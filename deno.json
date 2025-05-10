@@ -2,7 +2,14 @@
   "name": "@ryantaylor/workos",
   "version": "7.50.0",
   "exports": {
-    ".": "./mod.ts"
+    ".": {
+      "worker": "./dist/workos.worker.js",
+      "edge": "./dist/workos.worker.js",
+      "browser": "./dist/workos.worker.js",
+      "deno": "./mod.ts",
+      "node": "./dist/workos.js",
+      "default": "./dist/workos.js"
+    }
   },
   "imports": {
     "iron-session": "npm:iron-session@8.0.4",
@@ -41,7 +48,9 @@
     "test:coverage": "deno test --allow-all --coverage=cov",
     "coverage:report": "deno coverage cov --lcov --output=cov/lcov.info",
     "coverage:html": "deno coverage cov --html --output=cov/html",
-    "bundle": "deno run -A https://deno.land/x/fresh@1.6.5/dev.ts build"
+    "bundle": "deno run -A https://deno.land/x/fresh@1.6.5/dev.ts build",
+    "bundle:sdk": "deno run -A ./scripts/bundle.ts",
+    "deploy": "deno run -A ./scripts/bundle.ts && deno deploy"
   },
   "test": {
     "include": [

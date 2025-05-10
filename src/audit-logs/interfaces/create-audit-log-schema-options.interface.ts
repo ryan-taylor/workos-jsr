@@ -1,4 +1,4 @@
-import { PostOptions } from '../../common/interfaces';
+import { PostOptions } from '../../common/interfaces.ts';
 
 export type AuditLogSchemaMetadata =
   | Record<string, { type: 'string' | 'boolean' | 'number' }>

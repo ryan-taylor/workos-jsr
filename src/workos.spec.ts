@@ -1,18 +1,17 @@
 import fetch from 'jest-fetch-mock';
-import { fetchOnce, fetchHeaders, fetchBody } from './common/utils/test-utils';
-import fs from 'fs/promises';
+import { fetchOnce, fetchHeaders, fetchBody } from './common/utils/test-utils.ts';
 import {
   GenericServerException,
   NoApiKeyProvidedException,
   NotFoundException,
   OauthException,
-} from './common/exceptions';
-import { WorkOS } from './index';
-import { WorkOS as WorkOSWorker } from './index.worker';
-import { RateLimitExceededException } from './common/exceptions/rate-limit-exceeded.exception';
-import { FetchHttpClient } from './common/net/fetch-client';
-import { NodeHttpClient } from './common/net/node-client';
-import { SubtleCryptoProvider } from './common/crypto/subtle-crypto-provider';
+} from './common/exceptions.ts';
+import { WorkOS } from './index.ts';
+import { WorkOS as WorkOSWorker } from './index.worker.ts';
+import { RateLimitExceededException } from './common/exceptions/rate-limit-exceeded.exception.ts';
+import { FetchHttpClient } from './common/net/fetch-client.ts';
+import { NodeHttpClient } from './common/net/node-client.ts';
+import { SubtleCryptoProvider } from './common/crypto/subtle-crypto-provider.ts';
 
 describe('WorkOS', () => {
   beforeEach(() => fetch.resetMocks());
@@ -100,7 +99,7 @@ describe('WorkOS', () => {
         fetchOnce('{}');
 
         const packageJson = JSON.parse(
-          await fs.readFile('package.json', 'utf8'),
+          await Deno.readTextFile('package.json'),
         );
 
         const workos = new WorkOS('sk_test', {
@@ -123,7 +122,7 @@ describe('WorkOS', () => {
         fetchOnce('{}');
 
         const packageJson = JSON.parse(
-          await fs.readFile('package.json', 'utf8'),
+          await Deno.readTextFile('package.json'),
         );
 
         const workos = new WorkOS('sk_test');
@@ -141,7 +140,7 @@ describe('WorkOS', () => {
         fetchOnce('{}');
 
         const packageJson = JSON.parse(
-          await fs.readFile('package.json', 'utf8'),
+          await Deno.readTextFile('package.json'),
         );
 
         const workos = new WorkOS('sk_test');
@@ -171,7 +170,7 @@ describe('WorkOS', () => {
 
       // Read `package.json` using file I/O instead of `require` so we don't run
       // into issues with the `require` cache.
-      const packageJson = JSON.parse(await fs.readFile('package.json', 'utf8'));
+      const packageJson = JSON.parse(await Deno.readTextFile('package.json'));
 
       expect(workos.version).toBe(packageJson.version);
     });

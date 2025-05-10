@@ -5,18 +5,18 @@ import {
   fetchSearchParams,
   fetchHeaders,
   fetchBody,
-} from '../common/utils/test-utils';
-import { WorkOS } from '../workos';
-import clearStripeCustomerId from './fixtures/clear-stripe-customer-id.json';
-import createOrganizationInvalid from './fixtures/create-organization-invalid.json';
-import createOrganization from './fixtures/create-organization.json';
-import getOrganization from './fixtures/get-organization.json';
-import listOrganizationsFixture from './fixtures/list-organizations.json';
-import listOrganizationRolesFixture from './fixtures/list-organization-roles.json';
-import updateOrganization from './fixtures/update-organization.json';
-import setStripeCustomerId from './fixtures/set-stripe-customer-id.json';
-import setStripeCustomerIdDisabled from './fixtures/set-stripe-customer-id-disabled.json';
-import { DomainDataState } from './interfaces';
+} from '../common/utils/test-utils.ts';
+import { WorkOS } from '../workos.ts';
+import clearStripeCustomerId from './fixtures/clear-stripe-customer-id.json.ts';
+import createOrganizationInvalid from './fixtures/create-organization-invalid.json.ts';
+import createOrganization from './fixtures/create-organization.json.ts';
+import getOrganization from './fixtures/get-organization.json.ts';
+import listOrganizationsFixture from './fixtures/list-organizations.json.ts';
+import listOrganizationRolesFixture from './fixtures/list-organization-roles.json.ts';
+import updateOrganization from './fixtures/update-organization.json.ts';
+import setStripeCustomerId from './fixtures/set-stripe-customer-id.json.ts';
+import setStripeCustomerIdDisabled from './fixtures/set-stripe-customer-id-disabled.json.ts';
+import { DomainDataState } from './interfaces.ts';
 
 const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
 

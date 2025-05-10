@@ -1,8 +1,8 @@
-import { WorkOS } from '../workos';
-import { ListEventOptions } from './interfaces';
-import { deserializeEvent, deserializeList } from '../common/serializers';
-import { serializeListEventOptions } from './serializers';
-import { Event, EventResponse, List, ListResponse } from '../common/interfaces';
+import { WorkOS } from '../workos.ts';
+import { ListEventOptions } from './interfaces.ts';
+import { deserializeEvent, deserializeList } from '../common/serializers.ts';
+import { serializeListEventOptions } from './serializers.ts';
+import { Event, EventResponse, List, ListResponse } from '../common/interfaces.ts';
 
 export class Events {
   constructor(private readonly workos: WorkOS) {}

@@ -1,11 +1,11 @@
-import { WorkOS } from '../workos';
+import { WorkOS } from '../workos.ts';
 import {
   CreateOrganizationDomainOptions,
   OrganizationDomain,
   OrganizationDomainResponse,
-} from './interfaces';
-import { serializeCreateOrganizationDomainOptions } from './serializers/create-organization-domain-options.serializer';
-import { deserializeOrganizationDomain } from './serializers/organization-domain.serializer';
+} from './interfaces.ts';
+import { serializeCreateOrganizationDomainOptions } from './serializers/create-organization-domain-options.serializer.ts';
+import { deserializeOrganizationDomain } from './serializers/organization-domain.serializer.ts';
 
 export class OrganizationDomains {
   constructor(private readonly workos: WorkOS) {}

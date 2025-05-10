@@ -1,4 +1,4 @@
-import { ConnectionType } from './connection-type.enum';
+import { ConnectionType } from './connection-type.enum.ts';
 
 export interface ConnectionDomain {
   object: 'connection_domain';

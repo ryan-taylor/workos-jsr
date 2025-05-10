@@ -1,10 +1,10 @@
 import { createRemoteJWKSet, decodeJwt, jwtVerify } from 'jose';
-import { OauthException } from '../common/exceptions/oauth.exception';
-import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize';
-import { AutoPaginatable } from '../common/utils/pagination';
-import { Challenge, ChallengeResponse } from '../mfa/interfaces';
-import { deserializeChallenge } from '../mfa/serializers';
-import { WorkOS } from '../workos';
+import { OauthException } from '../common/exceptions/oauth.exception.ts';
+import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize.ts';
+import { AutoPaginatable } from '../common/utils/pagination.ts';
+import { Challenge, ChallengeResponse } from '../mfa/interfaces.ts';
+import { deserializeChallenge } from '../mfa/serializers.ts';
+import { WorkOS } from '../workos.ts';
 import {
   AuthenticateWithCodeOptions,
   AuthenticateWithMagicAuthOptions,
@@ -46,15 +46,15 @@ import {
   User,
   UserResponse,
   VerifyEmailOptions,
-} from './interfaces';
+} from './interfaces.ts';
 import {
   AuthenticateWithEmailVerificationOptions,
   SerializedAuthenticateWithEmailVerificationOptions,
-} from './interfaces/authenticate-with-email-verification-options.interface';
+} from './interfaces/authenticate-with-email-verification-options.interface.ts';
 import {
   AuthenticateWithOrganizationSelectionOptions,
   SerializedAuthenticateWithOrganizationSelectionOptions,
-} from './interfaces/authenticate-with-organization-selection.interface';
+} from './interfaces/authenticate-with-organization-selection.interface.ts';
 import {
   AccessToken,
   AuthenticateWithSessionCookieFailedResponse,
@@ -62,47 +62,47 @@ import {
   AuthenticateWithSessionCookieOptions,
   AuthenticateWithSessionCookieSuccessResponse,
   SessionCookieData,
-} from './interfaces/authenticate-with-session-cookie.interface';
-import { AuthorizationURLOptions } from './interfaces/authorization-url-options.interface';
+} from './interfaces/authenticate-with-session-cookie.interface.ts';
+import { AuthorizationURLOptions } from './interfaces/authorization-url-options.interface.ts';
 import {
   CreateOrganizationMembershipOptions,
   SerializedCreateOrganizationMembershipOptions,
-} from './interfaces/create-organization-membership-options.interface';
+} from './interfaces/create-organization-membership-options.interface.ts';
 import {
   Factor,
   FactorResponse,
   FactorWithSecrets,
   FactorWithSecretsResponse,
-} from './interfaces/factor.interface';
-import { Identity, IdentityResponse } from './interfaces/identity.interface';
+} from './interfaces/factor.interface.ts';
+import { Identity, IdentityResponse } from './interfaces/identity.interface.ts';
 import {
   Invitation,
   InvitationResponse,
-} from './interfaces/invitation.interface';
-import { ListInvitationsOptions } from './interfaces/list-invitations-options.interface';
-import { ListOrganizationMembershipsOptions } from './interfaces/list-organization-memberships-options.interface';
+} from './interfaces/invitation.interface.ts';
+import { ListInvitationsOptions } from './interfaces/list-invitations-options.interface.ts';
+import { ListOrganizationMembershipsOptions } from './interfaces/list-organization-memberships-options.interface.ts';
 import {
   OrganizationMembership,
   OrganizationMembershipResponse,
-} from './interfaces/organization-membership.interface';
+} from './interfaces/organization-membership.interface.ts';
 import {
   RefreshAndSealSessionDataFailureReason,
   RefreshAndSealSessionDataResponse,
-} from './interfaces/refresh-and-seal-session-data.interface';
+} from './interfaces/refresh-and-seal-session-data.interface.ts';
 import {
   RevokeSessionOptions,
   SerializedRevokeSessionOptions,
   serializeRevokeSessionOptions,
-} from './interfaces/revoke-session-options.interface';
+} from './interfaces/revoke-session-options.interface.ts';
 import {
   SendInvitationOptions,
   SerializedSendInvitationOptions,
-} from './interfaces/send-invitation-options.interface';
-import { SessionHandlerOptions } from './interfaces/session-handler-options.interface';
+} from './interfaces/send-invitation-options.interface.ts';
+import { SessionHandlerOptions } from './interfaces/session-handler-options.interface.ts';
 import {
   SerializedUpdateOrganizationMembershipOptions,
   UpdateOrganizationMembershipOptions,
-} from './interfaces/update-organization-membership-options.interface';
+} from './interfaces/update-organization-membership-options.interface.ts';
 import {
   deserializeAuthenticationResponse,
   deserializeEmailVerification,
@@ -123,21 +123,21 @@ import {
   serializeSendMagicAuthCodeOptions,
   serializeSendPasswordResetEmailOptions,
   serializeUpdateUserOptions,
-} from './serializers';
-import { serializeAuthenticateWithEmailVerificationOptions } from './serializers/authenticate-with-email-verification.serializer';
-import { serializeAuthenticateWithOrganizationSelectionOptions } from './serializers/authenticate-with-organization-selection-options.serializer';
-import { serializeCreateOrganizationMembershipOptions } from './serializers/create-organization-membership-options.serializer';
-import { deserializeFactor } from './serializers/factor.serializer';
-import { deserializeIdentities } from './serializers/identity.serializer';
-import { deserializeInvitation } from './serializers/invitation.serializer';
-import { serializeListInvitationsOptions } from './serializers/list-invitations-options.serializer';
-import { serializeListOrganizationMembershipsOptions } from './serializers/list-organization-memberships-options.serializer';
-import { serializeListUsersOptions } from './serializers/list-users-options.serializer';
-import { deserializeOrganizationMembership } from './serializers/organization-membership.serializer';
-import { serializeSendInvitationOptions } from './serializers/send-invitation-options.serializer';
-import { serializeUpdateOrganizationMembershipOptions } from './serializers/update-organization-membership-options.serializer';
-import { IronSessionProvider } from '../common/iron-session/iron-session-provider';
-import { Session } from './session';
+} from './serializers.ts';
+import { serializeAuthenticateWithEmailVerificationOptions } from './serializers/authenticate-with-email-verification.serializer.ts';
+import { serializeAuthenticateWithOrganizationSelectionOptions } from './serializers/authenticate-with-organization-selection-options.serializer.ts';
+import { serializeCreateOrganizationMembershipOptions } from './serializers/create-organization-membership-options.serializer.ts';
+import { deserializeFactor } from './serializers/factor.serializer.ts';
+import { deserializeIdentities } from './serializers/identity.serializer.ts';
+import { deserializeInvitation } from './serializers/invitation.serializer.ts';
+import { serializeListInvitationsOptions } from './serializers/list-invitations-options.serializer.ts';
+import { serializeListOrganizationMembershipsOptions } from './serializers/list-organization-memberships-options.serializer.ts';
+import { serializeListUsersOptions } from './serializers/list-users-options.serializer.ts';
+import { deserializeOrganizationMembership } from './serializers/organization-membership.serializer.ts';
+import { serializeSendInvitationOptions } from './serializers/send-invitation-options.serializer.ts';
+import { serializeUpdateOrganizationMembershipOptions } from './serializers/update-organization-membership-options.serializer.ts';
+import { IronSessionProvider } from '../common/iron-session/iron-session-provider.ts';
+import { Session } from './session.ts';
 
 const toQueryString = (options: Record<string, string | undefined>): string => {
   const searchParams = new URLSearchParams();
@@ -221,7 +221,7 @@ export class UserManagement {
         deserializeUser,
         options ? serializeListUsersOptions(options) : undefined,
       ),
-      (params) =>
+      params =>
         fetchAndDeserialize<UserResponse, User>(
           this.workos,
           '/user_management/users',
@@ -778,7 +778,7 @@ export class UserManagement {
         deserializeFactor,
         restOfOptions,
       ),
-      (params) =>
+      params =>
         fetchAndDeserialize<FactorResponse, Factor>(
           this.workos,
           `/user_management/users/${userId}/auth_factors`,
@@ -830,7 +830,7 @@ export class UserManagement {
           ? serializeListOrganizationMembershipsOptions(options)
           : undefined,
       ),
-      (params) =>
+      params =>
         fetchAndDeserialize<
           OrganizationMembershipResponse,
           OrganizationMembership
@@ -931,7 +931,7 @@ export class UserManagement {
         deserializeInvitation,
         options ? serializeListInvitationsOptions(options) : undefined,
       ),
-      (params) =>
+      params =>
         fetchAndDeserialize<InvitationResponse, Invitation>(
           this.workos,
           '/user_management/invitations',

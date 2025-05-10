@@ -3,7 +3,7 @@ import {
   IronSessionProvider,
   SealDataOptions,
   UnsealedDataType,
-} from './iron-session-provider';
+} from './iron-session-provider.ts';
 
 /**
  * WebIronSessionProvider which uses the base iron-session seal/unseal methods.

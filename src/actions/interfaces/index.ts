@@ -1,2 +1,2 @@
-export * from './action.interface';
-export * from './response-payload.interface';
+export * from './action.interface.ts';
+export * from './response-payload.interface.ts';

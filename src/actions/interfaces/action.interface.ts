@@ -1,7 +1,7 @@
 import {
   Organization,
   OrganizationResponse,
-} from '../../organizations/interfaces';
+} from '../../organizations/interfaces.ts';
 import {
   Invitation,
   InvitationResponse,
@@ -9,7 +9,7 @@ import {
   OrganizationMembershipResponse,
   User,
   UserResponse,
-} from '../../user-management/interfaces';
+} from '../../user-management/interfaces.ts';
 
 interface AuthenticationActionContext {
   id: string;

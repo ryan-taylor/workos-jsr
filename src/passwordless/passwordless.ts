@@ -1,12 +1,12 @@
-import { WorkOS } from '../workos';
+import { WorkOS } from '../workos.ts';
 import {
   CreatePasswordlessSessionOptions,
   PasswordlessSession,
   PasswordlessSessionResponse,
   SendSessionResponse,
   SerializedCreatePasswordlessSessionOptions,
-} from './interfaces';
-import { deserializePasswordlessSession } from './serializers/passwordless-session.serializer';
+} from './interfaces.ts';
+import { deserializePasswordlessSession } from './serializers/passwordless-session.serializer.ts';
 
 export class Passwordless {
   constructor(private readonly workos: WorkOS) {}

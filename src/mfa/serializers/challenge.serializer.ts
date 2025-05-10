@@ -1,4 +1,4 @@
-import { Challenge, ChallengeResponse } from '../interfaces';
+import { Challenge, ChallengeResponse } from '../interfaces.ts';
 
 export const deserializeChallenge = (
   challenge: ChallengeResponse,

@@ -5,10 +5,10 @@ import {
   fetchOnce,
   fetchSearchParams,
   fetchURL,
-} from '../common/utils/test-utils';
+} from '../common/utils/test-utils.ts';
 
-import { WorkOS } from '../workos';
-import { ResourceOp, WarrantOp } from './interfaces';
+import { WorkOS } from '../workos.ts';
+import { ResourceOp, WarrantOp } from './interfaces.ts';
 
 const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
 

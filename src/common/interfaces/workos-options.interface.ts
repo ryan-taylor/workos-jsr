@@ -1,4 +1,4 @@
-import { AppInfo } from './app-info.interface';
+import { AppInfo } from './app-info.interface.ts';
 
 export interface WorkOSOptions {
   apiHostname?: string;

@@ -3,9 +3,9 @@ import {
   fetchOnce,
   fetchURL,
   fetchSearchParams,
-} from '../common/utils/test-utils';
-import { ListResponse } from '../common/interfaces/list.interface';
-import { WorkOS } from '../workos';
+} from '../common/utils/test-utils.ts';
+import { ListResponse } from '../common/interfaces/list.interface.ts';
+import { WorkOS } from '../workos.ts';
 import {
   Directory,
   DirectoryGroup,
@@ -13,7 +13,7 @@ import {
   DirectoryResponse,
   DirectoryUserWithGroups,
   DirectoryUserWithGroupsResponse,
-} from './interfaces';
+} from './interfaces.ts';
 
 describe('DirectorySync', () => {
   beforeEach(() => fetch.resetMocks());
@@ -418,7 +418,7 @@ describe('DirectorySync', () => {
           });
 
           const managerIds = users.data.map(
-            (user) => user.customAttributes.managerId,
+            user => user.customAttributes.managerId,
           );
 
           expect(managerIds).toEqual([

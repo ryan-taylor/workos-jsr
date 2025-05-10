@@ -1,7 +1,7 @@
 import {
   AuthenticationEvent,
   AuthenticationEventResponse,
-} from '../interfaces';
+} from '../interfaces.ts';
 
 export const deserializeAuthenticationEvent = (
   authenticationEvent: AuthenticationEventResponse,

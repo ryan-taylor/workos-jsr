@@ -1,8 +1,8 @@
 import fetch from 'jest-fetch-mock';
-import { UnauthorizedException } from '../common/exceptions';
-import { BadRequestException } from '../common/exceptions/bad-request.exception';
-import { mockWorkOsResponse } from '../common/utils/workos-mock-response';
-import { WorkOS } from '../workos';
+import { UnauthorizedException } from '../common/exceptions.ts';
+import { BadRequestException } from '../common/exceptions/bad-request.exception.ts';
+import { mockWorkOsResponse } from '../common/utils/workos-mock-response.ts';
+import { WorkOS } from '../workos.ts';
 import {
   AuditLogExport,
   AuditLogExportOptions,
@@ -11,13 +11,13 @@ import {
   CreateAuditLogEventOptions,
   CreateAuditLogSchemaOptions,
   CreateAuditLogSchemaResponse,
-} from './interfaces';
+} from './interfaces.ts';
 import {
   serializeAuditLogExportOptions,
   serializeCreateAuditLogEventOptions,
   serializeCreateAuditLogSchemaOptions,
-} from './serializers';
-import { FetchError } from '../common/utils/fetch-error';
+} from './serializers.ts';
+import { FetchError } from '../common/utils/fetch-error.ts';
 
 const event: CreateAuditLogEventOptions = {
   action: 'document.updated',

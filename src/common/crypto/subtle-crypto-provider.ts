@@ -1,4 +1,4 @@
-import { CryptoProvider } from './crypto-provider';
+import { CryptoProvider } from './crypto-provider.ts.ts';
 
 /**
  * `CryptoProvider which uses the SubtleCrypto interface of the Web Crypto API.
@@ -62,8 +62,9 @@ export class SubtleCryptoProvider extends CryptoProvider {
 
   /** @override */
   async secureCompare(stringA: string, stringB: string): Promise<boolean> {
-    const bufferA = this.encoder.encode(stringA);
-    const bufferB = this.encoder.encode(stringB);
+    const encoder = new TextEncoder();
+    const bufferA = encoder.encode(stringA);
+    const bufferB = encoder.encode(stringB);
 
     if (bufferA.length !== bufferB.length) {
       return false;

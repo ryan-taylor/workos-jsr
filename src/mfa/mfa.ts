@@ -1,4 +1,4 @@
-import { WorkOS } from '../workos';
+import { WorkOS } from '../workos.ts';
 import {
   ChallengeFactorOptions,
   Challenge,
@@ -12,13 +12,13 @@ import {
   VerifyResponseResponse,
   FactorWithSecretsResponse,
   FactorWithSecrets,
-} from './interfaces';
+} from './interfaces.ts';
 import {
   deserializeChallenge,
   deserializeFactor,
   deserializeFactorWithSecrets,
   deserializeVerifyResponse,
-} from './serializers';
+} from './serializers.ts';
 
 export class Mfa {
   constructor(private readonly workos: WorkOS) {}

@@ -1,8 +1,8 @@
 import fetch from 'jest-fetch-mock';
-import { fetchOnce, fetchURL, fetchBody } from '../common/utils/test-utils';
+import { fetchOnce, fetchURL, fetchBody } from '../common/utils/test-utils.ts';
 
-import createSession from './fixtures/create-session.json';
-import { WorkOS } from '../workos';
+import createSession from './fixtures/create-session.json.ts';
+import { WorkOS } from '../workos.ts';
 
 describe('Passwordless', () => {
   beforeEach(() => fetch.resetMocks());

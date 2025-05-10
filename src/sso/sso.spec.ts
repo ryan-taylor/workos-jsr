@@ -5,11 +5,11 @@ import {
   fetchHeaders,
   fetchBody,
   fetchSearchParams,
-} from '../common/utils/test-utils';
+} from '../common/utils/test-utils.ts';
 
-import { WorkOS } from '../workos';
-import { ConnectionResponse, ConnectionType } from './interfaces';
-import { ListResponse } from '../common/interfaces';
+import { WorkOS } from '../workos.ts';
+import { ConnectionResponse, ConnectionType } from './interfaces.ts';
+import { ListResponse } from '../common/interfaces.ts';
 
 describe('SSO', () => {
   beforeEach(() => fetch.resetMocks());

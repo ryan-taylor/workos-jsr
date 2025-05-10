@@ -1,5 +1,5 @@
 import nock from 'nock';
-import { NodeHttpClient } from './node-client';
+import { NodeHttpClient } from './node-client.ts';
 
 const nodeClient = new NodeHttpClient('https://test.workos.com', {
   headers: {

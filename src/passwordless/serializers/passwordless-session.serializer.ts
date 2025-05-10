@@ -1,7 +1,7 @@
 import {
   PasswordlessSession,
   PasswordlessSessionResponse,
-} from '../interfaces';
+} from '../interfaces.ts';
 
 export const deserializePasswordlessSession = (
   passwordlessSession: PasswordlessSessionResponse,

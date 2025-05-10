@@ -3,7 +3,7 @@ import {
   TotpResponse,
   TotpWithSecrets,
   TotpWithSecretsResponse,
-} from '../../mfa/interfaces/totp.interface';
+} from '../../mfa/interfaces/totp.interface.ts';
 
 export interface Factor {
   object: 'authentication_factor';

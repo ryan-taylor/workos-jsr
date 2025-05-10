@@ -1,6 +1,6 @@
-import { AuthenticationResponse } from './authentication-response.interface';
-import { Impersonator } from './impersonator.interface';
-import { User } from './user.interface';
+import { AuthenticationResponse } from './authentication-response.interface.ts';
+import { Impersonator } from './impersonator.interface.ts';
+import { User } from './user.interface.ts';
 
 export interface AuthenticateWithSessionCookieOptions {
   sessionData: string;

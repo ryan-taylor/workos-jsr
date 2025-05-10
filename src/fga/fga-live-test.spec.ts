@@ -1,7 +1,7 @@
 import { disableFetchMocks, enableFetchMocks } from 'jest-fetch-mock';
 
-import { WorkOS } from '../workos';
-import { CheckOp, ResourceOp, WarrantOp } from './interfaces';
+import { WorkOS } from '../workos.ts';
+import { CheckOp, ResourceOp, WarrantOp } from './interfaces.ts';
 
 describe.skip('FGA Live Test', () => {
   let workos: WorkOS;

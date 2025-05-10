@@ -1,7 +1,7 @@
 import {
   SendPasswordResetEmailOptions,
   SerializedSendPasswordResetEmailOptions,
-} from '../interfaces';
+} from '../interfaces.ts';
 
 export const serializeSendPasswordResetEmailOptions = (
   options: SendPasswordResetEmailOptions,

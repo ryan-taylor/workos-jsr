@@ -1,4 +1,4 @@
-import { Warrant, WarrantResponse } from '../interfaces';
+import { Warrant, WarrantResponse } from '../interfaces.ts';
 
 export const deserializeWarrant = (warrant: WarrantResponse): Warrant => ({
   resourceType: warrant.resource_type,

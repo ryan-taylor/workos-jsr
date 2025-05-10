@@ -1,6 +1,6 @@
-import { Warrant, PolicyContext, WarrantResponse } from './warrant.interface';
-import { PaginationOptions } from '../../common/interfaces/pagination-options.interface';
-import { GetOptions } from '../../common/interfaces';
+import { Warrant, PolicyContext, WarrantResponse } from './warrant.interface.ts';
+import { PaginationOptions } from '../../common/interfaces/pagination-options.interface.ts';
+import { GetOptions } from '../../common/interfaces.ts';
 
 export interface QueryOptions extends PaginationOptions {
   q: string;

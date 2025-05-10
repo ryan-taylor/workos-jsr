@@ -1,5 +1,5 @@
-import { getPrimaryEmail } from './get-primary-email';
-import { DirectoryUser } from '../interfaces';
+import { getPrimaryEmail } from './get-primary-email.ts';
+import { DirectoryUser } from '../interfaces.ts';
 
 describe('getPrimaryEmail', () => {
   const user: DirectoryUser = {

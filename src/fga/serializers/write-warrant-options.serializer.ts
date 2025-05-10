@@ -1,8 +1,8 @@
 import {
   SerializedWriteWarrantOptions,
   WriteWarrantOptions,
-} from '../interfaces';
-import { isSubject, isResourceInterface } from '../utils/interface-check';
+} from '../interfaces.ts';
+import { isSubject, isResourceInterface } from '../utils/interface-check.ts';
 
 export const serializeWriteWarrantOptions = (
   warrant: WriteWarrantOptions,

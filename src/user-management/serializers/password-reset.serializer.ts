@@ -3,7 +3,7 @@ import {
   PasswordResetEvent,
   PasswordResetEventResponse,
   PasswordResetResponse,
-} from '../interfaces';
+} from '../interfaces.ts';
 
 export const deserializePasswordReset = (
   passwordReset: PasswordResetResponse,

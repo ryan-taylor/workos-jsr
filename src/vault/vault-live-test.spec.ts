@@ -1,9 +1,9 @@
 import { disableFetchMocks, enableFetchMocks } from 'jest-fetch-mock';
 
-import { WorkOS } from '../workos';
+import { WorkOS } from '../workos.ts';
 import { randomUUID } from 'crypto';
-import { NotFoundException } from '../index.worker';
-import { ConflictException } from '../common/exceptions/conflict.exception';
+import { NotFoundException } from '../index.worker.ts';
+import { ConflictException } from '../common/exceptions/conflict.exception.ts';
 
 describe.skip('Vault Live Test', () => {
   let workos: WorkOS;
@@ -236,7 +236,7 @@ describe.skip('Vault Live Test', () => {
       } while (before !== undefined);
 
       const missingObjects = objectNames.filter(
-        (name) => !allObjectNames.includes(name),
+        name => !allObjectNames.includes(name),
       );
 
       expect(allObjectNames.length).toEqual(numObjects);
@@ -262,10 +262,10 @@ describe.skip('Vault Live Test', () => {
 
       expect(versions.length).toBe(2);
 
-      const currentVersion = versions.find((v) => v.currentVersion);
+      const currentVersion = versions.find(v => v.currentVersion);
       expect(currentVersion?.id).toBe(updatedObject.metadata.versionId);
 
-      const firstVersion = versions.find((v) => v.id === newObject.versionId);
+      const firstVersion = versions.find(v => v.id === newObject.versionId);
       expect(firstVersion?.currentVersion).toBe(false);
     });
   });

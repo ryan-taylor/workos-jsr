@@ -2,7 +2,7 @@ import {
   AuthenticateUserWithTotpCredentials,
   AuthenticateWithTotpOptions,
   SerializedAuthenticateWithTotpOptions,
-} from '../interfaces';
+} from '../interfaces.ts';
 
 export const serializeAuthenticateWithTotpOptions = (
   options: AuthenticateWithTotpOptions & AuthenticateUserWithTotpCredentials,

@@ -1,6 +1,6 @@
 import fetch from 'jest-fetch-mock';
-import { fetchOnce, fetchURL } from '../../common/utils/test-utils';
-import { FetchHttpClient } from './fetch-client';
+import { fetchOnce, fetchURL } from '../../common/utils/test-utils.ts';
+import { FetchHttpClient } from './fetch-client.ts';
 
 const fetchClient = new FetchHttpClient('https://test.workos.com', {
   headers: {

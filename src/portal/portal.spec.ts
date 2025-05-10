@@ -1,9 +1,9 @@
 import fetch from 'jest-fetch-mock';
-import { fetchBody, fetchOnce } from '../common/utils/test-utils';
-import { WorkOS } from '../workos';
-import generateLinkInvalid from './fixtures/generate-link-invalid.json';
-import generateLink from './fixtures/generate-link.json';
-import { GeneratePortalLinkIntent } from './interfaces/generate-portal-link-intent.interface';
+import { fetchBody, fetchOnce } from '../common/utils/test-utils.ts';
+import { WorkOS } from '../workos.ts';
+import generateLinkInvalid from './fixtures/generate-link-invalid.json.ts';
+import generateLink from './fixtures/generate-link.json.ts';
+import { GeneratePortalLinkIntent } from './interfaces/generate-portal-link-intent.interface.ts';
 
 const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
 

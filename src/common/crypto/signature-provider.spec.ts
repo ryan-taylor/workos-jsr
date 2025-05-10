@@ -1,7 +1,7 @@
 import crypto from 'crypto';
-import { SubtleCryptoProvider } from './subtle-crypto-provider';
-import mockWebhook from '../../webhooks/fixtures/webhook.json';
-import { SignatureProvider } from './signature-provider';
+import { SubtleCryptoProvider } from './subtle-crypto-provider.ts';
+import mockWebhook from '../../webhooks/fixtures/webhook.json.ts';
+import { SignatureProvider } from './signature-provider.ts';
 
 describe('SignatureProvider', () => {
   let payload: any;

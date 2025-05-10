@@ -1,8 +1,8 @@
 import fetch from 'jest-fetch-mock';
-import { fetchOnce, fetchURL, fetchBody } from '../common/utils/test-utils';
-import { UnprocessableEntityException } from '../common/exceptions';
+import { fetchOnce, fetchURL, fetchBody } from '../common/utils/test-utils.ts';
+import { UnprocessableEntityException } from '../common/exceptions.ts';
 
-import { WorkOS } from '../workos';
+import { WorkOS } from '../workos.ts';
 import {
   Challenge,
   ChallengeResponse,
@@ -12,7 +12,7 @@ import {
   FactorWithSecretsResponse,
   VerifyResponse,
   VerifyResponseResponse,
-} from './interfaces';
+} from './interfaces.ts';
 
 describe('MFA', () => {
   beforeEach(() => fetch.resetMocks());

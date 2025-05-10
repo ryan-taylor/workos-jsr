@@ -2,7 +2,7 @@ import {
   BatchWriteResourcesResponse,
   Resource,
   ResourceResponse,
-} from '../interfaces';
+} from '../interfaces.ts';
 
 export const deserializeResource = (response: ResourceResponse): Resource => ({
   resourceType: response.resource_type,
@@ -13,5 +13,5 @@ export const deserializeResource = (response: ResourceResponse): Resource => ({
 export const deserializeBatchWriteResourcesResponse = (
   response: BatchWriteResourcesResponse,
 ): Resource[] => {
-  return response.data.map((resource) => deserializeResource(resource));
+  return response.data.map(resource => deserializeResource(resource));
 };

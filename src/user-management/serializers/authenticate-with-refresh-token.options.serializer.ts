@@ -2,7 +2,7 @@ import {
   AuthenticateUserWithCodeCredentials,
   AuthenticateWithRefreshTokenOptions,
   SerializedAuthenticateWithRefreshTokenOptions,
-} from '../interfaces';
+} from '../interfaces.ts';
 
 export const serializeAuthenticateWithRefreshTokenOptions = (
   options: AuthenticateWithRefreshTokenOptions &

@@ -1,6 +1,6 @@
-import { UnknownRecord } from '../../common/interfaces/unknown-record.interface';
-import { ProfileAndToken, ProfileAndTokenResponse } from '../interfaces';
-import { deserializeProfile } from './profile.serializer';
+import { UnknownRecord } from '../../common/interfaces/unknown-record.interface.ts';
+import { ProfileAndToken, ProfileAndTokenResponse } from '../interfaces.ts';
+import { deserializeProfile } from './profile.serializer.ts';
 
 export const deserializeProfileAndToken = <
   CustomAttributesType extends UnknownRecord,

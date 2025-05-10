@@ -1,14 +1,14 @@
 import fetch from 'jest-fetch-mock';
-import { fetchOnce, fetchSearchParams } from '../common/utils/test-utils';
+import { fetchOnce, fetchSearchParams } from '../common/utils/test-utils.ts';
 import {
   DsyncUserUpdatedEvent,
   DsyncUserUpdatedEventResponse,
   Event,
   EventResponse,
   ListResponse,
-} from '../common/interfaces';
-import { WorkOS } from '../workos';
-import { ConnectionType } from '../sso/interfaces';
+} from '../common/interfaces.ts';
+import { WorkOS } from '../workos.ts';
+import { ConnectionType } from '../sso/interfaces.ts';
 
 describe('Event', () => {
   beforeEach(() => fetch.resetMocks());

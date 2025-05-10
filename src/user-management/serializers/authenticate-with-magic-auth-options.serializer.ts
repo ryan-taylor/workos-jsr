@@ -2,7 +2,7 @@ import {
   AuthenticateUserWithMagicAuthCredentials,
   AuthenticateWithMagicAuthOptions,
   SerializedAuthenticateWithMagicAuthOptions,
-} from '../interfaces';
+} from '../interfaces.ts';
 
 export const serializeAuthenticateWithMagicAuthOptions = (
   options: AuthenticateWithMagicAuthOptions &

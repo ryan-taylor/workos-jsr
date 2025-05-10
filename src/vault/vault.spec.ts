@@ -1,14 +1,14 @@
 import fetch from 'jest-fetch-mock';
-import { fetchMethod, fetchOnce, fetchURL } from '../common/utils/test-utils';
-import { WorkOS } from '../workos';
-import { List } from '../common/interfaces';
+import { fetchMethod, fetchOnce, fetchURL } from '../common/utils/test-utils.ts';
+import { WorkOS } from '../workos.ts';
+import { List } from '../common/interfaces.ts';
 import {
   SecretDigest,
   SecretMetadata,
   SecretVersion,
   VaultSecret,
-} from './interfaces';
-import { ConflictException } from '../common/exceptions/conflict.exception';
+} from './interfaces.ts';
+import { ConflictException } from '../common/exceptions/conflict.exception.ts';
 
 const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
 

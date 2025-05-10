@@ -1,7 +1,7 @@
 import {
   AuthenticateWithOptionsBase,
   SerializedAuthenticateWithOptionsBase,
-} from './authenticate-with-options-base.interface';
+} from './authenticate-with-options-base.interface.ts';
 
 export interface AuthenticateWithRefreshTokenOptions
   extends AuthenticateWithOptionsBase {

@@ -1,1 +1,1 @@
-export * from './list-event-options.serializer';
+export * from './list-event-options.serializer.ts';

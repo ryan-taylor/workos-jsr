@@ -1,4 +1,4 @@
-import { EventName } from '../../common/interfaces';
+import { EventName } from '../../common/interfaces.ts';
 
 export interface ListEventOptions {
   events: EventName[];

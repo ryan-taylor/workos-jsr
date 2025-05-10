@@ -1,4 +1,4 @@
-import { Impersonator } from './impersonator.interface';
+import { Impersonator } from './impersonator.interface.ts';
 
 export interface Session {
   object: 'session';

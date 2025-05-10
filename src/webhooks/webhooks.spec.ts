@@ -1,8 +1,8 @@
 import crypto from 'crypto';
-import { WorkOS } from '../workos';
-import mockWebhook from './fixtures/webhook.json';
+import { WorkOS } from '../workos.ts';
+import mockWebhook from './fixtures/webhook.json.ts';
 const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
-import { SignatureVerificationException } from '../common/exceptions';
+import { SignatureVerificationException } from '../common/exceptions.ts';
 
 describe('Webhooks', () => {
   let payload: any;

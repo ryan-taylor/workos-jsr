@@ -1,4 +1,4 @@
-import { Connection, ConnectionResponse } from '../interfaces';
+import { Connection, ConnectionResponse } from '../interfaces.ts';
 
 export const deserializeConnection = (
   connection: ConnectionResponse,

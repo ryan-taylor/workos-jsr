@@ -1,8 +1,8 @@
-import { ResourceInterface, ResourceOptions } from './resource.interface';
-import { PolicyContext, SerializedSubject, Subject } from './warrant.interface';
-import { CheckOp } from './check-op.enum';
-import { PostOptions } from '../../common/interfaces';
-import { deserializeDecisionTreeNode } from '../serializers/check-options.serializer';
+import { ResourceInterface, ResourceOptions } from './resource.interface.ts';
+import { PolicyContext, SerializedSubject, Subject } from './warrant.interface.ts';
+import { CheckOp } from './check-op.enum.ts';
+import { PostOptions } from '../../common/interfaces.ts';
+import { deserializeDecisionTreeNode } from '../serializers/check-options.serializer.ts';
 
 const CHECK_RESULT_AUTHORIZED = 'authorized';
 

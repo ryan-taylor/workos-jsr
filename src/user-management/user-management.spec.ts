@@ -4,20 +4,20 @@ import {
   fetchOnce,
   fetchSearchParams,
   fetchURL,
-} from '../common/utils/test-utils';
-import { WorkOS } from '../workos';
-import deactivateOrganizationMembershipsFixture from './fixtures/deactivate-organization-membership.json';
-import emailVerificationFixture from './fixtures/email_verification.json';
-import invitationFixture from './fixtures/invitation.json';
-import listFactorFixture from './fixtures/list-factors.json';
-import listInvitationsFixture from './fixtures/list-invitations.json';
-import listOrganizationMembershipsFixture from './fixtures/list-organization-memberships.json';
-import listUsersFixture from './fixtures/list-users.json';
-import magicAuthFixture from './fixtures/magic_auth.json';
-import organizationMembershipFixture from './fixtures/organization-membership.json';
-import passwordResetFixture from './fixtures/password_reset.json';
-import userFixture from './fixtures/user.json';
-import identityFixture from './fixtures/identity.json';
+} from '../common/utils/test-utils.ts';
+import { WorkOS } from '../workos.ts';
+import deactivateOrganizationMembershipsFixture from './fixtures/deactivate-organization-membership.json.ts';
+import emailVerificationFixture from './fixtures/email_verification.json.ts';
+import invitationFixture from './fixtures/invitation.json.ts';
+import listFactorFixture from './fixtures/list-factors.json.ts';
+import listInvitationsFixture from './fixtures/list-invitations.json.ts';
+import listOrganizationMembershipsFixture from './fixtures/list-organization-memberships.json.ts';
+import listUsersFixture from './fixtures/list-users.json.ts';
+import magicAuthFixture from './fixtures/magic_auth.json.ts';
+import organizationMembershipFixture from './fixtures/organization-membership.json.ts';
+import passwordResetFixture from './fixtures/password_reset.json.ts';
+import userFixture from './fixtures/user.json.ts';
+import identityFixture from './fixtures/identity.json.ts';
 import * as jose from 'jose';
 import { sealData } from 'iron-session';
 

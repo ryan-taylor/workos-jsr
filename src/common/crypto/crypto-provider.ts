@@ -3,7 +3,10 @@
  * allowing pluggable underlying crypto implementations.
  */
 export abstract class CryptoProvider {
-  encoder = new TextEncoder();
+  // Use a getter to ensure TextEncoder is available in all environments
+  get encoder(): TextEncoder {
+    return new TextEncoder();
+  }
 
   /**
    * Computes a SHA-256 HMAC given a secret and a payload (encoded in UTF-8).

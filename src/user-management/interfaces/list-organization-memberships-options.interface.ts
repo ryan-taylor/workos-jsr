@@ -1,5 +1,5 @@
-import { PaginationOptions } from '../../common/interfaces';
-import { OrganizationMembershipStatus } from './organization-membership.interface';
+import { PaginationOptions } from '../../common/interfaces.ts';
+import { OrganizationMembershipStatus } from './organization-membership.interface.ts';
 
 export interface ListOrganizationMembershipsOptions extends PaginationOptions {
   organizationId?: string;

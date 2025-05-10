@@ -1,4 +1,4 @@
-import { PaginationOptions } from '../../common/interfaces/pagination-options.interface';
+import { PaginationOptions } from '../../common/interfaces/pagination-options.interface.ts';
 
 export interface ListUsersOptions extends PaginationOptions {
   email?: string;

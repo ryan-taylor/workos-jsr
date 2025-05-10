@@ -3,11 +3,11 @@ import {
   FactorResponse,
   FactorWithSecrets,
   FactorWithSecretsResponse,
-} from '../interfaces/factor.interface';
+} from '../interfaces/factor.interface.ts';
 import {
   deserializeTotp,
   deserializeTotpWithSecrets,
-} from '../../mfa/serializers/totp.serializer';
+} from '../../mfa/serializers/totp.serializer.ts';
 
 export const deserializeFactor = (factor: FactorResponse): Factor => ({
   object: factor.object,

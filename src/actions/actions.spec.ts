@@ -1,8 +1,8 @@
 import crypto from 'crypto';
-import { WorkOS } from '../workos';
-import mockAuthActionContext from './fixtures/authentication-action-context.json';
-import mockUserRegistrationActionContext from './fixtures/user-registration-action-context.json';
-import { NodeCryptoProvider } from '../common/crypto/node-crypto-provider';
+import { WorkOS } from '../workos.ts';
+import mockAuthActionContext from './fixtures/authentication-action-context.json.ts';
+import mockUserRegistrationActionContext from './fixtures/user-registration-action-context.json.ts';
+import { NodeCryptoProvider } from '../common/crypto/node-crypto-provider.ts';
 
 const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
 

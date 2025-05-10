@@ -1,4 +1,4 @@
-import { DomainData } from './domain-data.interface';
+import { DomainData } from './domain-data.interface.ts';
 
 export interface UpdateOrganizationOptions {
   organization: string;

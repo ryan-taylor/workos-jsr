@@ -1,3 +1,3 @@
-export * from './create-organization-options.serializer';
-export * from './organization.serializer';
-export * from './update-organization-options.serializer';
+export * from './create-organization-options.serializer.ts';
+export * from './organization.serializer.ts';
+export * from './update-organization-options.serializer.ts';

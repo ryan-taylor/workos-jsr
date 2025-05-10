@@ -4,7 +4,7 @@ import {
   RequestHeaders,
   RequestOptions,
   ResponseHeaders,
-} from '../interfaces/http-client.interface';
+} from '../interfaces/http-client.interface.ts';
 
 export abstract class HttpClient implements HttpClientInterface {
   readonly MAX_RETRY_ATTEMPTS = 3;
@@ -97,7 +97,7 @@ export abstract class HttpClient implements HttpClientInterface {
   }
 
   sleep = (retryAttempt: number) =>
-    new Promise((resolve) =>
+    new Promise(resolve =>
       setTimeout(resolve, this.getSleepTimeInMilliseconds(retryAttempt)),
     );
 }

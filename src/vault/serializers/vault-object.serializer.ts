@@ -1,4 +1,4 @@
-import { List, ListResponse } from '../../common/interfaces';
+import { List, ListResponse } from '../../common/interfaces.ts';
 import {
   ReadObjectMetadataResponse,
   ReadObjectResponse,
@@ -13,7 +13,7 @@ import {
   ObjectDigestResponse,
   ObjectDigest,
   ListObjectVersionsResponse,
-} from '../interfaces';
+} from '../interfaces.ts';
 
 export const deserializeObjectMetadata = (
   metadata: ReadObjectMetadataResponse,

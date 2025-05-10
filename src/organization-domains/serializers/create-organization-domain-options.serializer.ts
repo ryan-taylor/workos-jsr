@@ -1,7 +1,7 @@
 import {
   CreateOrganizationDomainOptions,
   SerializedCreateOrganizationDomainOptions,
-} from '../interfaces';
+} from '../interfaces.ts';
 
 export const serializeCreateOrganizationDomainOptions = (
   options: CreateOrganizationDomainOptions,

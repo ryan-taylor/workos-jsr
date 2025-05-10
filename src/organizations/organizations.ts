@@ -1,5 +1,5 @@
-import { AutoPaginatable } from '../common/utils/pagination';
-import { WorkOS } from '../workos';
+import { AutoPaginatable } from '../common/utils/pagination.ts';
+import { WorkOS } from '../workos.ts';
 import {
   CreateOrganizationOptions,
   CreateOrganizationRequestOptions,
@@ -7,17 +7,17 @@ import {
   Organization,
   OrganizationResponse,
   UpdateOrganizationOptions,
-} from './interfaces';
+} from './interfaces.ts';
 import {
   deserializeOrganization,
   serializeCreateOrganizationOptions,
   serializeUpdateOrganizationOptions,
-} from './serializers';
+} from './serializers.ts';
 
-import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize';
-import { ListOrganizationRolesResponse, RoleList } from '../roles/interfaces';
-import { deserializeRole } from '../roles/serializers/role.serializer';
-import { ListOrganizationRolesOptions } from './interfaces/list-organization-roles-options.interface';
+import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize.ts';
+import { ListOrganizationRolesResponse, RoleList } from '../roles/interfaces.ts';
+import { deserializeRole } from '../roles/serializers/role.serializer.ts';
+import { ListOrganizationRolesOptions } from './interfaces/list-organization-roles-options.interface.ts';
 
 export class Organizations {
   constructor(private readonly workos: WorkOS) {}
@@ -32,7 +32,7 @@ export class Organizations {
         deserializeOrganization,
         options,
       ),
-      (params) =>
+      params =>
         fetchAndDeserialize<OrganizationResponse, Organization>(
           this.workos,
           '/organizations',
@@ -101,7 +101,7 @@ export class Organizations {
 
     return {
       object: 'list',
-      data: response.data.map((role) => deserializeRole(role)),
+      data: response.data.map(role => deserializeRole(role)),
     };
   }
 }

@@ -1,5 +1,5 @@
-import { WorkOS } from '../workos';
-import { AutoPaginatable } from '../common/utils/pagination';
+import { WorkOS } from '../workos.ts';
+import { AutoPaginatable } from '../common/utils/pagination.ts';
 import {
   DefaultCustomAttributes,
   Directory,
@@ -11,14 +11,14 @@ import {
   ListDirectoriesOptions,
   ListDirectoryGroupsOptions,
   ListDirectoryUsersOptions,
-} from './interfaces';
+} from './interfaces.ts';
 import {
   deserializeDirectory,
   deserializeDirectoryGroup,
   deserializeDirectoryUserWithGroups,
   serializeListDirectoriesOptions,
-} from './serializers';
-import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize';
+} from './serializers.ts';
+import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize.ts';
 
 export class DirectorySync {
   constructor(private readonly workos: WorkOS) {}
@@ -33,7 +33,7 @@ export class DirectorySync {
         deserializeDirectory,
         options ? serializeListDirectoriesOptions(options) : undefined,
       ),
-      (params) =>
+      params =>
         fetchAndDeserialize<DirectoryResponse, Directory>(
           this.workos,
           '/directories',
@@ -66,7 +66,7 @@ export class DirectorySync {
         deserializeDirectoryGroup,
         options,
       ),
-      (params) =>
+      params =>
         fetchAndDeserialize<DirectoryGroupResponse, DirectoryGroup>(
           this.workos,
           '/directory_groups',
@@ -90,7 +90,7 @@ export class DirectorySync {
         deserializeDirectoryUserWithGroups,
         options,
       ),
-      (params) =>
+      params =>
         fetchAndDeserialize<
           DirectoryUserWithGroupsResponse<TCustomAttributes>,
           DirectoryUserWithGroups<TCustomAttributes>

@@ -1,6 +1,6 @@
-import { FetchHttpClient } from './fetch-client';
-import { HttpClient } from './http-client';
-import { NodeHttpClient } from './node-client';
+import { FetchHttpClient } from './fetch-client.ts';
+import { HttpClient } from './http-client.ts';
+import { NodeHttpClient } from './node-client.ts';
 
 export function createHttpClient(
   baseURL: string,
@@ -14,6 +14,6 @@ export function createHttpClient(
   }
 }
 
-export * from './fetch-client';
-export * from './node-client';
-export * from './http-client';
+export * from './fetch-client.ts';
+export * from './node-client.ts';
+export * from './http-client.ts';

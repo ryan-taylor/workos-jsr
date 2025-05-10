@@ -1,6 +1,6 @@
-import { UnknownRecord } from '../../common/interfaces/unknown-record.interface';
-import { RoleResponse } from '../../roles/interfaces';
-import { ConnectionType } from './connection-type.enum';
+import { UnknownRecord } from '../../common/interfaces/unknown-record.interface.ts';
+import { RoleResponse } from '../../roles/interfaces.ts';
+import { ConnectionType } from './connection-type.enum.ts';
 
 export interface Profile<CustomAttributesType extends UnknownRecord> {
   id: string;

@@ -1,10 +1,10 @@
-import { WorkOS } from '../workos';
-import { Session } from './session';
+import { WorkOS } from '../workos.ts';
+import { Session } from './session.ts';
 import * as jose from 'jose';
 import { sealData } from 'iron-session';
-import userFixture from './fixtures/user.json';
+import userFixture from './fixtures/user.json.ts';
 import fetch from 'jest-fetch-mock';
-import { fetchOnce } from '../common/utils/test-utils';
+import { fetchOnce } from '../common/utils/test-utils.ts';
 
 describe('Session', () => {
   let workos: WorkOS;

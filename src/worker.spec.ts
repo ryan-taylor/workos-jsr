@@ -2,7 +2,7 @@
  * @jest-environment miniflare
  */
 
-import { WorkOS } from './index.worker';
+import { WorkOS } from './index.worker.ts';
 
 test('WorkOS is initialized without errors', () => {
   expect(() => new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU')).not.toThrow();

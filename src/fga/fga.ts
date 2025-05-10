@@ -1,4 +1,4 @@
-import { WorkOS } from '../workos';
+import { WorkOS } from '../workos.ts';
 import {
   Resource,
   CheckBatchOptions,
@@ -26,7 +26,7 @@ import {
   WarrantTokenResponse,
   BatchWriteResourcesOptions,
   BatchWriteResourcesResponse,
-} from './interfaces';
+} from './interfaces.ts';
 import {
   deserializeBatchWriteResourcesResponse,
   deserializeQueryResult,
@@ -41,10 +41,10 @@ import {
   serializeListWarrantsOptions,
   serializeQueryOptions,
   serializeWriteWarrantOptions,
-} from './serializers';
-import { isResourceInterface } from './utils/interface-check';
-import { AutoPaginatable } from '../common/utils/pagination';
-import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize';
+} from './serializers.ts';
+import { isResourceInterface } from './utils/interface-check.ts';
+import { AutoPaginatable } from '../common/utils/pagination.ts';
+import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize.ts';
 
 export class FGA {
   constructor(private readonly workos: WorkOS) {}
@@ -111,7 +111,7 @@ export class FGA {
         deserializeResource,
         options ? serializeListResourceOptions(options) : undefined,
       ),
-      (params) =>
+      params =>
         fetchAndDeserialize<ResourceResponse, Resource>(
           this.workos,
           '/fga/v1/resources',
@@ -193,7 +193,7 @@ export class FGA {
         options ? serializeListWarrantsOptions(options) : undefined,
         requestOptions,
       ),
-      (params) =>
+      params =>
         fetchAndDeserialize<WarrantResponse, Warrant>(
           this.workos,
           '/fga/v1/warrants',
@@ -217,7 +217,7 @@ export class FGA {
         serializeQueryOptions(options),
         requestOptions,
       ),
-      (params) =>
+      params =>
         fetchAndDeserialize<QueryResultResponse, QueryResult>(
           this.workos,
           '/fga/v1/query',

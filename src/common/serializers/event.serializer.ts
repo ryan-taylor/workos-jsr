@@ -5,9 +5,9 @@ import {
   deserializeDirectoryGroup,
   deserializeUpdatedEventDirectoryGroup,
   deserializeUpdatedEventDirectoryUser,
-} from '../../directory-sync/serializers';
-import { deserializeOrganization } from '../../organizations/serializers';
-import { deserializeConnection } from '../../sso/serializers';
+} from '../../directory-sync/serializers.ts';
+import { deserializeOrganization } from '../../organizations/serializers.ts';
+import { deserializeConnection } from '../../sso/serializers.ts';
 import {
   deserializeAuthenticationEvent,
   deserializeEmailVerificationEvent,
@@ -15,13 +15,13 @@ import {
   deserializeMagicAuthEvent,
   deserializePasswordResetEvent,
   deserializeUser,
-} from '../../user-management/serializers';
-import { deserializeOrganizationDomain } from '../../organization-domains/serializers/organization-domain.serializer';
-import { deserializeOrganizationMembership } from '../../user-management/serializers/organization-membership.serializer';
-import { deserializeRoleEvent } from '../../user-management/serializers/role.serializer';
-import { deserializeSession } from '../../user-management/serializers/session.serializer';
-import { Event, EventBase, EventResponse } from '../interfaces';
-import { deserializeAuthenticationRadarRiskDetectedEvent } from '../../user-management/serializers/authentication-radar-risk-event-serializer';
+} from '../../user-management/serializers.ts';
+import { deserializeOrganizationDomain } from '../../organization-domains/serializers/organization-domain.serializer.ts';
+import { deserializeOrganizationMembership } from '../../user-management/serializers/organization-membership.serializer.ts';
+import { deserializeRoleEvent } from '../../user-management/serializers/role.serializer.ts';
+import { deserializeSession } from '../../user-management/serializers/session.serializer.ts';
+import { Event, EventBase, EventResponse } from '../interfaces.ts';
+import { deserializeAuthenticationRadarRiskDetectedEvent } from '../../user-management/serializers/authentication-radar-risk-event-serializer.ts';
 
 export const deserializeEvent = (event: EventResponse): Event => {
   const eventBase: EventBase = {

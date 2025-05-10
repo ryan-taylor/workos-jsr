@@ -4,8 +4,8 @@ import {
   RequestHeaders,
   RequestOptions,
   ResponseHeaders,
-} from '../interfaces/http-client.interface';
-import { HttpClient, HttpClientError, HttpClientResponse } from './http-client';
+} from '../interfaces/http-client.interface.ts';
+import { HttpClient, HttpClientError, HttpClientResponse } from './http-client.ts';
 
 export class FetchHttpClient extends HttpClient implements HttpClientInterface {
   private readonly _fetchFn;

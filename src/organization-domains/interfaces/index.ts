@@ -1,2 +1,2 @@
-export * from './create-organization-domain-options.interface';
-export * from './organization-domain.interface';
+export * from './create-organization-domain-options.interface.ts';
+export * from './organization-domain.interface.ts';

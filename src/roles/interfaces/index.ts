@@ -1,1 +1,1 @@
-export * from './role.interface';
+export * from './role.interface.ts';

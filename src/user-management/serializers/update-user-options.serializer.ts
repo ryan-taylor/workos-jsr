@@ -1,4 +1,4 @@
-import { SerializedUpdateUserOptions, UpdateUserOptions } from '../interfaces';
+import { SerializedUpdateUserOptions, UpdateUserOptions } from '../interfaces.ts';
 
 export const serializeUpdateUserOptions = (
   options: UpdateUserOptions,

@@ -1,7 +1,7 @@
 import {
   AuditLogExportOptions,
   SerializedAuditLogExportOptions,
-} from '../interfaces';
+} from '../interfaces.ts';
 
 export const serializeAuditLogExportOptions = (
   options: AuditLogExportOptions,

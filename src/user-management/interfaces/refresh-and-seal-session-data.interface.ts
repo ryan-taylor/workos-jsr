@@ -1,5 +1,5 @@
-import { AuthenticateWithSessionCookieSuccessResponse } from './authenticate-with-session-cookie.interface';
-import { AuthenticationResponse } from './authentication-response.interface';
+import { AuthenticateWithSessionCookieSuccessResponse } from './authenticate-with-session-cookie.interface.ts';
+import { AuthenticationResponse } from './authentication-response.interface.ts';
 
 export enum RefreshAndSealSessionDataFailureReason {
   /**

@@ -1,7 +1,7 @@
 import {
   SerializedUpdateUserPasswordOptions,
   UpdateUserPasswordOptions,
-} from '../interfaces';
+} from '../interfaces.ts';
 
 export const serializeUpdateUserPasswordOptions = (
   options: UpdateUserPasswordOptions,

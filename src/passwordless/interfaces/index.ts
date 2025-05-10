@@ -1,3 +1,3 @@
-export * from './passwordless-session.interface';
-export * from './create-passwordless-session-options.interface';
-export * from './send-session-response.interface';
+export * from './passwordless-session.interface.ts';
+export * from './create-passwordless-session-options.interface.ts';
+export * from './send-session-response.interface.ts';

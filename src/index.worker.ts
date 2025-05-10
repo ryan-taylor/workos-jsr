@@ -1,29 +1,29 @@
-import { Actions } from './actions/actions';
-import { SubtleCryptoProvider } from './common/crypto/subtle-crypto-provider';
-import { EdgeIronSessionProvider } from './common/iron-session/edge-iron-session-provider';
-import { IronSessionProvider } from './common/iron-session/iron-session-provider';
-import { FetchHttpClient } from './common/net/fetch-client';
-import { HttpClient } from './common/net/http-client';
-import { WorkOSOptions } from './index.worker';
-import { Webhooks } from './webhooks/webhooks';
-import { WorkOS } from './workos';
+import { Actions } from './actions/actions.ts';
+import { SubtleCryptoProvider } from './common/crypto/subtle-crypto-provider.ts';
+import { EdgeIronSessionProvider } from './common/iron-session/edge-iron-session-provider.ts';
+import { IronSessionProvider } from './common/iron-session/iron-session-provider.ts';
+import { FetchHttpClient } from './common/net/fetch-client.ts';
+import { HttpClient } from './common/net/http-client.ts';
+import { WorkOSOptions } from './index.worker.ts';
+import { Webhooks } from './webhooks/webhooks.ts';
+import { WorkOS } from './workos.ts';
 
-export * from './actions/interfaces';
-export * from './audit-logs/interfaces';
-export * from './common/exceptions';
-export * from './common/interfaces';
-export * from './common/utils/pagination';
-export * from './directory-sync/interfaces';
-export * from './directory-sync/utils/get-primary-email';
-export * from './events/interfaces';
-export * from './fga/interfaces';
-export * from './organizations/interfaces';
-export * from './organization-domains/interfaces';
-export * from './passwordless/interfaces';
-export * from './portal/interfaces';
-export * from './sso/interfaces';
-export * from './user-management/interfaces';
-export * from './roles/interfaces';
+export * from './actions/interfaces.ts';
+export * from './audit-logs/interfaces.ts';
+export * from './common/exceptions.ts';
+export * from './common/interfaces.ts';
+export * from './common/utils/pagination.ts';
+export * from './directory-sync/interfaces.ts';
+export * from './directory-sync/utils/get-primary-email.ts';
+export * from './events/interfaces.ts';
+export * from './fga/interfaces.ts';
+export * from './organizations/interfaces.ts';
+export * from './organization-domains/interfaces.ts';
+export * from './passwordless/interfaces.ts';
+export * from './portal/interfaces.ts';
+export * from './sso/interfaces.ts';
+export * from './user-management/interfaces.ts';
+export * from './roles/interfaces.ts';
 
 class WorkOSWorker extends WorkOS {
   /** @override */

@@ -1,7 +1,7 @@
 import {
   ListOrganizationMembershipsOptions,
   SerializedListOrganizationMembershipsOptions,
-} from '../interfaces/list-organization-memberships-options.interface';
+} from '../interfaces/list-organization-memberships-options.interface.ts';
 
 export const serializeListOrganizationMembershipsOptions = (
   options: ListOrganizationMembershipsOptions,

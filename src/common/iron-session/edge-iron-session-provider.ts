@@ -1,9 +1,9 @@
-import { sealData, unsealData } from 'iron-session/edge';
+import { sealData, unsealData } from 'iron-session';
 import {
   IronSessionProvider,
   SealDataOptions,
   UnsealedDataType,
-} from './iron-session-provider';
+} from './iron-session-provider.ts';
 
 /**
  * EdgeIronSessionProvider which uses the base iron-session seal/unseal methods.

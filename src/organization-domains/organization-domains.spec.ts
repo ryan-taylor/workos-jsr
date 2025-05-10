@@ -1,9 +1,9 @@
 import fetch from 'jest-fetch-mock';
-import { fetchOnce, fetchURL, fetchBody } from '../common/utils/test-utils';
-import { WorkOS } from '../workos';
-import getOrganizationDomainPending from './fixtures/get-organization-domain-pending.json';
-import getOrganizationDomainVerified from './fixtures/get-organization-domain-verified.json';
-import { OrganizationDomainState } from './interfaces';
+import { fetchOnce, fetchURL, fetchBody } from '../common/utils/test-utils.ts';
+import { WorkOS } from '../workos.ts';
+import getOrganizationDomainPending from './fixtures/get-organization-domain-pending.json.ts';
+import getOrganizationDomainVerified from './fixtures/get-organization-domain-verified.json.ts';
+import { OrganizationDomainState } from './interfaces.ts';
 
 const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
 

@@ -1,7 +1,7 @@
 import {
   EnrollAuthFactorOptions,
   SerializedEnrollUserInMfaFactorOptions,
-} from '../interfaces';
+} from '../interfaces.ts';
 
 export const serializeEnrollAuthFactorOptions = (
   options: EnrollAuthFactorOptions,

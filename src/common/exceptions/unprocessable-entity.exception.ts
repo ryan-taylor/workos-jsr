@@ -1,7 +1,7 @@
-import pluralize from 'pluralize';
+import pluralize from 'npm:pluralize@8.0.0';
 
-import { UnprocessableEntityError } from '../interfaces';
-import { RequestException } from '../interfaces/request-exception.interface';
+import { UnprocessableEntityError } from '../interfaces.ts';
+import { RequestException } from '../interfaces/request-exception.interface.ts';
 
 export class UnprocessableEntityException
   extends Error

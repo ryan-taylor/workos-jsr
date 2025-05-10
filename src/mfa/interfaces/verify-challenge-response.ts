@@ -1,4 +1,4 @@
-import { Challenge, ChallengeResponse } from './challenge.interface';
+import { Challenge, ChallengeResponse } from './challenge.interface.ts';
 
 export interface VerifyResponse {
   challenge: Challenge;

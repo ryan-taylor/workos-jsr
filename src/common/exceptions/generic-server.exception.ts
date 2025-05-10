@@ -1,4 +1,4 @@
-import { RequestException } from '../interfaces/request-exception.interface';
+import { RequestException } from '../interfaces/request-exception.interface.ts';
 
 export class GenericServerException extends Error implements RequestException {
   readonly name: string = 'GenericServerException';

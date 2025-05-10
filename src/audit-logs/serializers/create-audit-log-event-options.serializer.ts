@@ -1,7 +1,7 @@
 import {
   CreateAuditLogEventOptions,
   SerializedCreateAuditLogEventOptions,
-} from '../interfaces';
+} from '../interfaces.ts';
 
 export const serializeCreateAuditLogEventOptions = (
   event: CreateAuditLogEventOptions,

@@ -1,5 +1,5 @@
-import { deserializeOrganizationDomain } from '../../organization-domains/serializers/organization-domain.serializer';
-import { Organization, OrganizationResponse } from '../interfaces';
+import { deserializeOrganizationDomain } from '../../organization-domains/serializers/organization-domain.serializer.ts';
+import { Organization, OrganizationResponse } from '../interfaces.ts';
 
 export const deserializeOrganization = (
   organization: OrganizationResponse,

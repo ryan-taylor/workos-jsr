@@ -3,7 +3,7 @@ import {
   TotpResponse,
   TotpWithSecretsResponse,
   TotpWithSecrets,
-} from '../interfaces';
+} from '../interfaces.ts';
 
 export const deserializeTotp = (totp: TotpResponse): Totp => {
   return {

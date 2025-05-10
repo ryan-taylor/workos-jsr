@@ -1,6 +1,6 @@
 import { createRemoteJWKSet, decodeJwt, jwtVerify } from 'jose';
-import { OauthException } from '../common/exceptions/oauth.exception';
-import { IronSessionProvider } from '../common/iron-session/iron-session-provider';
+import { OauthException } from '../common/exceptions/oauth.exception.ts';
+import { IronSessionProvider } from '../common/iron-session/iron-session-provider.ts';
 import {
   AccessToken,
   AuthenticateWithSessionCookieFailedResponse,
@@ -10,8 +10,8 @@ import {
   RefreshAndSealSessionDataFailureReason,
   RefreshSessionResponse,
   SessionCookieData,
-} from './interfaces';
-import { UserManagement } from './user-management';
+} from './interfaces.ts';
+import { UserManagement } from './user-management.ts';
 
 type RefreshOptions = {
   cookiePassword?: string;

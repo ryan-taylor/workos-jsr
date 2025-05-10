@@ -1,5 +1,5 @@
-import { SignatureVerificationException } from '../exceptions';
-import { CryptoProvider } from './crypto-provider';
+import { SignatureVerificationException } from '../exceptions.ts';
+import { CryptoProvider } from './crypto-provider.ts';
 
 export class SignatureProvider {
   private cryptoProvider: CryptoProvider;

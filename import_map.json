@@ -1,0 +1,26 @@
+{
+  "imports": {
+    "preact": "https://esm.sh/preact@10",
+    "preact/hooks": "https://esm.sh/preact@10/hooks",
+    "iron-session": "npm:iron-session@8.0.4",
+    "iron-session/edge": "npm:iron-session@8.0.4/dist/index.js",
+    "jose": "npm:jose@6.0.11",
+    "leb": "npm:leb@1.0.0",
+    "pluralize": "npm:pluralize@8.0.0",
+    
+    "crypto": "https://deno.land/std/crypto/mod.ts",
+    "node:crypto": "https://deno.land/std/crypto/mod.ts",
+    "node:http": "https://deno.land/std/node/http.ts",
+    "node:https": "https://deno.land/std/node/https.ts",
+    "fs/promises": "https://deno.land/std/fs/mod.ts",
+    
+    "chai": "npm:chai@5.2.0",
+    "nock": "npm:nock@14.0.4",
+    "supertest": "npm:supertest@7.1.0",
+    
+    "@std/assert": "jsr:@std/assert@1",
+    "@std/path": "jsr:@std/path@1",
+    "@std/fs": "jsr:@std/fs@1",
+    "@std/http": "jsr:@std/http@1"
+  }
+}

@@ -1,0 +1,55 @@
+name: Coverage
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  coverage:
+    name: Test Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+          cache: true
+
+      - name: Cache Deno directory
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.deno
+          key: ${{ runner.os }}-deno-${{ hashFiles('**/deno.json') }}
+
+      - name: Run Tests with Coverage
+        run: |
+          deno test --unstable --coverage=coverage
+
+      - name: Generate lcov report
+        run: |
+          deno coverage coverage --unstable --lcov > coverage/lcov.info
+      
+      - name: Check Coverage Thresholds
+        run: |
+          COVERAGE=$(cat ./coverage/coverage-summary.json | jq '.total.lines.pct')
+          if (( $(echo "$COVERAGE < 100" | bc -l) )); then
+            echo "Coverage is below 100%: $COVERAGE%"
+            exit 1
+          else
+            echo "Coverage is 100%: $COVERAGE%"
+          fi
+      
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage/lcov.info
+          fail_ci_if_error: true

@@ -1,60 +1,41 @@
-# WorkOS Node to Deno Porting Guide
+# WorkOS Node.js to Deno/JSR Port
 
-This document outlines the process and progress of porting the WorkOS Node.js SDK to Deno.
+## Burndown Checklist
 
-## Project Status
+### Subtask 1: Setup and Reference
+- [ ] Create docs/PORTING.md with burndown list
+- [ ] Add upstream WorkOS-Node repository reference
+- [ ] Create upstream version reference branch
+- [ ] Clone repo for reference and checkout main branch
 
-This is an **independent community port** of the WorkOS Node.js SDK to Deno. This project is not officially endorsed by WorkOS. We aim to maintain feature parity while adapting to Deno's runtime environment.
+### Subtask 2: Bootstrap Deno Project
+- [ ] Initialize empty Deno project
+- [ ] Configure deno.json with imports and tasks
+- [ ] Create project directory structure
+- [ ] Create basic source skeleton files
 
-## Burndown List
+### Subtask 3: Core Framework Implementation
+- [ ] Implement core HTTP client with fetch
+- [ ] Implement WorkOS base class
+- [ ] Create error handling system
+- [ ] Create test framework
 
-The following is the complete list of tasks required to port the SDK:
+### Subtask 4: First Service (SSO) Implementation
+- [ ] Implement SSO interfaces
+- [ ] Implement authorization URL generator
+- [ ] Implement profile and token retrieval
+- [ ] Create comprehensive tests
 
-1. Setup and Reference
-   - Create documentation
-   - Set up git references
-   - Prepare repository structure
+### Subtask 5: Quality Assurance and Publishing
+- [ ] Setup GitHub CI workflow
+- [ ] Create JSR publishing configuration
+- [ ] Add documentation for the ported library
+- [ ] Prepare for JSR publish dry-run
 
-2. Core Infrastructure
-   - Port HTTP client 
-   - Port crypto providers
-   - Adapt serialization utilities
+---
 
-3. Authentication Modules
-   - SSO
-   - Passwordless
-   - MFA
+## Dependency Notes
 
-4. User & Organization Management
-   - User Management
-   - Organizations
-   - Directory Sync
-
-5. Access Control
-   - RBAC
-   - FGA
-
-6. Additional Services
-   - Audit Logs
-   - Webhooks
-   - Admin Portal
-
-7. Testing & Documentation
-   - Unit tests
-   - Integration tests
-   - API documentation
-   - Usage examples
-
-## Implementation Notes
-
-### Iron-session Omission
-
-The original WorkOS Node.js SDK uses iron-session for encrypting and signing session data. In this port, we have **intentionally omitted iron-session** as it's a Node.js-specific library with dependencies that aren't compatible with Deno. Instead, we'll implement a similar functionality using Deno's native APIs or compatible alternatives.
-
-### WebCrypto-only JOSE Implementation
-
-For JWT handling and cryptographic operations, this port uses a **WebCrypto-only JOSE implementation** rather than the Node.js crypto module. This approach leverages the standard Web Crypto API available in Deno, ensuring better compatibility and security across platforms.
-
-## Contributing
-
-Contributions to this porting effort are welcome. Please ensure you follow the project guidelines and test your changes thoroughly before submitting pull requests.
+- **jose**: Use a Deno/WebCrypto-native implementation via JSR (e.g. jsr:@panva/jose). No Node polyfills.
+- **iron-session**: Omit. Not needed for SDK core; if session helpers are needed, use Deno std/http and WebCrypto.
+- **General**: Prefer Deno std and JSR/ESM packages. Avoid Node polyfills. Keep API surface as close to Node SDK as possible, but use Deno idioms (URL, Response, AbortSignal) where appropriate.

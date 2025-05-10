@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "alwaysStrict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "target": "es6",
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": "lib",
+    "strict": true,
+    "lib": ["dom", "es2022"],
+    "types": ["jest", "jest-environment-miniflare/globals"]
+  },
+  "include": ["src"]
+}

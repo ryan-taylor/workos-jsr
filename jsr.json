@@ -1,0 +1,11 @@
+{
+  "name": "@ryantaylor/workos",
+  "version": "0.1.0",
+  "exports": "./mod.ts",
+  "description": "WorkOS SDK for Deno with support for Fresh 1.x and 2.x",
+  "repository": "https://github.com/ryan-taylor/workos-jsr",
+  "license": "MIT",
+  "tasks": {
+    "test": "deno test -A"
+  }
+}

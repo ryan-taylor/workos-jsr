@@ -1,6 +1,18 @@
-[0m[1m[31merror[0m: unexpected argument '--allow-all' found
+# Import Map Alias Resolution Baseline (import_map.f2.json)
+Date: 5/11/2025
 
-  tip: a similar argument exists: '--all'
+## Successfully Resolving Aliases
+- preact -> https://esm.sh/preact@10
+- preact/jsx-runtime -> https://esm.sh/preact@10/jsx-runtime
+- @fresh/core -> jsr:@fresh/core@2.0.0-alpha.29
 
-Usage: deno check --all [file]...
+## Failed Resolutions
+- @fresh/dev -> jsr:@fresh/dev@2.0.0-alpha.29
+  Error: JSR package not found
+- @fresh/plugin-tailwindcss -> jsr:@fresh/plugin-tailwindcss@2.0.0-alpha.29
+  Error: JSR package not found
 
+## Notes
+- Two JSR.io dependencies are not available in the registry
+- Core Fresh functionality (@fresh/core) resolves correctly
+- Preact dependencies resolve correctly via esm.sh

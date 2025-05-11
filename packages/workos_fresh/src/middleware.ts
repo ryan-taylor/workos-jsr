@@ -3,7 +3,7 @@
  * This file provides a wrapMw function that works with both Fresh 1.x and 2.x
  */
 
-import { freshMajor } from '../../scripts/select_fresh.ts';
+import { freshMajor } from '../../../../scripts/select_fresh.ts';
 
 export type MW_v1 = (req: Request, ctx: any) => Promise<Response>;
 export type MW_v2 = (ctx: any) => Promise<Response>;

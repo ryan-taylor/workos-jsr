@@ -4,7 +4,10 @@
 // Re-export the core SDK for convenience
 export * from "../workos_sdk/mod.ts";
 
-// Example (placeholder for now):
-// export * from "./src/middleware.ts";
-// export * from "./src/hooks.ts";
-// Add other exports as needed
+// Export Fresh compatibility layer
+export * from "./src/types.ts";
+export * from "./src/router.ts";
+export * from "./src/server.ts";
+export * from "./src/middleware.ts";
+export * from "./src/context.ts";
+export { default as getTailwindPlugin } from "./src/plugins/tailwind.ts";

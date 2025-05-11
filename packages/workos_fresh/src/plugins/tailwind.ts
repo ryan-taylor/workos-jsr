@@ -3,7 +3,7 @@
  * This file re-exports the Tailwind plugin based on the DENO_FRESH_VERSION environment variable
  */
 
-import { freshMajor } from '../../../scripts/select_fresh.ts';
+import { freshMajor } from '../../../../scripts/select_fresh.ts';
 import { Fresh2 } from '../types.ts';
 
 /**

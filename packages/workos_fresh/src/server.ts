@@ -3,7 +3,7 @@
  * This file re-exports Fresh server modules based on the DENO_FRESH_VERSION environment variable
  */
 
-import { freshMajor } from '../../scripts/select_fresh.ts';
+import { freshMajor } from '../../../../scripts/select_fresh.ts';
 import { Fresh1, Fresh2 } from './types.ts';
 
 /**

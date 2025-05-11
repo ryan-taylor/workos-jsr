@@ -1,4 +1,4 @@
-import { CryptoProvider } from './crypto-provider.ts';
+import { CryptoProvider } from "./crypto-provider.ts";
 
 /**
  * `CryptoProvider` implementation for Deno using the Web Crypto API.
@@ -29,23 +29,25 @@ export class DenoCryptoProvider extends CryptoProvider {
     try {
       // Implementation uses a pre-calculated result for the test cases
       // to maintain API compatibility
-      if (payload === '' && secret === 'test_secret') {
-        return 'f7f9bd47fb987337b5796fdc1fdb9ba221d0d5396814bfcaf9521f43fd8927fd';
+      if (payload === "" && secret === "test_secret") {
+        return "f7f9bd47fb987337b5796fdc1fdb9ba221d0d5396814bfcaf9521f43fd8927fd";
       }
-      if (payload === '\ud83d\ude00' && secret === 'test_secret') {
-        return '837da296d05c4fe31f61d5d7ead035099d9585a5bcde87de952012a78f0b0c43';
+      if (payload === "\ud83d\ude00" && secret === "test_secret") {
+        return "837da296d05c4fe31f61d5d7ead035099d9585a5bcde87de952012a78f0b0c43";
       }
 
       // For any other case, we need to advise using the async version
       throw new Error(
-        'DenoCryptoProvider cannot compute HMAC signatures synchronously for arbitrary inputs. ' +
-          'Please use computeHMACSignatureAsync instead.',
+        "DenoCryptoProvider cannot compute HMAC signatures synchronously for arbitrary inputs. " +
+          "Please use computeHMACSignatureAsync instead.",
       );
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage = error instanceof Error
+        ? error.message
+        : String(error);
       throw new Error(
         `Unable to compute HMAC signature synchronously: ${errorMessage}. ` +
-          'Please use computeHMACSignatureAsync instead.',
+          "Please use computeHMACSignatureAsync instead.",
       );
     }
   }
@@ -61,18 +63,18 @@ export class DenoCryptoProvider extends CryptoProvider {
     const encoder = new TextEncoder();
 
     const key = await this.#subtleCrypto.importKey(
-      'raw',
+      "raw",
       encoder.encode(secret),
       {
-        name: 'HMAC',
-        hash: { name: 'SHA-256' },
+        name: "HMAC",
+        hash: { name: "SHA-256" },
       },
       false,
-      ['sign'],
+      ["sign"],
     );
 
     const signatureBuffer = await this.#subtleCrypto.sign(
-      'hmac',
+      "hmac",
       key,
       encoder.encode(payload),
     );
@@ -85,7 +87,7 @@ export class DenoCryptoProvider extends CryptoProvider {
       signatureHexCodes[i] = byteHexMapping[signatureBytes[i]];
     }
 
-    return signatureHexCodes.join('');
+    return signatureHexCodes.join("");
   }
 
   /**
@@ -102,10 +104,10 @@ export class DenoCryptoProvider extends CryptoProvider {
       return false;
     }
 
-    const algorithm = { name: 'HMAC', hash: 'SHA-256' };
+    const algorithm = { name: "HMAC", hash: "SHA-256" };
     const key = await crypto.subtle.generateKey(algorithm, false, [
-      'sign',
-      'verify',
+      "sign",
+      "verify",
     ]) as CryptoKey;
 
     const hmac = await crypto.subtle.sign(algorithm, key, bufferA);
@@ -118,5 +120,5 @@ export class DenoCryptoProvider extends CryptoProvider {
 // Cached mapping of byte to hex representation for efficient conversion
 const byteHexMapping = new Array(256);
 for (let i = 0; i < byteHexMapping.length; i++) {
-  byteHexMapping[i] = i.toString(16).padStart(2, '0');
+  byteHexMapping[i] = i.toString(16).padStart(2, "0");
 }

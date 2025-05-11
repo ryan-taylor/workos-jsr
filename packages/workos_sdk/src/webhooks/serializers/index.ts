@@ -1,1 +1,1 @@
-export * from './webhook-event.serializer.ts';
+export * from "./webhook-event.serializer.ts";

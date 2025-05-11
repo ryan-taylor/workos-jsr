@@ -1,14 +1,14 @@
 import type {
   ListOrganizationMembershipsOptions,
   SerializedListOrganizationMembershipsOptions,
-} from '../interfaces/list-organization-memberships-options.interface.ts';
+} from "../interfaces/list-organization-memberships-options.interface.ts";
 
 export const serializeListOrganizationMembershipsOptions = (
   options: ListOrganizationMembershipsOptions,
 ): SerializedListOrganizationMembershipsOptions => ({
   user_id: options.userId,
   organization_id: options.organizationId,
-  statuses: options.statuses?.join(','),
+  statuses: options.statuses?.join(","),
   limit: options.limit,
   before: options.before,
   after: options.after,

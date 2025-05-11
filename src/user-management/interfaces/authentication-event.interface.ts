@@ -4,14 +4,14 @@ interface AuthenticationEventError {
 }
 
 type AuthenticationEventType =
-  | 'sso'
-  | 'password'
-  | 'oauth'
-  | 'mfa'
-  | 'magic_auth'
-  | 'email_verification';
+  | "sso"
+  | "password"
+  | "oauth"
+  | "mfa"
+  | "magic_auth"
+  | "email_verification";
 
-type AuthenticationEventStatus = 'failed' | 'succeeded';
+type AuthenticationEventStatus = "failed" | "succeeded";
 
 export type AuthenticationEvent = {
   email: string | null;

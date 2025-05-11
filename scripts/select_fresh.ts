@@ -11,8 +11,8 @@
  * @returns {number} The Fresh major version (1 or 2)
  */
 export function freshMajor(): number {
-  const version = Deno.env.get('DENO_FRESH_VERSION');
-  if (version === '2') {
+  const version = Deno.env.get("DENO_FRESH_VERSION");
+  if (version === "2") {
     return 2;
   }
   return 1; // Default to version 1

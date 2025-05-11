@@ -1,4 +1,9 @@
-import type { Totp, TotpResponse, TotpWithSecrets, TotpWithSecretsResponse } from '../interfaces.ts';
+import type {
+  Totp,
+  TotpResponse,
+  TotpWithSecrets,
+  TotpWithSecretsResponse,
+} from "../interfaces.ts";
 
 export const deserializeTotp = (totp: TotpResponse): Totp => {
   return {

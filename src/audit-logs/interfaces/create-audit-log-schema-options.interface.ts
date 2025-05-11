@@ -1,11 +1,11 @@
-import type { PostOptions } from '../../common/interfaces.ts';
+import type { PostOptions } from "../../common/interfaces.ts";
 
 export type AuditLogSchemaMetadata =
-  | Record<string, { type: 'string' | 'boolean' | 'number' }>
+  | Record<string, { type: "string" | "boolean" | "number" }>
   | undefined;
 
 export interface AuditLogSchema {
-  object: 'audit_log_schema';
+  object: "audit_log_schema";
   version: number;
   targets: AuditLogTargetSchema[];
   actor: AuditLogActorSchema;
@@ -32,7 +32,7 @@ export interface CreateAuditLogSchemaOptions {
 interface SerializedAuditLogTargetSchema {
   type: string;
   metadata?: {
-    type: 'object';
+    type: "object";
     properties: AuditLogSchemaMetadata;
   };
 }
@@ -41,28 +41,28 @@ export interface SerializedCreateAuditLogSchemaOptions {
   targets: SerializedAuditLogTargetSchema[];
   actor?: {
     metadata: {
-      type: 'object';
+      type: "object";
       properties: AuditLogSchemaMetadata;
     };
   };
   metadata?: {
-    type: 'object';
+    type: "object";
     properties: AuditLogSchemaMetadata;
   };
 }
 
 export interface CreateAuditLogSchemaResponse {
-  object: 'audit_log_schema';
+  object: "audit_log_schema";
   version: number;
   targets: SerializedAuditLogTargetSchema[];
   actor: {
     metadata: {
-      type: 'object';
+      type: "object";
       properties: AuditLogSchemaMetadata;
     };
   };
   metadata?: {
-    type: 'object';
+    type: "object";
     properties: AuditLogSchemaMetadata;
   };
   created_at: string;
@@ -70,5 +70,5 @@ export interface CreateAuditLogSchemaResponse {
 
 export type CreateAuditLogSchemaRequestOptions = Pick<
   PostOptions,
-  'idempotencyKey'
+  "idempotencyKey"
 >;

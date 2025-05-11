@@ -1,9 +1,13 @@
-import type { AuthenticateUserWithTotpCredentials, AuthenticateWithTotpOptions, SerializedAuthenticateWithTotpOptions } from '../interfaces.ts';
+import type {
+  AuthenticateUserWithTotpCredentials,
+  AuthenticateWithTotpOptions,
+  SerializedAuthenticateWithTotpOptions,
+} from "../interfaces.ts";
 
 export const serializeAuthenticateWithTotpOptions = (
   options: AuthenticateWithTotpOptions & AuthenticateUserWithTotpCredentials,
 ): SerializedAuthenticateWithTotpOptions => ({
-  grant_type: 'urn:workos:oauth:grant-type:mfa-totp',
+  grant_type: "urn:workos:oauth:grant-type:mfa-totp",
   client_id: options.clientId,
   client_secret: options.clientSecret,
   code: options.code,

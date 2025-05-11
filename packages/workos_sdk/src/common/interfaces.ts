@@ -27,7 +27,7 @@ export interface PaginationOptions {
   limit?: number;
   before?: string;
   after?: string;
-  order?: 'asc' | 'desc';
+  order?: "asc" | "desc";
 }
 
 export interface List<T> {
@@ -49,9 +49,9 @@ export interface ListResponse<T> {
 
 // Event types and interfaces
 export enum EventType {
-  Created = 'created',
-  Updated = 'updated',
-  Deleted = 'deleted'
+  Created = "created",
+  Updated = "updated",
+  Deleted = "deleted",
 }
 
 export type EventName = string;

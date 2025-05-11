@@ -1,14 +1,14 @@
-import { deserializeUser } from './user.serializer.ts';
-import userFixture from '../fixtures/user.json';
+import { deserializeUser } from "./user.serializer.ts";
+import userFixture from "../fixtures/user.json";
 
-describe('deserializeUser', () => {
-  it('includes metadata if present', () => {
-    const metadata = { key: 'value' };
+describe("deserializeUser", () => {
+  it("includes metadata if present", () => {
+    const metadata = { key: "value" };
 
     expect(
       deserializeUser({
         ...userFixture,
-        object: 'user',
+        object: "user",
         metadata,
       }),
     ).toMatchObject({
@@ -16,11 +16,11 @@ describe('deserializeUser', () => {
     });
   });
 
-  it('coerces missing metadata to empty object', () => {
+  it("coerces missing metadata to empty object", () => {
     const { metadata, ...userResponseWithoutMetadata } = userFixture;
 
     expect(
-      deserializeUser({ ...userResponseWithoutMetadata, object: 'user' }),
+      deserializeUser({ ...userResponseWithoutMetadata, object: "user" }),
     ).toMatchObject({
       metadata: {},
     });

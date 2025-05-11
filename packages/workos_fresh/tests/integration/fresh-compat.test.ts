@@ -1,4 +1,7 @@
-import { assertEquals, assertExists } from "https://deno.land/std/testing/asserts.ts";
+import {
+  assertEquals,
+  assertExists,
+} from "https://deno.land/std/testing/asserts.ts";
 import { makeRouter } from "../../src/router.ts";
 import { wrapMw } from "../../src/middleware.ts";
 import getTailwindPlugin from "../../src/plugins/tailwind.ts";
@@ -15,7 +18,7 @@ Deno.test("Fresh compatibility layer integration", async (t) => {
   await t.step("router integration", async () => {
     const router = await makeRouter([{
       pattern: "/test",
-      handler: () => new Response("test")
+      handler: () => new Response("test"),
     }]);
 
     assertExists(router);
@@ -38,7 +41,7 @@ Deno.test("Fresh compatibility layer integration", async (t) => {
       assertEquals(typeof plugin, "function");
     } catch (error: unknown) {
       // We expect an error in test environment due to missing Fresh
-      if (error instanceof Error && 'code' in error) {
+      if (error instanceof Error && "code" in error) {
         assertEquals((error as { code: string }).code, "ERR_MODULE_NOT_FOUND");
       } else {
         throw error;
@@ -49,7 +52,7 @@ Deno.test("Fresh compatibility layer integration", async (t) => {
   await t.step("components work together", async () => {
     const router = await makeRouter([{
       pattern: "/test",
-      handler: () => new Response("test")
+      handler: () => new Response("test"),
     }]);
 
     const middleware = wrapMw(async (req, ctx) => {

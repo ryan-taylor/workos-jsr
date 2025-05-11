@@ -12,7 +12,8 @@ import { walk } from "https://deno.land/std@0.220.0/fs/walk.ts";
 import { join } from "https://deno.land/std@0.220.0/path/mod.ts";
 
 // Regular expression to match import statements with duplicate .ts extensions
-const DUPLICATE_TS_REGEX = /(from\s+['"]|import\s*\(\s*['"]|export\s+.*\s+from\s+['"])([^'"]*?)\.ts\.ts(['"])/g;
+const DUPLICATE_TS_REGEX =
+  /(from\s+['"]|import\s*\(\s*['"]|export\s+.*\s+from\s+['"])([^'"]*?)\.ts\.ts(['"])/g;
 
 async function processFile(filePath: string): Promise<boolean> {
   try {
@@ -27,7 +28,9 @@ async function processFile(filePath: string): Promise<boolean> {
     const updatedContent = content.replace(
       DUPLICATE_TS_REGEX,
       (_match, prefix, path, suffix) => {
-        console.log(`In ${filePath}, fixing import: ${path}.ts.ts -> ${path}.ts`);
+        console.log(
+          `In ${filePath}, fixing import: ${path}.ts.ts -> ${path}.ts`,
+        );
         return `${prefix}${path}.ts${suffix}`;
       },
     );
@@ -46,8 +49,8 @@ async function processFile(filePath: string): Promise<boolean> {
 }
 
 async function main() {
-  const srcDir = join(Deno.cwd(), 'src');
-  const modFile = join(Deno.cwd(), 'mod.ts');
+  const srcDir = join(Deno.cwd(), "src");
+  const modFile = join(Deno.cwd(), "mod.ts");
   let filesProcessed = 0;
   let filesChanged = 0;
 
@@ -55,7 +58,7 @@ async function main() {
 
   for await (
     const entry of walk(srcDir, {
-      exts: ['ts'],
+      exts: ["ts"],
       skip: [/node_modules/, /\.git/],
     })
   ) {
@@ -81,9 +84,13 @@ async function main() {
   console.log(`- Files changed: ${filesChanged}`);
 
   if (filesChanged > 0) {
-    console.log(`\nDone! Fixed duplicate .ts extensions in ${filesChanged} files.`);
+    console.log(
+      `\nDone! Fixed duplicate .ts extensions in ${filesChanged} files.`,
+    );
   } else {
-    console.log(`\nNo files were changed. No duplicate .ts extensions were found.`);
+    console.log(
+      `\nNo files were changed. No duplicate .ts extensions were found.`,
+    );
   }
 }
 

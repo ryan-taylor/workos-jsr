@@ -1,4 +1,7 @@
-import type { ListUsersOptions, SerializedListUsersOptions } from '../interfaces.ts';
+import type {
+  ListUsersOptions,
+  SerializedListUsersOptions,
+} from "../interfaces.ts";
 
 export const serializeListUsersOptions = (
   options: ListUsersOptions,

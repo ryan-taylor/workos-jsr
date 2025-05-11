@@ -1,5 +1,5 @@
 export interface Challenge {
-  object: 'authentication_challenge';
+  object: "authentication_challenge";
   id: string;
   createdAt: string;
   updatedAt: string;
@@ -9,7 +9,7 @@ export interface Challenge {
 }
 
 export interface ChallengeResponse {
-  object: 'authentication_challenge';
+  object: "authentication_challenge";
   id: string;
   created_at: string;
   updated_at: string;

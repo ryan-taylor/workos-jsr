@@ -1,7 +1,7 @@
-import { deserializeEvent } from '../common/serializers.ts';
-import type { Event, EventResponse } from '../common/interfaces.ts';
-import { SignatureProvider } from '../common/crypto/signature-provider.ts';
-import type { CryptoProvider } from '../common/crypto/crypto-provider.ts';
+import { deserializeEvent } from "../common/serializers.ts";
+import type { Event, EventResponse } from "../common/interfaces.ts";
+import { SignatureProvider } from "../common/crypto/signature-provider.ts";
+import type { CryptoProvider } from "../common/crypto/crypto-provider.ts";
 
 export class Webhooks {
   private signatureProvider: SignatureProvider;

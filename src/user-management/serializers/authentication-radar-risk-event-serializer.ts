@@ -1,7 +1,11 @@
-import type { AuthenticationRadarRiskDetectedEventData, AuthenticationRadarRiskDetectedEventResponseData } from '../interfaces.ts';
+import type {
+  AuthenticationRadarRiskDetectedEventData,
+  AuthenticationRadarRiskDetectedEventResponseData,
+} from "../interfaces.ts";
 
 export const deserializeAuthenticationRadarRiskDetectedEvent = (
-  authenticationRadarRiskDetectedEvent: AuthenticationRadarRiskDetectedEventResponseData,
+  authenticationRadarRiskDetectedEvent:
+    AuthenticationRadarRiskDetectedEventResponseData,
 ): AuthenticationRadarRiskDetectedEventData => ({
   authMethod: authenticationRadarRiskDetectedEvent.auth_method,
   action: authenticationRadarRiskDetectedEvent.action,

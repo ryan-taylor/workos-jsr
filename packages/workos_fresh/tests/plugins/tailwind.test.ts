@@ -9,7 +9,7 @@ Deno.test("tailwind plugin", async (t) => {
       assertEquals(true, true);
     } catch (err: unknown) {
       // In test environment, we expect module not found error
-      if (err instanceof Error && 'code' in err) {
+      if (err instanceof Error && "code" in err) {
         assertEquals((err as { code: string }).code, "ERR_MODULE_NOT_FOUND");
       } else {
         throw err;

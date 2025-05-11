@@ -1,13 +1,13 @@
 export type EnrollFactorOptions =
   | {
-    type: 'sms';
+    type: "sms";
     phoneNumber: string;
   }
   | {
-    type: 'totp';
+    type: "totp";
     issuer: string;
     user: string;
   }
   | {
-    type: 'generic_otp';
+    type: "generic_otp";
   };

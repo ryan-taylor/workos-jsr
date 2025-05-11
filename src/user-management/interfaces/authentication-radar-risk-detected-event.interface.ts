@@ -1,6 +1,6 @@
 export type AuthenticationRadarRiskDetectedEventData = {
   authMethod: string;
-  action: 'signup' | 'login';
+  action: "signup" | "login";
   control: string | null;
   blocklistType: string | null;
   ipAddress: string | null;
@@ -11,7 +11,7 @@ export type AuthenticationRadarRiskDetectedEventData = {
 
 export interface AuthenticationRadarRiskDetectedEventResponseData {
   auth_method: string;
-  action: 'signup' | 'login';
+  action: "signup" | "login";
   control: string | null;
   blocklist_type: string | null;
   ip_address: string | null;

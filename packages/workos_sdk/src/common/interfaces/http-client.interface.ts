@@ -1,4 +1,4 @@
-import { JsonValue } from './http-response.interface.ts';
+import { JsonValue } from "./http-response.interface.ts";
 
 export type RequestHeaders = Record<string, string | number | string[]>;
 export type RequestOptions = {
@@ -13,14 +13,24 @@ export type ResponseHeaders = Record<string, ResponseHeaderValue>;
  */
 export interface HttpClientInterface {
   getClientName: () => string;
-  get(path: string, options: RequestOptions): Promise<HttpClientResponseInterface>;
+  get(
+    path: string,
+    options: RequestOptions,
+  ): Promise<HttpClientResponseInterface>;
   post<Entity = unknown>(
     path: string,
     entity: Entity,
     options: RequestOptions,
   ): Promise<HttpClientResponseInterface>;
-  put<Entity = unknown>(path: string, entity: Entity, options: RequestOptions): Promise<HttpClientResponseInterface>;
-  delete(path: string, options: RequestOptions): Promise<HttpClientResponseInterface>;
+  put<Entity = unknown>(
+    path: string,
+    entity: Entity,
+    options: RequestOptions,
+  ): Promise<HttpClientResponseInterface>;
+  delete(
+    path: string,
+    options: RequestOptions,
+  ): Promise<HttpClientResponseInterface>;
 }
 
 /**

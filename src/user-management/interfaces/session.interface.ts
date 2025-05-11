@@ -1,7 +1,7 @@
-import type { Impersonator } from './impersonator.interface.ts';
+import type { Impersonator } from "./impersonator.interface.ts";
 
 export interface Session {
-  object: 'session';
+  object: "session";
   id: string;
   userId: string;
   ipAddress: string | null;
@@ -11,7 +11,7 @@ export interface Session {
 }
 
 export interface SessionResponse {
-  object: 'session';
+  object: "session";
   id: string;
   user_id: string;
   ip_address: string | null;

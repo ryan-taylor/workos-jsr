@@ -30,8 +30,13 @@ export namespace Fresh1 {
     };
   }
 
-  export type CreateHandlerReturn = (req: Request, connInfo?: ServeHandlerInfo) => Promise<Response>;
-  export type CreateHandler = (manifest: Manifest) => Promise<CreateHandlerReturn>;
+  export type CreateHandlerReturn = (
+    req: Request,
+    connInfo?: ServeHandlerInfo,
+  ) => Promise<Response>;
+  export type CreateHandler = (
+    manifest: Manifest,
+  ) => Promise<CreateHandlerReturn>;
 
   export interface ServerModule {
     createHandler: CreateHandler;

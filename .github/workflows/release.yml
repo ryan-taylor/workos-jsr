@@ -1,7 +1,7 @@
 name: Release
 on:
   push:
-    tags: [ "sdk-*.*.*" ]     # eg sdk-0.1.0-alpha.0
+    tags: ["sdk-*.*.*"] # eg sdk-0.1.0-alpha.0
 
 jobs:
   publish:

@@ -9,12 +9,12 @@
  * information about specific functions and lines that need testing.
  */
 
-import { parseArgs } from 'https://deno.land/std@0.219.0/cli/parse_args.ts';
-import { join } from 'https://deno.land/std@0.219.0/path/mod.ts';
+import { parseArgs } from "https://deno.land/std@0.219.0/cli/parse_args.ts";
+import { join } from "https://deno.land/std@0.219.0/path/mod.ts";
 
-const args = parseArgs(Deno.args, { boolean: ['skip_tests'] });
-const FOCUS_MODULES = ['mfa', 'organizations', 'sso'];
-const COVERAGE_DIR = 'coverage';
+const args = parseArgs(Deno.args, { boolean: ["skip_tests"] });
+const FOCUS_MODULES = ["mfa", "organizations", "sso"];
+const COVERAGE_DIR = "coverage";
 
 type CoverageData = {
   url: string;
@@ -39,13 +39,16 @@ type DetailedCoverage = {
 };
 
 // Helper to run a command and get its output
-async function runCommand(cmd: string[], options: { captureStdout: boolean } = { captureStdout: true }): Promise<string> {
-  console.log(`Running: ${cmd.join(' ')}`);
+async function runCommand(
+  cmd: string[],
+  options: { captureStdout: boolean } = { captureStdout: true },
+): Promise<string> {
+  console.log(`Running: ${cmd.join(" ")}`);
 
   const command = new Deno.Command(cmd[0], {
     args: cmd.slice(1),
-    stdout: options.captureStdout ? 'piped' : 'inherit',
-    stderr: 'inherit',
+    stdout: options.captureStdout ? "piped" : "inherit",
+    stderr: "inherit",
   });
 
   const { success, code, stdout } = await command.output();
@@ -57,22 +60,26 @@ async function runCommand(cmd: string[], options: { captureStdout: boolean } = {
   if (options.captureStdout) {
     return new TextDecoder().decode(stdout);
   } else {
-    return '';
+    return "";
   }
 }
 
 // Run tests with coverage
 async function runTestsWithCoverage(): Promise<void> {
   try {
-    await runCommand(['deno', 'test', '-A', `--coverage=${COVERAGE_DIR}`], { captureStdout: false });
+    await runCommand(["deno", "test", "-A", `--coverage=${COVERAGE_DIR}`], {
+      captureStdout: false,
+    });
   } catch (error) {
-    console.error('Note: Some tests may have failed, but coverage data was still collected.');
+    console.error(
+      "Note: Some tests may have failed, but coverage data was still collected.",
+    );
   }
 }
 
 // Generate coverage data
 async function generateCoverageData(): Promise<CoverageResult> {
-  const output = await runCommand(['deno', 'coverage', COVERAGE_DIR, '--json']);
+  const output = await runCommand(["deno", "coverage", COVERAGE_DIR, "--json"]);
   return JSON.parse(output) as CoverageResult;
 }
 
@@ -80,8 +87,12 @@ async function generateCoverageData(): Promise<CoverageResult> {
 async function extractFunctionNames(filePath: string): Promise<string[]> {
   try {
     const content = await Deno.readTextFile(filePath);
-    const functionMatches = content.matchAll(/\s*(export\s+)?(function|async\s+function)\s+(\w+)/g);
-    const methodMatches = content.matchAll(/\s*(public|private|protected)?\s*(async\s+)?(\w+)\s*\(/g);
+    const functionMatches = content.matchAll(
+      /\s*(export\s+)?(function|async\s+function)\s+(\w+)/g,
+    );
+    const methodMatches = content.matchAll(
+      /\s*(public|private|protected)?\s*(async\s+)?(\w+)\s*\(/g,
+    );
 
     const functionNames: string[] = [];
     for (const match of functionMatches) {
@@ -89,26 +100,38 @@ async function extractFunctionNames(filePath: string): Promise<string[]> {
     }
 
     for (const match of methodMatches) {
-      if (match[3] && !['constructor', 'if', 'for', 'while', 'switch'].includes(match[3])) {
+      if (
+        match[3] &&
+        !["constructor", "if", "for", "while", "switch"].includes(match[3])
+      ) {
         functionNames.push(match[3]);
       }
     }
 
     return functionNames;
   } catch (error: unknown) {
-    console.error(`Error reading file ${filePath}: ${error instanceof Error ? error.message : String(error)}`);
+    console.error(
+      `Error reading file ${filePath}: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+    );
     return [];
   }
 }
 
 // Get detailed coverage information for a file
-async function getDetailedCoverage(filePath: string, coverageInfo: CoverageData): Promise<DetailedCoverage> {
+async function getDetailedCoverage(
+  filePath: string,
+  coverageInfo: CoverageData,
+): Promise<DetailedCoverage> {
   // Read the raw JSON coverage files to extract line-by-line coverage data
   const coverageFiles = await Deno.readDir(COVERAGE_DIR);
   const lineDetails: number[] = [];
 
   for await (const file of coverageFiles) {
-    if (!file.isFile || !file.name.endsWith('.json') || file.name === 'lcov.info') continue;
+    if (
+      !file.isFile || !file.name.endsWith(".json") || file.name === "lcov.info"
+    ) continue;
 
     try {
       const coverageFilePath = join(COVERAGE_DIR, file.name);
@@ -156,20 +179,22 @@ async function getDetailedCoverage(filePath: string, coverageInfo: CoverageData)
 
 // Generate a human-readable report
 function generateReport(detailedCoverages: DetailedCoverage[]): void {
-  console.log('\n=== WorkOS SDK Coverage Report ===\n');
+  console.log("\n=== WorkOS SDK Coverage Report ===\n");
 
   if (detailedCoverages.length === 0) {
-    console.log('All service modules have 100% coverage. Great job! 🎉');
+    console.log("All service modules have 100% coverage. Great job! 🎉");
     return;
   }
 
-  console.log('Modules with less than 100% coverage:\n');
+  console.log("Modules with less than 100% coverage:\n");
 
   for (const coverage of detailedCoverages) {
-    console.log(`📁 ${coverage.file} (${coverage.coverage.toFixed(2)}% covered)`);
+    console.log(
+      `📁 ${coverage.file} (${coverage.coverage.toFixed(2)}% covered)`,
+    );
 
     if (coverage.missingLines.length > 0) {
-      console.log('  📊 Uncovered lines:');
+      console.log("  📊 Uncovered lines:");
       const groupedLines = groupConsecutiveNumbers(coverage.missingLines);
       for (const group of groupedLines) {
         if (group.length === 1) {
@@ -181,29 +206,33 @@ function generateReport(detailedCoverages: DetailedCoverage[]): void {
     }
 
     if (coverage.missingFunctions.length > 0) {
-      console.log('  🔍 Functions that may need testing:');
+      console.log("  🔍 Functions that may need testing:");
       for (const func of coverage.missingFunctions) {
         console.log(`    - ${func}()`);
       }
     }
 
-    console.log('');
+    console.log("");
   }
 
-  console.log('--- Summary ---');
-  console.log(`Total modules with incomplete coverage: ${detailedCoverages.length}`);
+  console.log("--- Summary ---");
+  console.log(
+    `Total modules with incomplete coverage: ${detailedCoverages.length}`,
+  );
 
   // Focus modules summary
-  const focusModulesWithIssues = detailedCoverages.filter((c) => FOCUS_MODULES.some((module) => c.file.includes(`src/${module}/`)));
+  const focusModulesWithIssues = detailedCoverages.filter((c) =>
+    FOCUS_MODULES.some((module) => c.file.includes(`src/${module}/`))
+  );
 
   if (focusModulesWithIssues.length > 0) {
-    console.log('\n⚠️ Priority modules that need attention:');
+    console.log("\n⚠️ Priority modules that need attention:");
     for (const module of focusModulesWithIssues) {
       console.log(`  - ${module.file} (${module.coverage.toFixed(2)}%)`);
     }
   }
 
-  console.log('\nRun specific tests for these modules to improve coverage.');
+  console.log("\nRun specific tests for these modules to improve coverage.");
 }
 
 // Helper function to group consecutive numbers for better display
@@ -229,13 +258,13 @@ function groupConsecutiveNumbers(numbers: number[]): number[][] {
 
 // Main function
 async function main() {
-  console.log('Starting coverage analysis...');
+  console.log("Starting coverage analysis...");
 
   // Step 1: Run tests with coverage if required
   if (!args.skip_tests) {
     await runTestsWithCoverage();
   } else {
-    console.log('Skipping test execution, using existing coverage data.');
+    console.log("Skipping test execution, using existing coverage data.");
   }
 
   // Step 2: Generate coverage data
@@ -244,16 +273,18 @@ async function main() {
   // Step 3: Filter for service modules
   const serviceModules = Object.entries(coverageResult.files)
     .filter(([file]) =>
-      file.startsWith('src/') &&
-      !file.includes('/interfaces/') &&
-      !file.includes('/fixtures/') &&
-      !file.includes('/serializers/') &&
-      !file.includes('.spec.ts') &&
-      file.endsWith('.ts')
+      file.startsWith("src/") &&
+      !file.includes("/interfaces/") &&
+      !file.includes("/fixtures/") &&
+      !file.includes("/serializers/") &&
+      !file.includes(".spec.ts") &&
+      file.endsWith(".ts")
     );
 
   // Step 4: Find modules with less than 100% coverage
-  const incompleteModules = serviceModules.filter(([_, data]) => data.pct < 100);
+  const incompleteModules = serviceModules.filter(([_, data]) =>
+    data.pct < 100
+  );
 
   // Step 5: Get detailed coverage information
   const detailedCoverages: DetailedCoverage[] = [];
@@ -265,8 +296,12 @@ async function main() {
 
   // Step 6: Sort by priority (focus modules first, then by coverage percentage)
   detailedCoverages.sort((a, b) => {
-    const aIsFocus = FOCUS_MODULES.some((module) => a.file.includes(`src/${module}/`));
-    const bIsFocus = FOCUS_MODULES.some((module) => b.file.includes(`src/${module}/`));
+    const aIsFocus = FOCUS_MODULES.some((module) =>
+      a.file.includes(`src/${module}/`)
+    );
+    const bIsFocus = FOCUS_MODULES.some((module) =>
+      b.file.includes(`src/${module}/`)
+    );
 
     if (aIsFocus && !bIsFocus) return -1;
     if (!aIsFocus && bIsFocus) return 1;
@@ -280,7 +315,7 @@ async function main() {
 // Run the script
 if (import.meta.main) {
   main().catch((error) => {
-    console.error('Error:', error);
+    console.error("Error:", error);
     Deno.exit(1);
   });
 }

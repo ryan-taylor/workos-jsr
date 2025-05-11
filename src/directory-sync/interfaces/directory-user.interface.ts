@@ -1,5 +1,8 @@
-import type { RoleResponse } from '../../roles/interfaces/.ts';
-import type { DirectoryGroup, DirectoryGroupResponse } from './directory-group.interface.ts';
+import type { RoleResponse } from "../../roles/interfaces/.ts";
+import type {
+  DirectoryGroup,
+  DirectoryGroupResponse,
+} from "./directory-group.interface.ts";
 
 export type DefaultCustomAttributes = Record<string, unknown>;
 
@@ -7,7 +10,7 @@ export interface DirectoryUser<
   TCustomAttributes extends object = DefaultCustomAttributes,
   TRawAttributes = any,
 > {
-  object: 'directory_user';
+  object: "directory_user";
   id: string;
   directoryId: string;
   organizationId: string | null;
@@ -36,7 +39,7 @@ export interface DirectoryUser<
    * See https://workos.com/docs/directory-sync/attributes/custom-attributes/auto-mapped-attributes for details.
    */
   jobTitle: string | null;
-  state: 'active' | 'inactive';
+  state: "active" | "inactive";
   role?: RoleResponse;
   createdAt: string;
   updatedAt: string;
@@ -46,7 +49,7 @@ export interface DirectoryUserResponse<
   TCustomAttributes extends object = DefaultCustomAttributes,
   TRawAttributes = any,
 > {
-  object: 'directory_user';
+  object: "directory_user";
   id: string;
   directory_id: string;
   organization_id: string | null;
@@ -75,7 +78,7 @@ export interface DirectoryUserResponse<
    * See https://workos.com/docs/directory-sync/attributes/custom-attributes/auto-mapped-attributes for details.
    */
   job_title: string | null;
-  state: 'active' | 'inactive';
+  state: "active" | "inactive";
   role?: RoleResponse;
   created_at: string;
   updated_at: string;

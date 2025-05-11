@@ -1,8 +1,8 @@
-import type { RequestException } from '../interfaces/request-exception.interface.ts';
+import type { RequestException } from "../interfaces/request-exception.interface.ts";
 
 export class ConflictException extends Error implements RequestException {
   readonly status = 409;
-  override readonly name = 'ConflictException';
+  override readonly name = "ConflictException";
   override readonly message: string;
   readonly requestID: string;
 

@@ -1,16 +1,23 @@
-import { deserializeOrganization } from './serializers/organization.serializer.ts';
-import { serializeCreateOrganizationOptions } from './serializers/create-organization-options.serializer.ts';
-import { serializeUpdateOrganizationOptions } from './serializers/update-organization-options.serializer.ts';
-import type { Organization, CreateOrganizationOptions, UpdateOrganizationOptions, ListOrganizationsOptions } from './interfaces';
-import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize.ts';
+import { deserializeOrganization } from "./serializers/organization.serializer.ts";
+import { serializeCreateOrganizationOptions } from "./serializers/create-organization-options.serializer.ts";
+import { serializeUpdateOrganizationOptions } from "./serializers/update-organization-options.serializer.ts";
+import type {
+  CreateOrganizationOptions,
+  ListOrganizationsOptions,
+  Organization,
+  UpdateOrganizationOptions,
+} from "./interfaces";
+import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
 
 export class Organizations {
   constructor(private apiKey: string) {}
 
-  async createOrganization(options: CreateOrganizationOptions): Promise<Organization> {
+  async createOrganization(
+    options: CreateOrganizationOptions,
+  ): Promise<Organization> {
     return await fetchAndDeserialize({
-      path: '/organizations',
-      method: 'POST',
+      path: "/organizations",
+      method: "POST",
       data: serializeCreateOrganizationOptions(options),
       deserializer: deserializeOrganization,
       apiKey: this.apiKey,
@@ -25,10 +32,13 @@ export class Organizations {
     });
   }
 
-  async updateOrganization(id: string, options: UpdateOrganizationOptions): Promise<Organization> {
+  async updateOrganization(
+    id: string,
+    options: UpdateOrganizationOptions,
+  ): Promise<Organization> {
     return await fetchAndDeserialize({
       path: `/organizations/${id}`,
-      method: 'PUT',
+      method: "PUT",
       data: serializeUpdateOrganizationOptions(options),
       deserializer: deserializeOrganization,
       apiKey: this.apiKey,
@@ -38,7 +48,7 @@ export class Organizations {
   async deleteOrganization(id: string): Promise<void> {
     await fetchAndDeserialize({
       path: `/organizations/${id}`,
-      method: 'DELETE',
+      method: "DELETE",
       apiKey: this.apiKey,
     });
   }

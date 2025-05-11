@@ -9,8 +9,8 @@
  * Usage: deno run --allow-read --allow-write scripts/add-ts-extensions.ts
  */
 
-import { walk } from '@std/fs/walk';
-import { join } from '@std/path';
+import { walk } from "@std/fs/walk";
+import { join } from "@std/path";
 
 // Regular expression to match import statements with relative paths
 // This matches:
@@ -18,7 +18,8 @@ import { join } from '@std/path';
 // 2. dynamic imports
 // 3. export ... from statements
 // with relative paths (starting with './' or '../') that don't already have a file extension
-const IMPORT_REGEX = /(from\s+['"]|import\s*\(\s*['"]|export\s+.*\s+from\s+['"])(\.[^'"]*?)(?!\.ts|\.js|\.json)(['"])/g;
+const IMPORT_REGEX =
+  /(from\s+['"]|import\s*\(\s*['"]|export\s+.*\s+from\s+['"])(\.[^'"]*?)(?!\.ts|\.js|\.json)(['"])/g;
 
 async function processFile(filePath: string): Promise<boolean> {
   try {
@@ -52,7 +53,7 @@ async function processFile(filePath: string): Promise<boolean> {
 }
 
 async function main() {
-  const srcDir = join(Deno.cwd(), 'src');
+  const srcDir = join(Deno.cwd(), "src");
   let filesProcessed = 0;
   let filesChanged = 0;
 
@@ -60,7 +61,7 @@ async function main() {
 
   for await (
     const entry of walk(srcDir, {
-      exts: ['ts'],
+      exts: ["ts"],
       skip: [/node_modules/, /\.git/],
     })
   ) {
@@ -78,10 +79,14 @@ async function main() {
   console.log(`- Files changed: ${filesChanged}`);
 
   if (filesChanged > 0) {
-    console.log(`\nDone! Added .ts extensions to imports in ${filesChanged} files.`);
+    console.log(
+      `\nDone! Added .ts extensions to imports in ${filesChanged} files.`,
+    );
     console.log(`Please check the changes and fix any issues manually.`);
   } else {
-    console.log(`\nNo files were changed. All imports may already have extensions or no relative imports were found.`);
+    console.log(
+      `\nNo files were changed. All imports may already have extensions or no relative imports were found.`,
+    );
   }
 }
 

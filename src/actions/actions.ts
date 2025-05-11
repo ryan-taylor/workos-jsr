@@ -1,13 +1,16 @@
-import type { CryptoProvider } from '../common/crypto/crypto-provider.ts';
-import { SignatureProvider } from '../common/crypto/signature-provider.ts';
-import { unreachable } from '../common/utils/unreachable.ts';
-import type { ActionContext, ActionPayload } from './interfaces/action.interface.ts';
+import type { CryptoProvider } from "../common/crypto/crypto-provider.ts";
+import { SignatureProvider } from "../common/crypto/signature-provider.ts";
+import { unreachable } from "../common/utils/unreachable.ts";
+import type {
+  ActionContext,
+  ActionPayload,
+} from "./interfaces/action.interface.ts";
 import type {
   AuthenticationActionResponseData,
   ResponsePayload,
   UserRegistrationActionResponseData,
-} from './interfaces/response-payload.interface.ts';
-import { deserializeAction } from './serializers/action.serializer.ts';
+} from "./interfaces/response-payload.interface.ts";
+import { deserializeAction } from "./serializers/action.serializer.ts";
 
 export class Actions {
   private signatureProvider: SignatureProvider;
@@ -26,14 +29,14 @@ export class Actions {
 
   serializeType(
     type:
-      | AuthenticationActionResponseData['type']
-      | UserRegistrationActionResponseData['type'],
+      | AuthenticationActionResponseData["type"]
+      | UserRegistrationActionResponseData["type"],
   ) {
     switch (type) {
-      case 'authentication':
-        return 'authentication_action_response';
-      case 'user_registration':
-        return 'user_registration_action_response';
+      case "authentication":
+        return "authentication_action_response";
+      case "user_registration":
+        return "user_registration_action_response";
       default:
         return unreachable(type);
     }
@@ -46,14 +49,14 @@ export class Actions {
     let errorMessage: string | undefined;
     const { verdict, type } = data;
 
-    if (verdict === 'Deny' && data.errorMessage) {
+    if (verdict === "Deny" && data.errorMessage) {
       errorMessage = data.errorMessage;
     }
 
     const responsePayload: ResponsePayload = {
       timestamp: Date.now(),
       verdict,
-      ...(verdict === 'Deny' &&
+      ...(verdict === "Deny" &&
         data.errorMessage && { error_message: errorMessage }),
     };
 

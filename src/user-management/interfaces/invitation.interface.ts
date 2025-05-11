@@ -1,8 +1,8 @@
 export interface Invitation {
-  object: 'invitation';
+  object: "invitation";
   id: string;
   email: string;
-  state: 'pending' | 'accepted' | 'expired' | 'revoked';
+  state: "pending" | "accepted" | "expired" | "revoked";
   acceptedAt: string | null;
   revokedAt: string | null;
   expiresAt: string;
@@ -16,10 +16,10 @@ export interface Invitation {
 }
 
 export interface InvitationEvent {
-  object: 'invitation';
+  object: "invitation";
   id: string;
   email: string;
-  state: 'pending' | 'accepted' | 'expired' | 'revoked';
+  state: "pending" | "accepted" | "expired" | "revoked";
   acceptedAt: string | null;
   revokedAt: string | null;
   expiresAt: string;
@@ -31,10 +31,10 @@ export interface InvitationEvent {
 }
 
 export interface InvitationResponse {
-  object: 'invitation';
+  object: "invitation";
   id: string;
   email: string;
-  state: 'pending' | 'accepted' | 'expired' | 'revoked';
+  state: "pending" | "accepted" | "expired" | "revoked";
   accepted_at: string | null;
   revoked_at: string | null;
   expires_at: string;
@@ -48,10 +48,10 @@ export interface InvitationResponse {
 }
 
 export interface InvitationEventResponse {
-  object: 'invitation';
+  object: "invitation";
   id: string;
   email: string;
-  state: 'pending' | 'accepted' | 'expired' | 'revoked';
+  state: "pending" | "accepted" | "expired" | "revoked";
   accepted_at: string | null;
   revoked_at: string | null;
   expires_at: string;

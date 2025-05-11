@@ -1,4 +1,4 @@
 export enum ResourceOp {
-  Create = 'create',
-  Delete = 'delete',
+  Create = "create",
+  Delete = "delete",
 }

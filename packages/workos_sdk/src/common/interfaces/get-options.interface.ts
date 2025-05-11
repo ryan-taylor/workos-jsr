@@ -1,4 +1,4 @@
-import { JsonValue } from './http-response.interface.ts';
+import { JsonValue } from "./http-response.interface.ts";
 
 /**
  * Options for GET requests

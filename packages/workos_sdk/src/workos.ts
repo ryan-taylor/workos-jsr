@@ -6,47 +6,53 @@ import {
   RateLimitExceededException,
   UnauthorizedException,
   UnprocessableEntityException,
-} from './common/exceptions/index.ts';
-import type { GetOptions } from './common/interfaces/get-options.interface.ts';
-import type { PostOptions } from './common/interfaces/post-options.interface.ts';
-import type { PutOptions } from './common/interfaces/put-options.interface.ts';
-import type { WorkOSOptions } from './common/interfaces/workos-options.interface.ts';
-import type { WorkOSResponseError } from './common/interfaces/workos-response-error.interface.ts';
+} from "./common/exceptions/index.ts";
+import type { GetOptions } from "./common/interfaces/get-options.interface.ts";
+import type { PostOptions } from "./common/interfaces/post-options.interface.ts";
+import type { PutOptions } from "./common/interfaces/put-options.interface.ts";
+import type { WorkOSOptions } from "./common/interfaces/workos-options.interface.ts";
+import type { WorkOSResponseError } from "./common/interfaces/workos-response-error.interface.ts";
 
 // Re-export for usage outside of the package
-export type { GetOptions, PostOptions, PutOptions, WorkOSOptions, WorkOSResponseError };
-import { DirectorySync } from './directory-sync/directory-sync.ts';
-import { Events } from './events/events.ts';
-import { Organizations } from './organizations/organizations.ts';
-import { OrganizationDomains } from './organization-domains/organization-domains.ts';
-import { Passwordless } from './passwordless/passwordless.ts';
-import { Portal } from './portal/portal.ts';
-import { SSO } from './sso/sso.ts';
-import { Webhooks } from './webhooks/webhooks.ts';
-import { Mfa } from './mfa/mfa.ts';
-import { AuditLogs } from './audit-logs/audit-logs.ts';
-import { UserManagement } from './user-management/user-management.ts';
-import { FGA } from './fga/fga.ts';
-import { BadRequestException } from './common/exceptions/bad-request.exception.ts';
+export type {
+  GetOptions,
+  PostOptions,
+  PutOptions,
+  WorkOSOptions,
+  WorkOSResponseError,
+};
+import { DirectorySync } from "./directory-sync/directory-sync.ts";
+import { Events } from "./events/events.ts";
+import { Organizations } from "./organizations/organizations.ts";
+import { OrganizationDomains } from "./organization-domains/organization-domains.ts";
+import { Passwordless } from "./passwordless/passwordless.ts";
+import { Portal } from "./portal/portal.ts";
+import { SSO } from "./sso/sso.ts";
+import { Webhooks } from "./webhooks/webhooks.ts";
+import { Mfa } from "./mfa/mfa.ts";
+import { AuditLogs } from "./audit-logs/audit-logs.ts";
+import { UserManagement } from "./user-management/user-management.ts";
+import { FGA } from "./fga/fga.ts";
+import { BadRequestException } from "./common/exceptions/bad-request.exception.ts";
 
-import { type HttpClient, HttpClientError } from './common/net/http-client.ts';
-import { SubtleCryptoProvider } from './common/crypto/subtle-crypto-provider.ts';
-import { FetchHttpClient } from './common/net/fetch-client.ts';
-import { DenoHttpClient } from './common/net/deno-client.ts';
-import { FreshSessionProvider } from './common/iron-session/fresh-session-provider.ts';
-import { Widgets } from './widgets/widgets.ts';
-import { Actions } from './actions/actions.ts';
-import { Vault } from './vault/vault.ts';
-import { ConflictException } from './common/exceptions/conflict.exception.ts';
-import { initTelemetry } from './telemetry/workos-integration.ts';
+import { type HttpClient, HttpClientError } from "./common/net/http-client.ts";
+import { SubtleCryptoProvider } from "./common/crypto/subtle-crypto-provider.ts";
+import { FetchHttpClient } from "./common/net/fetch-client.ts";
+import { DenoHttpClient } from "./common/net/deno-client.ts";
+import { FreshSessionProvider } from "./common/iron-session/fresh-session-provider.ts";
+import { Widgets } from "./widgets/widgets.ts";
+import { Actions } from "./actions/actions.ts";
+import { Vault } from "./vault/vault.ts";
+import { ConflictException } from "./common/exceptions/conflict.exception.ts";
+import { initTelemetry } from "./telemetry/workos-integration.ts";
 
-const VERSION = '7.50.0';
+const VERSION = "7.50.0";
 
-const DEFAULT_HOSTNAME = 'api.workos.com';
+const DEFAULT_HOSTNAME = "api.workos.com";
 
-const HEADER_AUTHORIZATION = 'Authorization';
-const HEADER_IDEMPOTENCY_KEY = 'Idempotency-Key';
-const HEADER_WARRANT_TOKEN = 'Warrant-Token';
+const HEADER_AUTHORIZATION = "Authorization";
+const HEADER_IDEMPOTENCY_KEY = "Idempotency-Key";
+const HEADER_WARRANT_TOKEN = "Warrant-Token";
 
 /**
  * Main WorkOS client class that provides access to all WorkOS services.
@@ -148,7 +154,7 @@ export class WorkOS {
   constructor(readonly key?: string, readonly options: WorkOSOptions = {}) {
     if (!key) {
       // Use Deno.env.get for accessing environment variables
-      this.key = Deno.env.get('WORKOS_API_KEY');
+      this.key = Deno.env.get("WORKOS_API_KEY");
 
       if (!this.key) {
         throw new NoApiKeyProvidedException();
@@ -160,9 +166,9 @@ export class WorkOS {
     }
 
     // Use options.clientId or get from environment variable
-    this.clientId = this.options.clientId || Deno.env.get('WORKOS_CLIENT_ID');
+    this.clientId = this.options.clientId || Deno.env.get("WORKOS_CLIENT_ID");
 
-    const protocol: string = this.options.https ? 'https' : 'http';
+    const protocol: string = this.options.https ? "https" : "http";
     const apiHostname: string = this.options.apiHostname || DEFAULT_HOSTNAME;
     const port: number | undefined = this.options.port;
     this.baseURL = `${protocol}://${apiHostname}`;
@@ -174,7 +180,8 @@ export class WorkOS {
     let userAgent: string = `workos-node/${VERSION}`;
 
     if (options.appInfo) {
-      const { name, version }: { name: string; version: string } = options.appInfo;
+      const { name, version }: { name: string; version: string } =
+        options.appInfo;
       userAgent += ` ${name}: ${version}`;
     }
 
@@ -222,13 +229,13 @@ export class WorkOS {
    */
   createHttpClient(options: WorkOSOptions, userAgent: string) {
     // Check if we're running in Deno environment
-    const isDeno = typeof Deno !== 'undefined';
+    const isDeno = typeof Deno !== "undefined";
 
     // Create headers with authorization and user agent
     const headers = {
       ...options.config?.headers,
       Authorization: `Bearer ${this.key}`,
-      'User-Agent': userAgent,
+      "User-Agent": userAgent,
     };
 
     // Use Deno client when in Deno environment, otherwise use Fetch client
@@ -457,8 +464,12 @@ export class WorkOS {
       const { status, data, headers } = response;
 
       // Ensure requestID is a string
-      const requestIDHeader = headers['X-Request-ID'];
-      const requestID = typeof requestIDHeader === 'string' ? requestIDHeader : Array.isArray(requestIDHeader) ? requestIDHeader[0] : '';
+      const requestIDHeader = headers["X-Request-ID"];
+      const requestID = typeof requestIDHeader === "string"
+        ? requestIDHeader
+        : Array.isArray(requestIDHeader)
+        ? requestIDHeader[0]
+        : "";
 
       const {
         code,
@@ -478,7 +489,10 @@ export class WorkOS {
         case 422: {
           throw new UnprocessableEntityException({
             code,
-            errors: errors?.map(({ attribute, code }) => ({ field: attribute, code })),
+            errors: errors?.map(({ attribute, code }) => ({
+              field: attribute,
+              code,
+            })),
             message,
             requestID,
           });
@@ -493,17 +507,21 @@ export class WorkOS {
         }
         case 429: {
           // Extract retry-after header safely
-          const retryAfterHeader = typeof headers === 'object' && headers ? headers['Retry-After'] || headers['retry-after'] : null;
+          const retryAfterHeader = typeof headers === "object" && headers
+            ? headers["Retry-After"] || headers["retry-after"]
+            : null;
 
           let retryAfter: number | null = null;
-          if (typeof retryAfterHeader === 'string') {
+          if (typeof retryAfterHeader === "string") {
             retryAfter = Number(retryAfterHeader);
-          } else if (Array.isArray(retryAfterHeader) && retryAfterHeader.length > 0) {
+          } else if (
+            Array.isArray(retryAfterHeader) && retryAfterHeader.length > 0
+          ) {
             retryAfter = Number(retryAfterHeader[0]);
           }
 
           throw new RateLimitExceededException(
-            data.message || 'Rate limit exceeded',
+            data.message || "Rate limit exceeded",
             requestID,
             retryAfter,
           );
@@ -513,8 +531,8 @@ export class WorkOS {
             throw new OauthException(
               status,
               requestID,
-              error || '',
-              errorDescription || '',
+              error || "",
+              errorDescription || "",
               data,
             );
           } else if (code && errors) {
@@ -529,7 +547,7 @@ export class WorkOS {
           } else {
             throw new GenericServerException(
               status,
-              data.message || 'Unknown server error',
+              data.message || "Unknown server error",
               data,
               requestID,
             );

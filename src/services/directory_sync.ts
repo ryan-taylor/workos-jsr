@@ -1,4 +1,4 @@
-import type { HttpClient } from '../core/http_client.ts.ts';
+import type { HttpClient } from "../core/http_client.ts.ts";
 
 export interface ListDirectoriesOptions {
   limit?: number;
@@ -32,35 +32,48 @@ export class DirectorySync {
   private readonly baseUrl: string;
   private readonly apiKey: string;
 
-  constructor({ httpClient, baseUrl, apiKey }: { httpClient: HttpClient; baseUrl: string; apiKey: string }) {
+  constructor(
+    { httpClient, baseUrl, apiKey }: {
+      httpClient: HttpClient;
+      baseUrl: string;
+      apiKey: string;
+    },
+  ) {
     this.httpClient = httpClient;
     this.baseUrl = baseUrl;
     this.apiKey = apiKey;
   }
 
-  async listDirectories(options: ListDirectoriesOptions = {}): Promise<ListDirectoriesResponse> {
-    const url = new URL('/directories', this.baseUrl);
+  async listDirectories(
+    options: ListDirectoriesOptions = {},
+  ): Promise<ListDirectoriesResponse> {
+    const url = new URL("/directories", this.baseUrl);
     Object.entries(options).forEach(([k, v]) => {
       if (v !== undefined) url.searchParams.set(k, String(v));
     });
-    const headers = { 'Authorization': `Bearer ${this.apiKey}` };
-    return await this.httpClient.request<ListDirectoriesResponse>(url.toString(), { headers });
+    const headers = { "Authorization": `Bearer ${this.apiKey}` };
+    return await this.httpClient.request<ListDirectoriesResponse>(
+      url.toString(),
+      { headers },
+    );
   }
 
   async getDirectory(options: GetDirectoryOptions): Promise<Directory> {
     const url = new URL(`/directories/${options.directoryId}`, this.baseUrl);
-    const headers = { 'Authorization': `Bearer ${this.apiKey}` };
-    return await this.httpClient.request<Directory>(url.toString(), { headers });
+    const headers = { "Authorization": `Bearer ${this.apiKey}` };
+    return await this.httpClient.request<Directory>(url.toString(), {
+      headers,
+    });
   }
 
   async createDirectory(options: CreateDirectoryOptions): Promise<Directory> {
-    const url = new URL('/directories', this.baseUrl);
+    const url = new URL("/directories", this.baseUrl);
     const headers = {
-      'Authorization': `Bearer ${this.apiKey}`,
-      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${this.apiKey}`,
+      "Content-Type": "application/json",
     };
     return await this.httpClient.request<Directory>(url.toString(), {
-      method: 'POST',
+      method: "POST",
       headers,
       body: options,
     });

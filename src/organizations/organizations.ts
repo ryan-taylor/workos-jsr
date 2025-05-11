@@ -1,5 +1,5 @@
-import { AutoPaginatable } from '../common/utils/pagination.ts';
-import type { WorkOS } from '../workos.ts';
+import { AutoPaginatable } from "../common/utils/pagination.ts";
+import type { WorkOS } from "../workos.ts";
 import type {
   CreateOrganizationOptions,
   CreateOrganizationRequestOptions,
@@ -7,13 +7,20 @@ import type {
   Organization,
   OrganizationResponse,
   UpdateOrganizationOptions,
-} from './interfaces.ts';
-import { deserializeOrganization, serializeCreateOrganizationOptions, serializeUpdateOrganizationOptions } from './serializers.ts';
+} from "./interfaces.ts";
+import {
+  deserializeOrganization,
+  serializeCreateOrganizationOptions,
+  serializeUpdateOrganizationOptions,
+} from "./serializers.ts";
 
-import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize.ts';
-import type { ListOrganizationRolesResponse, RoleList } from '../roles/interfaces.ts';
-import { deserializeRole } from '../roles/serializers/role.serializer.ts';
-import type { ListOrganizationRolesOptions } from './interfaces/list-organization-roles-options.interface.ts';
+import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
+import type {
+  ListOrganizationRolesResponse,
+  RoleList,
+} from "../roles/interfaces.ts";
+import { deserializeRole } from "../roles/serializers/role.serializer.ts";
+import type { ListOrganizationRolesOptions } from "./interfaces/list-organization-roles-options.interface.ts";
 
 export class Organizations {
   constructor(private readonly workos: WorkOS) {}
@@ -24,14 +31,14 @@ export class Organizations {
     return new AutoPaginatable(
       await fetchAndDeserialize<OrganizationResponse, Organization>(
         this.workos,
-        '/organizations',
+        "/organizations",
         deserializeOrganization,
         options,
       ),
       (params) =>
         fetchAndDeserialize<OrganizationResponse, Organization>(
           this.workos,
-          '/organizations',
+          "/organizations",
           deserializeOrganization,
           params,
         ),
@@ -44,7 +51,7 @@ export class Organizations {
     requestOptions: CreateOrganizationRequestOptions = {},
   ): Promise<Organization> {
     const { data } = await this.workos.post<OrganizationResponse>(
-      '/organizations',
+      "/organizations",
       serializeCreateOrganizationOptions(payload),
       requestOptions,
     );
@@ -90,12 +97,14 @@ export class Organizations {
   ): Promise<RoleList> {
     const { organizationId } = options;
 
-    const { data: response } = await this.workos.get<ListOrganizationRolesResponse>(
+    const { data: response } = await this.workos.get<
+      ListOrganizationRolesResponse
+    >(
       `/organizations/${organizationId}/roles`,
     );
 
     return {
-      object: 'list',
+      object: "list",
       data: response.data.map((role) => deserializeRole(role)),
     };
   }

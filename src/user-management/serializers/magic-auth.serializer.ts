@@ -1,4 +1,9 @@
-import type { MagicAuth, MagicAuthEvent, MagicAuthEventResponse, MagicAuthResponse } from '../interfaces/magic-auth.interface.ts';
+import type {
+  MagicAuth,
+  MagicAuthEvent,
+  MagicAuthEventResponse,
+  MagicAuthResponse,
+} from "../interfaces/magic-auth.interface.ts";
 
 export const deserializeMagicAuth = (
   magicAuth: MagicAuthResponse,

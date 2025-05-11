@@ -7,8 +7,8 @@ import type {
   SerializedCheckBatchOptions,
   SerializedCheckOptions,
   SerializedCheckWarrantOptions,
-} from '../interfaces.ts';
-import { isResourceInterface, isSubject } from '../utils/interface-check.ts';
+} from "../interfaces.ts";
+import { isResourceInterface, isSubject } from "../utils/interface-check.ts";
 
 export const serializeCheckOptions = (
   options: CheckOptions,
@@ -21,7 +21,7 @@ export const serializeCheckOptions = (
 export const serializeCheckBatchOptions = (
   options: CheckBatchOptions,
 ): SerializedCheckBatchOptions => ({
-  op: 'batch',
+  op: "batch",
   checks: options.checks.map(serializeCheckWarrantOptions),
   debug: options.debug,
 });
@@ -30,12 +30,14 @@ const serializeCheckWarrantOptions = (
   warrant: CheckWarrantOptions,
 ): SerializedCheckWarrantOptions => {
   return {
-    resource_type: isResourceInterface(warrant.resource) ? warrant.resource.getResourceType() : warrant.resource.resourceType,
+    resource_type: isResourceInterface(warrant.resource)
+      ? warrant.resource.getResourceType()
+      : warrant.resource.resourceType,
     resource_id: isResourceInterface(warrant.resource)
       ? warrant.resource.getResourceId()
       : warrant.resource.resourceId
       ? warrant.resource.resourceId
-      : '',
+      : "",
     relation: warrant.relation,
     subject: isSubject(warrant.subject)
       ? {

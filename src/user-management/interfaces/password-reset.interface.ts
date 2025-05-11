@@ -1,5 +1,5 @@
 export interface PasswordReset {
-  object: 'password_reset';
+  object: "password_reset";
   id: string;
   userId: string;
   email: string;
@@ -10,7 +10,7 @@ export interface PasswordReset {
 }
 
 export interface PasswordResetEvent {
-  object: 'password_reset';
+  object: "password_reset";
   id: string;
   userId: string;
   email: string;
@@ -19,7 +19,7 @@ export interface PasswordResetEvent {
 }
 
 export interface PasswordResetResponse {
-  object: 'password_reset';
+  object: "password_reset";
   id: string;
   user_id: string;
   email: string;
@@ -30,7 +30,7 @@ export interface PasswordResetResponse {
 }
 
 export interface PasswordResetEventResponse {
-  object: 'password_reset';
+  object: "password_reset";
   id: string;
   user_id: string;
   email: string;

@@ -1,4 +1,7 @@
-import type { CreateOrganizationDomainOptions, SerializedCreateOrganizationDomainOptions } from '../interfaces/index.ts';
+import type {
+  CreateOrganizationDomainOptions,
+  SerializedCreateOrganizationDomainOptions,
+} from "../interfaces/index.ts";
 
 export const serializeCreateOrganizationDomainOptions = (
   options: CreateOrganizationDomainOptions,

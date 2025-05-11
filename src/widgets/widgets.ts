@@ -1,11 +1,11 @@
-import type { WorkOS } from '../workos.ts';
+import type { WorkOS } from "../workos.ts";
 import {
   deserializeGetTokenResponse,
   type GetTokenOptions,
   type GetTokenResponseResponse,
   type SerializedGetTokenOptions,
   serializeGetTokenOptions,
-} from './interfaces/get-token.ts';
+} from "./interfaces/get-token.ts";
 
 export class Widgets {
   constructor(private readonly workos: WorkOS) {}
@@ -14,7 +14,7 @@ export class Widgets {
     const { data } = await this.workos.post<
       GetTokenResponseResponse,
       SerializedGetTokenOptions
-    >('/widgets/token', serializeGetTokenOptions(payload));
+    >("/widgets/token", serializeGetTokenOptions(payload));
 
     return deserializeGetTokenResponse(data).token;
   }

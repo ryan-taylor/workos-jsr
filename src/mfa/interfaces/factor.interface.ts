@@ -1,10 +1,15 @@
-import type { Sms, SmsResponse } from './sms.interface.ts';
-import type { Totp, TotpResponse, TotpWithSecrets, TotpWithSecretsResponse } from './totp.interface.ts';
+import type { Sms, SmsResponse } from "./sms.interface.ts";
+import type {
+  Totp,
+  TotpResponse,
+  TotpWithSecrets,
+  TotpWithSecretsResponse,
+} from "./totp.interface.ts";
 
-type FactorType = 'sms' | 'totp' | 'generic_otp';
+type FactorType = "sms" | "totp" | "generic_otp";
 
 export interface Factor {
-  object: 'authentication_factor';
+  object: "authentication_factor";
   id: string;
   createdAt: string;
   updatedAt: string;
@@ -14,7 +19,7 @@ export interface Factor {
 }
 
 export interface FactorWithSecrets {
-  object: 'authentication_factor';
+  object: "authentication_factor";
   id: string;
   createdAt: string;
   updatedAt: string;
@@ -24,7 +29,7 @@ export interface FactorWithSecrets {
 }
 
 export interface FactorResponse {
-  object: 'authentication_factor';
+  object: "authentication_factor";
   id: string;
   created_at: string;
   updated_at: string;
@@ -34,7 +39,7 @@ export interface FactorResponse {
 }
 
 export interface FactorWithSecretsResponse {
-  object: 'authentication_factor';
+  object: "authentication_factor";
   id: string;
   created_at: string;
   updated_at: string;

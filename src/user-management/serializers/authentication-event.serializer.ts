@@ -1,4 +1,7 @@
-import type { AuthenticationEvent, AuthenticationEventResponse } from '../interfaces.ts';
+import type {
+  AuthenticationEvent,
+  AuthenticationEventResponse,
+} from "../interfaces.ts";
 
 export const deserializeAuthenticationEvent = (
   authenticationEvent: AuthenticationEventResponse,

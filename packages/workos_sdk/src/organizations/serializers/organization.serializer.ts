@@ -1,6 +1,8 @@
-import type { Organization } from '../interfaces';
+import type { Organization } from "../interfaces";
 
-export function deserializeOrganization(data: Record<string, unknown>): Organization {
+export function deserializeOrganization(
+  data: Record<string, unknown>,
+): Organization {
   return {
     id: data.id as string,
     name: data.name as string,

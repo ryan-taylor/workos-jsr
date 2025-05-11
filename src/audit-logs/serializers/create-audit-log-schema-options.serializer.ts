@@ -1,4 +1,8 @@
-import type { AuditLogSchemaMetadata, CreateAuditLogSchemaOptions, SerializedCreateAuditLogSchemaOptions } from '../interfaces.ts';
+import type {
+  AuditLogSchemaMetadata,
+  CreateAuditLogSchemaOptions,
+  SerializedCreateAuditLogSchemaOptions,
+} from "../interfaces.ts";
 
 function serializeMetadata(
   metadata: Record<string, string | number | boolean> | undefined,
@@ -11,7 +15,7 @@ function serializeMetadata(
 
   Object.keys(metadata).forEach((key) => {
     serializedMetadata[key] = {
-      type: metadata[key] as 'string' | 'number' | 'boolean',
+      type: metadata[key] as "string" | "number" | "boolean",
     };
   });
 
@@ -23,7 +27,7 @@ export const serializeCreateAuditLogSchemaOptions = (
 ): SerializedCreateAuditLogSchemaOptions => ({
   actor: {
     metadata: {
-      type: 'object',
+      type: "object",
       properties: serializeMetadata(schema.actor?.metadata),
     },
   },
@@ -32,7 +36,7 @@ export const serializeCreateAuditLogSchemaOptions = (
       type: target.type,
       metadata: target.metadata
         ? {
-          type: 'object',
+          type: "object",
           properties: serializeMetadata(target.metadata),
         }
         : undefined,
@@ -40,7 +44,7 @@ export const serializeCreateAuditLogSchemaOptions = (
   }),
   metadata: schema.metadata
     ? {
-      type: 'object',
+      type: "object",
       properties: serializeMetadata(schema.metadata),
     }
     : undefined,

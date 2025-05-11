@@ -2,14 +2,14 @@ import type {
   AuthenticateUserWithEmailVerificationCredentials,
   AuthenticateWithEmailVerificationOptions,
   SerializedAuthenticateWithEmailVerificationOptions,
-} from '../interfaces/authenticate-with-email-verification-options.interface.ts';
+} from "../interfaces/authenticate-with-email-verification-options.interface.ts";
 
 export const serializeAuthenticateWithEmailVerificationOptions = (
   options:
     & AuthenticateWithEmailVerificationOptions
     & AuthenticateUserWithEmailVerificationCredentials,
 ): SerializedAuthenticateWithEmailVerificationOptions => ({
-  grant_type: 'urn:workos:oauth:grant-type:email-verification:code',
+  grant_type: "urn:workos:oauth:grant-type:email-verification:code",
   client_id: options.clientId,
   client_secret: options.clientSecret,
   pending_authentication_token: options.pendingAuthenticationToken,

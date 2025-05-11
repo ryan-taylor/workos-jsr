@@ -1,7 +1,15 @@
-import { deserializeOrganization } from '../../organizations/serializers/organization.serializer.ts';
-import { deserializeInvitation, deserializeUser } from '../../user-management/serializers.ts';
-import { deserializeOrganizationMembership } from '../../user-management/serializers/organization-membership.serializer.ts';
-import type { ActionContext, ActionPayload, UserData, UserDataPayload } from '../interfaces/action.interface.ts';
+import { deserializeOrganization } from "../../organizations/serializers/organization.serializer.ts";
+import {
+  deserializeInvitation,
+  deserializeUser,
+} from "../../user-management/serializers.ts";
+import { deserializeOrganizationMembership } from "../../user-management/serializers/organization-membership.serializer.ts";
+import type {
+  ActionContext,
+  ActionPayload,
+  UserData,
+  UserDataPayload,
+} from "../interfaces/action.interface.ts";
 
 const deserializeUserData = (userData: UserDataPayload): UserData => {
   return {
@@ -16,23 +24,27 @@ export const deserializeAction = (
   actionPayload: ActionPayload,
 ): ActionContext => {
   switch (actionPayload.object) {
-    case 'user_registration_action_context':
+    case "user_registration_action_context":
       return {
         id: actionPayload.id,
         object: actionPayload.object,
         userData: deserializeUserData(actionPayload.user_data),
-        invitation: actionPayload.invitation ? deserializeInvitation(actionPayload.invitation) : undefined,
+        invitation: actionPayload.invitation
+          ? deserializeInvitation(actionPayload.invitation)
+          : undefined,
 
         ipAddress: actionPayload.ip_address,
         userAgent: actionPayload.user_agent,
         deviceFingerprint: actionPayload.device_fingerprint,
       };
-    case 'authentication_action_context':
+    case "authentication_action_context":
       return {
         id: actionPayload.id,
         object: actionPayload.object,
         user: deserializeUser(actionPayload.user),
-        organization: actionPayload.organization ? deserializeOrganization(actionPayload.organization) : undefined,
+        organization: actionPayload.organization
+          ? deserializeOrganization(actionPayload.organization)
+          : undefined,
         organizationMembership: actionPayload.organization_membership
           ? deserializeOrganizationMembership(
             actionPayload.organization_membership,

@@ -5,15 +5,15 @@
  * that works with Deno's native fetch API.
  */
 
-import type { TelemetryConfig } from './telemetry-config.ts';
+import type { TelemetryConfig } from "./telemetry-config.ts";
 
 /**
  * Types of telemetry data that can be exported
  */
 export enum TelemetryType {
-  SPANS = 'spans',
-  METRICS = 'metrics',
-  LOGS = 'logs',
+  SPANS = "spans",
+  METRICS = "metrics",
+  LOGS = "logs",
 }
 
 /**
@@ -46,7 +46,7 @@ export interface Metric {
   name: string;
   description?: string;
   unit?: string;
-  type: 'counter' | 'gauge' | 'histogram';
+  type: "counter" | "gauge" | "histogram";
   value: number | {
     count: number;
     sum: number;
@@ -87,8 +87,8 @@ export class OTLPHttpExporter {
    * @param config - Telemetry configuration
    */
   constructor(config: TelemetryConfig) {
-    this.endpoint = config.endpoint || 'http://localhost:4318';
-    this.serviceName = config.serviceName || 'workos-sdk';
+    this.endpoint = config.endpoint || "http://localhost:4318";
+    this.serviceName = config.serviceName || "workos-sdk";
     this.defaultAttributes = config.defaultAttributes || {};
     this.debug = config.debug || false;
   }
@@ -103,8 +103,8 @@ export class OTLPHttpExporter {
     const array = new Uint8Array(bytes);
     crypto.getRandomValues(array);
     return Array.from(array)
-      .map((b) => b.toString(16).padStart(2, '0'))
-      .join('');
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
   }
 
   /**
@@ -139,7 +139,7 @@ export class OTLPHttpExporter {
       attributes: {
         ...span.attributes,
         ...this.defaultAttributes,
-        'service.name': this.serviceName,
+        "service.name": this.serviceName,
       },
     }));
 
@@ -148,15 +148,15 @@ export class OTLPHttpExporter {
         {
           resource: {
             attributes: {
-              'service.name': this.serviceName,
+              "service.name": this.serviceName,
               ...this.defaultAttributes,
             },
           },
           scopeSpans: [
             {
               scope: {
-                name: '@workos/sdk',
-                version: '1.0.0',
+                name: "@workos/sdk",
+                version: "1.0.0",
               },
               spans: enrichedSpans,
             },
@@ -180,23 +180,23 @@ export class OTLPHttpExporter {
     const enrichedMetrics = metrics.map((metric) => {
       const baseMetric = {
         name: metric.name,
-        description: metric.description || '',
-        unit: metric.unit || '',
+        description: metric.description || "",
+        unit: metric.unit || "",
         attributes: {
           ...metric.attributes,
           ...this.defaultAttributes,
-          'service.name': this.serviceName,
+          "service.name": this.serviceName,
         },
       };
 
-      if (metric.type === 'counter') {
+      if (metric.type === "counter") {
         return {
           ...baseMetric,
           sum: {
             dataPoints: [
               {
                 timeUnixNano: BigInt(metric.timestamp * 1000000),
-                asDouble: typeof metric.value === 'number' ? metric.value : 0,
+                asDouble: typeof metric.value === "number" ? metric.value : 0,
                 attributes: baseMetric.attributes,
               },
             ],
@@ -204,14 +204,14 @@ export class OTLPHttpExporter {
             aggregationTemporality: 1, // AGGREGATION_TEMPORALITY_CUMULATIVE
           },
         };
-      } else if (metric.type === 'gauge') {
+      } else if (metric.type === "gauge") {
         return {
           ...baseMetric,
           gauge: {
             dataPoints: [
               {
                 timeUnixNano: BigInt(metric.timestamp * 1000000),
-                asDouble: typeof metric.value === 'number' ? metric.value : 0,
+                asDouble: typeof metric.value === "number" ? metric.value : 0,
                 attributes: baseMetric.attributes,
               },
             ],
@@ -249,15 +249,15 @@ export class OTLPHttpExporter {
         {
           resource: {
             attributes: {
-              'service.name': this.serviceName,
+              "service.name": this.serviceName,
               ...this.defaultAttributes,
             },
           },
           scopeMetrics: [
             {
               scope: {
-                name: '@workos/sdk',
-                version: '1.0.0',
+                name: "@workos/sdk",
+                version: "1.0.0",
               },
               metrics: enrichedMetrics,
             },
@@ -283,7 +283,7 @@ export class OTLPHttpExporter {
       attributes: {
         ...log.attributes,
         ...this.defaultAttributes,
-        'service.name': this.serviceName,
+        "service.name": this.serviceName,
       },
     }));
 
@@ -292,15 +292,15 @@ export class OTLPHttpExporter {
         {
           resource: {
             attributes: {
-              'service.name': this.serviceName,
+              "service.name": this.serviceName,
               ...this.defaultAttributes,
             },
           },
           scopeLogs: [
             {
               scope: {
-                name: '@workos/sdk',
-                version: '1.0.0',
+                name: "@workos/sdk",
+                version: "1.0.0",
               },
               logRecords: enrichedLogs.map((log) => ({
                 timeUnixNano: BigInt(log.timestamp * 1000000),
@@ -309,7 +309,9 @@ export class OTLPHttpExporter {
                 body: {
                   stringValue: log.body,
                 },
-                attributes: Object.entries(log.attributes || {}).map(([k, v]) => ({
+                attributes: Object.entries(log.attributes || {}).map((
+                  [k, v],
+                ) => ({
                   key: k,
                   value: {
                     stringValue: v.toString(),
@@ -335,7 +337,10 @@ export class OTLPHttpExporter {
    * @returns Promise that resolves when the data is sent
    * @throws Error if the export fails
    */
-  private async sendTelemetry(type: TelemetryType, payload: unknown): Promise<void> {
+  private async sendTelemetry(
+    type: TelemetryType,
+    payload: unknown,
+  ): Promise<void> {
     const url = `${this.endpoint}/v1/${type}`;
 
     try {
@@ -344,9 +349,9 @@ export class OTLPHttpExporter {
       }
 
       const response = await fetch(url, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
       });
@@ -354,7 +359,9 @@ export class OTLPHttpExporter {
       if (!response.ok) {
         const errorText = await response.text();
         if (this.debug) {
-          console.error(`[WorkOS Telemetry] Error exporting ${type}: ${response.status} ${errorText}`);
+          console.error(
+            `[WorkOS Telemetry] Error exporting ${type}: ${response.status} ${errorText}`,
+          );
         }
       } else if (this.debug) {
         console.debug(`[WorkOS Telemetry] Successfully exported ${type}`);

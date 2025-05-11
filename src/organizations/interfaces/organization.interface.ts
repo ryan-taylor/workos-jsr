@@ -1,7 +1,10 @@
-import type { OrganizationDomain, OrganizationDomainResponse } from '../../organization-domains/interfaces/organization-domain.interface.ts';
+import type {
+  OrganizationDomain,
+  OrganizationDomainResponse,
+} from "../../organization-domains/interfaces/organization-domain.interface.ts";
 
 export interface Organization {
-  object: 'organization';
+  object: "organization";
   id: string;
   name: string;
   allowProfilesOutsideOrganization: boolean;
@@ -14,7 +17,7 @@ export interface Organization {
 }
 
 export interface OrganizationResponse {
-  object: 'organization';
+  object: "organization";
   id: string;
   name: string;
   allow_profiles_outside_organization: boolean;

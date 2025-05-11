@@ -1,10 +1,17 @@
-import type { ResourceInterface, ResourceOptions } from './resource.interface.ts';
-import type { PolicyContext, SerializedSubject, Subject } from './warrant.interface.ts';
-import type { CheckOp } from './check-op.enum.ts';
-import type { PostOptions } from '../../common/interfaces.ts';
-import { deserializeDecisionTreeNode } from '../serializers/check-options.serializer.ts';
+import type {
+  ResourceInterface,
+  ResourceOptions,
+} from "./resource.interface.ts";
+import type {
+  PolicyContext,
+  SerializedSubject,
+  Subject,
+} from "./warrant.interface.ts";
+import type { CheckOp } from "./check-op.enum.ts";
+import type { PostOptions } from "../../common/interfaces.ts";
+import { deserializeDecisionTreeNode } from "../serializers/check-options.serializer.ts";
 
-const CHECK_RESULT_AUTHORIZED = 'authorized';
+const CHECK_RESULT_AUTHORIZED = "authorized";
 
 export interface CheckWarrantOptions {
   resource: ResourceInterface | ResourceOptions;
@@ -39,7 +46,7 @@ export interface SerializedCheckOptions {
 }
 
 export interface SerializedCheckBatchOptions {
-  op: 'batch';
+  op: "batch";
   checks: SerializedCheckWarrantOptions[];
   debug?: boolean;
 }
@@ -109,4 +116,4 @@ export class CheckResult implements CheckResultInterface {
   }
 }
 
-export type CheckRequestOptions = Pick<PostOptions, 'warrantToken'>;
+export type CheckRequestOptions = Pick<PostOptions, "warrantToken">;

@@ -1,6 +1,8 @@
-import type { Connection } from '../interfaces/index.ts';
+import type { Connection } from "../interfaces/index.ts";
 
-export function deserializeConnection(data: Record<string, unknown>): Connection {
+export function deserializeConnection(
+  data: Record<string, unknown>,
+): Connection {
   return {
     id: data.id as string,
     name: data.name as string,

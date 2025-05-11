@@ -1,4 +1,4 @@
-import type { Cookie } from 'jsr:@std/http@1/cookie';
+import type { Cookie } from "jsr:@std/http@1/cookie";
 /**
  * Options for sealing session data
  */
@@ -34,7 +34,7 @@ export interface SessionOptions {
   /** Whether the cookie is only accessible via HTTP(S) requests and not client JavaScript, defaults to true */
   httpOnly?: boolean;
   /** Whether the cookie is only sent in a first-party context, defaults to 'Lax' */
-  sameSite?: 'Strict' | 'Lax' | 'None';
+  sameSite?: "Strict" | "Lax" | "None";
   /** Forces the cookie to be set for this domain, defaults to current domain */
   domain?: string;
 }
@@ -58,10 +58,12 @@ export class FreshSessionProvider {
     const { password } = options;
 
     // Ensure we have a single password string
-    const passwordStr = typeof password === 'string' ? password : Object.values(password)[0];
+    const passwordStr = typeof password === "string"
+      ? password
+      : Object.values(password)[0];
 
     if (!passwordStr) {
-      throw new Error('Password is required for sealing data');
+      throw new Error("Password is required for sealing data");
     }
 
     // Convert data to JSON string
@@ -79,7 +81,7 @@ export class FreshSessionProvider {
 
     // Encrypt the data
     const encryptedData = await crypto.subtle.encrypt(
-      { name: 'AES-GCM', iv },
+      { name: "AES-GCM", iv },
       key,
       dataBytes,
     );
@@ -106,10 +108,12 @@ export class FreshSessionProvider {
     const { password } = options;
 
     // Ensure we have a single password string
-    const passwordStr = typeof password === 'string' ? password : Object.values(password)[0];
+    const passwordStr = typeof password === "string"
+      ? password
+      : Object.values(password)[0];
 
     if (!passwordStr) {
-      throw new Error('Password is required for unsealing data');
+      throw new Error("Password is required for unsealing data");
     }
 
     try {
@@ -126,7 +130,7 @@ export class FreshSessionProvider {
 
       // Decrypt the data
       const decryptedData = await crypto.subtle.decrypt(
-        { name: 'AES-GCM', iv },
+        { name: "AES-GCM", iv },
         key,
         encryptedData,
       );
@@ -135,7 +139,9 @@ export class FreshSessionProvider {
       const jsonData = new TextDecoder().decode(decryptedData);
       return JSON.parse(jsonData) as T;
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage = error instanceof Error
+        ? error.message
+        : String(error);
       throw new Error(`Failed to unseal data: ${errorMessage}`);
     }
   }
@@ -182,10 +188,10 @@ export class FreshSessionProvider {
       cookieName,
       password,
       ttl = 86400 * 7, // Default 7 days
-      cookiePath = '/',
+      cookiePath = "/",
       secure = true,
       httpOnly = true,
-      sameSite = 'Lax',
+      sameSite = "Lax",
       domain,
     } = options;
 
@@ -214,7 +220,7 @@ export class FreshSessionProvider {
 
     // Create headers for the new response
     const headers = new Headers(baseResponse.headers);
-    headers.append('Set-Cookie', cookieStr);
+    headers.append("Set-Cookie", cookieStr);
 
     // Return a new response with the cookie header
     return new Response(baseResponse.body, {
@@ -236,17 +242,17 @@ export class FreshSessionProvider {
   ): Response {
     const {
       cookieName,
-      cookiePath = '/',
+      cookiePath = "/",
       secure = true,
       httpOnly = true,
-      sameSite = 'Lax',
+      sameSite = "Lax",
       domain,
     } = options;
 
     // Create an expired cookie to clear the session
     const cookie: Cookie = {
       name: cookieName,
-      value: '',
+      value: "",
       path: cookiePath,
       secure,
       httpOnly,
@@ -266,7 +272,7 @@ export class FreshSessionProvider {
 
     // Create headers for the new response
     const headers = new Headers(baseResponse.headers);
-    headers.append('Set-Cookie', cookieStr);
+    headers.append("Set-Cookie", cookieStr);
 
     // Return a new response with the cookie header
     return new Response(baseResponse.body, {
@@ -281,7 +287,9 @@ export class FreshSessionProvider {
    * @param options Session options
    * @returns A Fresh middleware handler
    */
-  createSessionMiddleware(options: SessionOptions): { handler: (req: Request, ctx: FreshContext) => Promise<Response> } {
+  createSessionMiddleware(
+    options: SessionOptions,
+  ): { handler: (req: Request, ctx: FreshContext) => Promise<Response> } {
     // Use arrow function to preserve 'this' context
     return {
       handler: async (req: Request, ctx: FreshContext) => {
@@ -320,13 +328,13 @@ export class FreshSessionProvider {
    * @returns An object containing all cookies
    */
   private parseCookies(req: Request): Record<string, string> {
-    const cookieStr = req.headers.get('cookie') || '';
+    const cookieStr = req.headers.get("cookie") || "";
     const cookies: Record<string, string> = {};
 
-    cookieStr.split(';').forEach((pair) => {
-      const [name, ...rest] = pair.trim().split('=');
+    cookieStr.split(";").forEach((pair) => {
+      const [name, ...rest] = pair.trim().split("=");
       if (name) {
-        cookies[name] = rest.join('=');
+        cookies[name] = rest.join("=");
       }
     });
 
@@ -342,10 +350,14 @@ export class FreshSessionProvider {
     let cookieStr = `${cookie.name}=${cookie.value}`;
 
     if (cookie.expires) {
-      cookieStr += `; Expires=${cookie.expires instanceof Date ? cookie.expires.toUTCString() : new Date(cookie.expires).toUTCString()}`;
+      cookieStr += `; Expires=${
+        cookie.expires instanceof Date
+          ? cookie.expires.toUTCString()
+          : new Date(cookie.expires).toUTCString()
+      }`;
     }
 
-    if (typeof cookie.maxAge === 'number') {
+    if (typeof cookie.maxAge === "number") {
       cookieStr += `; Max-Age=${cookie.maxAge}`;
     }
 
@@ -358,11 +370,11 @@ export class FreshSessionProvider {
     }
 
     if (cookie.secure) {
-      cookieStr += '; Secure';
+      cookieStr += "; Secure";
     }
 
     if (cookie.httpOnly) {
-      cookieStr += '; HttpOnly';
+      cookieStr += "; HttpOnly";
     }
 
     if (cookie.sameSite) {
@@ -380,11 +392,11 @@ export class FreshSessionProvider {
   private async getKeyMaterial(password: string): Promise<CryptoKey> {
     const encoder = new TextEncoder();
     return await crypto.subtle.importKey(
-      'raw',
+      "raw",
       encoder.encode(password),
-      { name: 'PBKDF2' },
+      { name: "PBKDF2" },
       false,
-      ['deriveBits', 'deriveKey'],
+      ["deriveBits", "deriveKey"],
     );
   }
 
@@ -395,19 +407,19 @@ export class FreshSessionProvider {
    */
   private async deriveKey(keyMaterial: CryptoKey): Promise<CryptoKey> {
     // Use a fixed salt for deterministic key derivation
-    const salt = new TextEncoder().encode('WorkOS-Fresh-Session-Salt');
+    const salt = new TextEncoder().encode("WorkOS-Fresh-Session-Salt");
 
     return await crypto.subtle.deriveKey(
       {
-        name: 'PBKDF2',
+        name: "PBKDF2",
         salt,
         iterations: 100000,
-        hash: 'SHA-256',
+        hash: "SHA-256",
       },
       keyMaterial,
-      { name: 'AES-GCM', length: 256 },
+      { name: "AES-GCM", length: 256 },
       false,
-      ['encrypt', 'decrypt'],
+      ["encrypt", "decrypt"],
     );
   }
 }

@@ -1,4 +1,4 @@
-import type { WorkOS } from '../workos.ts';
+import type { WorkOS } from "../workos.ts";
 import {
   type BatchWriteResourcesOptions,
   type BatchWriteResourcesResponse,
@@ -26,7 +26,7 @@ import {
   type WarrantToken,
   type WarrantTokenResponse,
   type WriteWarrantOptions,
-} from './interfaces.ts';
+} from "./interfaces.ts";
 import {
   deserializeBatchWriteResourcesResponse,
   deserializeQueryResult,
@@ -41,10 +41,10 @@ import {
   serializeListWarrantsOptions,
   serializeQueryOptions,
   serializeWriteWarrantOptions,
-} from './serializers.ts';
-import { isResourceInterface } from './utils/interface-check.ts';
-import { AutoPaginatable } from '../common/utils/pagination.ts';
-import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize.ts';
+} from "./serializers.ts";
+import { isResourceInterface } from "./utils/interface-check.ts";
+import { AutoPaginatable } from "../common/utils/pagination.ts";
+import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
 
 export class FGA {
   constructor(private readonly workos: WorkOS) {}
@@ -77,7 +77,7 @@ export class FGA {
 
   async createResource(resource: CreateResourceOptions): Promise<Resource> {
     const { data } = await this.workos.post<ResourceResponse>(
-      '/fga/v1/resources',
+      "/fga/v1/resources",
       serializeCreateResourceOptions(resource),
     );
 
@@ -87,8 +87,12 @@ export class FGA {
   async getResource(
     resource: ResourceInterface | ResourceOptions,
   ): Promise<Resource> {
-    const resourceType = isResourceInterface(resource) ? resource.getResourceType() : resource.resourceType;
-    const resourceId = isResourceInterface(resource) ? resource.getResourceId() : resource.resourceId;
+    const resourceType = isResourceInterface(resource)
+      ? resource.getResourceType()
+      : resource.resourceType;
+    const resourceId = isResourceInterface(resource)
+      ? resource.getResourceId()
+      : resource.resourceId;
 
     const { data } = await this.workos.get<ResourceResponse>(
       `/fga/v1/resources/${resourceType}/${resourceId}`,
@@ -103,14 +107,14 @@ export class FGA {
     return new AutoPaginatable(
       await fetchAndDeserialize<ResourceResponse, Resource>(
         this.workos,
-        '/fga/v1/resources',
+        "/fga/v1/resources",
         deserializeResource,
         options ? serializeListResourceOptions(options) : undefined,
       ),
       (params) =>
         fetchAndDeserialize<ResourceResponse, Resource>(
           this.workos,
-          '/fga/v1/resources',
+          "/fga/v1/resources",
           deserializeResource,
           params,
         ),
@@ -119,8 +123,12 @@ export class FGA {
   }
 
   async updateResource(options: UpdateResourceOptions): Promise<Resource> {
-    const resourceType = isResourceInterface(options.resource) ? options.resource.getResourceType() : options.resource.resourceType;
-    const resourceId = isResourceInterface(options.resource) ? options.resource.getResourceId() : options.resource.resourceId;
+    const resourceType = isResourceInterface(options.resource)
+      ? options.resource.getResourceType()
+      : options.resource.resourceType;
+    const resourceId = isResourceInterface(options.resource)
+      ? options.resource.getResourceId()
+      : options.resource.resourceId;
 
     const { data } = await this.workos.put<ResourceResponse>(
       `/fga/v1/resources/${resourceType}/${resourceId}`,
@@ -133,8 +141,12 @@ export class FGA {
   }
 
   async deleteResource(resource: DeleteResourceOptions): Promise<void> {
-    const resourceType = isResourceInterface(resource) ? resource.getResourceType() : resource.resourceType;
-    const resourceId = isResourceInterface(resource) ? resource.getResourceId() : resource.resourceId;
+    const resourceType = isResourceInterface(resource)
+      ? resource.getResourceType()
+      : resource.resourceType;
+    const resourceId = isResourceInterface(resource)
+      ? resource.getResourceId()
+      : resource.resourceId;
 
     await this.workos.delete(`/fga/v1/resources/${resourceType}/${resourceId}`);
   }
@@ -143,7 +155,7 @@ export class FGA {
     options: BatchWriteResourcesOptions,
   ): Promise<Resource[]> {
     const { data } = await this.workos.post<BatchWriteResourcesResponse>(
-      '/fga/v1/resources/batch',
+      "/fga/v1/resources/batch",
       serializeBatchWriteResourcesOptions(options),
     );
     return deserializeBatchWriteResourcesResponse(data);
@@ -151,7 +163,7 @@ export class FGA {
 
   async writeWarrant(options: WriteWarrantOptions): Promise<WarrantToken> {
     const { data } = await this.workos.post<WarrantTokenResponse>(
-      '/fga/v1/warrants',
+      "/fga/v1/warrants",
       serializeWriteWarrantOptions(options),
     );
 
@@ -162,7 +174,7 @@ export class FGA {
     options: WriteWarrantOptions[],
   ): Promise<WarrantToken> {
     const { data: warrantToken } = await this.workos.post<WarrantTokenResponse>(
-      '/fga/v1/warrants',
+      "/fga/v1/warrants",
       options.map(serializeWriteWarrantOptions),
     );
 
@@ -176,7 +188,7 @@ export class FGA {
     return new AutoPaginatable(
       await fetchAndDeserialize<WarrantResponse, Warrant>(
         this.workos,
-        '/fga/v1/warrants',
+        "/fga/v1/warrants",
         deserializeWarrant,
         options ? serializeListWarrantsOptions(options) : undefined,
         requestOptions,
@@ -184,7 +196,7 @@ export class FGA {
       (params) =>
         fetchAndDeserialize<WarrantResponse, Warrant>(
           this.workos,
-          '/fga/v1/warrants',
+          "/fga/v1/warrants",
           deserializeWarrant,
           params,
           requestOptions,
@@ -200,7 +212,7 @@ export class FGA {
     return new AutoPaginatable(
       await fetchAndDeserialize<QueryResultResponse, QueryResult>(
         this.workos,
-        '/fga/v1/query',
+        "/fga/v1/query",
         deserializeQueryResult,
         serializeQueryOptions(options),
         requestOptions,
@@ -208,7 +220,7 @@ export class FGA {
       (params) =>
         fetchAndDeserialize<QueryResultResponse, QueryResult>(
           this.workos,
-          '/fga/v1/query',
+          "/fga/v1/query",
           deserializeQueryResult,
           params,
           requestOptions,

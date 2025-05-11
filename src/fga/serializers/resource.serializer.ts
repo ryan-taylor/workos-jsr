@@ -1,4 +1,8 @@
-import type { BatchWriteResourcesResponse, Resource, ResourceResponse } from '../interfaces.ts';
+import type {
+  BatchWriteResourcesResponse,
+  Resource,
+  ResourceResponse,
+} from "../interfaces.ts";
 
 export const deserializeResource = (response: ResourceResponse): Resource => ({
   resourceType: response.resource_type,

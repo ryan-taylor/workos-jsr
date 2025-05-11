@@ -1,12 +1,15 @@
 # WorkOS Node.js to Deno 2.x Migration Guide
 
-This document outlines the key Node.js dependencies that need replacement as we migrate from Node.js to Deno 2.x, along with lessons learned, patterns that worked well, and common challenges encountered during the migration.
+This document outlines the key Node.js dependencies that need replacement as we
+migrate from Node.js to Deno 2.x, along with lessons learned, patterns that
+worked well, and common challenges encountered during the migration.
 
 ## Core Dependencies Requiring Replacement
 
 ### 1. crypto Module
 
-The Node.js `crypto` module is used extensively throughout the codebase, particularly in:
+The Node.js `crypto` module is used extensively throughout the codebase,
+particularly in:
 
 - **vault/**: For encryption and decryption operations
   - `src/vault/cryptography/encrypt.ts`
@@ -24,8 +27,10 @@ The Node.js `crypto` module is used extensively throughout the codebase, particu
 **Replacement Strategy:**
 
 - Use Deno's standard library crypto: `https://deno.land/std/crypto/mod.ts`
-- For SubtleCrypto operations, leverage Web Crypto API which is fully supported in Deno
-- Create adapter classes to maintain the same interface while using Deno's crypto implementations
+- For SubtleCrypto operations, leverage Web Crypto API which is fully supported
+  in Deno
+- Create adapter classes to maintain the same interface while using Deno's
+  crypto implementations
 
 ### 2. HTTP/HTTPS Clients
 
@@ -54,7 +59,8 @@ Used for session management in the user-management module:
 
 - Use npm: specifier to import iron-session: `npm:iron-session@8.0.4`
 - Review and adapt any Node.js specific aspects of the iron-session integration
-- Consider using Deno's built-in Web Crypto API for some of the functionality if needed
+- Consider using Deno's built-in Web Crypto API for some of the functionality if
+  needed
 
 ### 4. fs/promises Module
 
@@ -64,78 +70,107 @@ Used in tests for file operations:
 
 **Replacement Strategy:**
 
-- Use Deno's standard library for file operations: `https://deno.land/std/fs/mod.ts`
+- Use Deno's standard library for file operations:
+  `https://deno.land/std/fs/mod.ts`
 - Update test utilities to use Deno's file system APIs
-- Consider using Deno's test fixtures API for test data instead of file operations where appropriate
+- Consider using Deno's test fixtures API for test data instead of file
+  operations where appropriate
 
 ## Lessons Learned During Migration
 
 ### 1. Embracing Web Standards
 
-One of the most significant lessons from our migration was the advantage of embracing web standards. Deno's commitment to web-compatible APIs made certain aspects of the migration easier than expected:
+One of the most significant lessons from our migration was the advantage of
+embracing web standards. Deno's commitment to web-compatible APIs made certain
+aspects of the migration easier than expected:
 
-- **Web Crypto API**: Deno's implementation of Web Crypto API provided a smooth transition path for cryptographic operations
-- **Fetch API**: Using the standard fetch API instead of Node.js-specific HTTP clients improved code portability
-- **URL and URLSearchParams**: Using these web standard APIs instead of custom URL handling simplified the code
+- **Web Crypto API**: Deno's implementation of Web Crypto API provided a smooth
+  transition path for cryptographic operations
+- **Fetch API**: Using the standard fetch API instead of Node.js-specific HTTP
+  clients improved code portability
+- **URL and URLSearchParams**: Using these web standard APIs instead of custom
+  URL handling simplified the code
 
 ### 2. Module Resolution Strategy
 
-We found that a hybrid approach to module resolution worked best during the transition:
+We found that a hybrid approach to module resolution worked best during the
+transition:
 
-- **Import Maps**: Using import maps to alias Node.js module paths to their Deno equivalents allowed for a gradual migration
-- **Progressive Enhancement**: Starting with core utilities and progressively moving to more complex modules helped maintain stability
-- **npm: Compatibility**: Deno's ability to use npm packages through the npm: specifier was invaluable for dependencies without direct Deno equivalents
+- **Import Maps**: Using import maps to alias Node.js module paths to their Deno
+  equivalents allowed for a gradual migration
+- **Progressive Enhancement**: Starting with core utilities and progressively
+  moving to more complex modules helped maintain stability
+- **npm: Compatibility**: Deno's ability to use npm packages through the npm:
+  specifier was invaluable for dependencies without direct Deno equivalents
 
 ### 3. TypeScript Compatibility
 
 Deno's native TypeScript support required some adjustments:
 
-- **Type Definitions**: We needed to adapt some TypeScript definitions to work with Deno's stricter type checking
-- **Module Types**: Explicit use of import/export type was necessary in some cases
-- **Configuration**: Transitioning from tsconfig.json to Deno's configuration required careful mapping of options
+- **Type Definitions**: We needed to adapt some TypeScript definitions to work
+  with Deno's stricter type checking
+- **Module Types**: Explicit use of import/export type was necessary in some
+  cases
+- **Configuration**: Transitioning from tsconfig.json to Deno's configuration
+  required careful mapping of options
 
 ### 4. Testing Approach
 
 Our testing strategy evolved significantly:
 
-- **Test Runner**: Complete migration from Jest/Vitest to Deno's built-in test runner, removing all Jest/Vitest dependencies
-- **Mocking**: Implemented native mocking strategies that leverage Deno's capabilities instead of relying on Jest's mocking
-- **Coverage Tools**: Fully adopted Deno's built-in coverage tools instead of third-party coverage tools
-- **Compatibility Layer**: Removed the compatibility layer (deno-test-setup.ts) that was temporarily used during transition
+- **Test Runner**: Complete migration from Jest/Vitest to Deno's built-in test
+  runner, removing all Jest/Vitest dependencies
+- **Mocking**: Implemented native mocking strategies that leverage Deno's
+  capabilities instead of relying on Jest's mocking
+- **Coverage Tools**: Fully adopted Deno's built-in coverage tools instead of
+  third-party coverage tools
+- **Compatibility Layer**: Removed the compatibility layer (deno-test-setup.ts)
+  that was temporarily used during transition
 
 ## Patterns That Worked Well
 
 ### 1. Islands Architecture Implementation
 
-The Fresh framework's Islands architecture proved to be a excellent pattern for our application:
+The Fresh framework's Islands architecture proved to be a excellent pattern for
+our application:
 
-- **Selective Hydration**: Only interactive components are hydrated with JavaScript, reducing client-side JavaScript
-- **Clear Boundaries**: Explicit separation between server and client code improved reasoning about the codebase
-- **Progressive Enhancement**: The application works without JavaScript, with interactivity added as an enhancement
+- **Selective Hydration**: Only interactive components are hydrated with
+  JavaScript, reducing client-side JavaScript
+- **Clear Boundaries**: Explicit separation between server and client code
+  improved reasoning about the codebase
+- **Progressive Enhancement**: The application works without JavaScript, with
+  interactivity added as an enhancement
 
 ### 2. Adapter Pattern for Cross-Platform Compatibility
 
 We successfully used the adapter pattern to bridge Node.js and Deno APIs:
 
 - **Interface First**: Defining clear interfaces before implementing adapters
-- **Implementation Swapping**: Creating both Node.js and Deno implementations of the same interface
-- **Runtime Detection**: Using feature detection to select the appropriate implementation
+- **Implementation Swapping**: Creating both Node.js and Deno implementations of
+  the same interface
+- **Runtime Detection**: Using feature detection to select the appropriate
+  implementation
 
 ### 3. Signals for State Management
 
 Preact signals provided a lightweight, efficient approach to state management:
 
 - **Granular Updates**: Only components that depend on changed signals re-render
-- **Simplified API**: More intuitive than React's useState and useEffect for many use cases
-- **Explicit Dependencies**: Signal dependencies are explicit, making code easier to understand
+- **Simplified API**: More intuitive than React's useState and useEffect for
+  many use cases
+- **Explicit Dependencies**: Signal dependencies are explicit, making code
+  easier to understand
 
 ### 4. Custom Hooks for Logic Reuse
 
 Custom hooks proved to be a powerful pattern for logic reuse across islands:
 
-- **Encapsulating Complexity**: Hooks encapsulate complex logic in reusable units
-- **Consistent Patterns**: Common patterns like form handling and authentication follow consistent patterns
-- **Testability**: Isolated logic in hooks is easier to test than logic embedded in components
+- **Encapsulating Complexity**: Hooks encapsulate complex logic in reusable
+  units
+- **Consistent Patterns**: Common patterns like form handling and authentication
+  follow consistent patterns
+- **Testability**: Isolated logic in hooks is easier to test than logic embedded
+  in components
 
 ## Common Challenges and Solutions
 
@@ -145,17 +180,21 @@ Custom hooks proved to be a powerful pattern for logic reuse across islands:
 
 **Solution**:
 
-- Implemented a "dependency bridge" that provided consistent APIs across both environments
+- Implemented a "dependency bridge" that provided consistent APIs across both
+  environments
 - Used import maps to maintain consistent import paths
-- Created a dependency audit tool to track dependencies and their platform compatibility
+- Created a dependency audit tool to track dependencies and their platform
+  compatibility
 
 ### 2. Session Management
 
-**Challenge**: Adapting session management to work across different environment contexts.
+**Challenge**: Adapting session management to work across different environment
+contexts.
 
 **Solution**:
 
-- Created a unified session interface implemented for different contexts (Node.js, Deno, Edge)
+- Created a unified session interface implemented for different contexts
+  (Node.js, Deno, Edge)
 - Used Web Crypto API for cookie encryption when possible
 - Implemented secure fallbacks for environments without full Web Crypto support
 
@@ -177,13 +216,16 @@ Custom hooks proved to be a powerful pattern for logic reuse across islands:
 
 - Created shared type definitions used by both environments
 - Used conditional types to handle environment-specific differences
-- Leveraged TypeScript's module resolution to provide platform-specific implementations
+- Leveraged TypeScript's module resolution to provide platform-specific
+  implementations
 
 ## Tips for Migrating React Projects to Fresh + Preact
 
 ### 1. Start with Server Components
 
-Begin by identifying components that don't need client-side interactivity and convert them to static server components first. This gives immediate performance benefits and reduces the migration scope.
+Begin by identifying components that don't need client-side interactivity and
+convert them to static server components first. This gives immediate performance
+benefits and reduces the migration scope.
 
 ### 2. Create Islands Strategically
 
@@ -196,12 +238,15 @@ Don't convert every React component to a Preact island. Instead:
 ### 3. Adapt State Management
 
 - For simple state, migrate from React's useState to Preact's equivalent
-- For complex state, consider using Preact signals instead of React's Context or Redux
-- Keep state local to islands when possible rather than sharing state across islands
+- For complex state, consider using Preact signals instead of React's Context or
+  Redux
+- Keep state local to islands when possible rather than sharing state across
+  islands
 
 ### 4. Leverage Progressive Enhancement
 
-Design your application to work without JavaScript first, then enhance with interactivity:
+Design your application to work without JavaScript first, then enhance with
+interactivity:
 
 - Ensure forms submit properly without JavaScript
 - Implement server-side validation in addition to client-side
@@ -240,11 +285,13 @@ The recommended approach for this migration is incremental:
 3. Update tests
 4. Address edge cases and platform-specific code
 
-Each step should include thorough testing to ensure feature parity and prevent regressions.
+Each step should include thorough testing to ensure feature parity and prevent
+regressions.
 
 ## Deno-Native Test Migration
 
-As part of our migration to Deno 2.x, we've completely transitioned our testing infrastructure from Jest/Vitest to Deno's native testing capabilities:
+As part of our migration to Deno 2.x, we've completely transitioned our testing
+infrastructure from Jest/Vitest to Deno's native testing capabilities:
 
 ### 1. Removing the Jest/Vitest Dependencies
 
@@ -256,7 +303,8 @@ We've removed the following dependencies from package.json:
 
 ### 2. Test Script Updates
 
-Test scripts in package.json have been updated to use Deno's native test commands:
+Test scripts in package.json have been updated to use Deno's native test
+commands:
 
 - `test`: Changed from `vitest run` to `deno test`
 - `test:watch`: Changed from `vitest` to `deno test --watch`
@@ -264,7 +312,9 @@ Test scripts in package.json have been updated to use Deno's native test command
 
 ### 3. Removal of Compatibility Layer
 
-The temporary compatibility layer (tests/deno-test-setup.ts) that provided Jest-like functionality during the transition phase has been removed. This file included:
+The temporary compatibility layer (tests/deno-test-setup.ts) that provided
+Jest-like functionality during the transition phase has been removed. This file
+included:
 
 - Mock implementations for fetch
 - Test lifecycle hooks (beforeEach, afterEach)
@@ -293,7 +343,12 @@ deno test --coverage       # Run tests with coverage report
 
 ## Conclusion
 
-The migration from Node.js to Deno and from React to Fresh + Preact represents a significant architectural shift, but one that brings substantial benefits in terms of performance, maintainability, and developer experience. By following the strategies outlined in this guide, you can successfully navigate this migration while minimizing disruption and maximizing the advantages of the new platform.
+The migration from Node.js to Deno and from React to Fresh + Preact represents a
+significant architectural shift, but one that brings substantial benefits in
+terms of performance, maintainability, and developer experience. By following
+the strategies outlined in this guide, you can successfully navigate this
+migration while minimizing disruption and maximizing the advantages of the new
+platform.
 
 Key takeaways:
 
@@ -301,4 +356,5 @@ Key takeaways:
 - Use the adapter pattern for platform-specific code
 - Leverage Fresh's Islands architecture for optimal performance
 - Test thoroughly at each migration step
-- Take advantage of Deno's built-in TypeScript support and modern JavaScript features
+- Take advantage of Deno's built-in TypeScript support and modern JavaScript
+  features

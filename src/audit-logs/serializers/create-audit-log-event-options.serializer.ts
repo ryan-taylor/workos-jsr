@@ -1,4 +1,7 @@
-import type { CreateAuditLogEventOptions, SerializedCreateAuditLogEventOptions } from '../interfaces.ts';
+import type {
+  CreateAuditLogEventOptions,
+  SerializedCreateAuditLogEventOptions,
+} from "../interfaces.ts";
 
 export const serializeCreateAuditLogEventOptions = (
   event: CreateAuditLogEventOptions,

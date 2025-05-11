@@ -1,1 +1,1 @@
-export * from './role.serializer.ts';
+export * from "./role.serializer.ts";

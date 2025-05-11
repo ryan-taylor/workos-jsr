@@ -11,7 +11,7 @@
  */
 export function encodeUInt32(value: number): Uint8Array {
   if (value < 0 || value > 0xFFFFFFFF || !Number.isInteger(value)) {
-    throw new Error('Value must be an unsigned 32-bit integer');
+    throw new Error("Value must be an unsigned 32-bit integer");
   }
 
   // For zero, return a single byte
@@ -45,13 +45,16 @@ export function encodeUInt32(value: number): Uint8Array {
  * @param startIndex The index to start decoding from (default: 0)
  * @returns An object containing the decoded value and the index of the next byte after the decoded value
  */
-export function decodeUInt32(bytes: Uint8Array, startIndex = 0): { value: number; nextIndex: number } {
+export function decodeUInt32(
+  bytes: Uint8Array,
+  startIndex = 0,
+): { value: number; nextIndex: number } {
   if (!(bytes instanceof Uint8Array)) {
-    throw new Error('Input must be a Uint8Array');
+    throw new Error("Input must be a Uint8Array");
   }
 
   if (startIndex < 0 || startIndex >= bytes.length) {
-    throw new Error('Invalid start index');
+    throw new Error("Invalid start index");
   }
 
   let value = 0;
@@ -61,7 +64,7 @@ export function decodeUInt32(bytes: Uint8Array, startIndex = 0): { value: number
 
   do {
     if (index >= bytes.length) {
-      throw new Error('Unexpected end of input');
+      throw new Error("Unexpected end of input");
     }
 
     // Read the next byte
@@ -75,7 +78,7 @@ export function decodeUInt32(bytes: Uint8Array, startIndex = 0): { value: number
 
     // Check for potential overflow
     if (shift > 35) { // 5 bytes is more than enough for a 32-bit integer
-      throw new Error('Integer overflow');
+      throw new Error("Integer overflow");
     }
   } while (byte & 0x80); // Continue if the high bit is set
 

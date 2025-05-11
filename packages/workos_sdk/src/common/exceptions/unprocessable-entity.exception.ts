@@ -3,13 +3,14 @@ function plural(word: string): string {
   return `${word}s`;
 }
 
-import type { UnprocessableEntityError } from '../interfaces/unprocessable-entity-error.interface.ts';
-import type { RequestException } from '../interfaces/request-exception.interface.ts';
+import type { UnprocessableEntityError } from "../interfaces/unprocessable-entity-error.interface.ts";
+import type { RequestException } from "../interfaces/request-exception.interface.ts";
 
-export class UnprocessableEntityException extends Error implements RequestException {
+export class UnprocessableEntityException extends Error
+  implements RequestException {
   readonly status = 422;
-  override readonly name = 'UnprocessableEntityException';
-  override readonly message: string = 'Unprocessable entity';
+  override readonly name = "UnprocessableEntityException";
+  override readonly message: string = "Unprocessable entity";
   readonly code?: string;
   readonly requestID: string;
 
@@ -37,7 +38,9 @@ export class UnprocessableEntityException extends Error implements RequestExcept
     }
 
     if (errors) {
-      const requirement: string = errors.length === 1 ? 'requirement' : plural('requirement');
+      const requirement: string = errors.length === 1
+        ? "requirement"
+        : plural("requirement");
 
       this.message = `The following ${requirement} must be met:\n`;
 

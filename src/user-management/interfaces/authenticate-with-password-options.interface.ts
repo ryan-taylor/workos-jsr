@@ -1,6 +1,10 @@
-import type { AuthenticateWithOptionsBase, SerializedAuthenticateWithOptionsBase } from './authenticate-with-options-base.interface.ts';
+import type {
+  AuthenticateWithOptionsBase,
+  SerializedAuthenticateWithOptionsBase,
+} from "./authenticate-with-options-base.interface.ts";
 
-export interface AuthenticateWithPasswordOptions extends AuthenticateWithOptionsBase {
+export interface AuthenticateWithPasswordOptions
+  extends AuthenticateWithOptionsBase {
   email: string;
   password: string;
   invitationToken?: string;
@@ -10,8 +14,9 @@ export interface AuthenticateUserWithPasswordCredentials {
   clientSecret: string | undefined;
 }
 
-export interface SerializedAuthenticateWithPasswordOptions extends SerializedAuthenticateWithOptionsBase {
-  grant_type: 'password';
+export interface SerializedAuthenticateWithPasswordOptions
+  extends SerializedAuthenticateWithOptionsBase {
+  grant_type: "password";
   email: string;
   password: string;
   invitation_token?: string;

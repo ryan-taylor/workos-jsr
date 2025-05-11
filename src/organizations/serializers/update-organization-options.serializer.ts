@@ -1,7 +1,10 @@
-import type { SerializedUpdateOrganizationOptions, UpdateOrganizationOptions } from '../interfaces.ts';
+import type {
+  SerializedUpdateOrganizationOptions,
+  UpdateOrganizationOptions,
+} from "../interfaces.ts";
 
 export const serializeUpdateOrganizationOptions = (
-  options: Omit<UpdateOrganizationOptions, 'organization'>,
+  options: Omit<UpdateOrganizationOptions, "organization">,
 ): SerializedUpdateOrganizationOptions => ({
   name: options.name,
   allow_profiles_outside_organization: options.allowProfilesOutsideOrganization,

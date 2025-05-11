@@ -1,9 +1,9 @@
-import type { RequestException } from '../interfaces/request-exception.interface.ts';
+import type { RequestException } from "../interfaces/request-exception.interface.ts";
 
 export class BadRequestException extends Error implements RequestException {
   readonly status = 400;
-  override readonly name = 'BadRequestException';
-  override readonly message: string = 'Bad request';
+  override readonly name = "BadRequestException";
+  override readonly message: string = "Bad request";
   readonly code?: string;
   readonly errors?: unknown[];
   readonly requestID: string;

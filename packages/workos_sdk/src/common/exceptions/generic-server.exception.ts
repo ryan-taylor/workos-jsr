@@ -1,8 +1,8 @@
-import type { RequestException } from '../interfaces/request-exception.interface.ts';
+import type { RequestException } from "../interfaces/request-exception.interface.ts";
 
 export class GenericServerException extends Error implements RequestException {
-  override readonly name: string = 'GenericServerException';
-  override readonly message: string = 'The request could not be completed.';
+  override readonly name: string = "GenericServerException";
+  override readonly message: string = "The request could not be completed.";
 
   constructor(
     readonly status: number,

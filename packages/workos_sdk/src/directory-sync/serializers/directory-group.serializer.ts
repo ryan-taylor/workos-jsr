@@ -1,4 +1,7 @@
-import type { DirectoryGroup, DirectoryGroupResponse } from '../interfaces/index.ts';
+import type {
+  DirectoryGroup,
+  DirectoryGroupResponse,
+} from "../interfaces/index.ts";
 
 export const deserializeDirectoryGroup = (
   directoryGroup: DirectoryGroupResponse,
@@ -14,8 +17,8 @@ export const deserializeDirectoryGroup = (
 });
 
 export const deserializeUpdatedEventDirectoryGroup = (
-  directoryGroup: DirectoryGroupResponse & Record<'previous_attributes', any>,
-): DirectoryGroup & Record<'previousAttributes', any> => ({
+  directoryGroup: DirectoryGroupResponse & Record<"previous_attributes", any>,
+): DirectoryGroup & Record<"previousAttributes", any> => ({
   id: directoryGroup.id,
   idpId: directoryGroup.idp_id,
   directoryId: directoryGroup.directory_id,

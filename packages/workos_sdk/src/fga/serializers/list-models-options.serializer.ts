@@ -1,6 +1,8 @@
-import type { ListModelsOptions } from '../interfaces/index.ts';
+import type { ListModelsOptions } from "../interfaces/index.ts";
 
-export function serializeListModelsOptions(options: ListModelsOptions): Record<string, unknown> {
+export function serializeListModelsOptions(
+  options: ListModelsOptions,
+): Record<string, unknown> {
   return {
     organization_id: options.organization_id,
     limit: options.limit,

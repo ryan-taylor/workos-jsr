@@ -1,4 +1,7 @@
-import type { ListDirectoriesOptions, SerializedListDirectoriesOptions } from '../interfaces/index.ts';
+import type {
+  ListDirectoriesOptions,
+  SerializedListDirectoriesOptions,
+} from "../interfaces/index.ts";
 
 export const serializeListDirectoriesOptions = (
   options: ListDirectoriesOptions,

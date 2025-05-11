@@ -1,4 +1,4 @@
-import type { List, ListResponse } from '../../common/interfaces.ts';
+import type { List, ListResponse } from "../../common/interfaces.ts";
 import type {
   CreateObjectEntity,
   CreateObjectOptions,
@@ -13,7 +13,7 @@ import type {
   UpdateObjectEntity,
   UpdateObjectOptions,
   VaultObject,
-} from '../interfaces.ts';
+} from "../interfaces.ts";
 
 export const deserializeObjectMetadata = (
   metadata: ReadObjectMetadataResponse,
@@ -45,7 +45,7 @@ const deserializeObjectDigest = (
 export const deserializeListObjects = (
   list: ListResponse<ObjectDigestResponse>,
 ): List<ObjectDigest> => ({
-  object: 'list',
+  object: "list",
   data: list.data.map(deserializeObjectDigest),
   listMetadata: {
     after: list.list_metadata.after ?? undefined,

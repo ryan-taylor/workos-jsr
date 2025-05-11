@@ -29,8 +29,8 @@ export interface TelemetryConfig {
  */
 export const defaultTelemetryConfig: TelemetryConfig = {
   enabled: false,
-  endpoint: 'http://localhost:4318',
-  serviceName: 'workos-sdk',
+  endpoint: "http://localhost:4318",
+  serviceName: "workos-sdk",
   defaultAttributes: {},
   debug: false,
 };

@@ -1,7 +1,7 @@
-import type { PaginationOptions } from '../index.worker.ts';
-import type { WorkOS } from '../workos.ts';
-import { decode, decrypt } from './cryptography/decrypt.ts';
-import { encrypt } from './cryptography/encrypt.ts';
+import type { PaginationOptions } from "../index.worker.ts";
+import type { WorkOS } from "../workos.ts";
+import { decode, decrypt } from "./cryptography/decrypt.ts";
+import { encrypt } from "./cryptography/encrypt.ts";
 import type {
   CreateDataKeyOptions,
   CreateDataKeyResponse,
@@ -22,8 +22,11 @@ import type {
   ReadObjectResponse,
   UpdateObjectOptions,
   VaultObject,
-} from './interfaces.ts';
-import { deserializeCreateDataKeyResponse, deserializeDecryptDataKeyResponse } from './serializers/vault-key.serializer.ts';
+} from "./interfaces.ts";
+import {
+  deserializeCreateDataKeyResponse,
+  deserializeDecryptDataKeyResponse,
+} from "./serializers/vault-key.serializer.ts";
 import {
   deserializeListObjects,
   deserializeObject,
@@ -31,8 +34,8 @@ import {
   desrializeListObjectVersions,
   serializeCreateObjectEntity,
   serializeUpdateObjectEntity,
-} from './serializers/vault-object.serializer.ts';
-import type { List, ListResponse } from '../common/interfaces.ts';
+} from "./serializers/vault-object.serializer.ts";
+import type { List, ListResponse } from "../common/interfaces.ts";
 
 export class Vault {
   constructor(private readonly workos: WorkOS) {}
@@ -48,12 +51,12 @@ export class Vault {
   async listObjects(
     options?: PaginationOptions | undefined,
   ): Promise<List<ObjectDigest>> {
-    const url = new URL('/vault/v1/kv', this.workos.baseURL);
+    const url = new URL("/vault/v1/kv", this.workos.baseURL);
     if (options?.after) {
-      url.searchParams.set('after', options.after);
+      url.searchParams.set("after", options.after);
     }
     if (options?.limit) {
-      url.searchParams.set('limit', options.limit.toString());
+      url.searchParams.set("limit", options.limit.toString());
     }
 
     const { data } = await this.workos.get<ListResponse<ObjectDigestResponse>>(
@@ -121,7 +124,7 @@ export class Vault {
     const { dataKey, encryptedKeys } = await this.createDataKey({
       context,
     });
-    return encrypt(data, dataKey.key, encryptedKeys, associatedData || '');
+    return encrypt(data, dataKey.key, encryptedKeys, associatedData || "");
   }
 
   async decrypt(
@@ -130,7 +133,7 @@ export class Vault {
   ): Promise<string> {
     const decoded = decode(encryptedData);
     const dataKey = await this.decryptDataKey({ keys: decoded.keys });
-    return decrypt(decoded, dataKey.key, associatedData || '');
+    return decrypt(decoded, dataKey.key, associatedData || "");
   }
 
   /*

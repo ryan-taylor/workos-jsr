@@ -1,20 +1,26 @@
 # Fresh Migration Guide
 
-This guide explains how to use the WorkOS SDK with both Fresh 1.x and Fresh 2.x, and how to write code that works with both versions.
+This guide explains how to use the WorkOS SDK with both Fresh 1.x and Fresh 2.x,
+and how to write code that works with both versions.
 
 ## Overview of the Compatibility Layer
 
-The WorkOS SDK includes a compatibility layer that allows your code to work seamlessly with both Fresh 1.x and Fresh 2.x. This layer:
+The WorkOS SDK includes a compatibility layer that allows your code to work
+seamlessly with both Fresh 1.x and Fresh 2.x. This layer:
 
-1. Dynamically selects the appropriate import maps based on the `DENO_FRESH_VERSION` environment variable
-2. Provides compatibility wrappers for key Fresh APIs that have changed between versions
-3. Abstracts away version-specific differences in routing, middleware, and context handling
+1. Dynamically selects the appropriate import maps based on the
+   `DENO_FRESH_VERSION` environment variable
+2. Provides compatibility wrappers for key Fresh APIs that have changed between
+   versions
+3. Abstracts away version-specific differences in routing, middleware, and
+   context handling
 
 ## How to Use the Compatibility Layer
 
 ### Setting the Fresh Version
 
-Set the `DENO_FRESH_VERSION` environment variable to choose which Fresh version to use:
+Set the `DENO_FRESH_VERSION` environment variable to choose which Fresh version
+to use:
 
 ```bash
 # Use Fresh 1.x (default)
@@ -24,7 +30,8 @@ export DENO_FRESH_VERSION=1
 export DENO_FRESH_VERSION=2
 ```
 
-The SDK will automatically use the appropriate import maps and dependencies based on this setting.
+The SDK will automatically use the appropriate import maps and dependencies
+based on this setting.
 
 ### Using the Compatibility Barrels
 
@@ -32,13 +39,13 @@ Instead of importing directly from Fresh, import from the compatibility barrels:
 
 ```typescript
 // ❌ Don't import directly from Fresh
-import { FreshContext } from '$fresh/server.ts';
+import { FreshContext } from "$fresh/server.ts";
 // or
-import { App } from '@fresh/core/server.ts';
+import { App } from "@fresh/core/server.ts";
 
 // ✅ Do import from the compatibility layer
-import { FreshContext } from '../src/fresh-compat/context.ts';
-import { getFreshServerModule } from '../src/fresh-compat/server.ts';
+import { FreshContext } from "../src/fresh-compat/context.ts";
+import { getFreshServerModule } from "../src/fresh-compat/server.ts";
 ```
 
 The compatibility layer provides the following modules:
@@ -53,17 +60,18 @@ The compatibility layer provides the following modules:
 
 #### For Routing
 
-Use the `makeRouter` function to create routes that work with both Fresh versions:
+Use the `makeRouter` function to create routes that work with both Fresh
+versions:
 
 ```typescript
-import { makeRouter } from '../src/fresh-compat/router.ts';
+import { makeRouter } from "../src/fresh-compat/router.ts";
 
 const routes = [
   {
-    pattern: '/api/users',
+    pattern: "/api/users",
     handler: (req, ctx) => {
       // Your handler code
-      return new Response('Users API');
+      return new Response("Users API");
     },
   },
 ];
@@ -74,10 +82,11 @@ const handler = await makeRouter(routes);
 
 #### For Middleware
 
-Use the `wrapMw` function to create middleware that works with both Fresh versions:
+Use the `wrapMw` function to create middleware that works with both Fresh
+versions:
 
 ```typescript
-import { wrapMw } from '../src/fresh-compat/middleware.ts';
+import { wrapMw } from "../src/fresh-compat/middleware.ts";
 
 // Create middleware that works with both Fresh 1.x and 2.x
 const authMiddleware = wrapMw(async (req, ctx) => {
@@ -91,11 +100,11 @@ const authMiddleware = wrapMw(async (req, ctx) => {
 Use the common `FreshContext` interface:
 
 ```typescript
-import { FreshContext } from '../src/fresh-compat/context.ts';
+import { FreshContext } from "../src/fresh-compat/context.ts";
 
 function handler(req: Request, ctx: FreshContext) {
   // Your handler code
-  return new Response('Hello');
+  return new Response("Hello");
 }
 ```
 
@@ -104,7 +113,7 @@ function handler(req: Request, ctx: FreshContext) {
 Use the plugin helpers for version-specific plugins:
 
 ```typescript
-import getTailwindPlugin from '../src/fresh-compat/plugins/tailwind.ts';
+import getTailwindPlugin from "../src/fresh-compat/plugins/tailwind.ts";
 
 // In your fresh.config.ts
 const tailwind = await getTailwindPlugin();
@@ -117,7 +126,9 @@ export default {
 
 ## Type System
 
-The compatibility layer includes a comprehensive type system that provides proper type definitions for both Fresh 1.x and 2.x. This type system is defined in `src/fresh-compat/types.ts` and includes:
+The compatibility layer includes a comprehensive type system that provides
+proper type definitions for both Fresh 1.x and 2.x. This type system is defined
+in `src/fresh-compat/types.ts` and includes:
 
 ### Common Types
 
@@ -145,25 +156,27 @@ The `Fresh2` namespace includes types specific to Fresh 2.x:
 
 ### Using the Type System
 
-When writing code that works with both Fresh versions, import types from the compatibility layer:
+When writing code that works with both Fresh versions, import types from the
+compatibility layer:
 
 ```typescript
-import { Handler, Route, RoutePattern } from '../src/fresh-compat/types.ts';
-import { Fresh1, Fresh2 } from '../src/fresh-compat/types.ts';
+import { Handler, Route, RoutePattern } from "../src/fresh-compat/types.ts";
+import { Fresh1, Fresh2 } from "../src/fresh-compat/types.ts";
 
 // Define a handler that works with both versions
 const handler: Handler = (req, ctx) => {
-  return new Response('Hello');
+  return new Response("Hello");
 };
 
 // Define a route that works with both versions
 const route: Route = {
-  pattern: '/api/users',
+  pattern: "/api/users",
   handler,
 };
 ```
 
-The type system ensures that your code is type-safe and works with both Fresh versions.
+The type system ensures that your code is type-safe and works with both Fresh
+versions.
 
 ## Key Differences Between Fresh 1.x and 2.x APIs
 
@@ -200,11 +213,11 @@ The type system ensures that your code is type-safe and works with both Fresh ve
 
 ```typescript
 // routes/api/users.ts
-import { FreshContext } from '../../src/fresh-compat/context.ts';
+import { FreshContext } from "../../src/fresh-compat/context.ts";
 
 export function handler(req: Request, ctx: FreshContext) {
-  return new Response(JSON.stringify({ users: ['Alice', 'Bob'] }), {
-    headers: { 'Content-Type': 'application/json' },
+  return new Response(JSON.stringify({ users: ["Alice", "Bob"] }), {
+    headers: { "Content-Type": "application/json" },
   });
 }
 ```
@@ -213,14 +226,14 @@ export function handler(req: Request, ctx: FreshContext) {
 
 ```typescript
 // routes/_middleware.ts
-import { wrapMw } from '../src/fresh-compat/middleware.ts';
-import { FreshContext } from '../src/fresh-compat/context.ts';
+import { wrapMw } from "../src/fresh-compat/middleware.ts";
+import { FreshContext } from "../src/fresh-compat/context.ts";
 
 export const handler = wrapMw(async (req: Request, ctx: FreshContext) => {
   // Add user to context if authenticated
-  const token = req.headers.get('Authorization')?.split(' ')[1];
+  const token = req.headers.get("Authorization")?.split(" ")[1];
   if (token) {
-    ctx.state.user = { id: '123', name: 'Alice' };
+    ctx.state.user = { id: "123", name: "Alice" };
   }
 
   return await ctx.next();
@@ -231,16 +244,16 @@ export const handler = wrapMw(async (req: Request, ctx: FreshContext) => {
 
 ```typescript
 // server.ts
-import { makeRouter } from './src/fresh-compat/router.ts';
+import { makeRouter } from "./src/fresh-compat/router.ts";
 
 const routes = [
   {
-    pattern: '/',
-    handler: (req, ctx) => new Response('Home page'),
+    pattern: "/",
+    handler: (req, ctx) => new Response("Home page"),
   },
   {
-    pattern: '/api/data',
-    handler: (req, ctx) => new Response(JSON.stringify({ data: 'value' })),
+    pattern: "/api/data",
+    handler: (req, ctx) => new Response(JSON.stringify({ data: "value" })),
   },
 ];
 
@@ -252,18 +265,20 @@ Deno.serve(handler);
 
 ```typescript
 // custom-router.ts
-import { Fresh1, Fresh2, Route } from '../src/fresh-compat/types.ts';
-import { freshMajor } from '../scripts/select_fresh.ts';
+import { Fresh1, Fresh2, Route } from "../src/fresh-compat/types.ts";
+import { freshMajor } from "../scripts/select_fresh.ts";
 
 // Define routes that work with both versions
 const routes: Route[] = [
   {
-    pattern: '/api/users',
-    handler: (req, ctx) => new Response(JSON.stringify({ users: ['Alice', 'Bob'] })),
+    pattern: "/api/users",
+    handler: (req, ctx) =>
+      new Response(JSON.stringify({ users: ["Alice", "Bob"] })),
   },
   {
-    pattern: '/api/products',
-    handler: (req, ctx) => new Response(JSON.stringify({ products: ['Product A', 'Product B'] })),
+    pattern: "/api/products",
+    handler: (req, ctx) =>
+      new Response(JSON.stringify({ products: ["Product A", "Product B"] })),
   },
 ];
 
@@ -272,16 +287,20 @@ export async function createRouter() {
   if (freshMajor() === 1) {
     // For Fresh 1.x
     const manifest: Fresh1.Manifest = {
-      routes: Object.fromEntries(routes.map((route, i) => [`route${i}`, { handler: route.handler }])),
+      routes: Object.fromEntries(
+        routes.map((route, i) => [`route${i}`, { handler: route.handler }]),
+      ),
       islands: {},
       baseUrl: import.meta.url,
     };
 
-    const { createHandler } = await import('$fresh/server.ts') as Fresh1.ServerModule;
+    const { createHandler } = await import(
+      "$fresh/server.ts"
+    ) as Fresh1.ServerModule;
     return await createHandler(manifest);
   } else {
     // For Fresh 2.x
-    const { App } = await import('@fresh/core') as Fresh2.ServerModule;
+    const { App } = await import("@fresh/core") as Fresh2.ServerModule;
     const app = new App();
 
     for (const route of routes) {
@@ -302,7 +321,8 @@ export async function createRouter() {
 5. **Use the type system** to ensure type safety and compatibility
 6. **Avoid direct imports** from Fresh modules
 7. **Handle errors properly** when working with dynamic imports
-8. **Contribute improvements** to the compatibility layer when you find edge cases
+8. **Contribute improvements** to the compatibility layer when you find edge
+   cases
 
 ## Testing with Both Fresh Versions
 
@@ -319,4 +339,5 @@ deno task test:fresh2
 deno task test:ci
 ```
 
-The CI pipeline automatically tests against both Fresh versions using a test matrix.
+The CI pipeline automatically tests against both Fresh versions using a test
+matrix.

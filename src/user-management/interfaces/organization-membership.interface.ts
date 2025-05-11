@@ -1,9 +1,9 @@
-import type { RoleResponse } from '../../roles/interfaces/.ts';
+import type { RoleResponse } from "../../roles/interfaces/.ts";
 
-export type OrganizationMembershipStatus = 'active' | 'inactive' | 'pending';
+export type OrganizationMembershipStatus = "active" | "inactive" | "pending";
 
 export interface OrganizationMembership {
-  object: 'organization_membership';
+  object: "organization_membership";
   id: string;
   organizationId: string;
   status: OrganizationMembershipStatus;
@@ -14,7 +14,7 @@ export interface OrganizationMembership {
 }
 
 export interface OrganizationMembershipResponse {
-  object: 'organization_membership';
+  object: "organization_membership";
   id: string;
   organization_id: string;
   status: OrganizationMembershipStatus;

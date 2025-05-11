@@ -4,11 +4,15 @@
 [![Build Status](https://github.com/ryan-taylor/workos-jsr/actions/workflows/ci.yml/badge.svg)](https://github.com/ryan-taylor/workos-jsr/actions/workflows/ci.yml)
 [![Coverage Status](https://codecov.io/gh/ryan-taylor/workos-jsr/branch/main/graph/badge.svg)](https://codecov.io/gh/ryan-taylor/workos-jsr)
 
-This library provides convenient access to the WorkOS API from applications written in JavaScript and TypeScript. It is designed for Deno 2.x environments, including Deno's [Fresh](https://fresh.deno.dev/) framework. Full examples are provided for Fresh 2.x (canary).
+This library provides convenient access to the WorkOS API from applications
+written in JavaScript and TypeScript. It is designed for Deno 2.x environments,
+including Deno's [Fresh](https://fresh.deno.dev/) framework. Full examples are
+provided for Fresh 2.x (canary).
 
 ## Documentation
 
-See the [API Reference](https://workos.com/docs/reference/client-libraries) for usage examples.
+See the [API Reference](https://workos.com/docs/reference/client-libraries) for
+usage examples.
 
 ## Requirements
 
@@ -22,7 +26,7 @@ See the [API Reference](https://workos.com/docs/reference/client-libraries) for 
 For Deno and Fresh applications, you can import directly from JSR:
 
 ```ts
-import { WorkOS } from '@ryantaylor/workos';
+import { WorkOS } from "@ryantaylor/workos";
 ```
 
 Or add to your `deno.json` imports:
@@ -37,7 +41,9 @@ Or add to your `deno.json` imports:
 
 ## JSR.io Package
 
-This library is published to [JSR.io](https://jsr.io/@ryantaylor/workos) for Deno users. JSR (JavaScript Registry) is a modern package registry optimized for Deno and the web platform.
+This library is published to [JSR.io](https://jsr.io/@ryantaylor/workos) for
+Deno users. JSR (JavaScript Registry) is a modern package registry optimized for
+Deno and the web platform.
 
 ### Using the JSR Package
 
@@ -45,7 +51,7 @@ To use the SDK from JSR in a Deno project:
 
 ```ts
 // Direct import
-import { WorkOS } from 'jsr:@ryantaylor/workos@^0.1.0-alpha';
+import { WorkOS } from "jsr:@ryantaylor/workos@^0.1.0-alpha";
 
 // Or in your deno.json
 // {
@@ -57,7 +63,8 @@ import { WorkOS } from 'jsr:@ryantaylor/workos@^0.1.0-alpha';
 
 ### JSR Publishing Process
 
-The WorkOS SDK is published to JSR automatically through GitHub Actions. The process is as follows:
+The WorkOS SDK is published to JSR automatically through GitHub Actions. The
+process is as follows:
 
 1. Version is updated in `package.json` using semantic versioning
 2. A tag is created matching the version
@@ -65,7 +72,8 @@ The WorkOS SDK is published to JSR automatically through GitHub Actions. The pro
 
 ### Version Management for JSR Releases
 
-The version is kept in sync between npm and JSR. The package follows semantic versioning:
+The version is kept in sync between npm and JSR. The package follows semantic
+versioning:
 
 - **Major Version (X.0.0)**: Breaking changes
 - **Minor Version (0.X.0)**: New features without breaking changes
@@ -73,7 +81,8 @@ The version is kept in sync between npm and JSR. The package follows semantic ve
 
 ## Node.js Compatibility
 
-While this library is primarily designed for Deno environments, we maintain a Node.js-compatible distribution for users who:
+While this library is primarily designed for Deno environments, we maintain a
+Node.js-compatible distribution for users who:
 
 - Are in the process of migrating from Node.js to Deno
 - Need to use the SDK in both Node.js and Deno environments
@@ -85,10 +94,10 @@ To use the SDK from npm in a Node.js project:
 
 ```js
 // ESM import
-import { WorkOS } from '@ryantaylor/workos';
+import { WorkOS } from "@ryantaylor/workos";
 
 // CommonJS require
-const { WorkOS } = require('@ryantaylor/workos');
+const { WorkOS } = require("@ryantaylor/workos");
 ```
 
 ### Building the Node.js Distribution
@@ -100,7 +109,8 @@ To build the Node.js distribution locally:
 deno task npm:build
 ```
 
-This will create a `dist` directory containing the Node.js-compatible files and a package.json file.
+This will create a `dist` directory containing the Node.js-compatible files and
+a package.json file.
 
 ## Configuration
 
@@ -109,11 +119,11 @@ This will create a `dist` directory containing the Node.js-compatible files and 
 For Deno applications:
 
 ```ts
-import { WorkOS } from '@ryantaylor/workos';
+import { WorkOS } from "@ryantaylor/workos";
 
 const workos = new WorkOS(
-  Deno.env.get('WORKOS_API_KEY') || '',
-  { clientId: Deno.env.get('WORKOS_CLIENT_ID') },
+  Deno.env.get("WORKOS_API_KEY") || "",
+  { clientId: Deno.env.get("WORKOS_CLIENT_ID") },
 );
 ```
 
@@ -133,11 +143,14 @@ SESSION_SECRET=a_strong_random_string_for_cookie_encryption
 WORKOS_WEBHOOK_SECRET=your_workos_webhook_signing_secret
 ```
 
-For security in production, consider using a service like Doppler for secrets management rather than environment files.
+For security in production, consider using a service like Doppler for secrets
+management rather than environment files.
 
 ## Choosing the Fresh version
 
-This library supports both Fresh 1.x and Fresh 2.x (canary) through a compatibility layer. You can choose which version to use by setting the `DENO_FRESH_VERSION` environment variable:
+This library supports both Fresh 1.x and Fresh 2.x (canary) through a
+compatibility layer. You can choose which version to use by setting the
+`DENO_FRESH_VERSION` environment variable:
 
 ```bash
 # Use Fresh 1.x (default)
@@ -149,13 +162,15 @@ export DENO_FRESH_VERSION=2
 deno task dev
 ```
 
-The compatibility layer automatically selects the appropriate import maps and dependencies based on the Fresh version you choose. This allows you to:
+The compatibility layer automatically selects the appropriate import maps and
+dependencies based on the Fresh version you choose. This allows you to:
 
 - Develop with either Fresh version
 - Test your code against both versions
 - Gradually migrate from Fresh 1.x to Fresh 2.x
 
-For more details on the compatibility layer and how to write code that works with both versions, see the [Fresh Migration Guide](docs/FRESH_MIGRATION.md).
+For more details on the compatibility layer and how to write code that works
+with both versions, see the [Fresh Migration Guide](docs/FRESH_MIGRATION.md).
 
 ## Getting Started (Fresh 2.x)
 
@@ -169,7 +184,8 @@ export DENO_FRESH_VERSION=2
 deno task dev
 ```
 
-This will run the Fresh development server with live-reload enabled, allowing you to immediately see your changes.
+This will run the Fresh development server with live-reload enabled, allowing
+you to immediately see your changes.
 
 The example application in `examples/fresh-canary` demonstrates:
 
@@ -184,28 +200,31 @@ To deploy your application to Deno Deploy:
 deno task deploy
 ```
 
-This will build your application and deploy it using the configuration in `deno.deploy.json`.
+This will build your application and deploy it using the configuration in
+`deno.deploy.json`.
 
 ## OpenTelemetry Integration
 
-The WorkOS SDK includes built-in support for OpenTelemetry, enabling you to monitor SDK usage, performance, and errors in your application.
+The WorkOS SDK includes built-in support for OpenTelemetry, enabling you to
+monitor SDK usage, performance, and errors in your application.
 
 ### Enabling Telemetry
 
-To enable telemetry collection, provide telemetry configuration when initializing the WorkOS SDK:
+To enable telemetry collection, provide telemetry configuration when
+initializing the WorkOS SDK:
 
 ```ts
 const workos = new WorkOS(
-  Deno.env.get('WORKOS_API_KEY') || '',
+  Deno.env.get("WORKOS_API_KEY") || "",
   {
-    clientId: Deno.env.get('WORKOS_CLIENT_ID'),
+    clientId: Deno.env.get("WORKOS_CLIENT_ID"),
     telemetry: {
       enabled: true,
-      endpoint: 'http://localhost:4318', // OTLP over HTTP endpoint
-      serviceName: 'my-application',
+      endpoint: "http://localhost:4318", // OTLP over HTTP endpoint
+      serviceName: "my-application",
       defaultAttributes: {
-        'environment': 'production',
-        'deployment.version': '1.2.3',
+        "environment": "production",
+        "deployment.version": "1.2.3",
       },
     },
   },
@@ -226,7 +245,8 @@ The telemetry configuration supports these options:
 
 ### Visualizing Telemetry Data
 
-The WorkOS SDK exports telemetry data in the OpenTelemetry Protocol (OTLP) format, which can be collected and visualized using:
+The WorkOS SDK exports telemetry data in the OpenTelemetry Protocol (OTLP)
+format, which can be collected and visualized using:
 
 1. An OpenTelemetry Collector to receive and process the data
 2. Prometheus for metrics storage
@@ -274,10 +294,10 @@ global:
   scrape_interval: 15s
 
 scrape_configs:
-  - job_name: 'otel-collector'
+  - job_name: "otel-collector"
     scrape_interval: 10s
     static_configs:
-      - targets: ['otel-collector:8889']
+      - targets: ["otel-collector:8889"]
 ```
 
 ### Instrumented Functionality
@@ -293,7 +313,8 @@ The following WorkOS SDK operations are automatically instrumented:
 
 ### Demo Dashboard
 
-The Fresh example includes a telemetry dashboard at `/telemetry` that demonstrates how to visualize metrics from the WorkOS SDK:
+The Fresh example includes a telemetry dashboard at `/telemetry` that
+demonstrates how to visualize metrics from the WorkOS SDK:
 
 ```
 cd examples/fresh-canary
@@ -310,13 +331,13 @@ Here's a basic example of integrating WorkOS User Management with Fresh 2.x:
 
 ```ts
 // utils/workos.ts
-import { WorkOS } from '@ryantaylor/workos';
-import { FreshSessionProvider } from '@workos/sdk/common/iron-session/fresh-session-provider';
+import { WorkOS } from "@ryantaylor/workos";
+import { FreshSessionProvider } from "@workos/sdk/common/iron-session/fresh-session-provider";
 
 export function initWorkOS() {
   const workos = new WorkOS(
-    Deno.env.get('WORKOS_API_KEY') || '',
-    { clientId: Deno.env.get('WORKOS_CLIENT_ID') },
+    Deno.env.get("WORKOS_API_KEY") || "",
+    { clientId: Deno.env.get("WORKOS_CLIENT_ID") },
   );
 
   const sessionProvider = new FreshSessionProvider();
@@ -328,16 +349,17 @@ export function initWorkOS() {
 
 ```ts
 // routes/_middleware.ts
-import { FreshContext } from '$fresh/server.ts';
-import { FreshSessionProvider } from '@workos/sdk/common/iron-session/fresh-session-provider';
+import { FreshContext } from "$fresh/server.ts";
+import { FreshSessionProvider } from "@workos/sdk/common/iron-session/fresh-session-provider";
 
 const SESSION_OPTIONS = {
-  cookieName: 'workos_session',
-  password: Deno.env.get('SESSION_SECRET') || 'use-a-strong-password-in-production',
+  cookieName: "workos_session",
+  password: Deno.env.get("SESSION_SECRET") ||
+    "use-a-strong-password-in-production",
   ttl: 60 * 60 * 24 * 7, // 7 days in seconds
   secure: true,
   httpOnly: true,
-  sameSite: 'Lax' as const,
+  sameSite: "Lax" as const,
 };
 
 export async function handler(
@@ -377,26 +399,34 @@ When deploying WorkOS SDK to production:
 
 ## SDK Versioning
 
-For our SDKs WorkOS follows a Semantic Versioning ([SemVer](https://semver.org/)) process where all releases will have a version X.Y.Z (like 1.0.0) pattern wherein Z would be a bug fix (e.g., 1.0.1), Y would be a minor release (1.1.0) and X would be a major release (2.0.0). We permit any breaking changes to only be released in major versions and strongly recommend reading changelogs before making any major version upgrades.
+For our SDKs WorkOS follows a Semantic Versioning
+([SemVer](https://semver.org/)) process where all releases will have a version
+X.Y.Z (like 1.0.0) pattern wherein Z would be a bug fix (e.g., 1.0.1), Y would
+be a minor release (1.1.0) and X would be a major release (2.0.0). We permit any
+breaking changes to only be released in major versions and strongly recommend
+reading changelogs before making any major version upgrades.
 
 ## Beta Releases
 
-WorkOS has features in Beta that can be accessed via Beta releases. We would love for you to try these
-and share feedback with us before these features reach general availability (GA). To install a Beta version,
-please follow the [installation steps](#installation) above using the Beta release version.
+WorkOS has features in Beta that can be accessed via Beta releases. We would
+love for you to try these and share feedback with us before these features reach
+general availability (GA). To install a Beta version, please follow the
+[installation steps](#installation) above using the Beta release version.
 
-> Note: there can be breaking changes between Beta versions. Therefore, we recommend pinning the package version to a
-> specific version. This way you can install the same version each time without breaking changes unless you are
+> Note: there can be breaking changes between Beta versions. Therefore, we
+> recommend pinning the package version to a specific version. This way you can
+> install the same version each time without breaking changes unless you are
 > intentionally looking for the latest Beta version.
 
-We highly recommend keeping an eye on when the Beta feature you are interested in goes from Beta to stable so that you
-can move to using the stable version.
+We highly recommend keeping an eye on when the Beta feature you are interested
+in goes from Beta to stable so that you can move to using the stable version.
 
 ## Testing Coverage
 
 [![Coverage Status](https://codecov.io/gh/workos/workos-node/branch/main/graph/badge.svg)](https://codecov.io/gh/workos/workos-node)
 
-This library maintains 100% test coverage as a quality standard. All code changes must include appropriate test coverage.
+This library maintains 100% test coverage as a quality standard. All code
+changes must include appropriate test coverage.
 
 ### Running Coverage Tests Locally
 
@@ -417,18 +447,23 @@ deno coverage coverage --lcov --output=coverage/lcov.info
 
 The testing strategy follows these principles:
 
-1. **Unit Testing**: All public methods and functionality must have comprehensive unit tests.
-2. **Mocking Strategy**: HTTP requests are mocked using utility functions found in `tests/utils.ts`, which provide various mock client implementations:
+1. **Unit Testing**: All public methods and functionality must have
+   comprehensive unit tests.
+2. **Mocking Strategy**: HTTP requests are mocked using utility functions found
+   in `tests/utils.ts`, which provide various mock client implementations:
    - `createSuccessMockClient`: For testing successful API responses
    - `createErrorMockClient`: For testing error scenarios
    - `createNetworkErrorMockClient`: For testing network failures
    - `createCapturingMockClient`: For capturing and inspecting requests
 
-3. **Coverage Verification**: GitHub workflow automatically verifies that 100% coverage is maintained on all pull requests.
+3. **Coverage Verification**: GitHub workflow automatically verifies that 100%
+   coverage is maintained on all pull requests.
 
 ## Contributing
 
-We welcome contributions to the WorkOS Node.js library! Please check out our [contributing guidelines](CONTRIBUTING.md) for details on our commit message conventions and how to submit pull requests.
+We welcome contributions to the WorkOS Node.js library! Please check out our
+[contributing guidelines](CONTRIBUTING.md) for details on our commit message
+conventions and how to submit pull requests.
 
 ## More Information
 

@@ -4,8 +4,8 @@ import type {
   DirectoryUserResponse,
   DirectoryUserWithGroups,
   DirectoryUserWithGroupsResponse,
-} from '../interfaces/index.ts';
-import { deserializeDirectoryGroup } from './directory-group.serializer.ts';
+} from "../interfaces/index.ts";
+import { deserializeDirectoryGroup } from "./directory-group.serializer.ts";
 
 export const deserializeDirectoryUser = <
   TCustomAttributes extends object = DefaultCustomAttributes,
@@ -43,9 +43,9 @@ export const deserializeDirectoryUserWithGroups = <
 });
 
 export const deserializeUpdatedEventDirectoryUser = (
-  directoryUser: DirectoryUserResponse & Record<'previous_attributes', any>,
-): DirectoryUser & Record<'previousAttributes', any> => ({
-  object: 'directory_user',
+  directoryUser: DirectoryUserResponse & Record<"previous_attributes", any>,
+): DirectoryUser & Record<"previousAttributes", any> => ({
+  object: "directory_user",
   id: directoryUser.id,
   directoryId: directoryUser.directory_id,
   organizationId: directoryUser.organization_id,

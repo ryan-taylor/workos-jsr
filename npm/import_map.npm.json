@@ -16,7 +16,7 @@
     "@std/http": "jsr:@std/http@1.0.0",
     "$fresh/": "https://deno.land/x/fresh@1.7.3/",
     "preact/jsx-runtime": "https://esm.sh/preact@10/jsx-runtime",
-    
+
     "@fresh/core": "jsr:@fresh/core@2.0.0-alpha.29",
     "@fresh/dev": "jsr:@fresh/dev@2.0.0-alpha.29",
     "@fresh/plugin-tailwindcss": "jsr:@fresh/plugin-tailwindcss@2.0.0-alpha.29"

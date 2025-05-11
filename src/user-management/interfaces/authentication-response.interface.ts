@@ -1,17 +1,23 @@
-import type { Impersonator, ImpersonatorResponse } from './impersonator.interface.ts';
-import type { OauthTokens, OauthTokensResponse } from './oauth-tokens.interface.ts';
-import type { User, UserResponse } from './user.interface.ts';
+import type {
+  Impersonator,
+  ImpersonatorResponse,
+} from "./impersonator.interface.ts";
+import type {
+  OauthTokens,
+  OauthTokensResponse,
+} from "./oauth-tokens.interface.ts";
+import type { User, UserResponse } from "./user.interface.ts";
 
 type AuthenticationMethod =
-  | 'SSO'
-  | 'Password'
-  | 'Passkey'
-  | 'AppleOAuth'
-  | 'GitHubOAuth'
-  | 'GoogleOAuth'
-  | 'MicrosoftOAuth'
-  | 'MagicAuth'
-  | 'Impersonation';
+  | "SSO"
+  | "Password"
+  | "Passkey"
+  | "AppleOAuth"
+  | "GitHubOAuth"
+  | "GoogleOAuth"
+  | "MicrosoftOAuth"
+  | "MagicAuth"
+  | "Impersonation";
 
 export interface AuthenticationResponse {
   user: User;

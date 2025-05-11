@@ -3,7 +3,7 @@ export interface PasswordlessSession {
   email: string;
   expiresAt: Date;
   link: string;
-  object: 'passwordless_session';
+  object: "passwordless_session";
 }
 
 export interface PasswordlessSessionResponse {
@@ -11,5 +11,5 @@ export interface PasswordlessSessionResponse {
   email: string;
   expires_at: Date;
   link: string;
-  object: 'passwordless_session';
+  object: "passwordless_session";
 }

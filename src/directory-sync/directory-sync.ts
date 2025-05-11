@@ -1,5 +1,5 @@
-import type { WorkOS } from '../workos.ts';
-import { AutoPaginatable } from '../common/utils/pagination.ts';
+import type { WorkOS } from "../workos.ts";
+import { AutoPaginatable } from "../common/utils/pagination.ts";
 import type {
   DefaultCustomAttributes,
   Directory,
@@ -11,14 +11,14 @@ import type {
   ListDirectoriesOptions,
   ListDirectoryGroupsOptions,
   ListDirectoryUsersOptions,
-} from './interfaces.ts';
+} from "./interfaces.ts";
 import {
   deserializeDirectory,
   deserializeDirectoryGroup,
   deserializeDirectoryUserWithGroups,
   serializeListDirectoriesOptions,
-} from './serializers.ts';
-import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize.ts';
+} from "./serializers.ts";
+import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
 
 export class DirectorySync {
   constructor(private readonly workos: WorkOS) {}
@@ -29,14 +29,14 @@ export class DirectorySync {
     return new AutoPaginatable(
       await fetchAndDeserialize<DirectoryResponse, Directory>(
         this.workos,
-        '/directories',
+        "/directories",
         deserializeDirectory,
         options ? serializeListDirectoriesOptions(options) : undefined,
       ),
       (params) =>
         fetchAndDeserialize<DirectoryResponse, Directory>(
           this.workos,
-          '/directories',
+          "/directories",
           deserializeDirectory,
           params,
         ),
@@ -62,14 +62,14 @@ export class DirectorySync {
     return new AutoPaginatable(
       await fetchAndDeserialize<DirectoryGroupResponse, DirectoryGroup>(
         this.workos,
-        '/directory_groups',
+        "/directory_groups",
         deserializeDirectoryGroup,
         options,
       ),
       (params) =>
         fetchAndDeserialize<DirectoryGroupResponse, DirectoryGroup>(
           this.workos,
-          '/directory_groups',
+          "/directory_groups",
           deserializeDirectoryGroup,
           params,
         ),
@@ -86,7 +86,7 @@ export class DirectorySync {
         DirectoryUserWithGroups<TCustomAttributes>
       >(
         this.workos,
-        '/directory_users',
+        "/directory_users",
         deserializeDirectoryUserWithGroups,
         options,
       ),
@@ -96,7 +96,7 @@ export class DirectorySync {
           DirectoryUserWithGroups<TCustomAttributes>
         >(
           this.workos,
-          '/directory_users',
+          "/directory_users",
           deserializeDirectoryUserWithGroups,
           params,
         ),

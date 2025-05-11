@@ -1,17 +1,21 @@
-import { deserializeAuditLogEvent } from './serializers/audit-log-event.serializer.ts';
-import { serializeListEventsOptions } from './serializers/list-events-options.serializer.ts';
-import type { AuditLogEvent, CreateEventOptions, ListEventsOptions } from './interfaces/index.ts';
-import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize.ts';
-import type { WorkOS } from '../workos.ts';
-import type { List } from '../common/interfaces.ts';
+import { deserializeAuditLogEvent } from "./serializers/audit-log-event.serializer.ts";
+import { serializeListEventsOptions } from "./serializers/list-events-options.serializer.ts";
+import type {
+  AuditLogEvent,
+  CreateEventOptions,
+  ListEventsOptions,
+} from "./interfaces/index.ts";
+import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
+import type { WorkOS } from "../workos.ts";
+import type { List } from "../common/interfaces.ts";
 
 export class AuditLogs {
   constructor(private workos: WorkOS) {}
 
   async createEvent(options: CreateEventOptions): Promise<AuditLogEvent> {
     const response = await this.workos.post<{ data: AuditLogEvent }>(
-      '/audit_logs',
-      { body: options }
+      "/audit_logs",
+      { body: options },
     );
     return deserializeAuditLogEvent(response.data);
   }
@@ -19,9 +23,9 @@ export class AuditLogs {
   async listEvents(options: ListEventsOptions): Promise<List<AuditLogEvent>> {
     return await fetchAndDeserialize(
       this.workos,
-      '/audit_logs',
+      "/audit_logs",
       deserializeAuditLogEvent,
-      serializeListEventsOptions(options)
+      serializeListEventsOptions(options),
     );
   }
 }

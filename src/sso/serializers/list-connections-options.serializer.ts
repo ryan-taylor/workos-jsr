@@ -1,4 +1,7 @@
-import type { ListConnectionsOptions, SerializedListConnectionsOptions } from '../interfaces.ts';
+import type {
+  ListConnectionsOptions,
+  SerializedListConnectionsOptions,
+} from "../interfaces.ts";
 
 export const serializeListConnectionsOptions = (
   options: ListConnectionsOptions,

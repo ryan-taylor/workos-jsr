@@ -2,7 +2,8 @@
 
 ## Summary
 
-The following test files have been verified to already use the native Deno.test format:
+The following test files have been verified to already use the native Deno.test
+format:
 
 - tests/audit_logs.test.ts
 - tests/core.test.ts
@@ -25,7 +26,8 @@ All files use:
 - Clear, descriptive test names
 - Flat test organization
 
-No conversion is needed for these files as they already follow the established Deno.test conversion approach:
+No conversion is needed for these files as they already follow the established
+Deno.test conversion approach:
 
 - Imports assertions from @std/assert
 - Uses flat Deno.test functions with descriptive names

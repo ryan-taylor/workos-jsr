@@ -1,5 +1,5 @@
-import { crypto } from 'jsr:@std/crypto@1';
-import { encodeUInt32 } from '../../common/utils/leb128.ts';
+import { crypto } from "jsr:@std/crypto@1";
+import { encodeUInt32 } from "../../common/utils/leb128.ts";
 
 // Changed to async function
 export const encrypt = async (
@@ -21,16 +21,16 @@ export const encrypt = async (
 
   // Use AES-GCM for authenticated encryption
   const cryptoKey = await crypto.subtle.importKey(
-    'raw',
+    "raw",
     key,
-    { name: 'AES-GCM' },
+    { name: "AES-GCM" },
     false,
-    ['encrypt'],
+    ["encrypt"],
   );
 
   const encryptedData = await crypto.subtle.encrypt(
     {
-      name: 'AES-GCM',
+      name: "AES-GCM",
       iv,
       additionalData: aadBytes,
     },
@@ -71,7 +71,7 @@ function base64ToUint8Array(base64: string): Uint8Array {
 function uint8ArrayToBase64(bytes: Uint8Array): string {
   const binString = Array.from(bytes)
     .map((byte) => String.fromCharCode(byte))
-    .join('');
+    .join("");
   return btoa(binString);
 }
 

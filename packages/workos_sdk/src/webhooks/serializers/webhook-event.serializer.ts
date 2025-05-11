@@ -1,6 +1,8 @@
-import type { WebhookEvent } from '../interfaces/index.ts';
+import type { WebhookEvent } from "../interfaces/index.ts";
 
-export function deserializeWebhookEvent(data: Record<string, unknown>): WebhookEvent {
+export function deserializeWebhookEvent(
+  data: Record<string, unknown>,
+): WebhookEvent {
   return {
     id: data.id as string,
     event: data.event as string,

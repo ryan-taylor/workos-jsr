@@ -1,7 +1,7 @@
 export interface AuthorizationURLOptions {
   clientId: string;
   codeChallenge?: string;
-  codeChallengeMethod?: 'S256';
+  codeChallengeMethod?: "S256";
   connectionId?: string;
   /**
    *  @deprecated We previously required initiate login endpoints to return the `context`
@@ -14,5 +14,5 @@ export interface AuthorizationURLOptions {
   provider?: string;
   redirectUri: string;
   state?: string;
-  screenHint?: 'sign-up' | 'sign-in';
+  screenHint?: "sign-up" | "sign-in";
 }

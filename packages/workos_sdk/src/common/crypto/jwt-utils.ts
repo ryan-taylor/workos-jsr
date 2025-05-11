@@ -25,15 +25,17 @@ export interface JWTPayload {
 export function decodeJwt<T extends JWTPayload = JWTPayload>(token: string): T {
   try {
     // Split the token into header, payload, and signature
-    const [, payloadB64] = token.split('.');
+    const [, payloadB64] = token.split(".");
 
     // Base64 decode the payload
-    const payloadJson = atob(payloadB64.replace(/-/g, '+').replace(/_/g, '/'));
+    const payloadJson = atob(payloadB64.replace(/-/g, "+").replace(/_/g, "/"));
 
     // Parse and return the payload as a JavaScript object
     return JSON.parse(payloadJson) as T;
   } catch (error) {
-    throw new Error(`Invalid JWT: ${error instanceof Error ? error.message : String(error)}`);
+    throw new Error(
+      `Invalid JWT: ${error instanceof Error ? error.message : String(error)}`,
+    );
   }
 }
 
@@ -44,7 +46,7 @@ export function decodeJwt<T extends JWTPayload = JWTPayload>(token: string): T {
  */
 export function createRemoteJWKSet(url: URL | string) {
   // Convert string to URL if necessary
-  const jwksUrl = typeof url === 'string' ? new URL(url) : url;
+  const jwksUrl = typeof url === "string" ? new URL(url) : url;
 
   // Cache for the fetched JWKs and timestamp
   let jwksCache: { keys: JsonWebKey[] } | null = null;
@@ -61,7 +63,9 @@ export function createRemoteJWKSet(url: URL | string) {
       const response = await fetch(jwksUrl.toString());
 
       if (!response.ok) {
-        throw new Error(`Failed to fetch JWKs: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `Failed to fetch JWKs: ${response.status} ${response.statusText}`,
+        );
       }
 
       jwksCache = await response.json();
@@ -81,14 +85,14 @@ export function createRemoteJWKSet(url: URL | string) {
 
     // Import the JWK as a CryptoKey
     return crypto.subtle.importKey(
-      'jwk',
+      "jwk",
       jwk,
       {
-        name: 'RS256',
-        hash: { name: 'SHA-256' },
+        name: "RS256",
+        hash: { name: "SHA-256" },
       },
       false,
-      ['verify'],
+      ["verify"],
     );
   };
 }
@@ -104,16 +108,16 @@ export async function jwtVerify<T extends JWTPayload = JWTPayload>(
   getKey: (protectedHeader: any) => Promise<CryptoKey>,
 ): Promise<{ payload: T; protectedHeader: any }> {
   // Split the token into header, payload, and signature
-  const parts = token.split('.');
+  const parts = token.split(".");
   if (parts.length !== 3) {
-    throw new Error('Invalid JWT format');
+    throw new Error("Invalid JWT format");
   }
 
   const [headerB64, payloadB64, signatureB64] = parts;
 
   // Decode header and payload
-  const headerJson = atob(headerB64.replace(/-/g, '+').replace(/_/g, '/'));
-  const payloadJson = atob(payloadB64.replace(/-/g, '+').replace(/_/g, '/'));
+  const headerJson = atob(headerB64.replace(/-/g, "+").replace(/_/g, "/"));
+  const payloadJson = atob(payloadB64.replace(/-/g, "+").replace(/_/g, "/"));
 
   const header = JSON.parse(headerJson);
   const payload = JSON.parse(payloadJson) as T;
@@ -127,8 +131,8 @@ export async function jwtVerify<T extends JWTPayload = JWTPayload>(
 
   // Use appropriate algorithm based on header
   const algorithm = {
-    name: header.alg === 'RS256' ? 'RSASSA-PKCS1-v1_5' : 'HMAC',
-    hash: { name: header.alg.includes('256') ? 'SHA-256' : 'SHA-512' },
+    name: header.alg === "RS256" ? "RSASSA-PKCS1-v1_5" : "HMAC",
+    hash: { name: header.alg.includes("256") ? "SHA-256" : "SHA-512" },
   };
 
   const isValid = await crypto.subtle.verify(
@@ -139,13 +143,13 @@ export async function jwtVerify<T extends JWTPayload = JWTPayload>(
   );
 
   if (!isValid) {
-    throw new Error('Invalid JWT signature');
+    throw new Error("Invalid JWT signature");
   }
 
   // Check token expiration
   const now = Math.floor(Date.now() / 1000);
   if (payload.exp && payload.exp < now) {
-    throw new Error('JWT has expired');
+    throw new Error("JWT has expired");
   }
 
   return { payload, protectedHeader: header };
@@ -155,7 +159,7 @@ export async function jwtVerify<T extends JWTPayload = JWTPayload>(
  * Converts a base64url string to an ArrayBuffer
  */
 function base64UrlToArrayBuffer(base64Url: string): ArrayBuffer {
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
   const binaryString = atob(base64);
   const bytes = new Uint8Array(binaryString.length);
 

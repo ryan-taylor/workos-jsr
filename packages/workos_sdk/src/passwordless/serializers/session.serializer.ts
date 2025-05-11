@@ -1,6 +1,8 @@
-import type { PasswordlessSession } from '../interfaces/index.ts';
+import type { PasswordlessSession } from "../interfaces/index.ts";
 
-export function deserializeSession(data: Record<string, unknown>): PasswordlessSession {
+export function deserializeSession(
+  data: Record<string, unknown>,
+): PasswordlessSession {
   return {
     id: data.id as string,
     email: data.email as string,

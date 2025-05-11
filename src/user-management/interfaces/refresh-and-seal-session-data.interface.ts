@@ -1,22 +1,22 @@
-import type { AuthenticateWithSessionCookieSuccessResponse } from './authenticate-with-session-cookie.interface.ts';
-import type { AuthenticationResponse } from './authentication-response.interface.ts';
+import type { AuthenticateWithSessionCookieSuccessResponse } from "./authenticate-with-session-cookie.interface.ts";
+import type { AuthenticationResponse } from "./authentication-response.interface.ts";
 
 export enum RefreshAndSealSessionDataFailureReason {
   /**
    * @deprecated To be removed in a future major version.
    */
-  INVALID_SESSION_COOKE = 'invalid_session_cookie',
-  INVALID_SESSION_COOKIE = 'invalid_session_cookie',
-  NO_SESSION_COOKIE_PROVIDED = 'no_session_cookie_provided',
+  INVALID_SESSION_COOKE = "invalid_session_cookie",
+  INVALID_SESSION_COOKIE = "invalid_session_cookie",
+  NO_SESSION_COOKIE_PROVIDED = "no_session_cookie_provided",
 
   // API OauthErrors for refresh tokens
-  INVALID_GRANT = 'invalid_grant',
-  MFA_ENROLLMENT = 'mfa_enrollment',
-  SSO_REQUIRED = 'sso_required',
+  INVALID_GRANT = "invalid_grant",
+  MFA_ENROLLMENT = "mfa_enrollment",
+  SSO_REQUIRED = "sso_required",
   /**
    * @deprecated To be removed in a future major version.
    */
-  ORGANIZATION_NOT_AUTHORIZED = 'organization_not_authorized',
+  ORGANIZATION_NOT_AUTHORIZED = "organization_not_authorized",
 }
 
 type RefreshSessionFailedResponse = {
@@ -42,7 +42,7 @@ type RefreshSessionSuccessResponse =
     AuthenticateWithSessionCookieSuccessResponse,
     // accessToken is available in the session object and with session
     // helpers isn't necessarily useful to return top level
-    'accessToken'
+    "accessToken"
   >
   & {
     authenticated: true;

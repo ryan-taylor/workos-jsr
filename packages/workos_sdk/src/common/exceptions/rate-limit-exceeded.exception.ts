@@ -1,11 +1,11 @@
-import { GenericServerException } from './generic-server.exception.ts';
+import { GenericServerException } from "./generic-server.exception.ts";
 
 // Inheriting from `GenericServerException` in order to maintain backwards
 // compatibility with what 429 errors would have previously been thrown as.
 //
 // TODO: Consider making it the base class for all request errors.
 export class RateLimitExceededException extends GenericServerException {
-  override readonly name = 'RateLimitExceededException';
+  override readonly name = "RateLimitExceededException";
 
   constructor(
     message: string,

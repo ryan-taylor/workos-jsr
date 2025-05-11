@@ -1,4 +1,7 @@
-import type { SerializedUpdateUserPasswordOptions, UpdateUserPasswordOptions } from '../interfaces.ts';
+import type {
+  SerializedUpdateUserPasswordOptions,
+  UpdateUserPasswordOptions,
+} from "../interfaces.ts";
 
 export const serializeUpdateUserPasswordOptions = (
   options: UpdateUserPasswordOptions,

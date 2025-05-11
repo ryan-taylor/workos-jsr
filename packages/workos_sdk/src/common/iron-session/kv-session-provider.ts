@@ -1,13 +1,16 @@
 /// <reference lib="deno.unstable" />
 
-import type { Cookie } from 'https://deno.land/std@0.220.0/http/cookie.ts';
+import type { Cookie } from "https://deno.land/std@0.220.0/http/cookie.ts";
 // Use a type definition instead of direct import to avoid URL resolution issues
 type FreshContext = {
   next: () => Promise<Response>;
   state: Record<string, unknown>;
 };
-import { FreshSessionProvider } from './fresh-session-provider.ts';
-import type { SessionOptions, UnsealedDataType } from './fresh-session-provider.ts';
+import { FreshSessionProvider } from "./fresh-session-provider.ts";
+import type {
+  SessionOptions,
+  UnsealedDataType,
+} from "./fresh-session-provider.ts";
 
 /**
  * KVSessionProvider extends FreshSessionProvider to store session data in Deno KV
@@ -41,7 +44,7 @@ export class KVSessionProvider extends FreshSessionProvider {
    * @returns A key for the KV store
    */
   private getSessionKey(sessionId: string): Deno.KvKey {
-    return ['sessions', sessionId];
+    return ["sessions", sessionId];
   }
 
   /**
@@ -55,13 +58,13 @@ export class KVSessionProvider extends FreshSessionProvider {
     options: SessionOptions,
   ): Promise<T | null> {
     const { cookieName } = options;
-    const cookieStr = req.headers.get('cookie') || '';
+    const cookieStr = req.headers.get("cookie") || "";
     const cookies: Record<string, string> = {};
 
-    cookieStr.split(';').forEach((pair) => {
-      const [name, ...rest] = pair.trim().split('=');
+    cookieStr.split(";").forEach((pair) => {
+      const [name, ...rest] = pair.trim().split("=");
       if (name) {
-        cookies[name] = rest.join('=');
+        cookies[name] = rest.join("=");
       }
     });
 
@@ -76,14 +79,14 @@ export class KVSessionProvider extends FreshSessionProvider {
       await this.initialize();
 
       if (!this.kv) {
-        throw new Error('Failed to initialize KV store');
+        throw new Error("Failed to initialize KV store");
       }
 
       // Get session from KV store
       const sessionEntry = await this.kv.get<T>(this.getSessionKey(sessionId));
       return sessionEntry.value;
     } catch (error) {
-      console.error('Error retrieving session from KV:', error);
+      console.error("Error retrieving session from KV:", error);
       // If reading fails, return null (invalid or expired session)
       return null;
     }
@@ -104,10 +107,10 @@ export class KVSessionProvider extends FreshSessionProvider {
     const {
       cookieName,
       ttl = 86400 * 7, // Default 7 days
-      cookiePath = '/',
+      cookiePath = "/",
       secure = true,
       httpOnly = true,
-      sameSite = 'Lax',
+      sameSite = "Lax",
       domain,
     } = options;
 
@@ -119,7 +122,7 @@ export class KVSessionProvider extends FreshSessionProvider {
       await this.initialize();
 
       if (!this.kv) {
-        throw new Error('Failed to initialize KV store');
+        throw new Error("Failed to initialize KV store");
       }
 
       // Store data in KV with expiration
@@ -129,7 +132,7 @@ export class KVSessionProvider extends FreshSessionProvider {
         { expireIn: ttl * 1000 }, // KV expiration is in milliseconds
       );
     } catch (error) {
-      console.error('Error storing session in KV:', error);
+      console.error("Error storing session in KV:", error);
       // Continue even if KV storage fails, as we can still set the cookie
     }
 
@@ -152,10 +155,14 @@ export class KVSessionProvider extends FreshSessionProvider {
     let cookieStr = `${cookie.name}=${cookie.value}`;
 
     if (cookie.expires) {
-      cookieStr += `; Expires=${cookie.expires instanceof Date ? cookie.expires.toUTCString() : new Date(cookie.expires).toUTCString()}`;
+      cookieStr += `; Expires=${
+        cookie.expires instanceof Date
+          ? cookie.expires.toUTCString()
+          : new Date(cookie.expires).toUTCString()
+      }`;
     }
 
-    if (typeof cookie.maxAge === 'number') {
+    if (typeof cookie.maxAge === "number") {
       cookieStr += `; Max-Age=${cookie.maxAge}`;
     }
 
@@ -168,11 +175,11 @@ export class KVSessionProvider extends FreshSessionProvider {
     }
 
     if (cookie.secure) {
-      cookieStr += '; Secure';
+      cookieStr += "; Secure";
     }
 
     if (cookie.httpOnly) {
-      cookieStr += '; HttpOnly';
+      cookieStr += "; HttpOnly";
     }
 
     if (cookie.sameSite) {
@@ -184,7 +191,7 @@ export class KVSessionProvider extends FreshSessionProvider {
 
     // Create headers for the new response
     const headers = new Headers(baseResponse.headers);
-    headers.append('Set-Cookie', cookieStr);
+    headers.append("Set-Cookie", cookieStr);
 
     // Return a new response with the cookie header
     return new Response(baseResponse.body, {
@@ -225,13 +232,13 @@ export class KVSessionProvider extends FreshSessionProvider {
     response?: Response,
   ): Promise<Response> {
     const { cookieName } = options;
-    const cookieStr = req.headers.get('cookie') || '';
+    const cookieStr = req.headers.get("cookie") || "";
     const cookies: Record<string, string> = {};
 
-    cookieStr.split(';').forEach((pair) => {
-      const [name, ...rest] = pair.trim().split('=');
+    cookieStr.split(";").forEach((pair) => {
+      const [name, ...rest] = pair.trim().split("=");
       if (name) {
-        cookies[name] = rest.join('=');
+        cookies[name] = rest.join("=");
       }
     });
 
@@ -244,12 +251,12 @@ export class KVSessionProvider extends FreshSessionProvider {
         await this.initialize();
 
         if (!this.kv) {
-          throw new Error('Failed to initialize KV store');
+          throw new Error("Failed to initialize KV store");
         }
 
         await this.kv.delete(this.getSessionKey(sessionId));
       } catch (error) {
-        console.error('Error deleting session from KV:', error);
+        console.error("Error deleting session from KV:", error);
         // Continue even if KV deletion fails, as we can still clear the cookie
       }
     }

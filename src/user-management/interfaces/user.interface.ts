@@ -1,5 +1,5 @@
 export interface User {
-  object: 'user';
+  object: "user";
   id: string;
   email: string;
   emailVerified: boolean;
@@ -14,7 +14,7 @@ export interface User {
 }
 
 export interface UserResponse {
-  object: 'user';
+  object: "user";
   id: string;
   email: string;
   email_verified: boolean;

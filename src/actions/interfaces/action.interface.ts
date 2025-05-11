@@ -1,4 +1,7 @@
-import type { Organization, OrganizationResponse } from '../../organizations/interfaces.ts';
+import type {
+  Organization,
+  OrganizationResponse,
+} from "../../organizations/interfaces.ts";
 import type {
   Invitation,
   InvitationResponse,
@@ -6,11 +9,11 @@ import type {
   OrganizationMembershipResponse,
   User,
   UserResponse,
-} from '../../user-management/interfaces.ts';
+} from "../../user-management/interfaces.ts";
 
 interface AuthenticationActionContext {
   id: string;
-  object: 'authentication_action_context';
+  object: "authentication_action_context";
   user: User;
   organization?: Organization;
   organizationMembership?: OrganizationMembership;
@@ -21,7 +24,7 @@ interface AuthenticationActionContext {
 }
 
 export interface UserData {
-  object: 'user_data';
+  object: "user_data";
   email: string;
   firstName: string;
   lastName: string;
@@ -29,7 +32,7 @@ export interface UserData {
 
 interface UserRegistrationActionContext {
   id: string;
-  object: 'user_registration_action_context';
+  object: "user_registration_action_context";
   userData: UserData;
   invitation?: Invitation;
   ipAddress?: string;
@@ -43,7 +46,7 @@ export type ActionContext =
 
 interface AuthenticationActionPayload {
   id: string;
-  object: 'authentication_action_context';
+  object: "authentication_action_context";
   user: UserResponse;
   organization?: OrganizationResponse;
   organization_membership?: OrganizationMembershipResponse;
@@ -54,7 +57,7 @@ interface AuthenticationActionPayload {
 }
 
 export interface UserDataPayload {
-  object: 'user_data';
+  object: "user_data";
   email: string;
   first_name: string;
   last_name: string;
@@ -62,7 +65,7 @@ export interface UserDataPayload {
 
 export interface UserRegistrationActionPayload {
   id: string;
-  object: 'user_registration_action_context';
+  object: "user_registration_action_context";
   user_data: UserDataPayload;
   invitation?: InvitationResponse;
   ip_address?: string;

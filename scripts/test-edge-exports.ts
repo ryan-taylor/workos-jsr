@@ -6,26 +6,28 @@
  * the correct bundle is loaded in each case.
  */
 
-import { join } from '@std/path';
+import { join } from "@std/path";
 
 // Environment simulation variables
 const ENVIRONMENTS = {
-  NODE: 'node',
-  DENO: 'deno',
-  WORKER: 'worker',
-  EDGE: 'edge',
-  BROWSER: 'browser',
+  NODE: "node",
+  DENO: "deno",
+  WORKER: "worker",
+  EDGE: "edge",
+  BROWSER: "browser",
 };
 
 async function main() {
-  console.log('🧪 Testing WorkOS SDK conditional exports\n');
+  console.log("🧪 Testing WorkOS SDK conditional exports\n");
 
   // Check if bundles exist
   try {
-    await Deno.stat(join('dist', 'workos.js'));
-    await Deno.stat(join('dist', 'workos.worker.js'));
+    await Deno.stat(join("dist", "workos.js"));
+    await Deno.stat(join("dist", "workos.worker.js"));
   } catch (error) {
-    console.error("❌ Bundles not found. Please run 'deno task bundle:sdk' first.");
+    console.error(
+      "❌ Bundles not found. Please run 'deno task bundle:sdk' first.",
+    );
     Deno.exit(1);
   }
 
@@ -34,9 +36,9 @@ async function main() {
     console.log(`Testing ${envName} environment...`);
 
     // Run a Deno subprocess with environment-specific import
-    const command = new Deno.Command('deno', {
+    const command = new Deno.Command("deno", {
       args: [
-        'eval',
+        "eval",
         `
         // Simulate environment
         const env = "${env}";
@@ -65,10 +67,10 @@ async function main() {
 
     const { stdout } = await command.output();
     console.log(new TextDecoder().decode(stdout));
-    console.log('-----------------------');
+    console.log("-----------------------");
   }
 
-  console.log('\n🎉 All environment-specific exports working correctly!');
+  console.log("\n🎉 All environment-specific exports working correctly!");
 }
 
 if (import.meta.main) {

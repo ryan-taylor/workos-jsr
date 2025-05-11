@@ -18,7 +18,7 @@ const mockFetchState = {
   calls: [] as Array<[string, RequestInit | undefined]>,
   implementations: [] as Array<() => Promise<Response>>,
   defaultImplementation: () => {
-    throw new Error('Mock fetch called without implementation');
+    throw new Error("Mock fetch called without implementation");
   },
 };
 
@@ -27,7 +27,11 @@ export const mockFetch = async (
   input: string | URL | Request,
   init?: RequestInit,
 ): Promise<Response> => {
-  const url = typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url;
+  const url = typeof input === "string"
+    ? input
+    : input instanceof URL
+    ? input.toString()
+    : input.url;
   mockFetchState.calls.push([url, init]);
 
   if (mockFetchState.implementations.length > 0) {
@@ -43,7 +47,7 @@ export function resetMockFetch(): void {
   mockFetchState.calls = [];
   mockFetchState.implementations = [];
   mockFetchState.defaultImplementation = () => {
-    throw new Error('Mock fetch called without implementation');
+    throw new Error("Mock fetch called without implementation");
   };
 }
 
@@ -53,7 +57,9 @@ export function fetchOnce(
   { status = 200, headers, ...rest }: MockParams = {},
 ): void {
   // Handle string responses by parsing them if they're JSON strings
-  const responseData = typeof response === 'string' ? (response.trim().startsWith('{') ? JSON.parse(response) : response) : response;
+  const responseData = typeof response === "string"
+    ? (response.trim().startsWith("{") ? JSON.parse(response) : response)
+    : response;
 
   mockFetchState.implementations.push(() =>
     Promise.resolve(
@@ -61,7 +67,10 @@ export function fetchOnce(
         JSON.stringify(responseData),
         {
           status,
-          headers: { 'content-type': 'application/json;charset=UTF-8', ...headers },
+          headers: {
+            "content-type": "application/json;charset=UTF-8",
+            ...headers,
+          },
           ...rest,
         },
       ),
@@ -81,7 +90,9 @@ export function fetchSearchParams(): Record<string, string> {
 
 // Get headers from the last fetch call
 export function fetchHeaders(): Record<string, string> | undefined {
-  return mockFetchState.calls[0]?.[1]?.headers as Record<string, string> | undefined;
+  return mockFetchState.calls[0]?.[1]?.headers as
+    | Record<string, string>
+    | undefined;
 }
 
 // Get method from the last fetch call
@@ -176,11 +187,12 @@ export function stub<T extends object, K extends keyof T>(
   obj[method] = spyFn as unknown as T[K];
 
   // Add restore functionality
-  Object.defineProperty(spyFn, 'restore', {
+  Object.defineProperty(spyFn, "restore", {
     value: () => {
       obj[method] = original;
     },
   });
 
-  return spyFn as unknown as T[K] extends AnyFunction ? ReturnType<T[K]> : never;
+  return spyFn as unknown as T[K] extends AnyFunction ? ReturnType<T[K]>
+    : never;
 }

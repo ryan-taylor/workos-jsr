@@ -3,7 +3,7 @@ export interface RoleResponse {
 }
 
 export interface RoleEvent {
-  object: 'role';
+  object: "role";
   slug: string;
   permissions: string[];
   createdAt: string;
@@ -11,7 +11,7 @@ export interface RoleEvent {
 }
 
 export interface RoleEventResponse {
-  object: 'role';
+  object: "role";
   slug: string;
   permissions: string[];
   created_at: string;
@@ -19,35 +19,35 @@ export interface RoleEventResponse {
 }
 
 export interface ListOrganizationRolesResponse {
-  object: 'list';
+  object: "list";
   data: OrganizationRoleResponse[];
 }
 
 export interface OrganizationRoleResponse {
-  object: 'role';
+  object: "role";
   id: string;
   name: string;
   slug: string;
   description: string | null;
   permissions: string[];
-  type: 'EnvironmentRole' | 'OrganizationRole';
+  type: "EnvironmentRole" | "OrganizationRole";
   created_at: string;
   updated_at: string;
 }
 
 export interface Role {
-  object: 'role';
+  object: "role";
   id: string;
   name: string;
   slug: string;
   description: string | null;
   permissions: string[];
-  type: 'EnvironmentRole' | 'OrganizationRole';
+  type: "EnvironmentRole" | "OrganizationRole";
   createdAt: string;
   updatedAt: string;
 }
 
 export interface RoleList {
-  object: 'list';
+  object: "list";
   data: Role[];
 }

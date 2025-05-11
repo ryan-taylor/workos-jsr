@@ -8,6 +8,6 @@ export const mockWorkOsResponse = (status: number, data: unknown) => ({
   data,
   status,
   headers: {},
-  statusText: '',
+  statusText: "",
   config: {} as WorkOsResponseConfig,
 });

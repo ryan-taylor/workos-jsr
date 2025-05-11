@@ -1,6 +1,8 @@
-import type { GenerateLinkOptions } from '../interfaces';
+import type { GenerateLinkOptions } from "../interfaces";
 
-export function serializeGenerateLinkOptions(options: GenerateLinkOptions): Record<string, unknown> {
+export function serializeGenerateLinkOptions(
+  options: GenerateLinkOptions,
+): Record<string, unknown> {
   return {
     organization: options.organization,
     intent: options.intent,

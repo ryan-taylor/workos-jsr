@@ -1,5 +1,5 @@
 export interface MagicAuth {
-  object: 'magic_auth';
+  object: "magic_auth";
   id: string;
   userId: string;
   email: string;
@@ -10,7 +10,7 @@ export interface MagicAuth {
 }
 
 export interface MagicAuthEvent {
-  object: 'magic_auth';
+  object: "magic_auth";
   id: string;
   userId: string;
   email: string;
@@ -20,7 +20,7 @@ export interface MagicAuthEvent {
 }
 
 export interface MagicAuthResponse {
-  object: 'magic_auth';
+  object: "magic_auth";
   id: string;
   user_id: string;
   email: string;
@@ -31,7 +31,7 @@ export interface MagicAuthResponse {
 }
 
 export interface MagicAuthEventResponse {
-  object: 'magic_auth';
+  object: "magic_auth";
   id: string;
   user_id: string;
   email: string;

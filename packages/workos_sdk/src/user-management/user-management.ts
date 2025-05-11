@@ -1,14 +1,14 @@
-import { deserializeUser } from './serializers/user.serializer.ts';
-import { deserializeSession } from './serializers/session.serializer.ts';
+import { deserializeUser } from "./serializers/user.serializer.ts";
+import { deserializeSession } from "./serializers/session.serializer.ts";
 import type {
-  User,
-  Session,
-  CreateUserOptions,
   AuthenticateOptions,
-} from './interfaces/index.ts';
-import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize.ts';
-import type { WorkOS } from '../workos.ts';
-import type { GetOptions } from '../common/interfaces.ts';
+  CreateUserOptions,
+  Session,
+  User,
+} from "./interfaces/index.ts";
+import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
+import type { WorkOS } from "../workos.ts";
+import type { GetOptions } from "../common/interfaces.ts";
 
 export class UserManagement {
   constructor(private workos: WorkOS) {}
@@ -20,10 +20,10 @@ export class UserManagement {
 
     const result = await fetchAndDeserialize(
       this.workos,
-      '/user_management/users',
+      "/user_management/users",
       deserializeUser,
       undefined,
-      requestOptions
+      requestOptions,
     );
     return result.data[0];
   }
@@ -32,7 +32,7 @@ export class UserManagement {
     const result = await fetchAndDeserialize(
       this.workos,
       `/user_management/users/${id}`,
-      deserializeUser
+      deserializeUser,
     );
     return result.data[0];
   }
@@ -44,10 +44,10 @@ export class UserManagement {
 
     const result = await fetchAndDeserialize(
       this.workos,
-      '/user_management/authenticate',
+      "/user_management/authenticate",
       deserializeSession,
       undefined,
-      requestOptions
+      requestOptions,
     );
     return result.data[0];
   }
@@ -56,7 +56,7 @@ export class UserManagement {
     const result = await fetchAndDeserialize(
       this.workos,
       `/user_management/sessions/${id}`,
-      deserializeSession
+      deserializeSession,
     );
     return result.data[0];
   }

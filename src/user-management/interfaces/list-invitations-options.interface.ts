@@ -1,4 +1,4 @@
-import type { PaginationOptions } from '../../common/interfaces.ts';
+import type { PaginationOptions } from "../../common/interfaces.ts";
 
 export interface ListInvitationsOptions extends PaginationOptions {
   organizationId?: string;

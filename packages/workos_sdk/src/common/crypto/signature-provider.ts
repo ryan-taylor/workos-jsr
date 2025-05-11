@@ -1,5 +1,5 @@
-import { SignatureVerificationException } from '../exceptions.ts';
-import type { CryptoProvider } from './crypto-provider.ts';
+import { SignatureVerificationException } from "../exceptions.ts";
+import type { CryptoProvider } from "./crypto-provider.ts";
 
 export class SignatureProvider {
   private cryptoProvider: CryptoProvider;
@@ -19,17 +19,19 @@ export class SignatureProvider {
     secret: string;
     tolerance?: number;
   }): Promise<boolean> {
-    const [timestamp, signatureHash] = this.getTimestampAndSignatureHash(sigHeader);
+    const [timestamp, signatureHash] = this.getTimestampAndSignatureHash(
+      sigHeader,
+    );
 
     if (!signatureHash || Object.keys(signatureHash).length === 0) {
       throw new SignatureVerificationException(
-        'No signature hash found with expected scheme v1',
+        "No signature hash found with expected scheme v1",
       );
     }
 
     if (parseInt(timestamp, 10) < Date.now() - tolerance) {
       throw new SignatureVerificationException(
-        'Timestamp outside the tolerance zone',
+        "Timestamp outside the tolerance zone",
       );
     }
 
@@ -39,7 +41,7 @@ export class SignatureProvider {
         false
     ) {
       throw new SignatureVerificationException(
-        'Signature hash does not match the expected signature hash for payload',
+        "Signature hash does not match the expected signature hash for payload",
       );
     }
     return true;
@@ -47,14 +49,14 @@ export class SignatureProvider {
 
   getTimestampAndSignatureHash(sigHeader: string): [string, string] {
     const signature = sigHeader;
-    const [t, v1] = signature.split(',');
-    if (typeof t === 'undefined' || typeof v1 === 'undefined') {
+    const [t, v1] = signature.split(",");
+    if (typeof t === "undefined" || typeof v1 === "undefined") {
       throw new SignatureVerificationException(
-        'Signature or timestamp missing',
+        "Signature or timestamp missing",
       );
     }
-    const { 1: timestamp } = t.split('=');
-    const { 1: signatureHash } = v1.split('=');
+    const { 1: timestamp } = t.split("=");
+    const { 1: signatureHash } = v1.split("=");
 
     return [timestamp, signatureHash];
   }

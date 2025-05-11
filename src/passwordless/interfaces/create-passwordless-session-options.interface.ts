@@ -1,5 +1,5 @@
 export interface CreatePasswordlessSessionOptions {
-  type: 'MagicLink';
+  type: "MagicLink";
   email: string;
   redirectURI?: string;
   state?: string;
@@ -8,7 +8,7 @@ export interface CreatePasswordlessSessionOptions {
 }
 
 export interface SerializedCreatePasswordlessSessionOptions {
-  type: 'MagicLink';
+  type: "MagicLink";
   email: string;
   redirect_uri?: string;
   state?: string;

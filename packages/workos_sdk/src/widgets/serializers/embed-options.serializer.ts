@@ -1,6 +1,8 @@
-import type { EmbedOptions } from '../interfaces/index.ts';
+import type { EmbedOptions } from "../interfaces/index.ts";
 
-export function serializeEmbedOptions(options: EmbedOptions): Record<string, unknown> {
+export function serializeEmbedOptions(
+  options: EmbedOptions,
+): Record<string, unknown> {
   return {
     organization_id: options.organization_id,
     intent: options.intent,

@@ -1,4 +1,4 @@
-import type { HttpClient } from '../core/http_client.ts.ts';
+import type { HttpClient } from "../core/http_client.ts.ts";
 
 export interface ListOrganizationsOptions {
   limit?: number;
@@ -31,35 +31,51 @@ export class Organizations {
   private readonly baseUrl: string;
   private readonly apiKey: string;
 
-  constructor({ httpClient, baseUrl, apiKey }: { httpClient: HttpClient; baseUrl: string; apiKey: string }) {
+  constructor(
+    { httpClient, baseUrl, apiKey }: {
+      httpClient: HttpClient;
+      baseUrl: string;
+      apiKey: string;
+    },
+  ) {
     this.httpClient = httpClient;
     this.baseUrl = baseUrl;
     this.apiKey = apiKey;
   }
 
-  async list(options: ListOrganizationsOptions = {}): Promise<ListOrganizationsResponse> {
-    const url = new URL('/organizations', this.baseUrl);
+  async list(
+    options: ListOrganizationsOptions = {},
+  ): Promise<ListOrganizationsResponse> {
+    const url = new URL("/organizations", this.baseUrl);
     Object.entries(options).forEach(([k, v]) => {
       if (v !== undefined) url.searchParams.set(k, String(v));
     });
-    const headers = { 'Authorization': `Bearer ${this.apiKey}` };
-    return await this.httpClient.request<ListOrganizationsResponse>(url.toString(), { headers });
+    const headers = { "Authorization": `Bearer ${this.apiKey}` };
+    return await this.httpClient.request<ListOrganizationsResponse>(
+      url.toString(),
+      { headers },
+    );
   }
 
   async get(options: GetOrganizationOptions): Promise<Organization> {
-    const url = new URL(`/organizations/${options.organizationId}`, this.baseUrl);
-    const headers = { 'Authorization': `Bearer ${this.apiKey}` };
-    return await this.httpClient.request<Organization>(url.toString(), { headers });
+    const url = new URL(
+      `/organizations/${options.organizationId}`,
+      this.baseUrl,
+    );
+    const headers = { "Authorization": `Bearer ${this.apiKey}` };
+    return await this.httpClient.request<Organization>(url.toString(), {
+      headers,
+    });
   }
 
   async create(options: CreateOrganizationOptions): Promise<Organization> {
-    const url = new URL('/organizations', this.baseUrl);
+    const url = new URL("/organizations", this.baseUrl);
     const headers = {
-      'Authorization': `Bearer ${this.apiKey}`,
-      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${this.apiKey}`,
+      "Content-Type": "application/json",
     };
     return await this.httpClient.request<Organization>(url.toString(), {
-      method: 'POST',
+      method: "POST",
       headers,
       body: options,
     });

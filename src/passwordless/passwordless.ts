@@ -1,12 +1,12 @@
-import type { WorkOS } from '../workos.ts';
+import type { WorkOS } from "../workos.ts";
 import type {
   CreatePasswordlessSessionOptions,
   PasswordlessSession,
   PasswordlessSessionResponse,
   SendSessionResponse,
   SerializedCreatePasswordlessSessionOptions,
-} from './interfaces.ts';
-import { deserializePasswordlessSession } from './serializers/passwordless-session.serializer.ts';
+} from "./interfaces.ts";
+import { deserializePasswordlessSession } from "./serializers/passwordless-session.serializer.ts";
 
 export class Passwordless {
   constructor(private readonly workos: WorkOS) {}
@@ -19,7 +19,7 @@ export class Passwordless {
     const { data } = await this.workos.post<
       PasswordlessSessionResponse,
       SerializedCreatePasswordlessSessionOptions
-    >('/passwordless/sessions', {
+    >("/passwordless/sessions", {
       ...options,
       redirect_uri: redirectURI,
       expires_in: expiresIn,

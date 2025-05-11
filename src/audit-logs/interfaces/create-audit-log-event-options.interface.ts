@@ -1,4 +1,4 @@
-import type { PostOptions } from '../../common/interfaces.ts';
+import type { PostOptions } from "../../common/interfaces.ts";
 
 export interface AuditLogActor {
   id: string;
@@ -42,5 +42,5 @@ export interface SerializedCreateAuditLogEventOptions {
 
 export type CreateAuditLogEventRequestOptions = Pick<
   PostOptions,
-  'idempotencyKey'
+  "idempotencyKey"
 >;

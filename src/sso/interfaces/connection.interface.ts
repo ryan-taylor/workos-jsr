@@ -1,13 +1,13 @@
-import type { ConnectionType } from './connection-type.enum.ts';
+import type { ConnectionType } from "./connection-type.enum.ts";
 
 export interface ConnectionDomain {
-  object: 'connection_domain';
+  object: "connection_domain";
   id: string;
   domain: string;
 }
 
 export interface Connection {
-  object: 'connection';
+  object: "connection";
   id: string;
   organizationId?: string;
   name: string;
@@ -15,7 +15,7 @@ export interface Connection {
    * @deprecated The connectionType parameter has been deprecated. Please use type.
    */
   connectionType: ConnectionType;
-  state: 'draft' | 'active' | 'inactive' | 'validating';
+  state: "draft" | "active" | "inactive" | "validating";
   domains: ConnectionDomain[];
   type: ConnectionType;
   createdAt: string;
@@ -23,12 +23,12 @@ export interface Connection {
 }
 
 export interface ConnectionResponse {
-  object: 'connection';
+  object: "connection";
   id: string;
   organization_id?: string;
   name: string;
   connection_type: ConnectionType;
-  state: 'draft' | 'active' | 'inactive' | 'validating';
+  state: "draft" | "active" | "inactive" | "validating";
   domains: ConnectionDomain[];
   created_at: string;
   updated_at: string;

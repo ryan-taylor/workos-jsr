@@ -2,7 +2,7 @@
  * Base serializer functions and utilities
  */
 
-import type { Event, List, ListResponse } from './interfaces.ts';
+import type { Event, List, ListResponse } from "./interfaces.ts";
 
 // Base serializer function
 export function serialize<T>(data: unknown): T {
@@ -12,26 +12,33 @@ export function serialize<T>(data: unknown): T {
 // List serializer functions
 export function serializeList<T>(
   data: unknown,
-  itemSerializer: (item: unknown) => T
+  itemSerializer: (item: unknown) => T,
 ): ListResponse<T> {
-  const response = data as { data: unknown[]; list_metadata: { before: string | null; after: string | null } };
-  
+  const response = data as {
+    data: unknown[];
+    list_metadata: { before: string | null; after: string | null };
+  };
+
   return {
     data: response.data.map(itemSerializer),
-    list_metadata: response.list_metadata
+    list_metadata: response.list_metadata,
   };
 }
 
 export function deserializeList<T>(
   data: unknown,
-  itemDeserializer: (item: unknown) => T
+  itemDeserializer: (item: unknown) => T,
 ): List<T> {
-  const response = data as { object: string; data: unknown[]; list_metadata: { before: string | null; after: string | null } };
-  
+  const response = data as {
+    object: string;
+    data: unknown[];
+    list_metadata: { before: string | null; after: string | null };
+  };
+
   return {
     object: response.object,
     data: response.data.map(itemDeserializer),
-    list_metadata: response.list_metadata
+    list_metadata: response.list_metadata,
   };
 }
 
@@ -42,7 +49,7 @@ export function serializeEvent(data: unknown): Event {
     id: event.id,
     event: event.event,
     created_at: event.created_at,
-    data: event.data
+    data: event.data,
   };
 }
 

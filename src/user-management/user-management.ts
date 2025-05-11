@@ -1,10 +1,14 @@
-import { createRemoteJWKSet, decodeJwt, jwtVerify } from '../common/crypto/jwt-utils.ts';
-import { OauthException } from '../common/exceptions/oauth.exception.ts';
-import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize.ts';
-import { AutoPaginatable } from '../common/utils/pagination.ts';
-import type { Challenge, ChallengeResponse } from '../mfa/interfaces/index.ts';
-import { deserializeChallenge } from '../mfa/serializers/index.ts';
-import type { WorkOS } from '../workos.ts';
+import {
+  createRemoteJWKSet,
+  decodeJwt,
+  jwtVerify,
+} from "../common/crypto/jwt-utils.ts";
+import { OauthException } from "../common/exceptions/oauth.exception.ts";
+import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
+import { AutoPaginatable } from "../common/utils/pagination.ts";
+import type { Challenge, ChallengeResponse } from "../mfa/interfaces/index.ts";
+import { deserializeChallenge } from "../mfa/serializers/index.ts";
+import type { WorkOS } from "../workos.ts";
 import {
   type AuthenticateWithCodeOptions,
   type AuthenticateWithMagicAuthOptions,
@@ -46,15 +50,15 @@ import {
   type User,
   type UserResponse,
   type VerifyEmailOptions,
-} from './interfaces/index.ts';
+} from "./interfaces/index.ts";
 import type {
   AuthenticateWithEmailVerificationOptions,
   SerializedAuthenticateWithEmailVerificationOptions,
-} from './interfaces/authenticate-with-email-verification-options.interface.ts';
+} from "./interfaces/authenticate-with-email-verification-options.interface.ts";
 import type {
   AuthenticateWithOrganizationSelectionOptions,
   SerializedAuthenticateWithOrganizationSelectionOptions,
-} from './interfaces/authenticate-with-organization-selection.interface.ts';
+} from "./interfaces/authenticate-with-organization-selection.interface.ts";
 import {
   type AccessToken,
   type AuthenticateWithSessionCookieFailedResponse,
@@ -62,33 +66,50 @@ import {
   type AuthenticateWithSessionCookieOptions,
   type AuthenticateWithSessionCookieSuccessResponse,
   type SessionCookieData,
-} from './interfaces/authenticate-with-session-cookie.interface.ts';
-import type { AuthorizationURLOptions } from './interfaces/authorization-url-options.interface.ts';
+} from "./interfaces/authenticate-with-session-cookie.interface.ts";
+import type { AuthorizationURLOptions } from "./interfaces/authorization-url-options.interface.ts";
 import type {
   CreateOrganizationMembershipOptions,
   SerializedCreateOrganizationMembershipOptions,
-} from './interfaces/create-organization-membership-options.interface.ts';
-import type { Factor, FactorResponse, FactorWithSecrets, FactorWithSecretsResponse } from './interfaces/factor.interface.ts';
-import type { Identity, IdentityResponse } from './interfaces/identity.interface.ts';
-import type { Invitation, InvitationResponse } from './interfaces/invitation.interface.ts';
-import type { ListInvitationsOptions } from './interfaces/list-invitations-options.interface.ts';
-import type { ListOrganizationMembershipsOptions } from './interfaces/list-organization-memberships-options.interface.ts';
-import type { OrganizationMembership, OrganizationMembershipResponse } from './interfaces/organization-membership.interface.ts';
+} from "./interfaces/create-organization-membership-options.interface.ts";
+import type {
+  Factor,
+  FactorResponse,
+  FactorWithSecrets,
+  FactorWithSecretsResponse,
+} from "./interfaces/factor.interface.ts";
+import type {
+  Identity,
+  IdentityResponse,
+} from "./interfaces/identity.interface.ts";
+import type {
+  Invitation,
+  InvitationResponse,
+} from "./interfaces/invitation.interface.ts";
+import type { ListInvitationsOptions } from "./interfaces/list-invitations-options.interface.ts";
+import type { ListOrganizationMembershipsOptions } from "./interfaces/list-organization-memberships-options.interface.ts";
+import type {
+  OrganizationMembership,
+  OrganizationMembershipResponse,
+} from "./interfaces/organization-membership.interface.ts";
 import {
   RefreshAndSealSessionDataFailureReason,
   type RefreshAndSealSessionDataResponse,
-} from './interfaces/refresh-and-seal-session-data.interface.ts';
+} from "./interfaces/refresh-and-seal-session-data.interface.ts";
 import {
   type RevokeSessionOptions,
   type SerializedRevokeSessionOptions,
   serializeRevokeSessionOptions,
-} from './interfaces/revoke-session-options.interface.ts';
-import type { SendInvitationOptions, SerializedSendInvitationOptions } from './interfaces/send-invitation-options.interface.ts';
-import type { SessionHandlerOptions } from './interfaces/session-handler-options.interface.ts';
+} from "./interfaces/revoke-session-options.interface.ts";
+import type {
+  SendInvitationOptions,
+  SerializedSendInvitationOptions,
+} from "./interfaces/send-invitation-options.interface.ts";
+import type { SessionHandlerOptions } from "./interfaces/session-handler-options.interface.ts";
 import type {
   SerializedUpdateOrganizationMembershipOptions,
   UpdateOrganizationMembershipOptions,
-} from './interfaces/update-organization-membership-options.interface.ts';
+} from "./interfaces/update-organization-membership-options.interface.ts";
 import {
   deserializeAuthenticationResponse,
   deserializeEmailVerification,
@@ -109,21 +130,21 @@ import {
   serializeSendMagicAuthCodeOptions,
   serializeSendPasswordResetEmailOptions,
   serializeUpdateUserOptions,
-} from './serializers/index.ts';
-import { serializeAuthenticateWithEmailVerificationOptions } from './serializers/authenticate-with-email-verification.serializer.ts';
-import { serializeAuthenticateWithOrganizationSelectionOptions } from './serializers/authenticate-with-organization-selection-options.serializer.ts';
-import { serializeCreateOrganizationMembershipOptions } from './serializers/create-organization-membership-options.serializer.ts';
-import { deserializeFactor } from './serializers/factor.serializer.ts';
-import { deserializeIdentities } from './serializers/identity.serializer.ts';
-import { deserializeInvitation } from './serializers/invitation.serializer.ts';
-import { serializeListInvitationsOptions } from './serializers/list-invitations-options.serializer.ts';
-import { serializeListOrganizationMembershipsOptions } from './serializers/list-organization-memberships-options.serializer.ts';
-import { serializeListUsersOptions } from './serializers/list-users-options.serializer.ts';
-import { deserializeOrganizationMembership } from './serializers/organization-membership.serializer.ts';
-import { serializeSendInvitationOptions } from './serializers/send-invitation-options.serializer.ts';
-import { serializeUpdateOrganizationMembershipOptions } from './serializers/update-organization-membership-options.serializer.ts';
-import type { FreshSessionProvider } from '../common/iron-session/fresh-session-provider.ts';
-import { Session } from './session.ts';
+} from "./serializers/index.ts";
+import { serializeAuthenticateWithEmailVerificationOptions } from "./serializers/authenticate-with-email-verification.serializer.ts";
+import { serializeAuthenticateWithOrganizationSelectionOptions } from "./serializers/authenticate-with-organization-selection-options.serializer.ts";
+import { serializeCreateOrganizationMembershipOptions } from "./serializers/create-organization-membership-options.serializer.ts";
+import { deserializeFactor } from "./serializers/factor.serializer.ts";
+import { deserializeIdentities } from "./serializers/identity.serializer.ts";
+import { deserializeInvitation } from "./serializers/invitation.serializer.ts";
+import { serializeListInvitationsOptions } from "./serializers/list-invitations-options.serializer.ts";
+import { serializeListOrganizationMembershipsOptions } from "./serializers/list-organization-memberships-options.serializer.ts";
+import { serializeListUsersOptions } from "./serializers/list-users-options.serializer.ts";
+import { deserializeOrganizationMembership } from "./serializers/organization-membership.serializer.ts";
+import { serializeSendInvitationOptions } from "./serializers/send-invitation-options.serializer.ts";
+import { serializeUpdateOrganizationMembershipOptions } from "./serializers/update-organization-membership-options.serializer.ts";
+import type { FreshSessionProvider } from "../common/iron-session/fresh-session-provider.ts";
+import { Session } from "./session.ts";
 // Use Deno.env.get instead of process.env
 
 const toQueryString = (options: Record<string, string | undefined>): string => {
@@ -202,14 +223,14 @@ export class UserManagement {
     return new AutoPaginatable(
       await fetchAndDeserialize<UserResponse, User>(
         this.workos,
-        '/user_management/users',
+        "/user_management/users",
         deserializeUser,
         options ? serializeListUsersOptions(options) : undefined,
       ),
       (params) =>
         fetchAndDeserialize<UserResponse, User>(
           this.workos,
-          '/user_management/users',
+          "/user_management/users",
           deserializeUser,
           params,
         ),
@@ -221,7 +242,7 @@ export class UserManagement {
     const { data } = await this.workos.post<
       UserResponse,
       SerializedCreateUserOptions
-    >('/user_management/users', serializeCreateUserOptions(payload));
+    >("/user_management/users", serializeCreateUserOptions(payload));
 
     return deserializeUser(data);
   }
@@ -235,7 +256,7 @@ export class UserManagement {
       AuthenticationResponseResponse,
       SerializedAuthenticateWithMagicAuthOptions
     >(
-      '/user_management/authenticate',
+      "/user_management/authenticate",
       serializeAuthenticateWithMagicAuthOptions({
         ...remainingPayload,
         clientSecret: this.workos.key,
@@ -257,7 +278,7 @@ export class UserManagement {
       AuthenticationResponseResponse,
       SerializedAuthenticateWithPasswordOptions
     >(
-      '/user_management/authenticate',
+      "/user_management/authenticate",
       serializeAuthenticateWithPasswordOptions({
         ...remainingPayload,
         clientSecret: this.workos.key,
@@ -279,7 +300,7 @@ export class UserManagement {
       AuthenticationResponseResponse,
       SerializedAuthenticateWithCodeOptions
     >(
-      '/user_management/authenticate',
+      "/user_management/authenticate",
       serializeAuthenticateWithCodeOptions({
         ...remainingPayload,
         clientSecret: this.workos.key,
@@ -301,7 +322,7 @@ export class UserManagement {
       AuthenticationResponseResponse,
       SerializedAuthenticateWithRefreshTokenOptions
     >(
-      '/user_management/authenticate',
+      "/user_management/authenticate",
       serializeAuthenticateWithRefreshTokenOptions({
         ...remainingPayload,
         clientSecret: this.workos.key,
@@ -323,7 +344,7 @@ export class UserManagement {
       AuthenticationResponseResponse,
       SerializedAuthenticateWithTotpOptions
     >(
-      '/user_management/authenticate',
+      "/user_management/authenticate",
       serializeAuthenticateWithTotpOptions({
         ...remainingPayload,
         clientSecret: this.workos.key,
@@ -345,7 +366,7 @@ export class UserManagement {
       AuthenticationResponseResponse,
       SerializedAuthenticateWithEmailVerificationOptions
     >(
-      '/user_management/authenticate',
+      "/user_management/authenticate",
       serializeAuthenticateWithEmailVerificationOptions({
         ...remainingPayload,
         clientSecret: this.workos.key,
@@ -367,7 +388,7 @@ export class UserManagement {
       AuthenticationResponseResponse,
       SerializedAuthenticateWithOrganizationSelectionOptions
     >(
-      '/user_management/authenticate',
+      "/user_management/authenticate",
       serializeAuthenticateWithOrganizationSelectionOptions({
         ...remainingPayload,
         clientSecret: this.workos.key,
@@ -382,27 +403,30 @@ export class UserManagement {
 
   async authenticateWithSessionCookie({
     sessionData,
-    cookiePassword = Deno.env.get('WORKOS_COOKIE_PASSWORD'),
+    cookiePassword = Deno.env.get("WORKOS_COOKIE_PASSWORD"),
   }: AuthenticateWithSessionCookieOptions): Promise<
     | AuthenticateWithSessionCookieSuccessResponse
     | AuthenticateWithSessionCookieFailedResponse
   > {
     if (!cookiePassword) {
-      throw new Error('Cookie password is required');
+      throw new Error("Cookie password is required");
     }
 
     if (!this.jwks) {
-      throw new Error('Must provide clientId to initialize JWKS');
+      throw new Error("Must provide clientId to initialize JWKS");
     }
 
     if (!sessionData) {
       return {
         authenticated: false,
-        reason: AuthenticateWithSessionCookieFailureReason.NO_SESSION_COOKIE_PROVIDED,
+        reason:
+          AuthenticateWithSessionCookieFailureReason.NO_SESSION_COOKIE_PROVIDED,
       };
     }
 
-    const session = await this.ironSessionProvider.unsealData<SessionCookieData>(
+    const session = await this.ironSessionProvider.unsealData<
+      SessionCookieData
+    >(
       sessionData,
       {
         password: cookiePassword,
@@ -412,7 +436,8 @@ export class UserManagement {
     if (!session.accessToken) {
       return {
         authenticated: false,
-        reason: AuthenticateWithSessionCookieFailureReason.INVALID_SESSION_COOKIE,
+        reason:
+          AuthenticateWithSessionCookieFailureReason.INVALID_SESSION_COOKIE,
       };
     }
 
@@ -445,7 +470,7 @@ export class UserManagement {
 
   private async isValidJwt(accessToken: string): Promise<boolean> {
     if (!this.jwks) {
-      throw new Error('Must provide clientId to initialize JWKS');
+      throw new Error("Must provide clientId to initialize JWKS");
     }
 
     try {
@@ -463,20 +488,23 @@ export class UserManagement {
   async refreshAndSealSessionData({
     sessionData,
     organizationId,
-    cookiePassword = Deno.env.get('WORKOS_COOKIE_PASSWORD'),
+    cookiePassword = Deno.env.get("WORKOS_COOKIE_PASSWORD"),
   }: SessionHandlerOptions): Promise<RefreshAndSealSessionDataResponse> {
     if (!cookiePassword) {
-      throw new Error('Cookie password is required');
+      throw new Error("Cookie password is required");
     }
 
     if (!sessionData) {
       return {
         authenticated: false,
-        reason: RefreshAndSealSessionDataFailureReason.NO_SESSION_COOKIE_PROVIDED,
+        reason:
+          RefreshAndSealSessionDataFailureReason.NO_SESSION_COOKIE_PROVIDED,
       };
     }
 
-    const session = await this.ironSessionProvider.unsealData<SessionCookieData>(
+    const session = await this.ironSessionProvider.unsealData<
+      SessionCookieData
+    >(
       sessionData,
       {
         password: cookiePassword,
@@ -560,7 +588,7 @@ export class UserManagement {
     cookiePassword?: string;
   }): Promise<string> {
     if (!cookiePassword) {
-      throw new Error('Cookie password is required');
+      throw new Error("Cookie password is required");
     }
 
     const { org_id: organizationIdFromAccessToken } = decodeJwt<AccessToken>(
@@ -582,10 +610,10 @@ export class UserManagement {
 
   async getSessionFromCookie({
     sessionData,
-    cookiePassword = Deno.env.get('WORKOS_COOKIE_PASSWORD'),
+    cookiePassword = Deno.env.get("WORKOS_COOKIE_PASSWORD"),
   }: SessionHandlerOptions): Promise<SessionCookieData | undefined> {
     if (!cookiePassword) {
-      throw new Error('Cookie password is required');
+      throw new Error("Cookie password is required");
     }
 
     if (sessionData) {
@@ -634,7 +662,7 @@ export class UserManagement {
       MagicAuthResponse,
       SerializedCreateMagicAuthOptions
     >(
-      '/user_management/magic_auth',
+      "/user_management/magic_auth",
       serializeCreateMagicAuthOptions({
         ...options,
       }),
@@ -649,7 +677,7 @@ export class UserManagement {
    */
   async sendMagicAuthCode(options: SendMagicAuthCodeOptions): Promise<void> {
     await this.workos.post<any, SerializedSendMagicAuthCodeOptions>(
-      '/user_management/magic_auth/send',
+      "/user_management/magic_auth/send",
       serializeSendMagicAuthCodeOptions(options),
     );
   }
@@ -683,7 +711,7 @@ export class UserManagement {
       PasswordResetResponse,
       SerializedCreatePasswordResetOptions
     >(
-      '/user_management/password_reset',
+      "/user_management/password_reset",
       serializeCreatePasswordResetOptions({
         ...options,
       }),
@@ -699,7 +727,7 @@ export class UserManagement {
     payload: SendPasswordResetEmailOptions,
   ): Promise<void> {
     await this.workos.post<any, SerializedSendPasswordResetEmailOptions>(
-      '/user_management/password_reset/send',
+      "/user_management/password_reset/send",
       serializeSendPasswordResetEmailOptions(payload),
     );
   }
@@ -709,7 +737,7 @@ export class UserManagement {
       { user: UserResponse },
       SerializedResetPasswordOptions
     >(
-      '/user_management/password_reset/confirm',
+      "/user_management/password_reset/confirm",
       serializeResetPasswordOptions(payload),
     );
 
@@ -804,9 +832,11 @@ export class UserManagement {
         OrganizationMembership
       >(
         this.workos,
-        '/user_management/organization_memberships',
+        "/user_management/organization_memberships",
         deserializeOrganizationMembership,
-        options ? serializeListOrganizationMembershipsOptions(options) : undefined,
+        options
+          ? serializeListOrganizationMembershipsOptions(options)
+          : undefined,
       ),
       (params) =>
         fetchAndDeserialize<
@@ -814,11 +844,13 @@ export class UserManagement {
           OrganizationMembership
         >(
           this.workos,
-          '/user_management/organization_memberships',
+          "/user_management/organization_memberships",
           deserializeOrganizationMembership,
           params,
         ),
-      options ? serializeListOrganizationMembershipsOptions(options) : undefined,
+      options
+        ? serializeListOrganizationMembershipsOptions(options)
+        : undefined,
     );
   }
 
@@ -829,7 +861,7 @@ export class UserManagement {
       OrganizationMembershipResponse,
       SerializedCreateOrganizationMembershipOptions
     >(
-      '/user_management/organization_memberships',
+      "/user_management/organization_memberships",
       serializeCreateOrganizationMembershipOptions(options),
     );
 
@@ -903,14 +935,14 @@ export class UserManagement {
     return new AutoPaginatable(
       await fetchAndDeserialize<InvitationResponse, Invitation>(
         this.workos,
-        '/user_management/invitations',
+        "/user_management/invitations",
         deserializeInvitation,
         options ? serializeListInvitationsOptions(options) : undefined,
       ),
       (params) =>
         fetchAndDeserialize<InvitationResponse, Invitation>(
           this.workos,
-          '/user_management/invitations',
+          "/user_management/invitations",
           deserializeInvitation,
           params,
         ),
@@ -923,7 +955,7 @@ export class UserManagement {
       InvitationResponse,
       SerializedSendInvitationOptions
     >(
-      '/user_management/invitations',
+      "/user_management/invitations",
       serializeSendInvitationOptions({
         ...payload,
       }),
@@ -952,7 +984,7 @@ export class UserManagement {
 
   async revokeSession(payload: RevokeSessionOptions): Promise<void> {
     await this.workos.post<void, SerializedRevokeSessionOptions>(
-      '/user_management/sessions/revoke',
+      "/user_management/sessions/revoke",
       serializeRevokeSessionOptions(payload),
     );
   }
@@ -977,7 +1009,7 @@ export class UserManagement {
       );
     }
 
-    if (provider !== 'authkit' && screenHint) {
+    if (provider !== "authkit" && screenHint) {
       throw new TypeError(
         `'screenHint' is only supported for 'authkit' provider`,
       );
@@ -1001,7 +1033,7 @@ export class UserManagement {
       provider,
       client_id: clientId,
       redirect_uri: redirectUri,
-      response_type: 'code',
+      response_type: "code",
       state,
       screen_hint: screenHint,
     });
@@ -1021,13 +1053,13 @@ export class UserManagement {
     }
 
     const url = new URL(
-      '/user_management/sessions/logout',
+      "/user_management/sessions/logout",
       this.workos.baseURL,
     );
 
-    url.searchParams.set('session_id', sessionId);
+    url.searchParams.set("session_id", sessionId);
     if (returnTo) {
-      url.searchParams.set('return_to', returnTo);
+      url.searchParams.set("return_to", returnTo);
     }
 
     return url.toString();
@@ -1044,7 +1076,7 @@ export class UserManagement {
    */
   async getLogoutUrlFromSessionCookie({
     sessionData,
-    cookiePassword = Deno.env.get('WORKOS_COOKIE_PASSWORD'),
+    cookiePassword = Deno.env.get("WORKOS_COOKIE_PASSWORD"),
   }: SessionHandlerOptions): Promise<string> {
     const authenticationResponse = await this.authenticateWithSessionCookie({
       sessionData,
@@ -1061,7 +1093,7 @@ export class UserManagement {
 
   getJwksUrl(clientId: string): string {
     if (!clientId) {
-      throw TypeError('clientId must be a valid clientId');
+      throw TypeError("clientId must be a valid clientId");
     }
 
     return `${this.workos.baseURL}/sso/jwks/${clientId}`;

@@ -1,5 +1,5 @@
 export interface EmailVerification {
-  object: 'email_verification';
+  object: "email_verification";
   id: string;
   userId: string;
   email: string;
@@ -10,7 +10,7 @@ export interface EmailVerification {
 }
 
 export interface EmailVerificationEvent {
-  object: 'email_verification';
+  object: "email_verification";
   id: string;
   userId: string;
   email: string;
@@ -20,7 +20,7 @@ export interface EmailVerificationEvent {
 }
 
 export interface EmailVerificationResponse {
-  object: 'email_verification';
+  object: "email_verification";
   id: string;
   user_id: string;
   email: string;
@@ -31,7 +31,7 @@ export interface EmailVerificationResponse {
 }
 
 export interface EmailVerificationEventResponse {
-  object: 'email_verification';
+  object: "email_verification";
   id: string;
   user_id: string;
   email: string;

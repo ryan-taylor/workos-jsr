@@ -1,6 +1,9 @@
 # [ARCHIVED] WorkOS Node.js to Deno/JSR Port
 
-> **Archive Note**: This document was archived on May 11, 2025 because it contains an outdated burndown checklist for the initial Node.js to Deno port that is no longer relevant to current users. It's preserved for historical reference only.
+> **Archive Note**: This document was archived on May 11, 2025 because it
+> contains an outdated burndown checklist for the initial Node.js to Deno port
+> that is no longer relevant to current users. It's preserved for historical
+> reference only.
 
 ## Burndown Checklist
 
@@ -43,6 +46,10 @@
 
 ## Dependency Notes
 
-- **jose**: Use a Deno/WebCrypto-native implementation via JSR (e.g. jsr:@panva/jose). No Node polyfills.
-- **iron-session**: Omit. Not needed for SDK core; if session helpers are needed, use Deno std/http and WebCrypto.
-- **General**: Prefer Deno std and JSR/ESM packages. Avoid Node polyfills. Keep API surface as close to Node SDK as possible, but use Deno idioms (URL, Response, AbortSignal) where appropriate.
+- **jose**: Use a Deno/WebCrypto-native implementation via JSR (e.g.
+  jsr:@panva/jose). No Node polyfills.
+- **iron-session**: Omit. Not needed for SDK core; if session helpers are
+  needed, use Deno std/http and WebCrypto.
+- **General**: Prefer Deno std and JSR/ESM packages. Avoid Node polyfills. Keep
+  API surface as close to Node SDK as possible, but use Deno idioms (URL,
+  Response, AbortSignal) where appropriate.

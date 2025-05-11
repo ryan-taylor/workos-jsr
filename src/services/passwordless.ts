@@ -1,4 +1,4 @@
-import type { HttpClient } from '../core/http_client.ts.ts';
+import type { HttpClient } from "../core/http_client.ts.ts";
 
 export interface SendMagicLinkOptions {
   email: string;
@@ -22,17 +22,23 @@ export class Passwordless {
   private readonly baseUrl: string;
   private readonly apiKey: string;
 
-  constructor({ httpClient, baseUrl, apiKey }: { httpClient: HttpClient; baseUrl: string; apiKey: string }) {
+  constructor(
+    { httpClient, baseUrl, apiKey }: {
+      httpClient: HttpClient;
+      baseUrl: string;
+      apiKey: string;
+    },
+  ) {
     this.httpClient = httpClient;
     this.baseUrl = baseUrl;
     this.apiKey = apiKey;
   }
 
   async sendMagicLink(options: SendMagicLinkOptions): Promise<void> {
-    const url = new URL('/passwordless/send', this.baseUrl);
+    const url = new URL("/passwordless/send", this.baseUrl);
     const headers = {
-      'Authorization': `Bearer ${this.apiKey}`,
-      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${this.apiKey}`,
+      "Content-Type": "application/json",
     };
     const body: Record<string, unknown> = {
       email: options.email,
@@ -43,21 +49,23 @@ export class Passwordless {
       if (body[k] === undefined) delete body[k];
     });
     await this.httpClient.request(url.toString(), {
-      method: 'POST',
+      method: "POST",
       headers,
       body,
     });
   }
 
-  async authenticate(options: AuthenticateOptions): Promise<AuthenticateResponse> {
-    const url = new URL('/passwordless/authenticate', this.baseUrl);
+  async authenticate(
+    options: AuthenticateOptions,
+  ): Promise<AuthenticateResponse> {
+    const url = new URL("/passwordless/authenticate", this.baseUrl);
     const headers = {
-      'Authorization': `Bearer ${this.apiKey}`,
-      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${this.apiKey}`,
+      "Content-Type": "application/json",
     };
     const body = { code: options.code };
     return await this.httpClient.request<AuthenticateResponse>(url.toString(), {
-      method: 'POST',
+      method: "POST",
       headers,
       body,
     });

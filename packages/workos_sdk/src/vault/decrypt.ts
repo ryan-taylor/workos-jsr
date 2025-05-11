@@ -1,5 +1,5 @@
-import { crypto } from 'jsr:@std/crypto@1';
-import { decodeUInt32 } from '../../common/utils/leb128.ts';
+import { crypto } from "jsr:@std/crypto@1";
+import { decodeUInt32 } from "../../common/utils/leb128.ts";
 
 export interface Decoded {
   iv: Uint8Array;
@@ -13,7 +13,7 @@ export const decrypt = async (
   dataKey: string,
   aad: string,
 ): Promise<string> => {
-  if (typeof payload === 'string') {
+  if (typeof payload === "string") {
     payload = decode(payload);
   }
   const { iv, tag, ciphertext } = payload;
@@ -30,17 +30,17 @@ export const decrypt = async (
 
   // Import the key
   const cryptoKey = await crypto.subtle.importKey(
-    'raw',
+    "raw",
     key,
-    { name: 'AES-GCM' },
+    { name: "AES-GCM" },
     false,
-    ['decrypt'],
+    ["decrypt"],
   );
 
   // Decrypt the data
   const decryptedData = await crypto.subtle.decrypt(
     {
-      name: 'AES-GCM',
+      name: "AES-GCM",
       iv,
       additionalData: aadBytes,
     },
@@ -81,7 +81,7 @@ function base64ToUint8Array(base64: string): Uint8Array {
 function uint8ArrayToBase64(bytes: Uint8Array): string {
   const binString = Array.from(bytes)
     .map((byte) => String.fromCharCode(byte))
-    .join('');
+    .join("");
   return btoa(binString);
 }
 

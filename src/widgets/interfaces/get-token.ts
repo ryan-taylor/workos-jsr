@@ -1,4 +1,4 @@
-export type WidgetScope = 'widgets:users-table:manage';
+export type WidgetScope = "widgets:users-table:manage";
 
 export interface GetTokenOptions {
   organizationId: string;

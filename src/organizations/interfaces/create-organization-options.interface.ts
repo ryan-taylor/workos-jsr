@@ -1,5 +1,5 @@
-import type { PostOptions } from '../../common/interfaces.ts';
-import type { DomainData } from './domain-data.interface.ts';
+import type { PostOptions } from "../../common/interfaces.ts";
+import type { DomainData } from "./domain-data.interface.ts";
 
 export interface CreateOrganizationOptions {
   name: string;
@@ -33,4 +33,5 @@ export interface SerializedCreateOrganizationOptions {
   domains?: string[];
 }
 
-export interface CreateOrganizationRequestOptions extends Pick<PostOptions, 'idempotencyKey'> {}
+export interface CreateOrganizationRequestOptions
+  extends Pick<PostOptions, "idempotencyKey"> {}

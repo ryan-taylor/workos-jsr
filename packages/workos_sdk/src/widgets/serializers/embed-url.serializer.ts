@@ -1,4 +1,4 @@
-import type { EmbedUrl } from '../interfaces/index.ts';
+import type { EmbedUrl } from "../interfaces/index.ts";
 
 export function deserializeEmbedUrl(data: Record<string, unknown>): EmbedUrl {
   return {

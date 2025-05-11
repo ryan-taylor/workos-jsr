@@ -1,1 +1,1 @@
-export { WorkOS } from './workos.ts';
+export { WorkOS } from "./workos.ts";

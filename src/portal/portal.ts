@@ -1,5 +1,5 @@
-import type { WorkOS } from '../workos.ts';
-import type { GeneratePortalLinkIntent } from './interfaces/generate-portal-link-intent.interface.ts';
+import type { WorkOS } from "../workos.ts";
+import type { GeneratePortalLinkIntent } from "./interfaces/generate-portal-link-intent.interface.ts";
 
 export class Portal {
   constructor(private readonly workos: WorkOS) {}
@@ -15,7 +15,7 @@ export class Portal {
     returnUrl?: string;
     successUrl?: string;
   }): Promise<{ link: string }> {
-    const { data } = await this.workos.post('/portal/generate_link', {
+    const { data } = await this.workos.post("/portal/generate_link", {
       intent,
       organization,
       return_url: returnUrl,

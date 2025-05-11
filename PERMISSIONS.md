@@ -1,10 +1,13 @@
 # Deno Permission Requirements
 
-This document outlines the specific permissions required by the WorkOS SDK when running in Deno, along with explanations for why each permission is needed.
+This document outlines the specific permissions required by the WorkOS SDK when
+running in Deno, along with explanations for why each permission is needed.
 
 ## Permission Overview
 
-Deno's security model requires explicit permission grants for operations like network access, file system access, and environment variable reading. The WorkOS SDK requires the following permissions:
+Deno's security model requires explicit permission grants for operations like
+network access, file system access, and environment variable reading. The WorkOS
+SDK requires the following permissions:
 
 - `--allow-net`: Network access (API calls to WorkOS)
 - `--allow-env`: Environment variable access (configuration)
@@ -83,8 +86,10 @@ deno run --allow-net=api.workos.com,auth.workos.com,id.workos.com --allow-env=WO
 
 When writing tests, be aware of permission requirements:
 
-1. Use mock clients (see `tests_deno/utils/mock-clients.ts`) to avoid actual network requests
+1. Use mock clients (see `tests_deno/utils/mock-clients.ts`) to avoid actual
+   network requests
 2. Set up fixture data instead of writing to the file system
 3. Use environment variable mocking instead of real environment variables
 
-By following these practices, you can ensure tests run with minimal permissions and are more reliable.
+By following these practices, you can ensure tests run with minimal permissions
+and are more reliable.

@@ -1,4 +1,4 @@
-import type { Directory } from '../interfaces/index.ts';
+import type { Directory } from "../interfaces/index.ts";
 
 export function deserializeDirectory(data: Record<string, unknown>): Directory {
   return {

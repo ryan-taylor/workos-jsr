@@ -5,7 +5,7 @@ import type {
   DirectoryStateResponse,
   EventDirectory,
   EventDirectoryResponse,
-} from '../interfaces.ts';
+} from "../interfaces.ts";
 
 export const deserializeDirectory = (
   directory: DirectoryResponse,
@@ -25,12 +25,12 @@ export const deserializeDirectory = (
 export const deserializeDirectoryState = (
   state: DirectoryStateResponse,
 ): DirectoryState => {
-  if (state === 'linked') {
-    return 'active';
+  if (state === "linked") {
+    return "active";
   }
 
-  if (state === 'unlinked') {
-    return 'inactive';
+  if (state === "unlinked") {
+    return "inactive";
   }
 
   return state;
@@ -52,8 +52,8 @@ export const deserializeEventDirectory = (
 });
 
 export const deserializeDeletedEventDirectory = (
-  directory: Omit<EventDirectoryResponse, 'domains' | 'external_key'>,
-): Omit<EventDirectory, 'domains' | 'externalKey'> => ({
+  directory: Omit<EventDirectoryResponse, "domains" | "external_key">,
+): Omit<EventDirectory, "domains" | "externalKey"> => ({
   object: directory.object,
   id: directory.id,
   type: directory.type,

@@ -3,7 +3,7 @@ export interface ListEventsOptions {
   range_start?: string;
   range_end?: string;
   limit?: number;
-  order?: 'desc' | 'asc';
+  order?: "desc" | "asc";
   actions?: string[];
   actors?: string[];
   targets?: string[];

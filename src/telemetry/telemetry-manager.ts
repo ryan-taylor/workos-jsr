@@ -5,8 +5,16 @@
  * across the SDK. It handles span creation, metrics collection, and log forwarding.
  */
 
-import { defaultTelemetryConfig, type TelemetryConfig } from './telemetry-config.ts';
-import { type Log, type Metric, OTLPHttpExporter, type Span } from './otlp-exporter.ts';
+import {
+  defaultTelemetryConfig,
+  type TelemetryConfig,
+} from "./telemetry-config.ts";
+import {
+  type Log,
+  type Metric,
+  OTLPHttpExporter,
+  type Span,
+} from "./otlp-exporter.ts";
 
 /**
  * Timer that tracks the duration of an operation
@@ -101,7 +109,7 @@ export class TelemetryManager {
       this.flushInterval = setInterval(() => {
         this.flush().catch((err) => {
           if (this.config.debug) {
-            console.error('[WorkOS Telemetry] Error flushing telemetry:', err);
+            console.error("[WorkOS Telemetry] Error flushing telemetry:", err);
           }
         });
       }, 5000);
@@ -123,7 +131,7 @@ export class TelemetryManager {
   ): string {
     // If telemetry is disabled, return a dummy span ID
     if (!this.config.enabled) {
-      return 'disabled';
+      return "disabled";
     }
 
     const spanId = this.exporter.generateSpanId();
@@ -147,7 +155,7 @@ export class TelemetryManager {
       attributes: {
         ...attributes,
         // Add standard OpenTelemetry attributes
-        'service.name': this.config.serviceName || 'workos-sdk',
+        "service.name": this.config.serviceName || "workos-sdk",
       },
       events: [],
     });
@@ -187,7 +195,9 @@ export class TelemetryManager {
     });
 
     if (this.config.debug) {
-      console.debug(`[WorkOS Telemetry] Added event to span ${spanId}: ${name}`);
+      console.debug(
+        `[WorkOS Telemetry] Added event to span ${spanId}: ${name}`,
+      );
     }
   }
 
@@ -206,14 +216,16 @@ export class TelemetryManager {
     attributes: Record<string, string | number | boolean | string[]> = {},
   ): void {
     // If telemetry is disabled or the span ID is our dummy ID, do nothing
-    if (!this.config.enabled || spanId === 'disabled') {
+    if (!this.config.enabled || spanId === "disabled") {
       return;
     }
 
     // If the span doesn't exist, log a warning and return
     if (!this.activeSpans.has(spanId)) {
       if (this.config.debug) {
-        console.warn(`[WorkOS Telemetry] Attempted to end non-existent span: ${spanId}`);
+        console.warn(
+          `[WorkOS Telemetry] Attempted to end non-existent span: ${spanId}`,
+        );
       }
       return;
     }
@@ -233,7 +245,7 @@ export class TelemetryManager {
       attributes: {
         ...span.attributes,
         ...attributes,
-        'duration_ms': span.timer.elapsedMilliseconds(),
+        "duration_ms": span.timer.elapsedMilliseconds(),
       },
       status: {
         code: status,
@@ -256,7 +268,7 @@ export class TelemetryManager {
     if (this.batchedSpans.length >= 5) {
       this.flush().catch((err) => {
         if (this.config.debug) {
-          console.error('[WorkOS Telemetry] Error flushing spans:', err);
+          console.error("[WorkOS Telemetry] Error flushing spans:", err);
         }
       });
     }
@@ -282,7 +294,7 @@ export class TelemetryManager {
         upperBound: number;
       }[];
     },
-    type: 'counter' | 'gauge' | 'histogram' = 'counter',
+    type: "counter" | "gauge" | "histogram" = "counter",
     attributes: Record<string, string | number | boolean | string[]> = {},
     description?: string,
     unit?: string,
@@ -302,7 +314,7 @@ export class TelemetryManager {
       value,
       attributes: {
         ...attributes,
-        'service.name': this.config.serviceName || 'workos-sdk',
+        "service.name": this.config.serviceName || "workos-sdk",
       },
       timestamp: now,
     };
@@ -310,14 +322,18 @@ export class TelemetryManager {
     this.batchedMetrics.push(metric);
 
     if (this.config.debug) {
-      console.debug(`[WorkOS Telemetry] Recorded metric: ${name}=${typeof value === 'number' ? value : 'complex'}`);
+      console.debug(
+        `[WorkOS Telemetry] Recorded metric: ${name}=${
+          typeof value === "number" ? value : "complex"
+        }`,
+      );
     }
 
     // If we have enough metrics, flush them
     if (this.batchedMetrics.length >= 5) {
       this.flush().catch((err) => {
         if (this.config.debug) {
-          console.error('[WorkOS Telemetry] Error flushing metrics:', err);
+          console.error("[WorkOS Telemetry] Error flushing metrics:", err);
         }
       });
     }
@@ -354,15 +370,15 @@ export class TelemetryManager {
     // Map severity number to text
     let severityText: string;
     if (severity <= 4) {
-      severityText = 'TRACE';
+      severityText = "TRACE";
     } else if (severity <= 8) {
-      severityText = 'DEBUG';
+      severityText = "DEBUG";
     } else if (severity <= 12) {
-      severityText = 'INFO';
+      severityText = "INFO";
     } else if (severity <= 16) {
-      severityText = 'WARN';
+      severityText = "WARN";
     } else {
-      severityText = 'ERROR';
+      severityText = "ERROR";
     }
 
     const log: Log = {
@@ -372,7 +388,7 @@ export class TelemetryManager {
       body,
       attributes: {
         ...attributes,
-        'service.name': this.config.serviceName || 'workos-sdk',
+        "service.name": this.config.serviceName || "workos-sdk",
       },
       traceId,
       spanId,
@@ -381,14 +397,16 @@ export class TelemetryManager {
     this.batchedLogs.push(log);
 
     if (this.config.debug) {
-      console.debug(`[WorkOS Telemetry] Recorded log: [${severityText}] ${body}`);
+      console.debug(
+        `[WorkOS Telemetry] Recorded log: [${severityText}] ${body}`,
+      );
     }
 
     // If we have enough logs, flush them
     if (this.batchedLogs.length >= 10) {
       this.flush().catch((err) => {
         if (this.config.debug) {
-          console.error('[WorkOS Telemetry] Error flushing logs:', err);
+          console.error("[WorkOS Telemetry] Error flushing logs:", err);
         }
       });
     }
@@ -415,12 +433,16 @@ export class TelemetryManager {
     // Export in parallel
     await Promise.all([
       spans.length > 0 ? this.exporter.exportSpans(spans) : Promise.resolve(),
-      metrics.length > 0 ? this.exporter.exportMetrics(metrics) : Promise.resolve(),
+      metrics.length > 0
+        ? this.exporter.exportMetrics(metrics)
+        : Promise.resolve(),
       logs.length > 0 ? this.exporter.exportLogs(logs) : Promise.resolve(),
     ]);
 
     if (this.config.debug) {
-      console.debug(`[WorkOS Telemetry] Flushed ${spans.length} spans, ${metrics.length} metrics, ${logs.length} logs`);
+      console.debug(
+        `[WorkOS Telemetry] Flushed ${spans.length} spans, ${metrics.length} metrics, ${logs.length} logs`,
+      );
     }
   }
 
@@ -445,7 +467,7 @@ export class TelemetryManager {
     await this.flush();
 
     if (this.config.debug) {
-      console.debug('[WorkOS Telemetry] Telemetry manager shut down');
+      console.debug("[WorkOS Telemetry] Telemetry manager shut down");
     }
   }
 
@@ -476,7 +498,11 @@ export class TelemetryManager {
           spanId,
           SpanStatus.ERROR,
           error instanceof Error ? error.message : String(error),
-          { 'error.type': error instanceof Error ? error.constructor.name : 'Unknown' },
+          {
+            "error.type": error instanceof Error
+              ? error.constructor.name
+              : "Unknown",
+          },
         );
         throw error;
       }

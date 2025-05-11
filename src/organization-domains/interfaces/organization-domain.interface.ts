@@ -2,19 +2,19 @@ export enum OrganizationDomainState {
   /**
    * @deprecated
    */
-  LegacyVerified = 'legacy_verified',
-  Verified = 'verified',
-  Pending = 'pending',
-  Failed = 'failed',
+  LegacyVerified = "legacy_verified",
+  Verified = "verified",
+  Pending = "pending",
+  Failed = "failed",
 }
 
 export enum OrganizationDomainVerificationStrategy {
-  Dns = 'dns',
-  Manual = 'manual',
+  Dns = "dns",
+  Manual = "manual",
 }
 
 export interface OrganizationDomain {
-  object: 'organization_domain';
+  object: "organization_domain";
   id: string;
   domain: string;
   organizationId: string;
@@ -24,7 +24,7 @@ export interface OrganizationDomain {
 }
 
 export interface OrganizationDomainResponse {
-  object: 'organization_domain';
+  object: "organization_domain";
   id: string;
   domain: string;
   organization_id: string;

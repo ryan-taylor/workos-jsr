@@ -4,7 +4,7 @@ import type {
   RequestHeaders,
   RequestOptions,
   ResponseHeaders,
-} from '../interfaces/http-client.interface.ts';
+} from "../interfaces/http-client.interface.ts";
 
 export abstract class HttpClient implements HttpClientInterface {
   readonly MAX_RETRY_ATTEMPTS = 3;
@@ -16,7 +16,7 @@ export abstract class HttpClient implements HttpClientInterface {
 
   /** The HTTP client name used for diagnostics */
   getClientName(): string {
-    throw new Error('getClientName not implemented');
+    throw new Error("getClientName not implemented");
   }
 
   abstract get(
@@ -42,7 +42,7 @@ export abstract class HttpClient implements HttpClientInterface {
   ): Promise<HttpClientResponseInterface>;
 
   addClientToUserAgent(userAgent: string): string {
-    if (userAgent.indexOf(' ') > -1) {
+    if (userAgent.indexOf(" ") > -1) {
       return userAgent.replace(/\b\s/, `/${this.getClientName()} `);
     } else {
       return (userAgent += `/${this.getClientName()}`);
@@ -55,17 +55,21 @@ export abstract class HttpClient implements HttpClientInterface {
     params?: Record<string, string | number | boolean | undefined>,
   ): string {
     const queryString = HttpClient.getQueryString(params);
-    const url = new URL([path, queryString].filter(Boolean).join('?'), baseURL);
+    const url = new URL([path, queryString].filter(Boolean).join("?"), baseURL);
     return url.toString();
   }
 
-  static getQueryString(queryObj?: Record<string, string | number | boolean | undefined>): string | undefined {
+  static getQueryString(
+    queryObj?: Record<string, string | number | boolean | undefined>,
+  ): string | undefined {
     if (!queryObj) return undefined;
 
     const sanitizedQueryObj: Record<string, string> = {};
 
     Object.entries(queryObj).forEach(([param, value]) => {
-      if (value !== '' && value !== undefined) sanitizedQueryObj[param] = String(value);
+      if (value !== "" && value !== undefined) {
+        sanitizedQueryObj[param] = String(value);
+      }
     });
 
     return new URLSearchParams(sanitizedQueryObj).toString();
@@ -74,7 +78,7 @@ export abstract class HttpClient implements HttpClientInterface {
   static getContentTypeHeader(entity: unknown): RequestHeaders | undefined {
     if (entity instanceof URLSearchParams) {
       return {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
       };
     }
     return undefined;
@@ -95,11 +99,15 @@ export abstract class HttpClient implements HttpClientInterface {
     return sleepTime * jitter;
   }
 
-  sleep = (retryAttempt: number) => new Promise((resolve) => setTimeout(resolve, this.getSleepTimeInMilliseconds(retryAttempt)));
+  sleep = (retryAttempt: number) =>
+    new Promise((resolve) =>
+      setTimeout(resolve, this.getSleepTimeInMilliseconds(retryAttempt))
+    );
 }
 
 // tslint:disable-next-line
-export abstract class HttpClientResponse implements HttpClientResponseInterface {
+export abstract class HttpClientResponse
+  implements HttpClientResponseInterface {
   _statusCode: number;
   _headers: ResponseHeaders;
 
@@ -123,8 +131,8 @@ export abstract class HttpClientResponse implements HttpClientResponseInterface 
 
 // tslint:disable-next-line
 export class HttpClientError<T> extends Error {
-  override readonly name: string = 'HttpClientError';
-  override readonly message: string = 'The request could not be completed.';
+  override readonly name: string = "HttpClientError";
+  override readonly message: string = "The request could not be completed.";
   readonly response: { status: number; headers: ResponseHeaders; data: T };
 
   constructor({
@@ -132,7 +140,7 @@ export class HttpClientError<T> extends Error {
     response,
   }: {
     message: string;
-    readonly response: HttpClientError<T>['response'];
+    readonly response: HttpClientError<T>["response"];
   }) {
     super(message);
     this.message = message;

@@ -1,4 +1,4 @@
-import type { Event } from '../interfaces';
+import type { Event } from "../interfaces";
 
 export function deserializeEvent(data: Record<string, unknown>): Event {
   return {

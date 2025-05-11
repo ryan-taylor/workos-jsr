@@ -1,9 +1,9 @@
-import type { ResourceInterface, Subject } from '../interfaces.ts';
+import type { ResourceInterface, Subject } from "../interfaces.ts";
 
 export function isSubject(resource: any): resource is Subject {
   return (
-    Object.prototype.hasOwnProperty.call(resource, 'resourceType') &&
-    Object.prototype.hasOwnProperty.call(resource, 'resourceId')
+    Object.prototype.hasOwnProperty.call(resource, "resourceType") &&
+    Object.prototype.hasOwnProperty.call(resource, "resourceId")
   );
 }
 
@@ -12,8 +12,8 @@ export function isResourceInterface(
 ): resource is ResourceInterface {
   return (
     !!resource &&
-    typeof resource === 'object' &&
-    'getResouceType' in resource &&
-    'getResourceId' in resource
+    typeof resource === "object" &&
+    "getResouceType" in resource &&
+    "getResourceId" in resource
   );
 }

@@ -1,5 +1,5 @@
-import { AutoPaginatable } from '../common/utils/pagination.ts';
-import type { WorkOS } from '../workos.ts';
+import { AutoPaginatable } from "../common/utils/pagination.ts";
+import type { WorkOS } from "../workos.ts";
 import type {
   AuthorizationURLOptions,
   Connection,
@@ -11,10 +11,15 @@ import type {
   ProfileAndToken,
   ProfileAndTokenResponse,
   ProfileResponse,
-} from './interfaces.ts';
-import { deserializeConnection, deserializeProfile, deserializeProfileAndToken, serializeListConnectionsOptions } from './serializers.ts';
-import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize.ts';
-import type { UnknownRecord } from '../common/interfaces/unknown-record.interface.ts';
+} from "./interfaces.ts";
+import {
+  deserializeConnection,
+  deserializeProfile,
+  deserializeProfileAndToken,
+  serializeListConnectionsOptions,
+} from "./serializers.ts";
+import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
+import type { UnknownRecord } from "../common/interfaces/unknown-record.interface.ts";
 
 const toQueryString = (options: Record<string, string | undefined>): string => {
   const searchParams = new URLSearchParams();
@@ -40,14 +45,14 @@ export class SSO {
     return new AutoPaginatable(
       await fetchAndDeserialize<ConnectionResponse, Connection>(
         this.workos,
-        '/connections',
+        "/connections",
         deserializeConnection,
         options ? serializeListConnectionsOptions(options) : undefined,
       ),
       (params) =>
         fetchAndDeserialize<ConnectionResponse, Connection>(
           this.workos,
-          '/connections',
+          "/connections",
           deserializeConnection,
           params,
         ),
@@ -77,7 +82,7 @@ export class SSO {
 
     if (domain) {
       this.workos.emitWarning(
-        'The `domain` parameter for `getAuthorizationURL` is deprecated. Please use `organization` instead.',
+        "The `domain` parameter for `getAuthorizationURL` is deprecated. Please use `organization` instead.",
       );
     }
 
@@ -90,7 +95,7 @@ export class SSO {
       provider,
       client_id: clientId,
       redirect_uri: redirectUri,
-      response_type: 'code',
+      response_type: "code",
       state,
     });
 
@@ -116,13 +121,13 @@ export class SSO {
     const form = new URLSearchParams({
       client_id: clientId,
       client_secret: this.workos.key as string,
-      grant_type: 'authorization_code',
+      grant_type: "authorization_code",
       code,
     });
 
     const { data } = await this.workos.post<
       ProfileAndTokenResponse<CustomAttributesType>
-    >('/sso/token', form);
+    >("/sso/token", form);
 
     return deserializeProfileAndToken(data);
   }
@@ -132,7 +137,7 @@ export class SSO {
   }: GetProfileOptions): Promise<Profile<CustomAttributesType>> {
     const { data } = await this.workos.get<
       ProfileResponse<CustomAttributesType>
-    >('/sso/profile', {
+    >("/sso/profile", {
       accessToken,
     });
 

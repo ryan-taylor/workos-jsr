@@ -5,11 +5,11 @@
  * and modules with telemetry.
  */
 
-import { SpanStatus, telemetry } from './telemetry-manager.ts';
-import type { WorkOS } from '../workos.ts';
-import type { SSO } from '../sso/sso.ts';
-import type { DirectorySync } from '../directory-sync/directory-sync.ts';
-import type { UserManagement } from '../user-management/user-management.ts';
+import { SpanStatus, telemetry } from "./telemetry-manager.ts";
+import type { WorkOS } from "../workos.ts";
+import type { SSO } from "../sso/sso.ts";
+import type { DirectorySync } from "../directory-sync/directory-sync.ts";
+import type { UserManagement } from "../user-management/user-management.ts";
 
 /**
  * Instruments HTTP methods on the WorkOS class with telemetry
@@ -24,9 +24,9 @@ export function instrumentWorkOSCore(workos: WorkOS): void {
 
   // Replace with instrumented versions
   workos.get = async (path, options = {}) => {
-    const spanId = telemetry.startSpan('workos.get', {
-      'http.method': 'GET',
-      'http.path': path,
+    const spanId = telemetry.startSpan("workos.get", {
+      "http.method": "GET",
+      "http.path": path,
     });
 
     try {
@@ -38,16 +38,20 @@ export function instrumentWorkOSCore(workos: WorkOS): void {
         spanId,
         SpanStatus.ERROR,
         error instanceof Error ? error.message : String(error),
-        { 'error.type': error instanceof Error ? error.constructor.name : 'Unknown' },
+        {
+          "error.type": error instanceof Error
+            ? error.constructor.name
+            : "Unknown",
+        },
       );
       throw error;
     }
   };
 
   workos.post = async (path, entity, options = {}) => {
-    const spanId = telemetry.startSpan('workos.post', {
-      'http.method': 'POST',
-      'http.path': path,
+    const spanId = telemetry.startSpan("workos.post", {
+      "http.method": "POST",
+      "http.path": path,
     });
 
     try {
@@ -59,16 +63,20 @@ export function instrumentWorkOSCore(workos: WorkOS): void {
         spanId,
         SpanStatus.ERROR,
         error instanceof Error ? error.message : String(error),
-        { 'error.type': error instanceof Error ? error.constructor.name : 'Unknown' },
+        {
+          "error.type": error instanceof Error
+            ? error.constructor.name
+            : "Unknown",
+        },
       );
       throw error;
     }
   };
 
   workos.put = async (path, entity, options = {}) => {
-    const spanId = telemetry.startSpan('workos.put', {
-      'http.method': 'PUT',
-      'http.path': path,
+    const spanId = telemetry.startSpan("workos.put", {
+      "http.method": "PUT",
+      "http.path": path,
     });
 
     try {
@@ -80,16 +88,20 @@ export function instrumentWorkOSCore(workos: WorkOS): void {
         spanId,
         SpanStatus.ERROR,
         error instanceof Error ? error.message : String(error),
-        { 'error.type': error instanceof Error ? error.constructor.name : 'Unknown' },
+        {
+          "error.type": error instanceof Error
+            ? error.constructor.name
+            : "Unknown",
+        },
       );
       throw error;
     }
   };
 
   workos.delete = async (path, query) => {
-    const spanId = telemetry.startSpan('workos.delete', {
-      'http.method': 'DELETE',
-      'http.path': path,
+    const spanId = telemetry.startSpan("workos.delete", {
+      "http.method": "DELETE",
+      "http.path": path,
     });
 
     try {
@@ -100,7 +112,11 @@ export function instrumentWorkOSCore(workos: WorkOS): void {
         spanId,
         SpanStatus.ERROR,
         error instanceof Error ? error.message : String(error),
-        { 'error.type': error instanceof Error ? error.constructor.name : 'Unknown' },
+        {
+          "error.type": error instanceof Error
+            ? error.constructor.name
+            : "Unknown",
+        },
       );
       throw error;
     }
@@ -118,11 +134,13 @@ export function instrumentSSO(sso: SSO): void {
 
   // Replace with instrumented versions
   sso.getAuthorizationUrl = (options) => {
-    const spanId = telemetry.startSpan('sso.getAuthorizationUrl', {
-      'workos.module': 'sso',
-      ...options.connection ? { 'sso.connection': options.connection } : {},
-      ...options.organization ? { 'sso.organization': options.organization } : {},
-      ...options.domain ? { 'sso.domain': options.domain } : {},
+    const spanId = telemetry.startSpan("sso.getAuthorizationUrl", {
+      "workos.module": "sso",
+      ...options.connection ? { "sso.connection": options.connection } : {},
+      ...options.organization
+        ? { "sso.organization": options.organization }
+        : {},
+      ...options.domain ? { "sso.domain": options.domain } : {},
     });
 
     try {
@@ -130,28 +148,38 @@ export function instrumentSSO(sso: SSO): void {
       telemetry.endSpan(spanId, SpanStatus.OK);
       return result;
     } catch (error) {
-      telemetry.endSpan(spanId, SpanStatus.ERROR, error instanceof Error ? error.message : String(error));
+      telemetry.endSpan(
+        spanId,
+        SpanStatus.ERROR,
+        error instanceof Error ? error.message : String(error),
+      );
       throw error;
     }
   };
 
   sso.getProfile = async (options) => {
-    const spanId = telemetry.startSpan('sso.getProfile', {
-      'workos.module': 'sso',
+    const spanId = telemetry.startSpan("sso.getProfile", {
+      "workos.module": "sso",
     });
 
     try {
       const result = await originalGetProfile(options);
       telemetry.endSpan(spanId, SpanStatus.OK);
-      telemetry.recordMetric('sso.profile_requests', 1, 'counter', {
-        'result': 'success',
+      telemetry.recordMetric("sso.profile_requests", 1, "counter", {
+        "result": "success",
       });
       return result;
     } catch (error) {
-      telemetry.endSpan(spanId, SpanStatus.ERROR, error instanceof Error ? error.message : String(error));
-      telemetry.recordMetric('sso.profile_requests', 1, 'counter', {
-        'result': 'failure',
-        'error.type': error instanceof Error ? error.constructor.name : 'Unknown',
+      telemetry.endSpan(
+        spanId,
+        SpanStatus.ERROR,
+        error instanceof Error ? error.message : String(error),
+      );
+      telemetry.recordMetric("sso.profile_requests", 1, "counter", {
+        "result": "failure",
+        "error.type": error instanceof Error
+          ? error.constructor.name
+          : "Unknown",
       });
       throw error;
     }
@@ -168,20 +196,26 @@ export function instrumentDirectorySync(directorySync: DirectorySync): void {
 
   // Replace with instrumented versions
   directorySync.listUsers = async (options = {}) => {
-    const spanId = telemetry.startSpan('directorySync.listUsers', {
-      'workos.module': 'directorySync',
-      ...options.directory ? { 'directorySync.directory': options.directory } : {},
+    const spanId = telemetry.startSpan("directorySync.listUsers", {
+      "workos.module": "directorySync",
+      ...options.directory
+        ? { "directorySync.directory": options.directory }
+        : {},
     });
 
     try {
       const result = await originalListUsers(options);
       telemetry.endSpan(spanId, SpanStatus.OK, undefined, {
-        'result.count': result.data.length,
+        "result.count": result.data.length,
       });
-      telemetry.recordMetric('directory_sync.user_queries', 1, 'counter');
+      telemetry.recordMetric("directory_sync.user_queries", 1, "counter");
       return result;
     } catch (error) {
-      telemetry.endSpan(spanId, SpanStatus.ERROR, error instanceof Error ? error.message : String(error));
+      telemetry.endSpan(
+        spanId,
+        SpanStatus.ERROR,
+        error instanceof Error ? error.message : String(error),
+      );
       throw error;
     }
   };
@@ -193,31 +227,53 @@ export function instrumentDirectorySync(directorySync: DirectorySync): void {
  */
 export function instrumentUserManagement(userManagement: UserManagement): void {
   // Store original methods
-  const originalAuthenticateWithPassword = userManagement.authenticateWithPassword.bind(userManagement);
+  const originalAuthenticateWithPassword = userManagement
+    .authenticateWithPassword.bind(userManagement);
 
   // Replace with instrumented versions
   userManagement.authenticateWithPassword = async (options) => {
-    const spanId = telemetry.startSpan('userManagement.authenticateWithPassword', {
-      'workos.module': 'userManagement',
-      'auth.method': 'password',
-      ...options.email ? { 'user.email_domain': options.email.split('@')[1] } : {},
-    });
+    const spanId = telemetry.startSpan(
+      "userManagement.authenticateWithPassword",
+      {
+        "workos.module": "userManagement",
+        "auth.method": "password",
+        ...options.email
+          ? { "user.email_domain": options.email.split("@")[1] }
+          : {},
+      },
+    );
 
     try {
       const result = await originalAuthenticateWithPassword(options);
       telemetry.endSpan(spanId, SpanStatus.OK);
-      telemetry.recordMetric('user_management.authentication_attempts', 1, 'counter', {
-        'auth.method': 'password',
-        'result': 'success',
-      });
+      telemetry.recordMetric(
+        "user_management.authentication_attempts",
+        1,
+        "counter",
+        {
+          "auth.method": "password",
+          "result": "success",
+        },
+      );
       return result;
     } catch (error) {
-      telemetry.endSpan(spanId, SpanStatus.ERROR, error instanceof Error ? error.message : String(error));
-      telemetry.recordMetric('user_management.authentication_attempts', 1, 'counter', {
-        'auth.method': 'password',
-        'result': 'failure',
-        'error.type': error instanceof Error ? error.constructor.name : 'Unknown',
-      });
+      telemetry.endSpan(
+        spanId,
+        SpanStatus.ERROR,
+        error instanceof Error ? error.message : String(error),
+      );
+      telemetry.recordMetric(
+        "user_management.authentication_attempts",
+        1,
+        "counter",
+        {
+          "auth.method": "password",
+          "result": "failure",
+          "error.type": error instanceof Error
+            ? error.constructor.name
+            : "Unknown",
+        },
+      );
       throw error;
     }
   };

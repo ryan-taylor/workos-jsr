@@ -1,6 +1,8 @@
-import type { AuthorizationModel } from '../interfaces/index.ts';
+import type { AuthorizationModel } from "../interfaces/index.ts";
 
-export function deserializeAuthorizationModel(data: Record<string, unknown>): AuthorizationModel {
+export function deserializeAuthorizationModel(
+  data: Record<string, unknown>,
+): AuthorizationModel {
   return {
     id: data.id as string,
     organization_id: data.organization_id as string,

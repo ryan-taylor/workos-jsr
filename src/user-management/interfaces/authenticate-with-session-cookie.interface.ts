@@ -1,6 +1,6 @@
-import type { AuthenticationResponse } from './authentication-response.interface.ts';
-import type { Impersonator } from './impersonator.interface.ts';
-import type { User } from './user.interface.ts';
+import type { AuthenticationResponse } from "./authentication-response.interface.ts";
+import type { Impersonator } from "./impersonator.interface.ts";
+import type { User } from "./user.interface.ts";
 
 export interface AuthenticateWithSessionCookieOptions {
   sessionData: string;
@@ -17,13 +17,13 @@ export interface AccessToken {
 
 export type SessionCookieData = Pick<
   AuthenticationResponse,
-  'accessToken' | 'impersonator' | 'organizationId' | 'refreshToken' | 'user'
+  "accessToken" | "impersonator" | "organizationId" | "refreshToken" | "user"
 >;
 
 export enum AuthenticateWithSessionCookieFailureReason {
-  INVALID_JWT = 'invalid_jwt',
-  INVALID_SESSION_COOKIE = 'invalid_session_cookie',
-  NO_SESSION_COOKIE_PROVIDED = 'no_session_cookie_provided',
+  INVALID_JWT = "invalid_jwt",
+  INVALID_SESSION_COOKIE = "invalid_session_cookie",
+  NO_SESSION_COOKIE_PROVIDED = "no_session_cookie_provided",
 }
 
 export type AuthenticateWithSessionCookieFailedResponse = {

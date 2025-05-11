@@ -1,20 +1,26 @@
-import type { WorkOS } from '../workos.ts';
-import type { CreateAuditLogEventOptions, CreateAuditLogEventRequestOptions } from './interfaces.ts';
-import type { AuditLogExportOptions } from './interfaces/audit-log-export-options.interface.ts';
-import type { AuditLogExport, AuditLogExportResponse } from './interfaces/audit-log-export.interface.ts';
+import type { WorkOS } from "../workos.ts";
+import type {
+  CreateAuditLogEventOptions,
+  CreateAuditLogEventRequestOptions,
+} from "./interfaces.ts";
+import type { AuditLogExportOptions } from "./interfaces/audit-log-export-options.interface.ts";
+import type {
+  AuditLogExport,
+  AuditLogExportResponse,
+} from "./interfaces/audit-log-export.interface.ts";
 import type {
   AuditLogSchema,
   CreateAuditLogSchemaOptions,
   CreateAuditLogSchemaRequestOptions,
   CreateAuditLogSchemaResponse,
-} from './interfaces/create-audit-log-schema-options.interface.ts';
+} from "./interfaces/create-audit-log-schema-options.interface.ts";
 import {
   deserializeAuditLogExport,
   deserializeAuditLogSchema,
   serializeAuditLogExportOptions,
   serializeCreateAuditLogEventOptions,
   serializeCreateAuditLogSchemaOptions,
-} from './serializers.ts';
+} from "./serializers.ts";
 
 export class AuditLogs {
   constructor(private readonly workos: WorkOS) {}
@@ -25,7 +31,7 @@ export class AuditLogs {
     options: CreateAuditLogEventRequestOptions = {},
   ): Promise<void> {
     await this.workos.post(
-      '/audit_logs/events',
+      "/audit_logs/events",
       {
         event: serializeCreateAuditLogEventOptions(event),
         organization_id: organization,
@@ -36,7 +42,7 @@ export class AuditLogs {
 
   async createExport(options: AuditLogExportOptions): Promise<AuditLogExport> {
     const { data } = await this.workos.post<AuditLogExportResponse>(
-      '/audit_logs/exports',
+      "/audit_logs/exports",
       serializeAuditLogExportOptions(options),
     );
 

@@ -4,8 +4,12 @@ import type {
   RequestHeaders,
   RequestOptions,
   ResponseHeaders,
-} from '../interfaces/http-client.interface.ts';
-import { HttpClient, HttpClientError, HttpClientResponse } from './http-client.ts';
+} from "../interfaces/http-client.interface.ts";
+import {
+  HttpClient,
+  HttpClientError,
+  HttpClientResponse,
+} from "./http-client.ts";
 
 /**
  * HTTP client implementation for Deno runtime
@@ -21,7 +25,7 @@ export class DenoHttpClient extends HttpClient implements HttpClientInterface {
 
   /** @override */
   override getClientName(): string {
-    return 'deno';
+    return "deno";
   }
 
   async get(
@@ -34,15 +38,15 @@ export class DenoHttpClient extends HttpClient implements HttpClientInterface {
       options.params,
     );
 
-    if (path.startsWith('/fga/')) {
+    if (path.startsWith("/fga/")) {
       return await this.fetchRequestWithRetry(
         resourceURL,
-        'GET',
+        "GET",
         null,
         options.headers,
       );
     } else {
-      return await this.fetchRequest(resourceURL, 'GET', null, options.headers);
+      return await this.fetchRequest(resourceURL, "GET", null, options.headers);
     }
   }
 
@@ -57,10 +61,10 @@ export class DenoHttpClient extends HttpClient implements HttpClientInterface {
       options.params,
     );
 
-    if (path.startsWith('/fga/')) {
+    if (path.startsWith("/fga/")) {
       return await this.fetchRequestWithRetry(
         resourceURL,
-        'POST',
+        "POST",
         HttpClient.getBody(entity),
         {
           ...HttpClient.getContentTypeHeader(entity),
@@ -70,7 +74,7 @@ export class DenoHttpClient extends HttpClient implements HttpClientInterface {
     } else {
       return await this.fetchRequest(
         resourceURL,
-        'POST',
+        "POST",
         HttpClient.getBody(entity),
         {
           ...HttpClient.getContentTypeHeader(entity),
@@ -91,10 +95,10 @@ export class DenoHttpClient extends HttpClient implements HttpClientInterface {
       options.params,
     );
 
-    if (path.startsWith('/fga/')) {
+    if (path.startsWith("/fga/")) {
       return await this.fetchRequestWithRetry(
         resourceURL,
-        'PUT',
+        "PUT",
         HttpClient.getBody(entity),
         {
           ...HttpClient.getContentTypeHeader(entity),
@@ -104,7 +108,7 @@ export class DenoHttpClient extends HttpClient implements HttpClientInterface {
     } else {
       return await this.fetchRequest(
         resourceURL,
-        'PUT',
+        "PUT",
         HttpClient.getBody(entity),
         {
           ...HttpClient.getContentTypeHeader(entity),
@@ -124,17 +128,17 @@ export class DenoHttpClient extends HttpClient implements HttpClientInterface {
       options.params,
     );
 
-    if (path.startsWith('/fga/')) {
+    if (path.startsWith("/fga/")) {
       return await this.fetchRequestWithRetry(
         resourceURL,
-        'DELETE',
+        "DELETE",
         null,
         options.headers,
       );
     } else {
       return await this.fetchRequest(
         resourceURL,
-        'DELETE',
+        "DELETE",
         null,
         options.headers,
       );
@@ -150,20 +154,24 @@ export class DenoHttpClient extends HttpClient implements HttpClientInterface {
     // For methods which expect payloads, we should always pass a body value
     // even when it is empty. Without this, some JS runtimes (eg. Deno) will
     // inject a second Content-Length header.
-    const methodHasPayload = method === 'POST' || method === 'PUT' || method === 'PATCH';
-    const requestBody = body || (methodHasPayload ? '' : undefined);
+    const methodHasPayload = method === "POST" || method === "PUT" ||
+      method === "PATCH";
+    const requestBody = body || (methodHasPayload ? "" : undefined);
 
-    const { 'User-Agent': userAgent } = this.options?.headers as RequestHeaders || {};
-    const userAgentValue = userAgent ? this.addClientToUserAgent(userAgent.toString()) : `workos-deno/${this.getClientName()}`;
+    const { "User-Agent": userAgent } =
+      this.options?.headers as RequestHeaders || {};
+    const userAgentValue = userAgent
+      ? this.addClientToUserAgent(userAgent.toString())
+      : `workos-deno/${this.getClientName()}`;
 
     const res = await fetch(url, {
       method,
       headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
         ...this.options?.headers,
         ...headers,
-        'User-Agent': userAgentValue,
+        "User-Agent": userAgentValue,
       },
       body: requestBody,
     });
@@ -173,7 +181,9 @@ export class DenoHttpClient extends HttpClient implements HttpClientInterface {
         message: res.statusText,
         response: {
           status: res.status,
-          headers: DenoHttpClientResponse._transformHeadersToObject(res.headers),
+          headers: DenoHttpClientResponse._transformHeadersToObject(
+            res.headers,
+          ),
           data: await res.json(),
         },
       });
@@ -241,7 +251,8 @@ export class DenoHttpClient extends HttpClient implements HttpClientInterface {
 /**
  * HTTP client response implementation for Deno runtime
  */
-export class DenoHttpClientResponse extends HttpClientResponse implements HttpClientResponseInterface {
+export class DenoHttpClientResponse extends HttpClientResponse
+  implements HttpClientResponseInterface {
   _res: Response;
 
   constructor(res: Response) {
@@ -257,8 +268,8 @@ export class DenoHttpClientResponse extends HttpClientResponse implements HttpCl
   }
 
   async toJSON(): Promise<any> {
-    const contentType = this._res.headers.get('content-type');
-    const isJsonResponse = contentType?.includes('application/json');
+    const contentType = this._res.headers.get("content-type");
+    const isJsonResponse = contentType?.includes("application/json");
 
     return isJsonResponse ? await this._res.json() : null;
   }

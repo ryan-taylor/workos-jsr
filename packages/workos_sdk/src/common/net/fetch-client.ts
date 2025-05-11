@@ -4,9 +4,13 @@ import type {
   RequestHeaders,
   RequestOptions,
   ResponseHeaders,
-} from '../interfaces/http-client.interface.ts';
-import type { JsonValue } from '../interfaces/http-response.interface.ts';
-import { HttpClient, HttpClientError, HttpClientResponse } from './http-client.ts';
+} from "../interfaces/http-client.interface.ts";
+import type { JsonValue } from "../interfaces/http-response.interface.ts";
+import {
+  HttpClient,
+  HttpClientError,
+  HttpClientResponse,
+} from "./http-client.ts";
 
 export class FetchHttpClient extends HttpClient implements HttpClientInterface {
   private readonly _fetchFn;
@@ -22,7 +26,7 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
     if (!fetchFn) {
       if (!globalThis.fetch) {
         throw new Error(
-          'Fetch function not defined in the global scope and no replacement was provided.',
+          "Fetch function not defined in the global scope and no replacement was provided.",
         );
       }
       fetchFn = globalThis.fetch;
@@ -33,7 +37,7 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
 
   /** @override */
   override getClientName(): string {
-    return 'fetch';
+    return "fetch";
   }
 
   async get(
@@ -46,15 +50,15 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
       options.params,
     );
 
-    if (path.startsWith('/fga/')) {
+    if (path.startsWith("/fga/")) {
       return await this.fetchRequestWithRetry(
         resourceURL,
-        'GET',
+        "GET",
         null,
         options.headers,
       );
     } else {
-      return await this.fetchRequest(resourceURL, 'GET', null, options.headers);
+      return await this.fetchRequest(resourceURL, "GET", null, options.headers);
     }
   }
 
@@ -69,10 +73,10 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
       options.params,
     );
 
-    if (path.startsWith('/fga/')) {
+    if (path.startsWith("/fga/")) {
       return await this.fetchRequestWithRetry(
         resourceURL,
-        'POST',
+        "POST",
         HttpClient.getBody(entity),
         {
           ...HttpClient.getContentTypeHeader(entity),
@@ -82,7 +86,7 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
     } else {
       return await this.fetchRequest(
         resourceURL,
-        'POST',
+        "POST",
         HttpClient.getBody(entity),
         {
           ...HttpClient.getContentTypeHeader(entity),
@@ -103,10 +107,10 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
       options.params,
     );
 
-    if (path.startsWith('/fga/')) {
+    if (path.startsWith("/fga/")) {
       return await this.fetchRequestWithRetry(
         resourceURL,
-        'PUT',
+        "PUT",
         HttpClient.getBody(entity),
         {
           ...HttpClient.getContentTypeHeader(entity),
@@ -116,7 +120,7 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
     } else {
       return await this.fetchRequest(
         resourceURL,
-        'PUT',
+        "PUT",
         HttpClient.getBody(entity),
         {
           ...HttpClient.getContentTypeHeader(entity),
@@ -136,17 +140,17 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
       options.params,
     );
 
-    if (path.startsWith('/fga/')) {
+    if (path.startsWith("/fga/")) {
       return await this.fetchRequestWithRetry(
         resourceURL,
-        'DELETE',
+        "DELETE",
         null,
         options.headers,
       );
     } else {
       return await this.fetchRequest(
         resourceURL,
-        'DELETE',
+        "DELETE",
         null,
         options.headers,
       );
@@ -162,20 +166,21 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
     // For methods which expect payloads, we should always pass a body value
     // even when it is empty. Without this, some JS runtimes (eg. Deno) will
     // inject a second Content-Length header.
-    const methodHasPayload = method === 'POST' || method === 'PUT' || method === 'PATCH';
+    const methodHasPayload = method === "POST" || method === "PUT" ||
+      method === "PATCH";
 
-    const requestBody = body || (methodHasPayload ? '' : undefined);
+    const requestBody = body || (methodHasPayload ? "" : undefined);
 
-    const { 'User-Agent': userAgent } = this.options?.headers as RequestHeaders;
+    const { "User-Agent": userAgent } = this.options?.headers as RequestHeaders;
 
     const res = await this._fetchFn(url, {
       method,
       headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
         ...this.options?.headers,
         ...headers,
-        'User-Agent': this.addClientToUserAgent(userAgent.toString()),
+        "User-Agent": this.addClientToUserAgent(userAgent.toString()),
       },
       body: requestBody,
     });
@@ -185,7 +190,9 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
         message: res.statusText,
         response: {
           status: res.status,
-          headers: FetchHttpClientResponse._transformHeadersToObject(res.headers),
+          headers: FetchHttpClientResponse._transformHeadersToObject(
+            res.headers,
+          ),
           data: await res.json(),
         },
       });
@@ -232,7 +239,10 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
     return makeRequest();
   }
 
-  private shouldRetryRequest(requestError: Error | HttpClientError<unknown> | null, retryAttempt: number): boolean {
+  private shouldRetryRequest(
+    requestError: Error | HttpClientError<unknown> | null,
+    retryAttempt: number,
+  ): boolean {
     if (retryAttempt > this.MAX_RETRY_ATTEMPTS) {
       return false;
     }
@@ -255,7 +265,8 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
 }
 
 // tslint:disable-next-line
-export class FetchHttpClientResponse extends HttpClientResponse implements HttpClientResponseInterface {
+export class FetchHttpClientResponse extends HttpClientResponse
+  implements HttpClientResponseInterface {
   _res: Response;
 
   constructor(res: Response) {
@@ -271,8 +282,8 @@ export class FetchHttpClientResponse extends HttpClientResponse implements HttpC
   }
 
   toJSON(): Promise<JsonValue> | null {
-    const contentType = this._res.headers.get('content-type');
-    const isJsonResponse = contentType?.includes('application/json');
+    const contentType = this._res.headers.get("content-type");
+    const isJsonResponse = contentType?.includes("application/json");
 
     return isJsonResponse ? this._res.json() : null;
   }

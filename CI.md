@@ -2,22 +2,28 @@
 
 ## Introduction
 
-This document outlines the configuration for our Continuous Integration (CI) matrix testing setup. The primary purpose of this matrix is to ensure compatibility with multiple versions of Fresh:
+This document outlines the configuration for our Continuous Integration (CI)
+matrix testing setup. The primary purpose of this matrix is to ensure
+compatibility with multiple versions of Fresh:
 
-- **Fresh 2.x Stable**: The current stable release of Fresh that most users will be deploying in production.
-- **Fresh Canary**: The latest development version of Fresh, allowing us to catch compatibility issues early.
+- **Fresh 2.x Stable**: The current stable release of Fresh that most users will
+  be deploying in production.
+- **Fresh Canary**: The latest development version of Fresh, allowing us to
+  catch compatibility issues early.
 
 By testing against both versions, we can:
 
 1. Ensure our code works with the current stable release
-2. Proactively identify and address compatibility issues with upcoming Fresh releases
+2. Proactively identify and address compatibility issues with upcoming Fresh
+   releases
 3. Maintain backwards compatibility while adopting new features
 
 ## Matrix Job Configurations
 
 ### Job 1: Fresh 2.x Stable
 
-This job uses the standard `import_map.json` which references the stable version of Fresh.
+This job uses the standard `import_map.json` which references the stable version
+of Fresh.
 
 ```yaml
 fresh-stable:
@@ -45,7 +51,8 @@ fresh-stable:
 
 ### Job 2: Fresh Canary
 
-This job uses the `import_map.canary.json` which references the canary version of Fresh.
+This job uses the `import_map.canary.json` which references the canary version
+of Fresh.
 
 ```yaml
 fresh-canary:
@@ -73,7 +80,8 @@ fresh-canary:
 
 ## Example GitHub Actions Workflow
 
-Below is a complete example of how to implement this matrix testing setup in a GitHub Actions workflow:
+Below is a complete example of how to implement this matrix testing setup in a
+GitHub Actions workflow:
 
 ```yaml
 name: CI Matrix Testing

@@ -3,22 +3,24 @@
  * This file re-exports Fresh server modules based on the DENO_FRESH_VERSION environment variable
  */
 
-import { freshMajor } from '../../../scripts/select_fresh.ts';
-import { Fresh1, Fresh2 } from './types.ts';
+import { freshMajor } from "../../../scripts/select_fresh.ts";
+import { Fresh1, Fresh2 } from "./types.ts";
 
 /**
  * Get the appropriate Fresh server module based on version
  * @returns The Fresh server module for the current version
  */
-export async function getFreshServerModule(): Promise<Fresh1.ServerModule | Fresh2.ServerModule> {
+export async function getFreshServerModule(): Promise<
+  Fresh1.ServerModule | Fresh2.ServerModule
+> {
   const version = freshMajor();
 
   if (version === 1) {
     // For Fresh 1.x - use static imports that TypeScript understands
     try {
-      return await import('$fresh/server.ts') as Fresh1.ServerModule;
+      return await import("$fresh/server.ts") as Fresh1.ServerModule;
     } catch (error) {
-      console.error('Error importing Fresh 1.x server module:', error);
+      console.error("Error importing Fresh 1.x server module:", error);
       throw error;
     }
   } else {
@@ -26,14 +28,14 @@ export async function getFreshServerModule(): Promise<Fresh1.ServerModule | Fres
     try {
       // At runtime, this will use the correct import map based on the DENO_FRESH_VERSION
       // TypeScript will show an error, but it will work at runtime
-      const modulePath = '@fresh/core';
+      const modulePath = "@fresh/core";
       return await import(modulePath) as Fresh2.ServerModule;
     } catch (error) {
-      console.error('Error importing Fresh 2.x server module:', error);
+      console.error("Error importing Fresh 2.x server module:", error);
       throw error;
     }
   }
 }
 
 // Export type definitions that can be used regardless of Fresh version
-export type { FreshContext } from './context.ts';
+export type { FreshContext } from "./context.ts";

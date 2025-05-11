@@ -1158,5 +1158,12 @@
     "https://esm.sh/preact@10.26.6/denonext/preact.mjs": "511c9320df24c3bf556d419071e8c9d68ca23457bcbe0d536d78257d824f8ab8",
     "https://esm.sh/preact@10.26.6/hooks": "b02cce517819be770243fd5235c73885a9dad4a626c7d76fb283789c40b3640c",
     "https://esm.sh/preact@10.26.6/jsx-runtime": "17cc5810e769b04e8de6b14c3e4dac361aab92c8fd49c0391237075b91d12564"
+  },
+  "workspace": {
+    "dependencies": [
+      "jsr:@fresh/core@2.0.0-alpha.29",
+      "jsr:@fresh/dev@2.0.0-alpha.29",
+      "jsr:@fresh/plugin-tailwindcss@2.0.0-alpha.29"
+    ]
   }
 }

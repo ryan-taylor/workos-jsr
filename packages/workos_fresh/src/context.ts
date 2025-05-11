@@ -5,7 +5,11 @@
 
 // Define a generic FreshContext type that works with both Fresh 1.x and 2.x
 // The structure is similar enough between versions that we can use a common interface
-export interface FreshContext<State = Record<string, unknown>, Data = unknown, Params = Record<string, string>> {
+export interface FreshContext<
+  State = Record<string, unknown>,
+  Data = unknown,
+  Params = Record<string, string>,
+> {
   req: Request;
   url: URL;
   params: Params;

@@ -30,10 +30,10 @@ jobs:
       - name: Deploy to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: 'workos-sdk'
-          entrypoint: './dist/workos.js'
-          root: '.'
-          import-map: './deno.json'
+          project: "workos-sdk"
+          entrypoint: "./dist/workos.js"
+          root: "."
+          import-map: "./deno.json"
 
       - name: Test module
         run: |

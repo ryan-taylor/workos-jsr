@@ -1,19 +1,12 @@
 import { HttpClient, HttpClientError, HttpClientResponse } from './http-client.ts';
-import {
-  HttpClientInterface,
-  HttpClientResponseInterface,
-  RequestHeaders,
-  RequestOptions,
-} from '../interfaces/http-client.interface.ts';
+import type { HttpClientInterface, HttpClientResponseInterface, RequestHeaders, RequestOptions } from '../interfaces/http-client.interface.ts';
 
-import {
-  RequestOptions as HttpRequestOptions,
-  Agent as HttpAgent,
-} from 'node:http';
-import { Agent as HttpsAgent } from 'node:https';
+import type { Agent as HttpAgent, RequestOptions as HttpRequestOptions } from 'node:http';
+import type { Agent as HttpsAgent } from 'node:https';
 
 import * as http_ from 'node:http';
 import * as https_ from 'node:https';
+// Removed Buffer import as we'll use TextEncoder instead
 
 // `import * as http_ from 'http'` creates a "Module Namespace Exotic Object"
 // which is immune to monkey-patching, whereas http_.default (in an ES Module context)
@@ -22,8 +15,7 @@ import * as https_ from 'node:https';
 // suites might be using a library like "nock" which relies on the ability
 // to monkey-patch and intercept calls to http.request.
 const http = (http_ as unknown as { default: typeof http_ }).default || http_;
-const https =
-  (https_ as unknown as { default: typeof https_ }).default || https_;
+const https = (https_ as unknown as { default: typeof https_ }).default || https_;
 
 export class NodeHttpClient extends HttpClient implements HttpClientInterface {
   private httpAgent: HttpAgent;
@@ -195,7 +187,7 @@ export class NodeHttpClient extends HttpClient implements HttpClientInterface {
         agent,
       };
 
-      const req = lib.request(url, options, async res => {
+      const req = lib.request(url, options, async (res) => {
         const clientResponse = new NodeHttpClientResponse(res);
 
         if (res.statusCode && (res.statusCode < 200 || res.statusCode > 299)) {
@@ -214,12 +206,14 @@ export class NodeHttpClient extends HttpClient implements HttpClientInterface {
         resolve(clientResponse);
       });
 
-      req.on('error', err => {
+      req.on('error', (err) => {
         reject(new Error(err.message));
       });
 
       if (body) {
-        req.setHeader('Content-Length', Buffer.byteLength(body));
+        // Use TextEncoder to calculate byte length instead of Buffer
+        const encoder = new TextEncoder();
+        req.setHeader('Content-Length', encoder.encode(body).length);
         req.write(body);
       }
       req.end();
@@ -254,7 +248,7 @@ export class NodeHttpClient extends HttpClient implements HttpClientInterface {
 
     const makeRequest = async (): Promise<HttpClientResponseInterface> =>
       new Promise<HttpClientResponseInterface>((resolve, reject) => {
-        const req = lib.request(url, options, async res => {
+        const req = lib.request(url, options, async (res) => {
           const clientResponse = new NodeHttpClientResponse(res);
 
           if (this.shouldRetryRequest(res, retryAttempts)) {
@@ -284,7 +278,7 @@ export class NodeHttpClient extends HttpClient implements HttpClientInterface {
           resolve(new NodeHttpClientResponse(res));
         });
 
-        req.on('error', async err => {
+        req.on('error', async (err) => {
           if (err != null && err instanceof TypeError) {
             retryAttempts++;
             await this.sleep(retryAttempts);
@@ -295,7 +289,9 @@ export class NodeHttpClient extends HttpClient implements HttpClientInterface {
         });
 
         if (body) {
-          req.setHeader('Content-Length', Buffer.byteLength(body));
+          // Use TextEncoder to calculate byte length instead of Buffer
+          const encoder = new TextEncoder();
+          req.setHeader('Content-Length', encoder.encode(body).length);
           req.write(body);
         }
         req.end();
@@ -321,10 +317,7 @@ export class NodeHttpClient extends HttpClient implements HttpClientInterface {
 }
 
 // tslint:disable-next-line
-export class NodeHttpClientResponse
-  extends HttpClientResponse
-  implements HttpClientResponseInterface
-{
+export class NodeHttpClientResponse extends HttpClientResponse implements HttpClientResponseInterface {
   _res: http_.IncomingMessage;
 
   constructor(res: http_.IncomingMessage) {
@@ -349,7 +342,7 @@ export class NodeHttpClientResponse
       let response = '';
 
       this._res.setEncoding('utf8');
-      this._res.on('data', chunk => {
+      this._res.on('data', (chunk) => {
         response += chunk;
       });
       this._res.once('end', () => {

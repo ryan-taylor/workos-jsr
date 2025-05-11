@@ -4,7 +4,7 @@
     "preact/hooks": "https://esm.sh/preact@10/hooks",
     "iron-session": "npm:iron-session@8.0.4",
     "iron-session/edge": "npm:iron-session@8.0.4/dist/index.js",
-    "jose": "npm:jose@6.0.11",
+    "jose": "https://deno.land/x/jose@4.11.0/mod.ts",
     "leb": "npm:leb@1.0.0",
     "pluralize": "npm:pluralize@8.0.0",
     

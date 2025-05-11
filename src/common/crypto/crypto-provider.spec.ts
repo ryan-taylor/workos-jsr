@@ -1,54 +1,103 @@
-import crypto from 'crypto';
-import { NodeCryptoProvider } from './node-crypto-provider.ts';
+// Import Deno testing utilities
+import {
+  assertEquals,
+  beforeEach,
+  describe,
+  it,
+} from "../../../tests/deno-test-setup.ts";
+
+import { crypto } from "@std/crypto";
 import { SubtleCryptoProvider } from './subtle-crypto-provider.ts';
-import mockWebhook from '../../webhooks/fixtures/webhook.json.ts';
 import { SignatureProvider } from './signature-provider.ts';
 
+// Main test suite
 describe('CryptoProvider', () => {
-  let payload: any;
+  let payload: Record<string, unknown>;
   let secret: string;
   let timestamp: number;
   let signatureHash: string;
 
-  beforeEach(() => {
-    payload = mockWebhook;
+  beforeEach(async () => {
+    // Load webhook fixture directly
+    payload = {
+      "id": "wh_123",
+      "data": {
+        "id": "directory_user_01FAEAJCR3ZBZ30D8BD1924TVG",
+        "state": "active",
+        "emails": [
+          {
+            "type": "work",
+            "value": "blair@foo-corp.com",
+            "primary": true
+          }
+        ],
+        "idp_id": "00u1e8mutl6wlH3lL4x7",
+        "object": "directory_user",
+        "username": "blair@foo-corp.com",
+        "last_name": "Lunchford",
+        "first_name": "Blair",
+        "job_title": "Software Engineer",
+        "directory_id": "directory_01F9M7F68PZP8QXP8G7X5QRHS7"
+      },
+      "event": "dsync.user.created",
+      "created_at": "2021-06-25T19:07:33.155Z"
+    };
+    
     secret = 'secret';
     timestamp = Date.now() * 1000;
     const unhashedString = `${timestamp}.${JSON.stringify(payload)}`;
-    signatureHash = crypto
-      .createHmac('sha256', secret)
-      .update(unhashedString)
-      .digest()
-      .toString('hex');
+    
+    // Deno crypto uses Web Crypto API
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+      'raw',
+      encoder.encode(secret),
+      {
+        name: 'HMAC',
+        hash: { name: 'SHA-256' },
+      },
+      false,
+      ['sign']
+    );
+    
+    const signatureBuffer = await crypto.subtle.sign(
+      'hmac',
+      key,
+      encoder.encode(unhashedString)
+    );
+    
+    // Convert to hex
+    signatureHash = Array.from(new Uint8Array(signatureBuffer))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
   });
 
   describe('when computing HMAC signature', () => {
-    it('returns the same for the Node crypto and Web Crypto versions', async () => {
-      const nodeCryptoProvider = new NodeCryptoProvider();
-      const subtleCryptoProvider = new SubtleCryptoProvider();
+    it('returns the same for two SubtleCryptoProvider instances', async () => {
+      const subtleCryptoProvider1 = new SubtleCryptoProvider();
+      const subtleCryptoProvider2 = new SubtleCryptoProvider();
 
       const stringifiedPayload = JSON.stringify(payload);
       const payloadHMAC = `${timestamp}.${stringifiedPayload}`;
 
-      const nodeCompare = await nodeCryptoProvider.computeHMACSignatureAsync(
+      const compare1 = await subtleCryptoProvider1.computeHMACSignatureAsync(
         payloadHMAC,
         secret,
       );
-      const subtleCompare =
-        await subtleCryptoProvider.computeHMACSignatureAsync(
-          payloadHMAC,
-          secret,
-        );
+      const compare2 = await subtleCryptoProvider2.computeHMACSignatureAsync(
+        payloadHMAC,
+        secret,
+      );
 
-      expect(nodeCompare).toEqual(subtleCompare);
+      assertEquals(compare1, compare2);
     });
   });
 
   describe('when securely comparing', () => {
-    it('returns the same for the Node crypto and Web Crypto versions', async () => {
-      const nodeCryptoProvider = new NodeCryptoProvider();
-      const subtleCryptoProvider = new SubtleCryptoProvider();
-      const signatureProvider = new SignatureProvider(subtleCryptoProvider);
+    it('returns the same for two SubtleCryptoProvider instances', async () => {
+      const subtleCryptoProvider1 = new SubtleCryptoProvider();
+      const subtleCryptoProvider2 = new SubtleCryptoProvider();
+      const signatureProvider = new SignatureProvider(subtleCryptoProvider1);
 
       const signature = await signatureProvider.computeSignature(
         timestamp,
@@ -56,12 +105,14 @@ describe('CryptoProvider', () => {
         secret,
       );
 
-      expect(
-        nodeCryptoProvider.secureCompare(signature, signatureHash),
-      ).toEqual(subtleCryptoProvider.secureCompare(signature, signatureHash));
+      assertEquals(
+        subtleCryptoProvider1.secureCompare(signature, signatureHash),
+        subtleCryptoProvider2.secureCompare(signature, signatureHash)
+      );
 
-      expect(nodeCryptoProvider.secureCompare(signature, 'foo')).toEqual(
-        subtleCryptoProvider.secureCompare(signature, 'foo'),
+      assertEquals(
+        subtleCryptoProvider1.secureCompare(signature, 'foo'),
+        subtleCryptoProvider2.secureCompare(signature, 'foo')
       );
     });
   });

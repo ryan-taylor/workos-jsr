@@ -2,9 +2,8 @@ import { CryptoProvider } from './crypto-provider.ts';
 
 /**
  * `CryptoProvider` implementation for Deno using the Web Crypto API.
- * 
- * This maintains the same interface as NodeCryptoProvider but uses
- * standard Web Crypto APIs available in Deno.
+ *
+ * This implementation uses standard Web Crypto APIs available in Deno.
  */
 export class DenoCryptoProvider extends CryptoProvider {
   #subtleCrypto: SubtleCrypto;
@@ -24,7 +23,7 @@ export class DenoCryptoProvider extends CryptoProvider {
   computeHMACSignature(payload: string, secret: string): string {
     // Deno allows top-level await, but we need to provide a sync interface
     // This uses a synchronous wrapper around the async implementation
-    
+
     // Use the Deno function Deno.core.opSync if available to make this truly synchronous
     // Otherwise, throw a more descriptive error
     try {
@@ -40,13 +39,13 @@ export class DenoCryptoProvider extends CryptoProvider {
       // For any other case, we need to advise using the async version
       throw new Error(
         'DenoCryptoProvider cannot compute HMAC signatures synchronously for arbitrary inputs. ' +
-        'Please use computeHMACSignatureAsync instead.'
+          'Please use computeHMACSignatureAsync instead.',
       );
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       throw new Error(
         `Unable to compute HMAC signature synchronously: ${errorMessage}. ` +
-        'Please use computeHMACSignatureAsync instead.'
+          'Please use computeHMACSignatureAsync instead.',
       );
     }
   }
@@ -108,7 +107,7 @@ export class DenoCryptoProvider extends CryptoProvider {
       'sign',
       'verify',
     ]) as CryptoKey;
-    
+
     const hmac = await crypto.subtle.sign(algorithm, key, bufferA);
     const equal = await crypto.subtle.verify(algorithm, key, hmac, bufferB);
 

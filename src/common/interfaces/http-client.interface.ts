@@ -1,4 +1,4 @@
-import { JsonValue } from './http-response.interface.ts';
+import { JsonValue } from './http-response.interface.ts.ts';
 
 export type RequestHeaders = Record<string, string | number | string[]>;
 export type RequestOptions = {

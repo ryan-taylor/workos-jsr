@@ -4,7 +4,7 @@
 # This script helps format commits according to the Conventional Commits specification
 # https://www.conventionalcommits.org/
 
-echo "=== WorkOS Node SDK Conventional Commit Helper ==="
+echo "=== WorkOS Deno SDK Conventional Commit Helper ==="
 echo ""
 echo "This script will help you organize your changes into conventional commits."
 echo ""
@@ -47,7 +47,7 @@ echo "Based on your current git status, here are suggested commits:"
 echo ""
 
 echo "1. For configuration changes:"
-echo "   git add .gitignore commitlint.config.js renovate.json .husky/ deno.json deno.lock pnpm-lock.yaml package.json"
+echo "   git add .gitignore commitlint.config.js renovate.json .husky/ deno.json deno.lock import_map.json fresh.config.ts"
 echo "   git commit -m \"build: update project configuration and dependencies\""
 echo ""
 
@@ -57,12 +57,12 @@ echo "   git commit -m \"docs: improve project documentation and contribution gu
 echo ""
 
 echo "3. For test infrastructure:"
-echo "   git add tests/ coverage/ .github/workflows/coverage.yml scripts/"
-echo "   git commit -m \"test: implement test framework and CI coverage reporting\""
+echo "   git add tests_deno/ cov/ .github/workflows/coverage.yml scripts/coverage-report.ts"
+echo "   git commit -m \"test: implement Deno test framework and CI coverage reporting\""
 echo ""
 
 echo "4. For core code changes:"
-echo "   git add src/ main.ts mod.ts main_test.ts"
+echo "   git add src/ mod.ts routes/ islands/ utils/ components/ tests_deno/"
 echo "   git commit -m \"feat: implement core SDK functionality\""
 echo ""
 

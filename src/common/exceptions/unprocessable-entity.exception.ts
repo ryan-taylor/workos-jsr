@@ -1,7 +1,7 @@
 import { plural } from "https://deno.land/x/deno_plural@2.0.0/mod.ts";
 
-import type { UnprocessableEntityError } from '../interfaces/unprocessable-entity-error.interface.ts';
-import type { RequestException } from '../interfaces/request-exception.interface.ts';
+import type { UnprocessableEntityError } from '../interfaces/unprocessable-entity-error.interface.ts.ts';
+import type { RequestException } from '../interfaces/request-exception.interface.ts.ts';
 
 export class UnprocessableEntityException extends Error implements RequestException {
   readonly status = 422;

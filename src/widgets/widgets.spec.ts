@@ -1,8 +1,8 @@
 import fetch from 'jest-fetch-mock';
 import { WorkOS } from '../workos.ts';
 import { fetchOnce, fetchURL } from '../common/utils/test-utils.ts';
-import tokenFixture from './fixtures/token.json.ts';
-import getTokenErrorFixture from './fixtures/get-token-error.json.ts';
+import tokenFixture from './fixtures/token.json';
+import getTokenErrorFixture from './fixtures/get-token-error.json';
 
 describe('Widgets', () => {
   let workos: WorkOS;

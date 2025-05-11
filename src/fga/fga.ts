@@ -1,4 +1,4 @@
-import type { WorkOS } from '../workos.ts';
+import type { WorkOS } from '../workos.ts.ts';
 import {
   type BatchWriteResourcesOptions,
   type BatchWriteResourcesResponse,
@@ -26,7 +26,7 @@ import {
   type WarrantToken,
   type WarrantTokenResponse,
   type WriteWarrantOptions,
-} from './interfaces.ts';
+} from './interfaces.ts.ts';
 import {
   deserializeBatchWriteResourcesResponse,
   deserializeQueryResult,
@@ -41,10 +41,10 @@ import {
   serializeListWarrantsOptions,
   serializeQueryOptions,
   serializeWriteWarrantOptions,
-} from './serializers.ts';
-import { isResourceInterface } from './utils/interface-check.ts';
-import { AutoPaginatable } from '../common/utils/pagination.ts';
-import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize.ts';
+} from './serializers.ts.ts';
+import { isResourceInterface } from './utils/interface-check.ts.ts';
+import { AutoPaginatable } from '../common/utils/pagination.ts.ts';
+import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize.ts.ts';
 
 export class FGA {
   constructor(private readonly workos: WorkOS) {}

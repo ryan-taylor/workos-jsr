@@ -1,4 +1,4 @@
-import type { List, ListResponse } from '../interfaces.ts';
+import type { List, ListResponse } from '../interfaces.ts.ts';
 
 export const deserializeList = <TSerialized, TDeserialized>(
   list: ListResponse<TSerialized>,

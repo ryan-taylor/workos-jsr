@@ -1,4 +1,4 @@
-import type { PaginationOptions } from '../../common/interfaces/pagination-options.interface.ts';
+import type { PaginationOptions } from '../../common/interfaces/pagination-options.interface.ts.ts';
 
 export interface ListDirectoriesOptions extends PaginationOptions {
   organizationId?: string;

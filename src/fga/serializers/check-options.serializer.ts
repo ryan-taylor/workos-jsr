@@ -7,8 +7,8 @@ import type {
   SerializedCheckBatchOptions,
   SerializedCheckOptions,
   SerializedCheckWarrantOptions,
-} from '../interfaces.ts';
-import { isResourceInterface, isSubject } from '../utils/interface-check.ts';
+} from '../interfaces.ts.ts';
+import { isResourceInterface, isSubject } from '../utils/interface-check.ts.ts';
 
 export const serializeCheckOptions = (
   options: CheckOptions,

@@ -4,16 +4,16 @@ import type {
   RequestHeaders,
   RequestOptions,
   ResponseHeaders,
-} from '../interfaces/http-client.interface.ts';
-import type { JsonValue } from '../interfaces/http-response.interface.ts';
-import { HttpClient, HttpClientError, HttpClientResponse } from './http-client.ts';
+} from '../interfaces/http-client.interface.ts.ts';
+import type { JsonValue } from '../interfaces/http-response.interface.ts.ts';
+import { HttpClient, HttpClientError, HttpClientResponse } from './http-client.ts.ts';
 
 export class FetchHttpClient extends HttpClient implements HttpClientInterface {
   private readonly _fetchFn;
 
   constructor(
-    readonly baseURL: string,
-    readonly options?: RequestInit,
+    override readonly baseURL: string,
+    override readonly options?: RequestInit,
     fetchFn?: typeof fetch,
   ) {
     super(baseURL, options);
@@ -32,7 +32,7 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
   }
 
   /** @override */
-  getClientName(): string {
+  override getClientName(): string {
     return 'fetch';
   }
 
@@ -185,7 +185,7 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
         message: res.statusText,
         response: {
           status: res.status,
-          headers: res.headers,
+          headers: FetchHttpClientResponse._transformHeadersToObject(res.headers),
           data: await res.json(),
         },
       });
@@ -280,17 +280,13 @@ export class FetchHttpClientResponse extends HttpClientResponse implements HttpC
   static _transformHeadersToObject(headers: Headers): ResponseHeaders {
     // Fetch uses a Headers instance so this must be converted to a barebones
     // JS object to meet the HttpClient interface.
-    const headersObj: ResponseHeaders = {};
-    for (const entry of Object.entries(headers)) {
-      if (!Array.isArray(entry) || entry.length !== 2) {
-        throw new Error(
-          'Response objects produced by the fetch function given to FetchHttpClient do not have an iterable headers map. Response#headers should be an iterable object.',
-        );
-      }
+    const headersObj: { [key: string]: string } = {};
+    
+    // Use forEach to iterate through headers which is more reliable
+    headers.forEach((value, key) => {
+      headersObj[key] = value;
+    });
 
-      headersObj[entry[0]] = entry[1];
-    }
-
-    return headersObj;
+    return headersObj as ResponseHeaders;
   }
 }

@@ -2,119 +2,108 @@ name: Publish to JSR
 
 on:
   push:
-    branches:
-      - main
-  # Support manually triggering a new JSR release
+    branches: [main]
+    paths-ignore:
+      - "**.md"
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Version to publish (leave empty for automatic)'
+      version_bump:
+        description: 'Version bump type'
         required: false
-        type: string
-
-permissions:
-  # Required for JSR OIDC authentication
-  id-token: write
-  contents: write
-
-defaults:
-  run:
-    shell: bash
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+          - prerelease
 
 jobs:
-  validate:
-    name: Validate Package
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Deno
-        uses: denoland/setup-deno@v1
-        with:
-          deno-version: v1.x
-      
-      - name: Run Tests
-        run: deno task test:ci
-      
-      - name: Verify JSR Publishing Configuration
-        run: |
-          echo "Verifying JSR configuration..."
-          # Check if the deno.json file contains publish configuration
-          if ! jq -e '.publish' deno.json > /dev/null; then
-            echo "Error: Missing publish configuration in deno.json"
-            exit 1
-          fi
-          
-          # Check if JSR name is properly configured
-          if ! jq -e '.name' deno.json > /dev/null; then
-            echo "Error: Missing package name in deno.json"
-            exit 1
-          fi
-          
-          echo "JSR configuration verified."
-
   publish:
-    name: Publish to JSR
     runs-on: ubuntu-latest
-    needs: validate
+    permissions:
+      contents: read
+      id-token: write
+    
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Setup Deno
         uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      
-      - name: Install JSR CLI
-        run: npm install -g @jsr/cli
-      
-      - name: Set Version
-        if: github.event.inputs.version != ''
+
+      - name: Get WorkOS version
+        id: workos_version
         run: |
-          VERSION="${{ github.event.inputs.version }}"
-          echo "Setting version to $VERSION"
-          # Update version in deno.json
-          jq ".version=\"$VERSION\"" deno.json > deno.json.tmp && mv deno.json.tmp deno.json
-          # Update version in package.json
-          jq ".version=\"$VERSION\" | .jsr.version=\"$VERSION\"" package.json > package.json.tmp && mv package.json.tmp package.json
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-      
-      - name: Determine Version (Auto)
-        if: github.event.inputs.version == ''
+          WORKOS_VERSION=$(grep '"workosVersion":' package.json | cut -d'"' -f4)
+          echo "workos_version=$WORKOS_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Get current version
+        id: current_version
         run: |
-          CURRENT_VERSION=$(jq -r '.version' deno.json)
-          # Extract major.minor.patch
-          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
-          # Increment patch version
-          NEW_PATCH=$((PATCH + 1))
-          NEW_VERSION="$MAJOR.$MINOR.$NEW_PATCH"
-          echo "Incrementing version from $CURRENT_VERSION to $NEW_VERSION"
+          CURRENT_VERSION=$(grep '"version":' package.json | head -1 | cut -d'"' -f4)
+          echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Determine new version
+        id: new_version
+        run: |
+          WORKOS_VERSION="${{ steps.workos_version.outputs.workos_version }}"
+          CURRENT_VERSION="${{ steps.current_version.outputs.version }}"
+          VERSION_BUMP="${{ github.event.inputs.version_bump || 'patch' }}"
           
-          # Update version in deno.json
-          jq ".version=\"$NEW_VERSION\"" deno.json > deno.json.tmp && mv deno.json.tmp deno.json
-          # Update version in package.json
-          jq ".version=\"$NEW_VERSION\" | .jsr.version=\"$NEW_VERSION\"" package.json > package.json.tmp && mv package.json.tmp package.json
+          # Extract base version without alpha suffix
+          BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-alpha$//')
           
-          echo "VERSION=$NEW_VERSION" >> $GITHUB_ENV
-      
+          # Handle version bump based on input
+          if [[ "$VERSION_BUMP" == "major" ]]; then
+            MAJOR=$(echo $BASE_VERSION | cut -d. -f1)
+            NEW_VERSION="$((MAJOR + 1)).0.0-alpha"
+          elif [[ "$VERSION_BUMP" == "minor" ]]; then
+            MAJOR=$(echo $BASE_VERSION | cut -d. -f1)
+            MINOR=$(echo $BASE_VERSION | cut -d. -f2)
+            NEW_VERSION="$MAJOR.$((MINOR + 1)).0-alpha"
+          elif [[ "$VERSION_BUMP" == "prerelease" ]]; then
+            # Just keep the same version for prerelease
+            NEW_VERSION="$CURRENT_VERSION"
+          else
+            # Default is patch
+            MAJOR=$(echo $BASE_VERSION | cut -d. -f1)
+            MINOR=$(echo $BASE_VERSION | cut -d. -f2)
+            PATCH=$(echo $BASE_VERSION | cut -d. -f3)
+            NEW_VERSION="$MAJOR.$MINOR.$((PATCH + 1))-alpha"
+          fi
+          
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "workos_ref=$WORKOS_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Update version in package.json and deno.json
+        run: |
+          NEW_VERSION="${{ steps.new_version.outputs.version }}"
+          WORKOS_VERSION="${{ steps.new_version.outputs.workos_ref }}"
+          
+          # Update package.json
+          sed -i "1s/\"version\": \".*\"/\"version\": \"$NEW_VERSION\"/" package.json
+          sed -i "s/\"version\": \".*\"-alpha/\"version\": \"$NEW_VERSION\"/" package.json
+          
+          # Update JSR version in package.json
+          sed -i "/jsr/,/}/ s/\"version\": \".*\"/\"version\": \"$NEW_VERSION\"/" package.json
+          
+          # Update deno.json if it exists
+          if [ -f "deno.json" ]; then
+            sed -i "s/\"version\": \".*\"/\"version\": \"$NEW_VERSION\"/" deno.json
+          fi
+          
+          # Update description to include WorkOS version reference
+          sed -i "s/WorkOS API (v[0-9.]*)/WorkOS API (v$WORKOS_VERSION)/" package.json
+
       - name: Publish to JSR
-        run: npx jsr publish
-      
-      - name: Create Git Tag
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          git tag -a "v$VERSION" -m "Release v$VERSION"
-          git push origin "v$VERSION"
-      
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
+        run: deno publish
+        
+      - name: Commit version update
+        if: github.event_name == 'workflow_dispatch'
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          name: v${{ env.VERSION }}
-          tag_name: v${{ env.VERSION }}
-          generate_release_notes: true
+          commit_message: "chore: bump version to ${{ steps.new_version.outputs.version }}"
+          file_pattern: "package.json deno.json"

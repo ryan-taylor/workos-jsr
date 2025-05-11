@@ -6,9 +6,9 @@ import {
   type SerializedBatchWriteResourcesOptions,
   type SerializedCreateResourceOptions,
   type SerializedDeleteResourceOptions,
-} from '../interfaces.ts';
-import { serializeCreateResourceOptions } from './create-resource-options.serializer.ts';
-import { serializeDeleteResourceOptions } from './delete-resource-options.serializer.ts';
+} from '../interfaces.ts.ts';
+import { serializeCreateResourceOptions } from './create-resource-options.serializer.ts.ts';
+import { serializeDeleteResourceOptions } from './delete-resource-options.serializer.ts.ts';
 
 export const serializeBatchWriteResourcesOptions = (
   options: BatchWriteResourcesOptions,

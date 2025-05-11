@@ -10,13 +10,10 @@
     "node:https": "https://deno.land/std/node/https.ts",
     "fs/promises": "https://deno.land/std/fs/mod.ts",
     
-    "chai": "npm:chai@5.2.0",
-    "nock": "npm:nock@14.0.4",
-    "supertest": "npm:supertest@7.1.0",
-    
     "@std/assert": "jsr:@std/assert@1",
     "@std/path": "jsr:@std/path@1",
     "@std/fs": "jsr:@std/fs@1",
-    "@std/http": "jsr:@std/http@1"
+    "@std/http": "jsr:@std/http@1",
+    "$fresh/": "https://deno.land/x/fresh@canary/"
   }
 }

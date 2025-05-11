@@ -4,7 +4,7 @@ import type {
   RequestHeaders,
   RequestOptions,
   ResponseHeaders,
-} from '../interfaces/http-client.interface.ts';
+} from '../interfaces/http-client.interface.ts.ts';
 
 export abstract class HttpClient implements HttpClientInterface {
   readonly MAX_RETRY_ATTEMPTS = 3;

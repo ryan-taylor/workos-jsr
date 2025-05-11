@@ -1,11 +1,10 @@
 {
-  "version": "7.50.0",
+  "version": "0.1.0-alpha",
   "name": "@workos-inc/node",
-  "author": "WorkOS",
-  "description": "A JavaScript/TypeScript wrapper for the WorkOS API",
-  "homepage": "https://github.com/workos-inc/workos-node",
+  "author": "Ryan Taylor",
+  "description": "A Deno/JSR port of the WorkOS API (v7.50.0) for JavaScript/TypeScript",
+  "homepage": "https://github.com/ryan-taylor/workos-jsr",
   "license": "MIT",
-  "type": "module",
   "keywords": [
     "workos",
     "authentication",
@@ -14,53 +13,20 @@
     "deno",
     "fresh"
   ],
+  "workosVersion": "7.50.0",
   "jsr": {
     "name": "@ryantaylor/workos",
-    "version": "7.50.0"
+    "version": "0.1.0-alpha"
   },
-  "volta": {
-    "node": "^20.0.0",
-    "yarn": "^1.22.0"
-  },
-  "engines": {
-    "node": ">=16"
-  },
-  "typings": "lib/index.d.ts",
-  "files": [
-    "lib/"
-  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/workos-inc/workos-node.git"
+    "url": "git+https://github.com/ryan-taylor/workos-jsr.git"
   },
   "bugs": {
-    "url": "https://github.com/workos-inc/workos-node/issues"
+    "url": "https://github.com/ryan-taylor/workos-jsr/issues"
   },
-  "scripts": {
-    "clean": "rm -rf lib",
-    "build": "tsc -p .",
-    "lint": "eslint --ext .ts,.js src/ tests/",
-    "test": "deno test",
-    "test:watch": "deno test --watch",
-    "test:worker": "deno test src/worker.spec.ts",
-    "prettier": "prettier \"src/**/*.{js,ts,tsx}\" --check",
-    "format": "prettier \"src/**/*.{js,ts,tsx}\" --write",
-    "prepublishOnly": "pnpm run build",
-    "prepare": "husky install"
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1",
-    "@peculiar/webcrypto": "^1.5.0",
-    "@types/node": "^22.15.17",
-    "@typescript-eslint/eslint-plugin": "^8.32.0",
-    "@typescript-eslint/parser": "^8.32.0",
-    "eslint": "~9.26.0",
-    "eslint-plugin-deno": "^0.0.1",
-    "husky": "^9.1.7",
-    "prettier": "^3.5.3",
-    "typescript": "^5.8.3"
-  },
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "exports": {
     "types": "./lib/index.d.ts",
     "workerd": {
@@ -75,5 +41,12 @@
       "import": "./lib/index.js",
       "default": "./lib/index.js"
     }
-  }
+  },
+  "scripts": {
+    "build": "deno bundle ./mod.ts lib/index.js",
+    "prepare": "npm run build"
+  },
+  "files": [
+    "lib"
+  ]
 }

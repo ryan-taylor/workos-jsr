@@ -1,4 +1,4 @@
-import type { ResetPasswordOptions, SerializedResetPasswordOptions } from '../interfaces.ts';
+import type { ResetPasswordOptions, SerializedResetPasswordOptions } from '../interfaces.ts.ts';
 
 export const serializeResetPasswordOptions = (
   options: ResetPasswordOptions,

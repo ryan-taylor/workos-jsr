@@ -1,4 +1,4 @@
-import type { Session, SessionResponse } from '../interfaces.ts';
+import type { Session, SessionResponse } from '../interfaces.ts.ts';
 
 export const deserializeSession = (session: SessionResponse): Session => ({
   object: 'session',

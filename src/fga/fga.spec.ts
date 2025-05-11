@@ -1,5 +1,5 @@
 // Import Deno standard testing library
-import { assertEquals } from 'https://deno.land/std/testing/asserts.ts';
+import { assertEquals } from '@std/assert';
 
 import { fetchBody, fetchHeaders, fetchOnce, fetchSearchParams, fetchURL, resetMockFetch } from '../common/utils/test-utils.ts';
 

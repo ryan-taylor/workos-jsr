@@ -4,7 +4,7 @@
 [![JSR Version](https://jsr.io/badges/@workos/sdk)](https://jsr.io/@workos/sdk)
 [![Build Status](https://github.com/workos/workos-node/actions/workflows/ci.yml/badge.svg)](https://github.com/workos/workos-node/actions/workflows/ci.yml)
 
-The WorkOS library provides convenient access to the WorkOS API from applications written in JavaScript and TypeScript. It supports both Node.js and Deno environments, including Deno's [Fresh](https://fresh.deno.dev/) framework.
+The WorkOS library provides convenient access to the WorkOS API from applications written in JavaScript and TypeScript. It is primarily designed for Deno environments, including Deno's [Fresh](https://fresh.deno.dev/) framework, with legacy support for Node.js applications.
 
 ## Documentation
 
@@ -12,22 +12,10 @@ See the [API Reference](https://workos.com/docs/reference/client-libraries) for 
 
 ## Requirements
 
-- Node.js 16 or higher, OR
-- Deno 1.41 or higher
+- Deno 1.41 or higher, OR
+- Node.js 16 or higher (legacy support)
 
 ## Installation
-
-### Node.js
-
-Install the package with:
-
-```
-npm install @workos-inc/node
-# or
-yarn add @workos-inc/node
-# or
-pnpm add @workos-inc/node
-```
 
 ### Deno/Fresh
 
@@ -47,23 +35,43 @@ Or add to your `deno.json` imports:
 }
 ```
 
-## Configuration
+## JSR.io Package
 
-### Node.js Configuration
+This library is published to [JSR.io](https://jsr.io/@workos/sdk) for Deno users. JSR (JavaScript Registry) is a modern package registry optimized for Deno and the web platform.
 
-To use the library you must provide an API key, located in the WorkOS dashboard, as an environment variable `WORKOS_API_KEY`:
+### Using the JSR Package
 
-```sh
-WORKOS_API_KEY="sk_1234"
-```
-
-Or, you can set it on your own before your application starts:
+To use the WorkOS SDK from JSR in a Deno project:
 
 ```ts
-import { WorkOS } from '@workos-inc/node';
+// Direct import
+import { WorkOS } from "jsr:@workos/sdk@^1.0.0";
 
-const workos = new WorkOS('sk_1234');
+// Or in your deno.json
+// {
+//   "imports": {
+//     "@workos/sdk": "jsr:@workos/sdk@^1.0.0"
+//   }
+// }
 ```
+
+### JSR Publishing Process
+
+The WorkOS SDK is published to JSR automatically through GitHub Actions. The process is as follows:
+
+1. Version is updated in `package.json` using semantic versioning
+2. A tag is created matching the version
+3. GitHub Actions publishes the package to JSR when a new tag is pushed
+
+### Version Management for JSR Releases
+
+The version is kept in sync between npm and JSR. The package follows semantic versioning:
+
+- **Major Version (X.0.0)**: Breaking changes
+- **Minor Version (0.X.0)**: New features without breaking changes
+- **Patch Version (0.0.X)**: Bug fixes and minor updates
+
+## Configuration
 
 ### Deno/Fresh Configuration
 
@@ -139,8 +147,8 @@ The telemetry configuration supports these options:
 The WorkOS SDK exports telemetry data in the OpenTelemetry Protocol (OTLP) format, which can be collected and visualized using:
 
 1. An OpenTelemetry Collector to receive and process the data
-2. A backend like Prometheus, Jaeger, Honeycomb, or DataDog
-3. Visualization tools like Grafana
+2. Prometheus for metrics storage
+3. Grafana for visualization
 
 For example deployment with the OpenTelemetry Collector:
 
@@ -176,6 +184,20 @@ service:
       exporters: [jaeger]
 ```
 
+### Prometheus Configuration Example
+
+```yaml
+# prometheus.yml
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'otel-collector'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['otel-collector:8889']
+```
+
 ### Instrumented Functionality
 
 The following WorkOS SDK operations are automatically instrumented:
@@ -196,7 +218,7 @@ cd examples/fresh-canary
 deno task start
 ```
 
-Then navigate to http://localhost:8000/telemetry to see the dashboard.
+Then navigate to <http://localhost:8000/telemetry> to see the dashboard.
 
 ## Usage Examples
 
@@ -271,43 +293,6 @@ When deploying WorkOS SDK to production:
    - Consider connection pooling for high-traffic applications
    - Monitor API rate limits
 
-## JSR.io Package
-
-This library is published to [JSR.io](https://jsr.io/@workos/sdk) for Deno users. JSR (JavaScript Registry) is a modern package registry optimized for Deno and the web platform.
-
-### Using the JSR Package
-
-To use the WorkOS SDK from JSR in a Deno project:
-
-```ts
-// Direct import
-import { WorkOS } from "jsr:@workos/sdk@^1.0.0";
-
-// Or in your deno.json
-// {
-//   "imports": {
-//     "@workos/sdk": "jsr:@workos/sdk@^1.0.0"
-//   }
-// }
-```
-
-### JSR Publishing Process
-
-The WorkOS SDK is published to JSR automatically through GitHub Actions. The process is as follows:
-
-1. Version is updated in `package.json` using semantic versioning
-2. A tag is created matching the version
-3. GitHub Actions publishes the package to JSR when a new tag is pushed
-
-### Version Management for JSR Releases
-
-The version is kept in sync between npm and JSR. The package follows semantic versioning:
-
-- **Major Version (X.0.0)**: Breaking changes
-- **Minor Version (0.X.0)**: New features without breaking changes
-- **Patch Version (0.0.X)**: Bug fixes and minor updates
-
-
 ## SDK Versioning
 
 For our SDKs WorkOS follows a Semantic Versioning ([SemVer](https://semver.org/)) process where all releases will have a version X.Y.Z (like 1.0.0) pattern wherein Z would be a bug fix (e.g., 1.0.1), Y would be a minor release (1.1.0) and X would be a major release (2.0.0). We permit any breaking changes to only be released in major versions and strongly recommend reading changelogs before making any major version upgrades.
@@ -324,6 +309,7 @@ please follow the [installation steps](#installation) above using the Beta relea
 
 We highly recommend keeping an eye on when the Beta feature you are interested in goes from Beta to stable so that you
 can move to using the stable version.
+
 ## Testing Coverage
 
 [![Coverage Status](https://codecov.io/gh/workos/workos-node/branch/main/graph/badge.svg)](https://codecov.io/gh/workos/workos-node)
@@ -369,3 +355,34 @@ We welcome contributions to the WorkOS Node.js library! Please check out our [co
 - [Admin Portal Guide](https://workos.com/docs/admin-portal/guide)
 - [Magic Link Guide](https://workos.com/docs/magic-link/guide)
 - [Domain Verification Guide](https://workos.com/docs/domain-verification/guide)
+
+## LEGACY: Node.js Support
+
+While Deno is our recommended platform, the WorkOS SDK still supports Node.js applications as a legacy option.
+
+### Node.js Installation
+
+Install the package with:
+
+```
+npm install @workos-inc/node
+# or
+yarn add @workos-inc/node
+# or
+pnpm add @workos-inc/node
+```
+
+### Node.js Configuration
+
+To use the library you must provide an API key, located in the WorkOS dashboard, as an environment variable `WORKOS_API_KEY`:
+
+```sh
+WORKOS_API_KEY="sk_1234"
+```
+
+Or, you can set it on your own before your application starts:
+
+```ts
+import { WorkOS } from '@workos-inc/node';
+
+const workos = new WorkOS('sk_1234');

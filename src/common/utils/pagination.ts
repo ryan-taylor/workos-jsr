@@ -1,4 +1,4 @@
-import type { List, PaginationOptions } from '../interfaces.ts';
+import type { List, PaginationOptions } from '../interfaces.ts.ts';
 
 export class AutoPaginatable<T> {
   readonly object: 'list' = 'list';

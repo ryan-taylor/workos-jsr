@@ -1,4 +1,4 @@
-import { CryptoProvider } from './crypto-provider.ts';
+import { CryptoProvider } from './crypto-provider.ts.ts';
 
 /**
  * `CryptoProvider` implementation for Deno using the Web Crypto API.

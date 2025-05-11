@@ -1,4 +1,4 @@
-import type { CreateMagicAuthOptions, SerializedCreateMagicAuthOptions } from '../interfaces.ts';
+import type { CreateMagicAuthOptions, SerializedCreateMagicAuthOptions } from '../interfaces.ts.ts';
 
 export const serializeCreateMagicAuthOptions = (
   options: CreateMagicAuthOptions,

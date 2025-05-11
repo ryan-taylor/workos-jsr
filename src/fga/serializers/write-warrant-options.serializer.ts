@@ -1,5 +1,5 @@
-import type { SerializedWriteWarrantOptions, WriteWarrantOptions } from '../interfaces.ts';
-import { isResourceInterface, isSubject } from '../utils/interface-check.ts';
+import type { SerializedWriteWarrantOptions, WriteWarrantOptions } from '../interfaces.ts.ts';
+import { isResourceInterface, isSubject } from '../utils/interface-check.ts.ts';
 
 export const serializeWriteWarrantOptions = (
   warrant: WriteWarrantOptions,

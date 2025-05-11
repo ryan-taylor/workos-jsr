@@ -1,4 +1,4 @@
-import type { AuthenticationRadarRiskDetectedEventData, AuthenticationRadarRiskDetectedEventResponseData } from '../interfaces.ts';
+import type { AuthenticationRadarRiskDetectedEventData, AuthenticationRadarRiskDetectedEventResponseData } from '../interfaces.ts.ts';
 
 export const deserializeAuthenticationRadarRiskDetectedEvent = (
   authenticationRadarRiskDetectedEvent: AuthenticationRadarRiskDetectedEventResponseData,

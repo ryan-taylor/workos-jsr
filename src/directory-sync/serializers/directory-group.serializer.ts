@@ -1,4 +1,4 @@
-import type { DirectoryGroup, DirectoryGroupResponse } from '../interfaces.ts';
+import type { DirectoryGroup, DirectoryGroupResponse } from '../interfaces.ts.ts';
 
 export const deserializeDirectoryGroup = (
   directoryGroup: DirectoryGroupResponse,

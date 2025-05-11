@@ -22,6 +22,7 @@ The Node.js `crypto` module is used extensively throughout the codebase, particu
   - `src/common/crypto/subtle-crypto-provider.ts`
 
 **Replacement Strategy:**
+
 - Use Deno's standard library crypto: `https://deno.land/std/crypto/mod.ts`
 - For SubtleCrypto operations, leverage Web Crypto API which is fully supported in Deno
 - Create adapter classes to maintain the same interface while using Deno's crypto implementations
@@ -35,6 +36,7 @@ The codebase uses Node.js HTTP/HTTPS modules for API requests:
 - `src/common/net/fetch-client.ts`: Fetch-based HTTP client
 
 **Replacement Strategy:**
+
 - Use Deno's native fetch API as the primary HTTP client
 - Adapt or refactor the NodeHttpClient implementation to use Deno's fetch
 - Eventually phase out the NodeHttpClient entirely in favor of FetchHttpClient
@@ -44,11 +46,12 @@ The codebase uses Node.js HTTP/HTTPS modules for API requests:
 Used for session management in the user-management module:
 
 - `src/common/iron-session/iron-session-provider.ts`
-- `src/common/iron-session/web-iron-session-provider.ts` 
+- `src/common/iron-session/web-iron-session-provider.ts`
 - `src/common/iron-session/edge-iron-session-provider.ts`
 - `src/user-management/session.ts`
 
 **Replacement Strategy:**
+
 - Use npm: specifier to import iron-session: `npm:iron-session@8.0.4`
 - Review and adapt any Node.js specific aspects of the iron-session integration
 - Consider using Deno's built-in Web Crypto API for some of the functionality if needed
@@ -60,6 +63,7 @@ Used in tests for file operations:
 - `src/workos.spec.ts`: Used in test files for reading test fixtures
 
 **Replacement Strategy:**
+
 - Use Deno's standard library for file operations: `https://deno.land/std/fs/mod.ts`
 - Update test utilities to use Deno's file system APIs
 - Consider using Deno's test fixtures API for test data instead of file operations where appropriate
@@ -140,6 +144,7 @@ Custom hooks proved to be a powerful pattern for logic reuse across islands:
 **Challenge**: Managing dependencies across Node.js and Deno environments.
 
 **Solution**:
+
 - Implemented a "dependency bridge" that provided consistent APIs across both environments
 - Used import maps to maintain consistent import paths
 - Created a dependency audit tool to track dependencies and their platform compatibility
@@ -149,6 +154,7 @@ Custom hooks proved to be a powerful pattern for logic reuse across islands:
 **Challenge**: Adapting session management to work across different environment contexts.
 
 **Solution**:
+
 - Created a unified session interface implemented for different contexts (Node.js, Deno, Edge)
 - Used Web Crypto API for cookie encryption when possible
 - Implemented secure fallbacks for environments without full Web Crypto support
@@ -158,6 +164,7 @@ Custom hooks proved to be a powerful pattern for logic reuse across islands:
 **Challenge**: Maintaining consistent authentication flows across environments.
 
 **Solution**:
+
 - Centralized authentication logic in the server implementation
 - Used consistent URL patterns for authentication callbacks
 - Implemented environment-agnostic token storage and verification
@@ -167,6 +174,7 @@ Custom hooks proved to be a powerful pattern for logic reuse across islands:
 **Challenge**: Maintaining type compatibility across Node.js and Deno.
 
 **Solution**:
+
 - Created shared type definitions used by both environments
 - Used conditional types to handle environment-specific differences
 - Leveraged TypeScript's module resolution to provide platform-specific implementations
@@ -180,6 +188,7 @@ Begin by identifying components that don't need client-side interactivity and co
 ### 2. Create Islands Strategically
 
 Don't convert every React component to a Preact island. Instead:
+
 - Identify truly interactive components that need client-side JavaScript
 - Group related interactivity into cohesive islands
 - Prefer fewer, larger islands over many small ones to reduce the hydration cost
@@ -193,6 +202,7 @@ Don't convert every React component to a Preact island. Instead:
 ### 4. Leverage Progressive Enhancement
 
 Design your application to work without JavaScript first, then enhance with interactivity:
+
 - Ensure forms submit properly without JavaScript
 - Implement server-side validation in addition to client-side
 - Use native HTML elements and attributes before adding JavaScript behaviors
@@ -239,6 +249,7 @@ As part of our migration to Deno 2.x, we've completely transitioned our testing 
 ### 1. Removing the Jest/Vitest Dependencies
 
 We've removed the following dependencies from package.json:
+
 - vitest
 - @cloudflare/vitest-pool-workers
 - All other Jest/Vitest-related packages
@@ -246,6 +257,7 @@ We've removed the following dependencies from package.json:
 ### 2. Test Script Updates
 
 Test scripts in package.json have been updated to use Deno's native test commands:
+
 - `test`: Changed from `vitest run` to `deno test`
 - `test:watch`: Changed from `vitest` to `deno test --watch`
 - `test:worker`: Updated to use Deno's test runner
@@ -253,6 +265,7 @@ Test scripts in package.json have been updated to use Deno's native test command
 ### 3. Removal of Compatibility Layer
 
 The temporary compatibility layer (tests/deno-test-setup.ts) that provided Jest-like functionality during the transition phase has been removed. This file included:
+
 - Mock implementations for fetch
 - Test lifecycle hooks (beforeEach, afterEach)
 - Jest-compatible assertion utilities
@@ -261,6 +274,7 @@ The temporary compatibility layer (tests/deno-test-setup.ts) that provided Jest-
 ### 4. Benefits of Deno Native Testing
 
 The migration to Deno's native testing brings several advantages:
+
 - Faster test execution due to native integration with the runtime
 - Built-in test coverage tools without third-party dependencies
 - Simplified testing setup with fewer dependencies
@@ -269,6 +283,7 @@ The migration to Deno's native testing brings several advantages:
 ### 5. Running Tests
 
 To run tests with the new Deno-native approach:
+
 ```
 deno test                  # Run all tests
 deno test --watch          # Run tests in watch mode
@@ -281,6 +296,7 @@ deno test --coverage       # Run tests with coverage report
 The migration from Node.js to Deno and from React to Fresh + Preact represents a significant architectural shift, but one that brings substantial benefits in terms of performance, maintainability, and developer experience. By following the strategies outlined in this guide, you can successfully navigate this migration while minimizing disruption and maximizing the advantages of the new platform.
 
 Key takeaways:
+
 - Embrace web standards whenever possible
 - Use the adapter pattern for platform-specific code
 - Leverage Fresh's Islands architecture for optimal performance

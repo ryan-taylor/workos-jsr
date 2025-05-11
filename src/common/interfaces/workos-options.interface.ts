@@ -1,5 +1,5 @@
-import type { AppInfo } from './app-info.interface.ts';
-import type { TelemetryConfig } from '../../telemetry/telemetry-config.ts';
+import type { AppInfo } from './app-info.interface.ts.ts';
+import type { TelemetryConfig } from '../../telemetry/telemetry-config.ts.ts';
 
 export interface WorkOSOptions {
   apiHostname?: string;

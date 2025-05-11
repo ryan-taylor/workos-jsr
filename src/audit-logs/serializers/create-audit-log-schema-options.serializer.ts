@@ -1,4 +1,4 @@
-import type { AuditLogSchemaMetadata, CreateAuditLogSchemaOptions, SerializedCreateAuditLogSchemaOptions } from '../interfaces.ts';
+import type { AuditLogSchemaMetadata, CreateAuditLogSchemaOptions, SerializedCreateAuditLogSchemaOptions } from '../interfaces.ts.ts';
 
 function serializeMetadata(
   metadata: Record<string, string | number | boolean> | undefined,

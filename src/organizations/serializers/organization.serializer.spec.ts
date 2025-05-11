@@ -1,5 +1,5 @@
 import { deserializeOrganization } from './organization.serializer.ts';
-import organizationFixture from '../fixtures/get-organization.json.ts';
+import organizationFixture from '../fixtures/get-organization.json';
 
 const organizationResponse = {
   ...organizationFixture,

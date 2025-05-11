@@ -4,8 +4,8 @@ import type {
   RequestHeaders,
   RequestOptions,
   ResponseHeaders,
-} from '../interfaces/http-client.interface.ts';
-import { HttpClient, HttpClientError, HttpClientResponse } from './http-client.ts';
+} from '../interfaces/http-client.interface.ts.ts';
+import { HttpClient, HttpClientError, HttpClientResponse } from './http-client.ts.ts';
 
 /**
  * HTTP client implementation for Deno runtime

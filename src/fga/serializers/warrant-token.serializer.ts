@@ -1,4 +1,4 @@
-import type { WarrantToken, WarrantTokenResponse } from '../interfaces/warrant-token.interface.ts';
+import type { WarrantToken, WarrantTokenResponse } from '../interfaces/warrant-token.interface.ts.ts';
 
 export const deserializeWarrantToken = (
   warrantToken: WarrantTokenResponse,

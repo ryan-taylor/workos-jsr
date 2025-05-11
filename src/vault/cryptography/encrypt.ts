@@ -1,5 +1,5 @@
 import { crypto } from "@std/crypto";
-import { encodeUInt32 } from '../../common/utils/leb128.ts';
+import { encodeUInt32 } from '../../common/utils/leb128.ts.ts';
 
 // Changed to async function
 export const encrypt = async (

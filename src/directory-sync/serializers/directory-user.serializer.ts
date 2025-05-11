@@ -4,8 +4,8 @@ import type {
   DirectoryUserResponse,
   DirectoryUserWithGroups,
   DirectoryUserWithGroupsResponse,
-} from '../interfaces.ts';
-import { deserializeDirectoryGroup } from './directory-group.serializer.ts';
+} from '../interfaces.ts.ts';
+import { deserializeDirectoryGroup } from './directory-group.serializer.ts.ts';
 
 export const deserializeDirectoryUser = <
   TCustomAttributes extends object = DefaultCustomAttributes,

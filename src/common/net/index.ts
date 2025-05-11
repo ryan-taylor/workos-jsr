@@ -1,6 +1,6 @@
-import { FetchHttpClient } from './fetch-client.ts';
-import type { HttpClient } from './http-client.ts';
-import { DenoHttpClient } from './deno-client.ts';
+import { FetchHttpClient } from './fetch-client.ts.ts';
+import type { HttpClient } from './http-client.ts.ts';
+import { DenoHttpClient } from './deno-client.ts.ts';
 
 export function createHttpClient(
   baseURL: string,
@@ -13,6 +13,6 @@ export function createHttpClient(
   return new DenoHttpClient(baseURL, options);
 }
 
-export * from './fetch-client.ts';
-export * from './deno-client.ts';
-export * from './http-client.ts';
+export * from './fetch-client.ts.ts';
+export * from './deno-client.ts.ts';
+export * from './http-client.ts.ts';

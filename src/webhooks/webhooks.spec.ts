@@ -1,6 +1,6 @@
 import { WorkOS } from '../workos.ts';
 import { crypto } from "@std/crypto";
-import mockWebhook from './fixtures/webhook.json.ts';
+import mockWebhook from './fixtures/webhook.json';
 const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
 import { SignatureVerificationException } from '../common/exceptions.ts';
 

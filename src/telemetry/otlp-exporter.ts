@@ -5,7 +5,7 @@
  * that works with Deno's native fetch API.
  */
 
-import type { TelemetryConfig } from './telemetry-config.ts';
+import type { TelemetryConfig } from './telemetry-config.ts.ts';
 
 /**
  * Types of telemetry data that can be exported

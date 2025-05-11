@@ -1,5 +1,5 @@
 import { assertEquals, assertExists, assertNotEquals } from '@std/assert';
-import { FreshSessionProvider, type SessionOptions } from './fresh-session-provider.ts';
+import { FreshSessionProvider, type SessionOptions } from './fresh-session-provider.ts.ts';
 
 Deno.test('FreshSessionProvider', async (t) => {
   const provider = new FreshSessionProvider();

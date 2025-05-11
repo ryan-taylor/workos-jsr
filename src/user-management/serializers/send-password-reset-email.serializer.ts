@@ -1,4 +1,4 @@
-import type { SendPasswordResetEmailOptions, SerializedSendPasswordResetEmailOptions } from '../interfaces.ts';
+import type { SendPasswordResetEmailOptions, SerializedSendPasswordResetEmailOptions } from '../interfaces.ts.ts';
 
 export const serializeSendPasswordResetEmailOptions = (
   options: SendPasswordResetEmailOptions,

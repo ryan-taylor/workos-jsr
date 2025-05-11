@@ -1,1 +1,1 @@
-export { GeneratePortalLinkIntent } from './generate-portal-link-intent.interface.ts';
+export { GeneratePortalLinkIntent } from './generate-portal-link-intent.interface.ts.ts';

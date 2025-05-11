@@ -1,4 +1,4 @@
-import { CryptoProvider } from './crypto-provider.ts';
+import { CryptoProvider } from './crypto-provider.ts.ts';
 
 /**
  * `CryptoProvider` implementation using the Web Crypto API.

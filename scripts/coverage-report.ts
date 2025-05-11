@@ -9,9 +9,10 @@
  * information about specific functions and lines that need testing.
  */
 
-import { parse } from 'https://deno.land/std/flags/mod.ts';
+import { parseArgs } from "https://deno.land/std@0.219.0/cli/parse_args.ts";
+import { join } from "https://deno.land/std@0.219.0/path/mod.ts";
 
-const args = parse(Deno.args);
+const args = parseArgs(Deno.args, { boolean: ["skip_tests"] });
 const FOCUS_MODULES = ['mfa', 'organizations', 'sso'];
 const COVERAGE_DIR = 'coverage';
 
@@ -104,13 +105,14 @@ async function extractFunctionNames(filePath: string): Promise<string[]> {
 async function getDetailedCoverage(filePath: string, coverageInfo: CoverageData): Promise<DetailedCoverage> {
   // Read the raw JSON coverage files to extract line-by-line coverage data
   const coverageFiles = await Deno.readDir(COVERAGE_DIR);
-  let lineDetails: number[] = [];
+  const lineDetails: number[] = [];
 
   for await (const file of coverageFiles) {
     if (!file.isFile || !file.name.endsWith('.json') || file.name === 'lcov.info') continue;
 
     try {
-      const content = await Deno.readTextFile(`${COVERAGE_DIR}/${file.name}`);
+      const coverageFilePath = join(COVERAGE_DIR, file.name);
+      const content = await Deno.readTextFile(coverageFilePath);
       const jsonContent = JSON.parse(content);
 
       // Find the entry for our file

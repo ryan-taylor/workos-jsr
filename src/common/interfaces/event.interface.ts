@@ -5,9 +5,9 @@ import type {
   DirectoryUserResponse,
   EventDirectory,
   EventDirectoryResponse,
-} from '../../directory-sync/interfaces.ts';
-import type { Organization, OrganizationResponse } from '../../organizations/interfaces.ts';
-import type { Connection, ConnectionResponse } from '../../sso/interfaces.ts';
+} from '../../directory-sync/interfaces.ts.ts';
+import type { Organization, OrganizationResponse } from '../../organizations/interfaces.ts.ts';
+import type { Connection, ConnectionResponse } from '../../sso/interfaces.ts.ts';
 import type {
   AuthenticationEvent,
   AuthenticationEventResponse,
@@ -23,14 +23,14 @@ import type {
   SessionResponse,
   User,
   UserResponse,
-} from '../../user-management/interfaces.ts';
-import type { OrganizationMembership, OrganizationMembershipResponse } from '../../user-management/interfaces/organization-membership.interface.ts';
-import type { RoleEvent, RoleEventResponse } from '../../roles/interfaces/role.interface.ts';
-import type { OrganizationDomain, OrganizationDomainResponse } from '../../organization-domains/interfaces.ts';
+} from '../../user-management/interfaces.ts.ts';
+import type { OrganizationMembership, OrganizationMembershipResponse } from '../../user-management/interfaces/organization-membership.interface.ts.ts';
+import type { RoleEvent, RoleEventResponse } from '../../roles/interfaces/role.interface.ts.ts';
+import type { OrganizationDomain, OrganizationDomainResponse } from '../../organization-domains/interfaces.ts.ts';
 import type {
   AuthenticationRadarRiskDetectedEventData,
   AuthenticationRadarRiskDetectedEventResponseData,
-} from '../../user-management/interfaces/authentication-radar-risk-detected-event.interface.ts';
+} from '../../user-management/interfaces/authentication-radar-risk-detected-event.interface.ts.ts';
 
 export interface EventBase {
   id: string;

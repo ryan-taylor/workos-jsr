@@ -2,7 +2,7 @@ import type {
   AuthenticateUserWithOrganizationSelectionCredentials,
   AuthenticateWithOrganizationSelectionOptions,
   SerializedAuthenticateWithOrganizationSelectionOptions,
-} from '../interfaces/authenticate-with-organization-selection.interface.ts';
+} from '../interfaces/authenticate-with-organization-selection.interface.ts.ts';
 
 export const serializeAuthenticateWithOrganizationSelectionOptions = (
   options:

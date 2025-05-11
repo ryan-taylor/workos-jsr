@@ -1,2 +1,2 @@
-export * from './event.serializer.ts';
-export * from './list.serializer.ts';
+export * from './event.serializer.ts.ts';
+export * from './list.serializer.ts.ts';

@@ -1,4 +1,4 @@
-import type { KeyContext } from '../key.interface.ts';
+import type { KeyContext } from '../key.interface.ts.ts';
 
 export interface CreateDataKeyOptions {
   context: KeyContext;

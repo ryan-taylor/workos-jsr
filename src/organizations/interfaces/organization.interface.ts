@@ -1,4 +1,4 @@
-import type { OrganizationDomain, OrganizationDomainResponse } from '../../organization-domains/interfaces/organization-domain.interface.ts.ts';
+import type { OrganizationDomain, OrganizationDomainResponse } from '../../organization-domains/interfaces/organization-domain.interface.ts';
 
 export interface Organization {
   object: 'organization';

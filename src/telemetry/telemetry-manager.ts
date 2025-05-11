@@ -5,8 +5,8 @@
  * across the SDK. It handles span creation, metrics collection, and log forwarding.
  */
 
-import { defaultTelemetryConfig, type TelemetryConfig } from './telemetry-config.ts.ts';
-import { type Log, type Metric, OTLPHttpExporter, type Span } from './otlp-exporter.ts.ts';
+import { defaultTelemetryConfig, type TelemetryConfig } from './telemetry-config.ts';
+import { type Log, type Metric, OTLPHttpExporter, type Span } from './otlp-exporter.ts';
 
 /**
  * Timer that tracks the duration of an operation

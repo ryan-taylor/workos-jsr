@@ -2,7 +2,7 @@
 
 import { assertContains, assertEquals, assertExists, createMockUser, type mockFetchJson, type mockFetchRedirect, type restoreFetch } from './test_config.ts';
 import { createUserSession, getCurrentUser, requireAuth, SESSION_OPTIONS, type SessionData, type WorkOSUser } from '../utils/user-management.ts';
-import { FreshSessionProvider } from '../../../src/common/iron-session/fresh-session-provider.ts';
+import { FreshSessionProvider } from 'workos/common/iron-session/fresh-session-provider.ts';
 
 // Mock for FreshContext
 type MockContext = {

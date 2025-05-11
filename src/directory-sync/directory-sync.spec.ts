@@ -187,7 +187,7 @@ function setupTest() {
 
 Deno.test('DirectorySync - listDirectories with options requests Directories with query parameters', async () => {
   const workos = setupTest();
-  
+
   const directoryListResponse = {
     object: 'list',
     data: [directoryResponse],
@@ -203,7 +203,7 @@ Deno.test('DirectorySync - listDirectories with options requests Directories wit
 
   const params = fetchSearchParams();
   assertEquals(params.organization_id, 'org_1234');
-  
+
   // Check that subject has the expected structure
   assertEquals(subject.object, 'list');
   assertEquals(subject.data[0].id, directory.id);
@@ -212,7 +212,7 @@ Deno.test('DirectorySync - listDirectories with options requests Directories wit
 
 Deno.test('DirectorySync - getDirectory requests a Directory', async () => {
   const workos = setupTest();
-  
+
   // Convert to string to avoid type issues
   fetchOnce(JSON.stringify(directoryResponse));
 
@@ -223,7 +223,7 @@ Deno.test('DirectorySync - getDirectory requests a Directory', async () => {
 
 Deno.test('DirectorySync - deleteDirectory sends a request to delete the directory', async () => {
   const workos = setupTest();
-  
+
   fetchOnce({}, { status: 202 });
 
   await workos.directorySync.deleteDirectory('directory_123');
@@ -235,7 +235,7 @@ Deno.test('DirectorySync - deleteDirectory sends a request to delete the directo
 
 Deno.test('DirectorySync - getGroup requests a Directory Group', async () => {
   const workos = setupTest();
-  
+
   // Convert to string to avoid type issues
   fetchOnce(JSON.stringify(groupResponse));
 
@@ -244,15 +244,15 @@ Deno.test('DirectorySync - getGroup requests a Directory Group', async () => {
   assertEquals(subject, group);
 });
 
-Deno.test('DirectorySync - listGroups with a Directory requests a Directory\'s Groups', async () => {
+Deno.test("DirectorySync - listGroups with a Directory requests a Directory's Groups", async () => {
   const workos = setupTest();
-  
+
   const groupListResponse = {
     object: 'list',
     data: [groupResponse],
     list_metadata: {},
   };
-  
+
   // Convert to string to avoid type issues
   fetchOnce(JSON.stringify(groupListResponse));
 
@@ -262,7 +262,7 @@ Deno.test('DirectorySync - listGroups with a Directory requests a Directory\'s G
 
   const params = fetchSearchParams();
   assertEquals(params.directory, 'directory_123');
-  
+
   // Check that subject has the expected structure
   assertEquals(subject.object, 'list');
   assertEquals(subject.data[0].id, group.id);
@@ -270,15 +270,15 @@ Deno.test('DirectorySync - listGroups with a Directory requests a Directory\'s G
   assertEquals(subject.options?.directory, 'directory_123');
 });
 
-Deno.test('DirectorySync - listGroups with a User requests a Directory\'s Groups', async () => {
+Deno.test("DirectorySync - listGroups with a User requests a Directory's Groups", async () => {
   const workos = setupTest();
-  
+
   const groupListResponse = {
     object: 'list',
     data: [groupResponse],
     list_metadata: {},
   };
-  
+
   // Convert to string to avoid type issues
   fetchOnce(JSON.stringify(groupListResponse));
 
@@ -288,7 +288,7 @@ Deno.test('DirectorySync - listGroups with a User requests a Directory\'s Groups
 
   const params = fetchSearchParams();
   assertEquals(params.user, 'directory_usr_123');
-  
+
   // Check that subject has the expected structure
   assertEquals(subject.object, 'list');
   assertEquals(subject.data[0].id, group.id);
@@ -296,15 +296,15 @@ Deno.test('DirectorySync - listGroups with a User requests a Directory\'s Groups
   assertEquals(subject.options?.user, 'directory_usr_123');
 });
 
-Deno.test('DirectorySync - listUsers with a Directory requests a Directory\'s Users', async () => {
+Deno.test("DirectorySync - listUsers with a Directory requests a Directory's Users", async () => {
   const workos = setupTest();
-  
+
   const userWithGroupListResponse = {
     object: 'list',
     data: [userWithGroupResponse],
     list_metadata: {},
   };
-  
+
   // Convert to string to avoid type issues
   fetchOnce(JSON.stringify(userWithGroupListResponse));
 
@@ -314,7 +314,7 @@ Deno.test('DirectorySync - listUsers with a Directory requests a Directory\'s Us
 
   const params = fetchSearchParams();
   assertEquals(params.directory, 'directory_123');
-  
+
   // Check that subject has the expected structure
   assertEquals(subject.object, 'list');
   assertEquals(subject.data[0].id, userWithGroup.id);
@@ -324,7 +324,7 @@ Deno.test('DirectorySync - listUsers with a Directory requests a Directory\'s Us
 
 Deno.test('DirectorySync - listUsers with custom attributes returns the custom attributes, using the provided type', async () => {
   const workos = setupTest();
-  
+
   interface MyCustomAttributes {
     managerId: string;
   }
@@ -408,15 +408,15 @@ Deno.test('DirectorySync - listUsers with custom attributes returns the custom a
   ]);
 });
 
-Deno.test('DirectorySync - listUsers with a Group requests a Directory\'s Users', async () => {
+Deno.test("DirectorySync - listUsers with a Group requests a Directory's Users", async () => {
   const workos = setupTest();
-  
+
   const userWithGroupListResponse = {
     object: 'list',
     data: [userWithGroupResponse],
     list_metadata: {},
   };
-  
+
   // Convert to string to avoid type issues
   fetchOnce(JSON.stringify(userWithGroupListResponse));
 
@@ -426,7 +426,7 @@ Deno.test('DirectorySync - listUsers with a Group requests a Directory\'s Users'
 
   const params = fetchSearchParams();
   assertEquals(params.group, 'directory_grp_123');
-  
+
   // Check that subject has the expected structure
   assertEquals(subject.object, 'list');
   assertEquals(subject.data[0].id, userWithGroup.id);
@@ -436,7 +436,7 @@ Deno.test('DirectorySync - listUsers with a Group requests a Directory\'s Users'
 
 Deno.test('DirectorySync - getUser requests a Directory User', async () => {
   const workos = setupTest();
-  
+
   // Convert to string to avoid type issues
   fetchOnce(JSON.stringify(userWithGroupResponse));
 
@@ -447,7 +447,7 @@ Deno.test('DirectorySync - getUser requests a Directory User', async () => {
 
 Deno.test('DirectorySync - getUser with a Role requests a Directory User', async () => {
   const workos = setupTest();
-  
+
   // Convert to string to avoid type issues
   fetchOnce(JSON.stringify(userWithRoleResponse));
 

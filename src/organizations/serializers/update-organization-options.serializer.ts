@@ -1,4 +1,4 @@
-import type { SerializedUpdateOrganizationOptions, UpdateOrganizationOptions } from '../interfaces.ts.ts';
+import type { SerializedUpdateOrganizationOptions, UpdateOrganizationOptions } from '../interfaces.ts';
 
 export const serializeUpdateOrganizationOptions = (
   options: Omit<UpdateOrganizationOptions, 'organization'>,

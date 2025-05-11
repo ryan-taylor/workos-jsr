@@ -1,4 +1,4 @@
-import type { EnrollAuthFactorOptions, SerializedEnrollUserInMfaFactorOptions } from '../interfaces.ts.ts';
+import type { EnrollAuthFactorOptions, SerializedEnrollUserInMfaFactorOptions } from '../interfaces.ts';
 
 export const serializeEnrollAuthFactorOptions = (
   options: EnrollAuthFactorOptions,

@@ -1,4 +1,4 @@
-import type { AuditLogExportOptions, SerializedAuditLogExportOptions } from '../interfaces.ts.ts';
+import type { AuditLogExportOptions, SerializedAuditLogExportOptions } from '../interfaces.ts';
 
 export const serializeAuditLogExportOptions = (
   options: AuditLogExportOptions,

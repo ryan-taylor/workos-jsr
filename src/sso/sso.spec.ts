@@ -1,14 +1,14 @@
 // Import Deno standard testing library
 import { assertEquals } from '@std/assert';
 
-import { 
-  fetchBody, 
-  fetchHeaders, 
-  fetchOnce, 
-  fetchSearchParams, 
-  fetchURL, 
+import {
+  fetchBody,
+  fetchHeaders,
+  fetchOnce,
+  fetchSearchParams,
+  fetchURL,
+  type MockResponseData,
   resetMockFetch,
-  type MockResponseData 
 } from '../common/utils/test-utils.ts';
 
 import { WorkOS } from '../workos.ts';
@@ -36,7 +36,7 @@ function setup() {
 // SSO - listConnections with query parameters
 Deno.test('SSO - listConnections with query parameters', async () => {
   setup();
-  
+
   const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
   const listConnectionsResponse: ListResponse<ConnectionResponse> = {
     object: 'list',
@@ -66,8 +66,11 @@ Deno.test('SSO - getAuthorizationUrl with default api hostname', () => {
     redirectUri: 'example.com/sso/workos/callback',
   });
 
-  assertEquals(url, 'https://api.workos.com/sso/authorize?client_id=proj_123&domain=lyft.com&' + 
-    'redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code');
+  assertEquals(
+    url,
+    'https://api.workos.com/sso/authorize?client_id=proj_123&domain=lyft.com&' +
+      'redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code',
+  );
 });
 
 // SSO - getAuthorizationUrl without domain or provider throws error
@@ -101,8 +104,11 @@ Deno.test('SSO - getAuthorizationUrl with provider', () => {
     redirectUri: 'example.com/sso/workos/callback',
   });
 
-  assertEquals(url, 'https://api.workos.dev/sso/authorize?client_id=proj_123&provider=Google&' + 
-    'redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code');
+  assertEquals(
+    url,
+    'https://api.workos.dev/sso/authorize?client_id=proj_123&provider=Google&' +
+      'redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code',
+  );
 });
 
 // SSO - getAuthorizationUrl with connection
@@ -117,8 +123,11 @@ Deno.test('SSO - getAuthorizationUrl with connection', () => {
     redirectUri: 'example.com/sso/workos/callback',
   });
 
-  assertEquals(url, 'https://api.workos.dev/sso/authorize?client_id=proj_123&connection=connection_123&' + 
-    'redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code');
+  assertEquals(
+    url,
+    'https://api.workos.dev/sso/authorize?client_id=proj_123&connection=connection_123&' +
+      'redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code',
+  );
 });
 
 // SSO - getAuthorizationUrl with organization
@@ -133,8 +142,11 @@ Deno.test('SSO - getAuthorizationUrl with organization', () => {
     redirectUri: 'example.com/sso/workos/callback',
   });
 
-  assertEquals(url, 'https://api.workos.dev/sso/authorize?client_id=proj_123&organization=organization_123&' + 
-    'redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code');
+  assertEquals(
+    url,
+    'https://api.workos.dev/sso/authorize?client_id=proj_123&organization=organization_123&' +
+      'redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code',
+  );
 });
 
 // SSO - getAuthorizationUrl with custom api hostname
@@ -149,8 +161,11 @@ Deno.test('SSO - getAuthorizationUrl with custom api hostname', () => {
     redirectUri: 'example.com/sso/workos/callback',
   });
 
-  assertEquals(url, 'https://api.workos.dev/sso/authorize?client_id=proj_123&domain=lyft.com&' + 
-    'redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code');
+  assertEquals(
+    url,
+    'https://api.workos.dev/sso/authorize?client_id=proj_123&domain=lyft.com&' +
+      'redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code',
+  );
 });
 
 // SSO - getAuthorizationUrl with state
@@ -164,8 +179,11 @@ Deno.test('SSO - getAuthorizationUrl with state', () => {
     state: 'custom state',
   });
 
-  assertEquals(url, 'https://api.workos.com/sso/authorize?client_id=proj_123&domain=lyft.com&' + 
-    'redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code&state=custom+state');
+  assertEquals(
+    url,
+    'https://api.workos.com/sso/authorize?client_id=proj_123&domain=lyft.com&' +
+      'redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code&state=custom+state',
+  );
 });
 
 // SSO - getAuthorizationUrl with domainHint
@@ -180,10 +198,10 @@ Deno.test('SSO - getAuthorizationUrl with domainHint', () => {
     state: 'custom state',
   });
 
-  const expectedUrl = 'https://api.workos.com/sso/authorize?client_id=proj_123&connection=connection_123&' + 
-    'domain_hint=lyft.com&redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code&' + 
+  const expectedUrl = 'https://api.workos.com/sso/authorize?client_id=proj_123&connection=connection_123&' +
+    'domain_hint=lyft.com&redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code&' +
     'state=custom+state';
-  
+
   assertEquals(url, expectedUrl);
 });
 
@@ -199,17 +217,17 @@ Deno.test('SSO - getAuthorizationUrl with loginHint', () => {
     state: 'custom state',
   });
 
-  const expectedUrl = 'https://api.workos.com/sso/authorize?client_id=proj_123&connection=connection_123&' + 
-    'login_hint=foo%40workos.com&redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code&' + 
+  const expectedUrl = 'https://api.workos.com/sso/authorize?client_id=proj_123&connection=connection_123&' +
+    'login_hint=foo%40workos.com&redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code&' +
     'state=custom+state';
-  
+
   assertEquals(url, expectedUrl);
 });
 
 // SSO - getProfileAndToken with all information provided
 Deno.test('SSO - getProfileAndToken with all information provided', async () => {
   setup();
-  
+
   fetchOnce({
     access_token: '01DMEK0J53CVMC32CK5SE0KZ8Q',
     profile: {
@@ -251,12 +269,12 @@ Deno.test('SSO - getProfileAndToken with all information provided', async () => 
     grant_type: 'authorization_code',
     code: 'authorization_code',
   });
-  
+
   // Check headers
   const headers = fetchHeaders();
   assertEquals(headers?.['Authorization'], 'Bearer sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
   assertEquals(headers?.['Content-Type'], 'application/x-www-form-urlencoded;charset=utf-8');
-  
+
   // Check response data
   assertEquals(accessToken, '01DMEK0J53CVMC32CK5SE0KZ8Q');
   assertEquals(profile.id, 'prof_123');
@@ -272,7 +290,7 @@ Deno.test('SSO - getProfileAndToken with all information provided', async () => 
 // SSO - getProfileAndToken without groups attribute
 Deno.test('SSO - getProfileAndToken without groups attribute', async () => {
   setup();
-  
+
   fetchOnce({
     access_token: '01DMEK0J53CVMC32CK5SE0KZ8Q',
     profile: {
@@ -309,12 +327,12 @@ Deno.test('SSO - getProfileAndToken without groups attribute', async () => {
     grant_type: 'authorization_code',
     code: 'authorization_code',
   });
-  
+
   // Check headers
   const headers = fetchHeaders();
   assertEquals(headers?.['Authorization'], 'Bearer sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
   assertEquals(headers?.['Content-Type'], 'application/x-www-form-urlencoded;charset=utf-8');
-  
+
   // Check response data
   assertEquals(accessToken, '01DMEK0J53CVMC32CK5SE0KZ8Q');
   assertEquals(profile.id, 'prof_123');
@@ -324,7 +342,7 @@ Deno.test('SSO - getProfileAndToken without groups attribute', async () => {
 // SSO - getProfile
 Deno.test('SSO - getProfile calls the profile endpoint with access token', async () => {
   setup();
-  
+
   fetchOnce({
     id: 'prof_123',
     idp_id: '123',
@@ -362,7 +380,7 @@ Deno.test('SSO - getProfile calls the profile endpoint with access token', async
 // SSO - deleteConnection
 Deno.test('SSO - deleteConnection sends request to delete a Connection', async () => {
   setup();
-  
+
   fetchOnce();
 
   const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
@@ -376,7 +394,7 @@ Deno.test('SSO - deleteConnection sends request to delete a Connection', async (
 // SSO - getConnection
 Deno.test('SSO - getConnection requests a Connection', async () => {
   setup();
-  
+
   // Cast to MockResponseData to satisfy type constraints
   fetchOnce(connectionResponse as unknown as MockResponseData);
 
@@ -393,7 +411,7 @@ Deno.test('SSO - getConnection requests a Connection', async () => {
 // SSO - listConnections
 Deno.test('SSO - listConnections requests a list of Connections', async () => {
   setup();
-  
+
   fetchOnce({
     data: [connectionResponse],
     list_metadata: {},

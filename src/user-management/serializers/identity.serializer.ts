@@ -1,4 +1,4 @@
-import type { Identity, IdentityResponse } from '../interfaces/identity.interface.ts.ts';
+import type { Identity, IdentityResponse } from '../interfaces/identity.interface.ts';
 
 export const deserializeIdentities = (
   identities: IdentityResponse[],

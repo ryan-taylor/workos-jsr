@@ -1,11 +1,11 @@
-import type { WorkOS } from '../workos.ts.ts';
+import type { WorkOS } from '../workos.ts';
 import {
   deserializeGetTokenResponse,
   type GetTokenOptions,
   type GetTokenResponseResponse,
   type SerializedGetTokenOptions,
   serializeGetTokenOptions,
-} from './interfaces/get-token.ts.ts';
+} from './interfaces/get-token.ts';
 
 export class Widgets {
   constructor(private readonly workos: WorkOS) {}

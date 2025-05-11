@@ -1,4 +1,4 @@
-import type { Totp, TotpResponse, TotpWithSecrets, TotpWithSecretsResponse } from '../../mfa/interfaces/totp.interface.ts.ts';
+import type { Totp, TotpResponse, TotpWithSecrets, TotpWithSecretsResponse } from '../../mfa/interfaces/totp.interface.ts';
 
 export interface Factor {
   object: 'authentication_factor';

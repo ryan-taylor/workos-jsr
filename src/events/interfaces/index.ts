@@ -1,1 +1,1 @@
-export * from './list-events-options.interface.ts.ts';
+export * from './list-events-options.interface.ts';

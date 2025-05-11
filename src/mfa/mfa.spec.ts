@@ -24,7 +24,7 @@ function setup() {
 // MFA - getFactor
 Deno.test('MFA - returns the requested factor', async () => {
   setup();
-  
+
   const factor: Factor = {
     object: 'authentication_factor',
     id: 'auth_factor_1234',
@@ -60,7 +60,7 @@ Deno.test('MFA - returns the requested factor', async () => {
 // MFA - deleteFactor
 Deno.test('MFA - sends request to delete a Factor', async () => {
   setup();
-  
+
   fetchOnce();
   const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
 
@@ -74,7 +74,7 @@ Deno.test('MFA - sends request to delete a Factor', async () => {
 // MFA - enrollFactor with generic
 Deno.test('MFA - enrolls a factor with generic type', async () => {
   setup();
-  
+
   const factor: Factor = {
     object: 'authentication_factor',
     id: 'auth_factor_1234',
@@ -107,7 +107,7 @@ Deno.test('MFA - enrolls a factor with generic type', async () => {
 // MFA - enrollFactor with totp
 Deno.test('MFA - enrolls a factor with totp type', async () => {
   setup();
-  
+
   const factor: FactorWithSecrets = {
     object: 'authentication_factor',
     id: 'auth_factor_1234',
@@ -155,7 +155,7 @@ Deno.test('MFA - enrolls a factor with totp type', async () => {
 // MFA - enrollFactor with sms
 Deno.test('MFA - enrolls a factor with sms type', async () => {
   setup();
-  
+
   const factor: Factor = {
     object: 'authentication_factor',
     id: 'auth_factor_1234',
@@ -195,7 +195,7 @@ Deno.test('MFA - enrolls a factor with sms type', async () => {
 // MFA - enrollFactor with invalid phone number
 Deno.test('MFA - throws exception when phone number is invalid', async () => {
   setup();
-  
+
   fetchOnce(
     JSON.stringify({
       message: `Phone number is invalid: 'foo'`,
@@ -225,7 +225,7 @@ Deno.test('MFA - throws exception when phone number is invalid', async () => {
 // MFA - challengeFactor with no sms template
 Deno.test('MFA - challenge a factor with no sms template', async () => {
   setup();
-  
+
   const challenge: Challenge = {
     object: 'authentication_challenge',
     id: 'auth_challenge_1234',
@@ -262,7 +262,7 @@ Deno.test('MFA - challenge a factor with no sms template', async () => {
 // MFA - challengeFactor with sms template
 Deno.test('MFA - challenge a factor with sms template', async () => {
   setup();
-  
+
   const challenge: Challenge = {
     object: 'authentication_challenge',
     id: 'auth_challenge_1234',
@@ -304,7 +304,7 @@ Deno.test('MFA - challenge a factor with sms template', async () => {
 // MFA - verifyChallenge with successful response
 Deno.test('MFA - verifies a successful factor', async () => {
   setup();
-  
+
   const verifyResponse: VerifyResponse = {
     challenge: {
       object: 'authentication_challenge',
@@ -352,7 +352,7 @@ Deno.test('MFA - verifies a successful factor', async () => {
 // MFA - verifyChallenge when the challenge has been previously verified
 Deno.test('MFA - throws exception when the challenge has been previously verified', async () => {
   setup();
-  
+
   fetchOnce(
     JSON.stringify({
       message: `The authentication challenge '12345' has already been verified.`,
@@ -377,7 +377,7 @@ Deno.test('MFA - throws exception when the challenge has been previously verifie
   } catch (error) {
     assertEquals(error instanceof UnprocessableEntityException, true);
   }
-  
+
   const body = fetchBody();
   assertEquals(body, {
     code: '12345',
@@ -387,7 +387,7 @@ Deno.test('MFA - throws exception when the challenge has been previously verifie
 // MFA - verifyChallenge when the challenge has expired
 Deno.test('MFA - throws exception when the challenge has expired', async () => {
   setup();
-  
+
   fetchOnce(
     JSON.stringify({
       message: `The authentication challenge '12345' has expired.`,
@@ -412,7 +412,7 @@ Deno.test('MFA - throws exception when the challenge has expired', async () => {
   } catch (error) {
     assertEquals(error instanceof UnprocessableEntityException, true);
   }
-  
+
   const body = fetchBody();
   assertEquals(body, {
     code: '12345',
@@ -421,7 +421,7 @@ Deno.test('MFA - throws exception when the challenge has expired', async () => {
 
 Deno.test('MFA - exception has code when the challenge has expired', async () => {
   setup();
-  
+
   fetchOnce(
     JSON.stringify({
       message: `The authentication challenge '12345' has expired.`,
@@ -448,7 +448,7 @@ Deno.test('MFA - exception has code when the challenge has expired', async () =>
       assertEquals(error.code, 'authentication_challenge_expired');
     }
   }
-  
+
   const body = fetchBody();
   assertEquals(body, {
     code: '12345',

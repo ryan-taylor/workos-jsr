@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - "**.md"
+      - '**.md'
   workflow_dispatch:
     inputs:
       version_bump:
@@ -24,7 +24,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -52,10 +52,10 @@ jobs:
           WORKOS_VERSION="${{ steps.workos_version.outputs.workos_version }}"
           CURRENT_VERSION="${{ steps.current_version.outputs.version }}"
           VERSION_BUMP="${{ github.event.inputs.version_bump || 'patch' }}"
-          
+
           # Extract base version without alpha suffix
           BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-alpha$//')
-          
+
           # Handle version bump based on input
           if [[ "$VERSION_BUMP" == "major" ]]; then
             MAJOR=$(echo $BASE_VERSION | cut -d. -f1)
@@ -74,7 +74,7 @@ jobs:
             PATCH=$(echo $BASE_VERSION | cut -d. -f3)
             NEW_VERSION="$MAJOR.$MINOR.$((PATCH + 1))-alpha"
           fi
-          
+
           echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
           echo "workos_ref=$WORKOS_VERSION" >> $GITHUB_OUTPUT
 
@@ -82,28 +82,28 @@ jobs:
         run: |
           NEW_VERSION="${{ steps.new_version.outputs.version }}"
           WORKOS_VERSION="${{ steps.new_version.outputs.workos_ref }}"
-          
+
           # Update package.json
           sed -i "1s/\"version\": \".*\"/\"version\": \"$NEW_VERSION\"/" package.json
           sed -i "s/\"version\": \".*\"-alpha/\"version\": \"$NEW_VERSION\"/" package.json
-          
+
           # Update JSR version in package.json
           sed -i "/jsr/,/}/ s/\"version\": \".*\"/\"version\": \"$NEW_VERSION\"/" package.json
-          
+
           # Update deno.json if it exists
           if [ -f "deno.json" ]; then
             sed -i "s/\"version\": \".*\"/\"version\": \"$NEW_VERSION\"/" deno.json
           fi
-          
+
           # Update description to include WorkOS version reference
           sed -i "s/WorkOS API (v[0-9.]*)/WorkOS API (v$WORKOS_VERSION)/" package.json
 
       - name: Publish to JSR
         run: deno publish
-        
+
       - name: Commit version update
         if: github.event_name == 'workflow_dispatch'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: bump version to ${{ steps.new_version.outputs.version }}"
-          file_pattern: "package.json deno.json"
+          commit_message: 'chore: bump version to ${{ steps.new_version.outputs.version }}'
+          file_pattern: 'package.json deno.json'

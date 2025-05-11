@@ -1,5 +1,5 @@
-import type { KeyContext } from '../key.interface.ts.ts';
-import type { ObjectUpdateBy } from '../object.interface.ts.ts';
+import type { KeyContext } from '../key.interface.ts';
+import type { ObjectUpdateBy } from '../object.interface.ts';
 
 export interface ReadObjectOptions {
   id: string;

@@ -1,4 +1,11 @@
-import type { Directory, DirectoryResponse, DirectoryState, DirectoryStateResponse, EventDirectory, EventDirectoryResponse } from '../interfaces.ts.ts';
+import type {
+  Directory,
+  DirectoryResponse,
+  DirectoryState,
+  DirectoryStateResponse,
+  EventDirectory,
+  EventDirectoryResponse,
+} from '../interfaces.ts';
 
 export const deserializeDirectory = (
   directory: DirectoryResponse,

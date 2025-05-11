@@ -1,5 +1,5 @@
 import { WorkOS } from '../workos.ts';
-import { crypto } from "@std/crypto";
+import { crypto } from '@std/crypto';
 import mockWebhook from './fixtures/webhook.json';
 const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
 import { SignatureVerificationException } from '../common/exceptions.ts';
@@ -27,18 +27,18 @@ describe('Webhooks', () => {
         hash: { name: 'SHA-256' },
       },
       false,
-      ['sign']
+      ['sign'],
     );
-    
+
     const signatureBuffer = await crypto.subtle.sign(
       'hmac',
       key,
-      encoder.encode(unhashedString)
+      encoder.encode(unhashedString),
     );
-    
+
     // Convert to hex
     signatureHash = Array.from(new Uint8Array(signatureBuffer))
-      .map(b => b.toString(16).padStart(2, '0'))
+      .map((b) => b.toString(16).padStart(2, '0'))
       .join('');
     expectation = {
       id: 'directory_user_01FAEAJCR3ZBZ30D8BD1924TVG',

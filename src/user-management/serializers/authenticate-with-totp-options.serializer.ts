@@ -1,4 +1,4 @@
-import type { AuthenticateUserWithTotpCredentials, AuthenticateWithTotpOptions, SerializedAuthenticateWithTotpOptions } from '../interfaces.ts.ts';
+import type { AuthenticateUserWithTotpCredentials, AuthenticateWithTotpOptions, SerializedAuthenticateWithTotpOptions } from '../interfaces.ts';
 
 export const serializeAuthenticateWithTotpOptions = (
   options: AuthenticateWithTotpOptions & AuthenticateUserWithTotpCredentials,

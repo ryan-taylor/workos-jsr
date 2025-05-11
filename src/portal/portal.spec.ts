@@ -17,7 +17,7 @@ function setup() {
 // Portal - generateLink with SSO intent
 Deno.test('Portal - generateLink with the SSO intent returns an Admin Portal link', async () => {
   setup();
-  
+
   fetchOnce(generateLink, { status: 201 });
 
   const { link } = await workos.portal.generateLink({
@@ -37,7 +37,7 @@ Deno.test('Portal - generateLink with the SSO intent returns an Admin Portal lin
 // Portal - generateLink with domain_verification intent
 Deno.test('Portal - generateLink with the domain_verification intent returns an Admin Portal link', async () => {
   setup();
-  
+
   fetchOnce(generateLink, { status: 201 });
 
   const { link } = await workos.portal.generateLink({
@@ -57,7 +57,7 @@ Deno.test('Portal - generateLink with the domain_verification intent returns an 
 // Portal - generateLink with dsync intent
 Deno.test('Portal - generateLink with the dsync intent returns an Admin Portal link', async () => {
   setup();
-  
+
   fetchOnce(generateLink, { status: 201 });
 
   const { link } = await workos.portal.generateLink({
@@ -77,7 +77,7 @@ Deno.test('Portal - generateLink with the dsync intent returns an Admin Portal l
 // Portal - generateLink with audit_logs intent
 Deno.test('Portal - generateLink with the audit_logs intent returns an Admin Portal link', async () => {
   setup();
-  
+
   fetchOnce(generateLink, { status: 201 });
 
   const { link } = await workos.portal.generateLink({
@@ -97,7 +97,7 @@ Deno.test('Portal - generateLink with the audit_logs intent returns an Admin Por
 // Portal - generateLink with log_streams intent
 Deno.test('Portal - generateLink with the log_streams intent returns an Admin Portal link', async () => {
   setup();
-  
+
   fetchOnce(generateLink, { status: 201 });
 
   const { link } = await workos.portal.generateLink({
@@ -117,7 +117,7 @@ Deno.test('Portal - generateLink with the log_streams intent returns an Admin Po
 // Portal - generateLink with certificate_renewal intent
 Deno.test('Portal - generateLink with the certificate_renewal intent returns an Admin Portal link', async () => {
   setup();
-  
+
   fetchOnce(generateLink, { status: 201 });
 
   const { link } = await workos.portal.generateLink({
@@ -137,7 +137,7 @@ Deno.test('Portal - generateLink with the certificate_renewal intent returns an 
 // Portal - generateLink with invalid organization
 Deno.test('Portal - generateLink with an invalid organization throws an error', async () => {
   setup();
-  
+
   fetchOnce(generateLinkInvalid, {
     status: 400,
     headers: { 'X-Request-ID': 'a-request-id' },
@@ -155,7 +155,7 @@ Deno.test('Portal - generateLink with an invalid organization throws an error', 
     assertEquals(err instanceof Error, true);
     assertEquals(err.message.includes('Could not find an organization with the id, bogus-id.'), true);
   }
-  
+
   assertEquals(fetchBody(), {
     intent: GeneratePortalLinkIntent.SSO,
     organization: 'bogus-id',

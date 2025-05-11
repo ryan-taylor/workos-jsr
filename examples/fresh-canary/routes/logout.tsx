@@ -1,6 +1,6 @@
 import type { Handlers } from '$fresh/server.ts';
 import { getCurrentUser, initUserManagement, SESSION_OPTIONS } from '../utils/user-management.ts';
-import { FreshSessionProvider } from '../../../src/common/iron-session/fresh-session-provider.ts';
+import { FreshSessionProvider } from 'workos_internal/mod.ts';
 
 export const handler: Handlers = {
   async GET(req, ctx) {

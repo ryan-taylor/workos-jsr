@@ -6,4 +6,4 @@ If you discover a security vulnerability in this project, please do not open an 
 
 ## Supported Versions
 
-We provide support for the latest releases. Please upgrade to the latest version to ensure you have received all security updates. 
+We provide support for the latest releases. Please upgrade to the latest version to ensure you have received all security updates.

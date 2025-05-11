@@ -1,4 +1,4 @@
-import type { OrganizationDomain, OrganizationDomainResponse } from '../interfaces.ts.ts';
+import type { OrganizationDomain, OrganizationDomainResponse } from '../interfaces.ts';
 
 export const deserializeOrganizationDomain = (
   organizationDomain: OrganizationDomainResponse,

@@ -1,5 +1,5 @@
 // Initialize WorkOS client for the application
-import { WorkOS } from '../../../src/workos.ts';
+import { WorkOS } from 'workos';
 
 // Initialize the WorkOS SDK with API key from environment variables
 export const workos = new WorkOS(

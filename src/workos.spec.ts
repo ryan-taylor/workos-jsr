@@ -14,10 +14,10 @@ function setupEnvVars() {
   // Store original environment variables
   const API_KEY = Deno.env.get('WORKOS_API_KEY');
   const NODE_ENV = Deno.env.get('NODE_ENV');
-  
+
   // Clear environment variables for testing
   if (NODE_ENV) Deno.env.delete('NODE_ENV');
-  
+
   return { API_KEY, NODE_ENV };
 }
 
@@ -33,7 +33,7 @@ function setupFetchMock() {
   const originalFetch = globalThis.fetch;
   // Set fetch to undefined
   (globalThis as { fetch?: typeof fetch }).fetch = undefined;
-  
+
   return originalFetch;
 }
 
@@ -55,7 +55,7 @@ Deno.test('WorkOS - constructor throws an error when no API key is provided', ()
 
 Deno.test('WorkOS - constructor initializes when API key is provided with environment variable', () => {
   const originals = setupEnvVars();
-  
+
   try {
     // Set environment variable using Deno.env.set
     Deno.env.set('WORKOS_API_KEY', 'sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
@@ -127,8 +127,11 @@ Deno.test('WorkOS - constructor applies appInfo to the fetch client user-agent w
   await workos.post('/somewhere', {});
 
   const headers = fetchHeaders();
-  assertEquals(headers && headers['User-Agent'] && 
-    headers['User-Agent'].includes(`workos-node/${packageJson.version}/fetch fooApp: 1.0.0`), true);
+  assertEquals(
+    headers && headers['User-Agent'] &&
+      headers['User-Agent'].includes(`workos-node/${packageJson.version}/fetch fooApp: 1.0.0`),
+    true,
+  );
 });
 
 Deno.test('WorkOS - constructor adds HTTP client name to user-agent when no appInfo is provided', async () => {
@@ -144,8 +147,11 @@ Deno.test('WorkOS - constructor adds HTTP client name to user-agent when no appI
   await workos.post('/somewhere', {});
 
   const headers = fetchHeaders();
-  assertEquals(headers && headers['User-Agent'] && 
-    headers['User-Agent'].includes(`workos-node/${packageJson.version}/fetch`), true);
+  assertEquals(
+    headers && headers['User-Agent'] &&
+      headers['User-Agent'].includes(`workos-node/${packageJson.version}/fetch`),
+    true,
+  );
 });
 
 Deno.test('WorkOS - constructor automatically uses fetch HTTP client in fetch-supporting environment', () => {
@@ -310,7 +316,7 @@ Deno.test('WorkOS - post sends empty string body when entity is null', async () 
 // Environment tests
 Deno.test('WorkOS - automatically uses Deno HTTP client in environment without fetch', () => {
   const originalFetch = setupFetchMock();
-  
+
   try {
     const workos = new WorkOS('sk_test_key');
 
@@ -324,7 +330,7 @@ Deno.test('WorkOS - automatically uses Deno HTTP client in environment without f
 
 Deno.test('WorkOS - uses provided fetch function in environment without fetch', () => {
   const originalFetch = setupFetchMock();
-  
+
   try {
     const workos = new WorkOS('sk_test_key', {
       fetchFn: globalThis.fetch,
@@ -356,12 +362,12 @@ Deno.test('WorkOS - uses worker client in worker environment', () => {
 
 Deno.test('WorkOS - uses console.warn for warnings in worker environment', () => {
   const workos = new WorkOSWorker('sk_test_key');
-  
+
   // Use a simple approach for testing console.warn
   const originalWarn = console.warn;
   let warnCalled = false;
   let warnMessage = '';
-  
+
   try {
     // Replace console.warn temporarily
     console.warn = (message: string) => {
@@ -382,12 +388,12 @@ Deno.test('WorkOS - uses console.warn for warnings in worker environment', () =>
 
 Deno.test('WorkOS - uses console.warn for warnings in Deno environment', () => {
   const workos = new WorkOS('sk_test_key');
-  
+
   // Use a simple approach for testing console.warn
   const originalWarn = console.warn;
   let warnCalled = false;
   let warnMessage = '';
-  
+
   try {
     // Replace console.warn temporarily
     console.warn = (message: string) => {

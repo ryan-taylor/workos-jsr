@@ -1,6 +1,7 @@
 # Deno Test Format Verification
 
 ## Summary
+
 The following test files have been verified to already use the native Deno.test format:
 
 - tests/audit_logs.test.ts
@@ -16,6 +17,7 @@ The following test files have been verified to already use the native Deno.test 
 - tests/sso.test.ts
 
 ## Details
+
 All files use:
 
 - Direct `Deno.test()` functions (not describe/it nesting)

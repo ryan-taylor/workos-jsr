@@ -1,10 +1,10 @@
-import { createRemoteJWKSet, decodeJwt, jwtVerify } from '../common/crypto/jwt-utils.ts.ts';
-import { OauthException } from '../common/exceptions/oauth.exception.ts.ts';
-import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize.ts.ts';
-import { AutoPaginatable } from '../common/utils/pagination.ts.ts';
-import type { Challenge, ChallengeResponse } from '../mfa/interfaces/index.ts.ts';
-import { deserializeChallenge } from '../mfa/serializers/index.ts.ts';
-import type { WorkOS } from '../workos.ts.ts';
+import { createRemoteJWKSet, decodeJwt, jwtVerify } from '../common/crypto/jwt-utils.ts';
+import { OauthException } from '../common/exceptions/oauth.exception.ts';
+import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize.ts';
+import { AutoPaginatable } from '../common/utils/pagination.ts';
+import type { Challenge, ChallengeResponse } from '../mfa/interfaces/index.ts';
+import { deserializeChallenge } from '../mfa/serializers/index.ts';
+import type { WorkOS } from '../workos.ts';
 import {
   type AuthenticateWithCodeOptions,
   type AuthenticateWithMagicAuthOptions,
@@ -46,15 +46,15 @@ import {
   type User,
   type UserResponse,
   type VerifyEmailOptions,
-} from './interfaces/index.ts.ts';
+} from './interfaces/index.ts';
 import type {
   AuthenticateWithEmailVerificationOptions,
   SerializedAuthenticateWithEmailVerificationOptions,
-} from './interfaces/authenticate-with-email-verification-options.interface.ts.ts';
+} from './interfaces/authenticate-with-email-verification-options.interface.ts';
 import type {
   AuthenticateWithOrganizationSelectionOptions,
   SerializedAuthenticateWithOrganizationSelectionOptions,
-} from './interfaces/authenticate-with-organization-selection.interface.ts.ts';
+} from './interfaces/authenticate-with-organization-selection.interface.ts';
 import {
   type AccessToken,
   type AuthenticateWithSessionCookieFailedResponse,
@@ -62,30 +62,33 @@ import {
   type AuthenticateWithSessionCookieOptions,
   type AuthenticateWithSessionCookieSuccessResponse,
   type SessionCookieData,
-} from './interfaces/authenticate-with-session-cookie.interface.ts.ts';
-import type { AuthorizationURLOptions } from './interfaces/authorization-url-options.interface.ts.ts';
+} from './interfaces/authenticate-with-session-cookie.interface.ts';
+import type { AuthorizationURLOptions } from './interfaces/authorization-url-options.interface.ts';
 import type {
   CreateOrganizationMembershipOptions,
   SerializedCreateOrganizationMembershipOptions,
-} from './interfaces/create-organization-membership-options.interface.ts.ts';
-import type { Factor, FactorResponse, FactorWithSecrets, FactorWithSecretsResponse } from './interfaces/factor.interface.ts.ts';
-import type { Identity, IdentityResponse } from './interfaces/identity.interface.ts.ts';
-import type { Invitation, InvitationResponse } from './interfaces/invitation.interface.ts.ts';
-import type { ListInvitationsOptions } from './interfaces/list-invitations-options.interface.ts.ts';
-import type { ListOrganizationMembershipsOptions } from './interfaces/list-organization-memberships-options.interface.ts.ts';
-import type { OrganizationMembership, OrganizationMembershipResponse } from './interfaces/organization-membership.interface.ts.ts';
-import { RefreshAndSealSessionDataFailureReason, type RefreshAndSealSessionDataResponse } from './interfaces/refresh-and-seal-session-data.interface.ts.ts';
+} from './interfaces/create-organization-membership-options.interface.ts';
+import type { Factor, FactorResponse, FactorWithSecrets, FactorWithSecretsResponse } from './interfaces/factor.interface.ts';
+import type { Identity, IdentityResponse } from './interfaces/identity.interface.ts';
+import type { Invitation, InvitationResponse } from './interfaces/invitation.interface.ts';
+import type { ListInvitationsOptions } from './interfaces/list-invitations-options.interface.ts';
+import type { ListOrganizationMembershipsOptions } from './interfaces/list-organization-memberships-options.interface.ts';
+import type { OrganizationMembership, OrganizationMembershipResponse } from './interfaces/organization-membership.interface.ts';
+import {
+  RefreshAndSealSessionDataFailureReason,
+  type RefreshAndSealSessionDataResponse,
+} from './interfaces/refresh-and-seal-session-data.interface.ts';
 import {
   type RevokeSessionOptions,
   type SerializedRevokeSessionOptions,
   serializeRevokeSessionOptions,
-} from './interfaces/revoke-session-options.interface.ts.ts';
-import type { SendInvitationOptions, SerializedSendInvitationOptions } from './interfaces/send-invitation-options.interface.ts.ts';
-import type { SessionHandlerOptions } from './interfaces/session-handler-options.interface.ts.ts';
+} from './interfaces/revoke-session-options.interface.ts';
+import type { SendInvitationOptions, SerializedSendInvitationOptions } from './interfaces/send-invitation-options.interface.ts';
+import type { SessionHandlerOptions } from './interfaces/session-handler-options.interface.ts';
 import type {
   SerializedUpdateOrganizationMembershipOptions,
   UpdateOrganizationMembershipOptions,
-} from './interfaces/update-organization-membership-options.interface.ts.ts';
+} from './interfaces/update-organization-membership-options.interface.ts';
 import {
   deserializeAuthenticationResponse,
   deserializeEmailVerification,
@@ -106,21 +109,21 @@ import {
   serializeSendMagicAuthCodeOptions,
   serializeSendPasswordResetEmailOptions,
   serializeUpdateUserOptions,
-} from './serializers/index.ts.ts';
-import { serializeAuthenticateWithEmailVerificationOptions } from './serializers/authenticate-with-email-verification.serializer.ts.ts';
-import { serializeAuthenticateWithOrganizationSelectionOptions } from './serializers/authenticate-with-organization-selection-options.serializer.ts.ts';
-import { serializeCreateOrganizationMembershipOptions } from './serializers/create-organization-membership-options.serializer.ts.ts';
-import { deserializeFactor } from './serializers/factor.serializer.ts.ts';
-import { deserializeIdentities } from './serializers/identity.serializer.ts.ts';
-import { deserializeInvitation } from './serializers/invitation.serializer.ts.ts';
-import { serializeListInvitationsOptions } from './serializers/list-invitations-options.serializer.ts.ts';
-import { serializeListOrganizationMembershipsOptions } from './serializers/list-organization-memberships-options.serializer.ts.ts';
-import { serializeListUsersOptions } from './serializers/list-users-options.serializer.ts.ts';
-import { deserializeOrganizationMembership } from './serializers/organization-membership.serializer.ts.ts';
-import { serializeSendInvitationOptions } from './serializers/send-invitation-options.serializer.ts.ts';
-import { serializeUpdateOrganizationMembershipOptions } from './serializers/update-organization-membership-options.serializer.ts.ts';
-import type { FreshSessionProvider } from '../common/iron-session/fresh-session-provider.ts.ts';
-import { Session } from './session.ts.ts';
+} from './serializers/index.ts';
+import { serializeAuthenticateWithEmailVerificationOptions } from './serializers/authenticate-with-email-verification.serializer.ts';
+import { serializeAuthenticateWithOrganizationSelectionOptions } from './serializers/authenticate-with-organization-selection-options.serializer.ts';
+import { serializeCreateOrganizationMembershipOptions } from './serializers/create-organization-membership-options.serializer.ts';
+import { deserializeFactor } from './serializers/factor.serializer.ts';
+import { deserializeIdentities } from './serializers/identity.serializer.ts';
+import { deserializeInvitation } from './serializers/invitation.serializer.ts';
+import { serializeListInvitationsOptions } from './serializers/list-invitations-options.serializer.ts';
+import { serializeListOrganizationMembershipsOptions } from './serializers/list-organization-memberships-options.serializer.ts';
+import { serializeListUsersOptions } from './serializers/list-users-options.serializer.ts';
+import { deserializeOrganizationMembership } from './serializers/organization-membership.serializer.ts';
+import { serializeSendInvitationOptions } from './serializers/send-invitation-options.serializer.ts';
+import { serializeUpdateOrganizationMembershipOptions } from './serializers/update-organization-membership-options.serializer.ts';
+import type { FreshSessionProvider } from '../common/iron-session/fresh-session-provider.ts';
+import { Session } from './session.ts';
 // Use Deno.env.get instead of process.env
 
 const toQueryString = (options: Record<string, string | undefined>): string => {
@@ -379,7 +382,7 @@ export class UserManagement {
 
   async authenticateWithSessionCookie({
     sessionData,
-    cookiePassword = Deno.env.get("WORKOS_COOKIE_PASSWORD"),
+    cookiePassword = Deno.env.get('WORKOS_COOKIE_PASSWORD'),
   }: AuthenticateWithSessionCookieOptions): Promise<
     | AuthenticateWithSessionCookieSuccessResponse
     | AuthenticateWithSessionCookieFailedResponse
@@ -460,7 +463,7 @@ export class UserManagement {
   async refreshAndSealSessionData({
     sessionData,
     organizationId,
-    cookiePassword = Deno.env.get("WORKOS_COOKIE_PASSWORD"),
+    cookiePassword = Deno.env.get('WORKOS_COOKIE_PASSWORD'),
   }: SessionHandlerOptions): Promise<RefreshAndSealSessionDataResponse> {
     if (!cookiePassword) {
       throw new Error('Cookie password is required');
@@ -579,7 +582,7 @@ export class UserManagement {
 
   async getSessionFromCookie({
     sessionData,
-    cookiePassword = Deno.env.get("WORKOS_COOKIE_PASSWORD"),
+    cookiePassword = Deno.env.get('WORKOS_COOKIE_PASSWORD'),
   }: SessionHandlerOptions): Promise<SessionCookieData | undefined> {
     if (!cookiePassword) {
       throw new Error('Cookie password is required');
@@ -1041,7 +1044,7 @@ export class UserManagement {
    */
   async getLogoutUrlFromSessionCookie({
     sessionData,
-    cookiePassword = Deno.env.get("WORKOS_COOKIE_PASSWORD"),
+    cookiePassword = Deno.env.get('WORKOS_COOKIE_PASSWORD'),
   }: SessionHandlerOptions): Promise<string> {
     const authenticationResponse = await this.authenticateWithSessionCookie({
       sessionData,

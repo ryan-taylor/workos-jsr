@@ -1,13 +1,13 @@
-import type { Handlers, MiddlewareHandler } from '$fresh/server.ts';
-import { FreshSessionProvider } from '../../../src/common/iron-session/fresh-session-provider.ts';
+import type { Handlers } from '$fresh/server.ts';
+import { createSessionMiddleware, type MiddlewareHandler } from 'workos_internal/mod.ts';
 import { createSpan, recordMetric } from '../utils/telemetry.ts';
 import { SESSION_OPTIONS } from '../utils/user-management.ts';
 
-// Create a session provider instance
-const sessionProvider = new FreshSessionProvider();
-
-// Session middleware handler
-const sessionMiddleware = sessionProvider.createSessionMiddleware(SESSION_OPTIONS).handler;
+// Create session middleware compatible with both Fresh 1.x and 2.x
+const sessionMiddlewareObj = createSessionMiddleware(SESSION_OPTIONS);
+const sessionMiddleware = 'handler' in sessionMiddlewareObj 
+  ? sessionMiddlewareObj.handler 
+  : sessionMiddlewareObj as MiddlewareHandler;
 
 /**
  * Telemetry middleware to track request metrics

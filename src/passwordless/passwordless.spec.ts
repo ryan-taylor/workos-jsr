@@ -13,7 +13,7 @@ function setup() {
 // Passwordless - createSession
 Deno.test('Passwordless - createSession with valid options creates a passwordless session', async () => {
   setup();
-  
+
   const email = 'passwordless-session-email@workos.com';
   const redirectURI = 'https://example.com/passwordless/callback';
 
@@ -33,7 +33,7 @@ Deno.test('Passwordless - createSession with valid options creates a passwordles
   const body = fetchBody() as Record<string, unknown>;
   assertEquals(body.email, email);
   assertEquals(body.redirect_uri, redirectURI);
-  
+
   const url = fetchURL();
   assertEquals(url?.includes('/passwordless/sessions'), true);
 });
@@ -41,7 +41,7 @@ Deno.test('Passwordless - createSession with valid options creates a passwordles
 // Passwordless - sendSession
 Deno.test('Passwordless - sendSession with a valid session id sends a request', async () => {
   setup();
-  
+
   fetchOnce();
   const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
 
@@ -51,6 +51,6 @@ Deno.test('Passwordless - sendSession with a valid session id sends a request', 
   const url = fetchURL();
   assertEquals(
     url?.includes(`/passwordless/sessions/${sessionId}/send`),
-    true
+    true,
   );
 });

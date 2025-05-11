@@ -1,5 +1,5 @@
-import type { Sms, SmsResponse } from './sms.interface.ts.ts';
-import type { Totp, TotpResponse, TotpWithSecrets, TotpWithSecretsResponse } from './totp.interface.ts.ts';
+import type { Sms, SmsResponse } from './sms.interface.ts';
+import type { Totp, TotpResponse, TotpWithSecrets, TotpWithSecretsResponse } from './totp.interface.ts';
 
 type FactorType = 'sms' | 'totp' | 'generic_otp';
 

@@ -1,6 +1,6 @@
-import { type createRemoteJWKSet, decodeJwt, jwtVerify } from '../common/crypto/jwt-utils.ts.ts';
-import { OauthException } from '../common/exceptions/oauth.exception.ts.ts';
-import type { FreshSessionProvider } from '../common/iron-session/fresh-session-provider.ts.ts';
+import { type createRemoteJWKSet, decodeJwt, jwtVerify } from '../common/crypto/jwt-utils.ts';
+import { OauthException } from '../common/exceptions/oauth.exception.ts';
+import type { FreshSessionProvider } from '../common/iron-session/fresh-session-provider.ts';
 import {
   type AccessToken,
   type AuthenticateWithSessionCookieFailedResponse,
@@ -10,8 +10,8 @@ import {
   RefreshAndSealSessionDataFailureReason,
   type RefreshSessionResponse,
   type SessionCookieData,
-} from './interfaces/index.ts.ts';
-import type { UserManagement } from './user-management.ts.ts';
+} from './interfaces/index.ts';
+import type { UserManagement } from './user-management.ts';
 
 type RefreshOptions = {
   cookiePassword?: string;

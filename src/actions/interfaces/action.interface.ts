@@ -1,4 +1,4 @@
-import type { Organization, OrganizationResponse } from '../../organizations/interfaces.ts.ts';
+import type { Organization, OrganizationResponse } from '../../organizations/interfaces.ts';
 import type {
   Invitation,
   InvitationResponse,
@@ -6,7 +6,7 @@ import type {
   OrganizationMembershipResponse,
   User,
   UserResponse,
-} from '../../user-management/interfaces.ts.ts';
+} from '../../user-management/interfaces.ts';
 
 interface AuthenticationActionContext {
   id: string;

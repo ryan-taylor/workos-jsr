@@ -1,6 +1,6 @@
 // Session handling utilities
 
-import { FreshSessionProvider } from '../../../src/common/iron-session/fresh-session-provider.ts';
+import { FreshSessionProvider } from 'workos/common/iron-session/fresh-session-provider.ts';
 import { SESSION_OPTIONS, type SessionData } from './user-management.ts';
 
 /**

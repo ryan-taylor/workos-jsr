@@ -1,4 +1,4 @@
-import type { AuditLogSchema, CreateAuditLogSchemaResponse } from '../interfaces.ts.ts';
+import type { AuditLogSchema, CreateAuditLogSchemaResponse } from '../interfaces.ts';
 
 function deserializeMetadata(metadata: {
   properties?: Record<string, { type: string | number | boolean }>;

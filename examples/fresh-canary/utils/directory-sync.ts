@@ -1,8 +1,8 @@
 // Utility functions for integrating Directory Sync with Fresh 2.x
 
-import { WorkOS } from '../../../src/workos.ts';
-import type { FreshSessionProvider } from '../../../src/common/iron-session/fresh-session-provider.ts';
-import { DenoCryptoProvider } from '../../../src/common/crypto/deno-crypto-provider.ts';
+import { WorkOS } from 'workos';
+import type { FreshSessionProvider } from 'workos/common/iron-session/fresh-session-provider.ts';
+import { DenoCryptoProvider } from 'workos/common/crypto/deno-crypto-provider.ts';
 
 // Session configuration - using same as user-management for consistency
 export const SESSION_OPTIONS = {

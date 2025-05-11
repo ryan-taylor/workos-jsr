@@ -1,4 +1,4 @@
-import type { ListInvitationsOptions, SerializedListInvitationsOptions } from '../interfaces/list-invitations-options.interface.ts.ts';
+import type { ListInvitationsOptions, SerializedListInvitationsOptions } from '../interfaces/list-invitations-options.interface.ts';
 
 export const serializeListInvitationsOptions = (
   options: ListInvitationsOptions,

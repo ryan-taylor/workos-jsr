@@ -1,4 +1,4 @@
-import type { AuthenticateWithOptionsBase, SerializedAuthenticateWithOptionsBase } from './authenticate-with-options-base.interface.ts.ts';
+import type { AuthenticateWithOptionsBase, SerializedAuthenticateWithOptionsBase } from './authenticate-with-options-base.interface.ts';
 
 export interface AuthenticateWithCodeOptions extends AuthenticateWithOptionsBase {
   codeVerifier?: string;

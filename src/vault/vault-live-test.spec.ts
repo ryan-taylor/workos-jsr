@@ -1,7 +1,7 @@
 import { disableFetchMocks, enableFetchMocks } from 'jest-fetch-mock';
 
 import { WorkOS } from '../workos.ts';
-import { crypto } from "@std/crypto";
+import { crypto } from '@std/crypto';
 import { NotFoundException } from '../index.worker.ts';
 import { ConflictException } from '../common/exceptions/conflict.exception.ts';
 

@@ -1,0 +1,67 @@
+name: Test Matrix
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        deno: ["1.40.5", "2.x"]
+        fresh: ["1.6.5", "2.0.0-rc.1"]
+
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: ${{ matrix.deno }}
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/deno
+          key: ${{ runner.os }}-deno-${{ matrix.deno }}-${{ hashFiles('**/deno.json', '**/import_map.json') }}
+          restore-keys: |
+            ${{ runner.os }}-deno-${{ matrix.deno }}-
+
+      - name: Set Fresh version
+        run: |
+          echo "Setting Fresh version to ${{ matrix.fresh }}"
+          if [[ "${{ matrix.fresh }}" == "1.6.5" ]]; then
+            cp import_map.f1.json import_map.json
+          else
+            cp import_map.f2.json import_map.json
+          fi
+
+      - name: Verify formatting
+        if: matrix.deno == '2.x'
+        run: deno fmt --check
+
+      - name: Run linter
+        if: matrix.deno == '2.x'
+        run: deno lint
+
+      - name: Type check
+        run: deno check $(find . -name '*.ts' -not -path '*/node_modules/*')
+
+      - name: Run tests
+        run: |
+          if [[ "${{ matrix.deno }}" == "1.40.5" ]]; then
+            deno test -A --compat=1
+          else
+            deno test -A
+          fi
+
+      - name: Test Fresh example
+        run: |
+          cd examples/fresh-canary
+          deno task check
+          # Just verify it builds, don't actually run it
+          deno check main.ts

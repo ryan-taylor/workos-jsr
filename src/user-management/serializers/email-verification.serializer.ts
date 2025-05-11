@@ -1,4 +1,4 @@
-import type { EmailVerification, EmailVerificationEvent, EmailVerificationEventResponse, EmailVerificationResponse } from '../interfaces.ts.ts';
+import type { EmailVerification, EmailVerificationEvent, EmailVerificationEventResponse, EmailVerificationResponse } from '../interfaces.ts';
 
 export const deserializeEmailVerification = (
   emailVerification: EmailVerificationResponse,

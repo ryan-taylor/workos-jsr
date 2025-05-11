@@ -123,7 +123,7 @@ function setupTest() {
 
 Deno.test('Events - listEvents with options requests Events with query parameters', async () => {
   const workos = setupTest();
-  
+
   const eventsResponse = {
     object: 'list',
     data: [eventResponse],
@@ -152,13 +152,13 @@ Deno.test('Events - listEvents with options requests Events with query parameter
 
 Deno.test('Events - listEvents with a valid event name', async () => {
   const workos = setupTest();
-  
+
   const eventsListResponse = {
     object: 'list',
     data: [eventResponse],
     list_metadata: {},
   };
-  
+
   fetchOnce(JSON.stringify(eventsListResponse));
 
   const list = await workos.events.listEvents({
@@ -174,13 +174,13 @@ Deno.test('Events - listEvents with a valid event name', async () => {
 
 Deno.test('Events - listEvents with a valid organization id', async () => {
   const workos = setupTest();
-  
+
   const eventsListResponse = {
     object: 'list',
     data: [eventResponse],
     list_metadata: {},
   };
-  
+
   fetchOnce(JSON.stringify(eventsListResponse));
 
   const list = await workos.events.listEvents({
@@ -197,13 +197,13 @@ Deno.test('Events - listEvents with a valid organization id', async () => {
 
 Deno.test('Events - directory user updated events with a role returns the role', async () => {
   const workos = setupTest();
-  
+
   const directoryUserEventsListResponse = {
     object: 'list',
     data: [directoryUserUpdatedResponse],
     list_metadata: {},
   };
-  
+
   fetchOnce(JSON.stringify(directoryUserEventsListResponse));
 
   const list = await workos.events.listEvents({

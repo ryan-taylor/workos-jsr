@@ -1,4 +1,4 @@
-import type { QueryOptions, SerializedQueryOptions } from '../interfaces.ts.ts';
+import type { QueryOptions, SerializedQueryOptions } from '../interfaces.ts';
 
 export const serializeQueryOptions = (
   options: QueryOptions,

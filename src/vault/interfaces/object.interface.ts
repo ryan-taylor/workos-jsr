@@ -1,4 +1,4 @@
-import type { KeyContext } from './key.interface.ts.ts';
+import type { KeyContext } from './key.interface.ts';
 
 export interface ObjectDigest {
   id: string;

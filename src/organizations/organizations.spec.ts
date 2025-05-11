@@ -24,7 +24,7 @@ function setup() {
 // Organizations - listOrganizations
 Deno.test('Organizations - listOrganizations without any options returns organizations and metadata', async () => {
   setup();
-  
+
   fetchOnce(listOrganizationsFixture);
 
   const { data, listMetadata } = await workos.organizations.listOrganizations();
@@ -32,7 +32,7 @@ Deno.test('Organizations - listOrganizations without any options returns organiz
   assertEquals(fetchSearchParams(), {
     order: 'desc',
   });
-  
+
   const url = fetchURL();
   assertEquals(url?.includes('/organizations'), true);
 
@@ -46,7 +46,7 @@ Deno.test('Organizations - listOrganizations without any options returns organiz
 
 Deno.test('Organizations - listOrganizations with the domain option forms the proper request', async () => {
   setup();
-  
+
   fetchOnce(listOrganizationsFixture);
 
   const { data } = await workos.organizations.listOrganizations({
@@ -66,7 +66,7 @@ Deno.test('Organizations - listOrganizations with the domain option forms the pr
 
 Deno.test('Organizations - listOrganizations with the before option forms the proper request', async () => {
   setup();
-  
+
   fetchOnce(listOrganizationsFixture);
 
   const { data } = await workos.organizations.listOrganizations({
@@ -86,7 +86,7 @@ Deno.test('Organizations - listOrganizations with the before option forms the pr
 
 Deno.test('Organizations - listOrganizations with the after option forms the proper request', async () => {
   setup();
-  
+
   fetchOnce(listOrganizationsFixture);
 
   const { data } = await workos.organizations.listOrganizations({
@@ -106,7 +106,7 @@ Deno.test('Organizations - listOrganizations with the after option forms the pro
 
 Deno.test('Organizations - listOrganizations with the limit option forms the proper request', async () => {
   setup();
-  
+
   fetchOnce(listOrganizationsFixture);
 
   const { data } = await workos.organizations.listOrganizations({
@@ -127,7 +127,7 @@ Deno.test('Organizations - listOrganizations with the limit option forms the pro
 // Organizations - createOrganization
 Deno.test('Organizations - createOrganization with an idempotency key includes it with request', async () => {
   setup();
-  
+
   fetchOnce(createOrganization, { status: 201 });
 
   await workos.organizations.createOrganization(
@@ -142,7 +142,7 @@ Deno.test('Organizations - createOrganization with an idempotency key includes i
 
   const headers = fetchHeaders();
   assertEquals(headers?.['Idempotency-Key'], 'the-idempotency-key');
-  
+
   assertEquals(fetchBody(), {
     domains: ['example.com'],
     name: 'Test Organization',
@@ -151,7 +151,7 @@ Deno.test('Organizations - createOrganization with an idempotency key includes i
 
 Deno.test('Organizations - createOrganization with valid payload and domains creates an organization', async () => {
   setup();
-  
+
   fetchOnce(createOrganization, { status: 201 });
 
   const subject = await workos.organizations.createOrganization({
@@ -170,7 +170,7 @@ Deno.test('Organizations - createOrganization with valid payload and domains cre
 
 Deno.test('Organizations - createOrganization with valid payload and domain_data creates an organization', async () => {
   setup();
-  
+
   fetchOnce(createOrganization, { status: 201 });
 
   const subject = await workos.organizations.createOrganization({
@@ -191,7 +191,7 @@ Deno.test('Organizations - createOrganization with valid payload and domain_data
 
 Deno.test('Organizations - createOrganization adds metadata to the request', async () => {
   setup();
-  
+
   fetchOnce(createOrganization, { status: 201 });
 
   await workos.organizations.createOrganization({
@@ -205,7 +205,7 @@ Deno.test('Organizations - createOrganization adds metadata to the request', asy
 
 Deno.test('Organizations - createOrganization with an invalid payload returns an error', async () => {
   setup();
-  
+
   fetchOnce(createOrganizationInvalid, {
     status: 409,
     headers: { 'X-Request-ID': 'a-request-id' },
@@ -222,7 +222,7 @@ Deno.test('Organizations - createOrganization with an invalid payload returns an
     assertEquals(err instanceof Error, true);
     assertEquals(err.message.includes('An Organization with the domain example.com already exists.'), true);
   }
-  
+
   assertEquals(fetchBody(), {
     domains: ['example.com'],
     name: 'Test Organization',
@@ -232,7 +232,7 @@ Deno.test('Organizations - createOrganization with an invalid payload returns an
 // Organizations - getOrganization
 Deno.test('Organizations - getOrganization requests an Organization', async () => {
   setup();
-  
+
   fetchOnce(getOrganization);
   const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
 
@@ -242,7 +242,7 @@ Deno.test('Organizations - getOrganization requests an Organization', async () =
 
   const url = fetchURL();
   assertEquals(url?.includes('/organizations/org_01EHT88Z8J8795GZNQ4ZP1J81T'), true);
-  
+
   assertEquals(subject.id, 'org_01EHT88Z8J8795GZNQ4ZP1J81T');
   assertEquals(subject.name, 'Test Organization 3');
   assertEquals(subject.allowProfilesOutsideOrganization, false);
@@ -261,7 +261,7 @@ Deno.test('Organizations - getOrganization requests an Organization', async () =
 // Organizations - getOrganizationByExternalId
 Deno.test('Organizations - getOrganizationByExternalId sends request', async () => {
   setup();
-  
+
   const externalId = 'user_external_id';
   const apiResponse = {
     ...getOrganization,
@@ -273,7 +273,7 @@ Deno.test('Organizations - getOrganizationByExternalId sends request', async () 
 
   const url = fetchURL();
   assertEquals(url?.includes(`/organizations/external_id/${externalId}`), true);
-  
+
   assertEquals(organization.id, apiResponse.id);
   assertEquals(organization.externalId, apiResponse.external_id);
 });
@@ -281,7 +281,7 @@ Deno.test('Organizations - getOrganizationByExternalId sends request', async () 
 // Organizations - deleteOrganization
 Deno.test('Organizations - deleteOrganization sends request to delete an Organization', async () => {
   setup();
-  
+
   fetchOnce();
   const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
 
@@ -296,7 +296,7 @@ Deno.test('Organizations - deleteOrganization sends request to delete an Organiz
 // Organizations - updateOrganization
 Deno.test('Organizations - updateOrganization with valid payload and domains updates an organization', async () => {
   setup();
-  
+
   fetchOnce(updateOrganization, { status: 201 });
 
   const subject = await workos.organizations.updateOrganization({
@@ -316,7 +316,7 @@ Deno.test('Organizations - updateOrganization with valid payload and domains upd
 
 Deno.test('Organizations - updateOrganization with valid payload and domain_data updates an organization', async () => {
   setup();
-  
+
   fetchOnce(updateOrganization, { status: 201 });
 
   const subject = await workos.organizations.updateOrganization({
@@ -336,7 +336,7 @@ Deno.test('Organizations - updateOrganization with valid payload and domain_data
 
 Deno.test('Organizations - updateOrganization adds metadata to the request', async () => {
   setup();
-  
+
   fetchOnce(updateOrganization, { status: 201 });
 
   await workos.organizations.updateOrganization({
@@ -351,7 +351,7 @@ Deno.test('Organizations - updateOrganization adds metadata to the request', asy
 
 Deno.test('Organizations - updateOrganization with stripeCustomerId updates the Stripe customer ID', async () => {
   setup();
-  
+
   fetchOnce(setStripeCustomerId);
 
   const subject = await workos.organizations.updateOrganization({
@@ -367,7 +367,7 @@ Deno.test('Organizations - updateOrganization with stripeCustomerId updates the 
 
 Deno.test('Organizations - updateOrganization clears Stripe customer ID with null value', async () => {
   setup();
-  
+
   fetchOnce(clearStripeCustomerId);
 
   const subject = await workos.organizations.updateOrganization({
@@ -384,7 +384,7 @@ Deno.test('Organizations - updateOrganization clears Stripe customer ID with nul
 
 Deno.test('Organizations - updateOrganization with stripeCustomerId when feature is disabled returns error', async () => {
   setup();
-  
+
   fetchOnce(setStripeCustomerIdDisabled, { status: 422 });
 
   try {
@@ -407,7 +407,7 @@ Deno.test('Organizations - updateOrganization with stripeCustomerId when feature
 // Organizations - listOrganizationRoles
 Deno.test('Organizations - listOrganizationRoles returns roles for the organization', async () => {
   setup();
-  
+
   fetchOnce(listOrganizationRolesFixture);
 
   const { data, object } = await workos.organizations.listOrganizationRoles(

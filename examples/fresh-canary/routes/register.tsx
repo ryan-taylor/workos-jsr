@@ -1,5 +1,5 @@
 import type { Handlers, PageProps } from '$fresh/server.ts';
-import type { FreshSessionProvider } from '../../../src/common/iron-session/fresh-session-provider.ts';
+import type { FreshSessionProvider } from 'workos/common/iron-session/fresh-session-provider.ts';
 import { type createUserSession, initUserManagement, type SESSION_OPTIONS } from '../utils/user-management.ts';
 import RegisterForm from '../islands/RegisterForm.tsx';
 

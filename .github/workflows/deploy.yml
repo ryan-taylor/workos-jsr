@@ -26,15 +26,15 @@ jobs:
 
       - name: Bundle SDK
         run: deno task bundle:sdk
-        
+
       - name: Deploy to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "workos-sdk"
-          entrypoint: "./dist/workos.js"
-          root: "."
-          import-map: "./deno.json"
-          
+          project: 'workos-sdk'
+          entrypoint: './dist/workos.js'
+          root: '.'
+          import-map: './deno.json'
+
       - name: Test module
         run: |
           echo "Testing WorkOS SDK deployment..."

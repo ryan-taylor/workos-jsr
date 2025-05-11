@@ -13,7 +13,7 @@ const mockUserRegistrationActionContext = JSON.parse(Deno.readTextFileSync('./sr
 async function makeSigHeader(payload: unknown, secret: string) {
   const timestamp = Date.now() * 1000;
   const unhashedString = `${timestamp}.${JSON.stringify(payload)}`;
-  
+
   // Use Web Crypto API
   const encoder = new TextEncoder();
   const key = await crypto.subtle.importKey(
@@ -24,20 +24,20 @@ async function makeSigHeader(payload: unknown, secret: string) {
       hash: { name: 'SHA-256' },
     },
     false,
-    ['sign']
+    ['sign'],
   );
-  
+
   const signatureBuffer = await crypto.subtle.sign(
     'hmac',
     key,
-    encoder.encode(unhashedString)
+    encoder.encode(unhashedString),
   );
-  
+
   // Convert to hex
   const signatureHash = Array.from(new Uint8Array(signatureBuffer))
-    .map(b => b.toString(16).padStart(2, '0'))
+    .map((b) => b.toString(16).padStart(2, '0'))
     .join('');
-  
+
   return `t=${timestamp}, v1=${signatureHash}`;
 }
 
@@ -113,7 +113,7 @@ Deno.test('Actions - signResponse returns a signed user registration response', 
 Deno.test('Actions - verifyHeader successfully verifies a valid header', async () => {
   const { workos, secret } = setupTest();
   const sigHeader = await makeSigHeader(mockAuthActionContext, secret);
-  
+
   try {
     await workos.actions.verifyHeader({
       payload: mockAuthActionContext,
@@ -128,7 +128,7 @@ Deno.test('Actions - verifyHeader successfully verifies a valid header', async (
 
 Deno.test('Actions - verifyHeader throws when the header is invalid', async () => {
   const { workos, secret } = setupTest();
-  
+
   try {
     await workos.actions.verifyHeader({
       payload: mockAuthActionContext,
@@ -212,19 +212,19 @@ Deno.test('Actions - constructAction returns a user registration action', async 
   // Check the action properties individually to avoid TypeScript errors
   assertEquals(action.id, '01JATCMZJY26PQ59XT9BNT0FNN');
   assertEquals(action.object, 'user_registration_action_context');
-  
+
   // Check userData
   const userData = (action as any).userData;
   assertEquals(userData.object, 'user_data');
   assertEquals(userData.email, 'jane@foocorp.com');
   assertEquals(userData.firstName, 'Jane');
   assertEquals(userData.lastName, 'Doe');
-  
+
   // Check other properties
   assertEquals(action.ipAddress, '50.141.123.10');
   assertEquals(action.userAgent, 'Mozilla/5.0');
   assertEquals(action.deviceFingerprint, 'notafingerprint');
-  
+
   // Check invitation properties
   const invitation = (action as any).invitation;
   assertEquals(invitation.object, 'invitation');

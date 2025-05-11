@@ -32,13 +32,13 @@ Instead of importing directly from Fresh, import from the compatibility barrels:
 
 ```typescript
 // ❌ Don't import directly from Fresh
-import { FreshContext } from "$fresh/server.ts";
+import { FreshContext } from '$fresh/server.ts';
 // or
-import { App } from "@fresh/core/server.ts";
+import { App } from '@fresh/core/server.ts';
 
 // ✅ Do import from the compatibility layer
-import { FreshContext } from "../src/fresh-compat/context.ts";
-import { getFreshServerModule } from "../src/fresh-compat/server.ts";
+import { FreshContext } from '../src/fresh-compat/context.ts';
+import { getFreshServerModule } from '../src/fresh-compat/server.ts';
 ```
 
 The compatibility layer provides the following modules:
@@ -56,16 +56,16 @@ The compatibility layer provides the following modules:
 Use the `makeRouter` function to create routes that work with both Fresh versions:
 
 ```typescript
-import { makeRouter } from "../src/fresh-compat/router.ts";
+import { makeRouter } from '../src/fresh-compat/router.ts';
 
 const routes = [
   {
-    pattern: "/api/users",
+    pattern: '/api/users',
     handler: (req, ctx) => {
       // Your handler code
-      return new Response("Users API");
-    }
-  }
+      return new Response('Users API');
+    },
+  },
 ];
 
 // Create a router that works with both Fresh 1.x and 2.x
@@ -77,7 +77,7 @@ const handler = await makeRouter(routes);
 Use the `wrapMw` function to create middleware that works with both Fresh versions:
 
 ```typescript
-import { wrapMw } from "../src/fresh-compat/middleware.ts";
+import { wrapMw } from '../src/fresh-compat/middleware.ts';
 
 // Create middleware that works with both Fresh 1.x and 2.x
 const authMiddleware = wrapMw(async (req, ctx) => {
@@ -91,11 +91,11 @@ const authMiddleware = wrapMw(async (req, ctx) => {
 Use the common `FreshContext` interface:
 
 ```typescript
-import { FreshContext } from "../src/fresh-compat/context.ts";
+import { FreshContext } from '../src/fresh-compat/context.ts';
 
 function handler(req: Request, ctx: FreshContext) {
   // Your handler code
-  return new Response("Hello");
+  return new Response('Hello');
 }
 ```
 
@@ -104,14 +104,14 @@ function handler(req: Request, ctx: FreshContext) {
 Use the plugin helpers for version-specific plugins:
 
 ```typescript
-import getTailwindPlugin from "../src/fresh-compat/plugins/tailwind.ts";
+import getTailwindPlugin from '../src/fresh-compat/plugins/tailwind.ts';
 
 // In your fresh.config.ts
 const tailwind = await getTailwindPlugin();
 export default {
   plugins: [
-    tailwind()
-  ]
+    tailwind(),
+  ],
 };
 ```
 
@@ -148,18 +148,18 @@ The `Fresh2` namespace includes types specific to Fresh 2.x:
 When writing code that works with both Fresh versions, import types from the compatibility layer:
 
 ```typescript
-import { Handler, RoutePattern, Route } from "../src/fresh-compat/types.ts";
-import { Fresh1, Fresh2 } from "../src/fresh-compat/types.ts";
+import { Handler, Route, RoutePattern } from '../src/fresh-compat/types.ts';
+import { Fresh1, Fresh2 } from '../src/fresh-compat/types.ts';
 
 // Define a handler that works with both versions
 const handler: Handler = (req, ctx) => {
-  return new Response("Hello");
+  return new Response('Hello');
 };
 
 // Define a route that works with both versions
 const route: Route = {
-  pattern: "/api/users",
-  handler
+  pattern: '/api/users',
+  handler,
 };
 ```
 
@@ -169,29 +169,29 @@ The type system ensures that your code is type-safe and works with both Fresh ve
 
 ### Server API Changes
 
-| Fresh 1.x | Fresh 2.x | Compatibility Solution |
-|-----------|-----------|------------------------|
+| Fresh 1.x                                          | Fresh 2.x                                     | Compatibility Solution       |
+| -------------------------------------------------- | --------------------------------------------- | ---------------------------- |
 | `import { createHandler } from "$fresh/server.ts"` | `import { App } from "@fresh/core/server.ts"` | Use `getFreshServerModule()` |
-| `createHandler(manifest)` | `new App().build()` | Use `makeRouter()` |
+| `createHandler(manifest)`                          | `new App().build()`                           | Use `makeRouter()`           |
 
 ### Middleware API Changes
 
-| Fresh 1.x | Fresh 2.x | Compatibility Solution |
-|-----------|-----------|------------------------|
-| `(req: Request, ctx: Context) => Response` | `(ctx: Context) => Response` | Use `wrapMw()` |
-| `ctx.next()` | `ctx.next()` (unchanged) | Use standard pattern |
+| Fresh 1.x                                  | Fresh 2.x                    | Compatibility Solution |
+| ------------------------------------------ | ---------------------------- | ---------------------- |
+| `(req: Request, ctx: Context) => Response` | `(ctx: Context) => Response` | Use `wrapMw()`         |
+| `ctx.next()`                               | `ctx.next()` (unchanged)     | Use standard pattern   |
 
 ### Context API Changes
 
-| Fresh 1.x | Fresh 2.x | Compatibility Solution |
-|-----------|-----------|------------------------|
+| Fresh 1.x                 | Fresh 2.x                             | Compatibility Solution              |
+| ------------------------- | ------------------------------------- | ----------------------------------- |
 | `req` property on context | No `req` property (use `ctx.request`) | Use common `FreshContext` interface |
-| `state` as generic | `state` as generic (unchanged) | Use common pattern |
+| `state` as generic        | `state` as generic (unchanged)        | Use common pattern                  |
 
 ### Plugin API Changes
 
-| Fresh 1.x | Fresh 2.x | Compatibility Solution |
-|-----------|-----------|------------------------|
+| Fresh 1.x                                           | Fresh 2.x                                                 | Compatibility Solution    |
+| --------------------------------------------------- | --------------------------------------------------------- | ------------------------- |
 | `import twindPlugin from "$fresh/plugins/twind.ts"` | `import twindPlugin from "@fresh/plugin-twindcss/mod.ts"` | Use `getTailwindPlugin()` |
 
 ## Examples of Using the Compatibility Layer
@@ -200,11 +200,11 @@ The type system ensures that your code is type-safe and works with both Fresh ve
 
 ```typescript
 // routes/api/users.ts
-import { FreshContext } from "../../src/fresh-compat/context.ts";
+import { FreshContext } from '../../src/fresh-compat/context.ts';
 
 export function handler(req: Request, ctx: FreshContext) {
-  return new Response(JSON.stringify({ users: ["Alice", "Bob"] }), {
-    headers: { "Content-Type": "application/json" }
+  return new Response(JSON.stringify({ users: ['Alice', 'Bob'] }), {
+    headers: { 'Content-Type': 'application/json' },
   });
 }
 ```
@@ -213,16 +213,16 @@ export function handler(req: Request, ctx: FreshContext) {
 
 ```typescript
 // routes/_middleware.ts
-import { wrapMw } from "../src/fresh-compat/middleware.ts";
-import { FreshContext } from "../src/fresh-compat/context.ts";
+import { wrapMw } from '../src/fresh-compat/middleware.ts';
+import { FreshContext } from '../src/fresh-compat/context.ts';
 
 export const handler = wrapMw(async (req: Request, ctx: FreshContext) => {
   // Add user to context if authenticated
-  const token = req.headers.get("Authorization")?.split(" ")[1];
+  const token = req.headers.get('Authorization')?.split(' ')[1];
   if (token) {
-    ctx.state.user = { id: "123", name: "Alice" };
+    ctx.state.user = { id: '123', name: 'Alice' };
   }
-  
+
   return await ctx.next();
 });
 ```
@@ -231,17 +231,17 @@ export const handler = wrapMw(async (req: Request, ctx: FreshContext) => {
 
 ```typescript
 // server.ts
-import { makeRouter } from "./src/fresh-compat/router.ts";
+import { makeRouter } from './src/fresh-compat/router.ts';
 
 const routes = [
   {
-    pattern: "/",
-    handler: (req, ctx) => new Response("Home page")
+    pattern: '/',
+    handler: (req, ctx) => new Response('Home page'),
   },
   {
-    pattern: "/api/data",
-    handler: (req, ctx) => new Response(JSON.stringify({ data: "value" }))
-  }
+    pattern: '/api/data',
+    handler: (req, ctx) => new Response(JSON.stringify({ data: 'value' })),
+  },
 ];
 
 const handler = await makeRouter(routes);
@@ -252,19 +252,19 @@ Deno.serve(handler);
 
 ```typescript
 // custom-router.ts
-import { Route, Fresh1, Fresh2 } from "../src/fresh-compat/types.ts";
-import { freshMajor } from "../scripts/select_fresh.ts";
+import { Fresh1, Fresh2, Route } from '../src/fresh-compat/types.ts';
+import { freshMajor } from '../scripts/select_fresh.ts';
 
 // Define routes that work with both versions
 const routes: Route[] = [
   {
-    pattern: "/api/users",
-    handler: (req, ctx) => new Response(JSON.stringify({ users: ["Alice", "Bob"] }))
+    pattern: '/api/users',
+    handler: (req, ctx) => new Response(JSON.stringify({ users: ['Alice', 'Bob'] })),
   },
   {
-    pattern: "/api/products",
-    handler: (req, ctx) => new Response(JSON.stringify({ products: ["Product A", "Product B"] }))
-  }
+    pattern: '/api/products',
+    handler: (req, ctx) => new Response(JSON.stringify({ products: ['Product A', 'Product B'] })),
+  },
 ];
 
 // Create a router based on the Fresh version
@@ -274,20 +274,20 @@ export async function createRouter() {
     const manifest: Fresh1.Manifest = {
       routes: Object.fromEntries(routes.map((route, i) => [`route${i}`, { handler: route.handler }])),
       islands: {},
-      baseUrl: import.meta.url
+      baseUrl: import.meta.url,
     };
-    
-    const { createHandler } = await import("$fresh/server.ts") as Fresh1.ServerModule;
+
+    const { createHandler } = await import('$fresh/server.ts') as Fresh1.ServerModule;
     return await createHandler(manifest);
   } else {
     // For Fresh 2.x
-    const { App } = await import("@fresh/core") as Fresh2.ServerModule;
+    const { App } = await import('@fresh/core') as Fresh2.ServerModule;
     const app = new App();
-    
+
     for (const route of routes) {
       app.all(route.pattern, route.handler);
     }
-    
+
     return app.build();
   }
 }

@@ -8,6 +8,7 @@ This document outlines the configuration for our Continuous Integration (CI) mat
 - **Fresh Canary**: The latest development version of Fresh, allowing us to catch compatibility issues early.
 
 By testing against both versions, we can:
+
 1. Ensure our code works with the current stable release
 2. Proactively identify and address compatibility issues with upcoming Fresh releases
 3. Maintain backwards compatibility while adopting new features
@@ -25,19 +26,19 @@ fresh-stable:
   steps:
     - name: Checkout code
       uses: actions/checkout@v3
-    
+
     - name: Setup Deno
       uses: denoland/setup-deno@v1
       with:
         deno-version: v1.x
-    
+
     - name: Cache dependencies
       uses: actions/cache@v3
       with:
         path: ~/.cache/deno
         key: ${{ runner.os }}-deno-${{ hashFiles('deno.json') }}
         restore-keys: ${{ runner.os }}-deno-
-    
+
     - name: Run tests with stable import map
       run: deno test -A --import-map=import_map.json tests_deno/
 ```
@@ -53,19 +54,19 @@ fresh-canary:
   steps:
     - name: Checkout code
       uses: actions/checkout@v3
-    
+
     - name: Setup Deno
       uses: denoland/setup-deno@v1
       with:
         deno-version: v1.x
-    
+
     - name: Cache dependencies
       uses: actions/cache@v3
       with:
         path: ~/.cache/deno
         key: ${{ runner.os }}-deno-canary-${{ hashFiles('deno.json') }}
         restore-keys: ${{ runner.os }}-deno-canary-
-    
+
     - name: Run tests with canary import map
       run: deno test -A --import-map=import_map.canary.json tests_deno/
 ```
@@ -79,9 +80,9 @@ name: CI Matrix Testing
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   fresh-stable:
@@ -90,19 +91,19 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
+
       - name: Setup Deno
         uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
-      
+
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
           path: ~/.cache/deno
           key: ${{ runner.os }}-deno-${{ hashFiles('deno.json') }}
           restore-keys: ${{ runner.os }}-deno-
-      
+
       - name: Run tests with stable import map
         run: deno test -A --import-map=import_map.json tests_deno/
 
@@ -112,18 +113,19 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
+
       - name: Setup Deno
         uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
-      
+
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
           path: ~/.cache/deno
           key: ${{ runner.os }}-deno-canary-${{ hashFiles('deno.json') }}
           restore-keys: ${{ runner.os }}-deno-canary-
-      
+
       - name: Run tests with canary import map
         run: deno test -A --import-map=import_map.canary.json tests_deno/
+```

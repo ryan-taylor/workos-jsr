@@ -16,13 +16,13 @@ function setup() {
 // FGA - check
 Deno.test('FGA - check makes check request', async () => {
   setup();
-  
+
   fetchOnce(JSON.stringify({
     result: 'authorized',
     is_implicit: false,
     warrant_token: 'abc',
   }));
-  
+
   const checkResult = await workos.fga.check({
     checks: [
       {
@@ -38,7 +38,7 @@ Deno.test('FGA - check makes check request', async () => {
       },
     ],
   });
-  
+
   const url = fetchURL();
   assertEquals(typeof url, 'string');
   assertEquals(url?.includes('/fga/v1/check'), true);
@@ -52,19 +52,19 @@ Deno.test('FGA - check makes check request', async () => {
 // FGA - createResource
 Deno.test('FGA - createResource creates resource', async () => {
   setup();
-  
+
   fetchOnce(JSON.stringify({
     resource_type: 'role',
     resource_id: 'admin',
   }));
-  
+
   const resource = await workos.fga.createResource({
     resource: {
       resourceType: 'role',
       resourceId: 'admin',
     },
   });
-  
+
   const url = fetchURL();
   assertEquals(typeof url, 'string');
   assertEquals(url?.includes('/fga/v1/resources'), true);
@@ -76,7 +76,7 @@ Deno.test('FGA - createResource creates resource', async () => {
 
 Deno.test('FGA - createResource creates resource with metadata', async () => {
   setup();
-  
+
   fetchOnce(JSON.stringify({
     resource_type: 'role',
     resource_id: 'admin',
@@ -84,7 +84,7 @@ Deno.test('FGA - createResource creates resource with metadata', async () => {
       description: 'The admin role',
     },
   }));
-  
+
   const resource = await workos.fga.createResource({
     resource: {
       resourceType: 'role',
@@ -94,7 +94,7 @@ Deno.test('FGA - createResource creates resource with metadata', async () => {
       description: 'The admin role',
     },
   });
-  
+
   const url = fetchURL();
   assertEquals(typeof url, 'string');
   assertEquals(url?.includes('/fga/v1/resources'), true);
@@ -110,17 +110,17 @@ Deno.test('FGA - createResource creates resource with metadata', async () => {
 // FGA - getResource
 Deno.test('FGA - getResource gets resource', async () => {
   setup();
-  
+
   fetchOnce(JSON.stringify({
     resource_type: 'role',
     resource_id: 'admin',
   }));
-  
+
   const resource = await workos.fga.getResource({
     resourceType: 'role',
     resourceId: 'admin',
   });
-  
+
   const url = fetchURL();
   assertEquals(typeof url, 'string');
   assertEquals(url?.includes('/fga/v1/resources/role/admin'), true);
@@ -133,7 +133,7 @@ Deno.test('FGA - getResource gets resource', async () => {
 // FGA - listResources
 Deno.test('FGA - listResources lists resources', async () => {
   setup();
-  
+
   fetchOnce(JSON.stringify({
     data: [
       {
@@ -150,9 +150,9 @@ Deno.test('FGA - listResources lists resources', async () => {
       after: null,
     },
   }));
-  
+
   const { data: resources } = await workos.fga.listResources();
-  
+
   const url = fetchURL();
   assertEquals(typeof url, 'string');
   assertEquals(url?.includes('/fga/v1/resources'), true);
@@ -170,7 +170,7 @@ Deno.test('FGA - listResources lists resources', async () => {
 
 Deno.test('FGA - listResources sends correct params when filtering', async () => {
   setup();
-  
+
   fetchOnce(JSON.stringify({
     data: [
       {
@@ -187,15 +187,15 @@ Deno.test('FGA - listResources sends correct params when filtering', async () =>
       after: null,
     },
   }));
-  
+
   await workos.fga.listResources({
     resourceType: 'role',
   });
-  
+
   const url = fetchURL();
   assertEquals(typeof url, 'string');
   assertEquals(url?.includes('/fga/v1/resources'), true);
-  
+
   const params = fetchSearchParams();
   assertEquals(params.resource_type, 'role');
   assertEquals(params.order, 'desc');
@@ -204,14 +204,14 @@ Deno.test('FGA - listResources sends correct params when filtering', async () =>
 // FGA - deleteResource
 Deno.test('FGA - deleteResource should delete resource', async () => {
   setup();
-  
+
   fetchOnce();
-  
+
   const response = await workos.fga.deleteResource({
     resourceType: 'role',
     resourceId: 'admin',
   });
-  
+
   const url = fetchURL();
   assertEquals(typeof url, 'string');
   assertEquals(url?.includes('/fga/v1/resources/role/admin'), true);
@@ -221,7 +221,7 @@ Deno.test('FGA - deleteResource should delete resource', async () => {
 // FGA - batchWriteResources
 Deno.test('FGA - batchWriteResources batch create resources', async () => {
   setup();
-  
+
   fetchOnce(JSON.stringify({
     data: [
       {
@@ -241,7 +241,7 @@ Deno.test('FGA - batchWriteResources batch create resources', async () => {
       },
     ],
   }));
-  
+
   const createdResources = await workos.fga.batchWriteResources({
     op: ResourceOp.Create,
     resources: [
@@ -268,7 +268,7 @@ Deno.test('FGA - batchWriteResources batch create resources', async () => {
       },
     ],
   });
-  
+
   const url = fetchURL();
   assertEquals(typeof url, 'string');
   assertEquals(url?.includes('/fga/v1/resources/batch'), true);
@@ -293,7 +293,7 @@ Deno.test('FGA - batchWriteResources batch create resources', async () => {
 
 Deno.test('FGA - batchWriteResources batch delete resources', async () => {
   setup();
-  
+
   fetchOnce(JSON.stringify({
     data: [
       {
@@ -310,7 +310,7 @@ Deno.test('FGA - batchWriteResources batch delete resources', async () => {
       },
     ],
   }));
-  
+
   const deletedResources = await workos.fga.batchWriteResources({
     op: ResourceOp.Delete,
     resources: [
@@ -337,7 +337,7 @@ Deno.test('FGA - batchWriteResources batch delete resources', async () => {
       },
     ],
   });
-  
+
   const url = fetchURL();
   assertEquals(typeof url, 'string');
   assertEquals(url?.includes('/fga/v1/resources/batch'), true);
@@ -360,11 +360,11 @@ Deno.test('FGA - batchWriteResources batch delete resources', async () => {
 // FGA - writeWarrant
 Deno.test('FGA - writeWarrant should create warrant with no op', async () => {
   setup();
-  
+
   fetchOnce(JSON.stringify({
     warrant_token: 'some_token',
   }));
-  
+
   const warrantToken = await workos.fga.writeWarrant({
     resource: {
       resourceType: 'role',
@@ -376,11 +376,11 @@ Deno.test('FGA - writeWarrant should create warrant with no op', async () => {
       resourceId: 'user_123',
     },
   });
-  
+
   const url = fetchURL();
   assertEquals(typeof url, 'string');
   assertEquals(url?.includes('/fga/v1/warrants'), true);
-  
+
   const body = fetchBody();
   assertEquals(body, {
     resource_type: 'role',
@@ -398,11 +398,11 @@ Deno.test('FGA - writeWarrant should create warrant with no op', async () => {
 
 Deno.test('FGA - writeWarrant should create warrant with create op', async () => {
   setup();
-  
+
   fetchOnce(JSON.stringify({
     warrant_token: 'some_token',
   }));
-  
+
   const warrantToken = await workos.fga.writeWarrant({
     op: WarrantOp.Create,
     resource: {
@@ -415,11 +415,11 @@ Deno.test('FGA - writeWarrant should create warrant with create op', async () =>
       resourceId: 'user_123',
     },
   });
-  
+
   const url = fetchURL();
   assertEquals(typeof url, 'string');
   assertEquals(url?.includes('/fga/v1/warrants'), true);
-  
+
   const body = fetchBody();
   assertEquals(body, {
     op: 'create',
@@ -438,11 +438,11 @@ Deno.test('FGA - writeWarrant should create warrant with create op', async () =>
 
 Deno.test('FGA - writeWarrant should delete warrant with delete op', async () => {
   setup();
-  
+
   fetchOnce(JSON.stringify({
     warrant_token: 'some_token',
   }));
-  
+
   const warrantToken = await workos.fga.writeWarrant({
     op: WarrantOp.Delete,
     resource: {
@@ -455,11 +455,11 @@ Deno.test('FGA - writeWarrant should delete warrant with delete op', async () =>
       resourceId: 'user_123',
     },
   });
-  
+
   const url = fetchURL();
   assertEquals(typeof url, 'string');
   assertEquals(url?.includes('/fga/v1/warrants'), true);
-  
+
   const body = fetchBody();
   assertEquals(body, {
     op: 'delete',
@@ -479,11 +479,11 @@ Deno.test('FGA - writeWarrant should delete warrant with delete op', async () =>
 // FGA - batchWriteWarrants
 Deno.test('FGA - batchWriteWarrants should create warrants with no op or create op and delete warrants with delete op', async () => {
   setup();
-  
+
   fetchOnce(JSON.stringify({
     warrant_token: 'some_token',
   }));
-  
+
   const warrantToken = await workos.fga.batchWriteWarrants([
     {
       resource: {
@@ -521,11 +521,11 @@ Deno.test('FGA - batchWriteWarrants should create warrants with no op or create 
       },
     },
   ]);
-  
+
   const url = fetchURL();
   assertEquals(typeof url, 'string');
   assertEquals(url?.includes('/fga/v1/warrants'), true);
-  
+
   const body = fetchBody();
   assertEquals(body, [
     {
@@ -566,7 +566,7 @@ Deno.test('FGA - batchWriteWarrants should create warrants with no op or create 
 // FGA - listWarrants
 Deno.test('FGA - listWarrants should list warrants', async () => {
   setup();
-  
+
   fetchOnce(JSON.stringify({
     data: [
       {
@@ -594,9 +594,9 @@ Deno.test('FGA - listWarrants should list warrants', async () => {
       after: null,
     },
   }));
-  
+
   const { data: warrants } = await workos.fga.listWarrants();
-  
+
   const url = fetchURL();
   assertEquals(typeof url, 'string');
   assertEquals(url?.includes('/fga/v1/warrants'), true);
@@ -625,7 +625,7 @@ Deno.test('FGA - listWarrants should list warrants', async () => {
 
 Deno.test('FGA - listWarrants sends correct params when filtering', async () => {
   setup();
-  
+
   fetchOnce(JSON.stringify({
     data: [
       {
@@ -643,16 +643,16 @@ Deno.test('FGA - listWarrants sends correct params when filtering', async () => 
       after: null,
     },
   }));
-  
+
   await workos.fga.listWarrants({
     subjectType: 'user',
     subjectId: 'user_123',
   });
-  
+
   const url = fetchURL();
   assertEquals(typeof url, 'string');
   assertEquals(url?.includes('/fga/v1/warrants'), true);
-  
+
   const params = fetchSearchParams();
   assertEquals(params.subject_type, 'user');
   assertEquals(params.subject_id, 'user_123');
@@ -662,7 +662,7 @@ Deno.test('FGA - listWarrants sends correct params when filtering', async () => 
 // FGA - query
 Deno.test('FGA - query makes query request', async () => {
   setup();
-  
+
   fetchOnce(JSON.stringify({
     data: [
       {
@@ -685,11 +685,11 @@ Deno.test('FGA - query makes query request', async () => {
       after: null,
     },
   }));
-  
+
   const { data: queryResults } = await workos.fga.query({
     q: 'select role where user:user_123 is member',
   });
-  
+
   const url = fetchURL();
   assertEquals(typeof url, 'string');
   assertEquals(url?.includes('/fga/v1/query'), true);
@@ -713,7 +713,7 @@ Deno.test('FGA - query makes query request', async () => {
 
 Deno.test('FGA - query sends correct params and options', async () => {
   setup();
-  
+
   fetchOnce(JSON.stringify({
     data: [
       {
@@ -736,7 +736,7 @@ Deno.test('FGA - query sends correct params and options', async () => {
       after: null,
     },
   }));
-  
+
   await workos.fga.query(
     {
       q: 'select role where user:user_123 is member',
@@ -746,15 +746,15 @@ Deno.test('FGA - query sends correct params and options', async () => {
       warrantToken: 'some_token',
     },
   );
-  
+
   const url = fetchURL();
   assertEquals(typeof url, 'string');
   assertEquals(url?.includes('/fga/v1/query'), true);
-  
+
   const params = fetchSearchParams();
   assertEquals(params.q, 'select role where user:user_123 is member');
   assertEquals(params.order, 'asc');
-  
+
   const headers = fetchHeaders();
   if (headers) {
     assertEquals(headers['Warrant-Token'], 'some_token');

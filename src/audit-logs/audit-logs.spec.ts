@@ -62,14 +62,14 @@ function setupTest() {
 Deno.test('AuditLogs - createEvent sends the correct data to the API', async () => {
   // Create a WorkOS instance
   const workos = setupTest();
-  
+
   // Mock the post method to return a successful response
   const originalPost = workos.post;
   let postCalled = false;
   let postPath = '';
   let postData: any = null;
   let postOptions: any = null;
-  
+
   // Use type assertion to bypass TypeScript's type checking for the mock
   workos.post = ((path: string, data: any, options = {}) => {
     postCalled = true;
@@ -78,13 +78,13 @@ Deno.test('AuditLogs - createEvent sends the correct data to the API', async () 
     postOptions = options;
     return Promise.resolve({ data: { success: true } });
   }) as typeof workos.post;
-  
+
   try {
     // Call the method being tested
     await workos.auditLogs.createEvent('org_123', event, {
       idempotencyKey: 'the-idempotency-key',
     });
-    
+
     // Verify the post method was called with the correct arguments
     assertEquals(postCalled, true);
     assertEquals(postPath, '/audit_logs/events');
@@ -99,10 +99,10 @@ Deno.test('AuditLogs - createEvent sends the correct data to the API', async () 
 Deno.test('AuditLogs - createEvent handles API errors correctly', async () => {
   // Create a WorkOS instance
   const workos = setupTest();
-  
+
   // Mock the post method to throw an error
   const originalPost = workos.post;
-  
+
   // Use type assertion to bypass TypeScript's type checking for the mock
   workos.post = (() => {
     throw new BadRequestException({
@@ -117,7 +117,7 @@ Deno.test('AuditLogs - createEvent handles API errors correctly', async () => {
       requestID: 'a-request-id',
     });
   }) as typeof workos.post;
-  
+
   try {
     // Call the method and expect it to throw
     let error;
@@ -126,7 +126,7 @@ Deno.test('AuditLogs - createEvent handles API errors correctly', async () => {
     } catch (e) {
       error = e;
     }
-    
+
     // Verify the error
     assertInstanceOf(error, BadRequestException);
   } finally {
@@ -138,13 +138,13 @@ Deno.test('AuditLogs - createEvent handles API errors correctly', async () => {
 Deno.test('AuditLogs - createExport sends the correct data to the API', async () => {
   // Create a WorkOS instance
   const workos = setupTest();
-  
+
   // Mock the post method to return a successful response
   const originalPost = workos.post;
   let postCalled = false;
   let postPath = '';
   let postData: any = null;
-  
+
   const timestamp = new Date().toISOString();
   const mockResponse = {
     object: 'audit_log_export',
@@ -154,7 +154,7 @@ Deno.test('AuditLogs - createExport sends the correct data to the API', async ()
     created_at: timestamp,
     updated_at: timestamp,
   };
-  
+
   // Use type assertion to bypass TypeScript's type checking for the mock
   workos.post = ((path: string, data: any) => {
     postCalled = true;
@@ -162,22 +162,22 @@ Deno.test('AuditLogs - createExport sends the correct data to the API', async ()
     postData = data;
     return Promise.resolve({ data: mockResponse });
   }) as typeof workos.post;
-  
+
   const options = {
     organizationId: 'org_123',
     rangeStart: new Date(),
     rangeEnd: new Date(),
   };
-  
+
   try {
     // Call the method being tested
     const result = await workos.auditLogs.createExport(options);
-    
+
     // Verify the post method was called with the correct arguments
     assertEquals(postCalled, true);
     assertEquals(postPath, '/audit_logs/exports');
     assertEquals(postData.organization_id, options.organizationId);
-    
+
     // Verify the result
     assertEquals(result.object, 'audit_log_export');
     assertEquals(result.id, 'audit_log_export_1234');
@@ -191,12 +191,12 @@ Deno.test('AuditLogs - createExport sends the correct data to the API', async ()
 Deno.test('AuditLogs - getExport sends the correct data to the API', async () => {
   // Create a WorkOS instance
   const workos = setupTest();
-  
+
   // Mock the get method to return a successful response
   const originalGet = workos.get;
   let getCalled = false;
   let getPath = '';
-  
+
   const timestamp = new Date().toISOString();
   const mockResponse = {
     object: 'audit_log_export',
@@ -206,22 +206,22 @@ Deno.test('AuditLogs - getExport sends the correct data to the API', async () =>
     created_at: timestamp,
     updated_at: timestamp,
   };
-  
+
   // Use type assertion to bypass TypeScript's type checking for the mock
   workos.get = ((path: string) => {
     getCalled = true;
     getPath = path;
     return Promise.resolve({ data: mockResponse });
   }) as typeof workos.get;
-  
+
   try {
     // Call the method being tested
     const result = await workos.auditLogs.getExport('audit_log_export_1234');
-    
+
     // Verify the get method was called with the correct arguments
     assertEquals(getCalled, true);
     assertEquals(getPath, '/audit_logs/exports/audit_log_export_1234');
-    
+
     // Verify the result
     assertEquals(result.object, 'audit_log_export');
     assertEquals(result.id, 'audit_log_export_1234');
@@ -235,13 +235,13 @@ Deno.test('AuditLogs - getExport sends the correct data to the API', async () =>
 Deno.test('AuditLogs - createSchema sends the correct data to the API', async () => {
   // Create a WorkOS instance
   const workos = setupTest();
-  
+
   // Mock the post method to return a successful response
   const originalPost = workos.post;
   let postCalled = false;
   let postPath = '';
   let postOptions: any = null;
-  
+
   const time = new Date().toISOString();
   const mockResponse = {
     object: 'audit_log_schema',
@@ -282,7 +282,7 @@ Deno.test('AuditLogs - createSchema sends the correct data to the API', async ()
     },
     created_at: time,
   };
-  
+
   // Use type assertion to bypass TypeScript's type checking for the mock
   workos.post = ((path: string, _data: any, options = {}) => {
     postCalled = true;
@@ -290,18 +290,18 @@ Deno.test('AuditLogs - createSchema sends the correct data to the API', async ()
     postOptions = options;
     return Promise.resolve({ data: mockResponse });
   }) as typeof workos.post;
-  
+
   try {
     // Call the method being tested
     const result = await workos.auditLogs.createSchema(schema, {
       idempotencyKey: 'the-idempotency-key',
     });
-    
+
     // Verify the post method was called with the correct arguments
     assertEquals(postCalled, true);
     assertEquals(postPath, '/audit_logs/actions/user.logged_in/schemas');
     assertEquals(postOptions.idempotencyKey, 'the-idempotency-key');
-    
+
     // Verify the result
     assertEquals(result.object, 'audit_log_schema');
     assertEquals(result.version, 1);
@@ -314,13 +314,13 @@ Deno.test('AuditLogs - createSchema sends the correct data to the API', async ()
 Deno.test('AuditLogs - createSchema handles requests without metadata', async () => {
   // Create a WorkOS instance
   const workos = setupTest();
-  
+
   // Mock the post method to return a successful response
   const originalPost = workos.post;
   let postCalled = false;
   let postPath = '';
   let postData: any = null;
-  
+
   const time = new Date().toISOString();
   const mockResponse = {
     object: 'audit_log_schema',
@@ -350,7 +350,7 @@ Deno.test('AuditLogs - createSchema handles requests without metadata', async ()
     },
     created_at: time,
   };
-  
+
   // Use type assertion to bypass TypeScript's type checking for the mock
   workos.post = ((path: string, data: any) => {
     postCalled = true;
@@ -358,16 +358,16 @@ Deno.test('AuditLogs - createSchema handles requests without metadata', async ()
     postData = data;
     return Promise.resolve({ data: mockResponse });
   }) as typeof workos.post;
-  
+
   try {
     // Call the method being tested
     const result = await workos.auditLogs.createSchema(schemaWithoutMetadata);
-    
+
     // Verify the post method was called with the correct arguments
     assertEquals(postCalled, true);
     assertEquals(postPath, '/audit_logs/actions/user.logged_in/schemas');
     assertEquals(postData.metadata, undefined);
-    
+
     // Verify the result
     assertEquals(result.object, 'audit_log_schema');
     assertEquals(result.version, 1);

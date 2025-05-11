@@ -1,4 +1,4 @@
-import type { ListResourcesOptions, SerializedListResourcesOptions } from '../interfaces.ts.ts';
+import type { ListResourcesOptions, SerializedListResourcesOptions } from '../interfaces.ts';
 
 export const serializeListResourceOptions = (
   options: ListResourcesOptions,

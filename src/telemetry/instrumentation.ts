@@ -5,11 +5,11 @@
  * and modules with telemetry.
  */
 
-import { SpanStatus, telemetry } from './telemetry-manager.ts.ts';
-import type { WorkOS } from '../workos.ts.ts';
-import type { SSO } from '../sso/sso.ts.ts';
-import type { DirectorySync } from '../directory-sync/directory-sync.ts.ts';
-import type { UserManagement } from '../user-management/user-management.ts.ts';
+import { SpanStatus, telemetry } from './telemetry-manager.ts';
+import type { WorkOS } from '../workos.ts';
+import type { SSO } from '../sso/sso.ts';
+import type { DirectorySync } from '../directory-sync/directory-sync.ts';
+import type { UserManagement } from '../user-management/user-management.ts';
 
 /**
  * Instruments HTTP methods on the WorkOS class with telemetry

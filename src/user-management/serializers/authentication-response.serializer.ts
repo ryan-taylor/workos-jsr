@@ -1,6 +1,6 @@
-import type { AuthenticationResponse, AuthenticationResponseResponse } from '../interfaces.ts.ts';
-import { deserializeOauthTokens } from './oauth-tokens.serializer.ts.ts';
-import { deserializeUser } from './user.serializer.ts.ts';
+import type { AuthenticationResponse, AuthenticationResponseResponse } from '../interfaces.ts';
+import { deserializeOauthTokens } from './oauth-tokens.serializer.ts';
+import { deserializeUser } from './user.serializer.ts';
 
 export const deserializeAuthenticationResponse = (
   authenticationResponse: AuthenticationResponseResponse,

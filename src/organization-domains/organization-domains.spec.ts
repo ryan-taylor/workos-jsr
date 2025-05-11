@@ -17,7 +17,7 @@ function setup() {
 // OrganizationDomains - get
 Deno.test('OrganizationDomains - requests a verified Organization Domain', async () => {
   setup();
-  
+
   fetchOnce(getOrganizationDomainVerified);
 
   const subject = await workos.organizationDomains.get(
@@ -28,7 +28,7 @@ Deno.test('OrganizationDomains - requests a verified Organization Domain', async
   assertEquals(
     url?.includes('/organization_domains/org_domain_01HCZRAP3TPQ0X0DKJHR32TATG'),
     true,
-    `URL ${url} should contain the organization domain ID`
+    `URL ${url} should contain the organization domain ID`,
   );
   assertEquals(subject.id, 'org_domain_01HCZRAP3TPQ0X0DKJHR32TATG');
   assertEquals(subject.domain, 'workos.com');
@@ -40,7 +40,7 @@ Deno.test('OrganizationDomains - requests a verified Organization Domain', async
 
 Deno.test('OrganizationDomains - requests a pending Organization Domain', async () => {
   setup();
-  
+
   fetchOnce(getOrganizationDomainPending);
 
   const subject = await workos.organizationDomains.get(
@@ -51,7 +51,7 @@ Deno.test('OrganizationDomains - requests a pending Organization Domain', async 
   assertEquals(
     url?.includes('/organization_domains/org_domain_01HD50K7EPWCMNPGMKXKKE14XT'),
     true,
-    `URL ${url} should contain the organization domain ID`
+    `URL ${url} should contain the organization domain ID`,
   );
   assertEquals(subject.id, 'org_domain_01HD50K7EPWCMNPGMKXKKE14XT');
   assertEquals(subject.domain, 'workos.com');
@@ -64,7 +64,7 @@ Deno.test('OrganizationDomains - requests a pending Organization Domain', async 
 // OrganizationDomains - verify
 Deno.test('OrganizationDomains - start Organization Domain verification flow', async () => {
   setup();
-  
+
   fetchOnce(getOrganizationDomainPending);
 
   const subject = await workos.organizationDomains.verify(
@@ -75,7 +75,7 @@ Deno.test('OrganizationDomains - start Organization Domain verification flow', a
   assertEquals(
     url?.includes('/organization_domains/org_domain_01HD50K7EPWCMNPGMKXKKE14XT/verify'),
     true,
-    `URL ${url} should contain the organization domain verify endpoint`
+    `URL ${url} should contain the organization domain verify endpoint`,
   );
   assertEquals(subject.id, 'org_domain_01HD50K7EPWCMNPGMKXKKE14XT');
   assertEquals(subject.domain, 'workos.com');
@@ -88,7 +88,7 @@ Deno.test('OrganizationDomains - start Organization Domain verification flow', a
 // OrganizationDomains - create
 Deno.test('OrganizationDomains - creates an Organization Domain', async () => {
   setup();
-  
+
   fetchOnce(getOrganizationDomainPending);
 
   const subject = await workos.organizationDomains.create({
@@ -100,9 +100,9 @@ Deno.test('OrganizationDomains - creates an Organization Domain', async () => {
   assertEquals(
     url?.includes('/organization_domains'),
     true,
-    `URL ${url} should contain the organization domains endpoint`
+    `URL ${url} should contain the organization domains endpoint`,
   );
-  
+
   const body = fetchBody();
   assertEquals(body, {
     domain: 'workos.com',

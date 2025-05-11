@@ -16,7 +16,7 @@ const userFixture = {
   'email_verified': true,
   'profile_picture_url': 'https://example.com/profile_picture.jpg',
   'last_sign_in_at': '2023-07-18T02:07:19.911Z',
-  'metadata': { 'key': 'value' }
+  'metadata': { 'key': 'value' },
 };
 
 const listUsersFixture = {
@@ -25,13 +25,13 @@ const listUsersFixture = {
     {
       'object': 'user',
       'id': 'user_01H5JQDV7R7ATEYZDEG0W5PRYS',
-      'email': 'test01@example.com'
-    }
+      'email': 'test01@example.com',
+    },
   ],
   'list_metadata': {
     'before': null,
-    'after': null
-  }
+    'after': null,
+  },
 };
 
 const userId = 'user_01H5JQDV7R7ATEYZDEG0W5PRYS';
@@ -48,10 +48,10 @@ function setup() {
 // UserManagement - getUser sends a Get User request
 Deno.test('UserManagement - getUser sends a Get User request', async () => {
   const workos = setup();
-  
+
   fetchOnce(userFixture);
   const user = await workos.userManagement.getUser(userId);
-  
+
   assertEquals(fetchURL()?.includes(`/user_management/users/${userId}`), true);
   assertEquals(user.object, 'user');
   assertEquals(user.id, 'user_01H5JQDV7R7ATEYZDEG0W5PRYS');
@@ -66,7 +66,7 @@ Deno.test('UserManagement - getUser sends a Get User request', async () => {
 // UserManagement - getUserByExternalId sends a Get User request
 Deno.test('UserManagement - getUserByExternalId sends a Get User request', async () => {
   const workos = setup();
-  
+
   const externalId = 'user_external_id';
   fetchOnce({ ...userFixture, external_id: externalId });
 
@@ -86,10 +86,10 @@ Deno.test('UserManagement - getUserByExternalId sends a Get User request', async
 // UserManagement - listUsers lists users
 Deno.test('UserManagement - listUsers lists users', async () => {
   const workos = setup();
-  
+
   fetchOnce(listUsersFixture);
   const userList = await workos.userManagement.listUsers();
-  
+
   assertEquals(fetchURL()?.includes('/user_management/users'), true);
   assertEquals(userList.object, 'list');
   assertEquals(userList.data[0].object, 'user');
@@ -101,7 +101,7 @@ Deno.test('UserManagement - listUsers lists users', async () => {
 // UserManagement - listUsers sends the correct params when filtering
 Deno.test('UserManagement - listUsers sends the correct params when filtering', async () => {
   const workos = setup();
-  
+
   fetchOnce(listUsersFixture);
   await workos.userManagement.listUsers({
     email: 'foo@example.com',
@@ -121,7 +121,7 @@ Deno.test('UserManagement - listUsers sends the correct params when filtering', 
 // UserManagement - createUser sends a Create User request
 Deno.test('UserManagement - createUser sends a Create User request', async () => {
   const workos = setup();
-  
+
   fetchOnce(userFixture);
   const user = await workos.userManagement.createUser({
     email: 'test01@example.com',
@@ -145,7 +145,7 @@ Deno.test('UserManagement - createUser sends a Create User request', async () =>
 // UserManagement - createUser adds metadata to the request
 Deno.test('UserManagement - createUser adds metadata to the request', async () => {
   const workos = setup();
-  
+
   fetchOnce(userFixture);
   await workos.userManagement.createUser({
     email: 'test01@example.com',
@@ -169,7 +169,7 @@ Deno.test('UserManagement - getAuthorizationUrl with screenHint generates an aut
 
   const expectedUrl = 'https://api.workos.com/user_management/authorize?client_id=proj_123&provider=authkit&' +
     'redirect_uri=example.com%2Fauth%2Fworkos%2Fcallback&response_type=code&screen_hint=sign-up';
-  
+
   assertEquals(url, expectedUrl);
 });
 
@@ -188,7 +188,7 @@ Deno.test('UserManagement - getAuthorizationUrl with code_challenge and code_cha
   const expectedUrl = 'https://api.workos.com/user_management/authorize?client_id=proj_123&' +
     'code_challenge=code_challenge_value&code_challenge_method=S256&provider=authkit&' +
     'redirect_uri=example.com%2Fauth%2Fworkos%2Fcallback&response_type=code';
-  
+
   assertEquals(url, expectedUrl);
 });
 
@@ -204,7 +204,7 @@ Deno.test('UserManagement - getAuthorizationUrl with no custom api hostname gene
 
   const expectedUrl = 'https://api.workos.com/user_management/authorize?client_id=proj_123&provider=Google&' +
     'redirect_uri=example.com%2Fauth%2Fworkos%2Fcallback&response_type=code';
-  
+
   assertEquals(url, expectedUrl);
 });
 
@@ -244,8 +244,11 @@ Deno.test('UserManagement - getLogoutUrl with returnTo includes a return_to in t
     returnTo: 'https://your-app.com/signed-out',
   });
 
-  assertEquals(url, 'https://api.workos.com/user_management/sessions/logout?session_id=123456&' +
-    'return_to=https%3A%2F%2Fyour-app.com%2Fsigned-out');
+  assertEquals(
+    url,
+    'https://api.workos.com/user_management/sessions/logout?session_id=123456&' +
+      'return_to=https%3A%2F%2Fyour-app.com%2Fsigned-out',
+  );
 });
 
 // UserManagement - getJwksUrl returns the jwks url

@@ -5,30 +5,35 @@
 ## Burndown Checklist
 
 ### Subtask 1: Setup and Reference
+
 - [ ] Create docs/PORTING.md with burndown list
 - [ ] Add upstream WorkOS-Node repository reference
 - [ ] Create upstream version reference branch
 - [ ] Clone repo for reference and checkout main branch
 
 ### Subtask 2: Bootstrap Deno Project
+
 - [ ] Initialize empty Deno project
 - [ ] Configure deno.json with imports and tasks
 - [ ] Create project directory structure
 - [ ] Create basic source skeleton files
 
 ### Subtask 3: Core Framework Implementation
+
 - [ ] Implement core HTTP client with fetch
 - [ ] Implement WorkOS base class
 - [ ] Create error handling system
 - [ ] Create test framework
 
 ### Subtask 4: First Service (SSO) Implementation
+
 - [ ] Implement SSO interfaces
 - [ ] Implement authorization URL generator
 - [ ] Implement profile and token retrieval
 - [ ] Create comprehensive tests
 
 ### Subtask 5: Quality Assurance and Publishing
+
 - [ ] Setup GitHub CI workflow
 - [ ] Create JSR publishing configuration
 - [ ] Add documentation for the ported library

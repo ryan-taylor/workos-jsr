@@ -13,4 +13,4 @@ export class WorkOS extends BaseWorkOS {
     // Always use FetchHttpClient in worker environment
     return new FetchHttpClient(this.baseURL, { ...options.config, headers }) as unknown as HttpClient;
   }
-} 
+}

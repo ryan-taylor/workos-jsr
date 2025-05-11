@@ -17,7 +17,7 @@ function setup() {
 // Vault - createSecret creates secret
 Deno.test('Vault - createSecret creates secret', async () => {
   setup();
-  
+
   const secretName = 'charger';
   fetchOnce({
     id: 's1',
@@ -33,13 +33,13 @@ Deno.test('Vault - createSecret creates secret', async () => {
     },
     version_id: 'v1',
   });
-  
+
   const resource = await workos.vault.createSecret({
     name: secretName,
     context: { type: 'spore' },
     value: 'Full speed ahead',
   });
-  
+
   assertEquals(fetchURL()?.includes(`/vault/v1/kv`), true);
   assertEquals(fetchMethod(), 'POST');
   assertEquals(resource, {
@@ -61,7 +61,7 @@ Deno.test('Vault - createSecret creates secret', async () => {
 // Vault - createSecret throws an error if secret exists
 Deno.test('Vault - createSecret throws an error if secret exists', async () => {
   setup();
-  
+
   const secretName = 'charger';
   fetchOnce(
     {
@@ -69,7 +69,7 @@ Deno.test('Vault - createSecret throws an error if secret exists', async () => {
     },
     { status: 409 },
   );
-  
+
   try {
     await workos.vault.createSecret({
       name: secretName,
@@ -80,7 +80,7 @@ Deno.test('Vault - createSecret throws an error if secret exists', async () => {
   } catch (error) {
     assertEquals(error instanceof ConflictException, true);
   }
-  
+
   assertEquals(fetchURL()?.includes(`/vault/v1/kv`), true);
   assertEquals(fetchMethod(), 'POST');
 });
@@ -88,7 +88,7 @@ Deno.test('Vault - createSecret throws an error if secret exists', async () => {
 // Vault - readSecret reads a secret by id
 Deno.test('Vault - readSecret reads a secret by id', async () => {
   setup();
-  
+
   const secretName = 'lima';
   const secretId = 'secret1';
   fetchOnce({
@@ -110,11 +110,11 @@ Deno.test('Vault - readSecret reads a secret by id', async () => {
     name: secretName,
     value: 'Pull the lever Gronk',
   });
-  
+
   const resource = await workos.vault.readSecret({
     id: secretId,
   });
-  
+
   assertEquals(fetchURL()?.includes(`/vault/v1/kv/${secretId}`), true);
   assertEquals(fetchMethod(), 'GET');
   assertEquals(resource, {
@@ -141,7 +141,7 @@ Deno.test('Vault - readSecret reads a secret by id', async () => {
 // Vault - listSecrets gets a paginated list of secrets
 Deno.test('Vault - listSecrets gets a paginated list of secrets', async () => {
   setup();
-  
+
   fetchOnce({
     data: [
       {
@@ -155,9 +155,9 @@ Deno.test('Vault - listSecrets gets a paginated list of secrets', async () => {
       before: 'charger',
     },
   });
-  
+
   const resource = await workos.vault.listSecrets();
-  
+
   assertEquals(fetchURL()?.includes(`/vault/v1/kv`), true);
   assertEquals(fetchMethod(), 'GET');
   assertEquals(resource, {
@@ -179,7 +179,7 @@ Deno.test('Vault - listSecrets gets a paginated list of secrets', async () => {
 // Vault - listSecretVersions gets a paginated list of secret versions
 Deno.test('Vault - listSecretVersions gets a paginated list of secret versions', async () => {
   setup();
-  
+
   fetchOnce({
     data: [
       {
@@ -195,9 +195,9 @@ Deno.test('Vault - listSecretVersions gets a paginated list of secret versions',
       before: 'raZUqoHteQkLihH6AG5bj6sYAqMcJS76',
     },
   });
-  
+
   const resource = await workos.vault.listSecretVersions({ id: 'secret1' });
-  
+
   assertEquals(fetchURL()?.includes(`/vault/v1/kv/secret1/versions`), true);
   assertEquals(fetchMethod(), 'GET');
   assertEquals(resource, [
@@ -212,7 +212,7 @@ Deno.test('Vault - listSecretVersions gets a paginated list of secret versions',
 // Vault - updateSecret updates secret
 Deno.test('Vault - updateSecret updates secret', async () => {
   setup();
-  
+
   const secretId = 's1';
   fetchOnce({
     id: secretId,
@@ -232,12 +232,12 @@ Deno.test('Vault - updateSecret updates secret', async () => {
       version_id: 'v1',
     },
   });
-  
+
   const resource = await workos.vault.updateSecret({
     id: secretId,
     value: 'Full speed ahead',
   });
-  
+
   assertEquals(fetchURL()?.includes(`/vault/v1/kv/${secretId}`), true);
   assertEquals(fetchMethod(), 'PUT');
   assertEquals(resource, {
@@ -264,14 +264,14 @@ Deno.test('Vault - updateSecret updates secret', async () => {
 // Vault - updateSecret throws an error if secret version check fails
 Deno.test('Vault - updateSecret throws an error if secret version check fails', async () => {
   setup();
-  
+
   fetchOnce(
     {
       error: 'Item already exists',
     },
     { status: 409 },
   );
-  
+
   try {
     await workos.vault.updateSecret({
       id: 'secret1',
@@ -282,7 +282,7 @@ Deno.test('Vault - updateSecret throws an error if secret version check fails', 
   } catch (error) {
     assertEquals(error instanceof ConflictException, true);
   }
-  
+
   assertEquals(fetchURL()?.includes(`/vault/v1/kv/secret1`), true);
   assertEquals(fetchMethod(), 'PUT');
 });

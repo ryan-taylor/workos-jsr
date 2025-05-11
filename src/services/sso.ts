@@ -1,4 +1,4 @@
-import type { HttpClient } from '../core/http_client.ts.ts.ts';
+import type { HttpClient } from '../core/http_client.ts.ts';
 
 export interface GetAuthorizationUrlOptions {
   clientId: string;

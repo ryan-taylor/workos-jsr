@@ -1,4 +1,4 @@
-import type { OrganizationRoleResponse, Role } from '../interfaces.ts.ts';
+import type { OrganizationRoleResponse, Role } from '../interfaces.ts';
 
 export const deserializeRole = (role: OrganizationRoleResponse): Role => ({
   object: role.object,

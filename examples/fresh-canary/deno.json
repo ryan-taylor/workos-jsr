@@ -1,6 +1,10 @@
 {
   "tasks": {
-    "start": "deno run -A --watch=static/,routes/ main.ts"
+    "start": "deno run -A --watch=static/,routes/ main.ts",
+    "dev": "deno task start",
+    "test": "deno test -A",
+    "lint": "deno lint",
+    "check": "deno check $(find . -name '*.ts' -not -path '*/node_modules/*')"
   },
   "imports": {
     "$fresh/": "https://deno.land/x/fresh@1.6.5/",
@@ -11,13 +15,24 @@
     "@preact/signals-core": "https://esm.sh/*@preact/signals-core@1.5.1",
     "$std/": "https://deno.land/std@0.220.0/",
     "@std/http": "jsr:@std/http@1",
-    "workos": "../.."
+    
+    "workos": "https://raw.githubusercontent.com/ryan-taylor/workos-jsr/main/mod.ts",
+    "workos/": "https://raw.githubusercontent.com/ryan-taylor/workos-jsr/main/",
+    
+    "workos/common/": "./workos_internal/common/",
+    "workos/middleware/": "./workos_internal/middleware/",
+    "workos_internal/": "./workos_internal/"
   },
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
     "strict": true,
     "lib": ["dom", "dom.iterable", "dom.asynciterable", "deno.ns"]
+  },
+  "lint": {
+    "rules": {
+      "tags": ["recommended"]
+    }
   },
   "nodeModulesDir": "none"
 }

@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Deno
         uses: denoland/setup-deno@v1
         with:
@@ -37,7 +37,7 @@ jobs:
       - name: Generate lcov report
         run: |
           deno coverage coverage --unstable --lcov > coverage/lcov.info
-      
+
       - name: Check Coverage Thresholds
         run: |
           COVERAGE=$(cat ./coverage/coverage-summary.json | jq '.total.lines.pct')
@@ -47,7 +47,7 @@ jobs:
           else
             echo "Coverage is 100%: $COVERAGE%"
           fi
-      
+
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v4
         with:

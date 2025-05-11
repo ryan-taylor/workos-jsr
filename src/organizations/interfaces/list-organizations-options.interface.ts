@@ -1,4 +1,4 @@
-import type { PaginationOptions } from '../../common/interfaces/pagination-options.interface.ts.ts';
+import type { PaginationOptions } from '../../common/interfaces/pagination-options.interface.ts';
 
 export interface ListOrganizationsOptions extends PaginationOptions {
   domains?: string[];

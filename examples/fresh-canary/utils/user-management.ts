@@ -1,51 +1,26 @@
 // Utility functions for integrating User Management with Fresh 2.x
 
-// Utility functions for integrating User Management with Fresh 2.x
-import { FreshSessionProvider } from '../../../src/common/iron-session/fresh-session-provider.ts';
-import { WorkOS } from '../../../src/workos.ts';
-import { UserManagement } from '../../../src/user-management/user-management.ts';
+import {
+  FreshSessionProvider,
+  buildSessionOptions,
+  type SessionOptions,
+  type WorkOSUser,
+  type SessionData,
+  initUserManagement as initWorkOSUserManagement
+} from "workos_internal/mod.ts";
 
-// Session configuration
-export const SESSION_OPTIONS = {
-  cookieName: 'workos_session',
-  password: Deno.env.get('SESSION_SECRET') || 'use-a-strong-password-in-production',
-  ttl: 60 * 60 * 24 * 7, // 7 days in seconds
-  secure: true,
-  httpOnly: true,
-  sameSite: 'Lax' as const,
-};
-
-// User interface
-export interface WorkOSUser {
-  id: string;
-  email: string;
-  firstName?: string | null;
-  lastName?: string | null;
-  profilePictureUrl?: string | null;
-  customAttributes?: Record<string, unknown>;
-}
-
-// Session data interface
-export interface SessionData extends Record<string, unknown> {
-  user: WorkOSUser;
-  accessToken?: string;
-  refreshToken?: string;
-}
+// Session configuration using the factory function
+export const SESSION_OPTIONS: SessionOptions = buildSessionOptions(Deno.env);
 
 /**
  * Initialize WorkOS User Management
  * @returns An object containing WorkOS, UserManagement, and SessionProvider instances
  */
 export function initUserManagement() {
-  const workos = new WorkOS(
-    Deno.env.get('WORKOS_API_KEY') || '',
-    { clientId: Deno.env.get('WORKOS_CLIENT_ID') },
-  );
-
-  const sessionProvider = new FreshSessionProvider();
-  const userManagement = new UserManagement(workos, sessionProvider);
-
-  return { workos, userManagement, sessionProvider };
+  const apiKey = Deno.env.get('WORKOS_API_KEY') || '';
+  const clientId = Deno.env.get('WORKOS_CLIENT_ID');
+  
+  return initWorkOSUserManagement(apiKey, clientId);
 }
 
 /**
@@ -96,3 +71,6 @@ export async function createUserSession(
     response,
   );
 }
+
+// Re-export types for convenience
+export type { WorkOSUser, SessionData };

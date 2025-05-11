@@ -94,9 +94,10 @@ Deno's native TypeScript support required some adjustments:
 
 Our testing strategy evolved significantly:
 
-- **Test Runner**: Moving from Jest to Deno's built-in test runner required adapting test syntax and expectations
-- **Mocking**: Implementing new mocking strategies without Jest's extensive mocking capabilities
-- **Coverage Tools**: Adopting Deno's built-in coverage tools rather than third-party coverage tools
+- **Test Runner**: Complete migration from Jest/Vitest to Deno's built-in test runner, removing all Jest/Vitest dependencies
+- **Mocking**: Implemented native mocking strategies that leverage Deno's capabilities instead of relying on Jest's mocking
+- **Coverage Tools**: Fully adopted Deno's built-in coverage tools instead of third-party coverage tools
+- **Compatibility Layer**: Removed the compatibility layer (deno-test-setup.ts) that was temporarily used during transition
 
 ## Patterns That Worked Well
 
@@ -230,6 +231,50 @@ The recommended approach for this migration is incremental:
 4. Address edge cases and platform-specific code
 
 Each step should include thorough testing to ensure feature parity and prevent regressions.
+
+## Deno-Native Test Migration
+
+As part of our migration to Deno 2.x, we've completely transitioned our testing infrastructure from Jest/Vitest to Deno's native testing capabilities:
+
+### 1. Removing the Jest/Vitest Dependencies
+
+We've removed the following dependencies from package.json:
+- vitest
+- @cloudflare/vitest-pool-workers
+- All other Jest/Vitest-related packages
+
+### 2. Test Script Updates
+
+Test scripts in package.json have been updated to use Deno's native test commands:
+- `test`: Changed from `vitest run` to `deno test`
+- `test:watch`: Changed from `vitest` to `deno test --watch`
+- `test:worker`: Updated to use Deno's test runner
+
+### 3. Removal of Compatibility Layer
+
+The temporary compatibility layer (tests/deno-test-setup.ts) that provided Jest-like functionality during the transition phase has been removed. This file included:
+- Mock implementations for fetch
+- Test lifecycle hooks (beforeEach, afterEach)
+- Jest-compatible assertion utilities
+- Test runner wrappers
+
+### 4. Benefits of Deno Native Testing
+
+The migration to Deno's native testing brings several advantages:
+- Faster test execution due to native integration with the runtime
+- Built-in test coverage tools without third-party dependencies
+- Simplified testing setup with fewer dependencies
+- More consistent environment between development and testing
+
+### 5. Running Tests
+
+To run tests with the new Deno-native approach:
+```
+deno test                  # Run all tests
+deno test --watch          # Run tests in watch mode
+deno test path/to/test.ts  # Run specific test file
+deno test --coverage       # Run tests with coverage report
+```
 
 ## Conclusion
 

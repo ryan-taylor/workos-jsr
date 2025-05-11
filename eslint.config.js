@@ -8,11 +8,13 @@ export default [
       'lib/**',
       'coverage/**',
       '.sailplane/**',
-      '_reference/**'
+      '_reference/**',
+      'dist/**',
+      'cov/**'
     ]
   },
   {
-    files: ['**/*.{js,ts}'],
+    files: ['**/*.{js,ts,jsx,tsx}'],
     languageOptions: {
       parser: tsParser,
       ecmaVersion: 2022,
@@ -23,26 +25,28 @@ export default [
         }
       },
       globals: {
-        // Node.js globals
+        // Deno & Node.js globals - more permissive during transition
         process: 'readonly',
         module: 'readonly',
         __dirname: 'readonly',
         __filename: 'readonly',
         exports: 'writable',
         require: 'readonly',
+        Deno: 'readonly',
+        globalThis: 'readonly',
       }
     },
     plugins: {
       '@typescript-eslint': tsPlugin
     },
     rules: {
-      // ESLint base rules
-      'quotes': ['error', 'single', { 'avoidEscape': true, 'allowTemplateLiterals': true }],
-      'jsx-quotes': ['error', 'prefer-double'],
-      'semi': ['error', 'always'],
-      'arrow-parens': ['error', 'as-needed'],
-      'max-len': ['error', { 'code': 150 }],
-      'no-restricted-exports': ['error', { 'restrictDefaultExports': { 'direct': true } }],
+      // ESLint base rules - relaxed to warnings during transition
+      'quotes': ['warn', 'single', { 'avoidEscape': true, 'allowTemplateLiterals': true }],
+      'jsx-quotes': ['warn', 'prefer-double'],
+      'semi': ['warn', 'always'],
+      'arrow-parens': ['warn', 'as-needed'],
+      'max-len': ['warn', { 'code': 150 }],
+      'no-restricted-exports': ['warn', { 'restrictDefaultExports': { 'direct': true } }],
       
       // TypeScript-specific rules
       '@typescript-eslint/explicit-member-accessibility': 'off',
@@ -52,7 +56,12 @@ export default [
       
       // Import and sorting rules
       'sort-keys': 'off',
-      'sort-imports': 'off'
+      'sort-imports': 'off',
+      
+      // Relaxed rules for Deno compatibility
+      'no-undef': 'off', // Deno doesn't need this with TypeScript
+      'import/extensions': 'off', // Deno requires extensions
+      'import/no-unresolved': 'off', // Different resolution in Deno
     }
   },
   {

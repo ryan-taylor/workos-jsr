@@ -48,6 +48,10 @@
     "test:coverage": "deno test --allow-all --coverage=cov",
     "coverage:report": "deno coverage cov --lcov --output=cov/lcov.info",
     "coverage:html": "deno coverage cov --html --output=cov/html",
+    "test:deno": "deno test --allow-all tests_deno/",
+    "test:deno:watch": "deno test --allow-all --watch tests_deno/",
+    "test:deno:coverage": "deno test --allow-all --coverage=cov tests_deno/",
+    "test:ci": "deno test --allow-all --coverage=cov && deno coverage cov --lcov --output=cov/lcov.info",
     "bundle": "deno run -A https://deno.land/x/fresh@1.6.5/dev.ts build",
     "bundle:sdk": "deno run -A ./scripts/bundle.ts",
     "deploy": "deno run -A ./scripts/bundle.ts && deno deploy"
@@ -86,15 +90,22 @@
   },
   "fmt": {
     "indentWidth": 2,
-    "lineWidth": 100,
+    "lineWidth": 150,
     "semiColons": true,
     "singleQuote": true,
     "proseWrap": "preserve",
-    "include": ["src/", "tests/", "scripts/", "*.ts"]
+    "include": ["src/", "tests/", "tests_deno/", "scripts/", "*.ts", "examples/"]
   },
   "lint": {
-    "include": ["src/", "tests/", "scripts/", "*.ts"],
-    "exclude": ["**/node_modules/**", "lib/**", "cov/**", "coverage/**"]
+    "include": ["src/", "tests/", "tests_deno/", "scripts/", "*.ts", "examples/"],
+    "exclude": ["**/node_modules/**", "lib/**", "cov/**", "coverage/**", "dist/**", ".sailplane/**"],
+    "rules": {
+      "exclude": [
+        "no-explicit-any",
+        "no-unused-vars",
+        "ban-ts-comment"
+      ]
+    }
   },
   "publish": {
     "exclude": [

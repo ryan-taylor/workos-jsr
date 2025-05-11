@@ -5,6 +5,7 @@
   "description": "A JavaScript/TypeScript wrapper for the WorkOS API",
   "homepage": "https://github.com/workos-inc/workos-node",
   "license": "MIT",
+  "type": "module",
   "keywords": [
     "workos",
     "authentication",

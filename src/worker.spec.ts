@@ -1,7 +1,7 @@
 // Import Deno standard testing library
 import { assertEquals } from '@std/assert';
 
-import { WorkOS } from './index.worker.ts';
+import { WorkOS } from './index.ts';
 
 // WorkOS - initialization is successful
 Deno.test('WorkOS - initialization is successful', () => {

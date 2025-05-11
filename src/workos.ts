@@ -6,12 +6,12 @@ import {
   RateLimitExceededException,
   UnauthorizedException,
   UnprocessableEntityException,
-} from './common/exceptions/index.ts.ts';
-import type { GetOptions } from './common/interfaces/get-options.interface.ts.ts';
-import type { PostOptions } from './common/interfaces/post-options.interface.ts.ts';
-import type { PutOptions } from './common/interfaces/put-options.interface.ts.ts';
-import type { WorkOSOptions } from './common/interfaces/workos-options.interface.ts.ts';
-import type { WorkOSResponseError } from './common/interfaces/workos-response-error.interface.ts.ts';
+} from './common/exceptions/index.ts';
+import type { GetOptions } from './common/interfaces/get-options.interface.ts';
+import type { PostOptions } from './common/interfaces/post-options.interface.ts';
+import type { PutOptions } from './common/interfaces/put-options.interface.ts';
+import type { WorkOSOptions } from './common/interfaces/workos-options.interface.ts';
+import type { WorkOSResponseError } from './common/interfaces/workos-response-error.interface.ts';
 
 // Re-export for usage outside of the package
 export type {
@@ -21,30 +21,30 @@ export type {
   WorkOSOptions,
   WorkOSResponseError
 };
-import { DirectorySync } from './directory-sync/directory-sync.ts.ts';
-import { Events } from './events/events.ts.ts';
-import { Organizations } from './organizations/organizations.ts.ts';
-import { OrganizationDomains } from './organization-domains/organization-domains.ts.ts';
-import { Passwordless } from './passwordless/passwordless.ts.ts';
-import { Portal } from './portal/portal.ts.ts';
-import { SSO } from './sso/sso.ts.ts';
-import { Webhooks } from './webhooks/webhooks.ts.ts';
-import { Mfa } from './mfa/mfa.ts.ts';
-import { AuditLogs } from './audit-logs/audit-logs.ts.ts';
-import { UserManagement } from './user-management/user-management.ts.ts';
-import { FGA } from './fga/fga.ts.ts';
-import { BadRequestException } from './common/exceptions/bad-request.exception.ts.ts';
+import { DirectorySync } from './directory-sync/directory-sync.ts';
+import { Events } from './events/events.ts';
+import { Organizations } from './organizations/organizations.ts';
+import { OrganizationDomains } from './organization-domains/organization-domains.ts';
+import { Passwordless } from './passwordless/passwordless.ts';
+import { Portal } from './portal/portal.ts';
+import { SSO } from './sso/sso.ts';
+import { Webhooks } from './webhooks/webhooks.ts';
+import { Mfa } from './mfa/mfa.ts';
+import { AuditLogs } from './audit-logs/audit-logs.ts';
+import { UserManagement } from './user-management/user-management.ts';
+import { FGA } from './fga/fga.ts';
+import { BadRequestException } from './common/exceptions/bad-request.exception.ts';
 
-import { type HttpClient, HttpClientError } from './common/net/http-client.ts.ts';
-import { SubtleCryptoProvider } from './common/crypto/subtle-crypto-provider.ts.ts';
-import { FetchHttpClient } from './common/net/fetch-client.ts.ts';
-import { DenoHttpClient } from './common/net/deno-client.ts.ts';
-import { FreshSessionProvider } from './common/iron-session/fresh-session-provider.ts.ts';
-import { Widgets } from './widgets/widgets.ts.ts';
-import { Actions } from './actions/actions.ts.ts';
-import { Vault } from './vault/vault.ts.ts';
-import { ConflictException } from './common/exceptions/conflict.exception.ts.ts';
-import { initTelemetry } from './telemetry/workos-integration.ts.ts';
+import { type HttpClient, HttpClientError } from './common/net/http-client.ts';
+import { SubtleCryptoProvider } from './common/crypto/subtle-crypto-provider.ts';
+import { FetchHttpClient } from './common/net/fetch-client.ts';
+import { DenoHttpClient } from './common/net/deno-client.ts';
+import { FreshSessionProvider } from './common/iron-session/fresh-session-provider.ts';
+import { Widgets } from './widgets/widgets.ts';
+import { Actions } from './actions/actions.ts';
+import { Vault } from './vault/vault.ts';
+import { ConflictException } from './common/exceptions/conflict.exception.ts';
+import { initTelemetry } from './telemetry/workos-integration.ts';
 
 const VERSION = '7.50.0';
 
@@ -488,7 +488,7 @@ export class WorkOS {
         case 422: {
           throw new UnprocessableEntityException({
             code,
-            errors,
+            errors: errors?.map(({ attribute, code }) => ({ field: attribute, code })),
             message,
             requestID,
           });

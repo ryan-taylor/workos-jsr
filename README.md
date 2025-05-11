@@ -1,10 +1,10 @@
-# WorkOS JavaScript/TypeScript Library
+# @ryantaylor/workos: Deno/JSR port of the WorkOS API
 
-![npm](https://img.shields.io/npm/v/@workos-inc/node)
-[![JSR Version](https://jsr.io/badges/@workos/sdk)](https://jsr.io/@workos/sdk)
-[![Build Status](https://github.com/workos/workos-node/actions/workflows/ci.yml/badge.svg)](https://github.com/workos/workos-node/actions/workflows/ci.yml)
+[![JSR Version](https://jsr.io/badges/@ryantaylor/workos)](https://jsr.io/@ryantaylor/workos)
+[![Build Status](https://github.com/ryan-taylor/workos-jsr/actions/workflows/ci.yml/badge.svg)](https://github.com/ryan-taylor/workos-jsr/actions/workflows/ci.yml)
+[![Coverage Status](https://codecov.io/gh/ryan-taylor/workos-jsr/branch/main/graph/badge.svg)](https://codecov.io/gh/ryan-taylor/workos-jsr)
 
-The WorkOS library provides convenient access to the WorkOS API from applications written in JavaScript and TypeScript. It is primarily designed for Deno environments, including Deno's [Fresh](https://fresh.deno.dev/) framework, with legacy support for Node.js applications.
+This library provides convenient access to the WorkOS API from applications written in JavaScript and TypeScript. It is designed for Deno 2.x environments, including Deno's [Fresh](https://fresh.deno.dev/) framework. Full examples are provided for Fresh 2.x (canary).
 
 ## Documentation
 
@@ -12,8 +12,8 @@ See the [API Reference](https://workos.com/docs/reference/client-libraries) for 
 
 ## Requirements
 
-- Deno 1.41 or higher, OR
-- Node.js 16 or higher (legacy support)
+- Deno 2.0.0 or higher
+- Note: This project includes a `.deno-version` file to ensure compatibility
 
 ## Installation
 
@@ -22,7 +22,7 @@ See the [API Reference](https://workos.com/docs/reference/client-libraries) for 
 For Deno and Fresh applications, you can import directly from JSR:
 
 ```ts
-import { WorkOS } from "@workos/sdk";
+import { WorkOS } from "@ryantaylor/workos";
 ```
 
 Or add to your `deno.json` imports:
@@ -30,27 +30,27 @@ Or add to your `deno.json` imports:
 ```json
 {
   "imports": {
-    "@workos/sdk": "jsr:@workos/sdk@^1.0.0"
+    "@ryantaylor/workos": "jsr:@ryantaylor/workos@^0.1.0-alpha"
   }
 }
 ```
 
 ## JSR.io Package
 
-This library is published to [JSR.io](https://jsr.io/@workos/sdk) for Deno users. JSR (JavaScript Registry) is a modern package registry optimized for Deno and the web platform.
+This library is published to [JSR.io](https://jsr.io/@ryantaylor/workos) for Deno users. JSR (JavaScript Registry) is a modern package registry optimized for Deno and the web platform.
 
 ### Using the JSR Package
 
-To use the WorkOS SDK from JSR in a Deno project:
+To use the SDK from JSR in a Deno project:
 
 ```ts
 // Direct import
-import { WorkOS } from "jsr:@workos/sdk@^1.0.0";
+import { WorkOS } from "jsr:@ryantaylor/workos@^0.1.0-alpha";
 
 // Or in your deno.json
 // {
 //   "imports": {
-//     "@workos/sdk": "jsr:@workos/sdk@^1.0.0"
+//     "@ryantaylor/workos": "jsr:@ryantaylor/workos@^0.1.0-alpha"
 //   }
 // }
 ```
@@ -78,7 +78,7 @@ The version is kept in sync between npm and JSR. The package follows semantic ve
 For Deno applications:
 
 ```ts
-import { WorkOS } from "@workos/sdk";
+import { WorkOS } from "@ryantaylor/workos";
 
 const workos = new WorkOS(
   Deno.env.get("WORKOS_API_KEY") || "",
@@ -103,6 +103,31 @@ WORKOS_WEBHOOK_SECRET=your_workos_webhook_signing_secret
 ```
 
 For security in production, consider using a service like Doppler for secrets management rather than environment files.
+
+## Getting Started (Fresh 2.x)
+
+The quickest way to start a new project with WorkOS and Fresh 2.x:
+
+```bash
+# Start the development server
+deno task dev
+```
+
+This will run the Fresh development server with live-reload enabled, allowing you to immediately see your changes.
+
+The example application in `examples/fresh-canary` demonstrates:
+- User authentication with WorkOS
+- Session management with cookies
+- API routes for user operations
+- Telemetry dashboard
+
+To deploy your application to Deno Deploy:
+```bash
+deno task deploy
+```
+
+This will build your application and deploy it using the configuration in `deno.deploy.json`.
+
 
 ## OpenTelemetry Integration
 
@@ -228,7 +253,7 @@ Here's a basic example of integrating WorkOS User Management with Fresh 2.x:
 
 ```ts
 // utils/workos.ts
-import { WorkOS } from "@workos/sdk";
+import { WorkOS } from "@ryantaylor/workos";
 import { FreshSessionProvider } from "@workos/sdk/common/iron-session/fresh-session-provider";
 
 export function initWorkOS() {
@@ -356,33 +381,3 @@ We welcome contributions to the WorkOS Node.js library! Please check out our [co
 - [Magic Link Guide](https://workos.com/docs/magic-link/guide)
 - [Domain Verification Guide](https://workos.com/docs/domain-verification/guide)
 
-## LEGACY: Node.js Support
-
-While Deno is our recommended platform, the WorkOS SDK still supports Node.js applications as a legacy option.
-
-### Node.js Installation
-
-Install the package with:
-
-```
-npm install @workos-inc/node
-# or
-yarn add @workos-inc/node
-# or
-pnpm add @workos-inc/node
-```
-
-### Node.js Configuration
-
-To use the library you must provide an API key, located in the WorkOS dashboard, as an environment variable `WORKOS_API_KEY`:
-
-```sh
-WORKOS_API_KEY="sk_1234"
-```
-
-Or, you can set it on your own before your application starts:
-
-```ts
-import { WorkOS } from '@workos-inc/node';
-
-const workos = new WorkOS('sk_1234');

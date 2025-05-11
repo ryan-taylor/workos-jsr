@@ -240,7 +240,6 @@ Deno.test('AuditLogs - createSchema sends the correct data to the API', async ()
   const originalPost = workos.post;
   let postCalled = false;
   let postPath = '';
-  let postData: any = null;
   let postOptions: any = null;
   
   const time = new Date().toISOString();
@@ -285,10 +284,9 @@ Deno.test('AuditLogs - createSchema sends the correct data to the API', async ()
   };
   
   // Use type assertion to bypass TypeScript's type checking for the mock
-  workos.post = ((path: string, data: any, options = {}) => {
+  workos.post = ((path: string, _data: any, options = {}) => {
     postCalled = true;
     postPath = path;
-    postData = data;
     postOptions = options;
     return Promise.resolve({ data: mockResponse });
   }) as typeof workos.post;

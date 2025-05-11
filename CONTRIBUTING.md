@@ -1,6 +1,6 @@
-# Contributing to WorkOS Node.js Library
+# Contributing to @ryantaylor/workos
 
-Thank you for considering contributing to the WorkOS Node.js Library! This document outlines the standards and processes we follow for this project.
+Thank you for considering contributing to @ryantaylor/workos! This document outlines the standards and processes we follow for this project.
 
 ## Commit Message Convention
 

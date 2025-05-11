@@ -1,4 +1,6 @@
-# WorkOS Node.js to Deno/JSR Port
+# [ARCHIVED] WorkOS Node.js to Deno/JSR Port
+
+> **Archive Note**: This document was archived on May 11, 2025 because it contains an outdated burndown checklist for the initial Node.js to Deno port that is no longer relevant to current users. It's preserved for historical reference only.
 
 ## Burndown Checklist
 

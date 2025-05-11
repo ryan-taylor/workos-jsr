@@ -1,0 +1,22 @@
+{
+  "project": "workos-fresh-sdk",
+  "entrypoint": "main.ts",
+  "include": [
+    "src/**/*.ts",
+    "import_map.json",
+    "fresh.config.ts",
+    "static/**/*",
+    "routes/**/*.{ts,tsx}",
+    "islands/**/*.{ts,tsx}"
+  ],
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/fixtures/**",
+    "**/node_modules/**"
+  ],
+  "github": {
+    "enabled": true
+  },
+  "root_dir": "examples/fresh-canary"
+}

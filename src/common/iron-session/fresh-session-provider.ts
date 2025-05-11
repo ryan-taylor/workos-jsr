@@ -1,4 +1,4 @@
-import type { Cookie } from '@std/http/cookie';
+import type { Cookie } from "https://deno.land/std@0.220.0/http/cookie.ts";
 /**
  * Options for sealing session data
  */
@@ -10,7 +10,7 @@ export type SealDataOptions = {
  * Represents unsealed session data
  */
 export type UnsealedDataType = Record<string, unknown>;
-import type { FreshContext } from '$fresh/server.ts';
+import type { FreshContext } from "https://deno.land/x/fresh@2.2.0-canary.1/server.ts";
 
 /**
  * Interface for Fresh 2.x session options

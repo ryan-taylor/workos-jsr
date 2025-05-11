@@ -1,7 +1,7 @@
 {
   "version": "0.1.0-alpha",
-  "name": "@workos-inc/node",
-  "author": "Ryan Taylor",
+  "name": "@ryantaylor/workos",
+  "author": "Ryan Taylor <ryan@ryantaylor.me>",
   "description": "A Deno/JSR port of the WorkOS API (v7.50.0) for JavaScript/TypeScript",
   "homepage": "https://github.com/ryan-taylor/workos-jsr",
   "license": "MIT",

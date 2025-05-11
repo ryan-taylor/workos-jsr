@@ -2,14 +2,7 @@
   "name": "@ryantaylor/workos",
   "version": "7.50.0",
   "exports": {
-    ".": {
-      "worker": "./dist/workos.worker.js",
-      "edge": "./dist/workos.worker.js",
-      "browser": "./dist/workos.worker.js",
-      "deno": "./mod.ts",
-      "node": "./dist/workos.js",
-      "default": "./dist/workos.js"
-    }
+    ".": "./mod.ts"
   },
   "imports": {
     "iron-session": "npm:iron-session@8.0.4",
@@ -67,9 +60,7 @@
     ]
   },
   "compilerOptions": {
-    "allowJs": true,
     "strict": true,
-    "alwaysStrict": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
@@ -80,8 +71,6 @@
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "jsx": "react-jsx",
     "jsxImportSource": "preact",

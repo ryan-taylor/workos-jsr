@@ -20,10 +20,11 @@
     "test:ci": "deno test --allow-net --allow-env --allow-read --allow-write --import-map=$(deno run scripts/select_fresh.ts) --coverage=cov && deno coverage cov --lcov --output=cov/lcov.info",
     "bundle": "deno run -A --import-map=$(deno run scripts/select_fresh.ts) $(deno run scripts/bundle_entry.ts)",
     "bundle:sdk": "deno run -A ./scripts/bundle.ts",
+    "npm:build": "deno run -A ./npm/bundle.ts",
     "deploy": "deno run -A ./scripts/bundle.ts && deno deploy",
     "fmt": "deno fmt",
     "lint": "deno lint",
-    "check": "deno check",
+    "check": "deno check mod.ts",
     "dev": "deno run -A --import-map=$(deno run scripts/select_fresh.ts) $(deno run scripts/dev_entry.ts)",
     "switch": "deno run -A scripts/switch_fresh.ts"
   },
@@ -33,7 +34,8 @@
       "tests_deno/**/*.{test,spec}.ts"
     ],
     "exclude": [
-      "**/node_modules/**"
+      "**/node_modules/**",
+      "_reference/**"
     ]
   },
   "compilerOptions": {
@@ -57,10 +59,11 @@
     "lineWidth": 150,
     "semiColons": true,
     "singleQuote": true,
-    "proseWrap": "preserve"
+    "proseWrap": "preserve",
+    "exclude": ["_reference/**"]
   },
   "lint": {
-    "exclude": ["**/node_modules/**", "lib/**", "cov/**", "coverage/**", "dist/**", ".sailplane/**"],
+    "exclude": ["**/node_modules/**", "lib/**", "cov/**", "coverage/**", "dist/**", ".sailplane/**", "_reference/**"],
     "rules": {
       "exclude": [
         "no-explicit-any",
@@ -79,7 +82,7 @@
       "tests/",
       "tests_deno/",
       "examples/",
-      "_reference/",
+      "_reference/**",
       "scripts/",
       "cov/",
       "lib/",

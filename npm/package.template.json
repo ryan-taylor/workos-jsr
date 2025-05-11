@@ -1,0 +1,37 @@
+{
+  "name": "@ryantaylor/workos",
+  "version": "0.1.0-alpha",
+  "description": "WorkOS SDK for JavaScript, optimized for Deno Deploy and Edge environments with Node.js compatibility",
+  "main": "./workos.js",
+  "browser": "./workos.worker.js",
+  "exports": {
+    ".": {
+      "import": "./workos.js",
+      "require": "./workos.js",
+      "browser": "./workos.worker.js",
+      "worker": "./workos.worker.js",
+      "edge-light": "./workos.worker.js",
+      "deno": "./workos.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryan-taylor/workos-jsr.git"
+  },
+  "keywords": [
+    "workos",
+    "authentication",
+    "sso",
+    "deno",
+    "edge"
+  ],
+  "author": "Ryan Taylor",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ryan-taylor/workos-jsr/issues"
+  },
+  "homepage": "https://github.com/ryan-taylor/workos-jsr#readme",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

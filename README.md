@@ -22,7 +22,7 @@ See the [API Reference](https://workos.com/docs/reference/client-libraries) for 
 For Deno and Fresh applications, you can import directly from JSR:
 
 ```ts
-import { WorkOS } from "@ryantaylor/workos";
+import { WorkOS } from '@ryantaylor/workos';
 ```
 
 Or add to your `deno.json` imports:
@@ -45,7 +45,7 @@ To use the SDK from JSR in a Deno project:
 
 ```ts
 // Direct import
-import { WorkOS } from "jsr:@ryantaylor/workos@^0.1.0-alpha";
+import { WorkOS } from 'jsr:@ryantaylor/workos@^0.1.0-alpha';
 
 // Or in your deno.json
 // {
@@ -71,6 +71,37 @@ The version is kept in sync between npm and JSR. The package follows semantic ve
 - **Minor Version (0.X.0)**: New features without breaking changes
 - **Patch Version (0.0.X)**: Bug fixes and minor updates
 
+## Node.js Compatibility
+
+While this library is primarily designed for Deno environments, we maintain a Node.js-compatible distribution for users who:
+
+- Are in the process of migrating from Node.js to Deno
+- Need to use the SDK in both Node.js and Deno environments
+- Prefer to use npm as their package manager
+
+### Using the npm Package
+
+To use the SDK from npm in a Node.js project:
+
+```js
+// ESM import
+import { WorkOS } from '@ryantaylor/workos';
+
+// CommonJS require
+const { WorkOS } = require('@ryantaylor/workos');
+```
+
+### Building the Node.js Distribution
+
+To build the Node.js distribution locally:
+
+```bash
+# Build the Node.js distribution
+deno task npm:build
+```
+
+This will create a `dist` directory containing the Node.js-compatible files and a package.json file.
+
 ## Configuration
 
 ### Deno/Fresh Configuration
@@ -78,11 +109,11 @@ The version is kept in sync between npm and JSR. The package follows semantic ve
 For Deno applications:
 
 ```ts
-import { WorkOS } from "@ryantaylor/workos";
+import { WorkOS } from '@ryantaylor/workos';
 
 const workos = new WorkOS(
-  Deno.env.get("WORKOS_API_KEY") || "",
-  { clientId: Deno.env.get("WORKOS_CLIENT_ID") }
+  Deno.env.get('WORKOS_API_KEY') || '',
+  { clientId: Deno.env.get('WORKOS_CLIENT_ID') },
 );
 ```
 
@@ -104,11 +135,36 @@ WORKOS_WEBHOOK_SECRET=your_workos_webhook_signing_secret
 
 For security in production, consider using a service like Doppler for secrets management rather than environment files.
 
+## Choosing the Fresh version
+
+This library supports both Fresh 1.x and Fresh 2.x (canary) through a compatibility layer. You can choose which version to use by setting the `DENO_FRESH_VERSION` environment variable:
+
+```bash
+# Use Fresh 1.x (default)
+export DENO_FRESH_VERSION=1
+deno task dev
+
+# Use Fresh 2.x (canary)
+export DENO_FRESH_VERSION=2
+deno task dev
+```
+
+The compatibility layer automatically selects the appropriate import maps and dependencies based on the Fresh version you choose. This allows you to:
+
+- Develop with either Fresh version
+- Test your code against both versions
+- Gradually migrate from Fresh 1.x to Fresh 2.x
+
+For more details on the compatibility layer and how to write code that works with both versions, see the [Fresh Migration Guide](docs/FRESH_MIGRATION.md).
+
 ## Getting Started (Fresh 2.x)
 
 The quickest way to start a new project with WorkOS and Fresh 2.x:
 
 ```bash
+# Set Fresh version to 2.x
+export DENO_FRESH_VERSION=2
+
 # Start the development server
 deno task dev
 ```
@@ -116,18 +172,19 @@ deno task dev
 This will run the Fresh development server with live-reload enabled, allowing you to immediately see your changes.
 
 The example application in `examples/fresh-canary` demonstrates:
+
 - User authentication with WorkOS
 - Session management with cookies
 - API routes for user operations
 - Telemetry dashboard
 
 To deploy your application to Deno Deploy:
+
 ```bash
 deno task deploy
 ```
 
 This will build your application and deploy it using the configuration in `deno.deploy.json`.
-
 
 ## OpenTelemetry Integration
 
@@ -139,19 +196,19 @@ To enable telemetry collection, provide telemetry configuration when initializin
 
 ```ts
 const workos = new WorkOS(
-  Deno.env.get("WORKOS_API_KEY") || "",
+  Deno.env.get('WORKOS_API_KEY') || '',
   {
-    clientId: Deno.env.get("WORKOS_CLIENT_ID"),
+    clientId: Deno.env.get('WORKOS_CLIENT_ID'),
     telemetry: {
       enabled: true,
-      endpoint: "http://localhost:4318", // OTLP over HTTP endpoint
-      serviceName: "my-application",
+      endpoint: 'http://localhost:4318', // OTLP over HTTP endpoint
+      serviceName: 'my-application',
       defaultAttributes: {
-        "environment": "production",
-        "deployment.version": "1.2.3"
-      }
-    }
-  }
+        'environment': 'production',
+        'deployment.version': '1.2.3',
+      },
+    },
+  },
 );
 ```
 
@@ -159,13 +216,13 @@ const workos = new WorkOS(
 
 The telemetry configuration supports these options:
 
-| Option | Description | Default |
-|--------|-------------|---------|
-| `enabled` | Enable/disable telemetry collection | `false` |
-| `endpoint` | OTLP HTTP exporter endpoint | `http://localhost:4318` |
-| `serviceName` | Service name for telemetry | `workos-sdk` |
-| `defaultAttributes` | Additional attributes to include with all telemetry data | `{}` |
-| `debug` | Enable debug logging for telemetry | `false` |
+| Option              | Description                                              | Default                 |
+| ------------------- | -------------------------------------------------------- | ----------------------- |
+| `enabled`           | Enable/disable telemetry collection                      | `false`                 |
+| `endpoint`          | OTLP HTTP exporter endpoint                              | `http://localhost:4318` |
+| `serviceName`       | Service name for telemetry                               | `workos-sdk`            |
+| `defaultAttributes` | Additional attributes to include with all telemetry data | `{}`                    |
+| `debug`             | Enable debug logging for telemetry                       | `false`                 |
 
 ### Visualizing Telemetry Data
 
@@ -253,47 +310,47 @@ Here's a basic example of integrating WorkOS User Management with Fresh 2.x:
 
 ```ts
 // utils/workos.ts
-import { WorkOS } from "@ryantaylor/workos";
-import { FreshSessionProvider } from "@workos/sdk/common/iron-session/fresh-session-provider";
+import { WorkOS } from '@ryantaylor/workos';
+import { FreshSessionProvider } from '@workos/sdk/common/iron-session/fresh-session-provider';
 
 export function initWorkOS() {
   const workos = new WorkOS(
-    Deno.env.get("WORKOS_API_KEY") || "",
-    { clientId: Deno.env.get("WORKOS_CLIENT_ID") }
+    Deno.env.get('WORKOS_API_KEY') || '',
+    { clientId: Deno.env.get('WORKOS_CLIENT_ID') },
   );
-  
+
   const sessionProvider = new FreshSessionProvider();
   const userManagement = workos.userManagement(sessionProvider);
-  
+
   return { workos, userManagement, sessionProvider };
 }
 ```
 
 ```ts
 // routes/_middleware.ts
-import { FreshContext } from "$fresh/server.ts";
-import { FreshSessionProvider } from "@workos/sdk/common/iron-session/fresh-session-provider";
+import { FreshContext } from '$fresh/server.ts';
+import { FreshSessionProvider } from '@workos/sdk/common/iron-session/fresh-session-provider';
 
 const SESSION_OPTIONS = {
-  cookieName: "workos_session",
-  password: Deno.env.get("SESSION_SECRET") || "use-a-strong-password-in-production",
+  cookieName: 'workos_session',
+  password: Deno.env.get('SESSION_SECRET') || 'use-a-strong-password-in-production',
   ttl: 60 * 60 * 24 * 7, // 7 days in seconds
   secure: true,
   httpOnly: true,
-  sameSite: "Lax" as const,
+  sameSite: 'Lax' as const,
 };
 
 export async function handler(
   req: Request,
-  ctx: FreshContext
+  ctx: FreshContext,
 ): Promise<Response> {
   const sessionProvider = new FreshSessionProvider();
   const session = await sessionProvider.getSession(req, SESSION_OPTIONS);
-  
+
   if (session?.user) {
     ctx.state.user = session.user;
   }
-  
+
   return await ctx.next();
 }
 ```
@@ -380,4 +437,3 @@ We welcome contributions to the WorkOS Node.js library! Please check out our [co
 - [Admin Portal Guide](https://workos.com/docs/admin-portal/guide)
 - [Magic Link Guide](https://workos.com/docs/magic-link/guide)
 - [Domain Verification Guide](https://workos.com/docs/domain-verification/guide)
-

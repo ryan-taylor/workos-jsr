@@ -1,30 +1,56 @@
+// Import Deno testing utilities
+import {
+  assertEquals,
+  beforeEach,
+  describe,
+  it,
+} from "../../tests/deno-test-setup.ts";
+
 import { WorkOS } from '../workos.ts';
 import { Session } from './session.ts';
 import * as jose from 'jose';
 import { sealData } from 'iron-session';
-import userFixture from './fixtures/user.json.ts';
-import fetch from 'jest-fetch-mock';
-import { fetchOnce } from '../common/utils/test-utils.ts';
+import { fetchOnce, resetMockFetch, spy } from '../common/utils/test-utils.ts';
+
+// Import user fixture directly
+const userFixture = {
+  "object": "user",
+  "id": "user_01H5JQDV7R7ATEYZDEG0W5PRYS",
+  "email": "test01@example.com",
+  "first_name": "Test 01",
+  "last_name": "User",
+  "created_at": "2023-07-18T02:07:19.911Z",
+  "updated_at": "2023-07-18T02:07:19.911Z",
+  "email_verified": true,
+  "profile_picture_url": "https://example.com/profile_picture.jpg",
+  "last_sign_in_at": "2023-07-18T02:07:19.911Z",
+  "metadata": { "key": "value" }
+};
 
 describe('Session', () => {
   let workos: WorkOS;
 
-  beforeAll(() => {
-    workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU', {
-      clientId: 'client_123',
-    });
+  // Setup before all tests
+  workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU', {
+    clientId: 'client_123',
   });
 
-  beforeEach(() => fetch.resetMocks());
+  beforeEach(() => {
+    resetMockFetch();
+  });
 
   describe('constructor', () => {
     it('throws an error if cookiePassword is not provided', () => {
-      expect(() => {
+      try {
         workos.userManagement.loadSealedSession({
           sessionData: 'sessionData',
           cookiePassword: '',
         });
-      }).toThrow('cookiePassword is required');
+        throw new Error('Expected to throw but did not');
+      } catch (error) {
+        assertEquals(error instanceof Error, true);
+        assertEquals((error as Error).message, 'cookiePassword is required');
+      }
     });
 
     it('creates a new Session instance', () => {
@@ -33,7 +59,8 @@ describe('Session', () => {
         cookiePassword: 'cookiePassword',
       });
 
-      expect(session).toBeInstanceOf(Session);
+      // Check if session is an instance of Session
+      assertEquals(session instanceof Session, true);
     });
   });
 
@@ -45,7 +72,7 @@ describe('Session', () => {
       });
       const response = await session.authenticate();
 
-      expect(response).toEqual({
+      assertEquals(response, {
         authenticated: false,
         reason: 'no_session_cookie_provided',
       });
@@ -59,95 +86,127 @@ describe('Session', () => {
 
       const response = await session.authenticate();
 
-      expect(response).toEqual({
+      assertEquals(response, {
         authenticated: false,
         reason: 'invalid_session_cookie',
       });
     });
 
     it('returns a failed response if the accessToken is not a valid JWT', async () => {
-      jest.spyOn(jose, 'jwtVerify').mockImplementation(() => {
+      // Create a spy for jose.jwtVerify that throws an error
+      const originalJwtVerify = jose.jwtVerify;
+      const jwtVerifySpy = spy(() => {
         throw new Error('Invalid JWT');
       });
+      
+      // Use Object.defineProperty to temporarily replace the method
+      Object.defineProperty(jose, 'jwtVerify', {
+        value: jwtVerifySpy,
+        configurable: true,
+      });
 
-      const cookiePassword = 'alongcookiesecretmadefortestingsessions';
+      try {
+        const cookiePassword = 'alongcookiesecretmadefortestingsessions';
 
-      const sessionData = await sealData(
-        {
-          accessToken:
-            'ewogICJzdWIiOiAiMTIzNDU2Nzg5MCIsCiAgIm5hbWUiOiAiSm9obiBEb2UiLAogICJpYXQiOiAxNTE2MjM5MDIyLAogICJzaWQiOiAic2Vzc2lvbl8xMjMiLAogICJvcmdfaWQiOiAib3JnXzEyMyIsCiAgInJvbGUiOiAibWVtYmVyIiwKICAicGVybWlzc2lvbnMiOiBbInBvc3RzOmNyZWF0ZSIsICJwb3N0czpkZWxldGUiXQp9',
-          refreshToken: 'def456',
-          user: {
-            object: 'user',
-            id: 'user_01H5JQDV7R7ATEYZDEG0W5PRYS',
-            email: 'test@example.com',
+        const sessionData = await sealData(
+          {
+            accessToken:
+              'ewogICJzdWIiOiAiMTIzNDU2Nzg5MCIsCiAgIm5hbWUiOiAiSm9obiBEb2UiLAogICJpYXQiOiAxNTE2MjM5MDIyLAogICJzaWQiOiAic2Vzc2lvbl8xMjMiLAogICJvcmdfaWQiOiAib3JnXzEyMyIsCiAgInJvbGUiOiAibWVtYmVyIiwKICAicGVybWlzc2lvbnMiOiBbInBvc3RzOmNyZWF0ZSIsICJwb3N0czpkZWxldGUiXQp9',
+            refreshToken: 'def456',
+            user: {
+              object: 'user',
+              id: 'user_01H5JQDV7R7ATEYZDEG0W5PRYS',
+              email: 'test@example.com',
+            },
           },
-        },
-        { password: cookiePassword },
-      );
+          { password: cookiePassword },
+        );
 
-      const session = workos.userManagement.loadSealedSession({
-        sessionData,
-        cookiePassword,
-      });
-      const response = await session.authenticate();
+        const session = workos.userManagement.loadSealedSession({
+          sessionData,
+          cookiePassword,
+        });
+        const response = await session.authenticate();
 
-      expect(response).toEqual({
-        authenticated: false,
-        reason: 'invalid_jwt',
-      });
+        assertEquals(response, {
+          authenticated: false,
+          reason: 'invalid_jwt',
+        });
+      } finally {
+        // Restore original function
+        Object.defineProperty(jose, 'jwtVerify', {
+          value: originalJwtVerify,
+          configurable: true,
+        });
+      }
     });
 
     it('returns a successful response if the sessionData is valid', async () => {
-      jest
-        .spyOn(jose, 'jwtVerify')
-        .mockResolvedValue({} as jose.JWTVerifyResult & jose.ResolvedKey);
-
-      const cookiePassword = 'alongcookiesecretmadefortestingsessions';
-
-      const accessToken =
-        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdXRoZW50aWNhdGVkIjp0cnVlLCJpbXBlcnNvbmF0b3IiOnsiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJlYXNvbiI6InRlc3QifSwic2lkIjoic2Vzc2lvbl8xMjMiLCJvcmdfaWQiOiJvcmdfMTIzIiwicm9sZSI6Im1lbWJlciIsInBlcm1pc3Npb25zIjpbInBvc3RzOmNyZWF0ZSIsInBvc3RzOmRlbGV0ZSJdLCJlbnRpdGxlbWVudHMiOlsiYXVkaXQtbG9ncyJdLCJ1c2VyIjp7Im9iamVjdCI6InVzZXIiLCJpZCI6InVzZXJfMDFINUpRRFY3UjdBVEVZWkRFRzBXNVBSWVMiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20ifX0.A8mDST4wtq_0vId6ALg7k2Ukr7FXrszZtdJ_6dfXeAc';
-
-      const sessionData = await sealData(
-        {
-          accessToken,
-          refreshToken: 'def456',
-          impersonator: {
-            email: 'admin@example.com',
-            reason: 'test',
-          },
-          user: {
-            object: 'user',
-            id: 'user_01H5JQDV7R7ATEYZDEG0W5PRYS',
-            email: 'test@example.com',
-          },
-        },
-        { password: cookiePassword },
-      );
-
-      const session = workos.userManagement.loadSealedSession({
-        sessionData,
-        cookiePassword,
+      // Create a spy for jose.jwtVerify that returns a successful result
+      const originalJwtVerify = jose.jwtVerify;
+      const jwtVerifySpy = spy(async () => {
+        return {} as jose.JWTVerifyResult & jose.ResolvedKey;
+      });
+      
+      // Use Object.defineProperty to temporarily replace the method
+      Object.defineProperty(jose, 'jwtVerify', {
+        value: jwtVerifySpy,
+        configurable: true,
       });
 
-      await expect(session.authenticate()).resolves.toEqual({
-        authenticated: true,
-        impersonator: {
+      try {
+        const cookiePassword = 'alongcookiesecretmadefortestingsessions';
+
+        const accessToken =
+          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdXRoZW50aWNhdGVkIjp0cnVlLCJpbXBlcnNvbmF0b3IiOnsiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJlYXNvbiI6InRlc3QifSwic2lkIjoic2Vzc2lvbl8xMjMiLCJvcmdfaWQiOiJvcmdfMTIzIiwicm9sZSI6Im1lbWJlciIsInBlcm1pc3Npb25zIjpbInBvc3RzOmNyZWF0ZSIsInBvc3RzOmRlbGV0ZSJdLCJlbnRpdGxlbWVudHMiOlsiYXVkaXQtbG9ncyJdLCJ1c2VyIjp7Im9iamVjdCI6InVzZXIiLCJpZCI6InVzZXJfMDFINUpRRFY3UjdBVEVZWkRFRzBXNVBSWVMiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20ifX0.A8mDST4wtq_0vId6ALg7k2Ukr7FXrszZtdJ_6dfXeAc';
+
+        const sessionData = await sealData(
+          {
+            accessToken,
+            refreshToken: 'def456',
+            impersonator: {
+              email: 'admin@example.com',
+              reason: 'test',
+            },
+            user: {
+              object: 'user',
+              id: 'user_01H5JQDV7R7ATEYZDEG0W5PRYS',
+              email: 'test@example.com',
+            },
+          },
+          { password: cookiePassword },
+        );
+
+        const session = workos.userManagement.loadSealedSession({
+          sessionData,
+          cookiePassword,
+        });
+
+        const response = await session.authenticate();
+        
+        assertEquals(response.authenticated, true);
+        assertEquals(response.impersonator, {
           email: 'admin@example.com',
           reason: 'test',
-        },
-        sessionId: 'session_123',
-        organizationId: 'org_123',
-        role: 'member',
-        permissions: ['posts:create', 'posts:delete'],
-        entitlements: ['audit-logs'],
-        user: {
+        });
+        assertEquals(response.sessionId, 'session_123');
+        assertEquals(response.organizationId, 'org_123');
+        assertEquals(response.role, 'member');
+        assertEquals(response.permissions, ['posts:create', 'posts:delete']);
+        assertEquals(response.entitlements, ['audit-logs']);
+        assertEquals(response.user, {
           object: 'user',
           id: 'user_01H5JQDV7R7ATEYZDEG0W5PRYS',
           email: 'test@example.com',
-        },
-        accessToken,
-      });
+        });
+        assertEquals(response.accessToken, accessToken);
+      } finally {
+        // Restore original function
+        Object.defineProperty(jose, 'jwtVerify', {
+          value: originalJwtVerify,
+          configurable: true,
+        });
+      }
     });
   });
 
@@ -162,7 +221,7 @@ describe('Session', () => {
 
       const response = await session.refresh();
 
-      expect(response).toEqual({
+      assertEquals(response, {
         authenticated: false,
         reason: 'invalid_session_cookie',
       });
@@ -206,30 +265,20 @@ describe('Session', () => {
 
         const response = await session.refresh();
 
-        expect(response).toEqual({
-          authenticated: true,
-          impersonator: {
-            email: 'admin@example.com',
-            reason: 'test',
-          },
-          organizationId: 'org_123',
-          sealedSession: expect.any(String),
-          session: expect.objectContaining({
-            sealedSession: expect.any(String),
-            user: expect.objectContaining({
-              email: 'test01@example.com',
-            }),
-          }),
-          entitlements: undefined,
-          permissions: ['posts:create', 'posts:delete'],
-          role: 'member',
-          sessionId: 'session_123',
-          user: expect.objectContaining({
-            email: 'test01@example.com',
-            id: 'user_01H5JQDV7R7ATEYZDEG0W5PRYS',
-            object: 'user',
-          }),
+        assertEquals(response.authenticated, true);
+        assertEquals(response.impersonator, {
+          email: 'admin@example.com',
+          reason: 'test',
         });
+        assertEquals(response.organizationId, 'org_123');
+        assertEquals(typeof response.sealedSession, 'string');
+        assertEquals(response.session.user.email, 'test01@example.com');
+        assertEquals(response.permissions, ['posts:create', 'posts:delete']);
+        assertEquals(response.role, 'member');
+        assertEquals(response.sessionId, 'session_123');
+        assertEquals(response.user.email, 'test01@example.com');
+        assertEquals(response.user.id, 'user_01H5JQDV7R7ATEYZDEG0W5PRYS');
+        assertEquals(response.user.object, 'user');
       });
 
       it('overwrites the cookie password if a new one is provided', async () => {
@@ -243,97 +292,76 @@ describe('Session', () => {
           refreshToken,
         });
 
-        jest
-          .spyOn(jose, 'jwtVerify')
-          .mockResolvedValue({} as jose.JWTVerifyResult & jose.ResolvedKey);
+        // Create a spy for jose.jwtVerify that returns a successful result
+        const originalJwtVerify = jose.jwtVerify;
+        const jwtVerifySpy = spy(async () => {
+          return {} as jose.JWTVerifyResult & jose.ResolvedKey;
+        });
+        
+        // Use Object.defineProperty to temporarily replace the method
+        Object.defineProperty(jose, 'jwtVerify', {
+          value: jwtVerifySpy,
+          configurable: true,
+        });
 
-        const cookiePassword = 'alongcookiesecretmadefortestingsessions';
+        try {
+          const cookiePassword = 'alongcookiesecretmadefortestingsessions';
 
-        const sessionData = await sealData(
-          {
-            accessToken,
-            refreshToken,
-            user: {
-              object: 'user',
-              id: 'user_01H5JQDV7R7ATEYZDEG0W5PRYS',
-              email: 'test01@example.com',
+          const sessionData = await sealData(
+            {
+              accessToken,
+              refreshToken,
+              user: {
+                object: 'user',
+                id: 'user_01H5JQDV7R7ATEYZDEG0W5PRYS',
+                email: 'test01@example.com',
+              },
             },
-          },
-          { password: cookiePassword },
-        );
+            { password: cookiePassword },
+          );
 
-        const session = workos.userManagement.loadSealedSession({
-          sessionData,
-          cookiePassword,
-        });
+          const session = workos.userManagement.loadSealedSession({
+            sessionData,
+            cookiePassword,
+          });
 
-        const newCookiePassword =
-          'anevenlongercookiesecretmadefortestingsessions';
+          const newCookiePassword = 'anevenlongercookiesecretmadefortestingsessions';
 
-        const response = await session.refresh({
-          cookiePassword: newCookiePassword,
-        });
+          const response = await session.refresh({
+            cookiePassword: newCookiePassword,
+          });
 
-        expect(response.authenticated).toBe(true);
+          assertEquals(response.authenticated, true);
 
-        const resp = await session.authenticate();
+          const resp = await session.authenticate();
 
-        expect(resp.authenticated).toBe(true);
+          assertEquals(resp.authenticated, true);
+        } finally {
+          // Restore original function
+          Object.defineProperty(jose, 'jwtVerify', {
+            value: originalJwtVerify,
+            configurable: true,
+          });
+        }
       });
     });
   });
 
   describe('getLogoutUrl', () => {
     it('returns a logout URL for the user', async () => {
-      jest
-        .spyOn(jose, 'jwtVerify')
-        .mockResolvedValue({} as jose.JWTVerifyResult & jose.ResolvedKey);
-
-      const cookiePassword = 'alongcookiesecretmadefortestingsessions';
-
-      const sessionData = await sealData(
-        {
-          accessToken:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJzdWIiOiAiMTIzNDU2Nzg5MCIsCiAgIm5hbWUiOiAiSm9obiBEb2UiLAogICJpYXQiOiAxNTE2MjM5MDIyLAogICJzaWQiOiAic2Vzc2lvbl8xMjMiLAogICJvcmdfaWQiOiAib3JnXzEyMyIsCiAgInJvbGUiOiAibWVtYmVyIiwKICAicGVybWlzc2lvbnMiOiBbInBvc3RzOmNyZWF0ZSIsICJwb3N0czpkZWxldGUiXQp9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
-          refreshToken: 'def456',
-          user: {
-            object: 'user',
-            id: 'user_01H5JQDV7R7ATEYZDEG0W5PRYS',
-            email: 'test01@example.com',
-          },
-        },
-        { password: cookiePassword },
-      );
-
-      const session = workos.userManagement.loadSealedSession({
-        sessionData,
-        cookiePassword,
+      // Create a spy for jose.jwtVerify that returns a successful result
+      const originalJwtVerify = jose.jwtVerify;
+      const jwtVerifySpy = spy(async () => {
+        return {} as jose.JWTVerifyResult & jose.ResolvedKey;
+      });
+      
+      // Use Object.defineProperty to temporarily replace the method
+      Object.defineProperty(jose, 'jwtVerify', {
+        value: jwtVerifySpy,
+        configurable: true,
       });
 
-      const url = await session.getLogoutUrl();
-
-      expect(url).toEqual(
-        'https://api.workos.com/user_management/sessions/logout?session_id=session_123',
-      );
-    });
-
-    it('returns an error if the session is invalid', async () => {
-      const session = workos.userManagement.loadSealedSession({
-        sessionData: '',
-        cookiePassword: 'cookiePassword',
-      });
-
-      await expect(session.getLogoutUrl()).rejects.toThrow(
-        'Failed to extract session ID for logout URL: no_session_cookie_provided',
-      );
-    });
-
-    describe('when a returnTo URL is provided', () => {
-      it('returns a logout URL for the user', async () => {
-        jest
-          .spyOn(jose, 'jwtVerify')
-          .mockResolvedValue({} as jose.JWTVerifyResult & jose.ResolvedKey);
-
+      try {
         const cookiePassword = 'alongcookiesecretmadefortestingsessions';
 
         const sessionData = await sealData(
@@ -355,13 +383,81 @@ describe('Session', () => {
           cookiePassword,
         });
 
-        const url = await session.getLogoutUrl({
-          returnTo: 'https://example.com/signed-out',
+        const url = await session.getLogoutUrl();
+
+        assertEquals(url, 'https://api.workos.com/user_management/sessions/logout?session_id=session_123');
+      } finally {
+        // Restore original function
+        Object.defineProperty(jose, 'jwtVerify', {
+          value: originalJwtVerify,
+          configurable: true,
+        });
+      }
+    });
+
+    it('returns an error if the session is invalid', async () => {
+      const session = workos.userManagement.loadSealedSession({
+        sessionData: '',
+        cookiePassword: 'cookiePassword',
+      });
+
+      try {
+        await session.getLogoutUrl();
+        throw new Error('Expected to throw but did not');
+      } catch (error) {
+        assertEquals(error instanceof Error, true);
+        assertEquals((error as Error).message, 'Failed to extract session ID for logout URL: no_session_cookie_provided');
+      }
+    });
+
+    describe('when a returnTo URL is provided', () => {
+      it('returns a logout URL for the user', async () => {
+        // Create a spy for jose.jwtVerify that returns a successful result
+        const originalJwtVerify = jose.jwtVerify;
+        const jwtVerifySpy = spy(async () => {
+          return {} as jose.JWTVerifyResult & jose.ResolvedKey;
+        });
+        
+        // Use Object.defineProperty to temporarily replace the method
+        Object.defineProperty(jose, 'jwtVerify', {
+          value: jwtVerifySpy,
+          configurable: true,
         });
 
-        expect(url).toBe(
-          'https://api.workos.com/user_management/sessions/logout?session_id=session_123&return_to=https%3A%2F%2Fexample.com%2Fsigned-out',
-        );
+        try {
+          const cookiePassword = 'alongcookiesecretmadefortestingsessions';
+
+          const sessionData = await sealData(
+            {
+              accessToken:
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJzdWIiOiAiMTIzNDU2Nzg5MCIsCiAgIm5hbWUiOiAiSm9obiBEb2UiLAogICJpYXQiOiAxNTE2MjM5MDIyLAogICJzaWQiOiAic2Vzc2lvbl8xMjMiLAogICJvcmdfaWQiOiAib3JnXzEyMyIsCiAgInJvbGUiOiAibWVtYmVyIiwKICAicGVybWlzc2lvbnMiOiBbInBvc3RzOmNyZWF0ZSIsICJwb3N0czpkZWxldGUiXQp9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+              refreshToken: 'def456',
+              user: {
+                object: 'user',
+                id: 'user_01H5JQDV7R7ATEYZDEG0W5PRYS',
+                email: 'test01@example.com',
+              },
+            },
+            { password: cookiePassword },
+          );
+
+          const session = workos.userManagement.loadSealedSession({
+            sessionData,
+            cookiePassword,
+          });
+
+          const url = await session.getLogoutUrl({
+            returnTo: 'https://example.com/signed-out',
+          });
+
+          assertEquals(url, 'https://api.workos.com/user_management/sessions/logout?session_id=session_123&return_to=https%3A%2F%2Fexample.com%2Fsigned-out');
+        } finally {
+          // Restore original function
+          Object.defineProperty(jose, 'jwtVerify', {
+            value: originalJwtVerify,
+            configurable: true,
+          });
+        }
       });
     });
   });

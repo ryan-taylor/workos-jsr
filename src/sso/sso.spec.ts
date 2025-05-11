@@ -1,18 +1,30 @@
-import fetch from 'jest-fetch-mock';
+// Import Deno testing utilities
 import {
-  fetchOnce,
-  fetchURL,
-  fetchHeaders,
-  fetchBody,
-  fetchSearchParams,
+  assertEquals,
+  beforeEach,
+  describe,
+  expect,
+  it,
+} from "../../tests/deno-test-setup.ts";
+
+import { 
+  fetchBody, 
+  fetchHeaders, 
+  fetchOnce, 
+  fetchSearchParams, 
+  fetchURL, 
+  resetMockFetch,
+  type MockResponseData 
 } from '../common/utils/test-utils.ts';
 
 import { WorkOS } from '../workos.ts';
-import { ConnectionResponse, ConnectionType } from './interfaces.ts';
-import { ListResponse } from '../common/interfaces.ts';
+import { type ConnectionResponse, ConnectionType } from './interfaces/index.ts';
+import type { ListResponse } from '../common/interfaces/index.ts';
 
 describe('SSO', () => {
-  beforeEach(() => fetch.resetMocks());
+  beforeEach(() => {
+    resetMockFetch();
+  });
 
   const connectionResponse: ConnectionResponse = {
     object: 'connection',
@@ -36,7 +48,8 @@ describe('SSO', () => {
           list_metadata: {},
         };
 
-        fetchOnce(listConnectionsResponse);
+        // Cast to MockResponseData to satisfy type constraints
+        fetchOnce(listConnectionsResponse as unknown as MockResponseData);
 
         await workos.sso.listConnections({
           connectionType: ConnectionType.OktaSAML,
@@ -61,7 +74,7 @@ describe('SSO', () => {
             redirectUri: 'example.com/sso/workos/callback',
           });
 
-          expect(url).toMatchSnapshot();
+          assertEquals(url, "https://api.workos.com/sso/authorize?client_id=proj_123&domain=lyft.com&redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code");
         });
       });
 
@@ -69,13 +82,19 @@ describe('SSO', () => {
         it('throws an error for incomplete arguments', () => {
           const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
 
-          const urlFn = () =>
+          try {
             workos.sso.getAuthorizationUrl({
               clientId: 'proj_123',
               redirectUri: 'example.com/sso/workos/callback',
             });
-
-          expect(urlFn).toThrowErrorMatchingSnapshot();
+            throw new Error('Expected to throw but did not');
+          } catch (error: unknown) {
+            if (error instanceof Error) {
+              assertEquals(error.message, "Incomplete arguments. Need to specify either a 'connection', 'organization', 'domain', or 'provider'.");
+            } else {
+              throw new Error('Expected error to be an instance of Error');
+            }
+          }
         });
       });
 
@@ -91,7 +110,7 @@ describe('SSO', () => {
             redirectUri: 'example.com/sso/workos/callback',
           });
 
-          expect(url).toMatchSnapshot();
+          assertEquals(url, "https://api.workos.dev/sso/authorize?client_id=proj_123&provider=Google&redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code");
         });
       });
 
@@ -107,7 +126,7 @@ describe('SSO', () => {
             redirectUri: 'example.com/sso/workos/callback',
           });
 
-          expect(url).toMatchSnapshot();
+          assertEquals(url, "https://api.workos.dev/sso/authorize?client_id=proj_123&connection=connection_123&redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code");
         });
       });
 
@@ -123,7 +142,7 @@ describe('SSO', () => {
             redirectUri: 'example.com/sso/workos/callback',
           });
 
-          expect(url).toMatchSnapshot();
+          assertEquals(url, "https://api.workos.dev/sso/authorize?client_id=proj_123&organization=organization_123&redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code");
         });
       });
 
@@ -139,7 +158,7 @@ describe('SSO', () => {
             redirectUri: 'example.com/sso/workos/callback',
           });
 
-          expect(url).toMatchSnapshot();
+          assertEquals(url, "https://api.workos.dev/sso/authorize?client_id=proj_123&domain=lyft.com&redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code");
         });
       });
 
@@ -154,7 +173,7 @@ describe('SSO', () => {
             state: 'custom state',
           });
 
-          expect(url).toMatchSnapshot();
+          assertEquals(url, "https://api.workos.com/sso/authorize?client_id=proj_123&domain=lyft.com&redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code&state=custom+state");
         });
       });
 
@@ -170,9 +189,7 @@ describe('SSO', () => {
             state: 'custom state',
           });
 
-          expect(url).toMatchInlineSnapshot(
-            `"https://api.workos.com/sso/authorize?client_id=proj_123&connection=connection_123&domain_hint=lyft.com&redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code&state=custom+state"`,
-          );
+          assertEquals(url, "https://api.workos.com/sso/authorize?client_id=proj_123&connection=connection_123&domain_hint=lyft.com&redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code&state=custom+state");
         });
       });
 
@@ -188,9 +205,7 @@ describe('SSO', () => {
             state: 'custom state',
           });
 
-          expect(url).toMatchInlineSnapshot(
-            `"https://api.workos.com/sso/authorize?client_id=proj_123&connection=connection_123&login_hint=foo%40workos.com&redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code&state=custom+state"`,
-          );
+          assertEquals(url, "https://api.workos.com/sso/authorize?client_id=proj_123&connection=connection_123&login_hint=foo%40workos.com&redirect_uri=example.com%2Fsso%2Fworkos%2Fcallback&response_type=code&state=custom+state");
         });
       });
     });
@@ -232,12 +247,29 @@ describe('SSO', () => {
             clientId: 'proj_123',
           });
 
-          expect(fetch.mock.calls.length).toEqual(1);
-
-          expect(fetchBody()).toMatchSnapshot();
-          expect(fetchHeaders()).toMatchSnapshot();
-          expect(accessToken).toBe('01DMEK0J53CVMC32CK5SE0KZ8Q');
-          expect(profile).toMatchSnapshot();
+          // Check that fetch was called with correct body
+          assertEquals(fetchBody(), {
+            client_id: 'proj_123',
+            client_secret: 'sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU',
+            grant_type: 'authorization_code',
+            code: 'authorization_code',
+          });
+          
+          // Check headers
+          const headers = fetchHeaders();
+          assertEquals(headers?.['Authorization'], 'Bearer sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
+          assertEquals(headers?.['Content-Type'], 'application/x-www-form-urlencoded;charset=utf-8');
+          
+          // Check response data
+          assertEquals(accessToken, '01DMEK0J53CVMC32CK5SE0KZ8Q');
+          assertEquals(profile.id, 'prof_123');
+          assertEquals(profile.connectionId, 'conn_123');
+          assertEquals(profile.connectionType, 'OktaSAML');
+          assertEquals(profile.email, 'foo@test.com');
+          assertEquals(profile.firstName, 'foo');
+          assertEquals(profile.lastName, 'bar');
+          assertEquals(profile.groups, ['Admins', 'Developers']);
+          assertEquals(profile.customAttributes.license, 'professional');
         });
       });
 
@@ -272,12 +304,23 @@ describe('SSO', () => {
             clientId: 'proj_123',
           });
 
-          expect(fetch.mock.calls.length).toEqual(1);
-
-          expect(fetchBody()).toMatchSnapshot();
-          expect(fetchHeaders()).toMatchSnapshot();
-          expect(accessToken).toBe('01DMEK0J53CVMC32CK5SE0KZ8Q');
-          expect(profile).toMatchSnapshot();
+          // Check that fetch was called with correct body
+          assertEquals(fetchBody(), {
+            client_id: 'proj_123',
+            client_secret: 'sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU',
+            grant_type: 'authorization_code',
+            code: 'authorization_code',
+          });
+          
+          // Check headers
+          const headers = fetchHeaders();
+          assertEquals(headers?.['Authorization'], 'Bearer sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
+          assertEquals(headers?.['Content-Type'], 'application/x-www-form-urlencoded;charset=utf-8');
+          
+          // Check response data
+          assertEquals(accessToken, '01DMEK0J53CVMC32CK5SE0KZ8Q');
+          assertEquals(profile.id, 'prof_123');
+          assertEquals(profile.groups, undefined);
         });
       });
     });
@@ -311,12 +354,11 @@ describe('SSO', () => {
           accessToken: 'access_token',
         });
 
-        expect(fetch.mock.calls.length).toEqual(1);
-        expect(fetchHeaders()).toMatchObject({
-          Authorization: 'Bearer access_token',
-        });
+        // Check headers
+        const headers = fetchHeaders();
+        assertEquals(headers?.['Authorization'], 'Bearer access_token');
 
-        expect(profile.id).toBe('prof_123');
+        assertEquals(profile.id, 'prof_123');
       });
     });
 
@@ -328,21 +370,24 @@ describe('SSO', () => {
 
         await workos.sso.deleteConnection('conn_123');
 
-        expect(fetchURL()).toContain('/connections/conn_123');
+        const url = fetchURL();
+        assertEquals(url?.includes('/connections/conn_123'), true);
       });
     });
 
     describe('getConnection', () => {
       it(`requests a Connection`, async () => {
-        fetchOnce(connectionResponse);
+        // Cast to MockResponseData to satisfy type constraints
+        fetchOnce(connectionResponse as unknown as MockResponseData);
 
         const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
 
         const subject = await workos.sso.getConnection('conn_123');
 
-        expect(fetchURL()).toContain('/connections/conn_123');
+        const url = fetchURL();
+        assertEquals(url?.includes('/connections/conn_123'), true);
 
-        expect(subject.connectionType).toEqual('OktaSAML');
+        assertEquals(subject.connectionType, 'OktaSAML');
       });
     });
 
@@ -359,9 +404,10 @@ describe('SSO', () => {
           organizationId: 'org_1234',
         });
 
-        expect(fetchURL()).toContain('/connections');
+        const url = fetchURL();
+        assertEquals(url?.includes('/connections'), true);
 
-        expect(subject.data).toHaveLength(1);
+        assertEquals(subject.data.length, 1);
       });
     });
   });

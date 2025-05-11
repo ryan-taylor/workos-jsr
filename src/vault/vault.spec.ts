@@ -1,19 +1,23 @@
-import fetch from 'jest-fetch-mock';
-import { fetchMethod, fetchOnce, fetchURL } from '../common/utils/test-utils.ts';
-import { WorkOS } from '../workos.ts';
-import { List } from '../common/interfaces.ts';
+// Import Deno testing utilities
 import {
-  SecretDigest,
-  SecretMetadata,
-  SecretVersion,
-  VaultSecret,
-} from './interfaces.ts';
+  assertEquals,
+  beforeEach,
+  describe,
+  it,
+} from "../../tests/deno-test-setup.ts";
+
+import { fetchMethod, fetchOnce, fetchURL, resetMockFetch } from '../common/utils/test-utils.ts';
+import { WorkOS } from '../workos.ts';
+import type { List } from '../common/interfaces/index.ts';
+import type { SecretDigest, SecretMetadata, SecretVersion, VaultSecret } from './interfaces/index.ts';
 import { ConflictException } from '../common/exceptions/conflict.exception.ts';
 
 const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
 
 describe('Vault', () => {
-  beforeEach(() => fetch.resetMocks());
+  beforeEach(() => {
+    resetMockFetch();
+  });
 
   describe('createSecret', () => {
     it('creates secret', async () => {
@@ -37,9 +41,9 @@ describe('Vault', () => {
         context: { type: 'spore' },
         value: 'Full speed ahead',
       });
-      expect(fetchURL()).toContain(`/vault/v1/kv`);
-      expect(fetchMethod()).toBe('POST');
-      expect(resource).toStrictEqual<SecretMetadata>({
+      assertEquals(fetchURL()?.includes(`/vault/v1/kv`), true);
+      assertEquals(fetchMethod(), 'POST');
+      assertEquals(resource, {
         id: 's1',
         context: {
           type: 'spore',
@@ -52,7 +56,7 @@ describe('Vault', () => {
           name: 'Local Test Key',
         },
         versionId: 'v1',
-      });
+      } as SecretMetadata);
     });
 
     it('throws an error if secret exists', async () => {
@@ -63,15 +67,20 @@ describe('Vault', () => {
         },
         { status: 409 },
       );
-      await expect(
-        workos.vault.createSecret({
+      
+      try {
+        await workos.vault.createSecret({
           name: secretName,
           context: { type: 'spore' },
           value: 'Full speed ahead',
-        }),
-      ).rejects.toThrow(ConflictException);
-      expect(fetchURL()).toContain(`/vault/v1/kv`);
-      expect(fetchMethod()).toBe('POST');
+        });
+        throw new Error('Expected to throw but did not');
+      } catch (error) {
+        assertEquals(error instanceof ConflictException, true);
+      }
+      
+      assertEquals(fetchURL()?.includes(`/vault/v1/kv`), true);
+      assertEquals(fetchMethod(), 'POST');
     });
   });
 
@@ -101,9 +110,9 @@ describe('Vault', () => {
       const resource = await workos.vault.readSecret({
         id: secretId,
       });
-      expect(fetchURL()).toContain(`/vault/v1/kv/${secretId}`);
-      expect(fetchMethod()).toBe('GET');
-      expect(resource).toStrictEqual<VaultSecret>({
+      assertEquals(fetchURL()?.includes(`/vault/v1/kv/${secretId}`), true);
+      assertEquals(fetchMethod(), 'GET');
+      assertEquals(resource, {
         id: secretId,
         metadata: {
           id: secretId,
@@ -121,7 +130,7 @@ describe('Vault', () => {
         },
         name: secretName,
         value: 'Pull the lever Gronk',
-      });
+      } as VaultSecret);
     });
   });
 
@@ -141,9 +150,9 @@ describe('Vault', () => {
         },
       });
       const resource = await workos.vault.listSecrets();
-      expect(fetchURL()).toContain(`/vault/v1/kv`);
-      expect(fetchMethod()).toBe('GET');
-      expect(resource).toStrictEqual<List<SecretDigest>>({
+      assertEquals(fetchURL()?.includes(`/vault/v1/kv`), true);
+      assertEquals(fetchMethod(), 'GET');
+      assertEquals(resource, {
         object: 'list',
         data: [
           {
@@ -156,7 +165,7 @@ describe('Vault', () => {
           after: undefined,
           before: 'charger',
         },
-      });
+      } as List<SecretDigest>);
     });
   });
 
@@ -178,15 +187,15 @@ describe('Vault', () => {
         },
       });
       const resource = await workos.vault.listSecretVersions({ id: 'secret1' });
-      expect(fetchURL()).toContain(`/vault/v1/kv/secret1/versions`);
-      expect(fetchMethod()).toBe('GET');
-      expect(resource).toStrictEqual<SecretVersion[]>([
+      assertEquals(fetchURL()?.includes(`/vault/v1/kv/secret1/versions`), true);
+      assertEquals(fetchMethod(), 'GET');
+      assertEquals(resource, [
         {
           createdAt: new Date(Date.parse('2029-03-17T15:51:57.000000Z')),
           currentVersion: true,
           id: 'raZUqoHteQkLihH6AG5bj6sYAqMcJS76',
         },
-      ]);
+      ] as SecretVersion[]);
     });
   });
 
@@ -215,9 +224,9 @@ describe('Vault', () => {
         id: secretId,
         value: 'Full speed ahead',
       });
-      expect(fetchURL()).toContain(`/vault/v1/kv/${secretId}`);
-      expect(fetchMethod()).toBe('PUT');
-      expect(resource).toStrictEqual<VaultSecret>({
+      assertEquals(fetchURL()?.includes(`/vault/v1/kv/${secretId}`), true);
+      assertEquals(fetchMethod(), 'PUT');
+      assertEquals(resource, {
         id: secretId,
         name: 'charger',
         metadata: {
@@ -235,7 +244,7 @@ describe('Vault', () => {
           versionId: 'v1',
         },
         value: undefined,
-      });
+      } as VaultSecret);
     });
 
     it('throws an error if secret version check fails', async () => {
@@ -245,15 +254,20 @@ describe('Vault', () => {
         },
         { status: 409 },
       );
-      await expect(
-        workos.vault.updateSecret({
+      
+      try {
+        await workos.vault.updateSecret({
           id: 'secret1',
           value: 'Full speed ahead',
           versionCheck: 'notaversion',
-        }),
-      ).rejects.toThrow(ConflictException);
-      expect(fetchURL()).toContain(`/vault/v1/kv/secret1`);
-      expect(fetchMethod()).toBe('PUT');
+        });
+        throw new Error('Expected to throw but did not');
+      } catch (error) {
+        assertEquals(error instanceof ConflictException, true);
+      }
+      
+      assertEquals(fetchURL()?.includes(`/vault/v1/kv/secret1`), true);
+      assertEquals(fetchMethod(), 'PUT');
     });
   });
 });

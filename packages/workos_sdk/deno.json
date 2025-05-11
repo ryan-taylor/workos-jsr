@@ -1,2 +1,8 @@
 {
+  "name": "@workos/sdk",
+  "version": "0.1.0-alpha.0",
+  "description": "WorkOS SDK ported to Deno",
+  "exports": { "./mod.ts": "./mod.ts" },
+  "compilerOptions": { "strict": true },
+  "lint": { "rules": { "tags": ["recommended"] } }
 }

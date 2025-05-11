@@ -1,105 +1,15 @@
 {
-  "name": "@ryantaylor/workos",
-  "importMap": "import_map.json",
-  "version": "0.1.0-alpha",
-  "exports": {
-    ".": "./mod.ts"
+  "imports": {
+    "@workos/sdk/": "./packages/workos_sdk/",
+    "@workos/fresh/": "./packages/workos_fresh/",
+    "$fresh/": "https://deno.land/x/fresh@1.6.5/",
+    "preact": "https://esm.sh/preact@10.19.3",
+    "preact/": "https://esm.sh/preact@10.19.3/"
   },
   "tasks": {
-    "test": "deno test --allow-net --allow-env --allow-read --allow-write",
-    "test:watch": "deno test --allow-net --allow-env --allow-read --allow-write --watch",
-    "test:coverage": "deno test --allow-net --allow-env --allow-read --allow-write --coverage=cov",
-    "coverage:report": "deno coverage cov --lcov --output=cov/lcov.info",
-    "coverage:html": "deno coverage cov --html --output=cov/html",
-    "test:src": "deno test --allow-net --allow-env --allow-read --allow-write src/",
-    "test:deno": "deno test --allow-net --allow-env --allow-read --allow-write tests_deno/",
-    "test:deno:watch": "deno test --allow-net --allow-env --allow-read --allow-write --watch tests_deno/",
-    "test:deno:coverage": "deno test --allow-net --allow-env --allow-read --allow-write --coverage=cov tests_deno/",
-    "test:fresh1": "export DENO_FRESH_VERSION=1 && deno test --allow-net --allow-env --allow-read --allow-write",
-    "test:fresh2": "export DENO_FRESH_VERSION=2 && deno test --allow-net --allow-env --allow-read --allow-write",
-    "test:ci": "deno test --allow-net --allow-env --allow-read --allow-write --import-map=$(deno run scripts/select_fresh.ts) --coverage=cov && deno coverage cov --lcov --output=cov/lcov.info",
-    "bundle": "deno run -A --import-map=$(deno run scripts/select_fresh.ts) $(deno run scripts/bundle_entry.ts)",
-    "bundle:sdk": "deno run -A ./scripts/bundle.ts",
-    "npm:build": "deno run -A ./npm/bundle.ts",
-    "deploy": "deno run -A ./scripts/bundle.ts && deno deploy",
-    "fmt": "deno fmt",
-    "lint": "deno lint",
-    "check": "deno check mod.ts",
-    "dev": "deno run -A --import-map=$(deno run scripts/select_fresh.ts) $(deno run scripts/dev_entry.ts)",
-    "switch": "deno run -A scripts/switch_fresh.ts"
-  },
-  "test": {
-    "include": [
-      "src/**/*.{test,spec}.{ts,js}",
-      "tests_deno/**/*.{test,spec}.ts"
-    ],
-    "exclude": [
-      "**/node_modules/**",
-      "_reference/**"
-    ]
-  },
-  "compilerOptions": {
-    "strict": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
-    "strictBindCallApply": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "jsx": "react-jsx",
-    "jsxImportSource": "preact",
-    "lib": ["dom", "deno.ns", "deno.window"]
-  },
-  "fmt": {
-    "indentWidth": 2,
-    "lineWidth": 150,
-    "semiColons": true,
-    "singleQuote": true,
-    "proseWrap": "preserve",
-    "exclude": ["_reference/**"]
-  },
-  "lint": {
-    "exclude": ["**/node_modules/**", "lib/**", "cov/**", "coverage/**", "dist/**", ".sailplane/**", "_reference/**"],
-    "rules": {
-      "exclude": [
-        "no-explicit-any",
-        "no-unused-vars",
-        "ban-ts-comment"
-      ]
-    }
-  },
-  "publish": {
-    "exclude": [
-      ".env*",
-      ".git*",
-      ".nvmrc",
-      ".prettier*",
-      "coverage/",
-      "tests/",
-      "tests_deno/",
-      "examples/",
-      "_reference/**",
-      "scripts/",
-      "cov/",
-      "lib/",
-      "node_modules/",
-      "bin/",
-      "dist/",
-      "commitlint.config.js",
-      "**/*.spec.ts",
-      "**/*.test.ts",
-      "**/__snapshots__/",
-      "**/fixtures/",
-      "renovate.json",
-      "iron-session-*.tgz",
-      "deno-test-format-findings.md",
-      "CONTRIBUTING.md",
-      "fresh.config.ts",
-      ".sailplane/**"
-    ]
+    "lint":  "deno lint",
+    "check": "deno check $(git ls-files '*.ts')",
+    "test":  "deno test -A",
+    "dev":   "cd examples/fresh-canary && deno task start"
   }
 }

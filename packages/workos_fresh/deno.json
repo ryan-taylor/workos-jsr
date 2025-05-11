@@ -1,2 +1,8 @@
 {
+  "name": "@workos/sdk-fresh",
+  "version": "0.1.0-alpha.0",
+  "description": "Fresh helpers for WorkOS Deno SDK",
+  "imports": { "@workos/sdk/": "../workos_sdk/" },
+  "exports": { "./mod.ts": "./mod.ts" },
+  "compilerOptions": { "strict": true }
 }

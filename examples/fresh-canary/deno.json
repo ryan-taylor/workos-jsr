@@ -1,38 +1,10 @@
 {
-  "tasks": {
-    "start": "deno run -A --watch=static/,routes/ main.ts",
-    "dev": "deno task start",
-    "test": "deno test -A",
-    "lint": "deno lint",
-    "check": "deno check $(find . -name '*.ts' -not -path '*/node_modules/*')"
-  },
   "imports": {
-    "$fresh/": "https://deno.land/x/fresh@1.6.5/",
-    "preact": "https://esm.sh/preact@10.19.3",
-    "preact/": "https://esm.sh/preact@10.19.3/",
-    "preact-render-to-string": "https://esm.sh/*preact-render-to-string@6.3.1",
-    "@preact/signals": "https://esm.sh/*@preact/signals@1.2.2",
-    "@preact/signals-core": "https://esm.sh/*@preact/signals-core@1.5.1",
-    "$std/": "https://deno.land/std@0.220.0/",
-    "@std/http": "jsr:@std/http@1",
-    
-    "workos": "https://raw.githubusercontent.com/ryan-taylor/workos-jsr/main/mod.ts",
-    "workos/": "https://raw.githubusercontent.com/ryan-taylor/workos-jsr/main/",
-    
-    "workos/common/": "./workos_internal/common/",
-    "workos/middleware/": "./workos_internal/middleware/",
-    "workos_internal/": "./workos_internal/"
+    "@workos/sdk/": "../../packages/workos_sdk/",
+    "@workos/fresh/": "../../packages/workos_fresh/",
+    "$fresh/": "https://deno.land/x/fresh@1.6.5/"
   },
-  "compilerOptions": {
-    "jsx": "react-jsx",
-    "jsxImportSource": "preact",
-    "strict": true,
-    "lib": ["dom", "dom.iterable", "dom.asynciterable", "deno.ns"]
-  },
-  "lint": {
-    "rules": {
-      "tags": ["recommended"]
-    }
-  },
-  "nodeModulesDir": "none"
+  "tasks": {
+    "start": "deno run -A --watch=static/,routes/ main.ts"
+  }
 }

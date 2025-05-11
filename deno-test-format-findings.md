@@ -6,6 +6,13 @@ The following test files have been verified to already use the native Deno.test 
 - tests/core.test.ts
 - tests/directory_sync.test.ts
 - tests/http_client.test.ts
+- tests/http_client_complete.test.ts
+- tests/mfa.test.ts
+- tests/organizations.test.ts
+- tests/passwordless_complete.test.ts
+- tests/passwordless.test.ts
+- tests/path_operations.test.ts (uses t.step approach)
+- tests/sso.test.ts
 
 ## Details
 All files use:

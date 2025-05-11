@@ -1,4 +1,4 @@
-import { HttpClient, HttpClientError, HttpRequestOptions } from '../src/core/http_client.ts';
+import { type HttpClient, HttpClientError, type HttpRequestOptions } from '../src/core/http_client.ts';
 import { WorkOS } from '../src/workos.ts';
 
 /**
@@ -107,7 +107,7 @@ export function createCapturingMockClient<T = unknown>(responseData: T) {
 }
 
 /**
- * A standardized mock HTTP client for testing that provides a comprehensive 
+ * A standardized mock HTTP client for testing that provides a comprehensive
  * implementation with request tracking and response customization.
  * This can be used across all test files for consistency.
  */
@@ -142,17 +142,17 @@ export class MockHttpClient implements HttpClient {
     if (this.statusCode >= 400) {
       const response = new Response(JSON.stringify(this.mockResponse), {
         status: this.statusCode,
-        headers: { 'content-type': 'application/json' }
+        headers: { 'content-type': 'application/json' },
       });
       throw new HttpClientError(
         `HTTP ${this.statusCode}: Error`,
         this.statusCode,
-        response
+        response,
       );
     }
 
     return {
-      toJSON: async () => this.mockResponse
+      toJSON: async () => this.mockResponse,
     };
   }
 
@@ -188,12 +188,12 @@ export class MockHttpClient implements HttpClient {
 /**
  * Helper function to create a WorkOS instance with a mock HTTP client
  * Use this standardized method across all test files that need a WorkOS instance
- * 
+ *
  * @param mockResponse The data to be returned by the mock client
  * @param statusCode HTTP status code to return (defaults to 200)
  * @returns An object containing the WorkOS instance and mock client for assertions
  */
-export function createMockWorkOS(mockResponse: any, statusCode = 200): { workos: WorkOS, client: MockHttpClient } {
+export function createMockWorkOS(mockResponse: any, statusCode = 200): { workos: WorkOS; client: MockHttpClient } {
   const client = new MockHttpClient(mockResponse, statusCode);
   const workos = new WorkOS('sk_test_123456789');
   // Replace the client with our mock client

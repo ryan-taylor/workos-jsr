@@ -1,9 +1,9 @@
 // Utility functions for processing and storing webhook events
 
-import { WorkOS } from "../../../src/workos.ts";
-import { DenoCryptoProvider } from "../../../src/common/crypto/deno-crypto-provider.ts";
-import { Event } from "../../../src/common/interfaces/event.interface.ts";
-import { WebhookEvent } from "./webhook-types.ts";
+import { WorkOS } from '../../../src/workos.ts';
+import { DenoCryptoProvider } from '../../../src/common/crypto/deno-crypto-provider.ts';
+import type { Event } from '../../../src/common/interfaces/event.interface.ts';
+import type { WebhookEvent } from './webhook-types.ts';
 
 // Global events store (in-memory for the demo)
 // In a production environment, you would use a database
@@ -15,7 +15,7 @@ const webhookEvents: WebhookEvent[] = [];
  */
 export function initWebhooks() {
   const cryptoProvider = new DenoCryptoProvider();
-  
+
   return {
     webhooks: new WorkOS().webhooks,
   };
@@ -59,21 +59,21 @@ export function getWebhookEvents(options?: {
   if (options) {
     if (options.eventType) {
       filteredEvents = filteredEvents.filter(
-        (event) => event.event === options.eventType
+        (event) => event.event === options.eventType,
       );
     }
 
     if (options.startTime) {
       const startTimestamp = new Date(options.startTime).getTime();
       filteredEvents = filteredEvents.filter(
-        (event) => new Date(event.timestamp).getTime() >= startTimestamp
+        (event) => new Date(event.timestamp).getTime() >= startTimestamp,
       );
     }
 
     if (options.endTime) {
       const endTimestamp = new Date(options.endTime).getTime();
       filteredEvents = filteredEvents.filter(
-        (event) => new Date(event.timestamp).getTime() <= endTimestamp
+        (event) => new Date(event.timestamp).getTime() <= endTimestamp,
       );
     }
   }
@@ -87,10 +87,10 @@ export function getWebhookEvents(options?: {
  */
 export function getUniqueEventTypes(): string[] {
   const eventTypes = new Set<string>();
-  
+
   webhookEvents.forEach((event) => {
     eventTypes.add(event.event);
   });
-  
+
   return Array.from(eventTypes);
 }

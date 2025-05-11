@@ -1,13 +1,13 @@
 import { disableFetchMocks, enableFetchMocks } from 'jest-fetch-mock';
 
 import { WorkOS } from '../workos.ts';
-import { randomUUID } from 'crypto';
+import { crypto } from "@std/crypto";
 import { NotFoundException } from '../index.worker.ts';
 import { ConflictException } from '../common/exceptions/conflict.exception.ts';
 
 describe.skip('Vault Live Test', () => {
   let workos: WorkOS;
-  const objectPrefix: string = randomUUID();
+  const objectPrefix: string = crypto.randomUUID();
 
   beforeAll(() => {
     disableFetchMocks();
@@ -169,7 +169,7 @@ describe.skip('Vault Live Test', () => {
     });
 
     it('Describes objects', async () => {
-      const objectName = `${randomUUID()}-trujillo`;
+      const objectName = `${crypto.randomUUID()}-trujillo`;
       const newObject = await workos.vault.createObject({
         name: objectName,
         value: 'Qiviut 11-13 micron',
@@ -206,7 +206,7 @@ describe.skip('Vault Live Test', () => {
     it('Lists objects with pagination', async () => {
       const objectNames = [];
       const numObjects = 6;
-      const listPrefix = `${objectPrefix}-${randomUUID()}`;
+      const listPrefix = `${objectPrefix}-${crypto.randomUUID()}`;
 
       for (let i = 0; i < numObjects; i++) {
         const objectName = `${listPrefix}-${i}`;
@@ -236,7 +236,7 @@ describe.skip('Vault Live Test', () => {
       } while (before !== undefined);
 
       const missingObjects = objectNames.filter(
-        name => !allObjectNames.includes(name),
+        (name) => !allObjectNames.includes(name),
       );
 
       expect(allObjectNames.length).toEqual(numObjects);
@@ -262,10 +262,10 @@ describe.skip('Vault Live Test', () => {
 
       expect(versions.length).toBe(2);
 
-      const currentVersion = versions.find(v => v.currentVersion);
+      const currentVersion = versions.find((v) => v.currentVersion);
       expect(currentVersion?.id).toBe(updatedObject.metadata.versionId);
 
-      const firstVersion = versions.find(v => v.id === newObject.versionId);
+      const firstVersion = versions.find((v) => v.id === newObject.versionId);
       expect(firstVersion?.currentVersion).toBe(false);
     });
   });

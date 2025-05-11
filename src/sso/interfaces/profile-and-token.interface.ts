@@ -1,5 +1,5 @@
-import { UnknownRecord } from '../../common/interfaces/unknown-record.interface.ts';
-import { Profile, ProfileResponse } from './profile.interface.ts';
+import type { UnknownRecord } from '../../common/interfaces/unknown-record.interface.ts';
+import type { Profile, ProfileResponse } from './profile.interface.ts';
 
 export interface ProfileAndToken<CustomAttributesType extends UnknownRecord> {
   accessToken: string;

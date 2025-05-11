@@ -1,8 +1,8 @@
 import {
   deserializeDeletedEventDirectory,
+  deserializeDirectoryGroup,
   deserializeDirectoryUser,
   deserializeEventDirectory,
-  deserializeDirectoryGroup,
   deserializeUpdatedEventDirectoryGroup,
   deserializeUpdatedEventDirectoryUser,
 } from '../../directory-sync/serializers.ts';
@@ -20,7 +20,7 @@ import { deserializeOrganizationDomain } from '../../organization-domains/serial
 import { deserializeOrganizationMembership } from '../../user-management/serializers/organization-membership.serializer.ts';
 import { deserializeRoleEvent } from '../../user-management/serializers/role.serializer.ts';
 import { deserializeSession } from '../../user-management/serializers/session.serializer.ts';
-import { Event, EventBase, EventResponse } from '../interfaces.ts';
+import type { Event, EventBase, EventResponse } from '../interfaces.ts';
 import { deserializeAuthenticationRadarRiskDetectedEvent } from '../../user-management/serializers/authentication-radar-risk-event-serializer.ts';
 
 export const deserializeEvent = (event: EventResponse): Event => {

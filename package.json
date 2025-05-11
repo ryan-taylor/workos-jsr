@@ -48,22 +48,17 @@
     "prepublishOnly": "pnpm run build",
     "prepare": "husky install"
   },
-  "dependencies": {
-    "iron-session": "^8.0.4",
-    "leb": "^1.0.0",
-    "pluralize": "^8.0.0"
-  },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.8.27",
     "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1", 
+    "@commitlint/config-conventional": "^19.8.1",
     "@peculiar/webcrypto": "^1.5.0",
     "@types/node": "^22.15.17",
-    "@types/pluralize": "^0.0.33",
     "@typescript-eslint/eslint-plugin": "^8.32.0",
     "@typescript-eslint/parser": "^8.32.0",
     "chai": "^5.2.0",
     "eslint": "~9.26.0",
+    "eslint-plugin-deno": "^0.0.1",
     "husky": "^9.1.7",
     "nock": "^14.0.4",
     "prettier": "^3.5.3",

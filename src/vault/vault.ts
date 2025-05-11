@@ -1,8 +1,8 @@
-import { PaginationOptions } from '../index.worker.ts';
-import { WorkOS } from '../workos.ts';
+import type { PaginationOptions } from '../index.worker.ts';
+import type { WorkOS } from '../workos.ts';
 import { decode, decrypt } from './cryptography/decrypt.ts';
 import { encrypt } from './cryptography/encrypt.ts';
-import {
+import type {
   CreateDataKeyOptions,
   CreateDataKeyResponse,
   CreateObjectOptions,
@@ -11,22 +11,19 @@ import {
   DecryptDataKeyOptions,
   DecryptDataKeyResponse,
   DeleteObjectOptions,
-  ListObjectVersionsResponse,
-  ReadObjectMetadataResponse,
-  ReadObjectOptions,
-  ReadObjectResponse,
   KeyContext,
+  ListObjectVersionsResponse,
   ObjectDigest,
   ObjectDigestResponse,
   ObjectMetadata,
   ObjectVersion,
+  ReadObjectMetadataResponse,
+  ReadObjectOptions,
+  ReadObjectResponse,
   UpdateObjectOptions,
   VaultObject,
 } from './interfaces.ts';
-import {
-  deserializeCreateDataKeyResponse,
-  deserializeDecryptDataKeyResponse,
-} from './serializers/vault-key.serializer.ts';
+import { deserializeCreateDataKeyResponse, deserializeDecryptDataKeyResponse } from './serializers/vault-key.serializer.ts';
 import {
   deserializeListObjects,
   deserializeObject,
@@ -35,7 +32,7 @@ import {
   serializeCreateObjectEntity,
   serializeUpdateObjectEntity,
 } from './serializers/vault-object.serializer.ts';
-import { List, ListResponse } from '../common/interfaces.ts';
+import type { List, ListResponse } from '../common/interfaces.ts';
 
 export class Vault {
   constructor(private readonly workos: WorkOS) {}

@@ -45,4 +45,4 @@ Deno.test('SSO.getProfileAndToken makes POST and returns response (mocked)', asy
   });
   assertEquals(result.access_token, 'tok_123');
   assertEquals(result.profile.id, 'user_1');
-}); 
+});

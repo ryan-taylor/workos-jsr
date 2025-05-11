@@ -1,5 +1,5 @@
 import { MFA } from '../src/services/mfa.ts';
-import { HttpClient } from '../src/core/http_client.ts';
+import type { HttpClient } from '../src/core/http_client.ts';
 import { assertEquals } from '@std/assert';
 
 Deno.test('MFA.enroll returns factor (mocked)', async () => {
@@ -47,4 +47,4 @@ Deno.test('MFA.verify returns valid (mocked)', async () => {
   });
   const result = await mfa.verify({ challengeId: 'challenge_1', code: '123456' });
   assertEquals(result.valid, true);
-}); 
+});

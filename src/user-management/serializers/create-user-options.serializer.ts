@@ -1,4 +1,4 @@
-import { CreateUserOptions, SerializedCreateUserOptions } from '../interfaces.ts';
+import type { CreateUserOptions, SerializedCreateUserOptions } from '../interfaces.ts';
 
 export const serializeCreateUserOptions = (
   options: CreateUserOptions,

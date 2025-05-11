@@ -1,6 +1,6 @@
 import { assertEquals, assertExists } from '@std/assert';
-import { AuditLogs } from '../src/audit-logs/audit-logs.ts';
-import { HttpClientError } from '../src/core/errors.ts';
+import type { AuditLogs } from '../src/audit-logs/audit-logs.ts';
+import type { HttpClientError } from '../src/core/errors.ts';
 import { createMockWorkOS } from './utils.ts';
 
 // ===== createEvent Tests =====
@@ -8,7 +8,7 @@ import { createMockWorkOS } from './utils.ts';
 Deno.test('AuditLogs.createEvent: successfully creates an audit log event', async () => {
   // Mock response for successful event creation (returns void)
   const { workos, client } = createMockWorkOS({});
-  
+
   const organizationId = 'org_123456';
   const eventData = {
     action: 'user.login',
@@ -16,31 +16,31 @@ Deno.test('AuditLogs.createEvent: successfully creates an audit log event', asyn
     actor: {
       id: 'user_123',
       type: 'user',
-      name: 'John Doe'
+      name: 'John Doe',
     },
     targets: [
       {
         id: 'resource_456',
         type: 'resource',
-        name: 'Protected Resource'
-      }
+        name: 'Protected Resource',
+      },
     ],
     context: {
-      location: '192.168.1.1'
+      location: '192.168.1.1',
     },
     metadata: {
-      successful: true
-    }
+      successful: true,
+    },
   };
-  
+
   // Call the method
   await workos.auditLogs.createEvent(organizationId, eventData);
-  
+
   // Verify the request was made correctly
   const requestDetails = client.getRequestDetails();
   assertEquals(requestDetails.method, 'POST');
   assertEquals(requestDetails.url, '/audit_logs/events');
-  
+
   // Verify request body
   const body = requestDetails.body;
   assertExists(body);
@@ -58,11 +58,11 @@ Deno.test('AuditLogs.createEvent: handles error responses', async () => {
   // Mock error response
   const errorResponse = {
     error_type: 'validation_error',
-    message: 'Invalid event data'
+    message: 'Invalid event data',
   };
-  
+
   const { workos } = createMockWorkOS(errorResponse, 400);
-  
+
   // Prepare test data
   const organizationId = 'org_123456';
   const eventData = {
@@ -70,19 +70,19 @@ Deno.test('AuditLogs.createEvent: handles error responses', async () => {
     occurredAt: new Date(),
     actor: {
       id: 'user_123',
-      type: 'user'
+      type: 'user',
     },
     targets: [
       {
         id: 'resource_456',
-        type: 'resource'
-      }
+        type: 'resource',
+      },
     ],
     context: {
-      location: '192.168.1.1'
-    }
+      location: '192.168.1.1',
+    },
   };
-  
+
   // Attempt to create event and expect error
   let error: HttpClientError | undefined;
   try {
@@ -90,7 +90,7 @@ Deno.test('AuditLogs.createEvent: handles error responses', async () => {
   } catch (e) {
     error = e as HttpClientError;
   }
-  
+
   // Verify error was thrown
   assertExists(error);
   assertEquals(error?.status, 400);
@@ -105,28 +105,28 @@ Deno.test('AuditLogs.createExport: successfully creates an audit log export', as
     id: 'audit_export_123',
     state: 'pending',
     created_at: '2023-01-01T00:00:00Z',
-    updated_at: '2023-01-01T00:00:00Z'
+    updated_at: '2023-01-01T00:00:00Z',
   };
-  
+
   const { workos, client } = createMockWorkOS(mockResponse);
-  
+
   // Prepare test data
   const exportOptions = {
     organizationId: 'org_123456',
     rangeStart: new Date('2023-01-01'),
     rangeEnd: new Date('2023-01-31'),
     actions: ['user.login', 'user.logout'],
-    actorNames: ['John Doe']
+    actorNames: ['John Doe'],
   };
-  
+
   // Call the method
   const result = await workos.auditLogs.createExport(exportOptions);
-  
+
   // Verify the request was made correctly
   const requestDetails = client.getRequestDetails();
   assertEquals(requestDetails.method, 'POST');
   assertEquals(requestDetails.url, '/audit_logs/exports');
-  
+
   // Verify request body
   const body = requestDetails.body;
   assertExists(body);
@@ -135,7 +135,7 @@ Deno.test('AuditLogs.createExport: successfully creates an audit log export', as
   assertExists(body.range_end);
   assertEquals(body.actions, exportOptions.actions);
   assertEquals(body.actor_names, exportOptions.actorNames);
-  
+
   // Verify response was properly deserialized
   assertEquals(result.object, 'audit_log_export');
   assertEquals(result.id, 'audit_export_123');
@@ -148,18 +148,18 @@ Deno.test('AuditLogs.createExport: handles error responses', async () => {
   // Mock error response
   const errorResponse = {
     error_type: 'validation_error',
-    message: 'Invalid date range'
+    message: 'Invalid date range',
   };
-  
+
   const { workos } = createMockWorkOS(errorResponse, 400);
-  
+
   // Prepare test data
   const exportOptions = {
     organizationId: 'org_123456',
     rangeStart: new Date('2023-02-01'),
     rangeEnd: new Date('2023-01-01'), // Invalid: end before start
   };
-  
+
   // Attempt to create export and expect error
   let error: HttpClientError | undefined;
   try {
@@ -167,7 +167,7 @@ Deno.test('AuditLogs.createExport: handles error responses', async () => {
   } catch (e) {
     error = e as HttpClientError;
   }
-  
+
   // Verify error was thrown
   assertExists(error);
   assertEquals(error?.status, 400);
@@ -183,20 +183,20 @@ Deno.test('AuditLogs.getExport: successfully retrieves an audit log export', asy
     state: 'ready',
     url: 'https://example.com/export.csv',
     created_at: '2023-01-01T00:00:00Z',
-    updated_at: '2023-01-01T01:00:00Z'
+    updated_at: '2023-01-01T01:00:00Z',
   };
-  
+
   const { workos, client } = createMockWorkOS(mockResponse);
-  
+
   // Call the method
   const exportId = 'audit_export_123';
   const result = await workos.auditLogs.getExport(exportId);
-  
+
   // Verify the request was made correctly
   const requestDetails = client.getRequestDetails();
   assertEquals(requestDetails.method, 'GET');
   assertEquals(requestDetails.url, `/audit_logs/exports/${exportId}`);
-  
+
   // Verify response was properly deserialized
   assertEquals(result.object, 'audit_log_export');
   assertEquals(result.id, exportId);
@@ -210,11 +210,11 @@ Deno.test('AuditLogs.getExport: handles error responses', async () => {
   // Mock error response
   const errorResponse = {
     error_type: 'not_found',
-    message: 'Audit log export not found'
+    message: 'Audit log export not found',
   };
-  
+
   const { workos } = createMockWorkOS(errorResponse, 404);
-  
+
   // Attempt to get non-existent export and expect error
   let error: HttpClientError | undefined;
   try {
@@ -222,7 +222,7 @@ Deno.test('AuditLogs.getExport: handles error responses', async () => {
   } catch (e) {
     error = e as HttpClientError;
   }
-  
+
   // Verify error was thrown
   assertExists(error);
   assertEquals(error?.status, 404);
@@ -242,24 +242,24 @@ Deno.test('AuditLogs.createSchema: successfully creates an audit log schema', as
           type: 'object',
           properties: {
             name: { type: 'string' },
-            size: { type: 'number' }
-          }
-        }
-      }
+            size: { type: 'number' },
+          },
+        },
+      },
     ],
     actor: {
       metadata: {
         type: 'object',
         properties: {
-          department: { type: 'string' }
-        }
-      }
+          department: { type: 'string' },
+        },
+      },
     },
-    created_at: '2023-01-01T00:00:00Z'
+    created_at: '2023-01-01T00:00:00Z',
   };
-  
+
   const { workos, client } = createMockWorkOS(mockResponse);
-  
+
   // Prepare test data
   const schemaOptions = {
     action: 'document.access',
@@ -268,25 +268,25 @@ Deno.test('AuditLogs.createSchema: successfully creates an audit log schema', as
         type: 'document',
         metadata: {
           name: 'string',
-          size: 'number'
-        }
-      }
+          size: 'number',
+        },
+      },
     ],
     actor: {
       metadata: {
-        department: 'string'
-      }
-    }
+        department: 'string',
+      },
+    },
   };
-  
+
   // Call the method
   const result = await workos.auditLogs.createSchema(schemaOptions);
-  
+
   // Verify the request was made correctly
   const requestDetails = client.getRequestDetails();
   assertEquals(requestDetails.method, 'POST');
   assertEquals(requestDetails.url, `/audit_logs/actions/${schemaOptions.action}/schemas`);
-  
+
   // Verify response was properly deserialized
   assertEquals(result.object, 'audit_log_schema');
   assertEquals(result.version, 1);
@@ -300,17 +300,17 @@ Deno.test('AuditLogs.createSchema: handles error responses', async () => {
   // Mock error response
   const errorResponse = {
     error_type: 'validation_error',
-    message: 'Invalid schema definition'
+    message: 'Invalid schema definition',
   };
-  
+
   const { workos } = createMockWorkOS(errorResponse, 400);
-  
+
   // Prepare test data with invalid schema
   const schemaOptions = {
     action: 'document.access',
-    targets: [] // Invalid: empty targets array
+    targets: [], // Invalid: empty targets array
   };
-  
+
   // Attempt to create schema and expect error
   let error: HttpClientError | undefined;
   try {
@@ -318,7 +318,7 @@ Deno.test('AuditLogs.createSchema: handles error responses', async () => {
   } catch (e) {
     error = e as HttpClientError;
   }
-  
+
   // Verify error was thrown
   assertExists(error);
   assertEquals(error?.status, 400);

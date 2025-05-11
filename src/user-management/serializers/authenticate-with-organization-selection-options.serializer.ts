@@ -1,12 +1,13 @@
-import {
+import type {
   AuthenticateUserWithOrganizationSelectionCredentials,
   AuthenticateWithOrganizationSelectionOptions,
   SerializedAuthenticateWithOrganizationSelectionOptions,
 } from '../interfaces/authenticate-with-organization-selection.interface.ts';
 
 export const serializeAuthenticateWithOrganizationSelectionOptions = (
-  options: AuthenticateWithOrganizationSelectionOptions &
-    AuthenticateUserWithOrganizationSelectionCredentials,
+  options:
+    & AuthenticateWithOrganizationSelectionOptions
+    & AuthenticateUserWithOrganizationSelectionCredentials,
 ): SerializedAuthenticateWithOrganizationSelectionOptions => ({
   grant_type: 'urn:workos:oauth:grant-type:organization-selection',
   client_id: options.clientId,

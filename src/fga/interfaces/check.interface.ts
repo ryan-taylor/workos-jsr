@@ -1,7 +1,7 @@
-import { ResourceInterface, ResourceOptions } from './resource.interface.ts';
-import { PolicyContext, SerializedSubject, Subject } from './warrant.interface.ts';
-import { CheckOp } from './check-op.enum.ts';
-import { PostOptions } from '../../common/interfaces.ts';
+import type { ResourceInterface, ResourceOptions } from './resource.interface.ts';
+import type { PolicyContext, SerializedSubject, Subject } from './warrant.interface.ts';
+import type { CheckOp } from './check-op.enum.ts';
+import type { PostOptions } from '../../common/interfaces.ts';
 import { deserializeDecisionTreeNode } from '../serializers/check-options.serializer.ts';
 
 const CHECK_RESULT_AUTHORIZED = 'authorized';
@@ -96,11 +96,11 @@ export class CheckResult implements CheckResultInterface {
     this.warrantToken = json.warrant_token;
     this.debugInfo = json.debug_info
       ? {
-          processingTime: json.debug_info.processing_time,
-          decisionTree: deserializeDecisionTreeNode(
-            json.debug_info.decision_tree,
-          ),
-        }
+        processingTime: json.debug_info.processing_time,
+        decisionTree: deserializeDecisionTreeNode(
+          json.debug_info.decision_tree,
+        ),
+      }
       : undefined;
   }
 

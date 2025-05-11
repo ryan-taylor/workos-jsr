@@ -22,14 +22,14 @@ Islands Architecture is a term coined by Jason Miller (creator of Preact) that d
 
 ## Islands vs. Traditional React Applications
 
-| Feature | Traditional React App | Islands Architecture |
-|---------|----------------------|---------------------|
-| Initial Render | Client-side (CSR) or sometimes SSR with full hydration | Server-side (SSR) |
-| JavaScript Load | Entire application bundle | Only what's needed for interactive parts |
-| Hydration | Full-page hydration | Selective component hydration |
-| State Management | App-wide state often required | Isolated state per island |
-| Build Process | Complex bundling | Minimal or no bundling |
-| Progressive Enhancement | Harder to implement | Built-in by design |
+| Feature                 | Traditional React App                                  | Islands Architecture                     |
+| ----------------------- | ------------------------------------------------------ | ---------------------------------------- |
+| Initial Render          | Client-side (CSR) or sometimes SSR with full hydration | Server-side (SSR)                        |
+| JavaScript Load         | Entire application bundle                              | Only what's needed for interactive parts |
+| Hydration               | Full-page hydration                                    | Selective component hydration            |
+| State Management        | App-wide state often required                          | Isolated state per island                |
+| Build Process           | Complex bundling                                       | Minimal or no bundling                   |
+| Progressive Enhancement | Harder to implement                                    | Built-in by design                       |
 
 ## Islands in Fresh
 
@@ -137,39 +137,43 @@ Here's how to use an island in a route file:
 
 ```tsx
 // routes/profile.tsx
-import { Handlers, PageProps } from "$fresh/server.ts";
-import UserProfile from "../islands/UserProfile.tsx";
-import { getCurrentUser } from "../utils/user-management.ts";
+import { Handlers, PageProps } from '$fresh/server.ts';
+import UserProfile from '../islands/UserProfile.tsx';
+import { getCurrentUser } from '../utils/user-management.ts';
 
 export const handler: Handlers = {
   async GET(req, ctx) {
     const user = await getCurrentUser(req);
     if (!user) {
-      return new Response("", {
+      return new Response('', {
         status: 302,
-        headers: { Location: "/login" },
+        headers: { Location: '/login' },
       });
     }
-    
+
     return ctx.render({ user });
   },
 };
 
 export default function ProfilePage({ data }: PageProps) {
   const { user } = data;
-  
+
   return (
     <div>
       <h1>Profile</h1>
       {/* UserProfile will be hydrated on the client */}
       <UserProfile user={user} />
-      
+
       {/* This content remains static */}
-      <div class="static-content">
+      <div class='static-content'>
         <h2>Account Options</h2>
         <ul>
-          <li><a href="/settings">Settings</a></li>
-          <li><a href="/logout">Logout</a></li>
+          <li>
+            <a href='/settings'>Settings</a>
+          </li>
+          <li>
+            <a href='/logout'>Logout</a>
+          </li>
         </ul>
       </div>
     </div>

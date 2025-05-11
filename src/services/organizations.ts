@@ -1,4 +1,4 @@
-import { HttpClient } from '../core/http_client.ts.ts';
+import type { HttpClient } from '../core/http_client.ts.ts';
 
 export interface ListOrganizationsOptions {
   limit?: number;
@@ -64,4 +64,4 @@ export class Organizations {
       body: options,
     });
   }
-} 
+}

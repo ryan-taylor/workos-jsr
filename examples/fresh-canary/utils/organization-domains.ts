@@ -1,20 +1,18 @@
-import { WorkOS } from "../../../mod.ts";
+import { WorkOS } from '../../../mod.ts';
 
 // Initialize the WorkOS client
-const workos = new WorkOS(Deno.env.get("WORKOS_API_KEY") || "");
+const workos = new WorkOS(Deno.env.get('WORKOS_API_KEY') || '');
 
 // List all domains for an organization
 export async function listDomains(organizationId?: string) {
   try {
     // Construct the URL to fetch domains for an organization
-    const path = organizationId 
-      ? `/organization_domains?organization_id=${organizationId}`
-      : '/organization_domains';
-    
+    const path = organizationId ? `/organization_domains?organization_id=${organizationId}` : '/organization_domains';
+
     const { data } = await workos.get(path);
     return data;
   } catch (error) {
-    console.error("Error listing domains:", error);
+    console.error('Error listing domains:', error);
     throw error;
   }
 }
@@ -28,7 +26,7 @@ export async function addDomain(organizationId: string, domain: string) {
     });
     return newDomain;
   } catch (error) {
-    console.error("Error adding domain:", error);
+    console.error('Error adding domain:', error);
     throw error;
   }
 }
@@ -39,7 +37,7 @@ export async function verifyDomain(domainId: string) {
     const verifiedDomain = await workos.organizationDomains.verify(domainId);
     return verifiedDomain;
   } catch (error) {
-    console.error("Error verifying domain:", error);
+    console.error('Error verifying domain:', error);
     throw error;
   }
 }
@@ -51,7 +49,7 @@ export async function deleteDomain(domainId: string) {
     await workos.delete(`/organization_domains/${domainId}`);
     return true;
   } catch (error) {
-    console.error("Error deleting domain:", error);
+    console.error('Error deleting domain:', error);
     throw error;
   }
 }
@@ -62,7 +60,7 @@ export async function listOrganizations() {
     const organizations = await workos.organizations.listOrganizations();
     return organizations;
   } catch (error) {
-    console.error("Error listing organizations:", error);
+    console.error('Error listing organizations:', error);
     throw error;
   }
 }

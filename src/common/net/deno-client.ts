@@ -1,40 +1,27 @@
-import { HttpClient, HttpClientError, HttpClientResponse } from './http-client.ts.ts';
-import {
+import type {
   HttpClientInterface,
   HttpClientResponseInterface,
   RequestHeaders,
   RequestOptions,
   ResponseHeaders,
-} from '../interfaces/http-client.interface.ts.ts';
+} from '../interfaces/http-client.interface.ts';
+import { HttpClient, HttpClientError, HttpClientResponse } from './http-client.ts';
 
+/**
+ * HTTP client implementation for Deno runtime
+ * Uses Deno's native fetch API
+ */
 export class DenoHttpClient extends HttpClient implements HttpClientInterface {
-  constructor(override readonly baseURL: string, override readonly options?: RequestInit) {
+  constructor(
+    override readonly baseURL: string,
+    override readonly options?: RequestInit,
+  ) {
     super(baseURL, options);
   }
 
+  /** @override */
   override getClientName(): string {
     return 'deno';
-  }
-
-  static override getBody(entity: unknown): string | null | FormData {
-    if (entity === null || entity === undefined) {
-      return null;
-    }
-
-    if (entity instanceof URLSearchParams || entity instanceof FormData) {
-      return entity;
-    }
-
-    return JSON.stringify(entity);
-  }
-
-  /**
-   * Helper method to convert RequestHeaders to HeadersInit
-   */
-  private convertHeaders(headers?: RequestHeaders): HeadersInit | undefined {
-    if (!headers) return undefined;
-    // Cast RequestHeaders to Record<string, string> as HeadersInit
-    return headers as Record<string, string>;
   }
 
   async get(
@@ -48,19 +35,18 @@ export class DenoHttpClient extends HttpClient implements HttpClientInterface {
     );
 
     if (path.startsWith('/fga/')) {
-      return await this.fetchWithRetry(resourceURL, {
-        method: 'GET',
-        headers: this.convertHeaders(options.headers),
-      });
+      return await this.fetchRequestWithRetry(
+        resourceURL,
+        'GET',
+        null,
+        options.headers,
+      );
     } else {
-      return await this.fetch(resourceURL, {
-        method: 'GET',
-        headers: this.convertHeaders(options.headers),
-      });
+      return await this.fetchRequest(resourceURL, 'GET', null, options.headers);
     }
   }
 
-  async post<Entity = any>(
+  async post<Entity = unknown>(
     path: string,
     entity: Entity,
     options: RequestOptions,
@@ -71,28 +57,30 @@ export class DenoHttpClient extends HttpClient implements HttpClientInterface {
       options.params,
     );
 
-    const contentTypeHeader = HttpClient.getContentTypeHeader(entity);
-    const combinedHeaders = {
-      ...contentTypeHeader,
-      ...options.headers,
-    };
-
     if (path.startsWith('/fga/')) {
-      return await this.fetchWithRetry(resourceURL, {
-        method: 'POST',
-        headers: this.convertHeaders(combinedHeaders),
-        body: DenoHttpClient.getBody(entity),
-      });
+      return await this.fetchRequestWithRetry(
+        resourceURL,
+        'POST',
+        HttpClient.getBody(entity),
+        {
+          ...HttpClient.getContentTypeHeader(entity),
+          ...options.headers,
+        },
+      );
     } else {
-      return await this.fetch(resourceURL, {
-        method: 'POST',
-        headers: this.convertHeaders(combinedHeaders),
-        body: DenoHttpClient.getBody(entity),
-      });
+      return await this.fetchRequest(
+        resourceURL,
+        'POST',
+        HttpClient.getBody(entity),
+        {
+          ...HttpClient.getContentTypeHeader(entity),
+          ...options.headers,
+        },
+      );
     }
   }
 
-  async put<Entity = any>(
+  async put<Entity = unknown>(
     path: string,
     entity: Entity,
     options: RequestOptions,
@@ -103,24 +91,26 @@ export class DenoHttpClient extends HttpClient implements HttpClientInterface {
       options.params,
     );
 
-    const contentTypeHeader = HttpClient.getContentTypeHeader(entity);
-    const combinedHeaders = {
-      ...contentTypeHeader,
-      ...options.headers,
-    };
-
     if (path.startsWith('/fga/')) {
-      return await this.fetchWithRetry(resourceURL, {
-        method: 'PUT',
-        headers: this.convertHeaders(combinedHeaders),
-        body: DenoHttpClient.getBody(entity),
-      });
+      return await this.fetchRequestWithRetry(
+        resourceURL,
+        'PUT',
+        HttpClient.getBody(entity),
+        {
+          ...HttpClient.getContentTypeHeader(entity),
+          ...options.headers,
+        },
+      );
     } else {
-      return await this.fetch(resourceURL, {
-        method: 'PUT',
-        headers: this.convertHeaders(combinedHeaders),
-        body: DenoHttpClient.getBody(entity),
-      });
+      return await this.fetchRequest(
+        resourceURL,
+        'PUT',
+        HttpClient.getBody(entity),
+        {
+          ...HttpClient.getContentTypeHeader(entity),
+          ...options.headers,
+        },
+      );
     }
   }
 
@@ -135,167 +125,130 @@ export class DenoHttpClient extends HttpClient implements HttpClientInterface {
     );
 
     if (path.startsWith('/fga/')) {
-      return await this.fetchWithRetry(resourceURL, {
-        method: 'DELETE',
-        headers: this.convertHeaders(options.headers),
-      });
+      return await this.fetchRequestWithRetry(
+        resourceURL,
+        'DELETE',
+        null,
+        options.headers,
+      );
     } else {
-      return await this.fetch(resourceURL, {
-        method: 'DELETE',
-        headers: this.convertHeaders(options.headers),
+      return await this.fetchRequest(
+        resourceURL,
+        'DELETE',
+        null,
+        options.headers,
+      );
+    }
+  }
+
+  private async fetchRequest(
+    url: string,
+    method: string,
+    body?: BodyInit | null,
+    headers?: RequestHeaders,
+  ): Promise<HttpClientResponseInterface> {
+    // For methods which expect payloads, we should always pass a body value
+    // even when it is empty. Without this, some JS runtimes (eg. Deno) will
+    // inject a second Content-Length header.
+    const methodHasPayload = method === 'POST' || method === 'PUT' || method === 'PATCH';
+    const requestBody = body || (methodHasPayload ? '' : undefined);
+
+    const { 'User-Agent': userAgent } = this.options?.headers as RequestHeaders || {};
+    const userAgentValue = userAgent ? this.addClientToUserAgent(userAgent.toString()) : `workos-deno/${this.getClientName()}`;
+
+    const res = await fetch(url, {
+      method,
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        ...this.options?.headers,
+        ...headers,
+        'User-Agent': userAgentValue,
+      },
+      body: requestBody,
+    });
+
+    if (!res.ok) {
+      throw new HttpClientError({
+        message: res.statusText,
+        response: {
+          status: res.status,
+          headers: DenoHttpClientResponse._transformHeadersToObject(res.headers),
+          data: await res.json(),
+        },
       });
     }
+
+    return new DenoHttpClientResponse(res);
   }
 
-  private async fetch(
+  private async fetchRequestWithRetry(
     url: string,
-    init: RequestInit,
+    method: string,
+    body?: BodyInit | null,
+    headers?: RequestHeaders,
   ): Promise<HttpClientResponseInterface> {
-    const { 'User-Agent': userAgent } = (this.options?.headers as RequestHeaders) || {};
-    
-    // Convert options headers to HeadersInit
-    const baseHeaders = this.convertHeaders(this.options?.headers as RequestHeaders) || {};
-    
-    // Merge headers properly
-    const headers: HeadersInit = {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-      ...baseHeaders,
-      ...(init.headers || {}),
-    };
-    
-    // Add User-Agent if available
-    if (userAgent) {
-      headers['User-Agent'] = this.addClientToUserAgent(userAgent.toString());
-    }
-    
-    const fetchOptions: RequestInit = {
-      ...init,
-      headers,
-    };
-
-    try {
-      const response = await fetch(url, fetchOptions);
-      const clientResponse = new DenoHttpClientResponse(response);
-
-      if (response.status < 200 || response.status > 299) {
-        const responseData = await clientResponse.toJSON();
-        throw new HttpClientError({
-          message: response.statusText,
-          response: {
-            status: response.status,
-            headers: Object.fromEntries(response.headers.entries()),
-            data: responseData,
-          },
-        });
-      }
-
-      return clientResponse;
-    } catch (error) {
-      if (error instanceof HttpClientError) {
-        throw error;
-      }
-      throw new Error(error instanceof Error ? error.message : String(error));
-    }
-  }
-
-  private async fetchWithRetry(
-    url: string,
-    init: RequestInit,
-  ): Promise<HttpClientResponseInterface> {
-    const { 'User-Agent': userAgent } = (this.options?.headers as RequestHeaders) || {};
-    
-    // Convert options headers to HeadersInit
-    const baseHeaders = this.convertHeaders(this.options?.headers as RequestHeaders) || {};
-    
-    // Merge headers properly
-    const headers: HeadersInit = {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-      ...baseHeaders,
-      ...(init.headers || {}),
-    };
-    
-    // Add User-Agent if available
-    if (userAgent) {
-      headers['User-Agent'] = this.addClientToUserAgent(userAgent.toString());
-    }
-    
-    const fetchOptions: RequestInit = {
-      ...init,
-      headers,
-    };
-
+    let response: HttpClientResponseInterface;
     let retryAttempts = 1;
 
     const makeRequest = async (): Promise<HttpClientResponseInterface> => {
+      let requestError: any = null;
+
       try {
-        const response = await fetch(url, fetchOptions);
-        const clientResponse = new DenoHttpClientResponse(response);
-
-        if (this.shouldRetryRequest(response, retryAttempts)) {
-          retryAttempts++;
-          await this.sleep(retryAttempts);
-          return makeRequest();
-        }
-
-        if (response.status < 200 || response.status > 299) {
-          const responseData = await clientResponse.toJSON();
-          throw new HttpClientError({
-            message: response.statusText,
-            response: {
-              status: response.status,
-              headers: Object.fromEntries(response.headers.entries()),
-              data: responseData,
-            },
-          });
-        }
-
-        return clientResponse;
-      } catch (error) {
-        if (error instanceof TypeError && retryAttempts <= this.MAX_RETRY_ATTEMPTS) {
-          retryAttempts++;
-          await this.sleep(retryAttempts);
-          return makeRequest();
-        }
-
-        if (error instanceof HttpClientError) {
-          throw error;
-        }
-        
-        throw new Error(error instanceof Error ? error.message : String(error));
+        response = await this.fetchRequest(url, method, body, headers);
+      } catch (e) {
+        requestError = e;
       }
+
+      if (this.shouldRetryRequest(requestError, retryAttempts)) {
+        retryAttempts++;
+        await this.sleep(retryAttempts);
+        return makeRequest();
+      }
+
+      if (requestError != null) {
+        throw requestError;
+      }
+
+      return response;
     };
 
     return makeRequest();
   }
 
-  private shouldRetryRequest(response: Response, retryAttempt: number): boolean {
+  private shouldRetryRequest(requestError: any, retryAttempt: number): boolean {
     if (retryAttempt > this.MAX_RETRY_ATTEMPTS) {
       return false;
     }
 
-    if (response && this.RETRY_STATUS_CODES.includes(response.status)) {
-      return true;
+    if (requestError != null) {
+      if (requestError instanceof TypeError) {
+        return true;
+      }
+
+      if (
+        requestError instanceof HttpClientError &&
+        this.RETRY_STATUS_CODES.includes(requestError.response.status)
+      ) {
+        return true;
+      }
     }
 
     return false;
   }
 }
 
-export class DenoHttpClientResponse
-  extends HttpClientResponse
-  implements HttpClientResponseInterface
-{
+/**
+ * HTTP client response implementation for Deno runtime
+ */
+export class DenoHttpClientResponse extends HttpClientResponse implements HttpClientResponseInterface {
   _res: Response;
 
   constructor(res: Response) {
-    const headers: ResponseHeaders = {};
-    res.headers.forEach((value, key) => {
-      headers[key] = value;
-    });
-
-    super(res.status, headers);
+    super(
+      res.status,
+      DenoHttpClientResponse._transformHeadersToObject(res.headers),
+    );
     this._res = res;
   }
 
@@ -307,15 +260,17 @@ export class DenoHttpClientResponse
     const contentType = this._res.headers.get('content-type');
     const isJsonResponse = contentType?.includes('application/json');
 
-    if (!isJsonResponse) {
-      return null;
+    return isJsonResponse ? await this._res.json() : null;
+  }
+
+  static _transformHeadersToObject(headers: Headers): ResponseHeaders {
+    const headersObj: ResponseHeaders = {};
+    
+    // Deno's Headers implementation is iterable
+    for (const [key, value] of headers.entries()) {
+      headersObj[key] = value;
     }
 
-    try {
-      const text = await this._res.text();
-      return text ? JSON.parse(text) : null;
-    } catch (e) {
-      throw e;
-    }
+    return headersObj;
   }
 }

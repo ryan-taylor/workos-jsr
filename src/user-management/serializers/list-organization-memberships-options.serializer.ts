@@ -1,4 +1,4 @@
-import {
+import type {
   ListOrganizationMembershipsOptions,
   SerializedListOrganizationMembershipsOptions,
 } from '../interfaces/list-organization-memberships-options.interface.ts';

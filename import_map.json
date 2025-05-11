@@ -2,11 +2,7 @@
   "imports": {
     "preact": "https://esm.sh/preact@10",
     "preact/hooks": "https://esm.sh/preact@10/hooks",
-    "iron-session": "npm:iron-session@8.0.4",
-    "iron-session/edge": "npm:iron-session@8.0.4/dist/index.js",
     "jose": "https://deno.land/x/jose@4.11.0/mod.ts",
-    "leb": "npm:leb@1.0.0",
-    "pluralize": "npm:pluralize@8.0.0",
     
     "crypto": "https://deno.land/std/crypto/mod.ts",
     "node:crypto": "https://deno.land/std/crypto/mod.ts",

@@ -1,70 +1,65 @@
-import { PageProps } from "$fresh/server.ts";
-import VaultCryptoDemo from "../../islands/VaultCryptoDemo.tsx";
+import type { PageProps } from '$fresh/server.ts';
+import VaultCryptoDemo from '../../islands/VaultCryptoDemo.tsx';
 
 export default function VaultPage({ data }: PageProps) {
   return (
-    <div class="container">
+    <div class='container'>
       <h1>WorkOS Vault</h1>
-      <div class="description">
+      <div class='description'>
         <p>
-          WorkOS Vault is a secure credential and secret management service that allows you to store
-          and manage sensitive information. It provides a simple API for encrypting and decrypting data,
-          with built-in key management.
+          WorkOS Vault is a secure credential and secret management service that allows you to store and manage sensitive information. It provides a
+          simple API for encrypting and decrypting data, with built-in key management.
         </p>
       </div>
 
-      <div class="demo-section">
+      <div class='demo-section'>
         <h2>Interactive Demo</h2>
         <p>
-          Try out the WorkOS Vault encryption and decryption functionality using the interactive
-          demo below. Enter text to encrypt or decrypt and see the results in real-time.
+          Try out the WorkOS Vault encryption and decryption functionality using the interactive demo below. Enter text to encrypt or decrypt and see
+          the results in real-time.
         </p>
         <VaultCryptoDemo />
       </div>
 
-      <div class="use-cases">
+      <div class='use-cases'>
         <h2>Use Cases</h2>
-        <div class="use-case-grid">
-          <div class="use-case">
+        <div class='use-case-grid'>
+          <div class='use-case'>
             <h3>Secure Credential Storage</h3>
             <p>
-              Store API keys, access tokens, and other credentials securely.
-              Vault encrypts your data using industry-standard encryption
-              algorithms and handles key management for you.
+              Store API keys, access tokens, and other credentials securely. Vault encrypts your data using industry-standard encryption algorithms
+              and handles key management for you.
             </p>
           </div>
-          <div class="use-case">
+          <div class='use-case'>
             <h3>Secrets Management</h3>
             <p>
-              Manage sensitive configuration values and secrets across your
-              application. Vault provides a centralized solution for storing and
+              Manage sensitive configuration values and secrets across your application. Vault provides a centralized solution for storing and
               retrieving sensitive data with fine-grained access controls.
             </p>
           </div>
-          <div class="use-case">
+          <div class='use-case'>
             <h3>Data Protection</h3>
             <p>
-              Protect user data and personally identifiable information (PII) with
-              end-to-end encryption. Vault ensures that sensitive data is never
+              Protect user data and personally identifiable information (PII) with end-to-end encryption. Vault ensures that sensitive data is never
               stored in plaintext.
             </p>
           </div>
-          <div class="use-case">
+          <div class='use-case'>
             <h3>Compliance Requirements</h3>
             <p>
-              Meet regulatory requirements for data protection like GDPR and HIPAA.
-              Vault helps you implement security best practices and maintain
+              Meet regulatory requirements for data protection like GDPR and HIPAA. Vault helps you implement security best practices and maintain
               compliance with data protection regulations.
             </p>
           </div>
         </div>
       </div>
 
-      <div class="code-examples">
+      <div class='code-examples'>
         <h2>Code Examples</h2>
-        <div class="code-example">
+        <div class='code-example'>
           <h3>Encrypting Data</h3>
-          <pre class="code">
+          <pre class='code'>
             {`// Initialize WorkOS
 const workos = new WorkOS(process.env.WORKOS_API_KEY);
 
@@ -81,9 +76,9 @@ console.log("Encrypted data:", encryptedData);`}
           </pre>
         </div>
 
-        <div class="code-example">
+        <div class='code-example'>
           <h3>Decrypting Data</h3>
-          <pre class="code">
+          <pre class='code'>
             {`// Initialize WorkOS
 const workos = new WorkOS(process.env.WORKOS_API_KEY);
 
@@ -94,9 +89,9 @@ console.log("Decrypted data:", decryptedData);`}
           </pre>
         </div>
 
-        <div class="code-example">
+        <div class='code-example'>
           <h3>Creating and Managing Vault Objects</h3>
-          <pre class="code">
+          <pre class='code'>
             {`// Create a vault object
 const object = await workos.vault.createObject({
   name: "api-key",

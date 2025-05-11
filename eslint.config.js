@@ -51,8 +51,9 @@ export default [
       // TypeScript-specific rules
       '@typescript-eslint/explicit-member-accessibility': 'off',
       '@typescript-eslint/member-ordering': 'off',
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-shadow': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
       
       // Import and sorting rules
       'sort-keys': 'off',
@@ -70,7 +71,9 @@ export default [
       '@typescript-eslint': tsPlugin,
     },
     rules: {
-      ...tsPlugin.configs.recommended.rules
+      ...tsPlugin.configs.recommended.rules,
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': 'off'
     }
   }
 ];

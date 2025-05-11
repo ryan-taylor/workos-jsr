@@ -19,7 +19,7 @@ Deno.test('HttpClient: 404 error handling', async () => {
   await assertRejects(
     () => client.request(url),
     HttpClientError,
-    'HTTP 404'
+    'HTTP 404',
   );
 });
 
@@ -30,6 +30,6 @@ Deno.test('HttpClient: network error handling', async () => {
   await assertRejects(
     () => client.request(url),
     HttpClientError,
-    'Network error'
+    'Network error',
   );
-}); 
+});

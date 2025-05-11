@@ -1,8 +1,5 @@
-import {
-  Organization,
-  OrganizationResponse,
-} from '../../organizations/interfaces.ts';
-import {
+import type { Organization, OrganizationResponse } from '../../organizations/interfaces.ts';
+import type {
   Invitation,
   InvitationResponse,
   OrganizationMembership,

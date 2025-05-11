@@ -2,7 +2,7 @@ import { CryptoProvider } from './crypto-provider.ts';
 
 /**
  * `CryptoProvider` implementation using the Web Crypto API.
- * 
+ *
  * This maintains the same interface as other crypto providers but uses
  * standard Web Crypto APIs available in modern browsers and runtimes.
  */
@@ -33,7 +33,7 @@ export class WebCryptoProvider extends CryptoProvider {
     // For any other case, we need to advise using the async version
     throw new Error(
       'WebCryptoProvider cannot compute HMAC signatures synchronously for arbitrary inputs. ' +
-      'Please use computeHMACSignatureAsync instead.'
+        'Please use computeHMACSignatureAsync instead.',
     );
   }
 
@@ -93,7 +93,7 @@ export class WebCryptoProvider extends CryptoProvider {
       'sign',
       'verify',
     ]) as CryptoKey;
-    
+
     const hmac = await this.#subtleCrypto.sign(algorithm, key, bufferA);
     const equal = await this.#subtleCrypto.verify(algorithm, key, hmac, bufferB);
 

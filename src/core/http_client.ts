@@ -65,4 +65,4 @@ export class HttpClient {
       return (await response.text()) as T;
     }
   }
-} 
+}

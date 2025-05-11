@@ -1,17 +1,17 @@
-import { createRemoteJWKSet, decodeJwt, jwtVerify } from 'jose';
+import { type createRemoteJWKSet, decodeJwt, jwtVerify } from '../common/crypto/jwt-utils.ts';
 import { OauthException } from '../common/exceptions/oauth.exception.ts';
-import { IronSessionProvider } from '../common/iron-session/iron-session-provider.ts';
+import type { FreshSessionProvider } from '../common/iron-session/fresh-session-provider.ts';
 import {
-  AccessToken,
-  AuthenticateWithSessionCookieFailedResponse,
+  type AccessToken,
+  type AuthenticateWithSessionCookieFailedResponse,
   AuthenticateWithSessionCookieFailureReason,
-  AuthenticateWithSessionCookieSuccessResponse,
-  AuthenticationResponse,
+  type AuthenticateWithSessionCookieSuccessResponse,
+  type AuthenticationResponse,
   RefreshAndSealSessionDataFailureReason,
-  RefreshSessionResponse,
-  SessionCookieData,
-} from './interfaces.ts';
-import { UserManagement } from './user-management.ts';
+  type RefreshSessionResponse,
+  type SessionCookieData,
+} from './interfaces/index.ts';
+import type { UserManagement } from './user-management.ts';
 
 type RefreshOptions = {
   cookiePassword?: string;
@@ -21,7 +21,7 @@ type RefreshOptions = {
 export class Session {
   private jwks: ReturnType<typeof createRemoteJWKSet> | undefined;
   private userManagement: UserManagement;
-  private ironSessionProvider: IronSessionProvider;
+  private ironSessionProvider: FreshSessionProvider;
   private cookiePassword: string;
   private sessionData: string;
 
@@ -54,8 +54,7 @@ export class Session {
     if (!this.sessionData) {
       return {
         authenticated: false,
-        reason:
-          AuthenticateWithSessionCookieFailureReason.NO_SESSION_COOKIE_PROVIDED,
+        reason: AuthenticateWithSessionCookieFailureReason.NO_SESSION_COOKIE_PROVIDED,
       };
     }
 
@@ -71,16 +70,14 @@ export class Session {
     } catch (e) {
       return {
         authenticated: false,
-        reason:
-          AuthenticateWithSessionCookieFailureReason.INVALID_SESSION_COOKIE,
+        reason: AuthenticateWithSessionCookieFailureReason.INVALID_SESSION_COOKIE,
       };
     }
 
     if (!session.accessToken) {
       return {
         authenticated: false,
-        reason:
-          AuthenticateWithSessionCookieFailureReason.INVALID_SESSION_COOKIE,
+        reason: AuthenticateWithSessionCookieFailureReason.INVALID_SESSION_COOKIE,
       };
     }
 
@@ -121,13 +118,12 @@ export class Session {
    * @returns An object indicating whether the refresh was successful or not. If successful, it will include the new sealed session data.
    */
   async refresh(options: RefreshOptions = {}): Promise<RefreshSessionResponse> {
-    const session =
-      await this.ironSessionProvider.unsealData<SessionCookieData>(
-        this.sessionData,
-        {
-          password: this.cookiePassword,
-        },
-      );
+    const session = await this.ironSessionProvider.unsealData<SessionCookieData>(
+      this.sessionData,
+      {
+        password: this.cookiePassword,
+      },
+    );
 
     if (!session.refreshToken || !session.user) {
       return {
@@ -143,18 +139,16 @@ export class Session {
     try {
       const cookiePassword = options.cookiePassword ?? this.cookiePassword;
 
-      const authenticationResponse =
-        await this.userManagement.authenticateWithRefreshToken({
-          clientId: this.userManagement.clientId as string,
-          refreshToken: session.refreshToken,
-          organizationId:
-            options.organizationId ?? organizationIdFromAccessToken,
-          session: {
-            // We want to store the new sealed session in this class instance, so this always needs to be true
-            sealSession: true,
-            cookiePassword,
-          },
-        });
+      const authenticationResponse = await this.userManagement.authenticateWithRefreshToken({
+        clientId: this.userManagement.clientId as string,
+        refreshToken: session.refreshToken,
+        organizationId: options.organizationId ?? organizationIdFromAccessToken,
+        session: {
+          // We want to store the new sealed session in this class instance, so this always needs to be true
+          sealSession: true,
+          cookiePassword,
+        },
+      });
 
       // Update the password if a new one was provided
       if (options.cookiePassword) {

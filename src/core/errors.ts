@@ -5,4 +5,4 @@ export class WorkOSError extends Error {
   }
 }
 
-export { HttpClientError } from './http_client.ts.ts'; 
+export { HttpClientError } from './http_client.ts.ts';

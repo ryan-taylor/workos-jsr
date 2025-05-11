@@ -1,5 +1,5 @@
-import { PaginationOptions } from '../../common/interfaces/pagination-options.interface.ts';
-import { ConnectionType } from './connection-type.enum.ts';
+import type { PaginationOptions } from '../../common/interfaces/pagination-options.interface.ts';
+import type { ConnectionType } from './connection-type.enum.ts';
 
 export interface ListConnectionsOptions extends PaginationOptions {
   connectionType?: ConnectionType;

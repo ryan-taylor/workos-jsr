@@ -1,5 +1,5 @@
-import { useState } from "preact/hooks";
-import { WorkOSUser } from "../utils/user-management.ts";
+import { useState } from 'preact/hooks';
+import type { WorkOSUser } from '../utils/user-management.ts';
 
 // Define the auth factor interface based on what's used in the application
 interface AuthFactor {
@@ -34,70 +34,70 @@ export default function AuthFactorsList({ initialFactors, user }: AuthFactorsLis
 
     try {
       const response = await fetch(`/api/auth-factors?userId=${user.id}`);
-      
+
       if (!response.ok) {
         throw new Error('Failed to fetch authentication factors');
       }
 
       const data = await response.json();
       setFactors(data.data || []);
-      setSuccessMessage("Authentication factors refreshed successfully");
+      setSuccessMessage('Authentication factors refreshed successfully');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
-      console.error("Error refreshing auth factors:", err);
+      console.error('Error refreshing auth factors:', err);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div class="auth-factors-section">
+    <div class='auth-factors-section'>
       <h3>Two-Factor Authentication Methods</h3>
-      
+
       {successMessage && (
-        <div class="success-message">
+        <div class='success-message'>
           {successMessage}
         </div>
       )}
-      
+
       {error && (
-        <div class="error-message">
+        <div class='error-message'>
           {error}
         </div>
       )}
-      
-      <div class="auth-factors-content">
-        {factors.length === 0 ? (
-          <p>No authentication factors configured.</p>
-        ) : (
-          <ul class="factors-list">
+
+      <div class='auth-factors-content'>
+        {factors.length === 0 ? <p>No authentication factors configured.</p> : (
+          <ul class='factors-list'>
             {factors.map((factor) => (
-              <li key={factor.id} class="factor-item">
-                <div class="factor-info">
-                  <span class="factor-type">{factor.type}</span>
-                  <span class="factor-last-used">Last used: {formatDate(factor.last_used_at)}</span>
+              <li key={factor.id} class='factor-item'>
+                <div class='factor-info'>
+                  <span class='factor-type'>{factor.type}</span>
+                  <span class='factor-last-used'>Last used: {formatDate(factor.last_used_at)}</span>
                 </div>
               </li>
             ))}
           </ul>
         )}
-        
-        <div class="actions">
+
+        <div class='actions'>
           <button
-            type="button"
-            class="button secondary"
+            type='button'
+            class='button secondary'
             onClick={refreshAuthFactors}
             disabled={isLoading}
           >
             {isLoading ? 'Refreshing...' : 'Refresh Factors'}
           </button>
-          
+
           {/* If backend supports adding factors, this button can be enabled */}
-          {/*
+          {
+            /*
           <a href="/account/add-factor" class="button">
             Add Authentication Method
           </a>
-          */}
+          */
+          }
         </div>
       </div>
     </div>

@@ -2,16 +2,25 @@ import {
   GenericServerException,
   NoApiKeyProvidedException,
   NotFoundException,
-  UnauthorizedException,
-  UnprocessableEntityException,
   OauthException,
   RateLimitExceededException,
+  UnauthorizedException,
+  UnprocessableEntityException,
 } from './common/exceptions/index.ts';
-import { GetOptions } from './common/interfaces/get-options.interface.ts';
-import { PostOptions } from './common/interfaces/post-options.interface.ts';
-import { PutOptions } from './common/interfaces/put-options.interface.ts';
-import { WorkOSOptions } from './common/interfaces/workos-options.interface.ts';
-import { WorkOSResponseError } from './common/interfaces/workos-response-error.interface.ts';
+import type { GetOptions } from './common/interfaces/get-options.interface.ts';
+import type { PostOptions } from './common/interfaces/post-options.interface.ts';
+import type { PutOptions } from './common/interfaces/put-options.interface.ts';
+import type { WorkOSOptions } from './common/interfaces/workos-options.interface.ts';
+import type { WorkOSResponseError } from './common/interfaces/workos-response-error.interface.ts';
+
+// Re-export for usage outside of the package
+export type {
+  GetOptions,
+  PostOptions,
+  PutOptions,
+  WorkOSOptions,
+  WorkOSResponseError
+};
 import { DirectorySync } from './directory-sync/directory-sync.ts';
 import { Events } from './events/events.ts';
 import { Organizations } from './organizations/organizations.ts';
@@ -26,14 +35,16 @@ import { UserManagement } from './user-management/user-management.ts';
 import { FGA } from './fga/fga.ts';
 import { BadRequestException } from './common/exceptions/bad-request.exception.ts';
 
-import { HttpClient, HttpClientError } from './common/net/http-client.ts';
+import { type HttpClient, HttpClientError } from './common/net/http-client.ts';
 import { SubtleCryptoProvider } from './common/crypto/subtle-crypto-provider.ts';
 import { FetchHttpClient } from './common/net/fetch-client.ts';
-import { IronSessionProvider } from './common/iron-session/iron-session-provider.ts';
+import { DenoHttpClient } from './common/net/deno-client.ts';
+import { FreshSessionProvider } from './common/iron-session/fresh-session-provider.ts';
 import { Widgets } from './widgets/widgets.ts';
 import { Actions } from './actions/actions.ts';
 import { Vault } from './vault/vault.ts';
 import { ConflictException } from './common/exceptions/conflict.exception.ts';
+import { initTelemetry } from './telemetry/workos-integration.ts';
 
 const VERSION = '7.50.0';
 
@@ -61,55 +72,55 @@ const HEADER_WARRANT_TOKEN = 'Warrant-Token';
 export class WorkOS {
   /** Base URL for API requests */
   readonly baseURL: string;
-  
+
   /** HTTP client used for API requests */
   readonly client: HttpClient;
-  
+
   /** Optional client ID used for various authentication flows */
   readonly clientId?: string;
 
   /** Actions module for managing WorkOS Actions */
   readonly actions: Actions;
-  
+
   /** Audit Logs module for accessing audit logs */
   readonly auditLogs = new AuditLogs(this);
-  
+
   /** Directory Sync module for managing directory connections and users */
   readonly directorySync = new DirectorySync(this);
-  
+
   /** Organizations module for managing WorkOS organizations */
   readonly organizations = new Organizations(this);
-  
+
   /** Organization Domains module for managing domains */
   readonly organizationDomains = new OrganizationDomains(this);
-  
+
   /** Passwordless module for magic link and OTP authentication */
   readonly passwordless = new Passwordless(this);
-  
+
   /** Admin Portal module for generating admin portal URLs */
   readonly portal = new Portal(this);
-  
+
   /** SSO module for Single Sign-On authentication */
   readonly sso = new SSO(this);
-  
+
   /** Webhooks module for validating webhook payloads */
   readonly webhooks: Webhooks;
-  
+
   /** MFA module for Multi-Factor Authentication */
   readonly mfa = new Mfa(this);
-  
+
   /** Events module for accessing audit event logs */
   readonly events = new Events(this);
-  
+
   /** User Management module for authenticating and managing users */
   readonly userManagement: UserManagement;
-  
+
   /** Fine Grained Authorization module */
   readonly fga = new FGA(this);
-  
+
   /** Widgets module for embedding WorkOS UI components */
   readonly widgets = new Widgets(this);
-  
+
   /** Vault module for securely storing sensitive data */
   readonly vault = new Vault(this);
 
@@ -130,17 +141,20 @@ export class WorkOS {
    *   apiHostname: 'api.workos.dev',
    *   clientId: 'client_12345',
    * });
+   *
+   * // With telemetry enabled
+   * const workos = new WorkOS('sk_12345', {
+   *   telemetry: {
+   *     enabled: true,
+   *     endpoint: 'http://localhost:4318',
+   *   }
+   * });
    * ```
    */
   constructor(readonly key?: string, readonly options: WorkOSOptions = {}) {
     if (!key) {
-      // Check for Deno or Node.js environment
-      this.key =
-        typeof Deno !== 'undefined'
-          ? Deno.env.get("WORKOS_API_KEY")
-          : typeof process !== 'undefined'
-            ? process?.env.WORKOS_API_KEY
-            : undefined;
+      // Use Deno.env.get for accessing environment variables
+      this.key = Deno.env.get('WORKOS_API_KEY');
 
       if (!this.key) {
         throw new NoApiKeyProvidedException();
@@ -151,14 +165,8 @@ export class WorkOS {
       this.options.https = true;
     }
 
-    this.clientId = this.options.clientId;
-    if (!this.clientId) {
-      this.clientId = typeof Deno !== 'undefined'
-        ? Deno.env.get("WORKOS_CLIENT_ID")
-        : typeof process !== 'undefined'
-          ? process?.env.WORKOS_CLIENT_ID
-          : undefined;
-    }
+    // Use options.clientId or get from environment variable
+    this.clientId = this.options.clientId || Deno.env.get('WORKOS_CLIENT_ID');
 
     const protocol: string = this.options.https ? 'https' : 'http';
     const apiHostname: string = this.options.apiHostname || DEFAULT_HOSTNAME;
@@ -172,8 +180,7 @@ export class WorkOS {
     let userAgent: string = `workos-node/${VERSION}`;
 
     if (options.appInfo) {
-      const { name, version }: { name: string; version: string } =
-        options.appInfo;
+      const { name, version }: { name: string; version: string } = options.appInfo;
       userAgent += ` ${name}: ${version}`;
     }
 
@@ -187,6 +194,11 @@ export class WorkOS {
     );
 
     this.client = this.createHttpClient(options, userAgent);
+
+    // Initialize telemetry if provided in options
+    if (options.telemetry) {
+      initTelemetry(this, options.telemetry);
+    }
   }
 
   /**
@@ -215,28 +227,36 @@ export class WorkOS {
    * @internal
    */
   createHttpClient(options: WorkOSOptions, userAgent: string) {
-    // Using type assertion to convert FetchHttpClient to HttpClient
-    return new FetchHttpClient(this.baseURL, {
-      ...options.config,
-      headers: {
-        ...options.config?.headers,
-        Authorization: `Bearer ${this.key}`,
-        'User-Agent': userAgent,
-      },
-    }) as unknown as HttpClient;
+    // Check if we're running in Deno environment
+    const isDeno = typeof Deno !== 'undefined';
+    
+    // Create headers with authorization and user agent
+    const headers = {
+      ...options.config?.headers,
+      Authorization: `Bearer ${this.key}`,
+      'User-Agent': userAgent,
+    };
+    
+    // Use Deno client when in Deno environment, otherwise use Fetch client
+    if (isDeno) {
+      return new DenoHttpClient(this.baseURL, {
+        ...options.config,
+        headers,
+      }) as unknown as HttpClient;
+    } else {
+      return new FetchHttpClient(this.baseURL, {
+        ...options.config,
+        headers,
+      }) as unknown as HttpClient;
+    }
   }
 
   /**
-   * Creates an IronSessionProvider for session management.
-   * This method is implemented in platform-specific subclasses.
-   * @returns An IronSessionProvider instance
-   * @throws Error if called on the base WorkOS class
+   * Provides a Deno-compatible session implementation.
    * @internal
    */
-  createIronSessionProvider(): IronSessionProvider {
-    throw new Error(
-      'IronSessionProvider not implemented. Use WorkOSNode or WorkOSWorker instead.',
-    );
+  createIronSessionProvider(): FreshSessionProvider {
+    return new FreshSessionProvider();
   }
 
   /**
@@ -264,7 +284,7 @@ export class WorkOS {
    * });
    * ```
    */
-  async post<Result = any, Entity = any>(
+  async post<Result = unknown, Entity = unknown>(
     path: string,
     entity: Entity,
     options: PostOptions = {},
@@ -285,7 +305,8 @@ export class WorkOS {
         headers: requestHeaders,
       });
 
-      return { data: await res.toJSON() };
+      const jsonResponse = await res.toJSON();
+      return { data: jsonResponse as Result };
     } catch (error) {
       this.handleHttpError({ path, error });
 
@@ -308,7 +329,7 @@ export class WorkOS {
    * });
    * ```
    */
-  async get<Result = any>(
+  async get<Result = unknown>(
     path: string,
     options: GetOptions = {},
   ): Promise<{ data: Result }> {
@@ -327,7 +348,8 @@ export class WorkOS {
         params: options.query,
         headers: requestHeaders,
       });
-      return { data: await res.toJSON() };
+      const jsonResponse = await res.toJSON();
+      return { data: jsonResponse as Result };
     } catch (error) {
       this.handleHttpError({ path, error });
 
@@ -352,7 +374,7 @@ export class WorkOS {
    * });
    * ```
    */
-  async put<Result = any, Entity = any>(
+  async put<Result = unknown, Entity = unknown>(
     path: string,
     entity: Entity,
     options: PutOptions = {},
@@ -368,7 +390,8 @@ export class WorkOS {
         params: options.query,
         headers: requestHeaders,
       });
-      return { data: await res.toJSON() };
+      const jsonResponse = await res.toJSON();
+      return { data: jsonResponse as Result };
     } catch (error) {
       this.handleHttpError({ path, error });
 
@@ -389,7 +412,10 @@ export class WorkOS {
    * await workos.delete('/user-management/users/user_123');
    * ```
    */
-  async delete(path: string, query?: any): Promise<void> {
+  async delete(
+    path: string,
+    query?: Record<string, string | number | boolean | undefined>
+  ): Promise<void> {
     try {
       await this.client.delete(path, {
         params: query,
@@ -436,7 +462,14 @@ export class WorkOS {
     if (response) {
       const { status, data, headers } = response;
 
-      const requestID = headers['X-Request-ID'] ?? '';
+      // Ensure requestID is a string
+      const requestIDHeader = headers['X-Request-ID'];
+      const requestID = typeof requestIDHeader === 'string'
+        ? requestIDHeader
+        : Array.isArray(requestIDHeader)
+          ? requestIDHeader[0]
+          : '';
+          
       const {
         code,
         error_description: errorDescription,
@@ -469,21 +502,31 @@ export class WorkOS {
           });
         }
         case 429: {
-          const retryAfter = headers.get('Retry-After');
+          // Extract retry-after header safely
+          const retryAfterHeader = typeof headers === 'object' && headers
+            ? headers['Retry-After'] || headers['retry-after']
+            : null;
+          
+          let retryAfter: number | null = null;
+          if (typeof retryAfterHeader === 'string') {
+            retryAfter = Number(retryAfterHeader);
+          } else if (Array.isArray(retryAfterHeader) && retryAfterHeader.length > 0) {
+            retryAfter = Number(retryAfterHeader[0]);
+          }
 
           throw new RateLimitExceededException(
-            data.message,
+            data.message || 'Rate limit exceeded',
             requestID,
-            retryAfter ? Number(retryAfter) : null,
+            retryAfter,
           );
         }
         default: {
-          if (error || errorDescription) {
+          if (error !== undefined || errorDescription !== undefined) {
             throw new OauthException(
               status,
               requestID,
-              error,
-              errorDescription,
+              error || '',
+              errorDescription || '',
               data,
             );
           } else if (code && errors) {
@@ -498,7 +541,7 @@ export class WorkOS {
           } else {
             throw new GenericServerException(
               status,
-              data.message,
+              data.message || 'Unknown server error',
               data,
               requestID,
             );

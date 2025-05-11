@@ -1,9 +1,9 @@
 // Simplified telemetry implementation for Fresh application
 
 // Service information
-export const SERVICE_NAME = "fresh-canary";
-export const SERVICE_VERSION = "1.0.0";
-export const ENVIRONMENT = Deno.env.get("DENO_ENV") || "development";
+export const SERVICE_NAME = 'fresh-canary';
+export const SERVICE_VERSION = '1.0.0';
+export const ENVIRONMENT = Deno.env.get('DENO_ENV') || 'development';
 
 // Storage for metrics and spans
 type MetricValue = {
@@ -17,7 +17,7 @@ type Span = {
   startTime: number;
   endTime?: number;
   attributes: Record<string, string>;
-  status: "OK" | "ERROR";
+  status: 'OK' | 'ERROR';
   events: Array<{
     name: string;
     timestamp: number;
@@ -42,25 +42,25 @@ export async function createSpan<T>(
     name,
     startTime: performance.now(),
     attributes,
-    status: "OK",
+    status: 'OK',
     events: [],
   };
 
   try {
     // Execute the operation
     const result = await fn(span);
-    span.status = "OK";
+    span.status = 'OK';
     return result;
   } catch (error) {
     // Record error information
-    span.status = "ERROR";
+    span.status = 'ERROR';
     span.error = error instanceof Error ? error : new Error(String(error));
     throw error;
   } finally {
     // Finalize the span
     span.endTime = performance.now();
     spans.push(span);
-    
+
     // Also record as a duration metric
     const duration = span.endTime - span.startTime;
     recordMetric(`${name}_duration`, duration, attributes);
@@ -78,15 +78,15 @@ export function recordMetric(
   if (!metrics[name]) {
     metrics[name] = [];
   }
-  
+
   metrics[name].push({
     value,
     timestamp: Date.now(),
     attributes,
   });
-  
+
   // Debug logging in development
-  if (ENVIRONMENT === "development") {
+  if (ENVIRONMENT === 'development') {
     console.log(`METRIC [${name}]: ${value}`, attributes);
   }
 }
@@ -96,19 +96,19 @@ export function recordMetric(
  */
 export function formatMetricsAsPrometheus(): string {
   const lines: string[] = [];
-  
+
   for (const [name, values] of Object.entries(metrics)) {
     if (values.length === 0) continue;
-    
+
     // Add metric type header (counters or histograms)
-    const isHistogram = name.includes("_duration") || name.includes("_time");
-    lines.push(`# TYPE ${name} ${isHistogram ? "histogram" : "counter"}`);
-    lines.push(`# HELP ${name} ${name.replace(/_/g, " ")}`);
-    
+    const isHistogram = name.includes('_duration') || name.includes('_time');
+    lines.push(`# TYPE ${name} ${isHistogram ? 'histogram' : 'counter'}`);
+    lines.push(`# HELP ${name} ${name.replace(/_/g, ' ')}`);
+
     if (isHistogram) {
       // Group metrics by attribute sets
       const groupedMetrics: Record<string, number[]> = {};
-      
+
       for (const metricValue of values) {
         const attrKey = JSON.stringify(metricValue.attributes);
         if (!groupedMetrics[attrKey]) {
@@ -116,36 +116,36 @@ export function formatMetricsAsPrometheus(): string {
         }
         groupedMetrics[attrKey].push(metricValue.value);
       }
-      
+
       // Calculate histogram stats for each group
       for (const [attrKey, metricValues] of Object.entries(groupedMetrics)) {
         const attributes = JSON.parse(attrKey);
         const sum = metricValues.reduce((a, b) => a + b, 0);
         const count = metricValues.length;
-        
+
         // Get attribute string
         const attrString = formatLabels(attributes);
-        
+
         // Output sum and count
         lines.push(`${name}_sum${attrString} ${sum}`);
         lines.push(`${name}_count${attrString} ${count}`);
-        
+
         // Calculate and output percentile buckets
         // Simplified buckets for response time: 10, 50, 100, 200, 500, 1000, +Inf
         const buckets = [10, 50, 100, 200, 500, 1000];
-        
+
         for (const bucketLimit of buckets) {
-          const bucketCount = metricValues.filter(v => v <= bucketLimit).length;
-          lines.push(`${name}_bucket${formatLabels({...attributes, le: bucketLimit.toString()})} ${bucketCount}`);
+          const bucketCount = metricValues.filter((v) => v <= bucketLimit).length;
+          lines.push(`${name}_bucket${formatLabels({ ...attributes, le: bucketLimit.toString() })} ${bucketCount}`);
         }
-        
+
         // Add infinity bucket (all values)
-        lines.push(`${name}_bucket${formatLabels({...attributes, le: "+Inf"})} ${count}`);
+        lines.push(`${name}_bucket${formatLabels({ ...attributes, le: '+Inf' })} ${count}`);
       }
     } else {
       // Handle counters - sum by attribute sets
       const sums: Record<string, { sum: number; attrs: Record<string, string> }> = {};
-      
+
       for (const metricValue of values) {
         const attrKey = JSON.stringify(metricValue.attributes);
         if (!sums[attrKey]) {
@@ -153,15 +153,15 @@ export function formatMetricsAsPrometheus(): string {
         }
         sums[attrKey].sum += metricValue.value;
       }
-      
+
       // Output counter metrics
       for (const { sum, attrs } of Object.values(sums)) {
         lines.push(`${name}${formatLabels(attrs)} ${sum}`);
       }
     }
   }
-  
-  return lines.join("\n");
+
+  return lines.join('\n');
 }
 
 /**
@@ -169,13 +169,13 @@ export function formatMetricsAsPrometheus(): string {
  */
 function formatLabels(labels: Record<string, string>): string {
   if (Object.keys(labels).length === 0) {
-    return "";
+    return '';
   }
-  
+
   const labelPairs = Object.entries(labels)
     .map(([key, value]) => `${key}="${escapeValue(value)}"`)
-    .join(",");
-    
+    .join(',');
+
   return `{${labelPairs}}`;
 }
 

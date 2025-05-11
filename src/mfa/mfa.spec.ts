@@ -1,9 +1,16 @@
-import fetch from 'jest-fetch-mock';
-import { fetchOnce, fetchURL, fetchBody } from '../common/utils/test-utils.ts';
-import { UnprocessableEntityException } from '../common/exceptions.ts';
+// Import Deno testing utilities
+import {
+  assertEquals,
+  beforeEach,
+  describe,
+  it,
+} from "../../tests/deno-test-setup.ts";
+
+import { fetchBody, fetchOnce, fetchURL, resetMockFetch } from '../common/utils/test-utils.ts';
+import { UnprocessableEntityException } from '../common/exceptions/unprocessable-entity.exception.ts';
 
 import { WorkOS } from '../workos.ts';
-import {
+import type {
   Challenge,
   ChallengeResponse,
   Factor,
@@ -12,10 +19,12 @@ import {
   FactorWithSecretsResponse,
   VerifyResponse,
   VerifyResponseResponse,
-} from './interfaces.ts';
+} from './interfaces/index.ts';
 
 describe('MFA', () => {
-  beforeEach(() => fetch.resetMocks());
+  beforeEach(() => {
+    resetMockFetch();
+  });
 
   describe('getFactor', () => {
     it('returns the requested factor', async () => {
@@ -43,12 +52,12 @@ describe('MFA', () => {
         },
       };
 
-      fetchOnce(factorResponse);
+      fetchOnce(JSON.stringify(factorResponse));
 
       const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
       const subject = await workos.mfa.getFactor('test_123');
 
-      expect(subject).toEqual(factor);
+      assertEquals(subject, factor);
     });
   });
 
@@ -59,7 +68,9 @@ describe('MFA', () => {
 
       await workos.mfa.deleteFactor('conn_123');
 
-      expect(fetchURL()).toContain('/auth/factors/conn_123');
+      const url = fetchURL();
+      assertEquals(typeof url, 'string');
+      assertEquals(url?.includes('/auth/factors/conn_123'), true);
     });
   });
 
@@ -82,7 +93,7 @@ describe('MFA', () => {
           type: 'generic_otp',
         };
 
-        fetchOnce(factorResponse);
+        fetchOnce(JSON.stringify(factorResponse));
 
         const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU', {
           apiHostname: 'api.workos.dev',
@@ -92,7 +103,7 @@ describe('MFA', () => {
           type: 'generic_otp',
         });
 
-        expect(subject).toEqual(factor);
+        assertEquals(subject, factor);
       });
     });
 
@@ -128,7 +139,7 @@ describe('MFA', () => {
           },
         };
 
-        fetchOnce(factorResponse);
+        fetchOnce(JSON.stringify(factorResponse));
         const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU', {
           apiHostname: 'api.workos.dev',
         });
@@ -139,7 +150,7 @@ describe('MFA', () => {
           user: 'some_user',
         });
 
-        expect(subject).toEqual(factor);
+        assertEquals(subject, factor);
       });
     });
 
@@ -167,7 +178,7 @@ describe('MFA', () => {
           },
         };
 
-        fetchOnce(factorResponse);
+        fetchOnce(JSON.stringify(factorResponse));
 
         const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU', {
           apiHostname: 'api.workos.dev',
@@ -178,16 +189,16 @@ describe('MFA', () => {
           phoneNumber: '+1555555555',
         });
 
-        expect(subject).toEqual(factor);
+        assertEquals(subject, factor);
       });
 
       describe('when phone number is invalid', () => {
         it('throws an exception', async () => {
           fetchOnce(
-            {
+            JSON.stringify({
               message: `Phone number is invalid: 'foo'`,
               code: 'invalid_phone_number',
-            },
+            }),
             {
               status: 422,
               headers: { 'X-Request-ID': 'req_123' },
@@ -198,12 +209,15 @@ describe('MFA', () => {
             apiHostname: 'api.workos.dev',
           });
 
-          await expect(
-            workos.mfa.enrollFactor({
+          try {
+            await workos.mfa.enrollFactor({
               type: 'sms',
               phoneNumber: 'foo',
-            }),
-          ).rejects.toThrow(UnprocessableEntityException);
+            });
+            throw new Error('Expected to throw but did not');
+          } catch (error) {
+            assertEquals(error instanceof UnprocessableEntityException, true);
+          }
         });
       });
     });
@@ -232,7 +246,7 @@ describe('MFA', () => {
           authentication_factor_id: 'auth_factor_1234',
         };
 
-        fetchOnce(challengeResponse);
+        fetchOnce(JSON.stringify(challengeResponse));
 
         const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU', {
           apiHostname: 'api.workos.dev',
@@ -242,7 +256,7 @@ describe('MFA', () => {
           authenticationFactorId: 'auth_factor_1234',
         });
 
-        expect(subject).toEqual(challenge);
+        assertEquals(subject, challenge);
       });
     });
 
@@ -268,7 +282,7 @@ describe('MFA', () => {
           authentication_factor_id: 'auth_factor_1234',
         };
 
-        fetchOnce(challengeResponse);
+        fetchOnce(JSON.stringify(challengeResponse));
 
         const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU', {
           apiHostname: 'api.workos.dev',
@@ -279,10 +293,11 @@ describe('MFA', () => {
           smsTemplate: 'This is your code: 12345',
         });
 
-        expect(fetchBody()).toEqual({
+        const body = fetchBody();
+        assertEquals(body, {
           sms_template: 'This is your code: 12345',
         });
-        expect(subject).toEqual(challenge);
+        assertEquals(subject, challenge);
       });
     });
   });
@@ -316,7 +331,7 @@ describe('MFA', () => {
           valid: true,
         };
 
-        fetchOnce(verifyResponseResponse);
+        fetchOnce(JSON.stringify(verifyResponseResponse));
 
         const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU', {
           apiHostname: 'api.workos.dev',
@@ -327,76 +342,21 @@ describe('MFA', () => {
           code: '12345',
         });
 
-        expect(fetchBody()).toEqual({
+        const body = fetchBody();
+        assertEquals(body, {
           code: '12345',
         });
-        expect(subject).toEqual(verifyResponse);
+        assertEquals(subject, verifyResponse);
       });
     });
 
     describe('when the challenge has been previously verified', () => {
       it('throws an exception', async () => {
         fetchOnce(
-          {
+          JSON.stringify({
             message: `The authentication challenge '12345' has already been verified.`,
             code: 'authentication_challenge_previously_verified',
-          },
-          {
-            status: 422,
-            headers: { 'X-Request-ID': 'req_123' },
-          },
-        );
-
-        const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU', {
-          apiHostname: 'api.workos.dev',
-        });
-
-        await expect(
-          workos.mfa.verifyChallenge({
-            authenticationChallengeId: 'auth_challenge_1234',
-            code: '12345',
           }),
-        ).rejects.toThrow(UnprocessableEntityException);
-        expect(fetchBody()).toEqual({
-          code: '12345',
-        });
-      });
-    });
-
-    describe('when the challenge has expired', () => {
-      it('throws an exception', async () => {
-        fetchOnce(
-          {
-            message: `The authentication challenge '12345' has expired.`,
-            code: 'authentication_challenge_expired',
-          },
-          {
-            status: 422,
-            headers: { 'X-Request-ID': 'req_123' },
-          },
-        );
-
-        const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU', {
-          apiHostname: 'api.workos.dev',
-        });
-
-        await expect(
-          workos.mfa.verifyChallenge({
-            authenticationChallengeId: 'auth_challenge_1234',
-            code: '12345',
-          }),
-        ).rejects.toThrow(UnprocessableEntityException);
-        expect(fetchBody()).toEqual({
-          code: '12345',
-        });
-      });
-
-      it('exception has code', async () => {
-        fetchOnce(
-          {
-            message: `The authentication challenge '12345' has expired.`,
-            code: 'authentication_challenge_expired',
-          },
           {
             status: 422,
             headers: { 'X-Request-ID': 'req_123' },
@@ -412,12 +372,81 @@ describe('MFA', () => {
             authenticationChallengeId: 'auth_challenge_1234',
             code: '12345',
           });
+          throw new Error('Expected to throw but did not');
         } catch (error) {
-          expect(error).toMatchObject({
-            code: 'authentication_challenge_expired',
-          });
+          assertEquals(error instanceof UnprocessableEntityException, true);
         }
-        expect(fetchBody()).toEqual({
+        
+        const body = fetchBody();
+        assertEquals(body, {
+          code: '12345',
+        });
+      });
+    });
+
+    describe('when the challenge has expired', () => {
+      it('throws an exception', async () => {
+        fetchOnce(
+          JSON.stringify({
+            message: `The authentication challenge '12345' has expired.`,
+            code: 'authentication_challenge_expired',
+          }),
+          {
+            status: 422,
+            headers: { 'X-Request-ID': 'req_123' },
+          },
+        );
+
+        const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU', {
+          apiHostname: 'api.workos.dev',
+        });
+
+        try {
+          await workos.mfa.verifyChallenge({
+            authenticationChallengeId: 'auth_challenge_1234',
+            code: '12345',
+          });
+          throw new Error('Expected to throw but did not');
+        } catch (error) {
+          assertEquals(error instanceof UnprocessableEntityException, true);
+        }
+        
+        const body = fetchBody();
+        assertEquals(body, {
+          code: '12345',
+        });
+      });
+
+      it('exception has code', async () => {
+        fetchOnce(
+          JSON.stringify({
+            message: `The authentication challenge '12345' has expired.`,
+            code: 'authentication_challenge_expired',
+          }),
+          {
+            status: 422,
+            headers: { 'X-Request-ID': 'req_123' },
+          },
+        );
+
+        const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU', {
+          apiHostname: 'api.workos.dev',
+        });
+
+        try {
+          await workos.mfa.verifyChallenge({
+            authenticationChallengeId: 'auth_challenge_1234',
+            code: '12345',
+          });
+          throw new Error('Expected to throw but did not');
+        } catch (error) {
+          if (error instanceof UnprocessableEntityException) {
+            assertEquals(error.code, 'authentication_challenge_expired');
+          }
+        }
+        
+        const body = fetchBody();
+        assertEquals(body, {
           code: '12345',
         });
       });

@@ -1,5 +1,5 @@
-import { AuthenticateWithSessionCookieSuccessResponse } from './authenticate-with-session-cookie.interface.ts';
-import { AuthenticationResponse } from './authentication-response.interface.ts';
+import type { AuthenticateWithSessionCookieSuccessResponse } from './authenticate-with-session-cookie.interface.ts';
+import type { AuthenticationResponse } from './authentication-response.interface.ts';
 
 export enum RefreshAndSealSessionDataFailureReason {
   /**
@@ -37,16 +37,18 @@ export type RefreshAndSealSessionDataResponse =
   | RefreshSessionFailedResponse
   | RefreshAndSealSessionDataSuccessResponse;
 
-type RefreshSessionSuccessResponse = Omit<
-  AuthenticateWithSessionCookieSuccessResponse,
-  // accessToken is available in the session object and with session
-  // helpers isn't necessarily useful to return top level
-  'accessToken'
-> & {
-  authenticated: true;
-  session?: AuthenticationResponse;
-  sealedSession?: string;
-};
+type RefreshSessionSuccessResponse =
+  & Omit<
+    AuthenticateWithSessionCookieSuccessResponse,
+    // accessToken is available in the session object and with session
+    // helpers isn't necessarily useful to return top level
+    'accessToken'
+  >
+  & {
+    authenticated: true;
+    session?: AuthenticationResponse;
+    sealedSession?: string;
+  };
 
 export type RefreshSessionResponse =
   | RefreshSessionFailedResponse

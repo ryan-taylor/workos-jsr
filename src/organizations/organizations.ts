@@ -1,6 +1,6 @@
 import { AutoPaginatable } from '../common/utils/pagination.ts';
-import { WorkOS } from '../workos.ts';
-import {
+import type { WorkOS } from '../workos.ts';
+import type {
   CreateOrganizationOptions,
   CreateOrganizationRequestOptions,
   ListOrganizationsOptions,
@@ -8,16 +8,12 @@ import {
   OrganizationResponse,
   UpdateOrganizationOptions,
 } from './interfaces.ts';
-import {
-  deserializeOrganization,
-  serializeCreateOrganizationOptions,
-  serializeUpdateOrganizationOptions,
-} from './serializers.ts';
+import { deserializeOrganization, serializeCreateOrganizationOptions, serializeUpdateOrganizationOptions } from './serializers.ts';
 
 import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize.ts';
-import { ListOrganizationRolesResponse, RoleList } from '../roles/interfaces.ts';
+import type { ListOrganizationRolesResponse, RoleList } from '../roles/interfaces.ts';
 import { deserializeRole } from '../roles/serializers/role.serializer.ts';
-import { ListOrganizationRolesOptions } from './interfaces/list-organization-roles-options.interface.ts';
+import type { ListOrganizationRolesOptions } from './interfaces/list-organization-roles-options.interface.ts';
 
 export class Organizations {
   constructor(private readonly workos: WorkOS) {}
@@ -32,7 +28,7 @@ export class Organizations {
         deserializeOrganization,
         options,
       ),
-      params =>
+      (params) =>
         fetchAndDeserialize<OrganizationResponse, Organization>(
           this.workos,
           '/organizations',
@@ -94,14 +90,13 @@ export class Organizations {
   ): Promise<RoleList> {
     const { organizationId } = options;
 
-    const { data: response } =
-      await this.workos.get<ListOrganizationRolesResponse>(
-        `/organizations/${organizationId}/roles`,
-      );
+    const { data: response } = await this.workos.get<ListOrganizationRolesResponse>(
+      `/organizations/${organizationId}/roles`,
+    );
 
     return {
       object: 'list',
-      data: response.data.map(role => deserializeRole(role)),
+      data: response.data.map((role) => deserializeRole(role)),
     };
   }
 }

@@ -1,5 +1,5 @@
 import { Passwordless } from '../src/services/passwordless.ts';
-import { HttpClient } from '../src/core/http_client.ts';
+import type { HttpClient } from '../src/core/http_client.ts';
 import { assertEquals } from '@std/assert';
 
 Deno.test('Passwordless.sendMagicLink calls POST (mocked)', async () => {
@@ -40,4 +40,4 @@ Deno.test('Passwordless.authenticate returns profile (mocked)', async () => {
   const result = await passwordless.authenticate({ code: 'pw_code_abc' });
   assertEquals(result.access_token, 'tok_pw_123');
   assertEquals(result.profile.id, 'user_pw_1');
-}); 
+});

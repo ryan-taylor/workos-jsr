@@ -1,31 +1,31 @@
-import { WorkOS } from '../workos.ts';
+import type { WorkOS } from '../workos.ts';
 import {
-  Resource,
-  CheckBatchOptions,
-  CheckOptions,
-  CheckRequestOptions,
+  type BatchWriteResourcesOptions,
+  type BatchWriteResourcesResponse,
+  type CheckBatchOptions,
+  type CheckOptions,
+  type CheckRequestOptions,
   CheckResult,
-  CheckResultResponse,
-  CreateResourceOptions,
-  DeleteResourceOptions,
-  ListResourcesOptions,
-  ListWarrantsRequestOptions,
-  ListWarrantsOptions,
-  QueryOptions,
-  QueryRequestOptions,
-  QueryResult,
-  QueryResultResponse,
-  ResourceInterface,
-  ResourceOptions,
-  ResourceResponse,
-  UpdateResourceOptions,
-  WriteWarrantOptions,
-  Warrant,
-  WarrantResponse,
-  WarrantToken,
-  WarrantTokenResponse,
-  BatchWriteResourcesOptions,
-  BatchWriteResourcesResponse,
+  type CheckResultResponse,
+  type CreateResourceOptions,
+  type DeleteResourceOptions,
+  type ListResourcesOptions,
+  type ListWarrantsOptions,
+  type ListWarrantsRequestOptions,
+  type QueryOptions,
+  type QueryRequestOptions,
+  type QueryResult,
+  type QueryResultResponse,
+  type Resource,
+  type ResourceInterface,
+  type ResourceOptions,
+  type ResourceResponse,
+  type UpdateResourceOptions,
+  type Warrant,
+  type WarrantResponse,
+  type WarrantToken,
+  type WarrantTokenResponse,
+  type WriteWarrantOptions,
 } from './interfaces.ts';
 import {
   deserializeBatchWriteResourcesResponse,
@@ -87,12 +87,8 @@ export class FGA {
   async getResource(
     resource: ResourceInterface | ResourceOptions,
   ): Promise<Resource> {
-    const resourceType = isResourceInterface(resource)
-      ? resource.getResourceType()
-      : resource.resourceType;
-    const resourceId = isResourceInterface(resource)
-      ? resource.getResourceId()
-      : resource.resourceId;
+    const resourceType = isResourceInterface(resource) ? resource.getResourceType() : resource.resourceType;
+    const resourceId = isResourceInterface(resource) ? resource.getResourceId() : resource.resourceId;
 
     const { data } = await this.workos.get<ResourceResponse>(
       `/fga/v1/resources/${resourceType}/${resourceId}`,
@@ -111,7 +107,7 @@ export class FGA {
         deserializeResource,
         options ? serializeListResourceOptions(options) : undefined,
       ),
-      params =>
+      (params) =>
         fetchAndDeserialize<ResourceResponse, Resource>(
           this.workos,
           '/fga/v1/resources',
@@ -123,12 +119,8 @@ export class FGA {
   }
 
   async updateResource(options: UpdateResourceOptions): Promise<Resource> {
-    const resourceType = isResourceInterface(options.resource)
-      ? options.resource.getResourceType()
-      : options.resource.resourceType;
-    const resourceId = isResourceInterface(options.resource)
-      ? options.resource.getResourceId()
-      : options.resource.resourceId;
+    const resourceType = isResourceInterface(options.resource) ? options.resource.getResourceType() : options.resource.resourceType;
+    const resourceId = isResourceInterface(options.resource) ? options.resource.getResourceId() : options.resource.resourceId;
 
     const { data } = await this.workos.put<ResourceResponse>(
       `/fga/v1/resources/${resourceType}/${resourceId}`,
@@ -141,12 +133,8 @@ export class FGA {
   }
 
   async deleteResource(resource: DeleteResourceOptions): Promise<void> {
-    const resourceType = isResourceInterface(resource)
-      ? resource.getResourceType()
-      : resource.resourceType;
-    const resourceId = isResourceInterface(resource)
-      ? resource.getResourceId()
-      : resource.resourceId;
+    const resourceType = isResourceInterface(resource) ? resource.getResourceType() : resource.resourceType;
+    const resourceId = isResourceInterface(resource) ? resource.getResourceId() : resource.resourceId;
 
     await this.workos.delete(`/fga/v1/resources/${resourceType}/${resourceId}`);
   }
@@ -193,7 +181,7 @@ export class FGA {
         options ? serializeListWarrantsOptions(options) : undefined,
         requestOptions,
       ),
-      params =>
+      (params) =>
         fetchAndDeserialize<WarrantResponse, Warrant>(
           this.workos,
           '/fga/v1/warrants',
@@ -217,7 +205,7 @@ export class FGA {
         serializeQueryOptions(options),
         requestOptions,
       ),
-      params =>
+      (params) =>
         fetchAndDeserialize<QueryResultResponse, QueryResult>(
           this.workos,
           '/fga/v1/query',

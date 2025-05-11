@@ -36,7 +36,7 @@ WORKOS_WEBHOOK_SECRET=your_webhook_secret
 ### Initialize Directory Sync
 
 ```typescript
-import { initDirectorySync } from "./utils/directory-sync.ts";
+import { initDirectorySync } from './utils/directory-sync.ts';
 
 // Initialize WorkOS with your API key and client ID
 const { workos } = initDirectorySync();
@@ -45,7 +45,7 @@ const { workos } = initDirectorySync();
 ### List Directories
 
 ```typescript
-import { listDirectories } from "./utils/directory-sync.ts";
+import { listDirectories } from './utils/directory-sync.ts';
 
 // List all connected directories
 const directories = await listDirectories(workos);
@@ -53,70 +53,70 @@ const directories = await listDirectories(workos);
 // With optional filtering
 const filteredDirectories = await listDirectories(workos, {
   limit: 10,
-  organizationId: "org_123",
-  search: "example"
+  organizationId: 'org_123',
+  search: 'example',
 });
 ```
 
 ### Get Directory Details
 
 ```typescript
-import { getDirectory } from "./utils/directory-sync.ts";
+import { getDirectory } from './utils/directory-sync.ts';
 
 // Retrieve a specific directory
-const directory = await getDirectory(workos, "directory_123");
+const directory = await getDirectory(workos, 'directory_123');
 ```
 
 ### List Users
 
 ```typescript
-import { listDirectoryUsers } from "./utils/directory-sync.ts";
+import { listDirectoryUsers } from './utils/directory-sync.ts';
 
 // List users from a specific directory
 const users = await listDirectoryUsers(workos, {
-  directory: "directory_123",
-  limit: 100
+  directory: 'directory_123',
+  limit: 100,
 });
 
 // Filter users by group
 const groupUsers = await listDirectoryUsers(workos, {
-  directory: "directory_123",
-  group: "group_456"
+  directory: 'directory_123',
+  group: 'group_456',
 });
 ```
 
 ### List Groups
 
 ```typescript
-import { listDirectoryGroups } from "./utils/directory-sync.ts";
+import { listDirectoryGroups } from './utils/directory-sync.ts';
 
 // List groups from a specific directory
 const groups = await listDirectoryGroups(workos, {
-  directory: "directory_123",
-  limit: 100
+  directory: 'directory_123',
+  limit: 100,
 });
 
 // Filter groups that a specific user belongs to
 const userGroups = await listDirectoryGroups(workos, {
-  directory: "directory_123",
-  user: "user_789"
+  directory: 'directory_123',
+  user: 'user_789',
 });
 ```
 
 ### Get User Details
 
 ```typescript
-import { getDirectoryUser } from "./utils/directory-sync.ts";
+import { getDirectoryUser } from './utils/directory-sync.ts';
 
 // Get detailed information about a specific user
-const user = await getDirectoryUser(workos, "user_123");
+const user = await getDirectoryUser(workos, 'user_123');
 
 // Access user information
 console.log(user.firstName, user.lastName);
 console.log(user.emails[0].value); // Primary email
 
 // Access user's groups
-user.groups.forEach(group => {
+user.groups.forEach((group) => {
   console.log(group.name);
 });
 ```
@@ -124,10 +124,10 @@ user.groups.forEach(group => {
 ### Get Group Details
 
 ```typescript
-import { getDirectoryGroup } from "./utils/directory-sync.ts";
+import { getDirectoryGroup } from './utils/directory-sync.ts';
 
 // Get detailed information about a specific group
-const group = await getDirectoryGroup(workos, "group_123");
+const group = await getDirectoryGroup(workos, 'group_123');
 ```
 
 ## Webhook Integration
@@ -183,7 +183,7 @@ This implementation includes example routes that demonstrate a complete Director
 For detailed logging, you can add console logging to your webhook handler:
 
 ```typescript
-console.log("Webhook payload:", JSON.stringify(payload, null, 2));
+console.log('Webhook payload:', JSON.stringify(payload, null, 2));
 ```
 
 ## Learn More

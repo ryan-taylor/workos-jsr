@@ -1,4 +1,4 @@
-import { RoleResponse } from '../../roles/interfaces/.ts';
+import type { RoleResponse } from '../../roles/interfaces/.ts';
 
 export type OrganizationMembershipStatus = 'active' | 'inactive' | 'pending';
 

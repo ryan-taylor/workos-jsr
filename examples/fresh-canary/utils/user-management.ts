@@ -1,20 +1,21 @@
 // Utility functions for integrating User Management with Fresh 2.x
 
-import { FreshSessionProvider } from "../../../src/common/iron-session/fresh-session-provider.ts";
-import { WorkOS } from "../../../src/workos.ts";
-import { UserManagement } from "../../../src/user-management/user-management.ts";
+// Utility functions for integrating User Management with Fresh 2.x
+import { FreshSessionProvider } from '../../../src/common/iron-session/fresh-session-provider.ts';
+import { WorkOS } from '../../../src/workos.ts';
+import { UserManagement } from '../../../src/user-management/user-management.ts';
 
 // Session configuration
 export const SESSION_OPTIONS = {
-  cookieName: "workos_session",
-  password: Deno.env.get("SESSION_SECRET") || "use-a-strong-password-in-production",
+  cookieName: 'workos_session',
+  password: Deno.env.get('SESSION_SECRET') || 'use-a-strong-password-in-production',
   ttl: 60 * 60 * 24 * 7, // 7 days in seconds
   secure: true,
   httpOnly: true,
-  sameSite: "Lax" as const,
+  sameSite: 'Lax' as const,
 };
 
-// User interface 
+// User interface
 export interface WorkOSUser {
   id: string;
   email: string;
@@ -37,13 +38,13 @@ export interface SessionData extends Record<string, unknown> {
  */
 export function initUserManagement() {
   const workos = new WorkOS(
-    Deno.env.get("WORKOS_API_KEY") || "",
-    { clientId: Deno.env.get("WORKOS_CLIENT_ID") }
+    Deno.env.get('WORKOS_API_KEY') || '',
+    { clientId: Deno.env.get('WORKOS_CLIENT_ID') },
   );
-  
+
   const sessionProvider = new FreshSessionProvider();
   const userManagement = new UserManagement(workos, sessionProvider);
-  
+
   return { workos, userManagement, sessionProvider };
 }
 
@@ -54,14 +55,14 @@ export function initUserManagement() {
 export async function requireAuth(req: Request): Promise<Response | null> {
   const sessionProvider = new FreshSessionProvider();
   const session = await sessionProvider.getSession<SessionData>(req, SESSION_OPTIONS);
-  
+
   if (!session || !session.user) {
     return new Response(null, {
       status: 302,
-      headers: { Location: "/login?redirect=" + encodeURIComponent(req.url) },
+      headers: { Location: '/login?redirect=' + encodeURIComponent(req.url) },
     });
   }
-  
+
   return null;
 }
 
@@ -71,7 +72,7 @@ export async function requireAuth(req: Request): Promise<Response | null> {
 export async function getCurrentUser(req: Request): Promise<WorkOSUser | null> {
   const sessionProvider = new FreshSessionProvider();
   const session = await sessionProvider.getSession<SessionData>(req, SESSION_OPTIONS);
-  
+
   return session?.user || null;
 }
 
@@ -80,18 +81,18 @@ export async function getCurrentUser(req: Request): Promise<WorkOSUser | null> {
  */
 export async function createUserSession(
   sessionData: SessionData,
-  redirectUrl: string = "/",
+  redirectUrl: string = '/',
 ): Promise<Response> {
   const sessionProvider = new FreshSessionProvider();
-  
+
   const response = new Response(null, {
     status: 302,
     headers: { Location: redirectUrl },
   });
-  
+
   return await sessionProvider.createSessionResponse(
     sessionData,
     SESSION_OPTIONS,
-    response
+    response,
   );
 }

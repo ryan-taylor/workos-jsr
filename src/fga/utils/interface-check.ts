@@ -1,4 +1,4 @@
-import { Subject, ResourceInterface } from '../interfaces.ts';
+import type { ResourceInterface, Subject } from '../interfaces.ts';
 
 export function isSubject(resource: any): resource is Subject {
   return (

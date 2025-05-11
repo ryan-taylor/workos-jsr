@@ -1,6 +1,6 @@
-import { WorkOS } from '../workos.ts';
+import type { WorkOS } from '../workos.ts';
 import { AutoPaginatable } from '../common/utils/pagination.ts';
-import {
+import type {
   DefaultCustomAttributes,
   Directory,
   DirectoryGroup,
@@ -33,7 +33,7 @@ export class DirectorySync {
         deserializeDirectory,
         options ? serializeListDirectoriesOptions(options) : undefined,
       ),
-      params =>
+      (params) =>
         fetchAndDeserialize<DirectoryResponse, Directory>(
           this.workos,
           '/directories',
@@ -66,7 +66,7 @@ export class DirectorySync {
         deserializeDirectoryGroup,
         options,
       ),
-      params =>
+      (params) =>
         fetchAndDeserialize<DirectoryGroupResponse, DirectoryGroup>(
           this.workos,
           '/directory_groups',
@@ -90,7 +90,7 @@ export class DirectorySync {
         deserializeDirectoryUserWithGroups,
         options,
       ),
-      params =>
+      (params) =>
         fetchAndDeserialize<
           DirectoryUserWithGroupsResponse<TCustomAttributes>,
           DirectoryUserWithGroups<TCustomAttributes>

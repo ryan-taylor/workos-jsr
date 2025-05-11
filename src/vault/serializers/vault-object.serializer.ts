@@ -1,18 +1,18 @@
-import { List, ListResponse } from '../../common/interfaces.ts';
-import {
+import type { List, ListResponse } from '../../common/interfaces.ts';
+import type {
+  CreateObjectEntity,
+  CreateObjectOptions,
+  ListObjectVersionsResponse,
+  ObjectDigest,
+  ObjectDigestResponse,
+  ObjectMetadata,
+  ObjectVersion,
+  ObjectVersionResponse,
   ReadObjectMetadataResponse,
   ReadObjectResponse,
-  UpdateObjectOptions,
   UpdateObjectEntity,
-  ObjectMetadata,
+  UpdateObjectOptions,
   VaultObject,
-  ObjectVersionResponse,
-  ObjectVersion,
-  CreateObjectOptions,
-  CreateObjectEntity,
-  ObjectDigestResponse,
-  ObjectDigest,
-  ListObjectVersionsResponse,
 } from '../interfaces.ts';
 
 export const deserializeObjectMetadata = (

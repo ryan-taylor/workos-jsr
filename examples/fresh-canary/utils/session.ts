@@ -1,7 +1,7 @@
 // Session handling utilities
 
-import { FreshSessionProvider } from "../../../src/common/iron-session/fresh-session-provider.ts";
-import { SESSION_OPTIONS, SessionData } from "./user-management.ts";
+import { FreshSessionProvider } from '../../../src/common/iron-session/fresh-session-provider.ts';
+import { SESSION_OPTIONS, type SessionData } from './user-management.ts';
 
 /**
  * Get the current session
@@ -11,7 +11,7 @@ import { SESSION_OPTIONS, SessionData } from "./user-management.ts";
 export async function getSession(req: Request) {
   const sessionProvider = new FreshSessionProvider();
   const session = await sessionProvider.getSession<SessionData>(req, SESSION_OPTIONS);
-  
+
   return session || null;
 }
 
@@ -33,13 +33,13 @@ export async function isSignedIn(req: Request): Promise<boolean> {
  */
 export async function createSession(
   sessionData: SessionData,
-  response: Response
+  response: Response,
 ): Promise<Response> {
   const sessionProvider = new FreshSessionProvider();
   return sessionProvider.createSessionResponse(
     sessionData,
     SESSION_OPTIONS,
-    response
+    response,
   );
 }
 
@@ -51,19 +51,19 @@ export async function createSession(
  */
 export async function destroySession(
   req: Request,
-  response: Response
+  response: Response,
 ): Promise<Response> {
   const sessionProvider = new FreshSessionProvider();
   const session = await sessionProvider.getSession<SessionData>(req, SESSION_OPTIONS);
-  
+
   if (session) {
     // Handle session destruction - just create an empty session for now
     return sessionProvider.createSessionResponse(
       {} as SessionData,
       { ...SESSION_OPTIONS, ttl: 0 }, // Set TTL to 0 to expire immediately
-      response
+      response,
     );
   }
-  
+
   return response;
 }

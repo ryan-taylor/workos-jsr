@@ -1,5 +1,5 @@
-import { UnknownRecord } from '../../common/interfaces/unknown-record.interface.ts';
-import { Profile, ProfileResponse } from '../interfaces.ts';
+import type { UnknownRecord } from '../../common/interfaces/unknown-record.interface.ts';
+import type { Profile, ProfileResponse } from '../interfaces.ts';
 
 export const deserializeProfile = <CustomAttributesType extends UnknownRecord>(
   profile: ProfileResponse<CustomAttributesType>,

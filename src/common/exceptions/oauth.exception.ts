@@ -1,4 +1,4 @@
-import { RequestException } from '../interfaces/request-exception.interface.ts';
+import type { RequestException } from '../interfaces/request-exception.interface.ts';
 
 export class OauthException extends Error implements RequestException {
   readonly name = 'OauthException';

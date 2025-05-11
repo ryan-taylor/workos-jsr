@@ -24,8 +24,7 @@ describe('deserializeOrganization', () => {
   });
 
   it('coerces missing metadata to empty object', () => {
-    const { metadata, ...organizationResponseWithoutMetadata } =
-      organizationResponse;
+    const { metadata, ...organizationResponseWithoutMetadata } = organizationResponse;
 
     expect(
       deserializeOrganization(organizationResponseWithoutMetadata),

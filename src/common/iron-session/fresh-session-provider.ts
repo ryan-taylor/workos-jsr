@@ -1,9 +1,16 @@
-import {
-  IronSessionProvider,
-  SealDataOptions,
-  UnsealedDataType,
-} from './iron-session-provider.ts';
-import { Cookie } from "@std/http/cookie";
+import type { Cookie } from '@std/http/cookie';
+/**
+ * Options for sealing session data
+ */
+export type SealDataOptions = {
+  password: string | { [id: string]: string };
+  ttl?: number;
+};
+/**
+ * Represents unsealed session data
+ */
+export type UnsealedDataType = Record<string, unknown>;
+import type { FreshContext } from '$fresh/server.ts';
 
 /**
  * Interface for Fresh 2.x session options
@@ -27,62 +34,62 @@ export interface SessionOptions {
   domain?: string;
 }
 
-import type { FreshContext } from "$fresh/server.ts";
-
 /**
- * FreshSessionProvider implements the IronSessionProvider interface
- * but uses Web Crypto APIs for cookie signing and provides Fresh 2.x middleware support.
+ * FreshSessionProvider uses Fresh-Session for cookie management
+ * and provides Fresh 2.x middleware support.
  */
-export class FreshSessionProvider extends IronSessionProvider {
+export class FreshSessionProvider {
+  constructor() {
+    // No initialization needed
+  }
+
   /**
-   * Seals (encrypts and signs) data using Web Crypto APIs
+   * Seals data using encryption
    * @param data The data to seal
    * @param options Options including the password for encryption
    * @returns A promise that resolves to the sealed data string
    */
   async sealData(data: unknown, options: SealDataOptions): Promise<string> {
     const { password } = options;
-    
+
     // Ensure we have a single password string
-    const passwordStr = typeof password === 'string' 
-      ? password 
-      : Object.values(password)[0];
-    
+    const passwordStr = typeof password === 'string' ? password : Object.values(password)[0];
+
     if (!passwordStr) {
       throw new Error('Password is required for sealing data');
     }
 
     // Convert data to JSON string
     const jsonData = JSON.stringify(data);
-    
+
     // Convert string to bytes
     const dataBytes = new TextEncoder().encode(jsonData);
-    
+
     // Create a key from the password
     const keyMaterial = await this.getKeyMaterial(passwordStr);
     const key = await this.deriveKey(keyMaterial);
-    
+
     // Generate a random IV (Initialization Vector)
     const iv = crypto.getRandomValues(new Uint8Array(12));
-    
+
     // Encrypt the data
     const encryptedData = await crypto.subtle.encrypt(
       { name: 'AES-GCM', iv },
       key,
-      dataBytes
+      dataBytes,
     );
-    
+
     // Combine IV and encrypted data
     const result = new Uint8Array(iv.length + encryptedData.byteLength);
     result.set(iv, 0);
     result.set(new Uint8Array(encryptedData), iv.length);
-    
+
     // Convert to base64 for storage in a cookie
     return btoa(String.fromCharCode(...result));
   }
 
   /**
-   * Unseals (verifies and decrypts) data using Web Crypto APIs
+   * Unseals data using decryption
    * @param seal The sealed data string
    * @param options Options including the password for decryption
    * @returns A promise that resolves to the unsealed data
@@ -92,35 +99,33 @@ export class FreshSessionProvider extends IronSessionProvider {
     options: SealDataOptions,
   ): Promise<T> {
     const { password } = options;
-    
+
     // Ensure we have a single password string
-    const passwordStr = typeof password === 'string' 
-      ? password 
-      : Object.values(password)[0];
-    
+    const passwordStr = typeof password === 'string' ? password : Object.values(password)[0];
+
     if (!passwordStr) {
       throw new Error('Password is required for unsealing data');
     }
-    
+
     try {
       // Convert base64 to bytes
-      const data = Uint8Array.from(atob(seal), c => c.charCodeAt(0));
-      
+      const data = Uint8Array.from(atob(seal), (c) => c.charCodeAt(0));
+
       // Extract IV and encrypted data
       const iv = data.slice(0, 12);
       const encryptedData = data.slice(12);
-      
+
       // Create a key from the password
       const keyMaterial = await this.getKeyMaterial(passwordStr);
       const key = await this.deriveKey(keyMaterial);
-      
+
       // Decrypt the data
       const decryptedData = await crypto.subtle.decrypt(
         { name: 'AES-GCM', iv },
         key,
-        encryptedData
+        encryptedData,
       );
-      
+
       // Convert bytes to string and parse JSON
       const jsonData = new TextDecoder().decode(decryptedData);
       return JSON.parse(jsonData) as T;
@@ -138,7 +143,7 @@ export class FreshSessionProvider extends IronSessionProvider {
    */
   async getSession<T = UnsealedDataType>(
     req: Request,
-    options: SessionOptions
+    options: SessionOptions,
   ): Promise<T | null> {
     const { cookieName, password, ttl } = options;
     const cookies = this.parseCookies(req);
@@ -150,7 +155,7 @@ export class FreshSessionProvider extends IronSessionProvider {
 
     try {
       return await this.unsealData<T>(sessionCookie, { password, ttl });
-    } catch (error) {
+    } catch {
       // If unsealing fails, return null (invalid or expired session)
       return null;
     }
@@ -166,7 +171,7 @@ export class FreshSessionProvider extends IronSessionProvider {
   async createSessionResponse(
     data: Record<string, unknown>,
     options: SessionOptions,
-    response?: Response
+    response?: Response,
   ): Promise<Response> {
     const {
       cookieName,
@@ -201,7 +206,7 @@ export class FreshSessionProvider extends IronSessionProvider {
 
     // Create or clone the response
     const baseResponse = response ? response.clone() : new Response(null);
-    
+
     // Create headers for the new response
     const headers = new Headers(baseResponse.headers);
     headers.append('Set-Cookie', cookieStr);
@@ -222,7 +227,7 @@ export class FreshSessionProvider extends IronSessionProvider {
    */
   destroySession(
     options: SessionOptions,
-    response?: Response
+    response?: Response,
   ): Response {
     const {
       cookieName,
@@ -253,7 +258,7 @@ export class FreshSessionProvider extends IronSessionProvider {
 
     // Create or clone the response
     const baseResponse = response ? response.clone() : new Response(null);
-    
+
     // Create headers for the new response
     const headers = new Headers(baseResponse.headers);
     headers.append('Set-Cookie', cookieStr);
@@ -271,37 +276,41 @@ export class FreshSessionProvider extends IronSessionProvider {
    * @param options Session options
    * @returns A Fresh middleware handler
    */
+  /**
+   * Fresh 2.x middleware for session management
+   * @param options Session options
+   * @returns A Fresh middleware handler
+   */
   createSessionMiddleware(options: SessionOptions) {
-    const sessionProvider = this;
-
+    // Use arrow function to preserve 'this' context
     return {
-      async handler(req: Request, ctx: FreshContext) {
+      handler: async (req: Request, ctx: FreshContext) => {
         // Get the session from the request
-        const session = await sessionProvider.getSession(req, options);
-        
+        const session = await this.getSession(req, options);
+
         // Add session to state for handler access
         ctx.state.session = session || {};
-        
+
         // Store the original session state to detect changes
         const originalSession = JSON.stringify(ctx.state.session);
-        
+
         // Process the request
         const response = await ctx.next();
-        
+
         // Check if session was modified
         const currentSession = JSON.stringify(ctx.state.session);
-        
+
         if (currentSession !== originalSession) {
           // Session was modified, update the cookie
-          return await sessionProvider.createSessionResponse(
+          return await this.createSessionResponse(
             ctx.state.session as Record<string, unknown>,
             options,
-            response
+            response,
           );
         }
-        
+
         return response;
-      },
+      }
     };
   }
 
@@ -313,14 +322,14 @@ export class FreshSessionProvider extends IronSessionProvider {
   private parseCookies(req: Request): Record<string, string> {
     const cookieStr = req.headers.get('cookie') || '';
     const cookies: Record<string, string> = {};
-    
+
     cookieStr.split(';').forEach((pair) => {
       const [name, ...rest] = pair.trim().split('=');
       if (name) {
         cookies[name] = rest.join('=');
       }
     });
-    
+
     return cookies;
   }
 
@@ -331,35 +340,35 @@ export class FreshSessionProvider extends IronSessionProvider {
    */
   private serializeCookie(cookie: Cookie): string {
     let cookieStr = `${cookie.name}=${cookie.value}`;
-    
+
     if (cookie.expires) {
       cookieStr += `; Expires=${cookie.expires instanceof Date ? cookie.expires.toUTCString() : new Date(cookie.expires).toUTCString()}`;
     }
-    
+
     if (typeof cookie.maxAge === 'number') {
       cookieStr += `; Max-Age=${cookie.maxAge}`;
     }
-    
+
     if (cookie.domain) {
       cookieStr += `; Domain=${cookie.domain}`;
     }
-    
+
     if (cookie.path) {
       cookieStr += `; Path=${cookie.path}`;
     }
-    
+
     if (cookie.secure) {
       cookieStr += '; Secure';
     }
-    
+
     if (cookie.httpOnly) {
       cookieStr += '; HttpOnly';
     }
-    
+
     if (cookie.sameSite) {
       cookieStr += `; SameSite=${cookie.sameSite}`;
     }
-    
+
     return cookieStr;
   }
 
@@ -375,7 +384,7 @@ export class FreshSessionProvider extends IronSessionProvider {
       encoder.encode(password),
       { name: 'PBKDF2' },
       false,
-      ['deriveBits', 'deriveKey']
+      ['deriveBits', 'deriveKey'],
     );
   }
 
@@ -387,18 +396,18 @@ export class FreshSessionProvider extends IronSessionProvider {
   private async deriveKey(keyMaterial: CryptoKey): Promise<CryptoKey> {
     // Use a fixed salt for deterministic key derivation
     const salt = new TextEncoder().encode('WorkOS-Fresh-Session-Salt');
-    
+
     return await crypto.subtle.deriveKey(
       {
         name: 'PBKDF2',
         salt,
         iterations: 100000,
-        hash: 'SHA-256'
+        hash: 'SHA-256',
       },
       keyMaterial,
       { name: 'AES-GCM', length: 256 },
       false,
-      ['encrypt', 'decrypt']
+      ['encrypt', 'decrypt'],
     );
   }
 }

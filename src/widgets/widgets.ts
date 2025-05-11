@@ -1,9 +1,9 @@
-import { WorkOS } from '../workos.ts';
+import type { WorkOS } from '../workos.ts';
 import {
   deserializeGetTokenResponse,
-  GetTokenOptions,
-  GetTokenResponseResponse,
-  SerializedGetTokenOptions,
+  type GetTokenOptions,
+  type GetTokenResponseResponse,
+  type SerializedGetTokenOptions,
   serializeGetTokenOptions,
 } from './interfaces/get-token.ts';
 

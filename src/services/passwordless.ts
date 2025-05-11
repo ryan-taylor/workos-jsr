@@ -1,4 +1,4 @@
-import { HttpClient } from '../core/http_client.ts.ts';
+import type { HttpClient } from '../core/http_client.ts.ts';
 
 export interface SendMagicLinkOptions {
   email: string;
@@ -39,7 +39,7 @@ export class Passwordless {
       redirect_uri: options.redirectUri,
       state: options.state,
     };
-    (Object.keys(body) as Array<keyof typeof body>).forEach(k => {
+    (Object.keys(body) as Array<keyof typeof body>).forEach((k) => {
       if (body[k] === undefined) delete body[k];
     });
     await this.httpClient.request(url.toString(), {
@@ -62,4 +62,4 @@ export class Passwordless {
       body,
     });
   }
-} 
+}

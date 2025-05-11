@@ -1,5 +1,5 @@
-import { WorkOS } from '../workos.ts';
-import {
+import type { WorkOS } from '../workos.ts';
+import type {
   CreatePasswordlessSessionOptions,
   PasswordlessSession,
   PasswordlessSessionResponse,

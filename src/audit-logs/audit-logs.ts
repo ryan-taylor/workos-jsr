@@ -1,14 +1,8 @@
-import { WorkOS } from '../workos.ts';
-import {
-  CreateAuditLogEventOptions,
-  CreateAuditLogEventRequestOptions,
-} from './interfaces.ts';
-import { AuditLogExportOptions } from './interfaces/audit-log-export-options.interface.ts';
-import {
-  AuditLogExport,
-  AuditLogExportResponse,
-} from './interfaces/audit-log-export.interface.ts';
-import {
+import type { WorkOS } from '../workos.ts';
+import type { CreateAuditLogEventOptions, CreateAuditLogEventRequestOptions } from './interfaces.ts';
+import type { AuditLogExportOptions } from './interfaces/audit-log-export-options.interface.ts';
+import type { AuditLogExport, AuditLogExportResponse } from './interfaces/audit-log-export.interface.ts';
+import type {
   AuditLogSchema,
   CreateAuditLogSchemaOptions,
   CreateAuditLogSchemaRequestOptions,
@@ -16,10 +10,10 @@ import {
 } from './interfaces/create-audit-log-schema-options.interface.ts';
 import {
   deserializeAuditLogExport,
+  deserializeAuditLogSchema,
   serializeAuditLogExportOptions,
   serializeCreateAuditLogEventOptions,
   serializeCreateAuditLogSchemaOptions,
-  deserializeAuditLogSchema,
 } from './serializers.ts';
 
 export class AuditLogs {

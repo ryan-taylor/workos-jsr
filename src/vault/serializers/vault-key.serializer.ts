@@ -1,6 +1,6 @@
-import { CreateDataKeyResponse } from '../interfaces/key/create-data-key.interface.ts';
-import { DecryptDataKeyResponse } from '../interfaces/key/decrypt-data-key.interface.ts';
-import { DataKey, DataKeyPair } from '../interfaces/key.interface.ts';
+import type { CreateDataKeyResponse } from '../interfaces/key/create-data-key.interface.ts';
+import type { DecryptDataKeyResponse } from '../interfaces/key/decrypt-data-key.interface.ts';
+import type { DataKey, DataKeyPair } from '../interfaces/key.interface.ts';
 
 export const deserializeCreateDataKeyResponse = (
   key: CreateDataKeyResponse,

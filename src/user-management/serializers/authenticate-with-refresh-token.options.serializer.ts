@@ -1,12 +1,13 @@
-import {
+import type {
   AuthenticateUserWithCodeCredentials,
   AuthenticateWithRefreshTokenOptions,
   SerializedAuthenticateWithRefreshTokenOptions,
 } from '../interfaces.ts';
 
 export const serializeAuthenticateWithRefreshTokenOptions = (
-  options: AuthenticateWithRefreshTokenOptions &
-    AuthenticateUserWithCodeCredentials,
+  options:
+    & AuthenticateWithRefreshTokenOptions
+    & AuthenticateUserWithCodeCredentials,
 ): SerializedAuthenticateWithRefreshTokenOptions => ({
   grant_type: 'refresh_token',
   client_id: options.clientId,

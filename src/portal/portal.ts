@@ -1,5 +1,5 @@
-import { WorkOS } from '../workos.ts';
-import { GeneratePortalLinkIntent } from './interfaces/generate-portal-link-intent.interface.ts';
+import type { WorkOS } from '../workos.ts';
+import type { GeneratePortalLinkIntent } from './interfaces/generate-portal-link-intent.interface.ts';
 
 export class Portal {
   constructor(private readonly workos: WorkOS) {}

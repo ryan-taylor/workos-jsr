@@ -1,5 +1,5 @@
 import { Organizations } from '../src/services/organizations.ts';
-import { HttpClient } from '../src/core/http_client.ts';
+import type { HttpClient } from '../src/core/http_client.ts';
 import { assertEquals } from '@std/assert';
 
 Deno.test('Organizations.list returns orgs (mocked)', async () => {
@@ -54,4 +54,4 @@ Deno.test('Organizations.create returns org (mocked)', async () => {
   const result = await organizations.create({ name: 'Org Three' });
   assertEquals(result.id, 'org_3');
   assertEquals(result.name, 'Org Three');
-}); 
+});

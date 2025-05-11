@@ -5,10 +5,7 @@
     ".": "./mod.ts"
   },
   "imports": {
-    "iron-session": "npm:iron-session@8.0.4",
-    "jose": "npm:jose@6.0.11",
-    "leb": "npm:leb@1.0.0",
-    "pluralize": "npm:pluralize@8.0.0",
+    "jose": "https://deno.land/x/jose@4.11.0/mod.ts",
     
     "crypto": "jsr:@std/crypto@^1.0.0",
     "node:crypto": "jsr:@std/crypto@^1.0.0",

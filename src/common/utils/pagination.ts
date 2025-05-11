@@ -1,4 +1,4 @@
-import { List, PaginationOptions } from '../interfaces.ts';
+import type { List, PaginationOptions } from '../interfaces.ts';
 
 export class AutoPaginatable<T> {
   readonly object: 'list' = 'list';
@@ -33,7 +33,7 @@ export class AutoPaginatable<T> {
 
     if (result.listMetadata.after) {
       // Delay of 4rps to respect list users rate limits
-      await new Promise(resolve => setTimeout(resolve, 250));
+      await new Promise((resolve) => setTimeout(resolve, 250));
       yield* this.generatePages({ after: result.listMetadata.after });
     }
   }
@@ -49,9 +49,11 @@ export class AutoPaginatable<T> {
 
     const results: T[] = [];
 
-    for await (const page of this.generatePages({
-      after: this.options.after,
-    })) {
+    for await (
+      const page of this.generatePages({
+        after: this.options.after,
+      })
+    ) {
       results.push(...page);
     }
 

@@ -1,5 +1,5 @@
 import { SignatureVerificationException } from '../exceptions.ts';
-import { CryptoProvider } from './crypto-provider.ts';
+import type { CryptoProvider } from './crypto-provider.ts';
 
 export class SignatureProvider {
   private cryptoProvider: CryptoProvider;
@@ -19,8 +19,7 @@ export class SignatureProvider {
     secret: string;
     tolerance?: number;
   }): Promise<boolean> {
-    const [timestamp, signatureHash] =
-      this.getTimestampAndSignatureHash(sigHeader);
+    const [timestamp, signatureHash] = this.getTimestampAndSignatureHash(sigHeader);
 
     if (!signatureHash || Object.keys(signatureHash).length === 0) {
       throw new SignatureVerificationException(
@@ -37,7 +36,7 @@ export class SignatureProvider {
     const expectedSig = await this.computeSignature(timestamp, payload, secret);
     if (
       (await this.cryptoProvider.secureCompare(expectedSig, signatureHash)) ===
-      false
+        false
     ) {
       throw new SignatureVerificationException(
         'Signature hash does not match the expected signature hash for payload',

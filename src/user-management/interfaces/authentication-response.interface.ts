@@ -1,6 +1,6 @@
-import { Impersonator, ImpersonatorResponse } from './impersonator.interface.ts';
-import { OauthTokens, OauthTokensResponse } from './oauth-tokens.interface.ts';
-import { User, UserResponse } from './user.interface.ts';
+import type { Impersonator, ImpersonatorResponse } from './impersonator.interface.ts';
+import type { OauthTokens, OauthTokensResponse } from './oauth-tokens.interface.ts';
+import type { User, UserResponse } from './user.interface.ts';
 
 type AuthenticationMethod =
   | 'SSO'

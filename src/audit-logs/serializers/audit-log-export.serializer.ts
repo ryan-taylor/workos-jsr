@@ -1,4 +1,4 @@
-import { AuditLogExport, AuditLogExportResponse } from '../interfaces.ts';
+import type { AuditLogExport, AuditLogExportResponse } from '../interfaces.ts';
 
 export const deserializeAuditLogExport = (
   auditLogExport: AuditLogExportResponse,

@@ -1,10 +1,43 @@
-.npmrc
-node_modules
-yarn-error.log
-lib/
+# Deno cache and lock files
+.deno/
+denoweb/
+denofmt/
+denowatch*
+deno.lock
+
+env.local
+
+# Node modules and lockfiles
+node_modules/
+pnpm-lock.yaml
 package-lock.json
+
+# Build outputs
+lib/
+dist/
+
+# Coverage reports
+coverage/
+cov/
+
+# Logs
+*.log
+
+# IDE/editor settings
+.vscode/
+.idea/
+
+# Test snapshots
+**/__snapshots__/
+
+# Examples, reference and docs
+_reference/
+examples/
+docs/ui/
+tests_deno/
+
+.npmrc
 .DS_Store
 yarn.lock
 .sailplane/
 .eslintcache
-coverage/

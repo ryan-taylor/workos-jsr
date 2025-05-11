@@ -53,4 +53,4 @@ export class WorkOS {
       apiKey: this.apiKey,
     });
   }
-} 
+}

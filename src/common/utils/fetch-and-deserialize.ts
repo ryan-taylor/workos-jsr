@@ -1,10 +1,5 @@
-import { WorkOS } from '../../workos.ts';
-import {
-  GetOptions,
-  List,
-  ListResponse,
-  PaginationOptions,
-} from '../interfaces.ts';
+import type { WorkOS } from '../../workos.ts';
+import type { GetOptions, List, ListResponse, PaginationOptions } from '../interfaces.ts';
 import { deserializeList } from '../serializers.ts';
 
 const setDefaultOptions = (options?: PaginationOptions): PaginationOptions => {

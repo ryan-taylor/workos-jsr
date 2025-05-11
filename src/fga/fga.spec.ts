@@ -1,27 +1,30 @@
-import fetch from 'jest-fetch-mock';
+// Import Deno testing utilities
 import {
-  fetchBody,
-  fetchHeaders,
-  fetchOnce,
-  fetchSearchParams,
-  fetchURL,
-} from '../common/utils/test-utils.ts';
+  assertEquals,
+  beforeEach,
+  describe,
+  it,
+} from "../../tests/deno-test-setup.ts";
+
+import { fetchBody, fetchHeaders, fetchOnce, fetchSearchParams, fetchURL, resetMockFetch } from '../common/utils/test-utils.ts';
 
 import { WorkOS } from '../workos.ts';
-import { ResourceOp, WarrantOp } from './interfaces.ts';
+import { ResourceOp, WarrantOp } from './interfaces/index.ts';
 
 const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
 
 describe('FGA', () => {
-  beforeEach(() => fetch.resetMocks());
+  beforeEach(() => {
+    resetMockFetch();
+  });
 
   describe('check', () => {
     it('makes check request', async () => {
-      fetchOnce({
+      fetchOnce(JSON.stringify({
         result: 'authorized',
         is_implicit: false,
         warrant_token: 'abc',
-      });
+      }));
       const checkResult = await workos.fga.check({
         checks: [
           {
@@ -37,8 +40,10 @@ describe('FGA', () => {
           },
         ],
       });
-      expect(fetchURL()).toContain('/fga/v1/check');
-      expect(checkResult).toMatchObject({
+      const url = fetchURL();
+      assertEquals(typeof url, 'string');
+      assertEquals(url?.includes('/fga/v1/check'), true);
+      assertEquals(checkResult, {
         result: 'authorized',
         isImplicit: false,
         warrantToken: 'abc',
@@ -48,31 +53,33 @@ describe('FGA', () => {
 
   describe('createResource', () => {
     it('creates resource', async () => {
-      fetchOnce({
+      fetchOnce(JSON.stringify({
         resource_type: 'role',
         resource_id: 'admin',
-      });
+      }));
       const resource = await workos.fga.createResource({
         resource: {
           resourceType: 'role',
           resourceId: 'admin',
         },
       });
-      expect(fetchURL()).toContain('/fga/v1/resources');
-      expect(resource).toMatchObject({
+      const url = fetchURL();
+      assertEquals(typeof url, 'string');
+      assertEquals(url?.includes('/fga/v1/resources'), true);
+      assertEquals(resource, {
         resourceType: 'role',
         resourceId: 'admin',
       });
     });
 
     it('creates resource with metadata', async () => {
-      fetchOnce({
+      fetchOnce(JSON.stringify({
         resource_type: 'role',
         resource_id: 'admin',
         meta: {
           description: 'The admin role',
         },
-      });
+      }));
       const resource = await workos.fga.createResource({
         resource: {
           resourceType: 'role',
@@ -82,8 +89,10 @@ describe('FGA', () => {
           description: 'The admin role',
         },
       });
-      expect(fetchURL()).toContain('/fga/v1/resources');
-      expect(resource).toMatchObject({
+      const url = fetchURL();
+      assertEquals(typeof url, 'string');
+      assertEquals(url?.includes('/fga/v1/resources'), true);
+      assertEquals(resource, {
         resourceType: 'role',
         resourceId: 'admin',
         meta: {
@@ -95,16 +104,18 @@ describe('FGA', () => {
 
   describe('getResource', () => {
     it('gets resource', async () => {
-      fetchOnce({
+      fetchOnce(JSON.stringify({
         resource_type: 'role',
         resource_id: 'admin',
-      });
+      }));
       const resource = await workos.fga.getResource({
         resourceType: 'role',
         resourceId: 'admin',
       });
-      expect(fetchURL()).toContain('/fga/v1/resources/role/admin');
-      expect(resource).toMatchObject({
+      const url = fetchURL();
+      assertEquals(typeof url, 'string');
+      assertEquals(url?.includes('/fga/v1/resources/role/admin'), true);
+      assertEquals(resource, {
         resourceType: 'role',
         resourceId: 'admin',
       });
@@ -113,7 +124,7 @@ describe('FGA', () => {
 
   describe('listResources', () => {
     it('lists resources', async () => {
-      fetchOnce({
+      fetchOnce(JSON.stringify({
         data: [
           {
             resource_type: 'role',
@@ -128,10 +139,12 @@ describe('FGA', () => {
           before: null,
           after: null,
         },
-      });
+      }));
       const { data: resources } = await workos.fga.listResources();
-      expect(fetchURL()).toContain('/fga/v1/resources');
-      expect(resources).toMatchObject([
+      const url = fetchURL();
+      assertEquals(typeof url, 'string');
+      assertEquals(url?.includes('/fga/v1/resources'), true);
+      assertEquals(resources, [
         {
           resourceType: 'role',
           resourceId: 'admin',
@@ -144,7 +157,7 @@ describe('FGA', () => {
     });
 
     it('sends correct params when filtering', async () => {
-      fetchOnce({
+      fetchOnce(JSON.stringify({
         data: [
           {
             resource_type: 'role',
@@ -159,15 +172,17 @@ describe('FGA', () => {
           before: null,
           after: null,
         },
-      });
+      }));
       await workos.fga.listResources({
         resourceType: 'role',
       });
-      expect(fetchURL()).toContain('/fga/v1/resources');
-      expect(fetchSearchParams()).toEqual({
-        resource_type: 'role',
-        order: 'desc',
-      });
+      const url = fetchURL();
+      assertEquals(typeof url, 'string');
+      assertEquals(url?.includes('/fga/v1/resources'), true);
+      
+      const params = fetchSearchParams();
+      assertEquals(params.resource_type, 'role');
+      assertEquals(params.order, 'desc');
     });
   });
 
@@ -178,14 +193,16 @@ describe('FGA', () => {
         resourceType: 'role',
         resourceId: 'admin',
       });
-      expect(fetchURL()).toContain('/fga/v1/resources/role/admin');
-      expect(response).toBeUndefined();
+      const url = fetchURL();
+      assertEquals(typeof url, 'string');
+      assertEquals(url?.includes('/fga/v1/resources/role/admin'), true);
+      assertEquals(response, undefined);
     });
   });
 
   describe('batchWriteResources', () => {
     it('batch create resources', async () => {
-      fetchOnce({
+      fetchOnce(JSON.stringify({
         data: [
           {
             resource_type: 'role',
@@ -203,7 +220,7 @@ describe('FGA', () => {
             resource_id: 'employee',
           },
         ],
-      });
+      }));
       const createdResources = await workos.fga.batchWriteResources({
         op: ResourceOp.Create,
         resources: [
@@ -230,8 +247,10 @@ describe('FGA', () => {
           },
         ],
       });
-      expect(fetchURL()).toContain('/fga/v1/resources/batch');
-      expect(createdResources).toMatchObject([
+      const url = fetchURL();
+      assertEquals(typeof url, 'string');
+      assertEquals(url?.includes('/fga/v1/resources/batch'), true);
+      assertEquals(createdResources, [
         {
           resourceType: 'role',
           resourceId: 'admin',
@@ -251,7 +270,7 @@ describe('FGA', () => {
     });
 
     it('batch delete resources', async () => {
-      fetchOnce({
+      fetchOnce(JSON.stringify({
         data: [
           {
             resource_type: 'role',
@@ -266,7 +285,7 @@ describe('FGA', () => {
             resource_id: 'employee',
           },
         ],
-      });
+      }));
       const deletedResources = await workos.fga.batchWriteResources({
         op: ResourceOp.Delete,
         resources: [
@@ -293,8 +312,10 @@ describe('FGA', () => {
           },
         ],
       });
-      expect(fetchURL()).toContain('/fga/v1/resources/batch');
-      expect(deletedResources).toMatchObject([
+      const url = fetchURL();
+      assertEquals(typeof url, 'string');
+      assertEquals(url?.includes('/fga/v1/resources/batch'), true);
+      assertEquals(deletedResources, [
         {
           resourceType: 'role',
           resourceId: 'admin',
@@ -313,9 +334,9 @@ describe('FGA', () => {
 
   describe('writeWarrant', () => {
     it('should create warrant with no op', async () => {
-      fetchOnce({
+      fetchOnce(JSON.stringify({
         warrant_token: 'some_token',
-      });
+      }));
       const warrantToken = await workos.fga.writeWarrant({
         resource: {
           resourceType: 'role',
@@ -327,8 +348,12 @@ describe('FGA', () => {
           resourceId: 'user_123',
         },
       });
-      expect(fetchURL()).toContain('/fga/v1/warrants');
-      expect(fetchBody()).toEqual({
+      const url = fetchURL();
+      assertEquals(typeof url, 'string');
+      assertEquals(url?.includes('/fga/v1/warrants'), true);
+      
+      const body = fetchBody();
+      assertEquals(body, {
         resource_type: 'role',
         resource_id: 'admin',
         relation: 'member',
@@ -337,15 +362,15 @@ describe('FGA', () => {
           resource_id: 'user_123',
         },
       });
-      expect(warrantToken).toMatchObject({
+      assertEquals(warrantToken, {
         warrantToken: 'some_token',
       });
     });
 
     it('should create warrant with create op', async () => {
-      fetchOnce({
+      fetchOnce(JSON.stringify({
         warrant_token: 'some_token',
-      });
+      }));
       const warrantToken = await workos.fga.writeWarrant({
         op: WarrantOp.Create,
         resource: {
@@ -358,8 +383,12 @@ describe('FGA', () => {
           resourceId: 'user_123',
         },
       });
-      expect(fetchURL()).toContain('/fga/v1/warrants');
-      expect(fetchBody()).toEqual({
+      const url = fetchURL();
+      assertEquals(typeof url, 'string');
+      assertEquals(url?.includes('/fga/v1/warrants'), true);
+      
+      const body = fetchBody();
+      assertEquals(body, {
         op: 'create',
         resource_type: 'role',
         resource_id: 'admin',
@@ -369,15 +398,15 @@ describe('FGA', () => {
           resource_id: 'user_123',
         },
       });
-      expect(warrantToken).toMatchObject({
+      assertEquals(warrantToken, {
         warrantToken: 'some_token',
       });
     });
 
     it('should delete warrant with delete op', async () => {
-      fetchOnce({
+      fetchOnce(JSON.stringify({
         warrant_token: 'some_token',
-      });
+      }));
       const warrantToken = await workos.fga.writeWarrant({
         op: WarrantOp.Delete,
         resource: {
@@ -390,8 +419,12 @@ describe('FGA', () => {
           resourceId: 'user_123',
         },
       });
-      expect(fetchURL()).toContain('/fga/v1/warrants');
-      expect(fetchBody()).toEqual({
+      const url = fetchURL();
+      assertEquals(typeof url, 'string');
+      assertEquals(url?.includes('/fga/v1/warrants'), true);
+      
+      const body = fetchBody();
+      assertEquals(body, {
         op: 'delete',
         resource_type: 'role',
         resource_id: 'admin',
@@ -401,7 +434,7 @@ describe('FGA', () => {
           resource_id: 'user_123',
         },
       });
-      expect(warrantToken).toMatchObject({
+      assertEquals(warrantToken, {
         warrantToken: 'some_token',
       });
     });
@@ -409,9 +442,9 @@ describe('FGA', () => {
 
   describe('batchWriteWarrants', () => {
     it('should create warrants with no op or create op and delete warrants with delete op', async () => {
-      fetchOnce({
+      fetchOnce(JSON.stringify({
         warrant_token: 'some_token',
-      });
+      }));
       const warrantToken = await workos.fga.batchWriteWarrants([
         {
           resource: {
@@ -449,8 +482,12 @@ describe('FGA', () => {
           },
         },
       ]);
-      expect(fetchURL()).toContain('/fga/v1/warrants');
-      expect(fetchBody()).toEqual([
+      const url = fetchURL();
+      assertEquals(typeof url, 'string');
+      assertEquals(url?.includes('/fga/v1/warrants'), true);
+      
+      const body = fetchBody();
+      assertEquals(body, [
         {
           resource_type: 'role',
           resource_id: 'admin',
@@ -481,7 +518,7 @@ describe('FGA', () => {
           },
         },
       ]);
-      expect(warrantToken).toMatchObject({
+      assertEquals(warrantToken, {
         warrantToken: 'some_token',
       });
     });
@@ -489,7 +526,7 @@ describe('FGA', () => {
 
   describe('listWarrants', () => {
     it('should list warrants', async () => {
-      fetchOnce({
+      fetchOnce(JSON.stringify({
         data: [
           {
             resource_type: 'role',
@@ -515,10 +552,12 @@ describe('FGA', () => {
           before: null,
           after: null,
         },
-      });
+      }));
       const { data: warrants } = await workos.fga.listWarrants();
-      expect(fetchURL()).toContain('/fga/v1/warrants');
-      expect(warrants).toMatchObject([
+      const url = fetchURL();
+      assertEquals(typeof url, 'string');
+      assertEquals(url?.includes('/fga/v1/warrants'), true);
+      assertEquals(warrants, [
         {
           resourceType: 'role',
           resourceId: 'admin',
@@ -542,7 +581,7 @@ describe('FGA', () => {
     });
 
     it('sends correct params when filtering', async () => {
-      fetchOnce({
+      fetchOnce(JSON.stringify({
         data: [
           {
             resource_type: 'role',
@@ -558,23 +597,25 @@ describe('FGA', () => {
           before: null,
           after: null,
         },
-      });
+      }));
       await workos.fga.listWarrants({
         subjectType: 'user',
         subjectId: 'user_123',
       });
-      expect(fetchURL()).toContain('/fga/v1/warrants');
-      expect(fetchSearchParams()).toEqual({
-        subject_type: 'user',
-        subject_id: 'user_123',
-        order: 'desc',
-      });
+      const url = fetchURL();
+      assertEquals(typeof url, 'string');
+      assertEquals(url?.includes('/fga/v1/warrants'), true);
+      
+      const params = fetchSearchParams();
+      assertEquals(params.subject_type, 'user');
+      assertEquals(params.subject_id, 'user_123');
+      assertEquals(params.order, 'desc');
     });
   });
 
   describe('query', () => {
     it('makes query request', async () => {
-      fetchOnce({
+      fetchOnce(JSON.stringify({
         data: [
           {
             resource_type: 'role',
@@ -595,12 +636,14 @@ describe('FGA', () => {
           before: null,
           after: null,
         },
-      });
+      }));
       const { data: queryResults } = await workos.fga.query({
         q: 'select role where user:user_123 is member',
       });
-      expect(fetchURL()).toContain('/fga/v1/query');
-      expect(queryResults).toMatchObject([
+      const url = fetchURL();
+      assertEquals(typeof url, 'string');
+      assertEquals(url?.includes('/fga/v1/query'), true);
+      assertEquals(queryResults, [
         {
           resourceType: 'role',
           resourceId: 'admin',
@@ -619,7 +662,7 @@ describe('FGA', () => {
     });
 
     it('sends correct params and options', async () => {
-      fetchOnce({
+      fetchOnce(JSON.stringify({
         data: [
           {
             resourceType: 'role',
@@ -640,7 +683,7 @@ describe('FGA', () => {
           before: null,
           after: null,
         },
-      });
+      }));
       await workos.fga.query(
         {
           q: 'select role where user:user_123 is member',
@@ -650,14 +693,18 @@ describe('FGA', () => {
           warrantToken: 'some_token',
         },
       );
-      expect(fetchURL()).toContain('/fga/v1/query');
-      expect(fetchSearchParams()).toEqual({
-        q: 'select role where user:user_123 is member',
-        order: 'asc',
-      });
-      expect(fetchHeaders()).toMatchObject({
-        'Warrant-Token': 'some_token',
-      });
+      const url = fetchURL();
+      assertEquals(typeof url, 'string');
+      assertEquals(url?.includes('/fga/v1/query'), true);
+      
+      const params = fetchSearchParams();
+      assertEquals(params.q, 'select role where user:user_123 is member');
+      assertEquals(params.order, 'asc');
+      
+      const headers = fetchHeaders();
+      if (headers) {
+        assertEquals(headers['Warrant-Token'], 'some_token');
+      }
     });
   });
 });

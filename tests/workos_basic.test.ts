@@ -16,4 +16,4 @@ Deno.test('WorkOS instantiates with apiKey', () => {
 Deno.test('WorkOS allows custom baseUrl', () => {
   const w = new WorkOS({ apiKey: 'sk_test_123', baseUrl: 'https://custom.workos.com' });
   assertEquals(w.baseUrl, 'https://custom.workos.com');
-}); 
+});

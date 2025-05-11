@@ -1,8 +1,5 @@
-import { RoleResponse } from '../../roles/interfaces/.ts';
-import {
-  DirectoryGroup,
-  DirectoryGroupResponse,
-} from './directory-group.interface.ts';
+import type { RoleResponse } from '../../roles/interfaces/.ts';
+import type { DirectoryGroup, DirectoryGroupResponse } from './directory-group.interface.ts';
 
 export type DefaultCustomAttributes = Record<string, unknown>;
 

@@ -1,10 +1,6 @@
-import {
-  AuthenticateWithOptionsBase,
-  SerializedAuthenticateWithOptionsBase,
-} from './authenticate-with-options-base.interface.ts';
+import type { AuthenticateWithOptionsBase, SerializedAuthenticateWithOptionsBase } from './authenticate-with-options-base.interface.ts';
 
-export interface AuthenticateWithTotpOptions
-  extends AuthenticateWithOptionsBase {
+export interface AuthenticateWithTotpOptions extends AuthenticateWithOptionsBase {
   code: string;
   pendingAuthenticationToken: string;
   authenticationChallengeId: string;
@@ -14,8 +10,7 @@ export interface AuthenticateUserWithTotpCredentials {
   clientSecret: string | undefined;
 }
 
-export interface SerializedAuthenticateWithTotpOptions
-  extends SerializedAuthenticateWithOptionsBase {
+export interface SerializedAuthenticateWithTotpOptions extends SerializedAuthenticateWithOptionsBase {
   grant_type: 'urn:workos:oauth:grant-type:mfa-totp';
   code: string;
   pending_authentication_token: string;

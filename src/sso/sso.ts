@@ -1,6 +1,6 @@
 import { AutoPaginatable } from '../common/utils/pagination.ts';
-import { WorkOS } from '../workos.ts';
-import {
+import type { WorkOS } from '../workos.ts';
+import type {
   AuthorizationURLOptions,
   Connection,
   ConnectionResponse,
@@ -12,14 +12,9 @@ import {
   ProfileAndTokenResponse,
   ProfileResponse,
 } from './interfaces.ts';
-import {
-  deserializeConnection,
-  deserializeProfile,
-  deserializeProfileAndToken,
-  serializeListConnectionsOptions,
-} from './serializers.ts';
+import { deserializeConnection, deserializeProfile, deserializeProfileAndToken, serializeListConnectionsOptions } from './serializers.ts';
 import { fetchAndDeserialize } from '../common/utils/fetch-and-deserialize.ts';
-import { UnknownRecord } from '../common/interfaces/unknown-record.interface.ts';
+import type { UnknownRecord } from '../common/interfaces/unknown-record.interface.ts';
 
 const toQueryString = (options: Record<string, string | undefined>): string => {
   const searchParams = new URLSearchParams();
@@ -49,7 +44,7 @@ export class SSO {
         deserializeConnection,
         options ? serializeListConnectionsOptions(options) : undefined,
       ),
-      params =>
+      (params) =>
         fetchAndDeserialize<ConnectionResponse, Connection>(
           this.workos,
           '/connections',

@@ -1,4 +1,4 @@
-import { HttpClient } from '../core/http_client.ts.ts';
+import type { HttpClient } from '../core/http_client.ts.ts';
 
 export interface ListDirectoriesOptions {
   limit?: number;
@@ -65,4 +65,4 @@ export class DirectorySync {
       body: options,
     });
   }
-} 
+}

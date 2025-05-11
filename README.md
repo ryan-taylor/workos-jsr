@@ -78,6 +78,126 @@ const workos = new WorkOS(
 );
 ```
 
+### Environment Configuration
+
+Create a `.env` file in your project root with these variables:
+
+```bash
+# Required
+WORKOS_API_KEY=your_workos_api_key
+WORKOS_CLIENT_ID=your_workos_client_id
+
+# For session management (if using Fresh)
+SESSION_SECRET=a_strong_random_string_for_cookie_encryption
+
+# For webhooks
+WORKOS_WEBHOOK_SECRET=your_workos_webhook_signing_secret
+```
+
+For security in production, consider using a service like Doppler for secrets management rather than environment files.
+
+## OpenTelemetry Integration
+
+The WorkOS SDK includes built-in support for OpenTelemetry, enabling you to monitor SDK usage, performance, and errors in your application.
+
+### Enabling Telemetry
+
+To enable telemetry collection, provide telemetry configuration when initializing the WorkOS SDK:
+
+```ts
+const workos = new WorkOS(
+  Deno.env.get("WORKOS_API_KEY") || "",
+  {
+    clientId: Deno.env.get("WORKOS_CLIENT_ID"),
+    telemetry: {
+      enabled: true,
+      endpoint: "http://localhost:4318", // OTLP over HTTP endpoint
+      serviceName: "my-application",
+      defaultAttributes: {
+        "environment": "production",
+        "deployment.version": "1.2.3"
+      }
+    }
+  }
+);
+```
+
+### Configuration Options
+
+The telemetry configuration supports these options:
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `enabled` | Enable/disable telemetry collection | `false` |
+| `endpoint` | OTLP HTTP exporter endpoint | `http://localhost:4318` |
+| `serviceName` | Service name for telemetry | `workos-sdk` |
+| `defaultAttributes` | Additional attributes to include with all telemetry data | `{}` |
+| `debug` | Enable debug logging for telemetry | `false` |
+
+### Visualizing Telemetry Data
+
+The WorkOS SDK exports telemetry data in the OpenTelemetry Protocol (OTLP) format, which can be collected and visualized using:
+
+1. An OpenTelemetry Collector to receive and process the data
+2. A backend like Prometheus, Jaeger, Honeycomb, or DataDog
+3. Visualization tools like Grafana
+
+For example deployment with the OpenTelemetry Collector:
+
+```yaml
+# collector-config.yaml
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+    timeout: 1s
+
+exporters:
+  prometheus:
+    endpoint: 0.0.0.0:8889
+  jaeger:
+    endpoint: jaeger:14250
+    tls:
+      insecure: true
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [prometheus]
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [jaeger]
+```
+
+### Instrumented Functionality
+
+The following WorkOS SDK operations are automatically instrumented:
+
+- HTTP requests to WorkOS API
+- SSO authentication flows
+- Directory Sync operations
+- User Management authentication
+- API success and error rates
+- Response times and latency
+
+### Demo Dashboard
+
+The Fresh example includes a telemetry dashboard at `/telemetry` that demonstrates how to visualize metrics from the WorkOS SDK:
+
+```
+cd examples/fresh-canary
+deno task start
+```
+
+Then navigate to http://localhost:8000/telemetry to see the dashboard.
+
 ## Usage Examples
 
 ### Fresh 2.x Integration Example
@@ -130,6 +250,27 @@ export async function handler(
   return await ctx.next();
 }
 ```
+
+## Deployment
+
+When deploying WorkOS SDK to production:
+
+1. **Configure secure environment variables**
+   - Store secrets securely (not in version control)
+   - Use a service like Doppler or HashiCorp Vault
+
+2. **Set up proper CORS and security headers**
+   - Restrict CORS to your application domains
+   - Use HTTPS for all requests
+
+3. **Monitor telemetry**
+   - Set up an OpenTelemetry collector
+   - Configure alerts for unusual patterns
+
+4. **Plan for scalability**
+   - Consider connection pooling for high-traffic applications
+   - Monitor API rate limits
+
 ## JSR.io Package
 
 This library is published to [JSR.io](https://jsr.io/@workos/sdk) for Deno users. JSR (JavaScript Registry) is a modern package registry optimized for Deno and the web platform.
@@ -227,5 +368,4 @@ We welcome contributions to the WorkOS Node.js library! Please check out our [co
 - [Directory Sync Guide](https://workos.com/docs/directory-sync/guide)
 - [Admin Portal Guide](https://workos.com/docs/admin-portal/guide)
 - [Magic Link Guide](https://workos.com/docs/magic-link/guide)
-- [Domain Verification Guide](https://workos.com/docs/domain-verification/guide)
 - [Domain Verification Guide](https://workos.com/docs/domain-verification/guide)

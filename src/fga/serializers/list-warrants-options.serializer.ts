@@ -1,7 +1,4 @@
-import {
-  ListWarrantsOptions,
-  SerializedListWarrantsOptions,
-} from '../interfaces.ts';
+import type { ListWarrantsOptions, SerializedListWarrantsOptions } from '../interfaces.ts';
 
 export const serializeListWarrantsOptions = (
   options: ListWarrantsOptions,

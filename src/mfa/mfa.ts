@@ -1,24 +1,19 @@
-import { WorkOS } from '../workos.ts';
-import {
-  ChallengeFactorOptions,
+import type { WorkOS } from '../workos.ts';
+import type {
   Challenge,
+  ChallengeFactorOptions,
+  ChallengeResponse,
   EnrollFactorOptions,
   Factor,
+  FactorResponse,
+  FactorWithSecrets,
+  FactorWithSecretsResponse,
   VerifyChallengeOptions,
   VerifyFactorOptions,
   VerifyResponse,
-  FactorResponse,
-  ChallengeResponse,
   VerifyResponseResponse,
-  FactorWithSecretsResponse,
-  FactorWithSecrets,
 } from './interfaces.ts';
-import {
-  deserializeChallenge,
-  deserializeFactor,
-  deserializeFactorWithSecrets,
-  deserializeVerifyResponse,
-} from './serializers.ts';
+import { deserializeChallenge, deserializeFactor, deserializeFactorWithSecrets, deserializeVerifyResponse } from './serializers.ts';
 
 export class Mfa {
   constructor(private readonly workos: WorkOS) {}
@@ -65,8 +60,7 @@ export class Mfa {
     const { data } = await this.workos.post<ChallengeResponse>(
       `/auth/factors/${options.authenticationFactorId}/challenge`,
       {
-        sms_template:
-          'smsTemplate' in options ? options.smsTemplate : undefined,
+        sms_template: 'smsTemplate' in options ? options.smsTemplate : undefined,
       },
     );
 

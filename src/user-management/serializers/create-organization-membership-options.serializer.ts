@@ -1,4 +1,4 @@
-import {
+import type {
   CreateOrganizationMembershipOptions,
   SerializedCreateOrganizationMembershipOptions,
 } from '../interfaces/create-organization-membership-options.interface.ts';

@@ -1,7 +1,4 @@
-import {
-  OrganizationMembership,
-  OrganizationMembershipResponse,
-} from '../interfaces/organization-membership.interface.ts';
+import type { OrganizationMembership, OrganizationMembershipResponse } from '../interfaces/organization-membership.interface.ts';
 
 export const deserializeOrganizationMembership = (
   organizationMembership: OrganizationMembershipResponse,

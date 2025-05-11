@@ -1,4 +1,4 @@
-import { KeyContext } from '../key.interface.ts';
+import type { KeyContext } from '../key.interface.ts';
 
 export interface CreateObjectEntity {
   name: string;

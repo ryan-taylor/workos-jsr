@@ -1,14 +1,25 @@
-import fetch from 'jest-fetch-mock';
-import { fetchOnce, fetchURL, fetchBody } from '../common/utils/test-utils.ts';
+// Import Deno testing utilities
+import {
+  assertEquals,
+  beforeEach,
+  describe,
+  it,
+} from "../../tests/deno-test-setup.ts";
+
+import { fetchBody, fetchOnce, fetchURL, resetMockFetch } from '../common/utils/test-utils.ts';
 import { WorkOS } from '../workos.ts';
-import getOrganizationDomainPending from './fixtures/get-organization-domain-pending.json.ts';
-import getOrganizationDomainVerified from './fixtures/get-organization-domain-verified.json.ts';
-import { OrganizationDomainState } from './interfaces.ts';
+import getOrganizationDomainPending from './fixtures/get-organization-domain-pending.json' with { type: "json" };
+import getOrganizationDomainVerified from './fixtures/get-organization-domain-verified.json' with { type: "json" };
+import { OrganizationDomainState } from './interfaces/index.ts';
 
 const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
 
+// Main test suite
 describe('OrganizationDomains', () => {
-  beforeEach(() => fetch.resetMocks());
+  // Reset fetch mocks before each test
+  beforeEach(() => {
+    resetMockFetch();
+  });
 
   describe('get', () => {
     it('requests an Organization Domain', async () => {
@@ -18,15 +29,18 @@ describe('OrganizationDomains', () => {
         'org_domain_01HCZRAP3TPQ0X0DKJHR32TATG',
       );
 
-      expect(fetchURL()).toContain(
-        '/organization_domains/org_domain_01HCZRAP3TPQ0X0DKJHR32TATG',
+      const url = fetchURL();
+      assertEquals(
+        url?.includes('/organization_domains/org_domain_01HCZRAP3TPQ0X0DKJHR32TATG'),
+        true,
+        `URL ${url} should contain the organization domain ID`
       );
-      expect(subject.id).toEqual('org_domain_01HCZRAP3TPQ0X0DKJHR32TATG');
-      expect(subject.domain).toEqual('workos.com');
-      expect(subject.organizationId).toEqual('org_01JR8C1EHCRPV4B4XP4W2B9X1M');
-      expect(subject.state).toEqual(OrganizationDomainState.Verified);
-      expect(subject.verificationToken).toBeNull();
-      expect(subject.verificationStrategy).toEqual('manual');
+      assertEquals(subject.id, 'org_domain_01HCZRAP3TPQ0X0DKJHR32TATG');
+      assertEquals(subject.domain, 'workos.com');
+      assertEquals(subject.organizationId, 'org_01JR8C1EHCRPV4B4XP4W2B9X1M');
+      assertEquals(subject.state, OrganizationDomainState.Verified);
+      assertEquals(subject.verificationToken, null);
+      assertEquals(subject.verificationStrategy, 'manual');
     });
 
     it('requests an Organization Domain', async () => {
@@ -36,15 +50,18 @@ describe('OrganizationDomains', () => {
         'org_domain_01HD50K7EPWCMNPGMKXKKE14XT',
       );
 
-      expect(fetchURL()).toContain(
-        '/organization_domains/org_domain_01HD50K7EPWCMNPGMKXKKE14XT',
+      const url = fetchURL();
+      assertEquals(
+        url?.includes('/organization_domains/org_domain_01HD50K7EPWCMNPGMKXKKE14XT'),
+        true,
+        `URL ${url} should contain the organization domain ID`
       );
-      expect(subject.id).toEqual('org_domain_01HD50K7EPWCMNPGMKXKKE14XT');
-      expect(subject.domain).toEqual('workos.com');
-      expect(subject.organizationId).toEqual('org_01JR8C1EHCRPV4B4XP4W2B9X1M');
-      expect(subject.state).toEqual(OrganizationDomainState.Pending);
-      expect(subject.verificationToken).toEqual('F06PGMsZIO0shrveGWuGxgCj7');
-      expect(subject.verificationStrategy).toEqual('dns');
+      assertEquals(subject.id, 'org_domain_01HD50K7EPWCMNPGMKXKKE14XT');
+      assertEquals(subject.domain, 'workos.com');
+      assertEquals(subject.organizationId, 'org_01JR8C1EHCRPV4B4XP4W2B9X1M');
+      assertEquals(subject.state, OrganizationDomainState.Pending);
+      assertEquals(subject.verificationToken, 'F06PGMsZIO0shrveGWuGxgCj7');
+      assertEquals(subject.verificationStrategy, 'dns');
     });
   });
 
@@ -56,15 +73,18 @@ describe('OrganizationDomains', () => {
         'org_domain_01HD50K7EPWCMNPGMKXKKE14XT',
       );
 
-      expect(fetchURL()).toContain(
-        '/organization_domains/org_domain_01HD50K7EPWCMNPGMKXKKE14XT/verify',
+      const url = fetchURL();
+      assertEquals(
+        url?.includes('/organization_domains/org_domain_01HD50K7EPWCMNPGMKXKKE14XT/verify'),
+        true,
+        `URL ${url} should contain the organization domain verify endpoint`
       );
-      expect(subject.id).toEqual('org_domain_01HD50K7EPWCMNPGMKXKKE14XT');
-      expect(subject.domain).toEqual('workos.com');
-      expect(subject.organizationId).toEqual('org_01JR8C1EHCRPV4B4XP4W2B9X1M');
-      expect(subject.state).toEqual(OrganizationDomainState.Pending);
-      expect(subject.verificationToken).toEqual('F06PGMsZIO0shrveGWuGxgCj7');
-      expect(subject.verificationStrategy).toEqual('dns');
+      assertEquals(subject.id, 'org_domain_01HD50K7EPWCMNPGMKXKKE14XT');
+      assertEquals(subject.domain, 'workos.com');
+      assertEquals(subject.organizationId, 'org_01JR8C1EHCRPV4B4XP4W2B9X1M');
+      assertEquals(subject.state, OrganizationDomainState.Pending);
+      assertEquals(subject.verificationToken, 'F06PGMsZIO0shrveGWuGxgCj7');
+      assertEquals(subject.verificationStrategy, 'dns');
     });
   });
 
@@ -77,18 +97,25 @@ describe('OrganizationDomains', () => {
         domain: 'workos.com',
       });
 
-      expect(fetchURL()).toContain('/organization_domains');
-      expect(fetchBody()).toEqual({
+      const url = fetchURL();
+      assertEquals(
+        url?.includes('/organization_domains'),
+        true,
+        `URL ${url} should contain the organization domains endpoint`
+      );
+      
+      const body = fetchBody();
+      assertEquals(body, {
         domain: 'workos.com',
         organization_id: 'org_01EHT88Z8J8795GZNQ4ZP1J81T',
       });
 
-      expect(subject.id).toEqual('org_domain_01HD50K7EPWCMNPGMKXKKE14XT');
-      expect(subject.domain).toEqual('workos.com');
-      expect(subject.organizationId).toEqual('org_01JR8C1EHCRPV4B4XP4W2B9X1M');
-      expect(subject.state).toEqual(OrganizationDomainState.Pending);
-      expect(subject.verificationToken).toEqual('F06PGMsZIO0shrveGWuGxgCj7');
-      expect(subject.verificationStrategy).toEqual('dns');
+      assertEquals(subject.id, 'org_domain_01HD50K7EPWCMNPGMKXKKE14XT');
+      assertEquals(subject.domain, 'workos.com');
+      assertEquals(subject.organizationId, 'org_01JR8C1EHCRPV4B4XP4W2B9X1M');
+      assertEquals(subject.state, OrganizationDomainState.Pending);
+      assertEquals(subject.verificationToken, 'F06PGMsZIO0shrveGWuGxgCj7');
+      assertEquals(subject.verificationStrategy, 'dns');
     });
   });
 });

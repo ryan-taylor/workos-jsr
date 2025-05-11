@@ -1,10 +1,11 @@
-import {
+import type {
   HttpClientInterface,
   HttpClientResponseInterface,
   RequestHeaders,
   RequestOptions,
   ResponseHeaders,
 } from '../interfaces/http-client.interface.ts';
+import type { JsonValue } from '../interfaces/http-response.interface.ts';
 import { HttpClient, HttpClientError, HttpClientResponse } from './http-client.ts';
 
 export class FetchHttpClient extends HttpClient implements HttpClientInterface {
@@ -57,7 +58,7 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
     }
   }
 
-  async post<Entity = any>(
+  async post<Entity = unknown>(
     path: string,
     entity: Entity,
     options: RequestOptions,
@@ -91,7 +92,7 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
     }
   }
 
-  async put<Entity = any>(
+  async put<Entity = unknown>(
     path: string,
     entity: Entity,
     options: RequestOptions,
@@ -155,14 +156,13 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
   private async fetchRequest(
     url: string,
     method: string,
-    body?: any,
+    body?: BodyInit | null | undefined,
     headers?: RequestHeaders,
   ): Promise<HttpClientResponseInterface> {
     // For methods which expect payloads, we should always pass a body value
     // even when it is empty. Without this, some JS runtimes (eg. Deno) will
     // inject a second Content-Length header.
-    const methodHasPayload =
-      method === 'POST' || method === 'PUT' || method === 'PATCH';
+    const methodHasPayload = method === 'POST' || method === 'PUT' || method === 'PATCH';
 
     const requestBody = body || (methodHasPayload ? '' : undefined);
 
@@ -197,19 +197,23 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
   private async fetchRequestWithRetry(
     url: string,
     method: string,
-    body?: any,
+    body?: BodyInit | null | undefined,
     headers?: RequestHeaders,
   ): Promise<HttpClientResponseInterface> {
     let response: HttpClientResponseInterface;
     let retryAttempts = 1;
 
     const makeRequest = async (): Promise<HttpClientResponseInterface> => {
-      let requestError: any = null;
+      let requestError: Error | HttpClientError<unknown> | null = null;
 
       try {
         response = await this.fetchRequest(url, method, body, headers);
       } catch (e) {
-        requestError = e;
+        if (e instanceof Error || e instanceof HttpClientError) {
+          requestError = e;
+        } else {
+          requestError = new Error(String(e));
+        }
       }
 
       if (this.shouldRetryRequest(requestError, retryAttempts)) {
@@ -228,7 +232,7 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
     return makeRequest();
   }
 
-  private shouldRetryRequest(requestError: any, retryAttempt: number): boolean {
+  private shouldRetryRequest(requestError: Error | HttpClientError<unknown> | null, retryAttempt: number): boolean {
     if (retryAttempt > this.MAX_RETRY_ATTEMPTS) {
       return false;
     }
@@ -251,10 +255,7 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
 }
 
 // tslint:disable-next-line
-export class FetchHttpClientResponse
-  extends HttpClientResponse
-  implements HttpClientResponseInterface
-{
+export class FetchHttpClientResponse extends HttpClientResponse implements HttpClientResponseInterface {
   _res: Response;
 
   constructor(res: Response) {
@@ -269,7 +270,7 @@ export class FetchHttpClientResponse
     return this._res;
   }
 
-  toJSON(): Promise<any> | null {
+  toJSON(): Promise<JsonValue> | null {
     const contentType = this._res.headers.get('content-type');
     const isJsonResponse = contentType?.includes('application/json');
 

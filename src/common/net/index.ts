@@ -1,6 +1,6 @@
 import { FetchHttpClient } from './fetch-client.ts';
-import { HttpClient } from './http-client.ts';
-import { NodeHttpClient } from './node-client.ts';
+import type { HttpClient } from './http-client.ts';
+import { DenoHttpClient } from './deno-client.ts';
 
 export function createHttpClient(
   baseURL: string,
@@ -9,11 +9,10 @@ export function createHttpClient(
 ): HttpClient {
   if (typeof fetch !== 'undefined' || typeof fetchFn !== 'undefined') {
     return new FetchHttpClient(baseURL, options, fetchFn);
-  } else {
-    return new NodeHttpClient(baseURL, options);
   }
+  return new DenoHttpClient(baseURL, options);
 }
 
 export * from './fetch-client.ts';
-export * from './node-client.ts';
+export * from './deno-client.ts';
 export * from './http-client.ts';

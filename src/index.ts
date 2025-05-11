@@ -1,36 +1,35 @@
 import { DenoCryptoProvider } from './common/crypto/deno-crypto-provider.ts';
 import { SubtleCryptoProvider } from './common/crypto/subtle-crypto-provider.ts';
-import { CryptoProvider } from './common/crypto/crypto-provider.ts';
+import type { CryptoProvider } from './common/crypto/crypto-provider.ts';
 import { WebCryptoProvider } from './common/crypto/web-crypto-provider.ts';
 
-import { HttpClient } from './common/net/http-client.ts';
+import type { HttpClient } from './common/net/http-client.ts';
 import { FetchHttpClient } from './common/net/fetch-client.ts';
-import { NodeHttpClient } from './common/net/node-client.ts';
 import { DenoHttpClient } from './common/net/deno-client.ts';
 
 import { Actions } from './actions/actions.ts';
 import { Webhooks } from './webhooks/webhooks.ts';
 import { WorkOS } from './workos.ts';
-import { WorkOSOptions } from './common/interfaces.ts';
-import { WebIronSessionProvider } from './common/iron-session/web-iron-session-provider.ts';
-import { IronSessionProvider } from './common/iron-session/iron-session-provider.ts';
+import type { WorkOSOptions } from './common/interfaces/index.ts';
+import { FreshSessionProvider } from './common/iron-session/fresh-session-provider.ts';
+// Removed Node-specific process import for Deno compatibility
 
-export * from './actions/interfaces.ts';
-export * from './audit-logs/interfaces.ts';
-export * from './common/exceptions.ts';
-export * from './common/interfaces.ts';
+export * from './actions/interfaces/index.ts';
+export * from './audit-logs/interfaces/index.ts';
+export * from './common/exceptions/index.ts';
+export * from './common/interfaces/index.ts';
 export * from './common/utils/pagination.ts';
-export * from './directory-sync/interfaces.ts';
+export * from './directory-sync/interfaces/index.ts';
 export * from './directory-sync/utils/get-primary-email.ts';
-export * from './events/interfaces.ts';
-export * from './fga/interfaces.ts';
-export * from './organizations/interfaces.ts';
-export * from './organization-domains/interfaces.ts';
-export * from './passwordless/interfaces.ts';
-export * from './portal/interfaces.ts';
-export * from './sso/interfaces.ts';
-export * from './user-management/interfaces.ts';
-export * from './roles/interfaces.ts';
+export * from './events/interfaces/index.ts';
+export * from './fga/interfaces/index.ts';
+export * from './organizations/interfaces/index.ts';
+export * from './organization-domains/interfaces/index.ts';
+export * from './passwordless/interfaces/index.ts';
+export * from './portal/interfaces/index.ts';
+export * from './sso/interfaces/index.ts';
+export * from './user-management/interfaces/index.ts';
+export * from './roles/interfaces/index.ts';
 
 class WorkOSNode extends WorkOS {
   override createHttpClient(options: WorkOSOptions, userAgent: string): HttpClient {
@@ -43,21 +42,12 @@ class WorkOSNode extends WorkOS {
       },
     };
 
-    // Check if we're in a Deno environment
-    if (typeof Deno !== 'undefined') {
-      return new DenoHttpClient(this.baseURL, opts);
-    }
-    // Check if fetch is available (browser or environment with fetch)
-    else if (
-      typeof fetch !== 'undefined' ||
-      typeof options.fetchFn !== 'undefined'
-    ) {
+    // Use FetchHttpClient if fetch is available
+    if (typeof fetch !== 'undefined' || typeof options.fetchFn !== 'undefined') {
       return new FetchHttpClient(this.baseURL, opts, options.fetchFn);
     }
-    // Fallback to Node HTTP client
-    else {
-      return new NodeHttpClient(this.baseURL, opts);
-    }
+    // Fallback to DenoHttpClient
+    return new DenoHttpClient(this.baseURL, opts);
   }
 
   override createWebhookClient(): Webhooks {
@@ -92,12 +82,13 @@ class WorkOSNode extends WorkOS {
     return new Actions(cryptoProvider);
   }
 
-  override createIronSessionProvider(): IronSessionProvider {
-    return new WebIronSessionProvider();
+  override createIronSessionProvider(): FreshSessionProvider {
+    return new FreshSessionProvider();
   }
 
   override emitWarning(warning: string): void {
-    return process.emitWarning(warning, 'WorkOS');
+    // Use console.warn instead of process.emitWarning for Deno compatibility
+    console.warn(`WorkOS: ${warning}`);
   }
 }
 

@@ -1,5 +1,5 @@
 // Roles utility functions for interacting with WorkOS roles API
-import { workos } from "./workos.ts";
+import { workos } from './workos.ts';
 
 export interface Role {
   id: string;
@@ -46,7 +46,7 @@ export async function listRoles() {
   try {
     // This is a placeholder - the actual implementation would use the WorkOS SDK
     // In a real implementation, we'd use workos.roles.listRoles() or similar
-    
+
     // For demo purposes, we'll return mock data
     const mockRoles: RoleList = {
       object: 'list',
@@ -59,7 +59,7 @@ export async function listRoles() {
           permissions: ['read:all', 'write:all', 'delete:all'],
           type: 'OrganizationRole',
           createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
+          updatedAt: new Date().toISOString(),
         },
         {
           id: 'role_02HXYZ123456789',
@@ -69,7 +69,7 @@ export async function listRoles() {
           permissions: ['read:all', 'write:own'],
           type: 'OrganizationRole',
           createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
+          updatedAt: new Date().toISOString(),
         },
         {
           id: 'role_03HXYZ123456789',
@@ -79,14 +79,14 @@ export async function listRoles() {
           permissions: ['read:all'],
           type: 'OrganizationRole',
           createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        }
-      ]
+          updatedAt: new Date().toISOString(),
+        },
+      ],
     };
-    
+
     return mockRoles;
   } catch (error) {
-    console.error("Error listing roles:", error);
+    console.error('Error listing roles:', error);
     throw error;
   }
 }
@@ -96,15 +96,15 @@ export async function getRole(roleId: string) {
   try {
     // Placeholder for actual WorkOS API call
     // In a real implementation, we'd use workos.roles.getRole(roleId) or similar
-    
+
     // For demo purposes, we'll simulate fetching the role
     const allRoles = await listRoles();
-    const role = allRoles.data.find(r => r.id === roleId);
-    
+    const role = allRoles.data.find((r) => r.id === roleId);
+
     if (!role) {
       throw new Error(`Role with ID ${roleId} not found`);
     }
-    
+
     return role;
   } catch (error) {
     console.error(`Error getting role ${roleId}:`, error);
@@ -117,7 +117,7 @@ export async function createRole(params: RoleCreateParams) {
   try {
     // Placeholder for actual WorkOS API call
     // In a real implementation, we'd use workos.roles.createRole(params) or similar
-    
+
     // For demo purposes, we'll simulate creating a role
     const newRole: Role = {
       id: `role_${Math.random().toString(36).substring(2, 11)}`,
@@ -127,12 +127,12 @@ export async function createRole(params: RoleCreateParams) {
       permissions: params.permissions,
       type: 'OrganizationRole',
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
-    
+
     return newRole;
   } catch (error) {
-    console.error("Error creating role:", error);
+    console.error('Error creating role:', error);
     throw error;
   }
 }
@@ -142,19 +142,19 @@ export async function updateRole(roleId: string, params: RoleUpdateParams) {
   try {
     // Placeholder for actual WorkOS API call
     // In a real implementation, we'd use workos.roles.updateRole(roleId, params) or similar
-    
+
     // For demo purposes, we'll simulate updating the role
     const role = await getRole(roleId);
-    
+
     const updatedRole: Role = {
       ...role,
       name: params.name || role.name,
       slug: params.slug || role.slug,
       description: params.description !== undefined ? params.description : role.description,
       permissions: params.permissions || role.permissions,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
-    
+
     return updatedRole;
   } catch (error) {
     console.error(`Error updating role ${roleId}:`, error);
@@ -167,7 +167,7 @@ export async function deleteRole(roleId: string) {
   try {
     // Placeholder for actual WorkOS API call
     // In a real implementation, we'd use workos.roles.deleteRole(roleId) or similar
-    
+
     // For demo purposes, we'll just return success
     return { success: true };
   } catch (error) {
@@ -181,7 +181,7 @@ export async function assignRole(params: RoleAssignmentParams) {
   try {
     // Placeholder for actual WorkOS API call
     // In a real implementation, we'd use workos.roles.assignRoleToUser(params) or similar
-    
+
     // For demo purposes, we'll just return success
     return { success: true, userId: params.userId, roleId: params.roleId };
   } catch (error) {
@@ -195,7 +195,7 @@ export async function unassignRole(params: RoleAssignmentParams) {
   try {
     // Placeholder for actual WorkOS API call
     // In a real implementation, we'd use workos.roles.unassignRoleFromUser(params) or similar
-    
+
     // For demo purposes, we'll just return success
     return { success: true, userId: params.userId, roleId: params.roleId };
   } catch (error) {
@@ -216,7 +216,7 @@ export function getSamplePermissions() {
     { key: 'manage:users', description: 'Manage user accounts' },
     { key: 'manage:roles', description: 'Manage roles and permissions' },
     { key: 'manage:billing', description: 'Manage billing and subscriptions' },
-    { key: 'manage:settings', description: 'Manage application settings' }
+    { key: 'manage:settings', description: 'Manage application settings' },
   ];
 }
 
@@ -227,7 +227,7 @@ export function getSampleUsers() {
     { id: 'user_02', name: 'Bob Johnson', email: 'bob@example.com' },
     { id: 'user_03', name: 'Carol Williams', email: 'carol@example.com' },
     { id: 'user_04', name: 'Dave Brown', email: 'dave@example.com' },
-    { id: 'user_05', name: 'Eve Davis', email: 'eve@example.com' }
+    { id: 'user_05', name: 'Eve Davis', email: 'eve@example.com' },
   ];
 }
 
@@ -238,25 +238,25 @@ export function getRoleTemplates() {
       name: 'Admin',
       slug: 'admin',
       description: 'Full access to all resources',
-      permissions: ['read:all', 'write:all', 'delete:all', 'manage:users', 'manage:roles', 'manage:billing', 'manage:settings']
+      permissions: ['read:all', 'write:all', 'delete:all', 'manage:users', 'manage:roles', 'manage:billing', 'manage:settings'],
     },
     {
       name: 'Manager',
       slug: 'manager',
       description: 'Manage team members and resources',
-      permissions: ['read:all', 'write:all', 'delete:all', 'manage:users']
+      permissions: ['read:all', 'write:all', 'delete:all', 'manage:users'],
     },
     {
       name: 'Member',
       slug: 'member',
       description: 'Standard user access',
-      permissions: ['read:all', 'write:own', 'delete:own']
+      permissions: ['read:all', 'write:own', 'delete:own'],
     },
     {
       name: 'Viewer',
       slug: 'viewer',
       description: 'Read-only access',
-      permissions: ['read:all']
-    }
+      permissions: ['read:all'],
+    },
   ];
 }

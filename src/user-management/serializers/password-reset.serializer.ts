@@ -1,9 +1,4 @@
-import {
-  PasswordReset,
-  PasswordResetEvent,
-  PasswordResetEventResponse,
-  PasswordResetResponse,
-} from '../interfaces.ts';
+import type { PasswordReset, PasswordResetEvent, PasswordResetEventResponse, PasswordResetResponse } from '../interfaces.ts';
 
 export const deserializePasswordReset = (
   passwordReset: PasswordResetResponse,

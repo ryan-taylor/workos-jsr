@@ -1,6 +1,6 @@
-import {
-  UpdateOrganizationMembershipOptions,
+import type {
   SerializedUpdateOrganizationMembershipOptions,
+  UpdateOrganizationMembershipOptions,
 } from '../interfaces/update-organization-membership-options.interface.ts';
 
 export const serializeUpdateOrganizationMembershipOptions = (

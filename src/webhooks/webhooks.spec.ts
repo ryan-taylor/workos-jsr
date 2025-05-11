@@ -1,5 +1,5 @@
-import crypto from 'crypto';
 import { WorkOS } from '../workos.ts';
+import { crypto } from "@std/crypto";
 import mockWebhook from './fixtures/webhook.json.ts';
 const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
 import { SignatureVerificationException } from '../common/exceptions.ts';
@@ -12,16 +12,34 @@ describe('Webhooks', () => {
   let signatureHash: string;
   let expectation: object;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     payload = mockWebhook;
     secret = 'secret';
     timestamp = Date.now() * 1000;
     unhashedString = `${timestamp}.${JSON.stringify(payload)}`;
-    signatureHash = crypto
-      .createHmac('sha256', secret)
-      .update(unhashedString)
-      .digest()
-      .toString('hex');
+    // Deno crypto uses Web Crypto API
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+      'raw',
+      encoder.encode(secret),
+      {
+        name: 'HMAC',
+        hash: { name: 'SHA-256' },
+      },
+      false,
+      ['sign']
+    );
+    
+    const signatureBuffer = await crypto.subtle.sign(
+      'hmac',
+      key,
+      encoder.encode(unhashedString)
+    );
+    
+    // Convert to hex
+    signatureHash = Array.from(new Uint8Array(signatureBuffer))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
     expectation = {
       id: 'directory_user_01FAEAJCR3ZBZ30D8BD1924TVG',
       state: 'active',

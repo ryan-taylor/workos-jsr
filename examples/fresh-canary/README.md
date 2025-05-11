@@ -17,7 +17,7 @@ Fresh is a next-generation web framework built on Deno, featuring:
 The migration from a traditional React application to Fresh + Preact involves several key concepts:
 
 1. **Server-Side Rendering (SSR)**: Most pages are rendered on the server for better performance and SEO
-   
+
 2. **Islands Architecture**: Interactive components ("islands") are selectively hydrated on the client while the rest of the page remains static
 
 3. **Hydration**: The process of attaching JavaScript event listeners to server-rendered HTML, bringing components to life on the client
@@ -98,7 +98,7 @@ fresh-canary/
 ## Authentication Flow
 
 1. User navigates to the homepage and clicks "Try SSO Login"
-2. User is redirected to the WorkOS SSO URL 
+2. User is redirected to the WorkOS SSO URL
 3. After authentication, WorkOS redirects back to your application's callback URL
 4. The callback handler exchanges the authorization code for a user profile and token
 5. A session is created and the user is redirected to the protected page
@@ -107,6 +107,7 @@ fresh-canary/
 ## Routes
 
 ### Authentication Routes
+
 - `/` - Homepage with a link to start the authentication flow
 - `/login` - Initiates the SSO flow and redirects to WorkOS
 - `/callback` - Handles the OAuth callback and creates a session
@@ -114,6 +115,7 @@ fresh-canary/
 - `/logout` - Ends the user's session
 
 ### Directory Sync Routes
+
 - `/directory-sync` - Lists all connected directories
 - `/directory-sync/users` - Shows users from a specific directory
 - `/directory-sync/groups` - Shows groups from a specific directory

@@ -1,7 +1,7 @@
 // API endpoint to list all roles
-import { Handlers } from "$fresh/server.ts";
-import { listRoles } from "../../../utils/roles.ts";
-import { requireAuth } from "../../../utils/user-management.ts";
+import type { Handlers } from '$fresh/server.ts';
+import { listRoles } from '../../../utils/roles.ts';
+import { requireAuth } from '../../../utils/user-management.ts';
 
 export const handler: Handlers = {
   async GET(req, _ctx) {
@@ -12,19 +12,19 @@ export const handler: Handlers = {
     try {
       const roles = await listRoles();
       return new Response(JSON.stringify(roles), {
-        headers: { "Content-Type": "application/json" }
+        headers: { 'Content-Type': 'application/json' },
       });
     } catch (error) {
-      console.error("Error fetching roles:", error);
+      console.error('Error fetching roles:', error);
       return new Response(
         JSON.stringify({
-          error: error instanceof Error ? error.message : "Failed to list roles"
+          error: error instanceof Error ? error.message : 'Failed to list roles',
         }),
         {
           status: 500,
-          headers: { "Content-Type": "application/json" }
-        }
+          headers: { 'Content-Type': 'application/json' },
+        },
       );
     }
-  }
+  },
 };

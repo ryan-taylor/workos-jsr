@@ -1,4 +1,4 @@
-import { RequestException } from '../interfaces/request-exception.interface.ts';
+import type { RequestException } from '../interfaces/request-exception.interface.ts';
 
 export class BadRequestException extends Error implements RequestException {
   readonly status = 400;

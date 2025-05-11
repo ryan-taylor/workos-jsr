@@ -1,5 +1,5 @@
-import { UnknownRecord } from '../../common/interfaces/unknown-record.interface.ts';
-import { ProfileAndToken, ProfileAndTokenResponse } from '../interfaces.ts';
+import type { UnknownRecord } from '../../common/interfaces/unknown-record.interface.ts';
+import type { ProfileAndToken, ProfileAndTokenResponse } from '../interfaces.ts';
 import { deserializeProfile } from './profile.serializer.ts';
 
 export const deserializeProfileAndToken = <

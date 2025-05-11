@@ -1,11 +1,21 @@
-import fetch from 'jest-fetch-mock';
-import { fetchOnce, fetchURL, fetchBody } from '../common/utils/test-utils.ts';
+// Import Deno testing utilities
+import {
+  assertEquals,
+  beforeEach,
+  describe,
+  it,
+} from "../../tests/deno-test-setup.ts";
 
-import createSession from './fixtures/create-session.json.ts';
+import { fetchBody, fetchOnce, fetchURL, resetMockFetch } from '../common/utils/test-utils.ts';
+import createSession from './fixtures/create-session.json' with { type: "json" };
 import { WorkOS } from '../workos.ts';
 
+// Main test suite
 describe('Passwordless', () => {
-  beforeEach(() => fetch.resetMocks());
+  // Reset fetch mocks before each test
+  beforeEach(() => {
+    resetMockFetch();
+  });
 
   describe('createSession', () => {
     describe('with valid options', () => {
@@ -23,12 +33,15 @@ describe('Passwordless', () => {
           redirectURI,
         });
 
-        expect(session.email).toEqual(email);
-        expect(session.object).toEqual('passwordless_session');
+        assertEquals(session.email, email);
+        assertEquals(session.object, 'passwordless_session');
 
-        expect(fetchBody().email).toEqual(email);
-        expect(fetchBody().redirect_uri).toEqual(redirectURI);
-        expect(fetchURL()).toContain('/passwordless/sessions');
+        const body = fetchBody() as Record<string, unknown>;
+        assertEquals(body.email, email);
+        assertEquals(body.redirect_uri, redirectURI);
+        
+        const url = fetchURL();
+        assertEquals(url?.includes('/passwordless/sessions'), true);
       });
     });
   });
@@ -42,8 +55,10 @@ describe('Passwordless', () => {
         const sessionId = 'session_123';
         await workos.passwordless.sendSession(sessionId);
 
-        expect(fetchURL()).toContain(
-          `/passwordless/sessions/${sessionId}/send`,
+        const url = fetchURL();
+        assertEquals(
+          url?.includes(`/passwordless/sessions/${sessionId}/send`),
+          true
         );
       });
     });

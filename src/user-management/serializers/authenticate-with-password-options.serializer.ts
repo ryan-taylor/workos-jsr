@@ -1,12 +1,13 @@
-import {
+import type {
   AuthenticateUserWithPasswordCredentials,
   AuthenticateWithPasswordOptions,
   SerializedAuthenticateWithPasswordOptions,
 } from '../interfaces.ts';
 
 export const serializeAuthenticateWithPasswordOptions = (
-  options: AuthenticateWithPasswordOptions &
-    AuthenticateUserWithPasswordCredentials,
+  options:
+    & AuthenticateWithPasswordOptions
+    & AuthenticateUserWithPasswordCredentials,
 ): SerializedAuthenticateWithPasswordOptions => ({
   grant_type: 'password',
   client_id: options.clientId,

@@ -1,17 +1,20 @@
-import fetch from 'jest-fetch-mock';
-import { fetchOnce, fetchSearchParams } from '../common/utils/test-utils.ts';
+// Import Deno testing utilities
 import {
-  DsyncUserUpdatedEvent,
-  DsyncUserUpdatedEventResponse,
-  Event,
-  EventResponse,
-  ListResponse,
-} from '../common/interfaces.ts';
+  assertEquals,
+  beforeEach,
+  describe,
+  it,
+} from "../../tests/deno-test-setup.ts";
+
+import { fetchOnce, fetchSearchParams, resetMockFetch } from '../common/utils/test-utils.ts';
+import type { DsyncUserUpdatedEvent, DsyncUserUpdatedEventResponse, Event, EventResponse } from '../common/interfaces/event.interface.ts';
 import { WorkOS } from '../workos.ts';
-import { ConnectionType } from '../sso/interfaces.ts';
+import { ConnectionType } from '../sso/interfaces/index.ts';
 
 describe('Event', () => {
-  beforeEach(() => fetch.resetMocks());
+  beforeEach(() => {
+    resetMockFetch();
+  });
 
   const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
 
@@ -51,20 +54,21 @@ describe('Event', () => {
   };
 
   describe('listEvents', () => {
-    const eventsListResponse: ListResponse<EventResponse> = {
+    const eventsListResponse = {
       object: 'list',
       data: [eventResponse],
       list_metadata: {},
     };
+    
     describe('with options', () => {
       it('requests Events with query parameters', async () => {
-        const eventsResponse: ListResponse<EventResponse> = {
+        const eventsResponse = {
           object: 'list',
           data: [eventResponse],
           list_metadata: {},
         };
 
-        fetchOnce(eventsResponse);
+        fetchOnce(JSON.stringify(eventsResponse));
 
         const list = await workos.events.listEvents({
           events: ['connection.activated'],
@@ -72,13 +76,12 @@ describe('Event', () => {
           rangeEnd: '2020-05-07',
         });
 
-        expect(fetchSearchParams()).toMatchObject({
-          events: 'connection.activated',
-          range_start: '2020-05-04',
-          range_end: '2020-05-07',
-        });
+        const params = fetchSearchParams();
+        assertEquals(params.events, 'connection.activated');
+        assertEquals(params.range_start, '2020-05-04');
+        assertEquals(params.range_end, '2020-05-07');
 
-        expect(list).toEqual({
+        assertEquals(list, {
           object: 'list',
           data: [event],
           listMetadata: {},
@@ -87,13 +90,13 @@ describe('Event', () => {
     });
 
     it(`requests Events with a valid event name`, async () => {
-      fetchOnce(eventsListResponse);
+      fetchOnce(JSON.stringify(eventsListResponse));
 
       const list = await workos.events.listEvents({
         events: ['connection.activated'],
       });
 
-      expect(list).toEqual({
+      assertEquals(list, {
         object: 'list',
         data: [event],
         listMetadata: {},
@@ -101,14 +104,14 @@ describe('Event', () => {
     });
 
     it(`requests Events with a valid organization id`, async () => {
-      fetchOnce(eventsListResponse);
+      fetchOnce(JSON.stringify(eventsListResponse));
 
       const list = await workos.events.listEvents({
         events: ['connection.activated'],
         organizationId: 'org_1234',
       });
 
-      expect(list).toEqual({
+      assertEquals(list, {
         object: 'list',
         data: [event],
         listMetadata: {},
@@ -188,19 +191,21 @@ describe('Event', () => {
             updated_at: '2021-12-13 12:15:45.531847',
           },
         };
-        const directoryUserEventsListResponse: ListResponse<EventResponse> = {
+        
+        const directoryUserEventsListResponse = {
           object: 'list',
           data: [directoryUserUpdatedResponse],
           list_metadata: {},
         };
+        
         it(`returns the role`, async () => {
-          fetchOnce(directoryUserEventsListResponse);
+          fetchOnce(JSON.stringify(directoryUserEventsListResponse));
 
           const list = await workos.events.listEvents({
             events: ['dsync.user.updated'],
           });
 
-          expect(list).toEqual({
+          assertEquals(list, {
             object: 'list',
             data: [directoryUserUpdated],
             listMetadata: {},

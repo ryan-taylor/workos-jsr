@@ -1,44 +1,50 @@
-import fetch from 'jest-fetch-mock';
+// Import Deno testing utilities
 import {
-  fetchOnce,
-  fetchURL,
-  fetchSearchParams,
-  fetchHeaders,
-  fetchBody,
-} from '../common/utils/test-utils.ts';
+  assertEquals,
+  beforeEach,
+  describe,
+  it,
+} from "../../tests/deno-test-setup.ts";
+
+import { fetchBody, fetchHeaders, fetchOnce, fetchSearchParams, fetchURL, resetMockFetch } from '../common/utils/test-utils.ts';
 import { WorkOS } from '../workos.ts';
-import clearStripeCustomerId from './fixtures/clear-stripe-customer-id.json.ts';
-import createOrganizationInvalid from './fixtures/create-organization-invalid.json.ts';
-import createOrganization from './fixtures/create-organization.json.ts';
-import getOrganization from './fixtures/get-organization.json.ts';
-import listOrganizationsFixture from './fixtures/list-organizations.json.ts';
-import listOrganizationRolesFixture from './fixtures/list-organization-roles.json.ts';
-import updateOrganization from './fixtures/update-organization.json.ts';
-import setStripeCustomerId from './fixtures/set-stripe-customer-id.json.ts';
-import setStripeCustomerIdDisabled from './fixtures/set-stripe-customer-id-disabled.json.ts';
-import { DomainDataState } from './interfaces.ts';
+import clearStripeCustomerId from './fixtures/clear-stripe-customer-id.json' with { type: "json" };
+import createOrganizationInvalid from './fixtures/create-organization-invalid.json' with { type: "json" };
+import createOrganization from './fixtures/create-organization.json' with { type: "json" };
+import getOrganization from './fixtures/get-organization.json' with { type: "json" };
+import listOrganizationsFixture from './fixtures/list-organizations.json' with { type: "json" };
+import listOrganizationRolesFixture from './fixtures/list-organization-roles.json' with { type: "json" };
+import updateOrganization from './fixtures/update-organization.json' with { type: "json" };
+import setStripeCustomerId from './fixtures/set-stripe-customer-id.json' with { type: "json" };
+import setStripeCustomerIdDisabled from './fixtures/set-stripe-customer-id-disabled.json' with { type: "json" };
+import { DomainDataState } from './interfaces/index.ts';
 
 const workos = new WorkOS('sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU');
 
+// Main test suite
 describe('Organizations', () => {
-  beforeEach(() => fetch.resetMocks());
+  // Reset fetch mocks before each test
+  beforeEach(() => {
+    resetMockFetch();
+  });
 
   describe('listOrganizations', () => {
     describe('without any options', () => {
       it('returns organizations and metadata', async () => {
         fetchOnce(listOrganizationsFixture);
 
-        const { data, listMetadata } =
-          await workos.organizations.listOrganizations();
+        const { data, listMetadata } = await workos.organizations.listOrganizations();
 
-        expect(fetchSearchParams()).toEqual({
+        assertEquals(fetchSearchParams(), {
           order: 'desc',
         });
-        expect(fetchURL()).toContain('/organizations');
+        
+        const url = fetchURL();
+        assertEquals(url?.includes('/organizations'), true);
 
-        expect(data).toHaveLength(7);
+        assertEquals(data.length, 7);
 
-        expect(listMetadata).toEqual({
+        assertEquals(listMetadata, {
           after: null,
           before: 'before-id',
         });
@@ -53,14 +59,15 @@ describe('Organizations', () => {
           domains: ['example.com', 'example2.com'],
         });
 
-        expect(fetchSearchParams()).toEqual({
+        assertEquals(fetchSearchParams(), {
           domains: 'example.com,example2.com',
           order: 'desc',
         });
 
-        expect(fetchURL()).toContain('/organizations');
+        const url = fetchURL();
+        assertEquals(url?.includes('/organizations'), true);
 
-        expect(data).toHaveLength(7);
+        assertEquals(data.length, 7);
       });
     });
 
@@ -72,14 +79,15 @@ describe('Organizations', () => {
           before: 'before-id',
         });
 
-        expect(fetchSearchParams()).toEqual({
+        assertEquals(fetchSearchParams(), {
           before: 'before-id',
           order: 'desc',
         });
 
-        expect(fetchURL()).toContain('/organizations');
+        const url = fetchURL();
+        assertEquals(url?.includes('/organizations'), true);
 
-        expect(data).toHaveLength(7);
+        assertEquals(data.length, 7);
       });
     });
 
@@ -91,14 +99,15 @@ describe('Organizations', () => {
           after: 'after-id',
         });
 
-        expect(fetchSearchParams()).toEqual({
+        assertEquals(fetchSearchParams(), {
           after: 'after-id',
           order: 'desc',
         });
 
-        expect(fetchURL()).toContain('/organizations');
+        const url = fetchURL();
+        assertEquals(url?.includes('/organizations'), true);
 
-        expect(data).toHaveLength(7);
+        assertEquals(data.length, 7);
       });
     });
 
@@ -110,14 +119,15 @@ describe('Organizations', () => {
           limit: 10,
         });
 
-        expect(fetchSearchParams()).toEqual({
+        assertEquals(fetchSearchParams(), {
           limit: '10',
           order: 'desc',
         });
 
-        expect(fetchURL()).toContain('/organizations');
+        const url = fetchURL();
+        assertEquals(url?.includes('/organizations'), true);
 
-        expect(data).toHaveLength(7);
+        assertEquals(data.length, 7);
       });
     });
   });
@@ -137,10 +147,10 @@ describe('Organizations', () => {
           },
         );
 
-        expect(fetchHeaders()).toMatchObject({
-          'Idempotency-Key': 'the-idempotency-key',
-        });
-        expect(fetchBody()).toEqual({
+        const headers = fetchHeaders();
+        assertEquals(headers?.['Idempotency-Key'], 'the-idempotency-key');
+        
+        assertEquals(fetchBody(), {
           domains: ['example.com'],
           name: 'Test Organization',
         });
@@ -157,13 +167,13 @@ describe('Organizations', () => {
             name: 'Test Organization',
           });
 
-          expect(fetchBody()).toEqual({
+          assertEquals(fetchBody(), {
             domains: ['example.com'],
             name: 'Test Organization',
           });
-          expect(subject.id).toEqual('org_01EHT88Z8J8795GZNQ4ZP1J81T');
-          expect(subject.name).toEqual('Test Organization');
-          expect(subject.domains).toHaveLength(1);
+          assertEquals(subject.id, 'org_01EHT88Z8J8795GZNQ4ZP1J81T');
+          assertEquals(subject.name, 'Test Organization');
+          assertEquals(subject.domains.length, 1);
         });
       });
 
@@ -178,13 +188,13 @@ describe('Organizations', () => {
             name: 'Test Organization',
           });
 
-          expect(fetchBody()).toEqual({
+          assertEquals(fetchBody(), {
             domain_data: [{ domain: 'example.com', state: 'verified' }],
             name: 'Test Organization',
           });
-          expect(subject.id).toEqual('org_01EHT88Z8J8795GZNQ4ZP1J81T');
-          expect(subject.name).toEqual('Test Organization');
-          expect(subject.domains).toHaveLength(1);
+          assertEquals(subject.id, 'org_01EHT88Z8J8795GZNQ4ZP1J81T');
+          assertEquals(subject.name, 'Test Organization');
+          assertEquals(subject.domains.length, 1);
         });
       });
 
@@ -196,9 +206,8 @@ describe('Organizations', () => {
           metadata: { key: 'value' },
         });
 
-        expect(fetchBody()).toMatchObject({
-          metadata: { key: 'value' },
-        });
+        const body = fetchBody() as Record<string, unknown>;
+        assertEquals(body.metadata, { key: 'value' });
       });
     });
 
@@ -209,15 +218,19 @@ describe('Organizations', () => {
           headers: { 'X-Request-ID': 'a-request-id' },
         });
 
-        await expect(
-          workos.organizations.createOrganization({
+        try {
+          await workos.organizations.createOrganization({
             domains: ['example.com'],
             name: 'Test Organization',
-          }),
-        ).rejects.toThrowError(
-          'An Organization with the domain example.com already exists.',
-        );
-        expect(fetchBody()).toEqual({
+          });
+          throw new Error('Expected to throw but did not');
+        } catch (error) {
+          const err = error as Error;
+          assertEquals(err instanceof Error, true);
+          assertEquals(err.message.includes('An Organization with the domain example.com already exists.'), true);
+        }
+        
+        assertEquals(fetchBody(), {
           domains: ['example.com'],
           name: 'Test Organization',
         });
@@ -234,13 +247,13 @@ describe('Organizations', () => {
         'org_01EHT88Z8J8795GZNQ4ZP1J81T',
       );
 
-      expect(fetchURL()).toContain(
-        '/organizations/org_01EHT88Z8J8795GZNQ4ZP1J81T',
-      );
-      expect(subject.id).toEqual('org_01EHT88Z8J8795GZNQ4ZP1J81T');
-      expect(subject.name).toEqual('Test Organization 3');
-      expect(subject.allowProfilesOutsideOrganization).toEqual(false);
-      expect(subject.domains).toEqual([
+      const url = fetchURL();
+      assertEquals(url?.includes('/organizations/org_01EHT88Z8J8795GZNQ4ZP1J81T'), true);
+      
+      assertEquals(subject.id, 'org_01EHT88Z8J8795GZNQ4ZP1J81T');
+      assertEquals(subject.name, 'Test Organization 3');
+      assertEquals(subject.allowProfilesOutsideOrganization, false);
+      assertEquals(subject.domains, [
         {
           object: 'organization_domain',
           id: 'org_domain_01EHT88Z8WZEFWYPM6EC9BX2R8',
@@ -262,14 +275,13 @@ describe('Organizations', () => {
       };
       fetchOnce(apiResponse);
 
-      const organization =
-        await workos.organizations.getOrganizationByExternalId(externalId);
+      const organization = await workos.organizations.getOrganizationByExternalId(externalId);
 
-      expect(fetchURL()).toContain(`/organizations/external_id/${externalId}`);
-      expect(organization).toMatchObject({
-        id: apiResponse.id,
-        externalId: apiResponse.external_id,
-      });
+      const url = fetchURL();
+      assertEquals(url?.includes(`/organizations/external_id/${externalId}`), true);
+      
+      assertEquals(organization.id, apiResponse.id);
+      assertEquals(organization.externalId, apiResponse.external_id);
     });
   });
 
@@ -282,9 +294,8 @@ describe('Organizations', () => {
         'org_01EHT88Z8J8795GZNQ4ZP1J81T',
       );
 
-      expect(fetchURL()).toContain(
-        '/organizations/org_01EHT88Z8J8795GZNQ4ZP1J81T',
-      );
+      const url = fetchURL();
+      assertEquals(url?.includes('/organizations/org_01EHT88Z8J8795GZNQ4ZP1J81T'), true);
     });
   });
 
@@ -300,13 +311,13 @@ describe('Organizations', () => {
             name: 'Test Organization 2',
           });
 
-          expect(fetchBody()).toEqual({
+          assertEquals(fetchBody(), {
             domains: ['example.com'],
             name: 'Test Organization 2',
           });
-          expect(subject.id).toEqual('org_01EHT88Z8J8795GZNQ4ZP1J81T');
-          expect(subject.name).toEqual('Test Organization 2');
-          expect(subject.domains).toHaveLength(1);
+          assertEquals(subject.id, 'org_01EHT88Z8J8795GZNQ4ZP1J81T');
+          assertEquals(subject.name, 'Test Organization 2');
+          assertEquals(subject.domains.length, 1);
         });
       });
 
@@ -321,12 +332,12 @@ describe('Organizations', () => {
             ],
           });
 
-          expect(fetchBody()).toEqual({
+          assertEquals(fetchBody(), {
             domain_data: [{ domain: 'example.com', state: 'verified' }],
           });
-          expect(subject.id).toEqual('org_01EHT88Z8J8795GZNQ4ZP1J81T');
-          expect(subject.name).toEqual('Test Organization 2');
-          expect(subject.domains).toHaveLength(1);
+          assertEquals(subject.id, 'org_01EHT88Z8J8795GZNQ4ZP1J81T');
+          assertEquals(subject.name, 'Test Organization 2');
+          assertEquals(subject.domains.length, 1);
         });
       });
 
@@ -338,14 +349,14 @@ describe('Organizations', () => {
           metadata: { key: 'value' },
         });
 
-        expect(fetchBody()).toEqual({
+        assertEquals(fetchBody(), {
           metadata: { key: 'value' },
         });
       });
     });
 
     describe('when given `stripeCustomerId`', () => {
-      it('updates the organization’s Stripe customer ID', async () => {
+      it("updates the organization's Stripe customer ID", async () => {
         fetchOnce(setStripeCustomerId);
 
         const subject = await workos.organizations.updateOrganization({
@@ -353,14 +364,13 @@ describe('Organizations', () => {
           stripeCustomerId: 'cus_MX8J9nfK4lP2Yw',
         });
 
-        expect(fetchBody()).toMatchObject({
-          stripe_customer_id: 'cus_MX8J9nfK4lP2Yw',
-        });
+        const body = fetchBody() as Record<string, unknown>;
+        assertEquals(body.stripe_customer_id, 'cus_MX8J9nfK4lP2Yw');
 
-        expect(subject.stripeCustomerId).toBe('cus_MX8J9nfK4lP2Yw');
+        assertEquals(subject.stripeCustomerId, 'cus_MX8J9nfK4lP2Yw');
       });
 
-      it('clears the organization’s Stripe customer ID with a `null` value', async () => {
+      it("clears the organization's Stripe customer ID with a `null` value", async () => {
         fetchOnce(clearStripeCustomerId);
 
         const subject = await workos.organizations.updateOrganization({
@@ -368,27 +378,30 @@ describe('Organizations', () => {
           stripeCustomerId: null,
         });
 
-        expect(fetchBody()).toEqual({
+        assertEquals(fetchBody(), {
           stripe_customer_id: null,
         });
 
-        expect(subject.stripeCustomerId).toBeUndefined();
+        assertEquals(subject.stripeCustomerId, undefined);
       });
 
       describe('when the feature is not enabled', () => {
         it('returns an error', async () => {
           fetchOnce(setStripeCustomerIdDisabled, { status: 422 });
 
-          await expect(
-            workos.organizations.updateOrganization({
+          try {
+            await workos.organizations.updateOrganization({
               organization: 'org_01EHT88Z8J8795GZNQ4ZP1J81T',
               stripeCustomerId: 'cus_MX8J9nfK4lP2Yw',
-            }),
-          ).rejects.toThrowError(
-            'stripe_customer_id is not enabled for this environment',
-          );
+            });
+            throw new Error('Expected to throw but did not');
+          } catch (error) {
+            const err = error as Error;
+            assertEquals(err instanceof Error, true);
+            assertEquals(err.message.includes('stripe_customer_id is not enabled for this environment'), true);
+          }
 
-          expect(fetchBody()).toEqual({
+          assertEquals(fetchBody(), {
             stripe_customer_id: 'cus_MX8J9nfK4lP2Yw',
           });
         });
@@ -406,13 +419,12 @@ describe('Organizations', () => {
         },
       );
 
-      expect(fetchURL()).toContain(
-        '/organizations/org_01EHT88Z8J8795GZNQ4ZP1J81T/roles',
-      );
+      const url = fetchURL();
+      assertEquals(url?.includes('/organizations/org_01EHT88Z8J8795GZNQ4ZP1J81T/roles'), true);
 
-      expect(object).toEqual('list');
-      expect(data).toHaveLength(3);
-      expect(data).toEqual([
+      assertEquals(object, 'list');
+      assertEquals(data.length, 3);
+      assertEquals(data, [
         {
           object: 'role',
           id: 'role_01EHQMYV6MBK39QC5PZXHY59C5',

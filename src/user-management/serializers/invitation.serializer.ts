@@ -1,9 +1,4 @@
-import {
-  Invitation,
-  InvitationEvent,
-  InvitationEventResponse,
-  InvitationResponse,
-} from '../interfaces/invitation.interface.ts';
+import type { Invitation, InvitationEvent, InvitationEventResponse, InvitationResponse } from '../interfaces/invitation.interface.ts';
 
 export const deserializeInvitation = (
   invitation: InvitationResponse,

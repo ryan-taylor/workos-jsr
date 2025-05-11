@@ -1,4 +1,4 @@
-import {
+import type {
   HttpClientInterface,
   HttpClientResponseInterface,
   RequestHeaders,
@@ -52,26 +52,26 @@ export abstract class HttpClient implements HttpClientInterface {
   static getResourceURL(
     baseURL: string,
     path: string,
-    params?: Record<string, any>,
-  ) {
+    params?: Record<string, string | number | boolean | undefined>,
+  ): string {
     const queryString = HttpClient.getQueryString(params);
     const url = new URL([path, queryString].filter(Boolean).join('?'), baseURL);
     return url.toString();
   }
 
-  static getQueryString(queryObj?: Record<string, any>) {
+  static getQueryString(queryObj?: Record<string, string | number | boolean | undefined>): string | undefined {
     if (!queryObj) return undefined;
 
-    const sanitizedQueryObj: Record<string, any> = {};
+    const sanitizedQueryObj: Record<string, string> = {};
 
     Object.entries(queryObj).forEach(([param, value]) => {
-      if (value !== '' && value !== undefined) sanitizedQueryObj[param] = value;
+      if (value !== '' && value !== undefined) sanitizedQueryObj[param] = String(value);
     });
 
     return new URLSearchParams(sanitizedQueryObj).toString();
   }
 
-  static getContentTypeHeader(entity: any): RequestHeaders | undefined {
+  static getContentTypeHeader(entity: unknown): RequestHeaders | undefined {
     if (entity instanceof URLSearchParams) {
       return {
         'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
@@ -80,7 +80,7 @@ export abstract class HttpClient implements HttpClientInterface {
     return undefined;
   }
 
-  static getBody(entity: any): BodyInit | null | undefined {
+  static getBody(entity: unknown): BodyInit | null | undefined {
     if (entity === null || entity instanceof URLSearchParams) {
       return entity;
     }
@@ -89,23 +89,17 @@ export abstract class HttpClient implements HttpClientInterface {
   }
 
   private getSleepTimeInMilliseconds(retryAttempt: number): number {
-    const sleepTime =
-      this.MINIMUM_SLEEP_TIME_IN_MILLISECONDS *
+    const sleepTime = this.MINIMUM_SLEEP_TIME_IN_MILLISECONDS *
       Math.pow(this.BACKOFF_MULTIPLIER, retryAttempt);
     const jitter = Math.random() + 0.5;
     return sleepTime * jitter;
   }
 
-  sleep = (retryAttempt: number) =>
-    new Promise(resolve =>
-      setTimeout(resolve, this.getSleepTimeInMilliseconds(retryAttempt)),
-    );
+  sleep = (retryAttempt: number) => new Promise((resolve) => setTimeout(resolve, this.getSleepTimeInMilliseconds(retryAttempt)));
 }
 
 // tslint:disable-next-line
-export abstract class HttpClientResponse
-  implements HttpClientResponseInterface
-{
+export abstract class HttpClientResponse implements HttpClientResponseInterface {
   _statusCode: number;
   _headers: ResponseHeaders;
 
@@ -129,9 +123,9 @@ export abstract class HttpClientResponse
 
 // tslint:disable-next-line
 export class HttpClientError<T> extends Error {
-  readonly name: string = 'HttpClientError';
-  readonly message: string = 'The request could not be completed.';
-  readonly response: { status: number; headers: any; data: T };
+  override readonly name: string = 'HttpClientError';
+  override readonly message: string = 'The request could not be completed.';
+  readonly response: { status: number; headers: ResponseHeaders; data: T };
 
   constructor({
     message,

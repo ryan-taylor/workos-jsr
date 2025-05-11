@@ -1,4 +1,4 @@
-import { HttpClient } from '../core/http_client.ts.ts';
+import type { HttpClient } from '../core/http_client.ts.ts';
 
 export interface GetAuthorizationUrlOptions {
   clientId: string;
@@ -62,7 +62,7 @@ export class SSO {
       redirect_uri: options.redirectUri,
     };
     // Remove undefined values
-    (Object.keys(body) as Array<keyof typeof body>).forEach(k => {
+    (Object.keys(body) as Array<keyof typeof body>).forEach((k) => {
       if (body[k] === undefined) delete body[k];
     });
     return await this.httpClient.request<ProfileAndTokenResponse>(url.toString(), {
@@ -71,4 +71,4 @@ export class SSO {
       body,
     });
   }
-} 
+}

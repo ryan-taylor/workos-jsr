@@ -1,15 +1,9 @@
 {
-  "imports": {
-    "@workos/sdk/": "./packages/workos_sdk/",
-    "@workos/fresh/": "./packages/workos_fresh/",
-    "$fresh/": "https://deno.land/x/fresh@1.6.5/",
-    "preact": "https://esm.sh/preact@10.19.3",
-    "preact/": "https://esm.sh/preact@10.19.3/"
-  },
+  "importMap": "import_map.f2.json",
   "tasks": {
-    "lint":  "deno lint",
-    "check": "deno check $(git ls-files '*.ts')",
-    "test":  "deno test -A",
-    "dev":   "cd examples/fresh-canary && deno task start"
+    "lint": "deno lint --ignore=_reference/**",
+    "check": "deno check mod.ts",
+    "test": "deno test -A --ignore=_reference",
+    "dev": "cd examples/fresh-canary && deno task start"
   }
 }

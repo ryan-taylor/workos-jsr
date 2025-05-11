@@ -7,7 +7,7 @@ import {
   type WorkOSUser,
   type SessionData,
   initUserManagement as initWorkOSUserManagement
-} from "workos_internal/mod.ts";
+} from "../workos_internal/mod.ts";
 
 // Session configuration using the factory function
 export const SESSION_OPTIONS: SessionOptions = buildSessionOptions(Deno.env);

@@ -2,7 +2,8 @@ import type { RequestException } from '../interfaces/request-exception.interface
 
 export class ConflictException extends Error implements RequestException {
   readonly status = 409;
-  readonly name = 'ConflictException';
+  override readonly name = 'ConflictException';
+  override readonly message: string;
   readonly requestID: string;
 
   constructor({

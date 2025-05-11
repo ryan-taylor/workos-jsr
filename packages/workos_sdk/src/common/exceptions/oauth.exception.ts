@@ -1,7 +1,8 @@
 import type { RequestException } from '../interfaces/request-exception.interface.ts';
 
 export class OauthException extends Error implements RequestException {
-  readonly name = 'OauthException';
+  override readonly name = 'OauthException';
+  override readonly message: string;
 
   constructor(
     readonly status: number,

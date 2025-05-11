@@ -9,5 +9,5 @@ export * from "./src/types.ts";
 export * from "./src/router.ts";
 export * from "./src/server.ts";
 export * from "./src/middleware.ts";
-export * from "./src/context.ts";
+export type { FreshContext } from "./src/context.ts";
 export { default as getTailwindPlugin } from "./src/plugins/tailwind.ts";

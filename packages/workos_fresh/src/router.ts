@@ -3,7 +3,7 @@
  * This file provides a makeRouter function that works with both Fresh 1.x and 2.x
  */
 
-import { freshMajor } from '../../../../scripts/select_fresh.ts';
+import { freshMajor } from '../../../scripts/select_fresh.ts';
 import { Fresh1, Fresh2, Route } from './types.ts';
 
 export type { Handler, Route, RoutePattern } from './types.ts';

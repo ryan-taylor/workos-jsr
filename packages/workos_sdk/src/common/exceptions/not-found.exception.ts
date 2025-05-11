@@ -2,8 +2,8 @@ import type { RequestException } from '../interfaces/request-exception.interface
 
 export class NotFoundException extends Error implements RequestException {
   readonly status = 404;
-  readonly name = 'NotFoundException';
-  readonly message: string;
+  override readonly name = 'NotFoundException';
+  override readonly message: string;
   readonly code?: string;
   readonly requestID: string;
 

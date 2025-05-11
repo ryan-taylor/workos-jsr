@@ -606,10 +606,5 @@
     "https://esm.sh/preact@10.26.6?target=denonext": "f23abf40ff31cc8c6fc9d44c8f63534d980857ba8dab8086836fc221c9debd7f",
     "https://esm.sh/semver@7.7.1/denonext/semver.mjs": "f1d8c45a097d5f2da9662be5ff2087f1e4af9ebeb9b0c2eeeb0c90d74fa7a14c",
     "https://esm.sh/semver@7.7.1?target=denonext": "7d6e1f9de61981f17d0e5153d48b77475e3433225ce9265ad77206afe216c5c8"
-  },
-  "workspace": {
-    "dependencies": [
-      "jsr:@std/http@1"
-    ]
   }
 }

@@ -12,12 +12,13 @@ const setDefaultOptions = (options?: PaginationOptions): PaginationOptions => {
 export const fetchAndDeserialize = async <T, U>(
   workos: WorkOS,
   endpoint: string,
-  deserializeFn: (data: T) => U,
+  deserializeFn: (item: unknown) => U,
   options?: PaginationOptions,
   requestOptions?: GetOptions,
 ): Promise<List<U>> => {
+  const paginationOptions = setDefaultOptions(options);
   const { data } = await workos.get<ListResponse<T>>(endpoint, {
-    query: setDefaultOptions(options),
+    query: paginationOptions as Record<string, string | number | boolean | undefined>,
     ...requestOptions,
   });
 

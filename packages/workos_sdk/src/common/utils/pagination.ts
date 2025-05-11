@@ -1,7 +1,6 @@
 import type { List, PaginationOptions } from '../interfaces.ts';
 
 export class AutoPaginatable<T> {
-  readonly object: 'list' = 'list';
   readonly options: PaginationOptions;
 
   constructor(
@@ -18,8 +17,8 @@ export class AutoPaginatable<T> {
     return this.list.data;
   }
 
-  get listMetadata() {
-    return this.list.listMetadata;
+  get list_metadata() {
+    return this.list.list_metadata;
   }
 
   private async *generatePages(params: PaginationOptions): AsyncGenerator<T[]> {
@@ -31,10 +30,10 @@ export class AutoPaginatable<T> {
 
     yield result.data;
 
-    if (result.listMetadata.after) {
+    if (result.list_metadata && result.list_metadata.after) {
       // Delay of 4rps to respect list users rate limits
       await new Promise((resolve) => setTimeout(resolve, 250));
-      yield* this.generatePages({ after: result.listMetadata.after });
+      yield* this.generatePages({ after: result.list_metadata.after });
     }
   }
 

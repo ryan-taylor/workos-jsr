@@ -4,5 +4,8 @@
   "description": "Fresh helpers for WorkOS Deno SDK",
   "imports": { "@workos/sdk/": "../workos_sdk/" },
   "exports": { "./mod.ts": "./mod.ts" },
-  "compilerOptions": { "strict": true }
+  "compilerOptions": { "strict": true },
+  "tasks": {
+    "test": "deno test -A tests/ tests/integration/"
+  }
 }

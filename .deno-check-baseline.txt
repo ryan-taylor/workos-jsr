@@ -1,0 +1,6 @@
+[0m[1m[31merror[0m: unexpected argument '--allow-all' found
+
+  tip: a similar argument exists: '--all'
+
+Usage: deno check --all [file]...
+

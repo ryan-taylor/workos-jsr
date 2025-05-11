@@ -5,7 +5,7 @@ import { GenericServerException } from './generic-server.exception.ts';
 //
 // TODO: Consider making it the base class for all request errors.
 export class RateLimitExceededException extends GenericServerException {
-  readonly name = 'RateLimitExceededException';
+  override readonly name = 'RateLimitExceededException';
 
   constructor(
     message: string,

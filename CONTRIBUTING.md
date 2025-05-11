@@ -84,17 +84,24 @@ chore: update dependencies to latest versions
 5. **Explain the why in the body**: The body is where you explain the reasoning behind the change
 6. **Reference issues**: If the commit addresses an issue, reference it in the footer
 
-## Commit Enforcement
+## Quality Checks
 
-This project uses [commitlint](https://commitlint.js.org/) and [husky](https://typicode.github.io/husky/) to enforce the Conventional Commits format. When you attempt to make a commit, these tools will automatically check your commit message against the required format.
+All quality gates are enforced through GitHub Actions:
 
-If your commit message doesn't meet the requirements, the commit will be rejected with an explanation of what's wrong, allowing you to correct it.
+1. **Lint, Type-Check & Test**: Every push and pull request triggers automatic:
+   - Deno linting
+   - Type checking
+   - Unit & integration tests
 
-The configuration extends `@commitlint/config-conventional`, which enforces the Conventional Commits specification.
+2. **Commit Message Format**: All commits are automatically checked against the Conventional Commits specification using commitlint.
+
+You no longer need local Git hooks or Husky. Simply `git commit` & `git push`; the Checks tab in your PR will show the results.
+
+The configuration extends `@commitlint/config-conventional`, which enforces the Conventional Commits specification described above.
 
 ## Pull Request Process
 
 1. Ensure your code maintains 100% test coverage
 2. Update documentation if necessary
-3. Make sure all tests pass
+3. Make sure all GitHub Actions checks pass
 4. Submit your pull request with a detailed description of your changes

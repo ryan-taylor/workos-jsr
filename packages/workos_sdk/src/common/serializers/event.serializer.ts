@@ -24,11 +24,18 @@ import type { Event, EventBase, EventResponse } from '../interfaces.ts';
 import { deserializeAuthenticationRadarRiskDetectedEvent } from '../../user-management/serializers/authentication-radar-risk-event-serializer.ts';
 
 export const deserializeEvent = (event: EventResponse): Event => {
+  // Create the base event object
   const eventBase: EventBase = {
     id: event.id,
     createdAt: event.created_at,
   };
-
+  
+  // Default event object to return if no matching event type is found
+  const defaultEvent: Event = {
+    ...eventBase,
+    event: event.event,
+    data: event.data
+  };
   switch (event.event) {
     case 'authentication.email_verification_succeeded':
     case 'authentication.magic_auth_failed':
@@ -182,4 +189,7 @@ export const deserializeEvent = (event: EventResponse): Event => {
         data: deserializeOrganizationDomain(event.data),
       };
   }
+  
+  // Return the default event if no matching event type was found
+  return defaultEvent;
 };

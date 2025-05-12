@@ -5,5 +5,5 @@ export const deserializeList = <TSerialized, TDeserialized>(
   deserializer: (serialized: TSerialized) => TDeserialized,
 ): List<TDeserialized> => ({
   data: list.data.map(deserializer),
-  listMetadata: list.list_metadata,
+  listMetadata: list.listMetadata,
 });

@@ -17,8 +17,8 @@ export class AutoPaginatable<T> {
     return this.list.data;
   }
 
-  get list_metadata() {
-    return this.list.list_metadata;
+  get listMetadata() {
+    return this.list.listMetadata;
   }
 
   private async *generatePages(params: PaginationOptions): AsyncGenerator<T[]> {
@@ -30,10 +30,10 @@ export class AutoPaginatable<T> {
 
     yield result.data;
 
-    if (result.list_metadata && result.list_metadata.after) {
+    if (result.listMetadata && result.listMetadata.after) {
       // Delay of 4rps to respect list users rate limits
       await new Promise((resolve) => setTimeout(resolve, 250));
-      yield* this.generatePages({ after: result.list_metadata.after });
+      yield* this.generatePages({ after: result.listMetadata.after });
     }
   }
 
@@ -57,5 +57,43 @@ export class AutoPaginatable<T> {
     }
 
     return results;
+  }
+}
+
+export class PageIterator<T> {
+  private hasNextPage = true;
+  private options: PaginationOptions;
+
+  constructor(
+    private readonly fetchPage: (
+      options: PaginationOptions,
+    ) => Promise<List<T>>,
+    private readonly list: List<T>,
+    options: PaginationOptions = {},
+  ) {
+    this.options = { ...options };
+  }
+
+  get listMetadata() {
+    return this.list.listMetadata;
+  }
+
+  async next(): Promise<List<T>> {
+    return this.list;
+  }
+
+  async *generatePages(
+    options: PaginationOptions = {},
+  ): AsyncGenerator<List<T>, void, unknown> {
+    let result = this.list;
+    yield result;
+
+    while (result.listMetadata && result.listMetadata.after) {
+      // eslint-disable-next-line no-await-in-loop
+      result = await this.fetchPage({
+        ...options,
+        after: result.listMetadata.after,
+      });
+    }
   }
 }

@@ -1,11 +1,11 @@
 import type { WorkOS } from "../../workos.ts";
 import type {
-  GetOptions,
+  CommonGetOptions as GetOptions,
   List,
   ListResponse,
   PaginationOptions,
 } from "../interfaces.ts";
-import { deserializeList } from "../serializers.ts";
+import { adaptListMetadata, deserializeList } from "../serializers.ts";
 
 const setDefaultOptions = (options?: PaginationOptions): PaginationOptions => {
   return {
@@ -22,7 +22,7 @@ export const fetchAndDeserialize = async <T, U>(
   requestOptions?: GetOptions,
 ): Promise<List<U>> => {
   const paginationOptions = setDefaultOptions(options);
-  const { data } = await workos.get<ListResponse<T>>(endpoint, {
+  const response = await workos.get<Record<string, unknown>>(endpoint, {
     query: paginationOptions as Record<
       string,
       string | number | boolean | undefined
@@ -30,5 +30,8 @@ export const fetchAndDeserialize = async <T, U>(
     ...requestOptions,
   });
 
-  return deserializeList(data, deserializeFn);
+  // Adapt the response to ensure we have listMetadata even if API returns list_metadata
+  const adaptedData = adaptListMetadata(response.data) as ListResponse<T>;
+  
+  return deserializeList(adaptedData, deserializeFn);
 };

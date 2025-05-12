@@ -1,7 +1,7 @@
 export interface ListResponse<T> {
   readonly object: "list";
   data: T[];
-  list_metadata: {
+  listMetadata: {
     before?: string;
     after?: string;
   };

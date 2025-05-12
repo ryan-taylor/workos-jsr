@@ -9,19 +9,37 @@ export function serialize<T>(data: unknown): T {
   return data as T;
 }
 
+// Function to adapt API responses with snake_case to our camelCase
+export function adaptListMetadata(data: unknown): unknown {
+  if (!data || typeof data !== 'object') return data;
+  
+  const rawResponse = data as Record<string, unknown>;
+  
+  // Check if it has list_metadata and adapt it
+  if ('list_metadata' in rawResponse) {
+    return {
+      ...rawResponse,
+      listMetadata: rawResponse.list_metadata,
+    };
+  }
+  
+  return data;
+}
+
 // List serializer functions
 export function serializeList<T>(
   data: unknown,
   itemSerializer: (item: unknown) => T,
 ): ListResponse<T> {
-  const response = data as {
+  const adaptedData = adaptListMetadata(data);
+  const response = adaptedData as {
     data: unknown[];
-    list_metadata: { before: string | null; after: string | null };
+    listMetadata: { before: string | null; after: string | null };
   };
 
   return {
     data: response.data.map(itemSerializer),
-    list_metadata: response.list_metadata,
+    listMetadata: response.listMetadata,
   };
 }
 
@@ -29,16 +47,17 @@ export function deserializeList<T>(
   data: unknown,
   itemDeserializer: (item: unknown) => T,
 ): List<T> {
-  const response = data as {
+  const adaptedData = adaptListMetadata(data);
+  const response = adaptedData as {
     object: string;
     data: unknown[];
-    list_metadata: { before: string | null; after: string | null };
+    listMetadata: { before: string | null; after: string | null };
   };
 
   return {
     object: response.object,
     data: response.data.map(itemDeserializer),
-    list_metadata: response.list_metadata,
+    listMetadata: response.listMetadata,
   };
 }
 

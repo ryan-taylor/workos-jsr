@@ -33,7 +33,7 @@ export interface PaginationOptions {
 export interface List<T> {
   object: string;
   data: T[];
-  list_metadata: {
+  listMetadata: {
     before: string | null;
     after: string | null;
   };
@@ -41,7 +41,7 @@ export interface List<T> {
 
 export interface ListResponse<T> {
   data: T[];
-  list_metadata: {
+  listMetadata: {
     before: string | null;
     after: string | null;
   };

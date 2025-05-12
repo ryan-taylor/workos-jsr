@@ -12,6 +12,7 @@ import type { PostOptions } from "./common/interfaces/post-options.interface.ts"
 import type { PutOptions } from "./common/interfaces/put-options.interface.ts";
 import type { WorkOSOptions } from "./common/interfaces/workos-options.interface.ts";
 import type { WorkOSResponseError } from "./common/interfaces/workos-response-error.interface.ts";
+import type { DeleteOptions } from "./common/interfaces/delete-options.interface.ts";
 
 // Re-export for usage outside of the package
 export type {
@@ -404,7 +405,7 @@ export class WorkOS {
    * Makes a DELETE request to the WorkOS API.
    *
    * @param path - API endpoint path
-   * @param query - Optional query parameters
+   * @param options - Request options including query parameters
    * @returns Promise that resolves when the deletion is complete
    * @throws Various exceptions based on HTTP status codes
    *
@@ -415,11 +416,12 @@ export class WorkOS {
    */
   async delete(
     path: string,
-    query?: Record<string, string | number | boolean | undefined>,
+    options: DeleteOptions = {},
   ): Promise<void> {
     try {
       await this.client.delete(path, {
-        params: query,
+        params: options.query,
+        headers: options.headers,
       });
     } catch (error) {
       this.handleHttpError({ path, error });

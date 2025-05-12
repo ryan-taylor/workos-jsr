@@ -29,6 +29,10 @@ jobs:
             echo "Error: Generated code is out of date. Please run 'deno task generate:api' locally and commit the changes."
             exit 1
           fi
-
+          
+      - name: Validate OpenAPI Spec Checksums
+        run: |
+          deno run -A scripts/ci/validate-spec-checksums.ts
+        
       - name: Unit & Integration Tests
         run: deno test -A

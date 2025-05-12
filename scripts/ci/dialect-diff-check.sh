@@ -1,22 +1,27 @@
 #!/usr/bin/env bash
 # dialect-diff-check.sh
 #
-# This script checks for OpenAPI dialect changes between spec versions.
+# This script checks for OpenAPI dialect changes between spec versions and validates checksums.
 # It can be used in CI pipelines to detect and report on OpenAPI version changes.
 #
 # Exit codes:
-#  0: No dialect change detected
+#  0: No issues detected
 #  1: Error occurred during execution
 #  2: Dialect change detected (for CI to flag as warning/attention needed)
+#  3: Checksum validation failed
+#  4: Both dialect change and checksum validation issues detected
 #
-# Usage: ./dialect-diff-check.sh [--post-comment] [--spec-dir=DIR]
+# Usage: ./dialect-diff-check.sh [--post-comment] [--spec-dir=DIR] [--skip-checksums] [--warn-only]
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SPEC_DIR="vendor/openapi"
 POST_COMMENT=false
+SKIP_CHECKSUMS=false
+WARN_ONLY=false
 GITHUB_STEP_SUMMARY=${GITHUB_STEP_SUMMARY:-""}
+EXIT_CODE=0
 
 # Parse arguments
 for arg in "$@"; do
@@ -27,6 +32,14 @@ for arg in "$@"; do
       ;;
     --spec-dir=*)
       SPEC_DIR="${arg#*=}"
+      shift
+      ;;
+    --skip-checksums)
+      SKIP_CHECKSUMS=true
+      shift
+      ;;
+    --warn-only)
+      WARN_ONLY=true
       shift
       ;;
     *)
@@ -107,11 +120,49 @@ extract_version() {
 LATEST_VERSION=$(extract_version "$LATEST_DIALECT")
 PREVIOUS_VERSION=$(extract_version "$PREVIOUS_DIALECT")
 
+# Validate spec checksums if not skipped
+CHECKSUM_ISSUES=false
+if [ "$SKIP_CHECKSUMS" != "true" ]; then
+  echo -e "\n=== Validating OpenAPI Spec Checksums ==="
+  
+  # Collect arguments for the checksum validation script
+  CHECKSUM_ARGS=()
+  CHECKSUM_ARGS+=("--spec-dir=$SPEC_DIR")
+  
+  if [ "$WARN_ONLY" = "true" ]; then
+    CHECKSUM_ARGS+=("--warn-only")
+  fi
+  
+  # Run the checksum validation
+  echo "Running: deno run -A scripts/ci/validate-spec-checksums.ts ${CHECKSUM_ARGS[*]}"
+  if ! deno run -A scripts/ci/validate-spec-checksums.ts "${CHECKSUM_ARGS[@]}"; then
+    CHECKSUM_ISSUES=true
+    echo "🚨 Checksum validation failed"
+    
+    # Only set exit code if not in warn-only mode
+    if [ "$WARN_ONLY" != "true" ]; then
+      EXIT_CODE=3
+    fi
+  else
+    echo "✅ Checksum validation passed"
+  fi
+fi
+
 # Check if the dialect has changed
+DIALECT_CHANGE=false
 if [ "$LATEST_DIALECT" != "$PREVIOUS_DIALECT" ]; then
-  echo "🚨 DIALECT CHANGE DETECTED 🚨"
+  DIALECT_CHANGE=true
+  echo -e "\n🚨 DIALECT CHANGE DETECTED 🚨"
   echo "  Previous version: $PREVIOUS_VERSION"
   echo "  New version: $LATEST_VERSION"
+  
+  # Set exit code for dialect change
+  if [ $EXIT_CODE -eq 0 ]; then
+    EXIT_CODE=2
+  elif [ $EXIT_CODE -eq 3 ]; then
+    # Both dialect change and checksum issues
+    EXIT_CODE=4
+  fi
   
   # Generate the comment content
   COMMENT_CONTENT="## 🚨 OpenAPI Dialect Change Detected 🚨\n\n"
@@ -146,9 +197,29 @@ if [ "$LATEST_DIALECT" != "$PREVIOUS_DIALECT" ]; then
     fi
   fi
   
-  # Exit with code 2 to indicate dialect change (for CI pipelines)
-  exit 2
+ # Exit code already set above
 else
-  echo "✅ No dialect change detected"
-  exit 0
+ echo -e "\n✅ No dialect change detected"
+fi
+
+# Provide summary of all checks
+echo -e "\n=== Check Summary ==="
+echo "Dialect check: $([ "$DIALECT_CHANGE" = "true" ] && echo "🚨 Changes detected" || echo "✅ No changes")"
+
+if [ "$SKIP_CHECKSUMS" != "true" ]; then
+ echo "Checksum validation: $([ "$CHECKSUM_ISSUES" = "true" ] && echo "🚨 Issues found" || echo "✅ Passed")"
+else
+ echo "Checksum validation: Skipped"
+fi
+
+# If both dialect changed and checksums failed, create a combined report
+if [ "$DIALECT_CHANGE" = "true" ] && [ "$CHECKSUM_ISSUES" = "true" ]; then
+ if [ "$POST_COMMENT" = true ] && [ -n "$GITHUB_STEP_SUMMARY" ]; then
+   echo -e "## 🚨 Multiple OpenAPI Specification Issues Detected\n\n" >> "$GITHUB_STEP_SUMMARY"
+   echo -e "Both dialect changes and checksum validation issues were found. Please review the detailed logs." >> "$GITHUB_STEP_SUMMARY"
+ fi
+fi
+
+# Exit with appropriate code
+exit $EXIT_CODE
 fi

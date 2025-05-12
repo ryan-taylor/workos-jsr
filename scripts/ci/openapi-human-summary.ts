@@ -28,12 +28,11 @@ import { exists, ensureDir } from "https://deno.land/std/fs/mod.ts";
 import { expandGlob } from "https://deno.land/std/fs/mod.ts";
 import { 
   ensureOasdiffInstalled, 
-  runOasdiff, 
-  writeOutput as writeOasdiffOutput 
+  runOasdiff
 } from "./openapi-diff.ts";
-import { 
-  generateSummary 
-} from "./openapi-summary-generator.ts";
+import {
+  generateSummary
+} from "./fixed-summary-generator.ts";
 
 /**
  * Parse command line arguments
@@ -224,7 +223,7 @@ async function main() {
     
     // Save JSON output to temp file
     const jsonOutputPath = join(tmpDir, `diff-${Date.now()}.json`);
-    await writeOasdiffOutput(diffResult, jsonOutputPath, "json");
+    await Deno.writeTextFile(jsonOutputPath, JSON.stringify(diffResult, null, 2));
     console.log(`Raw diff output saved to: ${jsonOutputPath}`);
     
     // Generate human-readable summary
@@ -238,8 +237,8 @@ async function main() {
     }
     
     if (!outputFile) {
-      // If no output file was specified, just print a message about the generated summary
-      console.log(`\nSummary has been generated and displayed above.`);
+      // If no output file was specified, just print the summary
+      console.log(`\n${summaryOutput}`);
     } else {
       console.log(`\nSummary has been saved to: ${outputFile}`);
     }

@@ -4,6 +4,14 @@
 [![Build Status](https://github.com/ryan-taylor/workos-jsr/actions/workflows/ci.yml/badge.svg)](https://github.com/ryan-taylor/workos-jsr/actions/workflows/ci.yml)
 [![Coverage Status](https://codecov.io/gh/ryan-taylor/workos-jsr/branch/main/graph/badge.svg)](https://codecov.io/gh/ryan-taylor/workos-jsr)
 
+## Relationship to Official SDK
+
+This package is a fork of [workos-inc/workos-node](https://github.com/workos-inc/workos-node) adapted specifically for Deno and JSR. We maintain our own development path focused on Deno compatibility while tracking the upstream for reference only.
+
+Our versioning does not directly correspond to the official WorkOS SDK - we follow semantic versioning for our Deno-specific implementation.
+
+## Overview
+
 This library provides convenient access to the WorkOS API from applications
 written in JavaScript and TypeScript. It is designed for Deno 2.x environments,
 including Deno's [Fresh](https://fresh.deno.dev/) framework. Full examples are

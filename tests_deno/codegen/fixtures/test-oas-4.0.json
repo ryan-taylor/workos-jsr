@@ -1,0 +1,942 @@
+{
+  "openapi": "4.0.0",
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "_comment": "This is a draft stub for testing purposes only. It is not an official OAS 4.0 specification. It's designed to test adapter fallback mechanisms.",
+  "info": {
+    "title": "Edge Case Test API for OAS 4.0",
+    "description": "A test API specification with various edge cases to verify adapter behavior with OpenAPI 4.0",
+    "version": "1.0.0",
+    "contact": {
+      "name": "WorkOS API Team",
+      "url": "https://workos.com/api",
+      "email": "api@workos.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.example.com/v1",
+      "description": "Production server"
+    },
+    {
+      "url": "https://api.staging.example.com/v1",
+      "description": "Staging server"
+    }
+  ],
+  "paths": {
+    "/resources": {
+      "get": {
+        "summary": "List resources with complex parameters",
+        "description": "Demonstrates various parameter types and authentication",
+        "operationId": "listResources",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of results to return",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10
+            }
+          },
+          {
+            "name": "page-token",
+            "in": "query",
+            "description": "Token for pagination with unusual name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort.field",
+            "in": "query",
+            "description": "Field to sort by with dot notation",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["created_at", "updated_at", "name"]
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "Filter with a complex schema",
+            "required": false,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComplexFilter"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Resource"
+                      }
+                    },
+                    "next_page_token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create a resource with a complex request body",
+        "description": "Demonstrates request body validation with deeply nested objects",
+        "operationId": "createResource",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateResourceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Resource created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Resource"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": ["resources.write"]
+          }
+        ]
+      }
+    },
+    "/resources/{id}": {
+      "get": {
+        "summary": "Get a resource by ID",
+        "description": "Demonstrates path parameter usage",
+        "operationId": "getResource",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Resource ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "description": "Relations to include",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["metadata", "related", "all"]
+              }
+            },
+            "style": "form",
+            "explode": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Resource"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": ["resources.read"]
+          },
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Replace a resource",
+        "description": "Demonstrates full replacement of a resource",
+        "operationId": "replaceResource",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Resource ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateResourceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resource replaced",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Resource"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": ["resources.write"]
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Update a resource",
+        "description": "Demonstrates partial updates with oneOf schema",
+        "operationId": "updateResource",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Resource ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateResourceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resource updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Resource"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": ["resources.write"]
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete a resource",
+        "description": "Demonstrates basic operation with empty response",
+        "operationId": "deleteResource",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Resource ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Resource deleted successfully"
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/webhooks": {
+      "post": {
+        "summary": "Register a webhook",
+        "description": "Demonstrates webhook registration for async operations - new in OAS 4.0",
+        "operationId": "registerWebhook",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookRegistration"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Webhook registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Webhook"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": ["webhooks.write"]
+          }
+        ]
+      }
+    }
+  },
+  "webhooks": {
+    "resourceCreated": {
+      "post": {
+        "summary": "Resource created webhook",
+        "description": "Sent when a new resource is created",
+        "operationId": "onResourceCreated",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResourceEvent"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook received"
+          }
+        }
+      }
+    },
+    "resourceUpdated": {
+      "post": {
+        "summary": "Resource updated webhook",
+        "description": "Sent when a resource is updated",
+        "operationId": "onResourceUpdated",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResourceEvent"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook received"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Resource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/Metadata"
+          },
+          "related_resources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Resource"
+            },
+            "description": "Circular reference to demonstrate handling of recursive schemas"
+          }
+        },
+        "required": ["id", "name", "created_at", "updated_at"]
+      },
+      "Metadata": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "Arbitrary metadata as key-value pairs"
+      },
+      "CreateResourceRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "type": {
+            "type": "string",
+            "enum": ["TYPE_A", "TYPE_B", "TYPE_C"]
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/Metadata"
+          },
+          "nested_data": {
+            "$ref": "#/components/schemas/DeeplyNestedObject"
+          }
+        },
+        "required": ["name", "type"]
+      },
+      "UpdateResourceRequest": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 500
+              }
+            },
+            "required": ["name"]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "metadata": {
+                "$ref": "#/components/schemas/Metadata"
+              }
+            },
+            "required": ["metadata"]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "nested_data": {
+                "$ref": "#/components/schemas/DeeplyNestedObject"
+              }
+            },
+            "required": ["nested_data"]
+          }
+        ]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "debug_id": {
+            "type": "string",
+            "description": "Optional debug identifier - new in OAS 4.0"
+          }
+        },
+        "required": ["code", "message"]
+      },
+      "ComplexFilter": {
+        "type": "object",
+        "properties": {
+          "and": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ComplexFilter"
+            }
+          },
+          "or": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ComplexFilter"
+            }
+          },
+          "not": {
+            "$ref": "#/components/schemas/ComplexFilter"
+          },
+          "eq": {
+            "type": "object",
+            "additionalProperties": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "gt": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            }
+          },
+          "lt": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            }
+          },
+          "in": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "DeeplyNestedObject": {
+        "type": "object",
+        "properties": {
+          "level1": {
+            "type": "object",
+            "properties": {
+              "level2": {
+                "type": "object",
+                "properties": {
+                  "level3": {
+                    "type": "object",
+                    "properties": {
+                      "level4": {
+                        "type": "object",
+                        "properties": {
+                          "level5": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "type": "string"
+                              },
+                              "array": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "nestedArrayItem": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "WebhookRegistration": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["resource.created", "resource.updated", "resource.deleted"]
+            }
+          },
+          "secret": {
+            "type": "string",
+            "description": "Secret used to sign webhook payloads"
+          },
+          "active": {
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "required": ["url", "events"]
+      },
+      "Webhook": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["id", "url", "events", "active", "created_at"]
+      },
+      "ResourceEvent": {
+        "type": "object",
+        "properties": {
+          "event_type": {
+            "type": "string",
+            "enum": ["resource.created", "resource.updated", "resource.deleted"]
+          },
+          "resource": {
+            "$ref": "#/components/schemas/Resource" 
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "webhook_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": ["event_type", "resource", "timestamp", "webhook_id"]
+      },
+      "ExternalReferenceTest": {
+        "type": "object",
+        "properties": {
+          "remote_object": {
+            "$ref": "external-schema.json#/ExternalObject"
+          }
+        }
+      },
+      "ComplexTypeCompositions": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "baseProperty": {
+                "type": "string"
+              }
+            },
+            "required": ["baseProperty"]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "extension1": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "option1": {
+                    "type": "string"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "option2": {
+                    "type": "number"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "securitySchemes": {
+      "apiKey": {
+        "type": "apiKey",
+        "name": "X-API-Key",
+        "in": "header",
+        "description": "API key authentication"
+      },
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "JWT Bearer token authentication"
+      },
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "Basic authentication with username and password"
+      },
+      "oauth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://auth.example.com/oauth/authorize",
+            "tokenUrl": "https://auth.example.com/oauth/token",
+            "refreshUrl": "https://auth.example.com/oauth/refresh",
+            "scopes": {
+              "resources.read": "Read resources",
+              "resources.write": "Write resources",
+              "webhooks.write": "Manage webhooks"
+            }
+          }
+        }
+      },
+      "mtls": {
+        "type": "mutualTLS",
+        "description": "Mutual TLS authentication - new in OAS 4.0"
+      }
+    },
+    "parameters": {
+      "limitParam": {
+        "name": "limit",
+        "in": "query",
+        "description": "Maximum number of results to return",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 10
+        }
+      },
+      "pageTokenParam": {
+        "name": "page-token",
+        "in": "query",
+        "description": "Token for pagination",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "requestBodies": {
+      "ResourceCreate": {
+        "description": "Resource creation payload",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateResourceRequest" 
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Resource not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    }
+  }
+}

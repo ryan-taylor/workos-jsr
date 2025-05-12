@@ -99,7 +99,7 @@ export abstract class HttpClient implements HttpClientInterface {
     return sleepTime * jitter;
   }
 
-  sleep = (retryAttempt: number) =>
+  sleep = (retryAttempt: number): Promise<void> =>
     new Promise((resolve) =>
       setTimeout(resolve, this.getSleepTimeInMilliseconds(retryAttempt))
     );

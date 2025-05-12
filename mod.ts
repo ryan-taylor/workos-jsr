@@ -51,7 +51,7 @@ export class WorkOS extends BaseWorkOS {
    * Override the createIronSessionProvider method to use our Fresh-native implementation
    * instead of the default implementation that throws an error.
    */
-  override createIronSessionProvider() {
+  override createIronSessionProvider(): FreshSessionProvider {
     return new FreshSessionProvider();
   }
 }

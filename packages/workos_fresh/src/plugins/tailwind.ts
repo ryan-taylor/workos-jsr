@@ -28,7 +28,7 @@ export default async function getTailwindPlugin(): Promise<() => unknown> {
       // At runtime, this will use the correct import map based on the DENO_FRESH_VERSION
       // TypeScript will show an error, but it will work at runtime
       const modulePath = "@fresh/plugin-tailwindcss";
-      const tailwindModule = await import(modulePath) as {
+      const tailwindModule = await import(new URL(modulePath, import.meta.url).href) as {
         default: Fresh2.TailwindPlugin;
       };
       return tailwindModule.default;

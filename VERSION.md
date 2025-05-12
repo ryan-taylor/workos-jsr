@@ -18,7 +18,7 @@ We maintain our own release cycle independent of the official WorkOS SDK:
 
 | @ryantaylor/workos version | Deno version | Fresh compatibility | WorkOS API version |
 |----------------------------|--------------|---------------------|-------------------|
-| 0.1.x                      | 2.0.0+       | Fresh 1.x and 2.x   | Latest            |
+| 0.1.x                      | 2.0.0+       | Fresh 2.x only      | Latest            |
 
 ## Relationship to Official WorkOS SDK
 

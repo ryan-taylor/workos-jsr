@@ -10,7 +10,7 @@ This project is a Deno-first adaptation of the WorkOS SDK. When contributing, pl
 1. Prioritize Deno and Fresh compatibility
 2. Use Deno-native approaches where possible
 3. Maintain TypeScript strictness
-4. Test against both Fresh 1.x and 2.x if applicable
+4. Test against Fresh 2.x
 5. Document Deno-specific usage patterns
 
 ## Commit Message Convention

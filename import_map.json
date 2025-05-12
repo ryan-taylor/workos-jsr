@@ -14,7 +14,6 @@
     "@std/path": "jsr:@std/path@1.0.0",
     "@std/fs": "jsr:@std/fs@1.0.0",
     "@std/http": "jsr:@std/http@1.0.0",
-    "$fresh/": "https://deno.land/x/fresh@1.7.3/",
     "preact/jsx-runtime": "https://esm.sh/preact@10/jsx-runtime"
   }
 }

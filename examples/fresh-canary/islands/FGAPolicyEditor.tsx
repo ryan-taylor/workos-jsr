@@ -1,3 +1,5 @@
+/** @jsx h */
+import { h } from "preact";
 import { useComputed, useSignal } from '@preact/signals';
 import { useEffect, type useState } from 'preact/hooks';
 import { exampleModels } from '../utils/fga.ts';

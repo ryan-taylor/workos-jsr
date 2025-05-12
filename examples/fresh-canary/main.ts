@@ -1,22 +1,9 @@
-import { start } from "$fresh/server.ts";
-import manifest from "./fresh.gen.ts";
-import { wrapMw, makeRouter, getTailwindPlugin } from "@workos/fresh";
+import { App, fsRoutes, trailingSlashes } from "@fresh/core";
 
-// Create a router with proper routes array
-const router = await makeRouter([
-  {
-    pattern: "/",
-    handler: () => new Response("🏃 Fresh-canary alive"),
-  },
-]);
+export const app = new App({ root: import.meta.url })
+  .use(trailingSlashes("never"));
 
-await start(manifest, {
-  plugins: [getTailwindPlugin()],
-  router,
-  middleware: [
-    wrapMw({
-      apiKey: Deno.env.get("WORKOS_API_KEY") || "",
-      cookieName: "workos_session",
-    }),
-  ],
+await fsRoutes(app, {
+  loadIsland: (p) => import(`./islands/${p}`),
+  loadRoute: (p) => import(`./routes/${p}`),
 });

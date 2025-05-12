@@ -1,4 +1,6 @@
 // AuthStateDemo component demonstrates using custom auth hooks with Preact signals
+/** @jsx h */
+import { h, Fragment } from "preact";
 import { useAuthFunctions, useUserData } from '../utils/auth-hooks.ts';
 import type { WorkOSUser } from '../utils/user-management.ts';
 
@@ -127,7 +129,7 @@ export default function AuthStateDemo({ initialUser }: AuthStateDemoProps) {
             </button>
           )
           : (
-            <>
+            <Fragment>
               <button
                 onClick={handleRefresh}
                 className='refresh-button'
@@ -142,7 +144,7 @@ export default function AuthStateDemo({ initialUser }: AuthStateDemoProps) {
               >
                 {isLoggingOut.value ? 'Logging out...' : 'Log Out'}
               </button>
-            </>
+            </Fragment>
           )}
       </div>
 

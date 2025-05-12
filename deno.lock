@@ -2,11 +2,13 @@
   "version": "5",
   "specifiers": {
     "jsr:@luca/esbuild-deno-loader@0.11.0": "0.11.0",
+    "jsr:@std/assert@1.0.0": "1.0.0",
     "jsr:@std/bytes@^1.0.2": "1.0.5",
     "jsr:@std/crypto@1": "1.0.4",
     "jsr:@std/encoding@1": "1.0.10",
     "jsr:@std/encoding@^1.0.5": "1.0.10",
     "jsr:@std/http@1": "1.0.15",
+    "jsr:@std/internal@^1.0.1": "1.0.6",
     "jsr:@std/path@1": "1.0.9",
     "jsr:@std/path@^1.0.2": "1.0.9",
     "jsr:@std/path@^1.0.6": "1.0.9",
@@ -24,6 +26,12 @@
         "jsr:@std/path@^1.0.6"
       ]
     },
+    "@std/assert@1.0.0": {
+      "integrity": "0e4f6d873f7f35e2a1e6194ceee39686c996b9e5d134948e644d35d4c4df2008",
+      "dependencies": [
+        "jsr:@std/internal"
+      ]
+    },
     "@std/bytes@1.0.5": {
       "integrity": "4465dd739d7963d964c809202ebea6d5c6b8e3829ef25c6a224290fbb8a1021e"
     },
@@ -35,6 +43,9 @@
     },
     "@std/http@1.0.15": {
       "integrity": "435a4934b4e196e82a8233f724da525f7b7112f3566502f28815e94764c19159"
+    },
+    "@std/internal@1.0.6": {
+      "integrity": "9533b128f230f73bd209408bb07a4b12f8d4255ab2a4d22a1fd6d87304aca9a4"
     },
     "@std/path@1.0.9": {
       "integrity": "260a49f11edd3db93dd38350bf9cd1b4d1366afa98e81b86167b4e3dd750129e"
@@ -1195,6 +1206,8 @@
     "https://esm.sh/@babel/helper-validator-identifier@7.22.20/denonext/helper-validator-identifier.mjs": "f765fd69eb4fd81b839b76bf60f227caac4fe4d41b4c646cc08aa7b8d948fe17",
     "https://esm.sh/preact@10.19.3": "e665fa7cfbac33461e7ecf79f8b361a8f831b3e7edc8089d1f95e05fed6a8be1",
     "https://esm.sh/preact@10.19.3/debug": "18994c6286e5573744cb14c985f1de3a1e79aaba1cf518a8eae5550371dac4d9",
+    "https://esm.sh/preact@10.19.3/denonext/hooks.mjs": "d2909a69dced9dd62b62efda5ca42e16827cb23322808f59ddfe67d555426277",
+    "https://esm.sh/preact@10.19.3/denonext/preact.mjs": "050906b5fcc2e1703c3f58879378077191dbd58d5d415bcb8dcbc35c4fd0f5d9",
     "https://esm.sh/preact@10.19.3/hooks": "ec6d1409b12bce994ec7f0711b17e41424e339727af83fb471acc63952e35278",
     "https://esm.sh/preact@10.26.6": "f23abf40ff31cc8c6fc9d44c8f63534d980857ba8dab8086836fc221c9debd7f",
     "https://esm.sh/preact@10.26.6/debug": "204b29a82cbbc138ab50855f18fdb079c0fc14d5f1b0e69c7ac24b07a600bdb7",
@@ -1205,5 +1218,17 @@
     "https://esm.sh/preact@10.26.6/denonext/preact.mjs": "511c9320df24c3bf556d419071e8c9d68ca23457bcbe0d536d78257d824f8ab8",
     "https://esm.sh/preact@10.26.6/hooks": "b02cce517819be770243fd5235c73885a9dad4a626c7d76fb283789c40b3640c",
     "https://esm.sh/preact@10.26.6/jsx-runtime": "17cc5810e769b04e8de6b14c3e4dac361aab92c8fd49c0391237075b91d12564"
+  },
+  "workspace": {
+    "dependencies": [
+      "jsr:@fresh/core@2.0.0-alpha.29",
+      "jsr:@fresh/dev@2.0.0-alpha.29",
+      "jsr:@fresh/plugin-tailwindcss@2.0.0-alpha.29",
+      "jsr:@std/assert@1.0.0",
+      "jsr:@std/fs@1.0.0",
+      "jsr:@std/http@1.0.0",
+      "jsr:@std/path@1.0.0",
+      "jsr:@std/testing@1"
+    ]
   }
 }

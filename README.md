@@ -111,41 +111,11 @@ WORKOS_WEBHOOK_SECRET=your_workos_webhook_signing_secret
 For security in production, consider using a service like Doppler for secrets
 management rather than environment files.
 
-## Choosing the Fresh version
-
-This library supports both Fresh 1.x and Fresh 2.x (canary) through a
-compatibility layer. You can choose which version to use by setting the
-`DENO_FRESH_VERSION` environment variable:
-
-```bash
-# Use Fresh 1.x (default)
-export DENO_FRESH_VERSION=1
-deno task dev
-
-# Use Fresh 2.x (canary)
-export DENO_FRESH_VERSION=2
-deno task dev
-```
-
-The compatibility layer automatically selects the appropriate import maps and
-dependencies based on the Fresh version you choose. This allows you to:
-
-- Develop with either Fresh version
-- Test your code against both versions
-- Gradually migrate from Fresh 1.x to Fresh 2.x
-
-For more details on the compatibility layer and how to write code that works
-with both versions, see the [Fresh Migration Guide](docs/FRESH_MIGRATION.md).
-
-## Getting Started (Fresh 2.x)
+## Getting Started
 
 The quickest way to start a new project with WorkOS and Fresh 2.x:
 
 ```bash
-# Set Fresh version to 2.x
-export DENO_FRESH_VERSION=2
-
-# Start the development server
 deno task dev
 ```
 

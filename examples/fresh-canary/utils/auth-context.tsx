@@ -1,5 +1,6 @@
 // Authentication context using Preact's createContext with Signals
-import { createContext } from 'preact';
+/** @jsx h */
+import { createContext, h } from 'preact';
 import { computed, type ReadonlySignal, type Signal, signal } from '@preact/signals';
 import { useContext } from 'preact/hooks';
 import type { ComponentChildren } from 'preact';

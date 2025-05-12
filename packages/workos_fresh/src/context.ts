@@ -16,4 +16,11 @@ export interface FreshContext<
   state: State;
   data: Data;
   render: (data?: Data) => Promise<Response>;
+  workos?: {
+    sso: {
+      getAuthorizationURL: (options: { provider: string; redirectUri: string }) => string;
+    };
+    [key: string]: unknown;
+  };
+  next: () => Promise<Response>;
 }

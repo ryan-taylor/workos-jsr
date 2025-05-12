@@ -5,7 +5,9 @@
     "jsr:@std/bytes@^1.0.2": "1.0.5",
     "jsr:@std/crypto@1": "1.0.4",
     "jsr:@std/encoding@^1.0.5": "1.0.10",
+    "jsr:@std/fs@1.0.0": "1.0.0",
     "jsr:@std/http@1": "1.0.15",
+    "jsr:@std/path@1.0.0": "1.0.0",
     "jsr:@std/path@^1.0.2": "1.0.9",
     "jsr:@std/path@^1.0.6": "1.0.9",
     "npm:autoprefixer@10.4.17": "10.4.17_postcss@8.4.35",
@@ -31,8 +33,17 @@
     "@std/encoding@1.0.10": {
       "integrity": "8783c6384a2d13abd5e9e87a7ae0520a30e9f56aeeaa3bdf910a3eaaf5c811a1"
     },
+    "@std/fs@1.0.0": {
+      "integrity": "d72e4a125af7168d717a2ed1dca77a728b422b0d138fd20579e3fa41a77da943",
+      "dependencies": [
+        "jsr:@std/path@^1.0.2"
+      ]
+    },
     "@std/http@1.0.15": {
       "integrity": "435a4934b4e196e82a8233f724da525f7b7112f3566502f28815e94764c19159"
+    },
+    "@std/path@1.0.0": {
+      "integrity": "77fcb858b6e38777d1154df0f02245ba0b07e2c40ca3c0eec57c9233188c2d21"
     },
     "@std/path@1.0.9": {
       "integrity": "260a49f11edd3db93dd38350bf9cd1b4d1366afa98e81b86167b4e3dd750129e"

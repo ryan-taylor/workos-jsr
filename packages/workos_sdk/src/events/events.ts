@@ -1,6 +1,6 @@
 import { deserializeEvent } from "./serializers/event.serializer.ts";
 import { serializeListEventsOptions } from "./serializers/list-events-options.serializer.ts";
-import type { Event, EventsListOptions } from "./interfaces";
+import type { Event, EventsListOptions } from "./interfaces.ts";
 import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
 import type { List } from "../common/interfaces.ts";
 import type { WorkOS } from "../workos.ts";

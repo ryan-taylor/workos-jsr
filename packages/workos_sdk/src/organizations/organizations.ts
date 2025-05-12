@@ -6,7 +6,7 @@ import type {
   ListOrganizationsOptions,
   Organization,
   UpdateOrganizationOptions,
-} from "./interfaces";
+} from "./interfaces.ts";
 import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
 import type { WorkOS } from "../workos.ts";
 import type { List } from "../common/interfaces.ts";

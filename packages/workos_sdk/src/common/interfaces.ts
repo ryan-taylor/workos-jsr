@@ -10,6 +10,15 @@ export interface ApiResponse {
 
 // HTTP Request Options
 export interface CommonGetOptions {
+  /**
+   * Query string parameters sent with a GET request. Use this instead of the
+   * older `params` property (still supported for backward-compatibility).
+   */
+  query?: Record<string, string | number | boolean>;
+
+  /**
+   * @deprecated Use `query` instead.
+   */
   params?: Record<string, string | number | boolean>;
 }
 
@@ -72,3 +81,10 @@ export interface SerializedListEventOptions {
   [key: string]: string | number | boolean | undefined;
   events?: string;
 }
+
+// Backwards-compatibility aliases ------------------------------------------------
+
+/**
+ * @deprecated Use `CommonGetOptions` instead.
+ */
+export type GetOptions = CommonGetOptions;

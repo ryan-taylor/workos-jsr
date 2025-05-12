@@ -1,4 +1,4 @@
-import type { GenerateLinkOptions } from "../interfaces";
+import type { GenerateLinkOptions } from "../interfaces.ts";
 
 export function serializeGenerateLinkOptions(
   options: GenerateLinkOptions,

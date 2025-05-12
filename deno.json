@@ -4,6 +4,7 @@
     "lint": "deno lint --ignore=_reference/**",
     "check": "deno check mod.ts",
     "test": "deno test -A --ignore=_reference",
-    "dev": "cd examples/fresh-canary && deno task start"
+    "dev": "cd examples/fresh-canary && deno task start",
+    "rewrite-imports": "deno run -A scripts/rewrite-imports.ts"
   }
 }

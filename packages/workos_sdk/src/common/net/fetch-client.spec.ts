@@ -11,7 +11,7 @@ import {
   fetchURL,
   resetMockFetch,
   spy,
-} from "../../common/utils/test-utils.ts";
+} from "../utils/test-utils.ts";
 import { FetchHttpClient } from "./fetch-client.ts";
 
 const fetchClient = new FetchHttpClient("https://test.workos.com", {

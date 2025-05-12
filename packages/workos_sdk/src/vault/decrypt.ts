@@ -1,5 +1,5 @@
 import { crypto } from "jsr:@std/crypto@1";
-import { decodeUInt32 } from "../../common/utils/leb128.ts";
+import { decodeUInt32 } from "../common/utils/leb128.ts";
 
 export interface Decoded {
   iv: Uint8Array;

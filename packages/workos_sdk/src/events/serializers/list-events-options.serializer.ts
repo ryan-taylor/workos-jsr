@@ -1,4 +1,4 @@
-import type { EventsListOptions } from "../interfaces";
+import type { EventsListOptions } from "../interfaces.ts";
 
 export function serializeListEventsOptions(
   options: EventsListOptions,

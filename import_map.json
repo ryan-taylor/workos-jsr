@@ -16,7 +16,6 @@
     "preact/jsx-runtime": "https://esm.sh/preact@10/jsx-runtime",
     
     "workos": "./packages/workos_sdk/src/",
-    "workos/": "./packages/workos_sdk/src/",
-    "src/": "./packages/workos_sdk/src/"
+    "workos/": "./packages/workos_sdk/src/"
   }
 }

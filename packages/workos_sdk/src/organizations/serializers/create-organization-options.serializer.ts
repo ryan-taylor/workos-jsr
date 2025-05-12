@@ -1,4 +1,4 @@
-import type { CreateOrganizationOptions } from "../interfaces";
+import type { CreateOrganizationOptions } from "../interfaces.ts";
 
 export function serializeCreateOrganizationOptions(
   options: CreateOrganizationOptions,

@@ -9,9 +9,10 @@ import type {
 import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
 import type { WorkOS } from "../workos.ts";
 import type { GetOptions } from "../common/interfaces.ts";
+import type { List } from "../common/interfaces.ts";
 
 export class UserManagement {
-  constructor(private workos: WorkOS) {}
+  constructor(private workos: WorkOS, _sessionProvider?: unknown) {}
 
   async createUser(options: CreateUserOptions): Promise<User> {
     const requestOptions: GetOptions = {
@@ -25,7 +26,16 @@ export class UserManagement {
       undefined,
       requestOptions,
     );
-    return result.data[0];
+
+    if (result && typeof result === "object" && "data" in result) {
+      return (result as List<User>).data[0];
+    }
+
+    if (Array.isArray(result)) {
+      return result[0];
+    }
+
+    return result as User;
   }
 
   async getUser(id: string): Promise<User> {
@@ -34,7 +44,16 @@ export class UserManagement {
       `/user_management/users/${id}`,
       deserializeUser,
     );
-    return result.data[0];
+
+    if (result && typeof result === "object" && "data" in result) {
+      return (result as List<User>).data[0];
+    }
+
+    if (Array.isArray(result)) {
+      return result[0];
+    }
+
+    return result as User;
   }
 
   async authenticate(options: AuthenticateOptions): Promise<Session> {
@@ -49,7 +68,16 @@ export class UserManagement {
       undefined,
       requestOptions,
     );
-    return result.data[0];
+
+    if (result && typeof result === "object" && "data" in result) {
+      return (result as List<Session>).data[0];
+    }
+
+    if (Array.isArray(result)) {
+      return result[0];
+    }
+
+    return result as Session;
   }
 
   async getSession(id: string): Promise<Session> {
@@ -58,6 +86,15 @@ export class UserManagement {
       `/user_management/sessions/${id}`,
       deserializeSession,
     );
-    return result.data[0];
+
+    if (result && typeof result === "object" && "data" in result) {
+      return (result as List<Session>).data[0];
+    }
+
+    if (Array.isArray(result)) {
+      return result[0];
+    }
+
+    return result as Session;
   }
 }

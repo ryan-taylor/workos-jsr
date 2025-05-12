@@ -209,7 +209,7 @@ export class WorkOS {
    * @internal
    */
   createWebhookClient() {
-    return new Webhooks(new SubtleCryptoProvider());
+    return new Webhooks();
   }
 
   /**

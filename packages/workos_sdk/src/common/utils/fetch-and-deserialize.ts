@@ -20,8 +20,8 @@ export interface FetchAndDeserializeOptions<U> {
   deserializer: (item: unknown) => U;
   apiKey?: string;
   method?: "GET" | "POST" | "PUT" | "DELETE";
-  data?: Record<string, unknown>;
-  queryParams?: Record<string, string | number | boolean | undefined>;
+  data?: unknown;
+  queryParams?: Record<string, unknown>;
   workos?: WorkOS; // Optional for backward compatibility
 }
 
@@ -71,11 +71,15 @@ export async function fetchAndDeserialize<T, U>(
         
         // Single item response
         return deserializer(response.data);
+      } else if (method === "DELETE") {
+        // DELETE requests do not return a body in our SDK
+        await workos.delete(path);
+        return undefined as unknown as U;
       } else {
-        // Handle other methods (POST, PUT, DELETE)
-        const response = await workos[method.toLowerCase() as "post" | "put" | "delete"]<Record<string, unknown>>(
+        // Handle POST and PUT which return a JSON payload
+        const response = await workos[method.toLowerCase() as "post" | "put"]<Record<string, unknown>>(
           path,
-          { body: data }
+          data as Record<string, unknown>
         );
         return response.data ? deserializer(response.data) : undefined as unknown as U;
       }

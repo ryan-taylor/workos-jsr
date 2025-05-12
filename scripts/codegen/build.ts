@@ -3,6 +3,7 @@
 import { ensureDir, existsSync } from "https://deno.land/std/fs/mod.ts";
 import { basename, dirname, join } from "https://deno.land/std/path/mod.ts";
 import { getGenerator } from "./adapter.ts";
+import { postProcess } from "./postprocess/index.ts";
 
 /**
  * Find the latest OpenAPI spec file in the vendor directory.
@@ -131,8 +132,11 @@ async function generateCode(): Promise<void> {
       templates: "./scripts/codegen/templates",
     });
     
-    
     console.log("Code generation complete!");
+    
+    // Apply post-processing transforms
+    console.log("Applying post-processing transforms...");
+    await postProcess(outputDir);
     
     // Run type check on the generated code
     await typeCheckGeneratedCode(outputDir);

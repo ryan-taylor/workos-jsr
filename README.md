@@ -78,39 +78,6 @@ process is as follows:
 2. A tag is created matching the format `deno-vX.Y.Z`
 3. GitHub Actions publishes the package to JSR when a new tag is pushed
 
-## Node.js Compatibility
-
-While this library is primarily designed for Deno environments, we maintain a
-Node.js-compatible distribution for users who:
-
-- Are in the process of migrating from Node.js to Deno
-- Need to use the SDK in both Node.js and Deno environments
-- Prefer to use npm as their package manager
-
-### Using the npm Package
-
-To use the SDK from npm in a Node.js project:
-
-```js
-// ESM import
-import { WorkOS } from "@ryantaylor/workos";
-
-// CommonJS require
-const { WorkOS } = require("@ryantaylor/workos");
-```
-
-### Building the Node.js Distribution
-
-To build the Node.js distribution locally:
-
-```bash
-# Build the Node.js distribution
-deno task npm:build
-```
-
-This will create a `dist` directory containing the Node.js-compatible files and
-a package.json file.
-
 ## Configuration
 
 ### Deno/Fresh Configuration

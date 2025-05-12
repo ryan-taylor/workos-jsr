@@ -2,10 +2,13 @@ import { start } from "$fresh/server.ts";
 import manifest from "./fresh.gen.ts";
 import { wrapMw, makeRouter, getTailwindPlugin } from "@workos/fresh";
 
-const router = makeRouter({
-  apiKey: Deno.env.get("WORKOS_API_KEY") || "",
-  cookieName: "workos_session",
-});
+// Create a router with proper routes array
+const router = await makeRouter([
+  {
+    pattern: "/",
+    handler: () => new Response("🏃 Fresh-canary alive"),
+  },
+]);
 
 await start(manifest, {
   plugins: [getTailwindPlugin()],

@@ -1,9 +1,11 @@
 import { deserializeUser } from "./serializers/user.serializer.ts";
 import { deserializeSession } from "./serializers/session.serializer.ts";
+import { deserializeSessionAuth } from "./serializers/session-auth.serializer.ts";
 import type {
   AuthenticateOptions,
   CreateUserOptions,
   Session,
+  SessionAuth,
   User,
 } from "./interfaces/index.ts";
 import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
@@ -46,27 +48,11 @@ export class UserManagement {
    * @returns Promise resolving to the created User
    */
   async createUser(options: CreateUserOptions): Promise<User> {
-    const requestOptions: GetOptions = {
-      params: options as unknown as Record<string, string | number | boolean>,
-    };
-
-    const result = await fetchAndDeserialize(
-      this.workos,
+    const response = await this.workos.post<User>(
       "/user_management/users",
-      deserializeUser,
-      undefined,
-      requestOptions,
+      options,
     );
-
-    if (result && typeof result === "object" && "data" in result) {
-      return (result as List<User>).data[0];
-    }
-
-    if (Array.isArray(result)) {
-      return result[0];
-    }
-
-    return result as User;
+    return response.data;
   }
 
   /**
@@ -99,28 +85,19 @@ export class UserManagement {
    * @param options - Configuration options for authentication
    * @returns Promise resolving to a Session object
    */
-  async authenticate(options: AuthenticateOptions): Promise<Session> {
-    const requestOptions: GetOptions = {
-      params: options as unknown as Record<string, string | number | boolean>,
-    };
-
-    const result = await fetchAndDeserialize(
-      this.workos,
+  /**
+   * Authenticates a user with credentials.
+   *
+   * @param options - Configuration options for authentication
+   * @returns Promise resolving to a SessionAuth object
+   */
+  async authenticate(options: AuthenticateOptions): Promise<SessionAuth> {
+    const response = await this.workos.post<Record<string, unknown>>(
       "/user_management/authenticate",
-      deserializeSession,
-      undefined,
-      requestOptions,
+      options,
     );
-
-    if (result && typeof result === "object" && "data" in result) {
-      return (result as List<Session>).data[0];
-    }
-
-    if (Array.isArray(result)) {
-      return result[0];
-    }
-
-    return result as Session;
+    
+    return deserializeSessionAuth(response.data as Record<string, unknown>);
   }
 
   /**
@@ -145,5 +122,51 @@ export class UserManagement {
     }
 
     return result as Session;
+  }
+
+  /**
+   * Lists users with optional pagination filters.
+   */
+  /**
+   * Lists users with optional pagination filters.
+   *
+   * @param query - Optional query parameters for filtering
+   * @returns Promise resolving to a paginated List of Users
+   */
+  async listUsers(query: Record<string, unknown> = {}): Promise<List<User>> {
+    const requestOptions: GetOptions = { query } as unknown as GetOptions;
+    return await fetchAndDeserialize(
+      this.workos,
+      "/user_management/users",
+      deserializeUser,
+      undefined,
+      requestOptions,
+    ) as List<User>;
+  }
+
+  /**
+   * Alias kept for tests: authenticateWithPassword
+   */
+  /**
+   * Authenticates a user with password credentials.
+   *
+   * @param options - Authentication options including email and password
+   * @returns Promise resolving to a SessionAuth object
+   */
+  async authenticateWithPassword(options: AuthenticateOptions): Promise<SessionAuth> {
+    return await this.authenticate(options);
+  }
+
+  /**
+   * Revokes a session by ID.
+   */
+  /**
+   * Revokes a user session by ID.
+   *
+   * @param params - Object containing the sessionId to revoke
+   * @returns Promise that resolves when the session is successfully revoked
+   */
+  async revokeSession({ sessionId }: { sessionId: string }): Promise<void> {
+    await this.workos.post(`/user_management/sessions/${sessionId}/revoke`, null);
   }
 }

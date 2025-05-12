@@ -178,10 +178,24 @@ export type SecurityStrategyRegistry = {
 };
 
 /**
+ * Security strategy map for storing strategy implementations by auth scheme
+ *
+ * This map is strictly typed with SupportedAuthScheme keys, ensuring:
+ * - Only valid auth schemes defined in the spec can be used as keys
+ * - Type safety is enforced at compile time
+ * - Error messages will show valid schemes when invalid ones are attempted
+ *
+ * The keys are constrained to the SupportedAuthScheme union type.
+ */
+export type SecurityStrategyMap = {
+  [S in SupportedAuthScheme]?: SecurityStrategy<S>;
+};
+
+/**
  * Global registry of security strategies
  * This can be extended by registering new strategies
  */
-export const securityRegistry: SecurityStrategyRegistry = {};
+export const securityRegistry: SecurityStrategyMap = {};
 
 /**
  * Register a security strategy in the global registry
@@ -205,6 +219,12 @@ export function getSecurityStrategy<S extends SupportedAuthScheme>(
 ): SecurityStrategy<S> | undefined {
   return securityRegistry[scheme] as SecurityStrategy<S> | undefined;
 }
+
+/**
+ * For backward compatibility - alias to SecurityStrategyMap
+ * @deprecated Use SecurityStrategyMap instead
+ */
+export type { SecurityStrategyRegistry as DeprecatedSecurityStrategyRegistry };
 
 /**
  * API Key security strategy implementation

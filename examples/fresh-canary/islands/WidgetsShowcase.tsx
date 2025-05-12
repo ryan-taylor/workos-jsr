@@ -1,6 +1,8 @@
 // Widgets Showcase island - Interactive component for demonstrating WorkOS widgets
+/** @jsx h */
+import { h } from "preact";
 import { useState } from 'preact/hooks';
-import { IS_BROWSER } from '$fresh/runtime.ts';
+import { IS_BROWSER } from 'https://deno.land/x/fresh@1.6.5/runtime.ts';
 
 // Define the widget types we'll support
 enum WidgetType {

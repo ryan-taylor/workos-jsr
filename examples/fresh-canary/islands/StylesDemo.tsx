@@ -1,6 +1,8 @@
 // StylesDemo component demonstrates various styling techniques in Fresh
+/** @jsx h */
+import { h } from "preact";
 import { useEffect, useState } from 'preact/hooks';
-import { IS_BROWSER } from '$fresh/runtime.ts';
+import { IS_BROWSER } from 'https://deno.land/x/fresh@1.6.5/runtime.ts';
 
 // Component Props Interface
 interface StylesDemoProps {
@@ -73,11 +75,11 @@ export default function StylesDemo({ initialColor = '#635bff' }: StylesDemoProps
   };
 
   return (
-    <div style={containerStyle} className='styles-demo'>
-      <div className='hydration-status'>
+    <div style={containerStyle} class='styles-demo'>
+      <div class='hydration-status'>
         <p>
           <strong>Component Status:</strong>{' '}
-          <span className={isHydrated ? 'hydrated' : 'not-hydrated'}>
+          <span class={isHydrated ? 'hydrated' : 'not-hydrated'}>
             {isHydrated ? 'Hydrated ✅' : 'Not Hydrated ⏳'}
           </span>
         </p>
@@ -86,36 +88,36 @@ export default function StylesDemo({ initialColor = '#635bff' }: StylesDemoProps
       <h2>Scoped Component Styling Demo</h2>
 
       {/* Scoped styling demonstration */}
-      <section className='demo-section'>
+      <section class='demo-section'>
         <h3>1. Scoped Styling</h3>
-        <p className='explanation'>
+        <p class='explanation'>
           This component uses scoped styling that doesn't affect other parts of the application. Each section has its own styles that are applied only
           to elements within this component.
         </p>
-        <div className='scoped-example'>
+        <div class='scoped-example'>
           <p>This content has scoped styles applied.</p>
         </div>
       </section>
 
       {/* SSR and CSR consistent styling demonstration */}
-      <section className='demo-section'>
+      <section class='demo-section'>
         <h3>2. SSR & CSR Consistent Styling</h3>
-        <p className='explanation'>
+        <p class='explanation'>
           The styling is consistent between server-side rendering and client-side hydration. There are no style flashes or layout shifts when the
           component hydrates.
         </p>
-        <div className='ssr-csr-example'>
+        <div class='ssr-csr-example'>
           <p>This content looks the same before and after hydration.</p>
-          <div className='ssr-csr-box'>
+          <div class='ssr-csr-box'>
             <span>Consistent Styling</span>
           </div>
         </div>
       </section>
 
       {/* Dynamic styling based on state demonstration */}
-      <section className='demo-section'>
+      <section class='demo-section'>
         <h3>3. Dynamic Styling</h3>
-        <p className='explanation'>
+        <p class='explanation'>
           This demonstrates dynamic styling that changes based on component state. Try clicking the buttons below to see how the styling updates.
         </p>
 
@@ -123,7 +125,7 @@ export default function StylesDemo({ initialColor = '#635bff' }: StylesDemoProps
           This text has dynamic styling applied!
         </p>
 
-        <div className='controls'>
+        <div class='controls'>
           <button
             style={buttonStyle}
             onClick={generateRandomColor}
@@ -159,14 +161,14 @@ export default function StylesDemo({ initialColor = '#635bff' }: StylesDemoProps
       </section>
 
       {/* CSS Variables demonstration */}
-      <section className='demo-section'>
+      <section class='demo-section'>
         <h3>4. CSS Variables</h3>
-        <p className='explanation'>
+        <p class='explanation'>
           Using CSS variables from the global stylesheet for consistency across the application.
         </p>
-        <div className='variables-example'>
-          <button className='primary-button'>Primary Color Button</button>
-          <button className='secondary-button'>Secondary Color Button</button>
+        <div class='variables-example'>
+          <button class='primary-button'>Primary Color Button</button>
+          <button class='secondary-button'>Secondary Color Button</button>
         </div>
       </section>
     </div>

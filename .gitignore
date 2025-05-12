@@ -32,7 +32,9 @@ cov/
 
 # Examples, reference and docs
 _reference/
-examples/
+examples/node-*
+examples/**/node_modules
+# Keep examples/fresh-canary tracked
 docs/ui/
 tests_deno/
 src/fga/

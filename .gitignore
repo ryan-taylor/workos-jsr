@@ -48,3 +48,7 @@ docs/ui/
 yarn.lock
 .sailplane/
 .eslintcache
+
+# oasdiff binary and temp files
+.tools/bin/
+.tmp/openapi-diffs/

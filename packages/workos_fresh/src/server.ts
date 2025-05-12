@@ -28,8 +28,8 @@ export async function getFreshServerModule(): Promise<
     try {
       // At runtime, this will use the correct import map based on the DENO_FRESH_VERSION
       // TypeScript will show an error, but it will work at runtime
-      const modulePath = "@fresh/core";
-      return await import(modulePath) as Fresh2.ServerModule;
+      // Use direct string import instead of URL construction for better analyzability
+      return await import("@fresh/core") as Fresh2.ServerModule;
     } catch (error) {
       console.error("Error importing Fresh 2.x server module:", error);
       throw error;

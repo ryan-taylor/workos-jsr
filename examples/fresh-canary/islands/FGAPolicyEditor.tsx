@@ -133,7 +133,7 @@ export default function FGAPolicyEditor() {
     }
 
     // Check if name already exists
-    if (modelData.value.objectTypes.some((ot) => ot.name === newObjectType.value.name)) {
+    if (modelData.value.objectTypes.some((ot: ObjectType) => ot.name === newObjectType.value.name)) {
       validationError.value = `Object type '${newObjectType.value.name}' already exists`;
       return;
     }
@@ -163,8 +163,8 @@ export default function FGAPolicyEditor() {
     }
 
     // Check if source and target exist
-    const sourceExists = modelData.value.objectTypes.some((ot) => ot.name === newRelationship.value.source);
-    const targetExists = modelData.value.objectTypes.some((ot) => ot.name === newRelationship.value.target);
+    const sourceExists = modelData.value.objectTypes.some((ot: ObjectType) => ot.name === newRelationship.value.source);
+    const targetExists = modelData.value.objectTypes.some((ot: ObjectType) => ot.name === newRelationship.value.target);
 
     if (!sourceExists) {
       validationError.value = `Source type '${newRelationship.value.source}' doesn't exist`;
@@ -201,7 +201,7 @@ export default function FGAPolicyEditor() {
 
     // Check if any relationships use this object type
     const isUsed = modelData.value.relationships.some(
-      (rel) => rel.source === objectType.name || rel.target === objectType.name,
+      (rel: Relationship) => rel.source === objectType.name || rel.target === objectType.name,
     );
 
     if (isUsed) {
@@ -301,7 +301,7 @@ export default function FGAPolicyEditor() {
             <p class='text-sm text-gray-600 mb-4'>Define the types of objects in your authorization model</p>
 
             <div class='object-types-list mb-4'>
-              {modelData.value.objectTypes.map((objectType, index) => (
+              {modelData.value.objectTypes.map((objectType: ObjectType, index: number) => (
                 <ObjectTypeItem
                   key={objectType.name}
                   objectType={objectType}
@@ -353,7 +353,7 @@ export default function FGAPolicyEditor() {
             <p class='text-sm text-gray-600 mb-4'>Define the relationships between object types</p>
 
             <div class='relationships-list mb-4'>
-              {modelData.value.relationships.map((relationship, index) => (
+              {modelData.value.relationships.map((relationship: Relationship, index: number) => (
                 <RelationshipItem
                   key={`${relationship.source}-${relationship.relation}-${relationship.target}`}
                   relationship={relationship}
@@ -379,7 +379,7 @@ export default function FGAPolicyEditor() {
                     onChange={(e) => newRelationship.value = { ...newRelationship.value, source: (e.target as HTMLSelectElement).value }}
                   >
                     <option value=''>Select source</option>
-                    {modelData.value.objectTypes.map((ot) => <option key={ot.name} value={ot.name}>{ot.name}</option>)}
+                    {modelData.value.objectTypes.map((ot: ObjectType) => <option key={ot.name} value={ot.name}>{ot.name}</option>)}
                   </select>
                 </div>
                 <div>
@@ -400,7 +400,7 @@ export default function FGAPolicyEditor() {
                     onChange={(e) => newRelationship.value = { ...newRelationship.value, target: (e.target as HTMLSelectElement).value }}
                   >
                     <option value=''>Select target</option>
-                    {modelData.value.objectTypes.map((ot) => <option key={ot.name} value={ot.name}>{ot.name}</option>)}
+                    {modelData.value.objectTypes.map((ot: ObjectType) => <option key={ot.name} value={ot.name}>{ot.name}</option>)}
                   </select>
                 </div>
               </div>

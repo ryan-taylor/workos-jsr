@@ -2,7 +2,7 @@
 /** @jsx h */
 import { h } from "preact";
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { IS_BROWSER } from '$fresh/runtime.ts';
+import { IS_BROWSER } from 'https://deno.land/x/fresh@1.6.5/runtime.ts';
 
 interface HydrationDemoProps {
   initialServerTime?: string;

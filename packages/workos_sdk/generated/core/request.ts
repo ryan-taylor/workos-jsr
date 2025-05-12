@@ -2,6 +2,7 @@
  * HTTP Request interface
  * Common types used for API requests
  */
+import type { SupportedAuthScheme } from "./auth-schemes.ts";
 import { SecurityScheme, RequestLike } from "./security.ts";
 import { RequestOptions, applySecurityToRequest } from "./request-options.ts";
 
@@ -52,7 +53,7 @@ export interface ApiRequestConfig {
   headers?: Record<string, string>;
   
   /** Default security scheme to use */
-  defaultSecurityScheme?: SecurityScheme;
+  defaultSecurityScheme?: SupportedAuthScheme;
   
   /** Timeout in milliseconds */
   timeout?: number;
@@ -65,7 +66,7 @@ export interface ApiRequestConfig {
  * @param options The request options to apply
  * @returns The modified request parameters
  */
-export function applyRequestOptions<S extends SecurityScheme>(
+export function applyRequestOptions<S extends SupportedAuthScheme>(
   params: RequestParameters,
   options?: RequestOptions<S>
 ): RequestParameters {

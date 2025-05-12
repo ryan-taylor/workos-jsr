@@ -3,6 +3,15 @@
  * This file defines the abstraction layer for different security schemes
  */
 
+import type {
+  SupportedAuthScheme,
+  HttpAuthScheme,
+  ApiKeyLocation,
+  OAuth2Flow
+} from "./auth-schemes.ts";
+
+// Re-export types from auth-schemes.ts
+export type { SupportedAuthScheme, HttpAuthScheme, ApiKeyLocation, OAuth2Flow } from "./auth-schemes.ts";
 /**
  * Interface representing a request object with headers and query parameters
  */
@@ -13,22 +22,17 @@ export interface RequestLike {
 }
 
 /**
- * Supported security schemes
- * These can be extended in the future to support additional schemes
+ * @deprecated Use SupportedAuthScheme from auth-schemes.ts instead
+ * This alias is maintained for backward compatibility
  */
-export type SecurityScheme = 
-  | "apiKey" 
-  | "http" 
-  | "oauth2" 
-  | "openIdConnect"
-  | "mutualTLS";
+export type SecurityScheme = SupportedAuthScheme;
 
 /**
  * Interface for security strategy implementations
  * Each security scheme should implement this interface to apply
  * authentication to requests
  */
-export interface SecurityStrategy<S extends SecurityScheme = SecurityScheme> {
+export interface SecurityStrategy<S extends SupportedAuthScheme = SupportedAuthScheme> {
   /**
    * The type of security scheme this strategy handles
    */
@@ -71,7 +75,7 @@ export interface ApiKeySecurityOptions extends BaseSecurityOptions {
   /**
    * Where to place the API key (header, query, cookie)
    */
-  in?: "header" | "query" | "cookie";
+  in?: ApiKeyLocation;
   
   /**
    * The name of the parameter to use
@@ -86,7 +90,7 @@ export interface HttpSecurityOptions extends BaseSecurityOptions {
   /**
    * The HTTP authentication scheme (basic, bearer, etc.)
    */
-  scheme: "basic" | "bearer" | "digest" | string;
+  scheme: HttpAuthScheme;
   
   /**
    * The authentication credentials
@@ -157,7 +161,7 @@ export interface MutualTLSSecurityOptions extends BaseSecurityOptions {
 /**
  * Type mapping for security options based on scheme
  */
-export type SecurityOptions<S extends SecurityScheme> = 
+export type SecurityOptions<S extends SupportedAuthScheme> =
   S extends "apiKey" ? ApiKeySecurityOptions :
   S extends "http" ? HttpSecurityOptions :
   S extends "oauth2" ? OAuth2SecurityOptions :
@@ -170,7 +174,7 @@ export type SecurityOptions<S extends SecurityScheme> =
  * Maps security scheme types to their implementations
  */
 export type SecurityStrategyRegistry = {
-  [S in SecurityScheme]?: SecurityStrategy<S>;
+  [S in SupportedAuthScheme]?: SecurityStrategy<S>;
 };
 
 /**
@@ -184,7 +188,7 @@ export const securityRegistry: SecurityStrategyRegistry = {};
  *
  * @param strategy The security strategy to register
  */
-export function registerSecurityStrategy<S extends SecurityScheme>(
+export function registerSecurityStrategy<S extends SupportedAuthScheme>(
   strategy: SecurityStrategy<S>
 ): void {
   (securityRegistry[strategy.scheme] as SecurityStrategy<S> | undefined) = strategy;
@@ -196,7 +200,7 @@ export function registerSecurityStrategy<S extends SecurityScheme>(
  * @param scheme The security scheme to get a strategy for
  * @returns The registered strategy, or undefined if none exists
  */
-export function getSecurityStrategy<S extends SecurityScheme>(
+export function getSecurityStrategy<S extends SupportedAuthScheme>(
   scheme: S
 ): SecurityStrategy<S> | undefined {
   return securityRegistry[scheme] as SecurityStrategy<S> | undefined;

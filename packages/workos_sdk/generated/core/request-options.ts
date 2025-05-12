@@ -3,13 +3,19 @@
  * This file defines the request options interface that supports different security schemes
  */
 
-import { SecurityScheme, SecurityOptions, SecurityStrategy, getSecurityStrategy } from "./security.ts";
+import type { SupportedAuthScheme } from "./auth-schemes.ts";
+import {
+  SecurityOptions,
+  SecurityStrategy,
+  getSecurityStrategy,
+  SecurityScheme
+} from "./security.ts";
 
 /**
  * Request options interface that supports different security schemes
  * This interface is generic and can be specialized for different security schemes
  */
-export interface RequestOptions<S extends SecurityScheme = "apiKey"> {
+export interface RequestOptions<S extends SupportedAuthScheme = "apiKey"> {
   /**
    * The security scheme to use for this request
    */
@@ -78,7 +84,7 @@ export interface RequestOptions<S extends SecurityScheme = "apiKey"> {
  * @param options The request options containing security configuration
  * @returns The request with security applied
  */
-export function applySecurityToRequest<S extends SecurityScheme>(
+export function applySecurityToRequest<S extends SupportedAuthScheme>(
   request: Record<string, unknown>,
   options: RequestOptions<S>
 ): Record<string, unknown> {

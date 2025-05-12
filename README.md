@@ -8,7 +8,7 @@
 
 This package is a fork of [workos-inc/workos-node](https://github.com/workos-inc/workos-node) adapted specifically for Deno and JSR. We maintain our own development path focused on Deno compatibility while tracking the upstream for reference only.
 
-Our versioning does not directly correspond to the official WorkOS SDK - we follow semantic versioning for our Deno-specific implementation.
+Our versioning does not directly correspond to the official WorkOS SDK - we follow semantic versioning for our Deno-specific implementation. See [VERSION.md](VERSION.md) for details.
 
 ## Overview
 
@@ -19,8 +19,8 @@ provided for Fresh 2.x (canary).
 
 ## Documentation
 
-See the [API Reference](https://workos.com/docs/reference/client-libraries) for
-usage examples.
+See the [WorkOS API Reference](https://workos.com/docs/reference/client-libraries) for
+API reference, while our implementation details may differ to optimize for Deno.
 
 ## Requirements
 
@@ -34,7 +34,7 @@ usage examples.
 For Deno and Fresh applications, you can import directly from JSR:
 
 ```ts
-import { WorkOS } from "@ryantaylor/workos";
+import { WorkOS } from "jsr:@ryantaylor/workos@^0.1.0";
 ```
 
 Or add to your `deno.json` imports:
@@ -42,7 +42,7 @@ Or add to your `deno.json` imports:
 ```json
 {
   "imports": {
-    "@ryantaylor/workos": "jsr:@ryantaylor/workos@^0.1.0-alpha"
+    "@ryantaylor/workos": "jsr:@ryantaylor/workos@^0.1.0"
   }
 }
 ```
@@ -59,33 +59,24 @@ To use the SDK from JSR in a Deno project:
 
 ```ts
 // Direct import
-import { WorkOS } from "jsr:@ryantaylor/workos@^0.1.0-alpha";
+import { WorkOS } from "jsr:@ryantaylor/workos@^0.1.0";
 
 // Or in your deno.json
 // {
 //   "imports": {
-//     "@ryantaylor/workos": "jsr:@ryantaylor/workos@^0.1.0-alpha"
+//     "@ryantaylor/workos": "jsr:@ryantaylor/workos@^0.1.0"
 //   }
 // }
 ```
 
 ### JSR Publishing Process
 
-The WorkOS SDK is published to JSR automatically through GitHub Actions. The
+The Deno SDK is published to JSR automatically through GitHub Actions. The
 process is as follows:
 
-1. Version is updated in `package.json` using semantic versioning
-2. A tag is created matching the version
+1. Version is updated in `jsr.json` using semantic versioning
+2. A tag is created matching the format `deno-vX.Y.Z`
 3. GitHub Actions publishes the package to JSR when a new tag is pushed
-
-### Version Management for JSR Releases
-
-The version is kept in sync between npm and JSR. The package follows semantic
-versioning:
-
-- **Major Version (X.0.0)**: Breaking changes
-- **Minor Version (0.X.0)**: New features without breaking changes
-- **Patch Version (0.0.X)**: Bug fixes and minor updates
 
 ## Node.js Compatibility
 
@@ -431,10 +422,10 @@ in goes from Beta to stable so that you can move to using the stable version.
 
 ## Testing Coverage
 
-[![Coverage Status](https://codecov.io/gh/workos/workos-node/branch/main/graph/badge.svg)](https://codecov.io/gh/workos/workos-node)
+[![Coverage Status](https://codecov.io/gh/ryan-taylor/workos-jsr/branch/main/graph/badge.svg)](https://codecov.io/gh/ryan-taylor/workos-jsr)
 
-This library maintains 100% test coverage as a quality standard. All code
-changes must include appropriate test coverage.
+This library aims to maintain comprehensive test coverage as a quality standard.
+All code changes should include appropriate test coverage.
 
 ### Running Coverage Tests Locally
 
@@ -455,7 +446,7 @@ deno coverage coverage --lcov --output=coverage/lcov.info
 
 The testing strategy follows these principles:
 
-1. **Unit Testing**: All public methods and functionality must have
+1. **Unit Testing**: All public methods and functionality should have
    comprehensive unit tests.
 2. **Mocking Strategy**: HTTP requests are mocked using utility functions found
    in `tests/utils.ts`, which provide various mock client implementations:
@@ -464,19 +455,17 @@ The testing strategy follows these principles:
    - `createNetworkErrorMockClient`: For testing network failures
    - `createCapturingMockClient`: For capturing and inspecting requests
 
-3. **Coverage Verification**: GitHub workflow automatically verifies that 100%
-   coverage is maintained on all pull requests.
+3. **Coverage Verification**: GitHub workflow automatically verifies test coverage
+   is maintained on all pull requests.
 
 ## Contributing
 
-We welcome contributions to the WorkOS Node.js library! Please check out our
+We welcome contributions to the Deno/JSR port of WorkOS! Please check out our
 [contributing guidelines](CONTRIBUTING.md) for details on our commit message
 conventions and how to submit pull requests.
 
 ## More Information
 
-- [Single Sign-On Guide](https://workos.com/docs/sso/guide)
-- [Directory Sync Guide](https://workos.com/docs/directory-sync/guide)
-- [Admin Portal Guide](https://workos.com/docs/admin-portal/guide)
-- [Magic Link Guide](https://workos.com/docs/magic-link/guide)
-- [Domain Verification Guide](https://workos.com/docs/domain-verification/guide)
+- [WorkOS Documentation](https://workos.com/docs)
+- [Our Version Policy](VERSION.md)
+- [Our Changelog](CHANGELOG.md)

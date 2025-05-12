@@ -1,6 +1,10 @@
 MIT License
 
-Copyright (c) 2025 Ryan Taylor
+Copyright (c) 2023-2025 Ryan Taylor
+Portions Copyright (c) 2019-2023 WorkOS
+
+This Deno/JSR port is based on code from the WorkOS Node.js SDK,
+available at: https://github.com/workos-inc/workos-node
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

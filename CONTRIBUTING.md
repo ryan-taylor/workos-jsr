@@ -1,7 +1,17 @@
 # Contributing to @ryantaylor/workos
 
-Thank you for considering contributing to @ryantaylor/workos! This document
+Thank you for considering contributing to the Deno/JSR port of WorkOS! This document
 outlines the standards and processes we follow for this project.
+
+## Deno-First Development
+
+This project is a Deno-first adaptation of the WorkOS SDK. When contributing, please:
+
+1. Prioritize Deno and Fresh compatibility
+2. Use Deno-native approaches where possible
+3. Maintain TypeScript strictness
+4. Test against both Fresh 1.x and 2.x if applicable
+5. Document Deno-specific usage patterns
 
 ## Commit Message Convention
 
@@ -102,9 +112,9 @@ chore: update dependencies to latest versions
 All quality gates are enforced through GitHub Actions:
 
 1. **Lint, Type-Check & Test**: Every push and pull request triggers automatic:
-   - Deno linting
-   - Type checking
-   - Unit & integration tests
+   - Deno linting and formatting
+   - Type checking with strict TypeScript settings
+   - Unit & integration tests for Deno environments
 
 2. **Commit Message Format**: All commits are automatically checked against the
    Conventional Commits specification using commitlint.
@@ -117,7 +127,8 @@ Conventional Commits specification described above.
 
 ## Pull Request Process
 
-1. Ensure your code maintains 100% test coverage
-2. Update documentation if necessary
-3. Make sure all GitHub Actions checks pass
-4. Submit your pull request with a detailed description of your changes
+1. Ensure your code maintains comprehensive test coverage
+2. Verify compatibility with Deno and Fresh
+3. Update documentation if necessary
+4. Make sure all GitHub Actions checks pass
+5. Submit your pull request with a detailed description of your changes

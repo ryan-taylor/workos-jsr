@@ -80,7 +80,10 @@ export function addProcessedChecksumToSpec(
     // Parse the spec
     const spec = JSON.parse(specContent);
     
-    // Add the post-processed checksum as a custom extension
+    // Add the post-processed checksum as the standardized field name
+    spec["x-spec-content-sha"] = processedChecksum;
+    
+    // Also maintain the legacy field for backward compatibility
     spec["x-spec-processed-checksum"] = processedChecksum;
     
     // Return the updated spec
@@ -107,7 +110,10 @@ export async function processSpec(specPath: string): Promise<{
     const originalSpec = JSON.parse(originalContent);
     
     // Get the original raw checksum if it exists
-    const rawChecksum = originalSpec["x-spec-checksum"] || "";
+    // Try the new standardized field name first, then fall back to the legacy name
+    const rawChecksum = originalSpec["x-spec-content-sha"] ||
+      originalSpec["x-spec-checksum"] ||
+      "";
     
     // Process the spec and generate a checksum
     const { content: processedContent, checksum: processedChecksum } = 
@@ -119,7 +125,7 @@ export async function processSpec(specPath: string): Promise<{
     // Write the updated spec back to the file
     await Deno.writeTextFile(specPath, updatedContent);
     
-    console.log(`Updated spec with post-processed checksum: ${processedChecksum}`);
+    console.log(`Updated spec with content SHA checksum: ${processedChecksum}`);
     
     return {
       specPath,
@@ -148,7 +154,7 @@ if (import.meta.main) {
     console.log(`
 Spec file: ${result.specPath}
 Raw checksum: ${result.rawChecksum}
-Post-processed checksum: ${result.processedChecksum}
+Content SHA checksum: ${result.processedChecksum}
     `);
     
     Deno.exit(0);

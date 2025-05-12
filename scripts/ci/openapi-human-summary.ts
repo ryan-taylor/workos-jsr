@@ -26,13 +26,16 @@ import { parse } from "https://deno.land/std/flags/mod.ts";
 import { join, basename, dirname } from "https://deno.land/std/path/mod.ts";
 import { exists, ensureDir } from "https://deno.land/std/fs/mod.ts";
 import { expandGlob } from "https://deno.land/std/fs/mod.ts";
-import { 
-  ensureOasdiffInstalled, 
+import {
+  ensureOasdiffInstalled,
   runOasdiff
 } from "./openapi-diff.ts";
 import {
   generateSummary
 } from "./fixed-summary-generator.ts";
+import {
+  generatePRCommentJSON
+} from "./openapi-json-pr.ts";
 
 /**
  * Parse command line arguments
@@ -40,7 +43,7 @@ import {
 function parseArgs() {
   const flags = parse(Deno.args, {
     boolean: ["help", "post-comment"],
-    string: ["base", "revision", "spec-dir", "pattern", "output-file", "format"],
+    string: ["base", "revision", "spec-dir", "pattern", "output-file", "format", "pr-json"],
     alias: {
       h: "help",
       b: "base",
@@ -48,14 +51,16 @@ function parseArgs() {
       d: "spec-dir",
       p: "pattern",
       o: "output-file",
-      f: "format"
+      f: "format",
+      j: "pr-json"
     },
     default: {
       help: false,
       "post-comment": false,
       "spec-dir": "vendor/openapi",
       "pattern": "workos-*.json",
-      "format": "md"
+      "format": "md",
+      "pr-json": ""
     },
   });
 
@@ -71,7 +76,8 @@ function parseArgs() {
     pattern: flags.pattern,
     outputFile: flags["output-file"],
     format: flags.format,
-    postComment: flags["post-comment"]
+    postComment: flags["post-comment"],
+    prJsonFile: flags["pr-json"]
   };
 }
 
@@ -97,6 +103,7 @@ Options:
   --pattern=<glob>     Glob pattern to match spec files (default: workos-*.json)
   --output-file=<file> Write output to file instead of stdout
   --format=<format>    Output format: md, html (default: md)
+  --pr-json=<file>     Generate JSON output formatted for PR comments
   --post-comment       Post results as a GitHub comment
   --help               Show help information
 
@@ -167,7 +174,8 @@ async function main() {
       pattern,
       outputFile,
       format,
-      postComment
+      postComment,
+      prJsonFile
     } = parseArgs();
     
     // Ensure oasdiff binary is installed
@@ -229,6 +237,13 @@ async function main() {
     // Generate human-readable summary
     console.log(`\nGenerating human-readable summary...`);
     const summaryOutput = await generateSummary(jsonOutputPath, outputFile, format);
+    
+    // Generate PR JSON output if requested
+    if (prJsonFile) {
+      console.log(`\nGenerating PR comment JSON format...`);
+      await generatePRCommentJSON(jsonOutputPath, prJsonFile);
+      console.log(`PR comment JSON has been saved to: ${prJsonFile}`);
+    }
     
     // Post summary to GitHub if requested
     if (postComment && Deno.env.get("GITHUB_ACTIONS") === "true") {

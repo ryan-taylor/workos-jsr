@@ -16,6 +16,11 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: deno
+
+      - uses: google-github-actions/release-please-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: deno
           package-name: workos
           changelog-types: |
             [

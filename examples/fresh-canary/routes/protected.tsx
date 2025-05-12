@@ -1,3 +1,5 @@
+/** @jsx h */
+import { h } from "preact";
 import type { Handlers } from '$fresh/server.ts';
 import type { PageProps } from '$fresh/server.ts';
 import { getCurrentUser, initUserManagement, requireAuth, type WorkOSUser } from '../utils/user-management.ts';

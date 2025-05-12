@@ -1,3 +1,5 @@
+/** @jsx h */
+import { h } from "preact";
 import type { ComponentChildren, JSX } from 'preact';
 
 export function Select(props: JSX.HTMLAttributes<HTMLSelectElement>) {

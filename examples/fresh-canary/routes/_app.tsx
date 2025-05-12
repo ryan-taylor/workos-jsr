@@ -1,3 +1,5 @@
+/** @jsx h */
+import { h } from "preact";
 import type { AppProps, Handlers, PageProps } from '$fresh/server.ts';
 import { getCurrentUser, type WorkOSUser } from '../utils/user-management.ts';
 import { AuthProvider } from '../utils/auth-context.tsx';

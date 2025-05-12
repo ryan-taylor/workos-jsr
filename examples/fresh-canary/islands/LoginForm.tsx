@@ -1,4 +1,6 @@
-import { useState } from "../node_modules/preact/hooks/dist/hooks.js";
+/** @jsx h */
+import { h } from "preact";
+import { useState } from "preact/hooks";
 
 interface LoginFormProps {
   authorizationURL?: string;

@@ -1,3 +1,5 @@
+/** @jsx h */
+import { h } from "preact";
 import type { JSX } from 'preact';
 import { IS_BROWSER } from '$fresh/runtime.ts';
 

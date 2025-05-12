@@ -1,5 +1,7 @@
 // Island component performance monitoring HOC
-import { type ComponentChildren, type ComponentType, createContext, type h, type VNode } from 'preact';
+/** @jsx h */
+import { h } from 'preact';
+import { type ComponentChildren, type ComponentType, createContext, type VNode } from 'preact';
 import { useEffect, useErrorBoundary, useLayoutEffect, useRef, useState } from 'preact/hooks';
 import { recordMetric } from '../../utils/telemetry.ts';
 

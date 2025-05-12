@@ -1,3 +1,5 @@
+/** @jsx h */
+import { h } from "preact";
 import { useState } from 'preact/hooks';
 import type { WorkOSUser } from '../utils/user-management.ts';
 import { withTelemetry } from './perf/withTelemetry.tsx';

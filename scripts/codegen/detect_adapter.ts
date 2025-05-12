@@ -15,7 +15,12 @@
  *   const { version, adapter } = await detectAdapter("path/to/spec.json");
  */
 
-import { OpenApiGenerator, getGenerator } from "./adapter.ts";
+import {
+  FallbackMode,
+  OpenApiGenerator,
+  getFallbackModeFromEnv,
+  getGenerator
+} from "./adapter.ts";
 
 /**
  * Result of the adapter detection process
@@ -31,6 +36,10 @@ export interface AdapterDetectionResult {
   minorVersion: number;
   /** Full dialect identifier (if available) */
   dialect?: string;
+  /** Whether the adapter explicitly supports this version */
+  isExplicitlySupported: boolean;
+  /** The fallback mode that was applied, if any */
+  appliedFallback?: FallbackMode;
 }
 
 /**
@@ -90,24 +99,47 @@ export async function extractOpenApiVersion(specPath: string): Promise<{
 
 /**
  * Detects the appropriate adapter for an OpenAPI specification file
- * 
+ *
  * @param specPath Path to the OpenAPI specification file
+ * @param fallbackMode Optional fallback mode, defaults to environment variable setting
  * @returns Detection result with version info and appropriate adapter
  */
-export async function detectAdapter(specPath: string): Promise<AdapterDetectionResult> {
+export async function detectAdapter(
+  specPath: string,
+  fallbackMode?: FallbackMode
+): Promise<AdapterDetectionResult> {
   // Extract the OpenAPI version from the spec file
   const { version, majorVersion, minorVersion, dialect } = await extractOpenApiVersion(specPath);
   
-  // Get the appropriate generator for this version
-  const adapter = getGenerator(version);
+  // Use provided fallback mode or get from environment
+  const effectiveFallbackMode = fallbackMode || getFallbackModeFromEnv();
   
-  return {
-    version,
-    adapter,
-    majorVersion,
-    minorVersion,
-    dialect
-  };
+  try {
+    // Get the appropriate generator for this version
+    const adapter = getGenerator(version, effectiveFallbackMode);
+    
+    // Check if adapter explicitly supports this version
+    const isExplicitlySupported = adapter.supports(version);
+    
+    return {
+      version,
+      adapter,
+      majorVersion,
+      minorVersion,
+      dialect,
+      isExplicitlySupported,
+      // Only include appliedFallback if a fallback was used
+      ...(isExplicitlySupported ? {} : { appliedFallback: effectiveFallbackMode })
+    };
+  } catch (error) {
+    // Enhance error with diagnostic information
+    if (error instanceof Error) {
+      error.message = `Failed to detect adapter for OpenAPI ${version}: ${error.message}\n` +
+        `File: ${specPath}\n` +
+        `Fallback mode: ${effectiveFallbackMode}`;
+    }
+    throw error;
+  }
 }
 
 /**
@@ -134,8 +166,18 @@ if (import.meta.main) {
       console.error(`Error: ${specPath} does not exist or is not accessible`);
       Deno.exit(1);
     }
+    // Get fallback mode from command line args if provided
+    let fallbackMode: FallbackMode | undefined;
+    const fallbackArg = Deno.args.find(arg => arg.startsWith("--fallback="));
+    if (fallbackArg) {
+      const mode = fallbackArg.split("=")[1]?.toLowerCase();
+      if (mode === "strict") fallbackMode = FallbackMode.STRICT;
+      else if (mode === "warn") fallbackMode = FallbackMode.WARN;
+      else if (mode === "auto") fallbackMode = FallbackMode.AUTO;
+    }
+    
     // Detect adapter and print result
-    const result = await detectAdapter(specPath);
+    const result = await detectAdapter(specPath, fallbackMode);
     
     console.log(JSON.stringify({
       specPath,
@@ -143,7 +185,10 @@ if (import.meta.main) {
       dialect: result.dialect,
       majorVersion: result.majorVersion,
       minorVersion: result.minorVersion,
-      adapterSupportsVersion: result.adapter.supports(result.version)
+      adapterName: result.adapter.name,
+      explicitSupport: result.isExplicitlySupported,
+      fallbackApplied: result.appliedFallback || null,
+      fallbackMode: fallbackMode || getFallbackModeFromEnv()
     }, null, 2));
     
     

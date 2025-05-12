@@ -10,8 +10,10 @@
     "dev": "cd examples/fresh-canary && deno task start",
     "rewrite-imports": "deno run -A scripts/rewrite-imports.ts",
     "fetch:spec": "deno run --allow-net --allow-read --allow-write scripts/codegen/fetch_spec.ts",
-    "generate:api": "DENO_DIR=.deno_codegen_cache deno run -A scripts/codegen/build.ts && deno fmt packages/workos_sdk/generated && deno check packages/workos_sdk/generated/**/*.ts",
+    "prebuild:api": "deno run -A scripts/codegen/prebuild.ts $(find ./vendor/openapi -name 'workos-*.json' -type f | sort -r | head -n 1 || echo './scripts/codegen/detect_adapter.ts')",
+    "generate:api": "deno task prebuild:api && DENO_DIR=.deno_codegen_cache deno run -A scripts/codegen/build.ts && deno fmt packages/workos_sdk/generated && deno check packages/workos_sdk/generated/**/*.ts",
     "codegen:upgrade": "deno run -A scripts/codegen/upgrade.ts",
-    "ci:dialect-check": "scripts/ci/dialect-diff-check.sh"
+    "ci:dialect-check": "deno run -A scripts/ci/dialect-check.ts",
+    "precommit:check-adapter": "deno task prebuild:api"
   }
 }

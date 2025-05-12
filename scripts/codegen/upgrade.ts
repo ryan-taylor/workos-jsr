@@ -20,7 +20,11 @@
 
 import { ensureDir, existsSync } from "https://deno.land/std/fs/mod.ts";
 import { basename, dirname, join } from "https://deno.land/std/path/mod.ts";
-import { detectAdapter, extractOpenApiVersion } from "./detect_adapter.ts";
+import {
+  detectAdapter,
+  extractOpenApiVersion
+} from "./detect_adapter.ts";
+import { FallbackMode, getFallbackModeFromEnv } from "./adapter.ts";
 import { postProcess } from "./postprocess/index.ts";
 import { validateTemplates } from "./validate-templates.ts";
 
@@ -32,6 +36,16 @@ const GENERATED_DIR = "./packages/workos_sdk/generated";
 const args = Deno.args;
 const forceMode = args.includes("--force");
 const checkOnly = args.includes("--check-only");
+
+// Check for fallback mode override
+let fallbackMode: FallbackMode | undefined;
+const fallbackArg = args.find(arg => arg.startsWith("--fallback="));
+if (fallbackArg) {
+  const mode = fallbackArg.split("=")[1]?.toLowerCase();
+  if (mode === "strict") fallbackMode = FallbackMode.STRICT;
+  else if (mode === "warn") fallbackMode = FallbackMode.WARN;
+  else if (mode === "auto") fallbackMode = FallbackMode.AUTO;
+}
 
 interface SpecFileInfo {
   path: string;
@@ -160,7 +174,19 @@ async function checkDialectUpgrade(): Promise<{
   }
   
   console.log("No dialect change detected");
-  return { 
+  
+  // Check if current version will require fallback
+  const { adapter, isExplicitlySupported } = await detectAdapter(
+    latestSpec.path,
+    fallbackMode || getFallbackModeFromEnv()
+  );
+  
+  if (!isExplicitlySupported) {
+    console.log(`⚠️ Warning: The latest spec (${latestSpec.name}) uses OpenAPI version ${latestDialect.version} which is not explicitly supported.`);
+    console.log(`A fallback mechanism will be applied during code generation.`);
+  }
+  
+  return {
     needsUpgrade: false,
     from: previousDialect,
     to: latestDialect,
@@ -198,10 +224,22 @@ async function performUpgrade(
     if (!validationResult.valid && forceMode) {
       console.warn("Continuing with code generation despite missing templates (--force)");
     }
-    
     // Get appropriate generator for the OpenAPI version using detect_adapter
     console.log(`Selecting generator for OpenAPI ${dialectInfo.version}...`);
-    const { adapter } = await detectAdapter(specFile);
+    const { adapter, isExplicitlySupported, appliedFallback } = await detectAdapter(
+      specFile,
+      fallbackMode
+    );
+    
+    // Display warning if fallback was applied
+    if (!isExplicitlySupported) {
+      if (appliedFallback === FallbackMode.WARN || appliedFallback === FallbackMode.AUTO) {
+        console.warn(`⚠️ Warning: OpenAPI version ${dialectInfo.version} is not explicitly supported by any adapter.`);
+        console.warn(`Using ${adapter.name} as a fallback (mode: ${appliedFallback}).`);
+        console.warn(`You can set the OPENAPI_ADAPTER_FALLBACK environment variable to 'strict', 'warn', or 'auto'.`);
+        console.warn(`Or use the --fallback=strict|warn|auto command line option to customize behavior.`);
+      }
+    }
     
     // Generate code using the selected adapter
     console.log(`Generating code from ${specFile}...`);
@@ -273,8 +311,24 @@ async function main() {
         console.log(`Run 'deno task codegen:upgrade' to perform the upgrade from ${upgradeCheck.from?.version} to ${upgradeCheck.to?.version}`);
         Deno.exit(2); // Exit with code 2 to indicate upgrade needed
       } else {
-        console.log("\n✅ No dialect upgrade needed");
-        Deno.exit(0);
+        // Check for fallback with the latest spec
+        const specFiles = await findSpecFiles();
+        const latestSpec = specFiles[0];
+        const { isExplicitlySupported } = await detectAdapter(
+          latestSpec.path,
+          fallbackMode || getFallbackModeFromEnv()
+        );
+        
+        if (!isExplicitlySupported) {
+          console.log("\n⚠️ OpenAPI version not explicitly supported");
+          console.log(`The latest spec (${latestSpec.name}) uses OpenAPI version ${upgradeCheck.to?.version} which will require a fallback adapter.`);
+          console.log(`Run 'deno task codegen:upgrade' to regenerate using fallback mechanism.`);
+          console.log(`Or set OPENAPI_ADAPTER_FALLBACK=strict to enforce strict compatibility.`);
+          Deno.exit(3); // Exit with code 3 to indicate fallback needed
+        } else {
+          console.log("\n✅ No dialect upgrade needed");
+          Deno.exit(0);
+        }
       }
     }
     

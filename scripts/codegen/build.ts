@@ -2,7 +2,7 @@
 
 import { ensureDir, existsSync } from "https://deno.land/std/fs/mod.ts";
 import { basename, dirname, join } from "https://deno.land/std/path/mod.ts";
-import { getGenerator } from "./adapter.ts";
+import { detectAdapter } from "./detect_adapter.ts";
 import { postProcess } from "./postprocess/index.ts";
 import { validateTemplates } from "./validate-templates.ts";
 
@@ -48,14 +48,14 @@ async function findLatestSpecFile(): Promise<{
     const latestSpec = specFiles[0];
     console.log(`Found latest spec: ${latestSpec.name}`);
     
-    // In the future, we could extract the actual OpenAPI version from the spec file
-    // For now, assume OpenAPI 3.0 as that's what the current generator supports
-    const apiVersion = "3.0";
+    // Detect the OpenAPI version from the spec file
+    const { version } = await detectAdapter(latestSpec.path);
+    console.log(`Detected OpenAPI version: ${version}`);
     
     return {
       filePath: latestSpec.path,
       specVersion: latestSpec.date,
-      apiVersion,
+      apiVersion: version,
     };
   } catch (error) {
     console.error("Error finding latest spec file:", error);
@@ -139,7 +139,7 @@ async function generateCode(): Promise<void> {
     }
     
     // Get appropriate generator for the OpenAPI version
-    const generator = getGenerator(apiVersion);
+    const { adapter: generator } = await detectAdapter(filePath);
     
     // Generate code using the selected generator
     await generator.generate(filePath, outputDir, {

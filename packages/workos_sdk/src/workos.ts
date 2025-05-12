@@ -84,46 +84,46 @@ export class WorkOS {
   readonly actions: Actions;
 
   /** Audit Logs module for accessing audit logs */
-  readonly auditLogs = new AuditLogs(this);
+  readonly auditLogs: AuditLogs = new AuditLogs(this);
 
   /** Directory Sync module for managing directory connections and users */
-  readonly directorySync = new DirectorySync(this);
+  readonly directorySync: DirectorySync = new DirectorySync(this);
 
   /** Organizations module for managing WorkOS organizations */
-  readonly organizations = new Organizations(this);
+  readonly organizations: Organizations = new Organizations(this);
 
   /** Organization Domains module for managing domains */
-  readonly organizationDomains = new OrganizationDomains(this);
+  readonly organizationDomains: OrganizationDomains = new OrganizationDomains(this);
 
   /** Passwordless module for magic link and OTP authentication */
-  readonly passwordless = new Passwordless(this);
+  readonly passwordless: Passwordless = new Passwordless(this);
 
   /** Admin Portal module for generating admin portal URLs */
-  readonly portal = new Portal(this);
+  readonly portal: Portal = new Portal(this);
 
   /** SSO module for Single Sign-On authentication */
-  readonly sso = new SSO(this);
+  readonly sso: SSO = new SSO(this);
 
   /** Webhooks module for validating webhook payloads */
   readonly webhooks: Webhooks;
 
   /** MFA module for Multi-Factor Authentication */
-  readonly mfa = new Mfa(this);
+  readonly mfa: Mfa = new Mfa(this);
 
   /** Events module for accessing audit event logs */
-  readonly events = new Events(this);
+  readonly events: Events = new Events(this);
 
   /** User Management module for authenticating and managing users */
   readonly userManagement: UserManagement;
 
   /** Fine Grained Authorization module */
-  readonly fga = new FGA(this);
+  readonly fga: FGA = new FGA(this);
 
   /** Widgets module for embedding WorkOS UI components */
-  readonly widgets = new Widgets(this);
+  readonly widgets: Widgets = new Widgets(this);
 
   /** Vault module for securely storing sensitive data */
-  readonly vault = new Vault(this);
+  readonly vault: Vault = new Vault(this);
 
   /**
    * Creates a new WorkOS client instance.
@@ -208,7 +208,7 @@ export class WorkOS {
    * @returns A Webhooks instance
    * @internal
    */
-  createWebhookClient() {
+  createWebhookClient(): Webhooks {
     return new Webhooks();
   }
 
@@ -217,7 +217,7 @@ export class WorkOS {
    * @returns An Actions instance
    * @internal
    */
-  createActionsClient() {
+  createActionsClient(): Actions {
     return new Actions(new SubtleCryptoProvider());
   }
 
@@ -228,7 +228,7 @@ export class WorkOS {
    * @returns An HttpClient instance
    * @internal
    */
-  createHttpClient(options: WorkOSOptions, userAgent: string) {
+  createHttpClient(options: WorkOSOptions, userAgent: string): HttpClient {
     // Check if we're running in Deno environment
     const isDeno = typeof Deno !== "undefined";
 
@@ -265,7 +265,7 @@ export class WorkOS {
    * Gets the SDK version.
    * @returns The current version of the WorkOS SDK
    */
-  get version() {
+  get version(): string {
     return VERSION;
   }
 

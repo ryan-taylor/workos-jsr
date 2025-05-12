@@ -1,4 +1,7 @@
 {
+  "name": "@ryantaylor/workos",
+  "version": "0.1.0",
+  "exports": "./mod.ts",
   "importMap": "import_map.f2.json",
   "tasks": {
     "lint": "deno lint --ignore=_reference/**",

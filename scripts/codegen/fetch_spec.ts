@@ -61,6 +61,57 @@ async function generateShortHash(content: string): Promise<string> {
 }
 
 /**
+ * Generate a full SHA-256 checksum of the content.
+ * @param content The content to generate a checksum for
+ * @returns The complete SHA-256 checksum as a hexadecimal string
+ */
+async function generateChecksum(content: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(content);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+  
+  return hashHex;
+}
+
+/**
+ * Extract the OpenAPI version from a spec object
+ * @param spec Parsed OpenAPI specification object
+ * @returns The OpenAPI version as a string, or undefined if not found
+ */
+function extractOpenAPIVersion(spec: any): string | undefined {
+  // Check for OpenAPI 3.x format
+  if (spec.openapi) {
+    return spec.openapi;
+  }
+  
+  // Check for Swagger 2.x format
+  if (spec.swagger) {
+    return spec.swagger;
+  }
+  
+  return undefined;
+}
+
+/**
+ * Check if the detected dialect version is supported by our generators
+ * @param dialectVersion The OpenAPI dialect version from the spec
+ * @returns True if supported, false otherwise
+ */
+function isDialectSupported(dialectVersion: string): boolean {
+  // Import the generator factory function from adapter.ts
+  // Note: We're choosing not to import it directly to avoid circular dependencies
+  // Instead, we'll replicate the version check logic here
+  
+  // Parse version to handle formats like "3.0", "3", "3.0.0"
+  const version = parseFloat(dialectVersion);
+  
+  // Currently we only support up to OpenAPI 3.0
+  return version <= 3.0;
+}
+
+/**
  * Format the current date as YYYY-MM-DD.
  * @returns Formatted date string
  */
@@ -147,13 +198,28 @@ async function fetchContent(url: string): Promise<string> {
  */
 async function createMockSpec(outputDir: string): Promise<string> {
   console.log("Test mode: Creating mock OpenAPI spec file");
-  const mockContent = JSON.stringify({ 
-    openapi: "3.0.0", 
-    info: { 
-      title: "Mock WorkOS API", 
-      version: "1.0.0" 
-    } 
-  }, null, 2);
+  
+  // Create a basic mock spec object with type assertion to allow extensions
+  const mockSpec: Record<string, any> = {
+    openapi: "3.0.0",
+    info: {
+      title: "Mock WorkOS API",
+      version: "1.0.0"
+    }
+  };
+  
+  // Add custom extensions to the mock spec
+  mockSpec["x-spec-source"] = "test://mock-spec";
+  mockSpec["x-openapi-dialect"] = "https://spec.openapis.org/dialect/3.0.0";
+  
+  // Convert to JSON string for checksum calculation
+  const initialContent = JSON.stringify(mockSpec);
+  
+  // Generate the checksum and add it
+  mockSpec["x-spec-checksum"] = await generateChecksum(initialContent);
+  
+  // Generate the final content with all extensions
+  const mockContent = JSON.stringify(mockSpec, null, 2);
   
   const hash = await generateShortHash(mockContent);
   const date = getFormattedDate();
@@ -163,8 +229,80 @@ async function createMockSpec(outputDir: string): Promise<string> {
   await Deno.mkdir(outputDir, { recursive: true });
   await Deno.writeTextFile(outputPath, mockContent);
   console.log(`Saved mock OpenAPI spec to: ${outputPath}`);
+  console.log(`Added custom extensions for spec provenance and dialect tracking`);
   
   return outputPath;
+}
+
+/**
+ * Add custom extensions to an OpenAPI spec
+ * @param content The original spec content
+ * @param source The source URL or commit-SHA
+ * @returns Modified spec with custom extensions
+ */
+async function addCustomExtensions(content: string, source: string): Promise<string> {
+  try {
+    // Parse the spec
+    const spec = JSON.parse(content);
+    
+    // Extract the dialect version
+    const dialectVersion = extractOpenAPIVersion(spec);
+    
+    // Generate a checksum
+    const checksum = await generateChecksum(content);
+    
+    // Add custom extensions
+    spec["x-spec-source"] = source;
+    spec["x-openapi-dialect"] = dialectVersion
+      ? `https://spec.openapis.org/dialect/${dialectVersion}`
+      : "unknown";
+    spec["x-spec-checksum"] = checksum;
+    
+    // Return stringified spec with custom extensions
+    return JSON.stringify(spec, null, 2);
+  } catch (error) {
+    console.error("Error adding custom extensions:", error);
+    throw error;
+  }
+}
+
+/**
+ * Detect and record dialect changes by comparing with the latest spec
+ * @param newSpec The new spec content with parsed JSON
+ * @param latestSpecPath Path to the latest spec file
+ * @returns Object with change information
+ */
+async function detectDialectChanges(newSpec: any, latestSpecPath: string): Promise<{
+  changed: boolean;
+  oldDialect?: string;
+  newDialect: string;
+}> {
+  try {
+    // Read the latest spec file
+    const latestContent = await Deno.readTextFile(latestSpecPath);
+    const latestSpec = JSON.parse(latestContent);
+    
+    // Extract dialect information
+    const oldDialect = latestSpec["x-openapi-dialect"] || (
+      extractOpenAPIVersion(latestSpec)
+        ? `https://spec.openapis.org/dialect/${extractOpenAPIVersion(latestSpec)}`
+        : "unknown"
+    );
+    
+    const newDialect = newSpec["x-openapi-dialect"] || "unknown";
+    
+    return {
+      changed: oldDialect !== newDialect,
+      oldDialect,
+      newDialect,
+    };
+  } catch (error) {
+    // If there's an error (e.g., no previous spec), assume no change
+    return {
+      changed: false,
+      newDialect: newSpec["x-openapi-dialect"] || "unknown",
+    };
+  }
 }
 
 /**
@@ -183,16 +321,37 @@ async function main() {
     // Fetch the spec content
     const content = await fetchContent(url);
     
-    // Validate the content is valid JSON
+    // Validate the content is valid JSON and parse it
+    let parsedSpec;
     try {
-      JSON.parse(content);
+      parsedSpec = JSON.parse(content);
       console.log("Content validated as valid JSON");
     } catch (e) {
       throw new Error("Invalid JSON content in the OpenAPI spec");
     }
+
+    // Extract the OpenAPI version from the spec
+    const openApiVersion = extractOpenAPIVersion(parsedSpec);
+    if (!openApiVersion) {
+      console.warn("Could not determine OpenAPI version from spec");
+    } else {
+      console.log(`Detected OpenAPI version: ${openApiVersion}`);
+      
+      // Check if this dialect is supported by our generators
+      if (!isDialectSupported(openApiVersion)) {
+        throw new Error(
+          `Unsupported OpenAPI dialect version: ${openApiVersion}. ` +
+          `Our generators currently only support up to OpenAPI 3.0. ` +
+          `Please update the generator adapter to support this version.`
+        );
+      }
+    }
+    
+    // Add custom extensions to the spec
+    const enhancedContent = await addCustomExtensions(content, url);
     
     // Generate hash and formatted date for the filename
-    const hash = await generateShortHash(content);
+    const hash = await generateShortHash(enhancedContent);
     const date = getFormattedDate();
     const filename = `workos-${date}-${hash}.json`;
     const outputPath = `${outputDir}/${filename}`;
@@ -206,18 +365,36 @@ async function main() {
     
     if (existingFiles.length > 0) {
       const latestFile = existingFiles[0];
-      const latestContent = await Deno.readTextFile(`${outputDir}/${latestFile}`);
+      const latestPath = `${outputDir}/${latestFile}`;
+      const latestContent = await Deno.readTextFile(latestPath);
       const latestHash = await generateShortHash(latestContent);
       
       if (latestHash === hash) {
         console.log(`No changes detected in the spec. Latest file: ${latestFile}`);
         return;
       }
+      
+      // Detect dialect changes for change logging
+      const dialectChanges = await detectDialectChanges(
+        JSON.parse(enhancedContent),
+        latestPath
+      );
+      
+      if (dialectChanges.changed) {
+        console.log("⚠️  OpenAPI dialect change detected!");
+        console.log(`Previous dialect: ${dialectChanges.oldDialect}`);
+        console.log(`New dialect: ${dialectChanges.newDialect}`);
+        
+        // This information could be used for changelog/commit messages
+        // We're just logging it for now, but you could save it to a file or
+        // incorporate it into the CI/CD system
+      }
     }
-    
-    // Write the new spec file
-    await Deno.writeTextFile(outputPath, content);
+    // Write the new spec file with enhanced content including custom extensions
+    await Deno.writeTextFile(outputPath, enhancedContent);
     console.log(`Saved new OpenAPI spec to: ${outputPath}`);
+    console.log(`Added custom extensions for spec provenance and dialect tracking`);
+    
     
   } catch (error) {
     console.error("Error:", error instanceof Error ? error.message : String(error));

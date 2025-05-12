@@ -2,7 +2,7 @@ name: Release Please
 
 on:
   push:
-    branches: [deno-main]
+    branches: [main]
 
 permissions:
   contents: write
@@ -12,21 +12,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: google-github-actions/release-please-action@v4
+      - uses: googleapis/release-please-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          release-type: deno
-
-      - uses: google-github-actions/release-please-action@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          release-type: deno
-          package-name: workos
-          changelog-types: |
-            [
-              { "type": "feat", "section": "Features" },
-              { "type": "fix", "section": "Bug Fixes" },
-              { "type": "perf", "section": "Performance Improvements" },
-              { "type": "refactor", "section": "Refactoring" },
-              { "type": "chore", "hidden": true }
-            ] 
+          release-type: deno 

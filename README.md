@@ -2,7 +2,6 @@
 
 [![JSR Version](https://jsr.io/badges/@ryantaylor/workos)](https://jsr.io/@ryantaylor/workos)
 [![Build Status](https://github.com/ryan-taylor/workos-jsr/actions/workflows/ci.yml/badge.svg)](https://github.com/ryan-taylor/workos-jsr/actions/workflows/ci.yml)
-[![Coverage Status](https://codecov.io/gh/ryan-taylor/workos-jsr/branch/main/graph/badge.svg)](https://codecov.io/gh/ryan-taylor/workos-jsr)
 
 ## Relationship to Official SDK
 
@@ -387,29 +386,7 @@ general availability (GA). To install a Beta version, please follow the
 We highly recommend keeping an eye on when the Beta feature you are interested
 in goes from Beta to stable so that you can move to using the stable version.
 
-## Testing Coverage
-
-[![Coverage Status](https://codecov.io/gh/ryan-taylor/workos-jsr/branch/main/graph/badge.svg)](https://codecov.io/gh/ryan-taylor/workos-jsr)
-
-This library aims to maintain comprehensive test coverage as a quality standard.
-All code changes should include appropriate test coverage.
-
-### Running Coverage Tests Locally
-
-You can run the coverage tests locally using Deno:
-
-```sh
-# Run tests with coverage
-deno test -A --coverage=coverage
-
-# Generate coverage report
-deno coverage coverage
-
-# View detailed coverage report
-deno coverage coverage --lcov --output=coverage/lcov.info
-```
-
-### Testing Approach
+## Testing Approach
 
 The testing strategy follows these principles:
 

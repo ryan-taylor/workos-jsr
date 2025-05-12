@@ -11,11 +11,12 @@
     "@fresh/core": "jsr:@fresh/core@2.0.0-alpha.29",
     "@fresh/dev": "jsr:@fresh/dev@2.0.0-alpha.29",
     "@fresh/plugin-tailwindcss": "jsr:@fresh/plugin-tailwindcss@2.0.0-alpha.29",
-    
     "@workos/sdk/": "./packages/workos_sdk/",
-    "@workos/fresh/": "./packages/workos_fresh/",
+    "@workos/fresh": "./packages/workos_fresh/mod.ts",
+    "@workos/fresh/": "./packages/workos_fresh/src/",
     "workos": "./packages/workos_sdk/src/",
     "workos/": "./packages/workos_sdk/src/",
+    
     
     "jose": "https://deno.land/x/jose@4.11.0/mod.ts",
     "crypto": "https://deno.land/std@0.220.0/crypto/mod.ts",

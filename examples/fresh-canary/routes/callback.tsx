@@ -1,5 +1,5 @@
-import { FreshContext } from "@workos/fresh/mod.ts";
-import { redirect } from "@fresh/runtime.ts";
+import { FreshContext } from "@workos/fresh";
+import { redirect } from "$fresh/server.ts";
 
 export default async function CallbackPage(req: Request, ctx: FreshContext) {
   const code = new URL(req.url).searchParams.get("code");

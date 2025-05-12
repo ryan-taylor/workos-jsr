@@ -1,7 +1,89 @@
 // packages/workos_sdk/mod.ts
-// Re-export all public APIs from the SDK
+// Explicit exports of public APIs from the SDK
 
-// Example (adjust based on actual files moved):
-export * from "./src/workos.ts";
-export * from "./src/common/index.ts";
-// Add other exports as needed
+// Main WorkOS class
+export { WorkOS } from "./src/workos.ts";
+
+// Direct exports from original interfaces.ts
+export type {
+  ApiResponse,
+  CommonGetOptions,
+  CommonPostOptions, 
+  CommonPutOptions,
+  PaginationOptions,
+  List,
+  ListResponse,
+  EventName,
+  SerializedListEventOptions,
+  GetOptions,
+} from "./src/common/interfaces.ts";
+
+// Enums are values not types
+export { EventType } from "./src/common/interfaces.ts";
+
+// Specific interface exports
+export type { PostOptions } from "./src/common/interfaces/post-options.interface.ts";
+export type { PutOptions } from "./src/common/interfaces/put-options.interface.ts";
+export type { DeleteOptions } from "./src/common/interfaces/delete-options.interface.ts";
+export type { WorkOSOptions } from "./src/common/interfaces/workos-options.interface.ts";
+export type { WorkOSResponseError } from "./src/common/interfaces/workos-response-error.interface.ts";
+
+// Common exceptions
+export {
+  GenericServerException,
+  BadRequestException,
+  NoApiKeyProvidedException,
+  NotFoundException,
+  OauthException,
+  RateLimitExceededException,
+  SignatureVerificationException,
+  UnauthorizedException,
+  UnprocessableEntityException,
+  ConflictException,
+} from "./src/common/exceptions/index.ts";
+
+// Common serializers
+export {
+  serialize,
+  adaptListMetadata,
+  serializeList,
+  deserializeList,
+  serializeEvent,
+  deserializeEvent,
+  serializeDate,
+  serializeBoolean,
+} from "./src/common/serializers.ts";
+
+// HTTP client
+export {
+  HttpClient,
+  HttpClientResponse,
+  HttpClientError,
+} from "./src/common/net/http-client.ts";
+
+// HTTP client implementations
+export { FetchHttpClient } from "./src/common/net/fetch-client.ts";
+export { DenoHttpClient } from "./src/common/net/deno-client.ts";
+
+// Service modules
+export { DirectorySync } from "./src/directory-sync/directory-sync.ts";
+export { Events } from "./src/events/events.ts";
+export { Organizations } from "./src/organizations/organizations.ts";
+export { OrganizationDomains } from "./src/organization-domains/organization-domains.ts";
+export { Passwordless } from "./src/passwordless/passwordless.ts";
+export { Portal } from "./src/portal/portal.ts";
+export { SSO } from "./src/sso/sso.ts";
+export { Webhooks } from "./src/webhooks/webhooks.ts";
+export { Mfa } from "./src/mfa/mfa.ts";
+export { AuditLogs } from "./src/audit-logs/audit-logs.ts";
+export { UserManagement } from "./src/user-management/user-management.ts";
+export { FGA } from "./src/fga/fga.ts";
+export { Widgets } from "./src/widgets/widgets.ts";
+export { Actions } from "./src/actions/actions.ts";
+export { Vault } from "./src/vault/vault.ts";
+
+// Session providers
+export { FreshSessionProvider } from "./src/common/iron-session/fresh-session-provider.ts";
+
+// Crypto providers
+export { SubtleCryptoProvider } from "./src/common/crypto/subtle-crypto-provider.ts";

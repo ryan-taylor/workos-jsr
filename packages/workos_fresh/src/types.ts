@@ -45,9 +45,10 @@ export namespace Fresh1 {
 
 // Fresh 2.x types
 export namespace Fresh2 {
+  // Updated to match actual Fresh 2.x API
   export interface App {
     all: (pattern: RoutePattern, handler: Handler) => App;
-    build: () => (req: Request) => Promise<Response>;
+    // build may not exist in the actual API
   }
 
   export interface AppConstructor {

@@ -5,9 +5,40 @@ import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
 import type { List } from "../common/interfaces.ts";
 import type { WorkOS } from "../workos.ts";
 
+/**
+ * Service for retrieving WorkOS Events.
+ * 
+ * The Events API provides access to audit events and other system-generated events
+ * that occur within your organization.
+ * 
+ * @example
+ * ```ts
+ * // Retrieve the latest events
+ * const events = await workos.events.listEvents({ limit: 10 });
+ * events.forEach(e => console.log(`${e.event} at ${e.created_at}`));
+ * ```
+ */
 export class Events {
+  /**
+   * @param workos - The main WorkOS client instance
+   */
   constructor(private workos: WorkOS) {}
 
+  /**
+   * Lists events with optional filtering and pagination.
+   * 
+   * @param options - Configuration options for listing events
+   * @returns Promise resolving to an array of Event objects
+   * 
+   * @example
+   * ```ts
+   * const events = await workos.events.listEvents({
+   *   range_start: '2023-01-01T00:00:00Z',
+   *   limit: 5,
+   *   events: ['user.login']
+   * });
+   * ```
+   */
   async listEvents(options: EventsListOptions = {}): Promise<Event[]> {
     const result = await fetchAndDeserialize<Record<string, unknown>, Event>(
       {

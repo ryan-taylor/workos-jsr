@@ -1,3 +1,26 @@
+/**
+ * WorkOS SDK for Deno
+ * 
+ * This module provides a clean, modern Deno implementation of the WorkOS API,
+ * allowing Deno applications to use WorkOS features such as SSO, Directory Sync,
+ * Audit Logs, User Management, and more.
+ * 
+ * @example
+ * ```ts
+ * import { WorkOS } from "@ryantaylor/workos";
+ * 
+ * // Initialize the WorkOS client
+ * const workos = new WorkOS(Deno.env.get("WORKOS_API_KEY"), {
+ *   clientId: Deno.env.get("WORKOS_CLIENT_ID")
+ * });
+ * 
+ * // Use any of the WorkOS features
+ * const profile = await workos.sso.getProfile(code);
+ * ```
+ * 
+ * @module
+ */
+
 // packages/workos_sdk/mod.ts
 // Explicit exports of public APIs from the SDK
 

@@ -1,8 +1,6 @@
 import { start } from "$fresh/server.ts";
 import manifest from "./fresh.gen.ts";
-import { wrapMw } from "@workos/fresh/middleware.ts";
-import { makeRouter } from "@workos/fresh/router.ts";
-import { getTailwindPlugin } from "@workos/fresh/plugins/tailwind.ts";
+import { wrapMw, makeRouter, getTailwindPlugin } from "@workos/fresh";
 
 const router = makeRouter({
   apiKey: Deno.env.get("WORKOS_API_KEY") || "",

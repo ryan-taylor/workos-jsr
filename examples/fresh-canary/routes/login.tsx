@@ -1,4 +1,4 @@
-import { FreshContext } from "@workos/fresh/mod.ts";
+import { FreshContext } from "@workos/fresh";
 
 export default function LoginPage(req: Request, ctx: FreshContext) {
   const loginUrl = ctx.workos.sso.getAuthorizationURL({

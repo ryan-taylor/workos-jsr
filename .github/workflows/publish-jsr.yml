@@ -10,10 +10,24 @@ jobs:
 
     permissions:
       contents: read
-      id-token: write
+      id-token: write # Required for JSR provenance
 
     steps:
       - uses: actions/checkout@v4
 
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      # Option 1: For Deno projects, use Deno's native JSR integration
       - name: Publish package
-        run: npx jsr publish
+        run: deno publish
+
+      # Option 2: Alternatively, if using npx jsr is preferred:
+      # - name: Setup Node
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 'lts/*'
+      
+      # - name: Publish package with JSR CLI
+      #   run: npx jsr publish

@@ -24,5 +24,8 @@
   ],
   "tasks": {
     "test": "deno test -A"
+  },
+  "dependencies": {
+    "@stackql/deno-openapi-dereferencer": "^0.1.0"
   }
 }

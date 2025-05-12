@@ -1,10 +1,10 @@
 #!/usr/bin/env -S deno run -A
-
 import { ensureDir, existsSync } from "https://deno.land/std/fs/mod.ts";
 import { basename, dirname, join } from "https://deno.land/std/path/mod.ts";
 import { detectAdapter } from "./detect_adapter.ts";
 import { postProcess } from "./postprocess/index.ts";
 import { validateTemplates } from "./validate-templates.ts";
+import { processSpec } from "./postprocess/dereference-spec.ts";
 
 /**
  * Find the latest OpenAPI spec file in the vendor directory.
@@ -114,6 +114,12 @@ async function generateCode(): Promise<void> {
   try {
     // Find the latest spec file
     const { filePath, specVersion, apiVersion } = await findLatestSpecFile();
+    
+    // Process the spec file to normalize and generate post-processed checksum
+    console.log("Processing OpenAPI spec to generate post-processed checksum...");
+    const { rawChecksum, processedChecksum } = await processSpec(filePath);
+    console.log(`Raw checksum: ${rawChecksum}`);
+    console.log(`Post-processed checksum: ${processedChecksum}`);
     
     // Define output directory
     const outputDir = `./packages/workos_sdk/generated/${specVersion}`;

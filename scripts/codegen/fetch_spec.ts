@@ -2,10 +2,11 @@
 
 /**
  * Fetch WorkOS OpenAPI Specification
- * 
+ *
  * This script fetches the WorkOS OpenAPI specification and saves it to a file with
  * a unique name based on the current date and a hash of the content.
- * 
+ * It also generates a dereferenced checksum to ensure immutability of the processed content.
+ *
  * Usage:
  *   deno run -A scripts/codegen/fetch_spec.ts [--url=<url>] [--output=<output>] [--test]
  * 
@@ -248,15 +249,18 @@ async function addCustomExtensions(content: string, source: string): Promise<str
     // Extract the dialect version
     const dialectVersion = extractOpenAPIVersion(spec);
     
-    // Generate a checksum
-    const checksum = await generateChecksum(content);
+    // Generate a checksum of the raw content
+    const rawChecksum = await generateChecksum(content);
     
     // Add custom extensions
     spec["x-spec-source"] = source;
     spec["x-openapi-dialect"] = dialectVersion
       ? `https://spec.openapis.org/dialect/${dialectVersion}`
       : "unknown";
-    spec["x-spec-checksum"] = checksum;
+    spec["x-spec-checksum"] = rawChecksum;
+    
+    // The post-processed (dereferenced) checksum will be added later
+    // in the build process after all $ref references are resolved
     
     // Return stringified spec with custom extensions
     return JSON.stringify(spec, null, 2);

@@ -1,0 +1,32 @@
+openapi: 3.0.0
+info:
+  title: Test API
+  version: 1.0.0
+  description: A simple API for testing the OpenAPI code generator
+paths:
+  /test:
+    get:
+      summary: Test endpoint
+      operationId: getTest
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestResponse'
+components:
+  schemas:
+    TestResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name

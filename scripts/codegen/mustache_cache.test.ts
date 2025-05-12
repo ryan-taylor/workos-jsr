@@ -1,5 +1,4 @@
-import { assertEquals, assertNotEquals } from "https://deno.land/std/assert/mod.ts";
-import { assertExists } from "https://deno.land/std/assert/mod.ts";
+import { assertEquals, assertNotEquals, assertExists } from "jsr:@std/assert@^1";
 import { clearTemplateCache, enhanceMustacheWithCaching, getTemplateCacheSize } from "./mustache_cache.ts";
 
 // Test mock for Mustache-like interface

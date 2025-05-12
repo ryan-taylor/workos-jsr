@@ -21,11 +21,10 @@
  *   --help               Show help information
  */
 
-import { parse } from "https://deno.land/std/flags/mod.ts";
+import { parse } from "https://deno.land/std/flags/mod.ts"; // Keep this import since flags might not be available in JSR
 import { OASDIFF_BINARY_PATH } from "./install-oasdiff.ts";
-import { exists } from "https://deno.land/std/fs/mod.ts";
-import { dirname } from "https://deno.land/std/path/mod.ts";
-import { ensureDir } from "https://deno.land/std/fs/mod.ts";
+import { exists, ensureDir } from "jsr:@std/fs@^1";
+import { dirname } from "jsr:@std/path@^1";
 
 // Define interfaces for the output format
 interface EndpointDiff {

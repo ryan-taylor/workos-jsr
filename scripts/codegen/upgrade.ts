@@ -18,8 +18,8 @@
  *   deno task codegen:upgrade [--force] [--check-only]
  */
 
-import { ensureDir, existsSync } from "https://deno.land/std/fs/mod.ts";
-import { basename, dirname, join } from "https://deno.land/std/path/mod.ts";
+import { ensureDir, existsSync } from "jsr:@std/fs@^1";
+import { basename, dirname, join } from "jsr:@std/path@^1";
 import {
   detectAdapter,
   extractOpenApiVersion

@@ -8,8 +8,8 @@
  * Usage: deno run --allow-read --allow-write scripts/fix-duplicate-extensions.ts
  */
 
-import { walk } from "https://deno.land/std@0.220.0/fs/walk.ts";
-import { join } from "https://deno.land/std@0.220.0/path/mod.ts";
+import { walk } from "jsr:@std/fs@^1";
+import { join } from "jsr:@std/path@^1";
 
 // Regular expression to match import statements with duplicate .ts extensions
 const DUPLICATE_TS_REGEX =

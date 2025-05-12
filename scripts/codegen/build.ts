@@ -1,6 +1,6 @@
 #!/usr/bin/env -S deno run -A
-import { ensureDir, existsSync } from "https://deno.land/std/fs/mod.ts";
-import { basename, dirname, join } from "https://deno.land/std/path/mod.ts";
+import { ensureDir, existsSync } from "jsr:@std/fs@^1";
+import { basename, dirname, join } from "jsr:@std/path@^1";
 import { detectAdapter } from "./detect_adapter.ts";
 import { postProcess } from "./postprocess/index.ts";
 import { validateTemplates } from "./validate-templates.ts";

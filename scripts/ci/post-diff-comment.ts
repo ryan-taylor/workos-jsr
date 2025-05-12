@@ -10,9 +10,8 @@
  *   deno run -A scripts/ci/post-diff-comment.ts
  */
 
-import { exists } from "https://deno.land/std/fs/mod.ts";
-import { dirname } from "https://deno.land/std/path/mod.ts";
-import { ensureDir } from "https://deno.land/std/fs/mod.ts";
+import { dirname } from "jsr:@std/path@^1";
+import { exists, ensureDir } from "jsr:@std/fs@^1";
 
 // Default paths for diff files
 const TEXT_DIFF_PATH = ".diff/spec-diff.txt";

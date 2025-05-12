@@ -10,7 +10,7 @@
  */
 
 import { parseArgs } from "https://deno.land/std@0.219.0/cli/parse_args.ts";
-import { join } from "https://deno.land/std@0.219.0/path/mod.ts";
+import { join } from "jsr:@std/path@^1";
 
 const args = parseArgs(Deno.args, { boolean: ["skip_tests"] });
 const FOCUS_MODULES = ["mfa", "organizations", "sso"];

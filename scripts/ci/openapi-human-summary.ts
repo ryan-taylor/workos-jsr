@@ -22,10 +22,9 @@
  *   --help               Show help information
  */
 
-import { parse } from "https://deno.land/std/flags/mod.ts";
-import { join, basename, dirname } from "https://deno.land/std/path/mod.ts";
-import { exists, ensureDir } from "https://deno.land/std/fs/mod.ts";
-import { expandGlob } from "https://deno.land/std/fs/mod.ts";
+import { parse } from "https://deno.land/std/flags/mod.ts"; // Keep this import since flags might not be available in JSR
+import { join, basename, dirname } from "jsr:@std/path@^1";
+import { exists, ensureDir, expandGlob } from "jsr:@std/fs@^1";
 import {
   ensureOasdiffInstalled,
   runOasdiff

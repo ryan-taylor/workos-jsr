@@ -17,10 +17,9 @@
  *   --help               Show help information
  */
 
-import { parse } from "https://deno.land/std/flags/mod.ts";
-import { join, dirname } from "https://deno.land/std/path/mod.ts";
-import { ensureDir } from "https://deno.land/std/fs/mod.ts";
-import { exists } from "https://deno.land/std/fs/mod.ts";
+import { parse } from "https://deno.land/std/flags/mod.ts"; // Keep this import since flags might not be available in JSR
+import { join, dirname } from "jsr:@std/path@^1";
+import { ensureDir, exists } from "jsr:@std/fs@^1";
 import { OasDiffResult } from "./openapi-diff.ts";
 import { analyzeChanges } from "./fixed-summary-generator.ts";
 

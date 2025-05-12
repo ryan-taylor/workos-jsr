@@ -16,10 +16,9 @@
  *   --help               Show help information
  */
 
-import { parse } from "https://deno.land/std/flags/mod.ts";
-import { join, dirname } from "https://deno.land/std/path/mod.ts";
-import { ensureDir } from "https://deno.land/std/fs/mod.ts";
-import { exists } from "https://deno.land/std/fs/mod.ts";
+import { parse } from "https://deno.land/std/flags/mod.ts"; // Keep this import since flags might not be available in JSR // Keep this import since flags might not be available in JSR
+import { join, dirname } from "jsr:@std/path@^1";
+import { ensureDir, exists } from "jsr:@std/fs@^1";
 import { OasDiffResult, PathDiff, EndpointDiff } from "./openapi-diff.ts";
 
 // Enhanced interfaces for detailed diff representation
@@ -218,6 +217,9 @@ function isBreakingChange(change: unknown, changeType: string): boolean {
 function analyzeChanges(diffResult: OasDiffResult): EndpointChangeDetails[] {
   const changes: EndpointChangeDetails[] = [];
   
+  // Track which path+method combinations we've already processed to avoid duplication
+  const processedPathMethods = new Set<string>();
+  
   // Process added paths
   if (diffResult.paths?.added) {
     for (const path of diffResult.paths.added) {
@@ -268,12 +270,16 @@ function analyzeChanges(diffResult: OasDiffResult): EndpointChangeDetails[] {
       // Deleted operations in existing paths
       if (path.operations?.deleted) {
         for (const method of path.operations.deleted) {
-          changes.push({
-            path: path.path,
-            method: method,
-            type: "deleted",
-            isBreaking: true
-          });
+          const key = `${path.path}:${method}`;
+          if (!processedPathMethods.has(key)) {
+            changes.push({
+              path: path.path,
+              method: method,
+              type: "deleted",
+              isBreaking: true
+            });
+            processedPathMethods.add(key);
+          }
         }
       }
       
@@ -294,46 +300,65 @@ function analyzeChanges(diffResult: OasDiffResult): EndpointChangeDetails[] {
       }
     }
   }
+  // Track which path+method combinations we've already processed
+  // This prevents duplication in the final summary
   
-  // Process endpoints directly if they exist in the diff
+  // For endpoints we've already processed from the paths section above
+  for (const change of changes) {
+    processedPathMethods.add(`${change.path}:${change.method}`);
+  }
+  
+  // Process endpoints directly if they exist in the diff (only if not already processed)
   if (diffResult.endpoints) {
     // Process added endpoints
     if (diffResult.endpoints.added) {
       for (const endpoint of diffResult.endpoints.added) {
-        changes.push({
-          path: endpoint.path,
-          method: endpoint.method,
-          type: "added",
-          isBreaking: false
-        });
+        const key = `${endpoint.path}:${endpoint.method}`;
+        if (!processedPathMethods.has(key)) {
+          changes.push({
+            path: endpoint.path,
+            method: endpoint.method,
+            type: "added",
+            isBreaking: false
+          });
+          processedPathMethods.add(key);
+        }
       }
     }
     
     // Process deleted endpoints
     if (diffResult.endpoints.deleted) {
       for (const endpoint of diffResult.endpoints.deleted) {
-        changes.push({
-          path: endpoint.path,
-          method: endpoint.method,
-          type: "deleted",
-          isBreaking: true
-        });
+        const key = `${endpoint.path}:${endpoint.method}`;
+        if (!processedPathMethods.has(key)) {
+          changes.push({
+            path: endpoint.path,
+            method: endpoint.method,
+            type: "deleted",
+            isBreaking: true
+          });
+          processedPathMethods.add(key);
+        }
       }
     }
     
     // Process modified endpoints
     if (diffResult.endpoints.modified) {
       for (const endpoint of diffResult.endpoints.modified) {
-        const isBreaking = isBreakingChange(endpoint, "modified");
-        changes.push({
-          path: endpoint.path,
-          method: endpoint.method,
-          type: "modified",
-          isBreaking,
-          parameters: extractParameterChanges(endpoint),
-          responses: extractResponseChanges(endpoint),
-          schemas: extractSchemaChanges(endpoint)
-        });
+        const key = `${endpoint.path}:${endpoint.method}`;
+        if (!processedPathMethods.has(key)) {
+          const isBreaking = isBreakingChange(endpoint, "modified");
+          changes.push({
+            path: endpoint.path,
+            method: endpoint.method,
+            type: "modified",
+            isBreaking,
+            parameters: extractParameterChanges(endpoint),
+            responses: extractResponseChanges(endpoint),
+            schemas: extractSchemaChanges(endpoint)
+          });
+          processedPathMethods.add(key);
+        }
       }
     }
   }

@@ -1,6 +1,6 @@
 /// <reference lib="deno.unstable" />
 
-import type { Cookie } from "https://deno.land/std@0.220.0/http/cookie.ts";
+import type { Cookie } from "jsr:@std/http@^1/cookie";
 // Use a type definition instead of direct import to avoid URL resolution issues
 type FreshContext = {
   next: () => Promise<Response>;

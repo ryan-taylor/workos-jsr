@@ -12,7 +12,7 @@
  * not just the raw file which might contain references.
  */
 
-import { join, dirname, resolve as pathResolve } from "https://deno.land/std/path/mod.ts";
+import { join, dirname, resolve as pathResolve } from "jsr:@std/path@^1";
 
 /**
  * Process an OpenAPI spec and generate a post-processed checksum

@@ -17,7 +17,7 @@
  */
 
 import { extractOpenApiVersion } from "../codegen/detect_adapter.ts";
-import { join } from "https://deno.land/std/path/mod.ts";
+import { join } from "jsr:@std/path@^1";
 
 // Default configuration
 const config = {

@@ -1,7 +1,7 @@
 #!/usr/bin/env -S deno run -A
 
-import { exists } from "https://deno.land/std/fs/mod.ts";
-import { join, dirname } from "https://deno.land/std/path/mod.ts";
+import { exists } from "jsr:@std/fs@^1";
+import { join, dirname } from "jsr:@std/path@^1";
 
 /**
  * Template information from manifest

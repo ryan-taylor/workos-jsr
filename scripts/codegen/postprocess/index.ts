@@ -1,9 +1,10 @@
 #!/usr/bin/env -S deno run -A
 
-import { walk } from "https://deno.land/std/fs/mod.ts";
-import { join } from "https://deno.land/std/path/mod.ts";
+import { walk } from "jsr:@std/fs@^1";
+import { join } from "jsr:@std/path@^1";
 import { Project } from "npm:ts-morph";
 import { enumUnionTransform } from "./transforms/enum-union-transform.ts";
+import { largeBrandedEnumTransform } from "./enums.ts";
 
 /**
  * Interface for code transforms 
@@ -42,7 +43,7 @@ export async function postProcess(
   options: PostProcessOptions = {},
 ): Promise<void> {
   const {
-    transforms = [enumUnionTransform],
+    transforms = [enumUnionTransform, largeBrandedEnumTransform],
     formatCode = true,
   } = options;
 

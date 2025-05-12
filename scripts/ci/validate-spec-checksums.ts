@@ -22,10 +22,9 @@
  *   --help             Show this help message
  */
 
-import { parse } from "https://deno.land/std/flags/mod.ts";
-import { join, resolve } from "https://deno.land/std/path/mod.ts";
-import { expandGlob } from "https://deno.land/std/fs/mod.ts";
-import { basename } from "https://deno.land/std/path/mod.ts";
+import { parse } from "https://deno.land/std/flags/mod.ts"; // Keep this import since flags might not be available in JSR
+import { join, resolve, basename } from "jsr:@std/path@^1";
+import { expandGlob } from "jsr:@std/fs@^1";
 import { verifySpec, VerificationOptions, VerificationResult } from "../codegen/postprocess/verify-spec.ts";
 
 // GitHub Actions workflow command functions

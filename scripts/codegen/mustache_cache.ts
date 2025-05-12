@@ -1,7 +1,7 @@
 #!/usr/bin/env -S deno run -A
 
-import { ensureDir, exists } from "https://deno.land/std/fs/mod.ts";
-import { dirname } from "https://deno.land/std/path/mod.ts";
+import { ensureDir, exists } from "jsr:@std/fs@^1";
+import { dirname } from "jsr:@std/path@^1";
 
 /**
  * Cache for compiled Mustache templates

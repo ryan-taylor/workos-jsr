@@ -1,0 +1,32 @@
+# Tests
+**/*.spec.ts
+**/*.test.ts
+**/*-test.ts
+**/*-live-test.spec.ts
+**/__tests__/**
+**/__snapshots__/**
+**/tests/**
+**/tests_deno/**
+**/fixtures/**
+
+# Examples
+examples/
+docs/
+
+# Source files we don't want to publish
+src/
+src/fga/
+
+# Development files
+.vscode/
+.idea/
+.sailplane/
+.git/
+.github/
+.eslintcache
+.npmrc
+
+# Logs and coverage
+*.log
+coverage/
+cov/ 

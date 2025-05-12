@@ -5,6 +5,23 @@
   "description": "WorkOS SDK for Deno with support for Fresh 1.x and 2.x",
   "repository": "https://github.com/ryan-taylor/workos-jsr",
   "license": "MIT",
+  "files": [
+    "mod.ts",
+    "packages/workos_sdk/mod.ts", 
+    "packages/workos_sdk/src/**/*.ts"
+  ],
+  "exclude": [
+    "**/*.spec.ts",
+    "**/*-test.ts",
+    "**/*-live-test.spec.ts",
+    "**/*.test.ts",
+    "**/__snapshots__/**",
+    "**/tests/**",
+    "**/tests_deno/**",
+    "**/fixtures/**",
+    "src/**",
+    "examples/**"
+  ],
   "tasks": {
     "test": "deno test -A"
   }

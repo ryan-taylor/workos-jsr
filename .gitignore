@@ -35,6 +35,7 @@ _reference/
 examples/
 docs/ui/
 tests_deno/
+src/fga/
 
 .npmrc
 .DS_Store

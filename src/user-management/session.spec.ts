@@ -185,7 +185,7 @@ Deno.test("Session - authenticate returns a successful response if the sessionDa
 
     // Split the token into multiple lines to avoid hitting the line length limit
     const accessToken =
-      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdXRoZW50aWNhdGVkIjp0cnVlLCJpbXBlcnNvbmF0b3IiOn" +
+      "test_jwt_token" +
       "siZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJlYXNvbiI6InRlc3QifSwic2lkIjoic2Vzc2lvbl8xMjMiLCJvcm" +
       "dfaWQiOiJvcmdfMTIzIiwicm9sZSI6Im1lbWJlciIsInBlcm1pc3Npb25zIjpbInBvc3RzOmNyZWF0ZSIsInBvc3RzOm" +
       "RlbGV0ZSJdLCJlbnRpdGxlbWVudHMiOlsiYXVkaXQtbG9ncyJdLCJ1c2VyIjp7Im9iamVjdCI6InVzZXIiLCJpZCI6In" +
@@ -277,7 +277,7 @@ Deno.test("Session - refresh when session data is valid returns a successful res
 
   // Split the token into multiple lines to avoid hitting the line length limit
   const accessToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJzdWIiOiAiMTIzNDU2Nzg5MCIsCiAgIm5hbWUiOiAiSm9obiBEb2" +
+    "test_jwt_token" +
     "UiLAogICJpYXQiOiAxNTE2MjM5MDIyLAogICJzaWQiOiAic2Vzc2lvbl8xMjMiLAogICJvcmdfaWQiOiAib3JnXzEyMyIsC" +
     "iAgInJvbGUiOiAibWVtYmVyIiwKICAicGVybWlzc2lvbnMiOiBbInBvc3RzOmNyZWF0ZSIsICJwb3N0czpkZWxldGUiXQp9." +
     "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
@@ -355,7 +355,7 @@ Deno.test("Session - refresh overwrites the cookie password if a new one is prov
 
   // Split the token into multiple lines to avoid hitting the line length limit
   const accessToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJzdWIiOiAiMTIzNDU2Nzg5MCIsCiAgIm5hbWUiOiAiSm9obiBEb2" +
+    "test_jwt_token" +
     "UiLAogICJpYXQiOiAxNTE2MjM5MDIyLAogICJzaWQiOiAic2Vzc2lvbl8xMjMiLAogICJvcmdfaWQiOiAib3JnXzEyMyIsC" +
     "iAgInJvbGUiOiAibWVtYmVyIiwKICAicGVybWlzc2lvbnMiOiBbInBvc3RzOmNyZWF0ZSIsICJwb3N0czpkZWxldGUiXQp9." +
     "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
@@ -450,7 +450,7 @@ Deno.test("Session - getLogoutUrl returns a logout URL for the user", async () =
 
     // Split the token into multiple lines to avoid hitting the line length limit
     const accessToken =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJzdWIiOiAiMTIzNDU2Nzg5MCIsCiAgIm5hbWUiOiAiSm9obiBEb2" +
+      "test_jwt_token" +
       "UiLAogICJpYXQiOiAxNTE2MjM5MDIyLAogICJzaWQiOiAic2Vzc2lvbl8xMjMiLAogICJvcmdfaWQiOiAib3JnXzEyMyIsC" +
       "iAgInJvbGUiOiAibWVtYmVyIiwKICAicGVybWlzc2lvbnMiOiBbInBvc3RzOmNyZWF0ZSIsICJwb3N0czpkZWxldGUiXQp9." +
       "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
@@ -529,7 +529,7 @@ Deno.test("Session - getLogoutUrl with returnTo URL returns a logout URL with re
 
     // Split the token into multiple lines to avoid hitting the line length limit
     const accessToken =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJzdWIiOiAiMTIzNDU2Nzg5MCIsCiAgIm5hbWUiOiAiSm9obiBEb2" +
+      "test_jwt_token" +
       "UiLAogICJpYXQiOiAxNTE2MjM5MDIyLAogICJzaWQiOiAic2Vzc2lvbl8xMjMiLAogICJvcmdfaWQiOiAib3JnXzEyMyIsC" +
       "iAgInJvbGUiOiAibWVtYmVyIiwKICAicGVybWlzc2lvbnMiOiBbInBvc3RzOmNyZWF0ZSIsICJwb3N0czpkZWxldGUiXQp9." +
       "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";

@@ -18,5 +18,17 @@ jobs:
       - name: Deno Type-Check
         run: deno check $(git ls-files '*.ts')
 
+      # This step ensures the generated code matches the OpenAPI spec by:
+      # 1. Running the code generation task
+      # 2. Checking if there are any uncommitted changes
+      # 3. Failing with a helpful message if changes are detected
+      - name: Verify Generated Code is Up-to-Date
+        run: |
+          deno task generate:api
+          if ! git diff --quiet -- packages/workos_sdk/generated; then
+            echo "Error: Generated code is out of date. Please run 'deno task generate:api' locally and commit the changes."
+            exit 1
+          fi
+
       - name: Unit & Integration Tests
         run: deno test -A

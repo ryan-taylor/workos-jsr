@@ -1,16 +1,17 @@
-import { 
-  deserializeDirectory, 
-  deserializeDirectoryGroup, 
-  deserializeDirectoryUser 
+import {
+  deserializeDirectory,
+  deserializeDirectoryGroup,
+  deserializeDirectoryUser
 } from "./serializers/index.ts";
-import type { 
-  Directory, 
-  DirectoryGroup, 
-  DirectoryUser 
+import type {
+  Directory,
+  DirectoryGroup,
+  DirectoryUser
 } from "./interfaces/index.ts";
 import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
 import type { WorkOS } from "../workos.ts";
-import type { GetOptions, List } from "../common/interfaces.ts";
+import { DirectorySyncService, setWorkOSInstance } from "../../generated/2025-05-12/index.ts";
+import type { CommonGetOptions, List } from "../common/interfaces.ts";
 
 /**
  * Service for WorkOS Directory Sync.
@@ -27,6 +28,7 @@ import type { GetOptions, List } from "../common/interfaces.ts";
  */
 export class DirectorySync {
   private workos: WorkOS;
+  private directorySyncService: DirectorySyncService;
 
   /**
    * Creates a new DirectorySync client.
@@ -34,6 +36,9 @@ export class DirectorySync {
    */
   constructor(workos: WorkOS) {
     this.workos = workos;
+    // Initialize the WorkOS instance for generated services
+    setWorkOSInstance(workos);
+    this.directorySyncService = new DirectorySyncService();
   }
 
   /**
@@ -42,10 +47,8 @@ export class DirectorySync {
    * @returns Promise resolving to the Directory object
    */
   async getDirectory(id: string): Promise<Directory> {
-    const { data } = await this.workos.get<Record<string, unknown>>(
-      `/directories/${id}`,
-    );
-    return deserializeDirectory(data);
+    // Use the generated service to get a directory
+    return await this.directorySyncService.getDirectory(id);
   }
 
   /**
@@ -55,14 +58,8 @@ export class DirectorySync {
    * @returns Promise resolving to a paginated List of Directory objects
    */
   async listDirectories(query: Record<string, unknown> = {}): Promise<List<Directory>> {
-    const requestOptions: GetOptions = { query } as unknown as GetOptions;
-    return await fetchAndDeserialize(
-      this.workos,
-      "/directories",
-      deserializeDirectory,
-      undefined,
-      requestOptions,
-    ) as List<Directory>;
+    // Use the generated service to list directories
+    return await this.directorySyncService.listDirectories(query);
   }
 
   /**
@@ -72,14 +69,8 @@ export class DirectorySync {
    * @returns Promise resolving to a paginated List of DirectoryGroup objects
    */
   async listGroups(query: Record<string, unknown> = {}): Promise<List<DirectoryGroup>> {
-    const requestOptions: GetOptions = { query } as unknown as GetOptions;
-    return await fetchAndDeserialize(
-      this.workos,
-      "/directory_groups",
-      deserializeDirectoryGroup,
-      undefined,
-      requestOptions,
-    ) as List<DirectoryGroup>;
+    // Use the generated service to list groups
+    return await this.directorySyncService.listGroups(query);
   }
 
   /**
@@ -89,13 +80,7 @@ export class DirectorySync {
    * @returns Promise resolving to a paginated List of DirectoryUser objects
    */
   async listUsers(query: Record<string, unknown> = {}): Promise<List<DirectoryUser>> {
-    const requestOptions: GetOptions = { query } as unknown as GetOptions;
-    return await fetchAndDeserialize(
-      this.workos,
-      "/directory_users",
-      deserializeDirectoryUser,
-      undefined,
-      requestOptions,
-    ) as List<DirectoryUser>;
+    // Use the generated service to list users
+    return await this.directorySyncService.listUsers(query);
   }
 }

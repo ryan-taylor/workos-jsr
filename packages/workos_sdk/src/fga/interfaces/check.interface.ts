@@ -56,4 +56,12 @@ export class CheckResult {
     this.isImplicit = response.is_implicit;
     this.warrantToken = response.warrant_token;
   }
+
+  /**
+   * Returns whether the check was authorized
+   * @returns true if authorized, false otherwise
+   */
+  isAuthorized(): boolean {
+    return this.result === "true";
+  }
 }

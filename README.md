@@ -2,6 +2,7 @@
 
 [![JSR Version](https://jsr.io/badges/@ryantaylor/workos)](https://jsr.io/@ryantaylor/workos)
 [![Build Status](https://github.com/ryan-taylor/workos-jsr/actions/workflows/ci.yml/badge.svg)](https://github.com/ryan-taylor/workos-jsr/actions/workflows/ci.yml)
+
 ## Overview
 
 This library provides seamless integration with the WorkOS API for applications written in Deno and JavaScript/TypeScript. This project benefits from the official WorkOS SDK; sincere appreciation is extended to the WorkOS project team and all contributors for their efforts.

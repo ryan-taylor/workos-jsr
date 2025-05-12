@@ -1,7 +1,7 @@
 import type { List, ListResponse, PaginationOptions } from "../common/interfaces.ts";
 import type { WorkOS } from "../workos.ts";
-import { decode, decrypt } from "./cryptography/decrypt.ts";
-import { encrypt } from "./cryptography/encrypt.ts";
+import { decode, decrypt } from "./decrypt.ts";
+import { encrypt } from "./encrypt.ts";
 import type {
   CreateDataKeyOptions,
   CreateDataKeyResponse,
@@ -123,7 +123,7 @@ export class Vault {
     const { dataKey, encryptedKeys } = await this.createDataKey({
       context,
     });
-    return encrypt(data, dataKey.key, encryptedKeys, associatedData || "");
+    return encrypt(data, dataKey.key, encryptedKeys[0], associatedData || "");
   }
 
   async decrypt(
@@ -131,7 +131,8 @@ export class Vault {
     associatedData?: string,
   ): Promise<string> {
     const decoded = decode(encryptedData);
-    const dataKey = await this.decryptDataKey({ keys: decoded.keys });
+    const keysArray = Array.isArray(decoded.keys) ? decoded.keys : [decoded.keys];
+    const dataKey = await this.decryptDataKey({ keys: keysArray });
     return decrypt(decoded, dataKey.key, associatedData || "");
   }
 
@@ -163,4 +164,4 @@ export class Vault {
    * @deprecated Use `deleteObject` instead.
    */
   deleteSecret = this.deleteObject;
-}
+} 

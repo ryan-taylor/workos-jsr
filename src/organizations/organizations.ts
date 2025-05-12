@@ -21,6 +21,7 @@ import type {
 } from "../roles/interfaces.ts";
 import { deserializeRole } from "../roles/serializers/role.serializer.ts";
 import type { ListOrganizationRolesOptions } from "./interfaces/list-organization-roles-options.interface.ts";
+import type { PaginationOptions } from "../common/interfaces.ts";
 
 export class Organizations {
   constructor(private readonly workos: WorkOS) {}
@@ -35,7 +36,7 @@ export class Organizations {
         deserializeOrganization,
         options,
       ),
-      (params) =>
+      (params: PaginationOptions) =>
         fetchAndDeserialize<OrganizationResponse, Organization>(
           this.workos,
           "/organizations",

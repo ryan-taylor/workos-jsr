@@ -19,6 +19,7 @@ import {
   serializeListDirectoriesOptions,
 } from "./serializers.ts";
 import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
+import type { PaginationOptions } from "../common/interfaces.ts";
 
 export class DirectorySync {
   constructor(private readonly workos: WorkOS) {}
@@ -33,7 +34,7 @@ export class DirectorySync {
         deserializeDirectory,
         options ? serializeListDirectoriesOptions(options) : undefined,
       ),
-      (params) =>
+      (params: PaginationOptions) =>
         fetchAndDeserialize<DirectoryResponse, Directory>(
           this.workos,
           "/directories",
@@ -66,7 +67,7 @@ export class DirectorySync {
         deserializeDirectoryGroup,
         options,
       ),
-      (params) =>
+      (params: PaginationOptions) =>
         fetchAndDeserialize<DirectoryGroupResponse, DirectoryGroup>(
           this.workos,
           "/directory_groups",
@@ -90,7 +91,7 @@ export class DirectorySync {
         deserializeDirectoryUserWithGroups,
         options,
       ),
-      (params) =>
+      (params: PaginationOptions) =>
         fetchAndDeserialize<
           DirectoryUserWithGroupsResponse<TCustomAttributes>,
           DirectoryUserWithGroups<TCustomAttributes>

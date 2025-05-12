@@ -45,6 +45,7 @@ import {
 import { isResourceInterface } from "./utils/interface-check.ts";
 import { AutoPaginatable } from "../common/utils/pagination.ts";
 import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
+import type { PaginationOptions } from "../common/interfaces.ts";
 
 export class FGA {
   constructor(private readonly workos: WorkOS) {}
@@ -111,7 +112,7 @@ export class FGA {
         deserializeResource,
         options ? serializeListResourceOptions(options) : undefined,
       ),
-      (params) =>
+      (params: PaginationOptions) =>
         fetchAndDeserialize<ResourceResponse, Resource>(
           this.workos,
           "/fga/v1/resources",
@@ -193,7 +194,7 @@ export class FGA {
         options ? serializeListWarrantsOptions(options) : undefined,
         requestOptions,
       ),
-      (params) =>
+      (params: PaginationOptions) =>
         fetchAndDeserialize<WarrantResponse, Warrant>(
           this.workos,
           "/fga/v1/warrants",
@@ -217,7 +218,7 @@ export class FGA {
         serializeQueryOptions(options),
         requestOptions,
       ),
-      (params) =>
+      (params: PaginationOptions) =>
         fetchAndDeserialize<QueryResultResponse, QueryResult>(
           this.workos,
           "/fga/v1/query",

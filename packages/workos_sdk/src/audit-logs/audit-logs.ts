@@ -3,8 +3,6 @@ import { serializeListEventsOptions } from "./serializers/list-events-options.se
 import type {
   AuditLogEvent,
   CreateEventOptions,
-  ListEventsOptions,
-  AuditLogCreateEventOptions,
   AuditLogListEventsOptions,
 } from "./interfaces/index.ts";
 import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";

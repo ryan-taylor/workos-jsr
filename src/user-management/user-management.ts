@@ -227,7 +227,7 @@ export class UserManagement {
         deserializeUser,
         options ? serializeListUsersOptions(options) : undefined,
       ),
-      (params) =>
+      (params: PaginationOptions) =>
         fetchAndDeserialize<UserResponse, User>(
           this.workos,
           "/user_management/users",
@@ -786,7 +786,7 @@ export class UserManagement {
         deserializeFactor,
         restOfOptions,
       ),
-      (params) =>
+      (params: PaginationOptions) =>
         fetchAndDeserialize<FactorResponse, Factor>(
           this.workos,
           `/user_management/users/${userId}/auth_factors`,
@@ -838,7 +838,7 @@ export class UserManagement {
           ? serializeListOrganizationMembershipsOptions(options)
           : undefined,
       ),
-      (params) =>
+      (params: PaginationOptions) =>
         fetchAndDeserialize<
           OrganizationMembershipResponse,
           OrganizationMembership
@@ -939,7 +939,7 @@ export class UserManagement {
         deserializeInvitation,
         options ? serializeListInvitationsOptions(options) : undefined,
       ),
-      (params) =>
+      (params: PaginationOptions) =>
         fetchAndDeserialize<InvitationResponse, Invitation>(
           this.workos,
           "/user_management/invitations",

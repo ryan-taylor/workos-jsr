@@ -1,42 +1,42 @@
-# @ryantaylor/workos: Deno/JSR port of the WorkOS API
+# @ryantaylor/workos: Deno/JSR Port of the WorkOS API
 
 [![JSR Version](https://jsr.io/badges/@ryantaylor/workos)](https://jsr.io/@ryantaylor/workos)
 [![Build Status](https://github.com/ryan-taylor/workos-jsr/actions/workflows/ci.yml/badge.svg)](https://github.com/ryan-taylor/workos-jsr/actions/workflows/ci.yml)
-
-## Relationship to Official SDK
-
-This package is a fork of [workos-inc/workos-node](https://github.com/workos-inc/workos-node) adapted specifically for Deno and JSR. We maintain our own development path focused on Deno compatibility while tracking the upstream for reference only.
-
-Our versioning does not directly correspond to the official WorkOS SDK - we follow semantic versioning for our Deno-specific implementation. See [VERSION.md](VERSION.md) for details.
-
 ## Overview
 
-This library provides convenient access to the WorkOS API from applications
-written in JavaScript and TypeScript. It is designed for Deno 2.x environments,
-including Deno's [Fresh](https://fresh.deno.dev/) framework. Full examples are
-provided for Fresh 2.x (canary).
+This library provides seamless integration with the WorkOS API for applications written in Deno and JavaScript/TypeScript. This project benefits from the official WorkOS SDK; sincere appreciation is extended to the WorkOS project team and all contributors for their efforts.
+
+The SDK is fully Deno-native, designed to work with Deno 2.x and Fresh 2.x with enhanced type safety and improved performance. Key features include:
+
+- **Fine-Grained Authorization (FGA)**: A complete implementation of WorkOS's authorization system
+- **Type-Safe User Management**: Enhanced session handling with proper typing
+- **Directory Sync**: Improved serialization and type-safe directory management
+- **Pure Deno Implementation**: No compatibility layers, built for Deno from the ground up
+
+## Relationship to the Official SDK
+
+This package is a fork of the [workos-inc/workos-node](https://github.com/workos-inc/workos-node) repository, adapted specifically for Deno and JSR compatibility. Upstream changes are tracked for reference, and semantic versioning is applied independently for this implementation.
 
 ## Documentation
 
-See the [WorkOS API Reference](https://workos.com/docs/reference/client-libraries) for
-API reference, while our implementation details may differ to optimize for Deno.
+Refer to the [WorkOS API Reference](https://workos.com/docs/reference/client-libraries) maintained by the WorkOS project for detailed API documentation. Thank you to the WorkOS maintainers and contributors for their continued work.
+Refer to the [WorkOS API Reference](https://workos.com/docs/reference/client-libraries) maintained by the WorkOS project for detailed API documentation. Thank you to the WorkOS maintainers and contributors for their continued work.
 
 ## Requirements
 
-- Deno 2.0.0 or higher
-- Note: This project includes a `.deno-version` file to ensure compatibility
+- Deno version 2.0.0 or higher
 
 ## Installation
 
 ### Deno/Fresh
 
-For Deno and Fresh applications, you can import directly from JSR:
+Direct import:
 
 ```ts
 import { WorkOS } from "jsr:@ryantaylor/workos@^0.1.0";
 ```
 
-Or add to your `deno.json` imports:
+Or add the following to the `deno.json` imports:
 
 ```json
 {
@@ -48,338 +48,244 @@ Or add to your `deno.json` imports:
 
 ## JSR.io Package
 
-This library is published to [JSR.io](https://jsr.io/@ryantaylor/workos) for
-Deno users. JSR (JavaScript Registry) is a modern package registry optimized for
-Deno and the web platform.
-
-### Using the JSR Package
-
-To use the SDK from JSR in a Deno project:
-
-```ts
-// Direct import
-import { WorkOS } from "jsr:@ryantaylor/workos@^0.1.0";
-
-// Or in your deno.json
-// {
-//   "imports": {
-//     "@ryantaylor/workos": "jsr:@ryantaylor/workos@^0.1.0"
-//   }
-// }
-```
-
-### JSR Publishing Process
-
-The Deno SDK is published to JSR automatically through GitHub Actions. The
-process is as follows:
-
-1. Version is updated in `jsr.json` using semantic versioning
-2. A tag is created matching the format `deno-vX.Y.Z`
-3. GitHub Actions publishes the package to JSR when a new tag is pushed
+This library is published to [JSR.io](https://jsr.io/@ryantaylor/workos), a modern registry optimized for Deno and web projects.
 
 ## Configuration
 
-### Deno/Fresh Configuration
-
-For Deno applications:
+For Deno applications, initialize the SDK as shown below:
 
 ```ts
 import { WorkOS } from "@ryantaylor/workos";
 
 const workos = new WorkOS(
-  Deno.env.get("WORKOS_API_KEY") || "",
-  { clientId: Deno.env.get("WORKOS_CLIENT_ID") },
+  Deno.env.get("WORKOS_API_KEY") ?? "",
+  { clientId: Deno.env.get("WORKOS_CLIENT_ID") }
 );
 ```
 
-### Environment Configuration
+### Environment Variables
 
-Create a `.env` file in your project root with these variables:
+Create a `.env` file at the project root with the following entries:
 
 ```bash
-# Required
 WORKOS_API_KEY=your_workos_api_key
 WORKOS_CLIENT_ID=your_workos_client_id
-
-# For session management (if using Fresh)
 SESSION_SECRET=a_strong_random_string_for_cookie_encryption
-
-# For webhooks
 WORKOS_WEBHOOK_SECRET=your_workos_webhook_signing_secret
 ```
 
-For security in production, consider using a service like Doppler for secrets
-management rather than environment files.
+In production environments, it is recommended to use a secure secrets management service instead of environment files.
 
 ## Getting Started
 
-The quickest way to start a new project with WorkOS and Fresh 2.x:
+Launch the Fresh development server with live reload:
 
 ```bash
 deno task dev
 ```
 
-This will run the Fresh development server with live-reload enabled, allowing
-you to immediately see your changes.
-
-The example application in `examples/fresh-canary` demonstrates:
-
-- User authentication with WorkOS
-- Session management with cookies
-- API routes for user operations
-- Telemetry dashboard
-
-To deploy your application to Deno Deploy:
-
-```bash
-deno task deploy
-```
-
-This will build your application and deploy it using the configuration in
-`deno.deploy.json`.
+Changes will be reflected in real time.
 
 ## OpenTelemetry Integration
 
-The WorkOS SDK includes built-in support for OpenTelemetry, enabling you to
-monitor SDK usage, performance, and errors in your application.
-
-### Enabling Telemetry
-
-To enable telemetry collection, provide telemetry configuration when
-initializing the WorkOS SDK:
+Built-in support for OpenTelemetry enables observability of SDK usage, performance, and errors. Example configuration:
 
 ```ts
 const workos = new WorkOS(
-  Deno.env.get("WORKOS_API_KEY") || "",
+  Deno.env.get("WORKOS_API_KEY") ?? "",
   {
     clientId: Deno.env.get("WORKOS_CLIENT_ID"),
     telemetry: {
       enabled: true,
-      endpoint: "http://localhost:4318", // OTLP over HTTP endpoint
+      endpoint: "http://localhost:4318",
       serviceName: "my-application",
       defaultAttributes: {
-        "environment": "production",
+        environment: "production",
         "deployment.version": "1.2.3",
       },
+      debug: false,
     },
-  },
+  }
 );
 ```
 
-### Configuration Options
+Telemetry data is exported in the OTLP format and can be collected by an OpenTelemetry Collector, stored in Prometheus, and visualized in Grafana.
 
-The telemetry configuration supports these options:
+## Deployment
 
-| Option              | Description                                              | Default                 |
-| ------------------- | -------------------------------------------------------- | ----------------------- |
-| `enabled`           | Enable/disable telemetry collection                      | `false`                 |
-| `endpoint`          | OTLP HTTP exporter endpoint                              | `http://localhost:4318` |
-| `serviceName`       | Service name for telemetry                               | `workos-sdk`            |
-| `defaultAttributes` | Additional attributes to include with all telemetry data | `{}`                    |
-| `debug`             | Enable debug logging for telemetry                       | `false`                 |
+- Secure environment variables via a vault or secrets management service
+- Enforce CORS and security headers for application routes
+- Monitor telemetry and configure alerts for abnormal patterns
+- Plan for scalability and handle API rate limits appropriately
 
-### Visualizing Telemetry Data
+## SDK Modules
 
-The WorkOS SDK exports telemetry data in the OpenTelemetry Protocol (OTLP)
-format, which can be collected and visualized using:
+### Fine-Grained Authorization (FGA)
 
-1. An OpenTelemetry Collector to receive and process the data
-2. Prometheus for metrics storage
-3. Grafana for visualization
+The FGA module provides a flexible, scalable authorization system that lets you model complex access control scenarios.
 
-For example deployment with the OpenTelemetry Collector:
+- Create and manage resources
+- Establish relationships with warrants
+- Perform authorization checks
+- Query authorization relationships
+- Batch operations for resources and warrants
 
-```yaml
-# collector-config.yaml
-receivers:
-  otlp:
-    protocols:
-      http:
-        endpoint: 0.0.0.0:4318
+```ts
+// Initialize the FGA module
+const workos = new WorkOS(Deno.env.get("WORKOS_API_KEY") ?? "");
+const fga = workos.fga;
 
-processors:
-  batch:
-    timeout: 1s
+// Create a resource
+const resource = await fga.createResource({
+  resourceType: "document",
+  resourceId: "doc-123",
+  meta: { name: "Project Plan" }
+});
 
-exporters:
-  prometheus:
-    endpoint: 0.0.0.0:8889
-  jaeger:
-    endpoint: jaeger:14250
-    tls:
-      insecure: true
+// Create a relationship (warrant)
+await fga.writeWarrant({
+  subjectType: "user",
+  subjectId: "user-456",
+  relation: "editor",
+  resourceType: "document",
+  resourceId: "doc-123"
+});
 
-service:
-  pipelines:
-    metrics:
-      receivers: [otlp]
-      processors: [batch]
-      exporters: [prometheus]
-    traces:
-      receivers: [otlp]
-      processors: [batch]
-      exporters: [jaeger]
+// Perform an authorization check
+const checkResult = await fga.check({
+  subjectType: "user",
+  subjectId: "user-456",
+  relation: "editor",
+  resourceType: "document",
+  resourceId: "doc-123"
+});
+
+console.log("Is authorized:", checkResult.result);
 ```
 
-### Prometheus Configuration Example
+### User Management
 
-```yaml
-# prometheus.yml
-global:
-  scrape_interval: 15s
+The User Management module provides session handling with enhanced type safety:
 
-scrape_configs:
-  - job_name: "otel-collector"
-    scrape_interval: 10s
-    static_configs:
-      - targets: ["otel-collector:8889"]
+- Type-safe user session authentication
+- Improved session management
+- Clean session provider integration with Fresh
+
+```ts
+// Initialize User Management with session provider
+const sessionProvider = new FreshSessionProvider();
+const userManagement = workos.userManagement(sessionProvider);
+
+// Authenticate a user and get properly typed session
+const sessionAuth = await userManagement.authenticateWithCode({
+  clientId: Deno.env.get("WORKOS_CLIENT_ID") ?? "",
+  code: "authorization_code",
+  redirectUri: "https://your-app.com/callback"
+});
+
+// Type-safe access to user properties
+console.log("User ID:", sessionAuth.user.id);
+console.log("User Email:", sessionAuth.user.email);
 ```
 
-### Instrumented Functionality
+### Directory Sync
 
-The following WorkOS SDK operations are automatically instrumented:
+The Directory Sync module manages directory connections with type-safe interfaces:
 
-- HTTP requests to WorkOS API
-- SSO authentication flows
-- Directory Sync operations
-- User Management authentication
-- API success and error rates
-- Response times and latency
+- Retrieve directories with proper typing
+- List users and groups with improved serialization
+- Paginated results with consistent patterns
 
-### Demo Dashboard
+```ts
+// Initialize Directory Sync
+const directorySync = workos.directorySync;
 
-The Fresh example includes a telemetry dashboard at `/telemetry` that
-demonstrates how to visualize metrics from the WorkOS SDK:
+// Get a directory with type-safe response
+const directory = await directorySync.getDirectory("directory_123");
 
+// List users with proper typing
+const users = await directorySync.listUsers({
+  directory: "directory_123"
+});
+
+// List groups with pagination
+const groups = await directorySync.listGroups({
+  directory: "directory_123",
+  limit: 10
+});
 ```
-cd examples/fresh-canary
-deno task start
-```
-
-Then navigate to <http://localhost:8000/telemetry> to see the dashboard.
 
 ## Usage Examples
 
-### Fresh 2.x Integration Example
-
-Here's a basic example of integrating WorkOS User Management with Fresh 2.x:
+A complete Fresh 2.x integration example for User Management:
 
 ```ts
 // utils/workos.ts
 import { WorkOS } from "@ryantaylor/workos";
-import { FreshSessionProvider } from "@workos/sdk/common/iron-session/fresh-session-provider";
+import { FreshSessionProvider } from "@ryantaylor/workos/common/iron-session/fresh-session-provider";
 
 export function initWorkOS() {
   const workos = new WorkOS(
-    Deno.env.get("WORKOS_API_KEY") || "",
-    { clientId: Deno.env.get("WORKOS_CLIENT_ID") },
+    Deno.env.get("WORKOS_API_KEY") ?? "",
+    { clientId: Deno.env.get("WORKOS_CLIENT_ID") }
   );
 
-  const sessionProvider = new FreshSessionProvider();
+  // Initialize session provider for user management
+  const sessionProvider = new FreshSessionProvider({
+    cookieName: "app_session",
+    password: Deno.env.get("SESSION_SECRET") ?? "",
+    cookieOptions: {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+    },
+  });
+
+  // Get typed user management client
   const userManagement = workos.userManagement(sessionProvider);
+  
+  // Get FGA client
+  const fga = workos.fga;
+  
+  // Get Directory Sync client
+  const directorySync = workos.directorySync;
 
-  return { workos, userManagement, sessionProvider };
+  return { workos, userManagement, fga, directorySync, sessionProvider };
 }
 ```
 
-```ts
-// routes/_middleware.ts
-import { FreshContext } from "$fresh/server.ts";
-import { FreshSessionProvider } from "@workos/sdk/common/iron-session/fresh-session-provider";
+## Benefits of Deno-Native Implementation
 
-const SESSION_OPTIONS = {
-  cookieName: "workos_session",
-  password: Deno.env.get("SESSION_SECRET") ||
-    "use-a-strong-password-in-production",
-  ttl: 60 * 60 * 24 * 7, // 7 days in seconds
-  secure: true,
-  httpOnly: true,
-  sameSite: "Lax" as const,
-};
+Our Deno-native approach provides several key advantages:
 
-export async function handler(
-  req: Request,
-  ctx: FreshContext,
-): Promise<Response> {
-  const sessionProvider = new FreshSessionProvider();
-  const session = await sessionProvider.getSession(req, SESSION_OPTIONS);
-
-  if (session?.user) {
-    ctx.state.user = session.user;
-  }
-
-  return await ctx.next();
-}
-```
-
-## Deployment
-
-When deploying WorkOS SDK to production:
-
-1. **Configure secure environment variables**
-   - Store secrets securely (not in version control)
-   - Use a service like Doppler or HashiCorp Vault
-
-2. **Set up proper CORS and security headers**
-   - Restrict CORS to your application domains
-   - Use HTTPS for all requests
-
-3. **Monitor telemetry**
-   - Set up an OpenTelemetry collector
-   - Configure alerts for unusual patterns
-
-4. **Plan for scalability**
-   - Consider connection pooling for high-traffic applications
-   - Monitor API rate limits
+- **Enhanced Type Safety**: Proper typing throughout the codebase prevents runtime errors
+- **No Compatibility Layers**: Direct use of Deno APIs without Node.js compatibility shims
+- **Better Performance**: Native implementations of key functionality
+- **Fresh Framework Integration**: Seamless integration with Fresh 2.x
+- **Simplified Development**: Clean, consistent API patterns across all modules
 
 ## SDK Versioning
 
-For our SDKs WorkOS follows a Semantic Versioning
-([SemVer](https://semver.org/)) process where all releases will have a version
-X.Y.Z (like 1.0.0) pattern wherein Z would be a bug fix (e.g., 1.0.1), Y would
-be a minor release (1.1.0) and X would be a major release (2.0.0). We permit any
-breaking changes to only be released in major versions and strongly recommend
-reading changelogs before making any major version upgrades.
+This SDK follows Semantic Versioning ([SemVer](https://semver.org/)): versions are formatted as X.Y.Z, where breaking changes are introduced only in major version increments.
 
 ## Beta Releases
 
-WorkOS has features in Beta that can be accessed via Beta releases. We would
-love for you to try these and share feedback with us before these features reach
-general availability (GA). To install a Beta version, please follow the
-[installation steps](#installation) above using the Beta release version.
-
-> Note: there can be breaking changes between Beta versions. Therefore, we
-> recommend pinning the package version to a specific version. This way you can
-> install the same version each time without breaking changes unless you are
-> intentionally looking for the latest Beta version.
-
-We highly recommend keeping an eye on when the Beta feature you are interested
-in goes from Beta to stable so that you can move to using the stable version.
+Beta features are available via Beta release tags. Pinning to a specific version is advised to avoid unexpected breaking changes.
 
 ## Testing Approach
 
-The testing strategy follows these principles:
-
-1. **Unit Testing**: All public methods and functionality should have
-   comprehensive unit tests.
-2. **Mocking Strategy**: HTTP requests are mocked using utility functions found
-   in `tests/utils.ts`, which provide various mock client implementations:
-   - `createSuccessMockClient`: For testing successful API responses
-   - `createErrorMockClient`: For testing error scenarios
-   - `createNetworkErrorMockClient`: For testing network failures
-   - `createCapturingMockClient`: For capturing and inspecting requests
-
-3. **Coverage Verification**: GitHub workflow automatically verifies test coverage
-   is maintained on all pull requests.
+- Unit tests cover all public methods and functionality
+- HTTP requests are mocked using utilities in `tests/utils.ts`
+- Coverage is verified through continuous integration workflows
 
 ## Contributing
 
-We welcome contributions to the Deno/JSR port of WorkOS! Please check out our
-[contributing guidelines](CONTRIBUTING.md) for details on our commit message
-conventions and how to submit pull requests.
+Contributions are welcome. Please review the guidelines in `CONTRIBUTING.md` for commit conventions and pull request procedures.
 
 ## More Information
 
 - [WorkOS Documentation](https://workos.com/docs)
-- [Our Version Policy](VERSION.md)
-- [Our Changelog](CHANGELOG.md)
+- [Version Policy](VERSION.md)
+- [Changelog](CHANGELOG.md)
+
+Hoser made in fabrique au 🇨🇦

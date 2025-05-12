@@ -66,7 +66,7 @@ export async function makeRouter(
         // We need to use a string literal here to prevent TypeScript from checking the import
         // This is a limitation of the current setup, but it's better than using the Function constructor
         const modulePath = "@fresh/core";
-        const freshModule = await import(modulePath) as Fresh2.ServerModule;
+        const freshModule = await import(new URL(modulePath, import.meta.url).href) as Fresh2.ServerModule;
 
         const App = freshModule.App;
         const app = new App();

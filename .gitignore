@@ -30,14 +30,18 @@ cov/
 # Test snapshots
 **/__snapshots__/
 
-# Examples, reference and docs
+# Examples and reference
 _reference/
 examples/node-*
 examples/**/node_modules
-# Keep examples/fresh-canary tracked
+# Only exclude these specific examples/directories
+# examples/fresh-canary is intentionally tracked
+
+# Documentation UI build files
 docs/ui/
-tests_deno/
-src/fga/
+
+# Specific source directories (temporary exclusions)
+# src/fga/
 
 .npmrc
 .DS_Store

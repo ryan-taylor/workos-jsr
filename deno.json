@@ -15,5 +15,13 @@
     "codegen:upgrade": "deno run -A scripts/codegen/upgrade.ts",
     "ci:dialect-check": "deno run -A scripts/ci/dialect-check.ts",
     "precommit:check-adapter": "deno task prebuild:api"
+  },
+  "dependencies": {
+    "@std/crypto": "^1",
+    "@std/fs": "^1",
+    "@std/path": "^1",
+    "@std/http": "^1",
+    "@std/assert": "^1",
+    "@std/testing": "^1"
   }
 }

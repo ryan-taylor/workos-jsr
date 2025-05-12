@@ -119,8 +119,12 @@ All quality gates are enforced through GitHub Actions:
 2. **Commit Message Format**: All commits are automatically checked against the
    Conventional Commits specification using commitlint.
 
-You no longer need local Git hooks or Husky. Simply `git commit` & `git push`;
-the Checks tab in your PR will show the results.
+3. **Pre-commit Hook for Generated Code**: A pre-commit hook ensures that the OpenAPI-generated code is up-to-date:
+   - Automatically runs `deno task generate:api` before each commit
+   - Checks if there are any changes to the generated files
+   - Aborts the commit if the generated code is out-of-date, prompting you to run the task and commit the changes
+
+The pre-commit hook helps prevent CI failures by ensuring the generated code is always up-to-date with the specification.
 
 The configuration extends `@commitlint/config-conventional`, which enforces the
 Conventional Commits specification described above.

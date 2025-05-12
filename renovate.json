@@ -3,9 +3,26 @@
     {
       "updateTypes": ["major", "minor", "patch", "pin", "digest"],
       "automerge": true
+    },
+    {
+      "matchPaths": ["vendor/openapi/**"],
+      "labels": ["spec-update"],
+      "reviewers": [],
+      "prBodyNotes": ["This PR contains OpenAPI spec updates that should follow a lighter review process."],
+      "automerge": false
     }
   ],
   "extends": [
     "config:base"
+  ],
+  "regexManagers": [
+    {
+      "fileMatch": ["^vendor/openapi/.*\\.(json|yaml|yml)$"],
+      "matchStrings": [
+        ".*"
+      ],
+      "datasourceTemplate": "git-refs",
+      "depNameTemplate": "openapi-spec"
+    }
   ]
 }

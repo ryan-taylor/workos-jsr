@@ -1,8 +1,8 @@
 #!/usr/bin/env -S deno run -A
 
-import { generate } from "npm:openapi-typescript-codegen";
 import { ensureDir, existsSync } from "https://deno.land/std/fs/mod.ts";
 import { basename, dirname, join } from "https://deno.land/std/path/mod.ts";
+import { getGenerator } from "./adapter.ts";
 
 /**
  * Find the latest OpenAPI spec file in the vendor directory.
@@ -11,6 +11,7 @@ import { basename, dirname, join } from "https://deno.land/std/path/mod.ts";
 async function findLatestSpecFile(): Promise<{
   filePath: string;
   specVersion: string;
+  apiVersion: string;
 }> {
   try {
     const specDir = "./vendor/openapi";
@@ -43,11 +44,16 @@ async function findLatestSpecFile(): Promise<{
     specFiles.sort((a, b) => b.date.localeCompare(a.date));
     
     const latestSpec = specFiles[0];
-    
     console.log(`Found latest spec: ${latestSpec.name}`);
+    
+    // In the future, we could extract the actual OpenAPI version from the spec file
+    // For now, assume OpenAPI 3.0 as that's what the current generator supports
+    const apiVersion = "3.0";
+    
     return {
       filePath: latestSpec.path,
       specVersion: latestSpec.date,
+      apiVersion,
     };
   } catch (error) {
     console.error("Error finding latest spec file:", error);
@@ -105,27 +111,26 @@ async function typeCheckGeneratedCode(outputDir: string): Promise<void> {
 async function generateCode(): Promise<void> {
   try {
     // Find the latest spec file
-    const { filePath, specVersion } = await findLatestSpecFile();
+    const { filePath, specVersion, apiVersion } = await findLatestSpecFile();
     
     // Define output directory
     const outputDir = `./packages/workos_sdk/generated/${specVersion}`;
     
     // Ensure output directory exists
     await ensureOutputDirectory(outputDir);
-    
     console.log(`Generating code from ${filePath} to ${outputDir}...`);
+    console.log(`Using OpenAPI version: ${apiVersion}`);
     
-    // Generate code using openapi-typescript-codegen
-    await generate({
-      input: filePath,
-      output: outputDir,
-      httpClient: "fetch",
+    // Get appropriate generator for the OpenAPI version
+    const generator = getGenerator(apiVersion);
+    
+    // Generate code using the selected generator
+    await generator.generate(filePath, outputDir, {
       useOptions: true,
       useUnionTypes: true,
-      // Use type assertion to handle templates property which exists in the library
-      // but may not be properly typed in TypeScript definitions
-      ...({ templates: "./scripts/codegen/templates" } as any),
+      templates: "./scripts/codegen/templates",
     });
+    
     
     console.log("Code generation complete!");
     

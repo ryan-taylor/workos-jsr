@@ -1,0 +1,24 @@
+/**
+ * Generated API client for {{apiName}}
+ * 
+ * OpenAPI spec version: {{version}}
+ * {{#generatedDate}}Generated on: {{generatedDate}}{{/generatedDate}}
+ */
+
+{{#imports}}
+import { {{import}} } from './{{filename}}';
+{{/imports}}
+
+// Export models
+{{#models}}
+export * from './models/{{filename}}';
+{{/models}}
+
+// Export services
+{{#services}}
+export * from './services/{{filename}}';
+{{/services}}
+
+// Export core components
+export * from './core/request';
+export * from './core/BaseHttpClient';

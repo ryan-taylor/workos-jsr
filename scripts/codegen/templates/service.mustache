@@ -1,0 +1,61 @@
+/**
+ * {{&description}}
+ * @class {{&classname}}
+ */
+export class {{&classname}} {
+    protected httpClient: any;
+    protected basePath: string;
+
+    constructor(httpClient: any, basePath: string = '{{&basePath}}') {
+        this.httpClient = httpClient;
+        this.basePath = basePath;
+    }
+
+{{#operations}}
+    /**
+     * {{&summary}}
+     * {{&description}}
+     {{#parameters}}
+     * @param {{&paramName}} {{&description}}
+     {{/parameters}}
+     * @returns {Promise<{{&returnType}}>}
+     * @memberof {{&classname}}
+     */
+    public async {{&methodName}}({{#parameters}}{{&paramName}}{{^required}}?{{/required}}: {{&dataType}}{{^last}}, {{/last}}{{/parameters}}): Promise<{{&returnType}}> {
+        const url = `${this.basePath}{{&path}}`;
+        const request = {
+            url,
+            method: '{{&httpMethod}}',
+            {{#hasBodyParam}}
+            body: {{&bodyParamName}},
+            {{/hasBodyParam}}
+            {{#hasQueryParams}}
+            query: {
+                {{#queryParams}}
+                {{#required}}
+                '{{&baseName}}': {{&paramName}},
+                {{/required}}
+                {{^required}}
+                ...({{&paramName}} !== undefined ? { '{{&baseName}}': {{&paramName}} } : {}),
+                {{/required}}
+                {{/queryParams}}
+            },
+            {{/hasQueryParams}}
+            {{#hasHeaderParams}}
+            headers: {
+                {{#headerParams}}
+                {{#required}}
+                '{{&baseName}}': {{&paramName}},
+                {{/required}}
+                {{^required}}
+                ...({{&paramName}} !== undefined ? { '{{&baseName}}': {{&paramName}} } : {}),
+                {{/required}}
+                {{/headerParams}}
+            },
+            {{/hasHeaderParams}}
+        };
+
+        return this.httpClient.execute(request);
+    }
+{{/operations}}
+}

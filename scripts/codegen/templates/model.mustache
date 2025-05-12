@@ -1,0 +1,15 @@
+/**
+ * {{description}}
+ * @interface {{name}}
+ */
+export {{#isEnum}}type{{/isEnum}}{{^isEnum}}interface{{/isEnum}} {{name}} {{#isEnum}}= {{#enums}}"{{value}}"{{^last}} | {{/last}}{{/enums}}{{/isEnum}}{{^isEnum}}
+{
+{{#properties}}
+    /**
+     * {{description}}
+     * @type {{{type}}}
+     * @memberof {{../name}}
+     */
+    {{name}}{{^required}}?{{/required}}: {{type}};
+{{/properties}}
+}{{/isEnum}}

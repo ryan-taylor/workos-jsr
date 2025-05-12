@@ -4,6 +4,7 @@ import { ensureDir, existsSync } from "https://deno.land/std/fs/mod.ts";
 import { basename, dirname, join } from "https://deno.land/std/path/mod.ts";
 import { getGenerator } from "./adapter.ts";
 import { postProcess } from "./postprocess/index.ts";
+import { validateTemplates } from "./validate-templates.ts";
 
 /**
  * Find the latest OpenAPI spec file in the vendor directory.
@@ -122,6 +123,21 @@ async function generateCode(): Promise<void> {
     console.log(`Generating code from ${filePath} to ${outputDir}...`);
     console.log(`Using OpenAPI version: ${apiVersion}`);
     
+    // Validate templates before code generation
+    const templatesDir = "./scripts/codegen/templates";
+    console.log(`Validating templates in ${templatesDir}...`);
+    const validationResult = await validateTemplates(templatesDir);
+    
+    if (!validationResult.valid) {
+      console.warn("Template validation failed: missing required templates");
+      console.warn(`Missing templates: ${validationResult.missingTemplates.join(", ")}`);
+      if (!Deno.args.includes("--force")) {
+        console.error("Template validation failed. Use --force to generate anyway.");
+        Deno.exit(1);
+      }
+      console.warn("Continuing with code generation despite missing templates (--force)");
+    }
+    
     // Get appropriate generator for the OpenAPI version
     const generator = getGenerator(apiVersion);
     
@@ -129,7 +145,7 @@ async function generateCode(): Promise<void> {
     await generator.generate(filePath, outputDir, {
       useOptions: true,
       useUnionTypes: true,
-      templates: "./scripts/codegen/templates",
+      templates: templatesDir,
     });
     
     console.log("Code generation complete!");

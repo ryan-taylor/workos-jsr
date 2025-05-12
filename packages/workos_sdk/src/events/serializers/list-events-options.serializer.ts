@@ -1,7 +1,7 @@
-import type { ListEventsOptions } from "../interfaces";
+import type { EventsListOptions } from "../interfaces";
 
 export function serializeListEventsOptions(
-  options: ListEventsOptions,
+  options: EventsListOptions,
 ): Record<string, string | number | boolean | undefined> {
   return {
     range_start: options.range_start,

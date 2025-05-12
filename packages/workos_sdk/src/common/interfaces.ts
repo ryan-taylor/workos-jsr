@@ -9,16 +9,16 @@ export interface ApiResponse {
 }
 
 // HTTP Request Options
-export interface GetOptions {
+export interface CommonGetOptions {
   params?: Record<string, string | number | boolean>;
 }
 
-export interface PostOptions {
+export interface CommonPostOptions {
   idempotencyKey?: string;
   body?: Record<string, unknown>;
 }
 
-export interface PutOptions {
+export interface CommonPutOptions {
   body?: Record<string, unknown>;
 }
 

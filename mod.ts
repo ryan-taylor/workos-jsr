@@ -99,13 +99,33 @@ export type {
   WorkOSOptions,
   WorkOSResponseError,
 } from "./src/workos.ts";
+export type { 
+  CommonGetOptions as InternalGetOptions,
+  CommonPostOptions as InternalPostOptions,
+  CommonPutOptions as InternalPutOptions,
+  List,
+  PaginationOptions,
+} from "./src/common/interfaces.ts";
 export type { SessionOptions } from "./src/common/iron-session/fresh-session-provider.ts";
 
 // Additional exports from individual modules
 export * from "./src/actions/interfaces/index.ts";
-export * from "./src/audit-logs/interfaces/index.ts";
+
+// Replace wildcard with explicit exports for audit-logs
+export type {
+  AuditLogEvent,
+  AuditLogCreateEventOptions,
+  AuditLogListEventsOptions
+} from "./src/audit-logs/interfaces/index.ts";
+
 export * from "./src/directory-sync/interfaces/index.ts";
-export * from "./src/events/interfaces/index.ts";
+
+// Replace wildcard with explicit exports for events
+export type {
+  Event,
+  EventsListOptions
+} from "./src/events/interfaces/index.ts";
+
 export * from "./src/fga/interfaces/index.ts";
 export * from "./src/organization-domains/interfaces/index.ts";
 export * from "./src/organizations/interfaces/index.ts";

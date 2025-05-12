@@ -1,4 +1,4 @@
-export interface ListEventsOptions {
+export interface AuditLogListEventsOptions {
   organization_id: string;
   range_start?: string;
   range_end?: string;

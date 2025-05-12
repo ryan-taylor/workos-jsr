@@ -1,7 +1,7 @@
-import type { ListEventsOptions } from "../interfaces/index.ts";
+import type { AuditLogListEventsOptions } from "../interfaces/index.ts";
 
 export function serializeListEventsOptions(
-  options: ListEventsOptions,
+  options: AuditLogListEventsOptions,
 ): Record<string, unknown> {
   return {
     organization_id: options.organization_id,

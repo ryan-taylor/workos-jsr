@@ -4,6 +4,8 @@ import type {
   AuditLogEvent,
   CreateEventOptions,
   ListEventsOptions,
+  AuditLogCreateEventOptions,
+  AuditLogListEventsOptions,
 } from "./interfaces/index.ts";
 import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
 import type { WorkOS } from "../workos.ts";
@@ -20,7 +22,7 @@ export class AuditLogs {
     return deserializeAuditLogEvent(response.data);
   }
 
-  async listEvents(options: ListEventsOptions): Promise<List<AuditLogEvent>> {
+  async listEvents(options: AuditLogListEventsOptions): Promise<List<AuditLogEvent>> {
     return await fetchAndDeserialize(
       this.workos,
       "/audit_logs",

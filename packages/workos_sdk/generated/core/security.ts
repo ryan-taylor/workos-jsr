@@ -12,6 +12,17 @@ import type {
 
 // Re-export types from auth-schemes.ts
 export type { SupportedAuthScheme, HttpAuthScheme, ApiKeyLocation, OAuth2Flow } from "./auth-schemes.ts";
+
+// Re-export types and functions from security-resolver.ts
+export type {
+  SecurityResolverOptions,
+  SecurityResolutionResult
+} from "./security-resolver.ts";
+export { 
+  resolveSecurityStrategy,
+  applyResolvedSecurityToRequest
+} from "./security-resolver.ts";
+
 /**
  * Interface representing a request object with headers and query parameters
  */
@@ -273,8 +284,6 @@ export class ApiKeySecurityStrategy implements SecurityStrategy<"apiKey"> {
     }
 
     return result;
-
-    return request;
   }
 }
 
@@ -316,8 +325,6 @@ export class HttpSecurityStrategy implements SecurityStrategy<"http"> {
     };
 
     return result;
-
-    return request;
   }
 }
 

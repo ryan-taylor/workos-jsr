@@ -37,6 +37,8 @@ interface ValidationResult {
 export async function validateTemplates(templateDir: string): Promise<ValidationResult> {
   const manifestPath = join(templateDir, "template_manifest.json");
   
+  console.log(`Checking for template manifest at ${manifestPath}`);
+  
   // Check if manifest exists
   if (!await exists(manifestPath)) {
     console.error(`Template manifest not found at ${manifestPath}`);
@@ -45,6 +47,8 @@ export async function validateTemplates(templateDir: string): Promise<Validation
       missingTemplates: ["template_manifest.json"],
     };
   }
+  
+  console.log(`Template manifest found at ${manifestPath}`);
   
   // Load manifest
   const manifestText = await Deno.readTextFile(manifestPath);
@@ -56,9 +60,12 @@ export async function validateTemplates(templateDir: string): Promise<Validation
   for (const template of manifest.templates) {
     if (template.required) {
       const templatePath = join(templateDir, template.name);
+      console.log(`Checking for required template: ${template.name} at ${templatePath}`);
       if (!await exists(templatePath)) {
         console.warn(`Required template missing: ${template.name}`);
         missingTemplates.push(template.name);
+      } else {
+        console.log(`Template found: ${template.name}`);
       }
     }
   }

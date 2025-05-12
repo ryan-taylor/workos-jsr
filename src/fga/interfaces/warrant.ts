@@ -1,19 +1,23 @@
-/**
- * Compatibility interface for legacy FGA tests
- * @deprecated Use the new CheckOptions interface instead
- */
-export enum CheckOp {
-  AnyOf = "anyOf",
-  AllOf = "allOf"
+// Re-export types from the new location for backward compatibility with tests
+import { WarrantOp as NewWarrantOp } from "../../../packages/workos_sdk/src/fga/interfaces/warrant-op.enum.ts";
+
+// Export the same enum type to ensure compatibility
+export enum WarrantOp {
+  Create = "create",
+  Delete = "delete",
 }
 
-/**
- * Legacy warrant operation enum for backwards compatibility
- * @deprecated
- */
-export enum WarrantOp {
-  AND = "and",
-  OR = "or",
-  NOT = "not",
-  Delete = "delete"
+// Add CheckOp enum which is needed by some tests
+export enum CheckOp {
+  AnyOf = "any_of",
+  AllOf = "all_of",
 }
+
+// Export other types that might be needed by tests
+export type {
+  Warrant,
+  Subject,
+  WriteWarrantOptions,
+  ListWarrantsOptions,
+  PolicyContext,
+} from "../../../packages/workos_sdk/src/fga/interfaces/warrant.interface.ts";

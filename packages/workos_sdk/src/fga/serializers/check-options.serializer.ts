@@ -59,8 +59,18 @@ const serializeCheckItem = (item: V2CheckItem): V2SerializedCheckItem => {
  * @returns The serialized check options
  */
 export const serializeCheckOptions = (options: CheckOptions): V2SerializedCheckOptions => {
-  // Map from user:123 format to proper structured V2CheckItem
+  // Handle V2 batch format if it has the 'checks' property
+  if (options.checks) {
+    return serializeCheckBatchOptions(options as V2CheckBatchOptions);
+  }
+  
+  // Handle standard format (requires user, relation, object properties)
   const { user, relation, object } = options;
+  
+  // Verify that all required properties exist for standard format
+  if (!user || !relation || !object) {
+    throw new Error('CheckOptions must include user, relation, and object properties');
+  }
   
   // Create a structured check item
   const checkItem: V2CheckItem = {
@@ -70,7 +80,7 @@ export const serializeCheckOptions = (options: CheckOptions): V2SerializedCheckO
     },
     relation,
     subject: {
-      resourceType: user.split(':')[0], 
+      resourceType: user.split(':')[0],
       resourceId: user.split(':')[1],
     }
   };

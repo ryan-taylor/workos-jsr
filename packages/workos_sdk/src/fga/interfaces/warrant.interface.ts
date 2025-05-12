@@ -13,7 +13,7 @@ export interface ListWarrantsOptions {
   subjectId?: string;
   subjectRelation?: string;
   limit?: number;
-  after?: string;
+  after?: string | null;
 }
 
 export interface SerializedListWarrantsOptions {
@@ -24,7 +24,7 @@ export interface SerializedListWarrantsOptions {
   subject_id?: string;
   subject_relation?: string;
   limit?: number;
-  after?: string;
+  after?: string | null;
 }
 
 export interface PolicyContext {

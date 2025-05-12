@@ -23,6 +23,14 @@ export interface QueryResult {
   resourceId: string;
   warrant: Warrant;
   isImplicit: boolean;
+  /**
+   * Optional metadata associated with the resource
+   */
+  meta?: Record<string, any>;
+  /**
+   * Optional relation property
+   */
+  relation?: string;
 }
 
 export interface SerializedQueryResultWarrant {

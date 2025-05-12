@@ -62,21 +62,12 @@ export class UserManagement {
    * @returns Promise resolving to the User
    */
   async getUser(id: string): Promise<User> {
-    const result = await fetchAndDeserialize(
-      this.workos,
-      `/user_management/users/${id}`,
-      deserializeUser,
+    // Direct API call to avoid list deserialization for a single item
+    const response = await this.workos.get<Record<string, unknown>>(
+      `/user_management/users/${id}`
     );
-
-    if (result && typeof result === "object" && "data" in result) {
-      return (result as List<User>).data[0];
-    }
-
-    if (Array.isArray(result)) {
-      return result[0];
-    }
-
-    return result as User;
+    
+    return deserializeUser(response.data);
   }
 
   /**

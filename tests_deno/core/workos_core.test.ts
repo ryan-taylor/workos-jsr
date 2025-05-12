@@ -9,7 +9,19 @@ import { createMockWorkOS } from '../utils/test_helpers.ts';
  */
 Deno.test('WorkOS SDK - Core: throws if apiKey is missing', () => {
   // @ts-ignore - Testing missing apiKey
-  assertRejects(() => new WorkOS(), Error, "Missing API key");
+  try {
+    new WorkOS();
+    // If we get here, the constructor didn't throw
+    throw new Error("Expected WorkOS constructor to throw an error");
+  } catch (error) {
+    if (error instanceof Error) {
+      // Use includes instead of exact match since error message includes additional help text
+      assertEquals(error.message.includes("Missing API key"), true,
+                  `Error message should contain 'Missing API key', got: ${error.message}`);
+    } else {
+      throw new Error("Unexpected error type");
+    }
+  }
 });
 
 Deno.test('WorkOS SDK - Core: instantiates with apiKey string', () => {

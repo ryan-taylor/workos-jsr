@@ -5,9 +5,9 @@
   "importMap": "import_map.f2.json",
   "tasks": {
     "lint": "deno lint --ignore=_reference/**",
-    "check": "deno check mod.ts",
-    "test": "deno test -A --ignore=_reference",
-    "dev": "cd examples/fresh-canary && deno task start",
-    "rewrite-imports": "deno run -A scripts/rewrite-imports.ts"
+    "check": "deno check --import-map import_map.f2.json mod.ts",
+    "test": "deno test -A --import-map import_map.f2.json --ignore=_reference,examples",
+    "dev": "cd examples/fresh-canary && deno task start --import-map ../../import_map.f2.json",
+    "rewrite-imports": "deno run -A --import-map import_map.f2.json scripts/rewrite-imports.ts"
   }
 }

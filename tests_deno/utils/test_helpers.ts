@@ -4,7 +4,7 @@ import {
   HttpClientError,
   HttpClientResponse
 } from '../../packages/workos_sdk/src/common/net/http-client.ts';
-import type { RequestOptions } from '../../packages/workos_sdk/src/common/interfaces/http-client.interface.ts';
+import type { RequestOptions, RequestHeaders } from '../../packages/workos_sdk/src/common/interfaces/http-client.interface.ts';
 
 /**
  * A standardized mock HTTP client for Deno testing that provides comprehensive
@@ -16,12 +16,11 @@ export class MockHttpClient extends HttpClient {
     method?: string;
     params?: Record<string, string | number | boolean | undefined>;
     body?: unknown;
-    headers?: Record<string, string>;
+    headers?: RequestHeaders;
   } = {};
 
   constructor(private readonly mockResponse: unknown, private readonly statusCode = 200) {
-    // @ts-ignore: Just mock the constructor for testing
-    super(); 
+    super(''); // Pass empty base URL to parent constructor
   }
 
   /**
@@ -143,101 +142,7 @@ export function createMockWorkOS(mockResponse: unknown, statusCode = 200): { wor
   // Use any to bypass type checking since we're mocking for tests
   (workos as any).client = client;
   
-  // Add compatibility methods for tests using old API
-  addCompatibilityMethods(workos);
-  
   return { workos, client };
-}
-
-/**
- * Adds compatibility methods to WorkOS for tests using the old API
- */
-function addCompatibilityMethods(workos: WorkOS): void {
-  // Ensure workos has a get method
-  if (!(workos as any).get) {
-    (workos as any).get = function(path: string, options?: Record<string, unknown>) {
-      return {
-        data: Array.isArray((workos as any).client.mockResponse) ? 
-          (workos as any).client.mockResponse : 
-          [(workos as any).client.mockResponse],
-        object: 'list',
-        list_metadata: { before: null, after: null }
-      };
-    };
-  }
-  
-  // Ensure workos has a post method  
-  if (!(workos as any).post) {
-    (workos as any).post = function(path: string, data: unknown) {
-      return (workos as any).client.mockResponse;
-    };
-  }
-
-  // Add compatibility directorySync methods
-  if (!(workos.directorySync as any).listDirectories) {
-    (workos.directorySync as any).listDirectories = async () => {
-      return {
-        data: Array.isArray((workos as any).client.mockResponse) ? 
-          (workos as any).client.mockResponse : 
-          [(workos as any).client.mockResponse],
-        object: 'list',
-        list_metadata: { before: null, after: null }
-      };
-    };
-  }
-  
-  if (!(workos.directorySync as any).listGroups) {
-    (workos.directorySync as any).listGroups = async (options: any) => {
-      return {
-        data: Array.isArray((workos as any).client.mockResponse) ? 
-          (workos as any).client.mockResponse : 
-          [(workos as any).client.mockResponse],
-        object: 'list',
-        list_metadata: { before: null, after: null }
-      };
-    };
-  }
-  
-  if (!(workos.directorySync as any).listUsers) {
-    (workos.directorySync as any).listUsers = async (options: any) => {
-      return {
-        data: Array.isArray((workos as any).client.mockResponse) ? 
-          (workos as any).client.mockResponse : 
-          [(workos as any).client.mockResponse],
-        object: 'list',
-        list_metadata: { before: null, after: null }
-      };
-    };
-  }
-  
-  // Add compatibility userManagement methods
-  if (!(workos.userManagement as any).listUsers) {
-    (workos.userManagement as any).listUsers = async () => {
-      return {
-        data: Array.isArray((workos as any).client.mockResponse) ? 
-          (workos as any).client.mockResponse : 
-          [(workos as any).client.mockResponse],
-        object: 'list',
-        list_metadata: { before: null, after: null }
-      };
-    };
-  }
-  
-  if (!(workos.userManagement as any).authenticateWithPassword) {
-    (workos.userManagement as any).authenticateWithPassword = async (data: any) => {
-      return {
-        user: (workos as any).client.mockResponse.user,
-        accessToken: (workos as any).client.mockResponse.access_token,
-        refreshToken: (workos as any).client.mockResponse.refresh_token
-      };
-    };
-  }
-  
-  if (!(workos.userManagement as any).revokeSession) {
-    (workos.userManagement as any).revokeSession = async (options: any) => {
-      return null;
-    };
-  }
 }
 
 /**

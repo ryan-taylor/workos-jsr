@@ -8,48 +8,62 @@ import type {
   UpdateOrganizationOptions,
 } from "./interfaces";
 import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
+import type { WorkOS } from "../workos.ts";
+import type { List } from "../common/interfaces.ts";
 
 export class Organizations {
-  constructor(private apiKey: string) {}
+  constructor(private workos: WorkOS) {}
 
   async createOrganization(
     options: CreateOrganizationOptions,
   ): Promise<Organization> {
-    return await fetchAndDeserialize({
-      path: "/organizations",
-      method: "POST",
-      data: serializeCreateOrganizationOptions(options),
-      deserializer: deserializeOrganization,
-      apiKey: this.apiKey,
-    });
+    const result = await fetchAndDeserialize<Record<string, unknown>, Organization>(
+      {
+        workos: this.workos,
+        path: "/organizations",
+        method: "POST",
+        data: serializeCreateOrganizationOptions(options),
+        deserializer: deserializeOrganization,
+      }
+    );
+    return result as Organization;
   }
 
   async getOrganization(id: string): Promise<Organization> {
-    return await fetchAndDeserialize({
-      path: `/organizations/${id}`,
-      deserializer: deserializeOrganization,
-      apiKey: this.apiKey,
-    });
+    const result = await fetchAndDeserialize<Record<string, unknown>, Organization>(
+      {
+        workos: this.workos,
+        path: `/organizations/${id}`,
+        deserializer: deserializeOrganization,
+      }
+    );
+    return result as Organization;
   }
 
   async updateOrganization(
     id: string,
     options: UpdateOrganizationOptions,
   ): Promise<Organization> {
-    return await fetchAndDeserialize({
-      path: `/organizations/${id}`,
-      method: "PUT",
-      data: serializeUpdateOrganizationOptions(options),
-      deserializer: deserializeOrganization,
-      apiKey: this.apiKey,
-    });
+    const result = await fetchAndDeserialize<Record<string, unknown>, Organization>(
+      {
+        workos: this.workos,
+        path: `/organizations/${id}`,
+        method: "PUT",
+        data: serializeUpdateOrganizationOptions(options),
+        deserializer: deserializeOrganization,
+      }
+    );
+    return result as Organization;
   }
 
   async deleteOrganization(id: string): Promise<void> {
-    await fetchAndDeserialize({
-      path: `/organizations/${id}`,
-      method: "DELETE",
-      apiKey: this.apiKey,
-    });
+    await fetchAndDeserialize<Record<string, unknown>, void>(
+      {
+        workos: this.workos,
+        path: `/organizations/${id}`,
+        method: "DELETE",
+        deserializer: () => undefined,
+      }
+    );
   }
 }

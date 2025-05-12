@@ -23,11 +23,12 @@ export class AuditLogs {
   }
 
   async listEvents(options: AuditLogListEventsOptions): Promise<List<AuditLogEvent>> {
-    return await fetchAndDeserialize(
+    const result = await fetchAndDeserialize<Record<string, unknown>, AuditLogEvent>(
       this.workos,
       "/audit_logs",
       deserializeAuditLogEvent,
       serializeListEventsOptions(options),
     );
+    return result as List<AuditLogEvent>;
   }
 }

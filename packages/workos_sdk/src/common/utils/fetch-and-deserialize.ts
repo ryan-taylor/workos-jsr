@@ -14,19 +14,92 @@ const setDefaultOptions = (options?: PaginationOptions): PaginationOptions => {
   };
 };
 
-export const fetchAndDeserialize = async <T, U>(
-  workos: WorkOS,
-  endpoint: string,
-  deserializeFn: (item: unknown) => U,
+// Type for legacy options-object calling pattern
+export interface FetchAndDeserializeOptions<U> {
+  path: string;
+  deserializer: (item: unknown) => U;
+  apiKey?: string;
+  method?: "GET" | "POST" | "PUT" | "DELETE";
+  data?: Record<string, unknown>;
+  queryParams?: Record<string, string | number | boolean | undefined>;
+  workos?: WorkOS; // Optional for backward compatibility
+}
+
+// Define a type guard to check which calling pattern is being used
+function isOptionsObject<U>(
+  first: WorkOS | FetchAndDeserializeOptions<U>
+): first is FetchAndDeserializeOptions<U> {
+  return typeof first === "object" && "path" in first;
+}
+
+// Unified fetchAndDeserialize function that supports both calling patterns
+export async function fetchAndDeserialize<T, U>(
+  workosOrOptions: WorkOS | FetchAndDeserializeOptions<U>,
+  endpoint?: string,
+  deserializeFn?: (item: unknown) => U,
   options?: PaginationOptions,
   requestOptions?: GetOptions,
-): Promise<List<U>> => {
+): Promise<U | U[] | List<U>> {
+  // Handle options object pattern (legacy)
+  if (isOptionsObject<U>(workosOrOptions)) {
+    const {
+      path,
+      deserializer,
+      apiKey,
+      method = "GET",
+      data,
+      queryParams,
+      workos,
+    } = workosOrOptions;
+
+    // Handle cases where workos is passed in the options object
+    if (workos) {
+      // Using WorkOS instance from options
+      if (method === "GET") {
+        const getOptions: GetOptions = {
+          query: queryParams as Record<string, string>,
+        };
+        const response = await workos.get<Record<string, unknown>>(path, getOptions);
+        
+        // If response is an array or has data property, assume it's a list
+        if (Array.isArray(response.data)) {
+          return response.data.map(deserializer);
+        } else if (response.data && typeof response.data === "object" && "data" in response.data) {
+          const adaptedData = adaptListMetadata(response.data) as ListResponse<T>;
+          return deserializeList(adaptedData, deserializer);
+        }
+        
+        // Single item response
+        return deserializer(response.data);
+      } else {
+        // Handle other methods (POST, PUT, DELETE)
+        const response = await workos[method.toLowerCase() as "post" | "put" | "delete"]<Record<string, unknown>>(
+          path,
+          { body: data }
+        );
+        return response.data ? deserializer(response.data) : undefined as unknown as U;
+      }
+    }
+    
+    // Using apiKey directly (this is the legacy pattern)
+    if (apiKey) {
+      // This is our legacy implementation
+      // We would need to handle this if supporting older code
+      throw new Error("Direct apiKey usage is deprecated, use WorkOS instance instead");
+    }
+    
+    throw new Error("Either workos instance or apiKey must be provided");
+  }
+  
+  // Handle positional parameters pattern (new)
+  const workos = workosOrOptions as WorkOS;
+  if (!endpoint || !deserializeFn) {
+    throw new Error("Endpoint and deserializer function must be provided when using positional parameters");
+  }
+  
   const paginationOptions = setDefaultOptions(options);
   const response = await workos.get<Record<string, unknown>>(endpoint, {
-    query: paginationOptions as Record<
-      string,
-      string | number | boolean | undefined
-    >,
+    query: paginationOptions as Record<string, string | number | boolean | undefined>,
     ...requestOptions,
   });
 
@@ -34,4 +107,4 @@ export const fetchAndDeserialize = async <T, U>(
   const adaptedData = adaptListMetadata(response.data) as ListResponse<T>;
   
   return deserializeList(adaptedData, deserializeFn);
-};
+}

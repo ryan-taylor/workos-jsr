@@ -8,70 +8,68 @@ import type {
 } from "./interfaces/index.ts";
 import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
 import type { WorkOS } from "../workos.ts";
-import type { PaginationOptions } from "../common/interfaces/index.ts";
+import type { List, PaginationOptions } from "../common/interfaces.ts";
 
 export class FGA {
   constructor(private readonly workos: WorkOS) {}
 
   async createModel(options: CreateModelOptions): Promise<AuthorizationModel> {
-    const result = await fetchAndDeserialize<
-      Record<string, unknown>,
-      AuthorizationModel
-    >(
-      this.workos,
-      "/fga/authorization_models",
-      (item: unknown) =>
-        deserializeAuthorizationModel(item as Record<string, unknown>),
+    const result = await fetchAndDeserialize<Record<string, unknown>, AuthorizationModel>(
       {
+        workos: this.workos,
+        path: "/fga/authorization_models",
+        method: "POST",
         data: options,
-      } as PaginationOptions,
+        deserializer: (item: unknown) => deserializeAuthorizationModel(item as Record<string, unknown>),
+      }
     );
-    return result as unknown as AuthorizationModel;
+    return result as AuthorizationModel;
   }
 
   async getModel(id: string): Promise<AuthorizationModel> {
-    const result = await fetchAndDeserialize<
-      Record<string, unknown>,
-      AuthorizationModel
-    >(
-      this.workos,
-      `/fga/authorization_models/${id}`,
-      (item: unknown) =>
-        deserializeAuthorizationModel(item as Record<string, unknown>),
+    const result = await fetchAndDeserialize<Record<string, unknown>, AuthorizationModel>(
+      {
+        workos: this.workos,
+        path: `/fga/authorization_models/${id}`,
+        deserializer: (item: unknown) => deserializeAuthorizationModel(item as Record<string, unknown>),
+      }
     );
-    return result as unknown as AuthorizationModel;
+    return result as AuthorizationModel;
   }
 
   async listModels(options: ListModelsOptions): Promise<AuthorizationModel[]> {
-    const result = await fetchAndDeserialize<
-      Record<string, unknown>,
-      AuthorizationModel[]
-    >(
-      this.workos,
-      "/fga/authorization_models",
-      (item: unknown) =>
-        deserializeAuthorizationModel(item as Record<string, unknown>),
+    const result = await fetchAndDeserialize<Record<string, unknown>, AuthorizationModel>(
       {
-        ...serializeListModelsOptions(options),
-      } as PaginationOptions,
+        workos: this.workos,
+        path: "/fga/authorization_models",
+        deserializer: (item: unknown) => deserializeAuthorizationModel(item as Record<string, unknown>),
+        queryParams: serializeListModelsOptions(options),
+      }
     );
-    return Array.isArray(result)
-      ? result
-      : [result as unknown as AuthorizationModel];
+    
+    // Handle the case where result might be a List<AuthorizationModel>
+    if (result && typeof result === 'object' && 'data' in result) {
+      // It's a List, return data array
+      return (result as List<AuthorizationModel>).data;
+    }
+    
+    // Convert single item to array if needed
+    return Array.isArray(result) ? result : [result];
   }
 
   async check(options: CheckOptions): Promise<boolean> {
     const result = await fetchAndDeserialize<Record<string, unknown>, boolean>(
-      this.workos,
-      "/fga/check",
-      (item: unknown) => {
-        const data = item as Record<string, unknown>;
-        return data.allowed as boolean;
-      },
       {
+        workos: this.workos,
+        path: "/fga/check",
+        method: "POST",
         data: options,
-      } as PaginationOptions,
+        deserializer: (item: unknown) => {
+          const data = item as Record<string, unknown>;
+          return Boolean(data.allowed);
+        },
+      }
     );
-    return result as unknown as boolean;
+    return Boolean(result);
   }
 }

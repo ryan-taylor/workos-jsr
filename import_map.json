@@ -10,7 +10,12 @@
     "@std/path": "jsr:@std/path@1.0.0",
     "@std/fs": "jsr:@std/fs@1.0.0",
     "@std/http": "jsr:@std/http@1.0.0",
+    "@std/testing/": "jsr:@std/testing@1/",
+    "@std/testing/bdd": "jsr:@std/testing@1/bdd",
     "$fresh/": "https://deno.land/x/fresh@1.7.3/",
-    "preact/jsx-runtime": "https://esm.sh/preact@10/jsx-runtime"
+    "preact/jsx-runtime": "https://esm.sh/preact@10/jsx-runtime",
+    
+    "workos": "./packages/workos_sdk/src/",
+    "workos/": "./packages/workos_sdk/src/"
   }
 }

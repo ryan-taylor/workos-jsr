@@ -16,6 +16,15 @@ import {
   getSecurityStrategy,
   SecurityScheme
 } from "./security.ts";
+import { SecurityStrategyNotRegisteredError } from "./security-errors.ts";
+
+// Re-export security error types
+export {
+  SecurityError,
+  MissingCredentialsError,
+  NoMatchingSecurityError,
+  SecurityStrategyNotRegisteredError
+} from "./security-errors.ts";
 
 /**
  * Request options interface that supports different security schemes
@@ -171,7 +180,7 @@ export function applySecurityToRequest<S extends SupportedAuthScheme>(
   const strategy = getSecurityStrategy(securityScheme);
   
   if (!strategy) {
-    throw new Error(`No security strategy registered for scheme "${securityScheme}"`);
+    throw new SecurityStrategyNotRegisteredError(securityScheme);
   }
   
   return strategy.applyToRequest(request, options.security);

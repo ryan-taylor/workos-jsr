@@ -1,11 +1,12 @@
 /**
  * Security resolver for multi-scheme endpoints
- * 
+ *
  * This file implements a resolver that intelligently selects the best
  * security strategy when multiple schemes are supported by an endpoint.
  */
 
 import type { SupportedAuthScheme } from "./auth-schemes.ts";
+import { NoMatchingSecurityError } from "./security-errors.ts";
 import {
   SecurityOptions,
   SecurityStrategy,
@@ -129,14 +130,15 @@ export function resolveSecurityStrategy<S extends SupportedAuthScheme = Supporte
   // No matching scheme found
   if (throwOnNoMatch) {
     const availableSchemes = Object.keys(availableCredentials)
-      .filter(scheme => getSecurityStrategy(scheme as SupportedAuthScheme))
-      .join(", ");
+      .filter(scheme => {
+        try {
+          return getSecurityStrategy(scheme as SupportedAuthScheme) !== undefined;
+        } catch (error) {
+          return false;
+        }
+      }) as SupportedAuthScheme[];
     
-    throw new Error(
-      `No matching security credentials found. ` +
-      `Endpoint supports: ${supportedSchemes.join(", ")}. ` +
-      `Available credentials: ${availableSchemes || "none"}.`
-    );
+    throw NoMatchingSecurityError.create(supportedSchemes, availableSchemes);
   }
   
   return undefined;

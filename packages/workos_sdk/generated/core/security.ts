@@ -9,6 +9,10 @@ import type {
   ApiKeyLocation,
   OAuth2Flow
 } from "./auth-schemes.ts";
+import {
+  MissingCredentialsError,
+  SecurityStrategyNotRegisteredError
+} from "./security-errors.ts";
 
 // Re-export types from auth-schemes.ts
 export type { SupportedAuthScheme, HttpAuthScheme, ApiKeyLocation, OAuth2Flow } from "./auth-schemes.ts";
@@ -221,14 +225,19 @@ export function registerSecurityStrategy<S extends SupportedAuthScheme>(
 
 /**
  * Get a security strategy from the registry
- * 
+ *
  * @param scheme The security scheme to get a strategy for
- * @returns The registered strategy, or undefined if none exists
+ * @returns The registered strategy
+ * @throws SecurityStrategyNotRegisteredError if no strategy is registered for the scheme
  */
 export function getSecurityStrategy<S extends SupportedAuthScheme>(
   scheme: S
-): SecurityStrategy<S> | undefined {
-  return securityRegistry[scheme] as SecurityStrategy<S> | undefined;
+): SecurityStrategy<S> {
+  const strategy = securityRegistry[scheme] as SecurityStrategy<S> | undefined;
+  if (!strategy) {
+    throw new SecurityStrategyNotRegisteredError(scheme);
+  }
+  return strategy;
 }
 
 /**
@@ -253,7 +262,13 @@ export class ApiKeySecurityStrategy implements SecurityStrategy<"apiKey"> {
   ): T {
     const mergedOptions = { ...this.defaultOptions, ...options };
     if (!mergedOptions.apiKey) {
-      throw new Error("API key is required for apiKey security scheme");
+      throw MissingCredentialsError.forApiKey(
+        ['apiKey'],
+        {
+          name: mergedOptions.name,
+          location: mergedOptions.in
+        }
+      );
     }
 
     const in_ = mergedOptions.in || "header";
@@ -303,7 +318,7 @@ export class HttpSecurityStrategy implements SecurityStrategy<"http"> {
   ): T {
     const mergedOptions = { ...this.defaultOptions, ...options };
     if (!mergedOptions.credentials) {
-      throw new Error("Credentials are required for http security scheme");
+      throw MissingCredentialsError.forHttp(['credentials'], { scheme: mergedOptions.scheme });
     }
 
     const authScheme = mergedOptions.scheme || "bearer";
@@ -344,7 +359,7 @@ export class OAuth2SecurityStrategy implements SecurityStrategy<"oauth2"> {
   ): T {
     const mergedOptions = { ...this.defaultOptions, ...options };
     if (!mergedOptions.accessToken) {
-      throw new Error("Access token is required for oauth2 security scheme");
+      throw MissingCredentialsError.forOAuth2(['accessToken']);
     }
 
     const tokenType = mergedOptions.tokenType || "Bearer";

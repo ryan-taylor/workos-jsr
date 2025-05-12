@@ -28,8 +28,10 @@ export async function getFreshServerModule(): Promise<
     try {
       // At runtime, this will use the correct import map based on the DENO_FRESH_VERSION
       // Use unknown as intermediate type to avoid direct type errors
+      // Import the Fresh 2.x module and safely type it as ServerModule
+      // This explicit typing ensures TypeScript recognizes the module structure
       const importedModule = await import("@fresh/core");
-      return importedModule as unknown as Fresh2.ServerModule;
+      return importedModule as Fresh2.ServerModule;
     } catch (error) {
       console.error("Error importing Fresh 2.x server module:", error);
       throw error;

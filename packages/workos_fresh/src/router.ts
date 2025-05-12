@@ -67,9 +67,12 @@ export async function makeRouter(
         // This is a limitation of the current setup, but it's better than using the Function constructor
         // Use direct string import instead of URL construction for better analyzability
         // Use unknown as the intermediate type to avoid direct type errors
-        const freshModule = await import("@fresh/core") as unknown;
+        // Import the Fresh 2.x module and safely type it
+        // The explicit casting ensures TypeScript recognizes the module structure
+        const freshModule = await import("@fresh/core");
         const typedModule = freshModule as Fresh2.ServerModule;
 
+        // Get the App constructor from the module
         const App = typedModule.App;
         const app = new App();
 
@@ -77,9 +80,9 @@ export async function makeRouter(
           app.all(route.pattern, route.handler);
         }
 
-        // Handle build method which might not exist in the exact same form
-        // @ts-ignore - Bypass TypeScript check since we're handling version differences
-        appHandler = app.build ? app.build() : (req: Request) => app.handle(req);
+        // Use the build method for request handling
+        // This is now properly defined in the Fresh2.App interface
+        appHandler = app.build();
       } catch (importError) {
         console.error("Error importing Fresh 2.x module:", importError);
       }

@@ -1,0 +1,23 @@
+{
+  "ExternalObject": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string"
+      },
+      "metadata": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "required": ["id", "name"]
+  },
+  "ExternalEnum": {
+    "type": "string",
+    "enum": ["VALUE_1", "VALUE_2", "VALUE_3", "VALUE_4", "VALUE_5"]
+  }
+}

@@ -63,8 +63,11 @@ No test should remain ignored without a documented rationale.
 
 #### 3. Enhance Import Map Management (Medium Priority)
 
-- **Task 14: Create Import Map Validation Script** (`scripts/check-import-map.ts`)  
-  Scan for unmapped imports, propose additions, and wire the script into the `pretest` task in `deno.json`.
+- **Task 14: Create Import Map Validation Script** (`scripts/check-import-map.ts`)
+  **Location**: `scripts/check-import-map.ts`
+  **Issue**: No automated way to detect unmapped imports.
+  **Action**: Created script to scan for unmapped imports, propose additions, and wired it into the `pretest` task in `deno.json`.
+  **Status**: Resolved.
 
 - **Task 15: Document Import Map Update Process**  
   Add "Updating Import Map" section to `CONTRIBUTING.md` or `README.md` and reference validation script.

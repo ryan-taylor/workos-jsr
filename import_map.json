@@ -9,6 +9,7 @@
     "@std/assert": "jsr:@std/assert@^1",
     "@std/path": "jsr:@std/path@^1",
     "@std/fs": "jsr:@std/fs@^1",
+    "@std/fs/walk": "jsr:@std/fs@^1/walk",
     "@std/http": "jsr:@std/http@^1",
     "@std/testing": "jsr:@std/testing@^1",
     "preact/jsx-runtime": "https://esm.sh/preact@10/jsx-runtime"

@@ -1,0 +1,72 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+
+import { assertArg } from "../_common/dirname.ts";
+import { stripTrailingSeparators } from "../_common/strip_trailing_separators.ts";
+import { isPosixPathSeparator } from "./_util.ts";
+
+/**
+ * Return the directory path of a `path`.
+ *
+ * @example Usage
+ * ```ts
+ * import { dirname } from "@std/path/posix/dirname";
+ * import { assertEquals } from "@std/assert";
+ *
+ * assertEquals(dirname("/home/user/Documents/"), "/home/user");
+ * assertEquals(dirname("/home/user/Documents/image.png"), "/home/user/Documents");
+ * assertEquals(dirname("https://deno.land/std/path/mod.ts"), "https://deno.land/std/path");
+ * ```
+ *
+ * @example Working with URLs
+ *
+ * ```ts
+ * import { dirname } from "@std/path/posix/dirname";
+ * import { assertEquals } from "@std/assert";
+ *
+ * assertEquals(dirname("https://deno.land/std/path/mod.ts"), "https://deno.land/std/path");
+ * assertEquals(dirname("https://deno.land/std/path/mod.ts?a=b"), "https://deno.land/std/path");
+ * assertEquals(dirname("https://deno.land/std/path/mod.ts#header"), "https://deno.land/std/path");
+ * ```
+ *
+ * Note: If you are working with file URLs,
+ * use the new version of `dirname` from `@std/path/posix/unstable-dirname`.
+ *
+ * @param path The path to get the directory from.
+ * @returns The directory path.
+ */
+export function dirname(path: string): string {
+  assertArg(path);
+
+  let end = -1;
+  let matchedNonSeparator = false;
+
+  for (let i = path.length - 1; i >= 1; --i) {
+    if (isPosixPathSeparator(path.charCodeAt(i))) {
+      if (matchedNonSeparator) {
+        end = i;
+        break;
+      }
+    } else {
+      matchedNonSeparator = true;
+    }
+  }
+
+  // No matches. Fallback based on provided path:
+  //
+  // - leading slashes paths
+  //     "/foo" => "/"
+  //     "///foo" => "/"
+  // - no slash path
+  //     "foo" => "."
+  if (end === -1) {
+    return isPosixPathSeparator(path.charCodeAt(0)) ? "/" : ".";
+  }
+
+  return stripTrailingSeparators(
+    path.slice(0, end),
+    isPosixPathSeparator,
+  );
+}
+
+// denoCacheMetadata={"headers":{"date":"Tue, 13 May 2025 01:47:32 GMT","x-goog-storage-class":"STANDARD","content-type":"text/typescript","x-goog-generation":"1745475807163831","cache-control":"public, max-age=31536000, immutable","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","access-control-allow-origin":"*","x-goog-metageneration":"1","access-control-expose-headers":"*","x-goog-stored-content-encoding":"identity","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","via":"1.1 google","cross-origin-resource-policy":"cross-origin","etag":"\"88365138bb5d4af57a161b868eda420b\"","content-length":"2074","server":"UploadServer","x-content-type-options":"nosniff","x-guploader-uploadid":"AAO2VwrvKAVOFjg4CzIxWIL50dLD4nkcuDTFfyQJliRDlRlqhCLeQ3ZdvVdQG_o6OxconNV5E4tKO0wTUT0Brw","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","x-goog-stored-content-length":"2074","age":"0","expires":"Wed, 13 May 2026 01:47:32 GMT","accept-ranges":"bytes","x-jsr-cache-status":"revalidated","x-robots-tag":"noindex","x-goog-hash":"crc32c=5t7ERA==,md5=iDZROLtdSvV6FhuGjtpCCw==","x-jsr-cache-id":"YYZ"},"url":"https://jsr.io/@std/path/1.0.9/posix/dirname.ts","time":1747100852}

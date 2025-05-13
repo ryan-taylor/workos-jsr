@@ -1,0 +1,53 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+
+import {
+  assertArgs,
+  lastPathSegment,
+  stripSuffix,
+} from "../_common/basename.ts";
+import { CHAR_COLON } from "../_common/constants.ts";
+import { stripTrailingSeparators } from "../_common/strip_trailing_separators.ts";
+import { isPathSeparator, isWindowsDeviceRoot } from "./_util.ts";
+
+/**
+ * Return the last portion of a `path`.
+ * Trailing directory separators are ignored, and optional suffix is removed.
+ *
+ * @example Usage
+ * ```ts
+ * import { basename } from "@std/path/windows/basename";
+ * import { assertEquals } from "@std/assert";
+ *
+ * assertEquals(basename("C:\\user\\Documents\\"), "Documents");
+ * assertEquals(basename("C:\\user\\Documents\\image.png"), "image.png");
+ * assertEquals(basename("C:\\user\\Documents\\image.png", ".png"), "image");
+ * ```
+ *
+ * Note: If you are working with file URLs,
+ * use the new version of `basename` from `@std/path/windows/unstable-basename`.
+ *
+ * @param path The path to extract the name from.
+ * @param suffix The suffix to remove from extracted name.
+ * @returns The extracted name.
+ */
+export function basename(path: string, suffix = ""): string {
+  assertArgs(path, suffix);
+
+  // Check for a drive letter prefix so as not to mistake the following
+  // path separator as an extra separator at the end of the path that can be
+  // disregarded
+  let start = 0;
+  if (path.length >= 2) {
+    const drive = path.charCodeAt(0);
+    if (isWindowsDeviceRoot(drive)) {
+      if (path.charCodeAt(1) === CHAR_COLON) start = 2;
+    }
+  }
+
+  const lastSegment = lastPathSegment(path, isPathSeparator, start);
+  const strippedSegment = stripTrailingSeparators(lastSegment, isPathSeparator);
+  return suffix ? stripSuffix(strippedSegment, suffix) : strippedSegment;
+}
+
+// denoCacheMetadata={"headers":{"cache-control":"public, max-age=31536000, immutable","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","x-goog-metageneration":"1","content-type":"text/typescript","via":"1.1 google","accept-ranges":"bytes","x-robots-tag":"noindex","x-goog-generation":"1745475807236264","x-goog-hash":"crc32c=wR9wqQ==,md5=ZY9aE5q02KUs6rzIAHhXTQ==","x-jsr-cache-status":"revalidated","expires":"Wed, 13 May 2026 01:47:32 GMT","x-guploader-uploadid":"AAO2VwrmIFQOYER4mW3kb1WTDJhp9qSQKyGuCwpvCX8CgcyJGgiTBbUxZhSHPHu5NKdu1ajR494qnDqe1FHrfw","age":"0","date":"Tue, 13 May 2025 01:47:32 GMT","access-control-allow-origin":"*","server":"UploadServer","x-goog-storage-class":"STANDARD","x-content-type-options":"nosniff","x-goog-stored-content-encoding":"identity","x-jsr-cache-id":"YYZ","cross-origin-resource-policy":"cross-origin","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","etag":"\"658f5a139ab4d8a52ceabcc80078574d\"","x-goog-stored-content-length":"1817","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","content-length":"1817","access-control-expose-headers":"*"},"url":"https://jsr.io/@std/path/1.0.9/windows/basename.ts","time":1747100852}

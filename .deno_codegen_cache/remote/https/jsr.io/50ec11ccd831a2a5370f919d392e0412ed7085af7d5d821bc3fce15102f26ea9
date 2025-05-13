@@ -1,0 +1,32 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+
+import { isWindows } from "./_os.ts";
+import { fromFileUrl as posixFromFileUrl } from "./posix/from_file_url.ts";
+import { fromFileUrl as windowsFromFileUrl } from "./windows/from_file_url.ts";
+
+/**
+ * Converts a file URL to a path string.
+ *
+ * @example Usage
+ * ```ts
+ * import { fromFileUrl } from "@std/path/from-file-url";
+ * import { assertEquals } from "@std/assert";
+ *
+ * if (Deno.build.os === "windows") {
+ *   assertEquals(fromFileUrl("file:///home/foo"), "\\home\\foo");
+ *   assertEquals(fromFileUrl("file:///C:/Users/foo"), "C:\\Users\\foo");
+ *   assertEquals(fromFileUrl("file://localhost/home/foo"), "\\home\\foo");
+ * } else {
+ *   assertEquals(fromFileUrl("file:///home/foo"), "/home/foo");
+ * }
+ * ```
+ *
+ * @param url The file URL to convert to a path.
+ * @returns The path string.
+ */
+export function fromFileUrl(url: string | URL): string {
+  return isWindows ? windowsFromFileUrl(url) : posixFromFileUrl(url);
+}
+
+// denoCacheMetadata={"headers":{"date":"Tue, 13 May 2025 01:47:31 GMT","expires":"Wed, 13 May 2026 01:47:31 GMT","cache-control":"public, max-age=31536000, immutable","via":"1.1 google","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","content-type":"text/typescript","age":"0","x-jsr-cache-id":"YYZ","x-jsr-cache-status":"revalidated","x-goog-metageneration":"1","access-control-allow-origin":"*","x-goog-stored-content-length":"1029","access-control-expose-headers":"*","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","x-goog-stored-content-encoding":"identity","content-length":"1029","x-goog-storage-class":"STANDARD","server":"UploadServer","x-robots-tag":"noindex","x-guploader-uploadid":"AAO2VwoSlTU5xV7RmN7z7tBsmryGEWQ_OWMro0TX1xh5IMlF-CVblUYGPsEITUevWKpGSsLgpts_qSBgQ7OISA","x-goog-hash":"crc32c=Ke+YDg==,md5=pg3i6HjfE+yPMpmMTFf4Sw==","accept-ranges":"bytes","etag":"\"a60de2e878df13ec8f32998c4c57f84b\"","x-goog-generation":"1745475807201243","cross-origin-resource-policy":"cross-origin","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"},"url":"https://jsr.io/@std/path/1.0.9/from_file_url.ts","time":1747100851}

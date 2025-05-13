@@ -1,0 +1,33 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+
+import { _format, assertArg } from "../_common/format.ts";
+import type { ParsedPath } from "../types.ts";
+
+/**
+ * Generate a path from `ParsedPath` object.
+ *
+ * @example Usage
+ * ```ts
+ * import { format } from "@std/path/posix/format";
+ * import { assertEquals } from "@std/assert";
+ *
+ * const path = format({
+ *   root: "/",
+ *   dir: "/path/dir",
+ *   base: "file.txt",
+ *   ext: ".txt",
+ *   name: "file"
+ * });
+ * assertEquals(path, "/path/dir/file.txt");
+ * ```
+ *
+ * @param pathObject The path object to format.
+ * @returns The formatted path.
+ */
+export function format(pathObject: Partial<ParsedPath>): string {
+  assertArg(pathObject);
+  return _format("/", pathObject);
+}
+
+// denoCacheMetadata={"headers":{"access-control-expose-headers":"*","x-content-type-options":"nosniff","date":"Tue, 13 May 2025 01:47:32 GMT","via":"1.1 google","expires":"Wed, 13 May 2026 01:47:32 GMT","age":"0","x-goog-storage-class":"STANDARD","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","access-control-allow-origin":"*","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","cross-origin-resource-policy":"cross-origin","x-guploader-uploadid":"AAO2VwqjzDnWRbSm4FZJcErdT363tZP7u4HU6sUXJim5bFSZPXST21xvpibcnrdDRwXAl28TlBhR3cGZEp__oA","x-jsr-cache-id":"YYZ","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","content-length":"778","x-goog-generation":"1745475807264942","x-goog-metageneration":"1","cache-control":"public, max-age=31536000, immutable","x-goog-stored-content-length":"778","etag":"\"19e39ae60d9c40678a3e4ef91d07ea76\"","accept-ranges":"bytes","x-goog-stored-content-encoding":"identity","server":"UploadServer","x-jsr-cache-status":"revalidated","x-goog-hash":"crc32c=SUAapw==,md5=GeOa5g2cQGeKPk75HQfqdg==","x-robots-tag":"noindex","content-type":"text/typescript"},"url":"https://jsr.io/@std/path/1.0.9/posix/format.ts","time":1747100851}

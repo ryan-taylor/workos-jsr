@@ -5,7 +5,6 @@
     "jose": "jsr:@panva/jose",
 "crypto": "jsr:@std/crypto@^1",
 "fs/promises": "jsr:@std/fs@^1",
-    "fs/promises": "https://deno.land/std@0.220.0/fs/mod.ts",
 
     "@std/assert": "jsr:@std/assert@1.0.0",
     "@std/path": "jsr:@std/path@1.0.0",

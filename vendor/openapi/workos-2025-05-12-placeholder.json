@@ -25,7 +25,9 @@
         "summary": "List directories",
         "description": "Returns a list of Directory resources.",
         "operationId": "listDirectories",
-        "tags": ["Directory Sync"],
+        "tags": [
+          "Directory Sync"
+        ],
         "parameters": [
           {
             "name": "limit",
@@ -53,7 +55,10 @@
             "description": "Sort order of records",
             "schema": {
               "type": "string",
-              "enum": ["asc", "desc"],
+              "enum": [
+                "asc",
+                "desc"
+              ],
               "default": "desc"
             }
           },
@@ -105,7 +110,9 @@
         "summary": "Get a directory",
         "description": "Get details for a specific directory",
         "operationId": "getDirectory",
-        "tags": ["Directory Sync"],
+        "tags": [
+          "Directory Sync"
+        ],
         "parameters": [
           {
             "name": "directory_id",
@@ -154,7 +161,10 @@
     "schemas": {
       "DirectoriesResponse": {
         "type": "object",
-        "required": ["data", "list_metadata"],
+        "required": [
+          "data",
+          "list_metadata"
+        ],
         "properties": {
           "data": {
             "type": "array",
@@ -169,7 +179,15 @@
       },
       "Directory": {
         "type": "object",
-        "required": ["id", "name", "type", "state", "organization_id", "created_at", "updated_at"],
+        "required": [
+          "id",
+          "name",
+          "type",
+          "state",
+          "organization_id",
+          "created_at",
+          "updated_at"
+        ],
         "properties": {
           "id": {
             "type": "string",
@@ -182,12 +200,22 @@
           "type": {
             "type": "string",
             "description": "Type of directory",
-            "enum": ["okta", "azure_scim", "google_workspace", "generic_scim"]
+            "enum": [
+              "okta",
+              "azure_scim",
+              "google_workspace",
+              "generic_scim"
+            ]
           },
           "state": {
             "type": "string",
             "description": "State of the directory",
-            "enum": ["active", "inactive", "validating", "error"]
+            "enum": [
+              "active",
+              "inactive",
+              "validating",
+              "error"
+            ]
           },
           "domain": {
             "type": "string",
@@ -212,7 +240,10 @@
       },
       "ListMetadata": {
         "type": "object",
-        "required": ["before", "after"],
+        "required": [
+          "before",
+          "after"
+        ],
         "properties": {
           "before": {
             "type": "string",
@@ -228,7 +259,10 @@
       },
       "Error": {
         "type": "object",
-        "required": ["code", "message"],
+        "required": [
+          "code",
+          "message"
+        ],
         "properties": {
           "code": {
             "type": "string",
@@ -246,5 +280,7 @@
     {
       "ApiKey": []
     }
-  ]
+  ],
+  "x-spec-content-sha": "402d596ded24b992101885b9824a6ed496b1d0da7ab5993ab85faee31ed3eb93",
+  "x-spec-processed-checksum": "402d596ded24b992101885b9824a6ed496b1d0da7ab5993ab85faee31ed3eb93"
 }

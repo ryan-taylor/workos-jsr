@@ -1,0 +1,45 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+
+import type { GlobOptions } from "../_common/glob_to_reg_exp.ts";
+import { normalize } from "./normalize.ts";
+import { SEPARATOR_PATTERN } from "./constants.ts";
+
+export type { GlobOptions };
+
+/**
+ * Like normalize(), but doesn't collapse "**\/.." when `globstar` is true.
+ *
+ * @example Usage
+ * ```ts
+ * import { normalizeGlob } from "@std/path/posix/normalize-glob";
+ * import { assertEquals } from "@std/assert";
+ *
+ * const path = normalizeGlob("foo/bar/../*", { globstar: true });
+ * assertEquals(path, "foo/*");
+ * ```
+ *
+ * @param glob The glob to normalize.
+ * @param options The options to use.
+ * @returns The normalized path.
+ */
+export function normalizeGlob(
+  glob: string,
+  options: Pick<GlobOptions, "globstar"> = {},
+): string {
+  const { globstar = false }: GlobOptions = options;
+  if (glob.match(/\0/g)) {
+    throw new Error(`Glob contains invalid characters: "${glob}"`);
+  }
+  if (!globstar) {
+    return normalize(glob);
+  }
+  const s = SEPARATOR_PATTERN.source;
+  const badParentPattern = new RegExp(
+    `(?<=(${s}|^)\\*\\*${s})\\.\\.(?=${s}|$)`,
+    "g",
+  );
+  return normalize(glob.replace(badParentPattern, "\0")).replace(/\0/g, "..");
+}
+
+// denoCacheMetadata={"headers":{"expires":"Wed, 13 May 2026 01:47:32 GMT","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","content-length":"1263","content-type":"text/typescript","accept-ranges":"bytes","x-robots-tag":"noindex","x-content-type-options":"nosniff","cache-control":"public, max-age=31536000, immutable","date":"Tue, 13 May 2025 01:47:32 GMT","access-control-expose-headers":"*","age":"0","cross-origin-resource-policy":"cross-origin","x-jsr-cache-id":"YYZ","x-goog-metageneration":"1","etag":"\"25eaac8eb9ad370468bbd3a4854aa73f\"","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","x-jsr-cache-status":"revalidated","server":"UploadServer","access-control-allow-origin":"*","x-goog-stored-content-length":"1263","x-guploader-uploadid":"AAO2VwrTsBHpMsxOXzHzUfATbdFKJFn48LpQY11TnL7HMai-QKn3ELNYPLk9UkdlmzpNqabu6CnxbzLBkBn7kQ","x-goog-hash":"crc32c=/1wW4Q==,md5=JeqsjrmtNwRou9OkhUqnPw==","via":"1.1 google","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","x-goog-stored-content-encoding":"identity","x-goog-storage-class":"STANDARD","x-goog-generation":"1745475807299984"},"url":"https://jsr.io/@std/path/1.0.9/posix/normalize_glob.ts","time":1747100852}

@@ -1,5 +1,5 @@
 // Re-export types from the new location for backward compatibility with tests
-import { WarrantOp as NewWarrantOp } from "../../../packages/workos_sdk/src/fga/interfaces/warrant-op.enum.ts.ts";
+import { WarrantOp as NewWarrantOp } from "../../../packages/workos_sdk/src/fga/interfaces/warrant-op.enum.ts";
 
 // Export the same enum type to ensure compatibility
 export enum WarrantOp {
@@ -20,4 +20,4 @@ export type {
   WriteWarrantOptions,
   ListWarrantsOptions,
   PolicyContext,
-} from "../../../packages/workos_sdk/src/fga/interfaces/warrant.interface.ts.ts";
+} from "../../../packages/workos_sdk/src/fga/interfaces/warrant.interface.ts";

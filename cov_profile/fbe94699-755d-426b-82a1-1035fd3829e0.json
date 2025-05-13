@@ -1,0 +1,31 @@
+{
+  "scriptId": "332",
+  "url": "file:///Users/t/Developer/workos-node/tests_deno/lcov_test.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 658, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 213, "endOffset": 311, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 378, "endOffset": 487, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 549, "endOffset": 655, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 603, "endOffset": 619, "count": 1 }],
+      "isBlockCoverage": true
+    }
+  ]
+}

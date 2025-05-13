@@ -1,0 +1,32 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+
+import { isWindows } from "./_os.ts";
+import { extname as posixExtname } from "./posix/extname.ts";
+import { extname as windowsExtname } from "./windows/extname.ts";
+/**
+ * Return the extension of the path with leading period (".").
+ *
+ * @example Usage
+ * ```ts
+ * import { extname } from "@std/path/extname";
+ * import { assertEquals } from "@std/assert";
+ *
+ * if (Deno.build.os === "windows") {
+ *   assertEquals(extname("C:\\home\\user\\Documents\\image.png"), ".png");
+ * } else {
+ *   assertEquals(extname("/home/user/Documents/image.png"), ".png");
+ * }
+ * ```
+ *
+ * Note: If you are working with file URLs,
+ * use the new version of `extname` from `@std/path/unstable-extname`.
+ *
+ * @param path Path with extension.
+ * @returns The file extension. E.g. returns `.ts` for `file.ts`.
+ */
+export function extname(path: string): string {
+  return isWindows ? windowsExtname(path) : posixExtname(path);
+}
+
+// denoCacheMetadata={"headers":{"expires":"Wed, 13 May 2026 01:47:31 GMT","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","x-jsr-cache-id":"YYZ","access-control-expose-headers":"*","x-goog-stored-content-length":"1003","x-goog-storage-class":"STANDARD","content-type":"text/typescript","via":"1.1 google","x-robots-tag":"noindex","access-control-allow-origin":"*","date":"Tue, 13 May 2025 01:47:31 GMT","x-goog-stored-content-encoding":"identity","x-jsr-cache-status":"revalidated","server":"UploadServer","cache-control":"public, max-age=31536000, immutable","etag":"\"a51cc9732cebbf6fd31d6cdd831ab1a2\"","x-goog-generation":"1745475807075138","x-guploader-uploadid":"AAO2VwrugY-wvzbViQCn1EOx4tIBN4kUofg7Uzp4T47FjmOLyL5kG-COjs7dchLyv8B0kk1V5HMcW_z4kt3ifg","content-length":"1003","cross-origin-resource-policy":"cross-origin","accept-ranges":"bytes","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","x-goog-hash":"crc32c=S+gh2g==,md5=pRzJcyzrv2/THWzdgxqxog==","age":"0","x-content-type-options":"nosniff","x-goog-metageneration":"1"},"url":"https://jsr.io/@std/path/1.0.9/extname.ts","time":1747100851}

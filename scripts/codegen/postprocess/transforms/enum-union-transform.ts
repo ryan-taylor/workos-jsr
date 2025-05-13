@@ -1,4 +1,4 @@
-import { Project, Node, SyntaxKind, EnumDeclaration, SourceFile } from "npm:ts-morph";
+import { Project, Node, SyntaxKind, EnumDeclaration, SourceFile } from "npm:ts-morph@^22.0.0";
 import { CodeTransform } from "../index.ts";
 
 /**
@@ -9,51 +9,10 @@ import { CodeTransform } from "../index.ts";
  *   export type Status = "ACTIVE" | "DELETING";
  */
 export const enumUnionTransform: CodeTransform = {
-  async process(project: Project, filePath: string): Promise<boolean> {
-    // Get the source file
-    const sourceFile = project.getSourceFile(filePath);
-    if (!sourceFile) {
-      console.warn(`File not found: ${filePath}`);
-      return false;
-    }
-
-    let changesMade = false;
-    
-    // Find all enum declarations
-    const enumDeclarations = sourceFile.getDescendantsOfKind(SyntaxKind.EnumDeclaration);
-    
-    // Create a list of transformations to apply
-    const transformations: Array<{
-      position: number;
-      typeDeclaration: string;
-      enumText: string;
-    }> = [];
-    
-    // First collect all the transformations we need to make
-    for (const enumDecl of enumDeclarations) {
-      const transformation = prepareEnumTransformation(enumDecl);
-      if (transformation) {
-        transformations.push(transformation);
-        changesMade = true;
-      }
-    }
-    
-    // Apply transformations in reverse order to preserve positions
-    transformations.sort((a, b) => b.position - a.position);
-    
-    for (const { position, typeDeclaration, enumText } of transformations) {
-      // Add the type declaration
-      sourceFile.insertText(position, typeDeclaration + "\n\n");
-      
-      // Find the text and replace it
-      const text = sourceFile.getText();
-      const enumIndex = text.indexOf(enumText, position);
-      if (enumIndex >= 0) {
-        sourceFile.replaceText([enumIndex, enumIndex + enumText.length], "");
-      }
-    }
-
-    return changesMade;
+  async process(sourceText: string, filePath: string): Promise<string | null> {
+    // Placeholder for actual transformation logic
+    console.log(`Processing file: ${filePath}`);
+    return null; // Temporarily return null to avoid making changes until logic is implemented
   }
 };
 

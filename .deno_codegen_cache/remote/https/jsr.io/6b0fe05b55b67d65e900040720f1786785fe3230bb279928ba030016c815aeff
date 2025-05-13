@@ -1,0 +1,36 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+
+import { assertArg } from "../_common/from_file_url.ts";
+
+/**
+ * Converts a file URL to a path string.
+ *
+ * @example Usage
+ * ```ts
+ * import { fromFileUrl } from "@std/path/windows/from-file-url";
+ * import { assertEquals } from "@std/assert";
+ *
+ * assertEquals(fromFileUrl("file:///home/foo"), "\\home\\foo");
+ * assertEquals(fromFileUrl("file:///C:/Users/foo"), "C:\\Users\\foo");
+ * assertEquals(fromFileUrl("file://localhost/home/foo"), "\\home\\foo");
+ * ```
+ *
+ * @param url The file URL to convert.
+ * @returns The path string.
+ */
+export function fromFileUrl(url: URL | string): string {
+  url = assertArg(url);
+  let path = decodeURIComponent(
+    url.pathname.replace(/\//g, "\\").replace(/%(?![0-9A-Fa-f]{2})/g, "%25"),
+  ).replace(/^\\*([A-Za-z]:)(\\|$)/, "$1\\");
+  if (url.hostname !== "") {
+    // Note: The `URL` implementation guarantees that the drive letter and
+    // hostname are mutually exclusive. Otherwise it would not have been valid
+    // to append the hostname and path like this.
+    path = `\\\\${url.hostname}${path}`;
+  }
+  return path;
+}
+
+// denoCacheMetadata={"headers":{"server":"UploadServer","content-type":"text/typescript","cache-control":"public, max-age=31536000, immutable","date":"Tue, 13 May 2025 01:47:32 GMT","etag":"\"80e6878cb157fbd3036cdf17b2039035\"","age":"0","x-jsr-cache-id":"YYZ","accept-ranges":"bytes","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","content-length":"1168","expires":"Wed, 13 May 2026 01:47:32 GMT","access-control-allow-origin":"*","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","x-goog-stored-content-encoding":"identity","access-control-expose-headers":"*","x-content-type-options":"nosniff","x-goog-metageneration":"1","x-goog-stored-content-length":"1168","x-jsr-cache-status":"revalidated","x-guploader-uploadid":"AAO2Vwpin7ZFL9c1HYvWLptKCRoT-jR4TcAKeDpgeQGAPbLXff5An_nWrxT_OX-LVbi31pFgtNHeqM7_fDuB7w","via":"1.1 google","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","x-goog-hash":"crc32c=kn08dw==,md5=gOaHjLFX+9MDbN8XsgOQNQ==","x-goog-storage-class":"STANDARD","x-robots-tag":"noindex","cross-origin-resource-policy":"cross-origin","x-goog-generation":"1745475807074578"},"url":"https://jsr.io/@std/path/1.0.9/windows/from_file_url.ts","time":1747100852}

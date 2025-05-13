@@ -1,0 +1,61 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+
+import {
+  assertArgs,
+  lastPathSegment,
+  stripSuffix,
+} from "../_common/basename.ts";
+import { stripTrailingSeparators } from "../_common/strip_trailing_separators.ts";
+import { isPosixPathSeparator } from "./_util.ts";
+
+/**
+ * Return the last portion of a `path`.
+ * Trailing directory separators are ignored, and optional suffix is removed.
+ *
+ * @example Usage
+ * ```ts
+ * import { basename } from "@std/path/posix/basename";
+ * import { assertEquals } from "@std/assert";
+ *
+ * assertEquals(basename("/home/user/Documents/"), "Documents");
+ * assertEquals(basename("/home/user/Documents/image.png"), "image.png");
+ * assertEquals(basename("/home/user/Documents/image.png", ".png"), "image");
+ * ```
+ *
+ * @example Working with URLs
+ *
+ * Note: This function doesn't automatically strip hash and query parts from
+ * URLs. If your URL contains a hash or query, remove them before passing the
+ * URL to the function. This can be done by passing the URL to `new URL(url)`,
+ * and setting the `hash` and `search` properties to empty strings.
+ *
+ * ```ts
+ * import { basename } from "@std/path/posix/basename";
+ * import { assertEquals } from "@std/assert";
+ *
+ * assertEquals(basename("https://deno.land/std/path/mod.ts"), "mod.ts");
+ * assertEquals(basename("https://deno.land/std/path/mod.ts", ".ts"), "mod");
+ * assertEquals(basename("https://deno.land/std/path/mod.ts?a=b"), "mod.ts?a=b");
+ * assertEquals(basename("https://deno.land/std/path/mod.ts#header"), "mod.ts#header");
+ * ```
+ *
+ * Note: If you are working with file URLs,
+ * use the new version of `basename` from `@std/path/posix/unstable-basename`.
+ *
+ * @param path The path to extract the name from.
+ * @param suffix The suffix to remove from extracted name.
+ * @returns The extracted name.
+ */
+export function basename(path: string, suffix = ""): string {
+  assertArgs(path, suffix);
+
+  const lastSegment = lastPathSegment(path, isPosixPathSeparator);
+  const strippedSegment = stripTrailingSeparators(
+    lastSegment,
+    isPosixPathSeparator,
+  );
+  return suffix ? stripSuffix(strippedSegment, suffix) : strippedSegment;
+}
+
+// denoCacheMetadata={"headers":{"x-jsr-cache-id":"YYZ","accept-ranges":"bytes","cross-origin-resource-policy":"cross-origin","cache-control":"public, max-age=31536000, immutable","access-control-allow-origin":"*","x-goog-generation":"1745475807303904","expires":"Wed, 13 May 2026 01:47:32 GMT","via":"1.1 google","date":"Tue, 13 May 2025 01:47:32 GMT","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","x-guploader-uploadid":"AAO2VwoUYJmG77Sw7dAQ43u1YHbcGojmpU9T6S4X1hYNdEPv6r4E8FImjf9n1jgj6WLpja2Ukre9BLzw6uqsZA","server":"UploadServer","content-length":"2192","content-type":"text/typescript","x-robots-tag":"noindex","x-jsr-cache-status":"revalidated","x-content-type-options":"nosniff","etag":"\"e728376ce4d42e4129ea2bdd66a1a830\"","access-control-expose-headers":"*","x-goog-hash":"crc32c=drSwwQ==,md5=5yg3bOTULkEp6ivdZqGoMA==","x-goog-stored-content-length":"2192","x-goog-metageneration":"1","x-goog-storage-class":"STANDARD","x-goog-stored-content-encoding":"identity","age":"0","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';"},"url":"https://jsr.io/@std/path/1.0.9/posix/basename.ts","time":1747100852}

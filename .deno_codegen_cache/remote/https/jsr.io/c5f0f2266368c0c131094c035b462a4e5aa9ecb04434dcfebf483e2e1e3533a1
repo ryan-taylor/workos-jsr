@@ -1,0 +1,91 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+import { join } from "jsr:@std/path@^1.0.9/join";
+import { toPathString } from "./_to_path_string.ts";
+
+/**
+ * Asynchronously ensures that a directory is empty.
+ *
+ * If the directory does not exist, it is created. The directory itself is not
+ * deleted.
+ *
+ * Requires `--allow-read` and `--allow-write` permissions.
+ *
+ * @see {@link https://docs.deno.com/runtime/manual/basics/permissions#file-system-access}
+ * for more information on Deno's permissions system.
+ *
+ * @param dir The path of the directory to empty, as a string or URL.
+ *
+ * @returns A void promise that resolves once the directory is empty.
+ *
+ * @example Usage
+ * ```ts ignore
+ * import { emptyDir } from "@std/fs/empty-dir";
+ *
+ * await emptyDir("./foo");
+ * ```
+ */
+export async function emptyDir(dir: string | URL) {
+  try {
+    const items = await Array.fromAsync(Deno.readDir(dir));
+
+    await Promise.all(items.map((item) => {
+      if (item && item.name) {
+        const filepath = join(toPathString(dir), item.name);
+        return Deno.remove(filepath, { recursive: true });
+      }
+    }));
+  } catch (err) {
+    if (!(err instanceof Deno.errors.NotFound)) {
+      throw err;
+    }
+
+    // if not exist. then create it
+    await Deno.mkdir(dir, { recursive: true });
+  }
+}
+
+/**
+ * Synchronously ensures that a directory is empty deletes the directory
+ * contents it is not empty.
+ *
+ * If the directory does not exist, it is created. The directory itself is not
+ * deleted.
+ *
+ * Requires `--allow-read` and `--allow-write` permissions.
+ *
+ * @see {@link https://docs.deno.com/runtime/manual/basics/permissions#file-system-access}
+ * for more information on Deno's permissions system.
+ *
+ * @param dir The path of the directory to empty, as a string or URL.
+ *
+ * @returns A void value that returns once the directory is empty.
+ *
+ * @example Usage
+ * ```ts ignore
+ * import { emptyDirSync } from "@std/fs/empty-dir";
+ *
+ * emptyDirSync("./foo");
+ * ```
+ */
+export function emptyDirSync(dir: string | URL) {
+  try {
+    const items = [...Deno.readDirSync(dir)];
+
+    // If the directory exists, remove all entries inside it.
+    while (items.length) {
+      const item = items.shift();
+      if (item && item.name) {
+        const filepath = join(toPathString(dir), item.name);
+        Deno.removeSync(filepath, { recursive: true });
+      }
+    }
+  } catch (err) {
+    if (!(err instanceof Deno.errors.NotFound)) {
+      throw err;
+    }
+    // if not exist. then create it
+    Deno.mkdirSync(dir, { recursive: true });
+  }
+}
+
+// denoCacheMetadata={"headers":{"x-jsr-cache-id":"YYZ","content-type":"text/typescript","last-modified":"Thu, 24 Apr 2025 06:23:46 GMT","x-guploader-uploadid":"AAO2VwpoScIc11nqQKzSvpZp_EVAhLRwwf5M08nxFiQCQJYmk5NhYKg5G3GylovH8HIsYcJtLVjxuz4gOFEoww","x-goog-stored-content-length":"2563","accept-ranges":"bytes","age":"0","x-jsr-cache-status":"revalidated","access-control-expose-headers":"*","x-goog-hash":"crc32c=iKgHCw==,md5=1t/LD/FbDJemGM86PFQJeQ==","content-length":"2563","cross-origin-resource-policy":"cross-origin","x-content-type-options":"nosniff","x-goog-metageneration":"1","x-robots-tag":"noindex","x-goog-stored-content-encoding":"identity","x-goog-generation":"1745475826549433","cache-control":"public, max-age=31536000, immutable","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","expires":"Wed, 13 May 2026 01:47:31 GMT","access-control-allow-origin":"*","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","server":"UploadServer","x-goog-storage-class":"STANDARD","via":"1.1 google","etag":"\"d6dfcb0ff15b0c97a618cf3a3c540979\"","date":"Tue, 13 May 2025 01:47:31 GMT"},"url":"https://jsr.io/@std/fs/1.0.17/empty_dir.ts","time":1747100851}

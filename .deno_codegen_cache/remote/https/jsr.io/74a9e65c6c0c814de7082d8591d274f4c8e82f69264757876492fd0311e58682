@@ -1,0 +1,51 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+
+/**
+ * Test whether the given string is a glob.
+ *
+ * @example Usage
+ * ```ts
+ * import { isGlob } from "@std/path/is-glob";
+ * import { assert } from "@std/assert";
+ *
+ * assert(!isGlob("foo/bar/../baz"));
+ * assert(isGlob("foo/*ar/../baz"));
+ * ```
+ *
+ * @param str String to test.
+ * @returns `true` if the given string is a glob, otherwise `false`
+ */
+export function isGlob(str: string): boolean {
+  const chars: Record<string, string> = { "{": "}", "(": ")", "[": "]" };
+  const regex =
+    /\\(.)|(^!|\*|\?|[\].+)]\?|\[[^\\\]]+\]|\{[^\\}]+\}|\(\?[:!=][^\\)]+\)|\([^|]+\|[^\\)]+\))/;
+
+  if (str === "") {
+    return false;
+  }
+
+  let match: RegExpExecArray | null;
+
+  while ((match = regex.exec(str))) {
+    if (match[2]) return true;
+    let idx = match.index + match[0].length;
+
+    // if an open bracket/brace/paren is escaped,
+    // set the index to the next closing character
+    const open = match[1];
+    const close = open ? chars[open] : null;
+    if (open && close) {
+      const n = str.indexOf(close, idx);
+      if (n !== -1) {
+        idx = n + 1;
+      }
+    }
+
+    str = str.slice(idx);
+  }
+
+  return false;
+}
+
+// denoCacheMetadata={"headers":{"x-goog-hash":"crc32c=Mk1x4w==,md5=+Zrrc3lee5fxZ0YcrTrHPA==","access-control-expose-headers":"*","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","cache-control":"public, max-age=31536000, immutable","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","x-goog-metageneration":"1","x-content-type-options":"nosniff","x-goog-stored-content-encoding":"identity","content-length":"1226","expires":"Wed, 13 May 2026 01:47:32 GMT","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","etag":"\"f99aeb73795e7b97f167461cad3ac73c\"","x-jsr-cache-id":"YYZ","via":"1.1 google","x-jsr-cache-status":"revalidated","access-control-allow-origin":"*","x-goog-generation":"1745475807150655","x-goog-stored-content-length":"1226","x-goog-storage-class":"STANDARD","server":"UploadServer","date":"Tue, 13 May 2025 01:47:32 GMT","content-type":"text/typescript","x-guploader-uploadid":"AAO2VwriWBs-N5cl9UMqYmim-ixFKbRqPK2T31OWq3MtR07zK_-H25zp0Tog0aIb2i4eHNVJecKITc__OWT4iA","age":"0","x-robots-tag":"noindex","cross-origin-resource-policy":"cross-origin","accept-ranges":"bytes"},"url":"https://jsr.io/@std/path/1.0.9/is_glob.ts","time":1747100852}

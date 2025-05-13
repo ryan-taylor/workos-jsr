@@ -3,8 +3,8 @@ import type {
   AuditLogEvent,
   AuditLogListEventsOptions,
   CreateEventOptions,
-} from "../../../packages/workos_sdk/src/audit-logs/interfaces/index.ts";
-import type { List } from "../../../packages/workos_sdk/src/common/interfaces.ts";
+} from "workos/audit-logs/interfaces/index.ts";
+import type { List } from "workos/common/interfaces.ts";
 
 // Mock data for demonstration purposes
 export interface MockAuditLogEvent {

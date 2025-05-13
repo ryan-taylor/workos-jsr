@@ -69,8 +69,9 @@ No test should remain ignored without a documented rationale.
   **Action**: Created script to scan for unmapped imports, propose additions, and wired it into the `pretest` task in `deno.json`.
   **Status**: Resolved.
 
-- **Task 15: Document Import Map Update Process**  
-  Add "Updating Import Map" section to `CONTRIBUTING.md` or `README.md` and reference validation script.
+- **Task 15: Document Import Map Update Process**
+   **Action**: Added "Updating Import Map" section to `CONTRIBUTING.md` with explanation of process and reference to validation script.
+   **Status**: Resolved.
 
 #### 4. Run Tests and Validate Runtime Behavior (Medium Priority)
 

@@ -156,6 +156,69 @@ All quality gates are enforced through GitHub Actions:
 
 The pre-commit hook helps prevent CI failures by ensuring the generated code is always up-to-date with the specification.
 
+## Import Map Management
+
+### What are Import Maps?
+
+Import maps are a crucial feature in Deno that map import specifiers to their actual location, whether that's a URL, a local file, or a JSR package. They serve several important functions in this project:
+
+1. **Dependency Management**: Centralizing all external dependencies in one configuration file
+2. **URL Abstraction**: Allowing us to use clean import paths without hard-coding URLs throughout the codebase
+3. **Version Control**: Pinning specific versions of dependencies for stability
+4. **JSR Integration**: Simplifying migration from other sources (like deno.land/std or esm.sh) to JSR.io packages
+
+The import map is defined in the file specified by the `importMap` field in `deno.json` (default: `import_map.json`).
+
+### Validating the Import Map
+
+We have a validation script (`scripts/check-import-map.ts`) that automatically scans the codebase for unmapped imports. This tool helps prevent runtime errors due to missing dependencies.
+
+To run the script:
+
+```bash
+# Check for unmapped imports
+deno run -A scripts/check-import-map.ts
+
+# Automatically fix by adding suggested entries
+deno run -A scripts/check-import-map.ts --fix
+```
+
+The script will:
+1. Scan directories specified in `TARGET_DIRS` for `.ts`, `.tsx`, `.js`, and `.jsx` files
+2. Extract all import specifiers using regex patterns
+3. Check if each specifier is covered by the import map
+4. Report unmapped imports with JSR-formatted suggestions
+5. Optionally update the import map with the `--fix` flag
+
+### Process for Updating the Import Map
+
+When adding new dependencies or updating existing ones:
+
+1. **Scan for unmapped imports first**:
+   ```bash
+   deno run -A scripts/check-import-map.ts
+   ```
+
+2. **Review suggested mappings** and consider if they should be added as-is or modified.
+
+3. **Update the import map** either:
+   - Manually by editing the import map file, or
+   - Automatically by running `deno run -A scripts/check-import-map.ts --fix`
+
+4. **Verify changes** by running the test suite to ensure everything works with the new mappings.
+
+5. **Commit the updated import map** along with any code changes.
+
+### Best Practices for Import Map Management
+
+1. **Prefer JSR.io packages** for new dependencies
+2. **Use semantic versioning** when specifying package versions
+3. **Keep the import map organized** with related dependencies grouped together
+4. **Document non-obvious mappings** with comments in the import map file
+5. **Run the validation script before committing** changes to catch unmapped imports early
+6. **Avoid duplicative mappings** that point to the same target
+7. **Remove unused mappings** when dependencies are no longer needed
+
 ## Publishing to JSR.io
 
 This project is published to JSR.io, the modern registry for JavaScript and TypeScript packages. To publish a new version:

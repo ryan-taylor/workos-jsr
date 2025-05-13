@@ -250,14 +250,17 @@ To check for outdated dependencies and update them:
    This will list any URLs with available updates.
 
 2. **Update versions conservatively**:
-   - For standard library dependencies, prefer minor version updates unless major version updates are required
-   - For third-party dependencies, review changelogs before upgrading to major versions
+   - For standard library dependencies, prefer minor version updates unless
+     major version updates are required
+   - For third-party dependencies, review changelogs before upgrading to major
+     versions
 
 3. **Regenerate the lock file**:
    ```bash
    deno cache --lock=deno.lock --lock-write
    ```
-   This ensures all dependent modules are cached and the lock file is up to date.
+   This ensures all dependent modules are cached and the lock file is up to
+   date.
 
 4. **Verify with full test suite**:
    ```bash
@@ -287,6 +290,80 @@ codebase:
    - Use kebab-case for file names
 
 All code should be formatted using `deno fmt` before committing.
+
+## Code Style & Hooks
+
+This project uses Deno's built-in formatter and linter to maintain consistent
+code style. Additionally, we use lefthook for pre-commit hooks to ensure code
+quality before commits.
+
+### Linting and Formatting Standards
+
+We follow Deno's default formatting and linting rules, with additional custom
+linting rules defined in `deno.json`:
+
+- **Formatter**: Deno's built-in formatter enforces consistent spacing,
+  indentation, and overall code structure
+- **Linter**: We use Deno's linter with recommended rules plus custom rules to
+  prevent Node.js-style imports
+
+### Installing and Using Lefthook
+
+[Lefthook](https://github.com/evilmartians/lefthook) is a fast Git hooks manager
+that we use to run pre-commit checks. To install lefthook:
+
+#### With npm:
+
+```bash
+npm install -g @evilmartians/lefthook
+```
+
+#### With Cargo (Rust):
+
+```bash
+cargo install lefthook
+```
+
+#### With other package managers:
+
+- Homebrew: `brew install lefthook`
+- MacPorts: `port install lefthook`
+
+After installation, lefthook will automatically use the configuration in
+`.lefthook.yml` to run pre-commit hooks whenever you commit code.
+
+### Running Formatting and Linting Manually
+
+To run formatting and linting checks manually:
+
+```bash
+# Format code
+deno task fmt
+
+# Check formatting without making changes
+deno task fmt --check
+
+# Run linter
+deno task lint
+
+# Run linter on specific files
+deno task lint:staged
+```
+
+### Testing Pre-commit Hooks
+
+To test the pre-commit hooks without making an actual commit:
+
+```bash
+# Test pre-commit hooks on all files
+lefthook run pre-commit --all-files
+
+# Test pre-commit hooks on staged files only
+lefthook run pre-commit
+```
+
+The pre-commit hooks will check formatting and run the linter on your changes,
+ensuring code quality before the commit is made.
 
 ## Publishing to JSR.io
 

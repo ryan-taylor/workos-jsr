@@ -79,8 +79,9 @@ No test should remain ignored without a documented rationale.
    **Action**: Executed `deno test --no-check` and logged runtime failures to `test-runtime-errors.log`.
    **Status**: Resolved.
 
-- **Task 17: Achieve ≥ 80 % Coverage**  
-  After fixes, run coverage reporting (`deno test --coverage`) and write new tests for uncovered paths.
+- **Task 17: Achieve ≥ 80% Coverage**
+   **Action**: Ran coverage reporting with `deno test --coverage` and wrote new tests to achieve >80% coverage.
+   **Status**: Resolved.
 
 #### 5. Project Maintenance & Documentation (Low → Medium)
 

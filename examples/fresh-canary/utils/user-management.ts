@@ -17,18 +17,15 @@ export const SESSION_OPTIONS: SessionOptions = buildSessionOptions(Deno.env);
  * @returns An object containing WorkOS, UserManagement, and SessionProvider instances
  */
 export function initUserManagement() {
-  const apiKey = Deno.env.get('WORKOS_API_KEY');
-  if (apiKey === null) {
-    throw new Error("Environment variable WORKOS_API_KEY is required");
+  const clientIdValue = Deno.env.get("WORKOS_CLIENT_ID");
+  const apiKey = Deno.env.get("WORKOS_API_KEY");
+  if (!apiKey || !clientIdValue) {
+    throw new Error("Missing environment variables for WorkOS configuration");
   }
-  
-  // Make sure clientId is a string, not undefined or null
-  const clientIdValue = Deno.env.get('WORKOS_CLIENT_ID');
-  if (!clientIdValue) {
-    throw new Error("Environment variable WORKOS_CLIENT_ID is required");
-  }
-  
-  return initWorkOSUserManagement(apiKey, clientIdValue);
+  // Explicitly assign to typed variables to help TypeScript with type narrowing
+  const clientId: string = clientIdValue;
+  const apiKeyString: string = apiKey;
+  return initWorkOSUserManagement(apiKeyString, clientId);
 }
 
 /**

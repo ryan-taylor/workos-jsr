@@ -1,4 +1,4 @@
-import type { WorkOS } from "../workos.ts";
+import type { WorkOS } from "workos/workos.ts";
 import {
   type BatchWriteResourcesOptions,
   type BatchWriteResourcesResponse,
@@ -26,7 +26,7 @@ import {
   type WarrantToken,
   type WarrantTokenResponse,
   type WriteWarrantOptions,
-} from "./interfaces/index.ts";
+} from "workos/fga/interfaces/index.ts";
 import {
   deserializeBatchWriteResourcesResponse,
   deserializeQueryResult,
@@ -41,11 +41,11 @@ import {
   serializeListWarrantsOptions,
   serializeQueryOptions,
   serializeWriteWarrantOptions,
-} from "./serializers/index.ts";
-import { isResourceInterface } from "./utils/interface-check.ts";
-import { AutoPaginatable } from "../common/utils/pagination.ts";
-import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
-import type { List, PaginationOptions } from "../common/interfaces.ts";
+} from "workos/fga/serializers/index.ts";
+import { isResourceInterface } from "workos/fga/utils/interface-check.ts";
+import { AutoPaginatable } from "workos/common/utils/pagination.ts";
+import { fetchAndDeserialize } from "workos/common/utils/fetch-and-deserialize.ts";
+import type { List, PaginationOptions } from "workos/common/interfaces.ts";
 
 /**
  * Service for Fine-Grained Authorization (FGA) in WorkOS.

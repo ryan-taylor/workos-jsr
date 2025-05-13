@@ -1,10 +1,10 @@
-import { deserializeSession } from "./serializers/session.serializer.ts";
-import { serializeCreateSessionOptions } from "./serializers/create-session-options.serializer.ts";
+import { deserializeSession } from "workos/passwordless/serializers/session.serializer.ts";
+import { serializeCreateSessionOptions } from "workos/passwordless/serializers/create-session-options.serializer.ts";
 import type {
   CreateSessionOptions,
   PasswordlessSession,
-} from "./interfaces/index.ts";
-import type { WorkOS } from "../workos.ts";
+} from "workos/passwordless/interfaces/index.ts";
+import type { WorkOS } from "workos/workos.ts";
 
 /**
  * Service for MagicLink passwordless authentication in WorkOS.

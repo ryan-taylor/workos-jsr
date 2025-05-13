@@ -1,17 +1,17 @@
-import { deserializeUser } from "./serializers/user.serializer.ts";
-import { deserializeSession } from "./serializers/session.serializer.ts";
-import { deserializeSessionAuth } from "./serializers/session-auth.serializer.ts";
+import { deserializeUser } from "workos/user-management/serializers/user.serializer.ts";
+import { deserializeSession } from "workos/user-management/serializers/session.serializer.ts";
+import { deserializeSessionAuth } from "workos/user-management/serializers/session-auth.serializer.ts";
 import type {
   AuthenticateOptions,
   CreateUserOptions,
   Session,
   SessionAuth,
   User,
-} from "./interfaces/index.ts";
-import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
-import type { WorkOS } from "../workos.ts";
-import type { GetOptions } from "../common/interfaces.ts";
-import type { List } from "../common/interfaces.ts";
+} from "workos/user-management/interfaces/index.ts";
+import { fetchAndDeserialize } from "workos/common/utils/fetch-and-deserialize.ts";
+import type { WorkOS } from "workos/workos.ts";
+import type { GetOptions } from "workos/common/interfaces.ts";
+import type { List } from "workos/common/interfaces.ts";
 
 /**
  * Service for User Management in WorkOS.

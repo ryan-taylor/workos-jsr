@@ -6,8 +6,8 @@ import type {
   V2CheckBatchOptions,
   V2SerializedCheckBatchOptions,
   CheckOptions,
-} from "../interfaces/index.ts";
-import { isResourceInterface } from "../utils/interface-check.ts";
+} from "workos/fga/interfaces/index.ts";
+import { isResourceInterface } from "workos/fga/utils/interface-check.ts";
 
 /**
  * Serializes a check item for the API

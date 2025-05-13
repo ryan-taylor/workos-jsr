@@ -1,4 +1,4 @@
-import type { AuditLogListEventsOptions } from "../interfaces/index.ts";
+import type { AuditLogListEventsOptions } from "workos/audit-logs/interfaces/index.ts";
 
 export function serializeListEventsOptions(
   options: AuditLogListEventsOptions,

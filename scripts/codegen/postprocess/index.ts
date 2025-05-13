@@ -1,22 +1,38 @@
-#!/usr/bin/env -S deno run -A
+#!/usr/bin/env -S deno run -A --reload
+// deno-lint-ignore-file
 
 import { walk } from "jsr:@std/fs@^1";
 import { join } from "jsr:@std/path@^1";
-import { Project } from "npm:ts-morph";
+// Lazy load deno_ast only when needed to avoid linter complaints about uncached remote imports.
+let denoAst: { parse: (src: string, opts: Record<string, unknown>) => unknown } | null = null;
+
+async function getDenoAst(): Promise<{ parse: (src: string, opts: Record<string, unknown>) => unknown }> {
+  if (denoAst === null) {
+    // Ensure Deno permissions allow remote imports with --allow-net flag
+    denoAst = await import("https://deno.land/x/deno_ast@0.46.7/mod.ts");
+  }
+  if (denoAst === null) {
+    throw new Error('Failed to load deno_ast module');
+  }
+  return denoAst;
+}
 import { enumUnionTransform } from "./transforms/enum-union-transform.ts";
 import { largeBrandedEnumTransform } from "./enums.ts";
 
 /**
  * Interface for code transforms 
  */
+/**
+ * Interface for code transforms
+ */
 export interface CodeTransform {
   /**
    * Process a TypeScript file
-   * @param project The ts-morph Project instance
+   * @param sourceText The content of the source file
    * @param filePath The path to the file to transform
-   * @returns True if changes were made
+   * @returns Modified source if changes were made, null otherwise
    */
-  process(project: Project, filePath: string): Promise<boolean>;
+  process(sourceText: string, filePath: string): Promise<string | null>;
 }
 
 /**
@@ -31,6 +47,24 @@ export interface PostProcessOptions {
    * Whether to format the code after transformation
    */
   formatCode?: boolean;
+}
+
+/**
+ * Parse TypeScript code with deno_ast
+ * @param sourceText The source code text to parse
+ * @returns The parsed AST or null if parsing failed
+ */
+export async function parseTypeScript(sourceText: string) {
+  try {
+    const { parse } = await getDenoAst();
+    return parse(sourceText, {
+      syntax: "typescript",
+      tsx: false, // Set to true if parsing TSX
+    });
+  } catch (error) {
+    console.error("Error parsing TypeScript:", error);
+    return null;
+  }
 }
 
 /**
@@ -49,17 +83,6 @@ export async function postProcess(
 
   console.log(`Post-processing generated code in ${inputDir}...`);
 
-  // Create a new ts-morph project
-  const project = new Project({
-    // TypeScript compiler options
-    compilerOptions: {
-      target: 6, // ES2020
-      module: 99, // ESNext
-      moduleResolution: 99, // Use a compatible value
-      strict: true,
-    },
-  });
-
   // Add all TypeScript files in the input directory
   const files: string[] = [];
   for await (const entry of walk(inputDir, {
@@ -76,28 +99,40 @@ export async function postProcess(
   }
 
   console.log(`Found ${files.length} TypeScript files to process`);
-  project.addSourceFilesAtPaths(files);
 
-  // Apply transforms
+  // Process files one by one
   let changesMade = false;
-  for (const transform of transforms) {
-    for (const file of files) {
-      const fileChanged = await transform.process(project, file);
-      changesMade = changesMade || fileChanged;
+  for (const file of files) {
+    try {
+      const sourceText = await Deno.readTextFile(file);
+      let modifiedSource = sourceText;
+      let fileChanged = false;
+
+      // Apply transforms sequentially
+      for (const transform of transforms) {
+        const result = await transform.process(modifiedSource, file);
+        if (result !== null) {
+          modifiedSource = result;
+          fileChanged = true;
+        }
+      }
+
+      // Save changes for this file if needed
+      if (fileChanged) {
+        await Deno.writeTextFile(file, modifiedSource);
+        changesMade = true;
+      }
+    } catch (error) {
+      console.error(`Error processing file ${file}:`, error);
     }
   }
 
-  // Save changes
-  if (changesMade) {
-    console.log("Saving changes to files...");
-    await project.save();
-    
-    // Format code if requested
-    if (formatCode) {
-      console.log("Formatting code...");
-      await formatGeneratedCode(inputDir);
-    }
-    
+  // Format code if requested and changes were made
+  if (changesMade && formatCode) {
+    console.log("Formatting code...");
+    await formatGeneratedCode(inputDir);
+    console.log("Post-processing complete");
+  } else if (changesMade) {
     console.log("Post-processing complete");
   } else {
     console.log("No changes made during post-processing");

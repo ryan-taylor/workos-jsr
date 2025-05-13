@@ -1,4 +1,4 @@
-import { SubtleCryptoProvider } from "../common/crypto/subtle-crypto-provider.ts";
+import { SubtleCryptoProvider } from "workos/common/crypto/subtle-crypto-provider.ts";
 
 /**
  * Service for generating and verifying WorkOS CSRF tokens and actions.

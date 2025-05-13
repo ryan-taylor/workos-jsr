@@ -144,7 +144,7 @@ export function useWorkOS(): WorkOSState & {
       const authenticatedUser = await userManagement.authenticateWithPassword({
         email,
         password,
-        clientId: Deno.env.get('WORKOS_CLIENT_ID') || '',
+        clientId: Deno.env.get('WORKOS_CLIENT_ID') ?? '',
       });
 
       // Update state with authenticated user

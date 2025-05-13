@@ -1,7 +1,7 @@
 import type {
   ListEventOptions,
   SerializedListEventOptions,
-} from "../interfaces/index.ts";
+} from "workos/events/interfaces/index.ts";
 
 export const serializeListEventOptions = (
   options: ListEventOptions,

@@ -4,13 +4,13 @@ import type {
   RequestHeaders,
   RequestOptions,
   ResponseHeaders,
-} from "../interfaces/http-client.interface.ts";
-import type { JsonValue } from "../interfaces/http-response.interface.ts";
+} from "workos/common/interfaces/http-client.interface.ts";
+import type { JsonValue } from "workos/common/interfaces/http-response.interface.ts";
 import {
   HttpClient,
   HttpClientError,
   HttpClientResponse,
-} from "./http-client.ts";
+} from "workos/common/net/http-client.ts";
 
 export class FetchHttpClient extends HttpClient implements HttpClientInterface {
   private readonly _fetchFn;

@@ -1,7 +1,7 @@
 import type {
   OrganizationDomain,
   OrganizationDomainResponse,
-} from "../interfaces/index.ts";
+} from "workos/organization-domains/interfaces/index.ts";
 
 export const deserializeOrganizationDomain = (
   organizationDomain: OrganizationDomainResponse,

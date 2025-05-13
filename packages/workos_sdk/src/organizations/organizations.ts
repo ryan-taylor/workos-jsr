@@ -1,15 +1,15 @@
-import { deserializeOrganization } from "./serializers/organization.serializer.ts";
-import { serializeCreateOrganizationOptions } from "./serializers/create-organization-options.serializer.ts";
-import { serializeUpdateOrganizationOptions } from "./serializers/update-organization-options.serializer.ts";
+import { deserializeOrganization } from "workos/organizations/serializers/organization.serializer.ts";
+import { serializeCreateOrganizationOptions } from "workos/organizations/serializers/create-organization-options.serializer.ts";
+import { serializeUpdateOrganizationOptions } from "workos/organizations/serializers/update-organization-options.serializer.ts";
 import type {
   CreateOrganizationOptions,
   ListOrganizationsOptions,
   Organization,
   UpdateOrganizationOptions,
-} from "./interfaces.ts";
-import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
-import type { WorkOS } from "../workos.ts";
-import type { List } from "../common/interfaces.ts";
+} from "workos/organizations/interfaces.ts";
+import { fetchAndDeserialize } from "workos/common/utils/fetch-and-deserialize.ts";
+import type { WorkOS } from "workos/workos.ts";
+import type { List } from "workos/common/interfaces.ts";
 
 /**
  * Organizations service for creating and managing WorkOS Organizations.

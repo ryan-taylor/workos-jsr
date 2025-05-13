@@ -1,4 +1,4 @@
-import type { WebhookEvent } from "../interfaces/index.ts";
+import type { WebhookEvent } from "workos/webhooks/interfaces/index.ts";
 
 export function deserializeWebhookEvent(
   data: Record<string, unknown>,

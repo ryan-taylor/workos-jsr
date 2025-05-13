@@ -1,5 +1,5 @@
-import { SignatureVerificationException } from "../exceptions.ts";
-import type { CryptoProvider } from "./crypto-provider.ts";
+import { SignatureVerificationException } from "workos/common/exceptions.ts";
+import type { CryptoProvider } from "workos/common/crypto/crypto-provider.ts";
 
 export class SignatureProvider {
   private cryptoProvider: CryptoProvider;

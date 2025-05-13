@@ -122,7 +122,7 @@ export const handler: Handlers = {
         // Authenticate with current password first
         try {
           await userManagement.authenticateWithPassword({
-            clientId: Deno.env.get('WORKOS_CLIENT_ID') || '',
+            clientId: Deno.env.get('WORKOS_CLIENT_ID') ?? '',
             email: user.email,
             password: currentPassword,
           });

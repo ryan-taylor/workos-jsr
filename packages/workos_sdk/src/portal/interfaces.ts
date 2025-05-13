@@ -1,1 +1,1 @@
-export * from "./interfaces/index.ts"; 
+export * from "workos/portal/interfaces/index.ts"; 

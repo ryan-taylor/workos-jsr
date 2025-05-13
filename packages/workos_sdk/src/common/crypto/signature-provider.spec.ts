@@ -4,11 +4,11 @@ import {
   beforeEach,
   describe,
   it,
-} from "../../../tests/deno-test-setup.ts";
+} from "workos/../tests/deno-test-setup.ts";
 
 import { crypto } from "@std/crypto";
-import { SubtleCryptoProvider } from "./subtle-crypto-provider.ts";
-import { SignatureProvider } from "./signature-provider.ts";
+import { SubtleCryptoProvider } from "workos/common/crypto/subtle-crypto-provider.ts";
+import { SignatureProvider } from "workos/common/crypto/signature-provider.ts";
 
 // Main test suite
 describe("SignatureProvider", () => {

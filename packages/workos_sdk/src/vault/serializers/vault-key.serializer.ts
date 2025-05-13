@@ -1,4 +1,4 @@
-import type { CreateDataKeyResponse, DataKey, DataKeyPair, DecryptDataKeyResponse } from "../interfaces.ts";
+import type { CreateDataKeyResponse, DataKey, DataKeyPair, DecryptDataKeyResponse } from "workos/vault/interfaces.ts";
 
 export const deserializeCreateDataKeyResponse = (
   data: CreateDataKeyResponse,

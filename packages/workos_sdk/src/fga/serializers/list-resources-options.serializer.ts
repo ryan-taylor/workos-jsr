@@ -1,7 +1,7 @@
 import type {
   ListResourcesOptions,
   SerializedListResourcesOptions,
-} from "../interfaces/index.ts";
+} from "workos/fga/interfaces/index.ts";
 
 /**
  * Serializes list resources options for the API

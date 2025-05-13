@@ -1,8 +1,8 @@
 import type {
   QueryResult,
   QueryResultResponse,
-} from "../interfaces/index.ts";
-import { deserializeWarrant } from "./warrant.serializer.ts";
+} from "workos/fga/interfaces/index.ts";
+import { deserializeWarrant } from "workos/fga/serializers/warrant.serializer.ts";
 
 /**
  * Deserializes a query result response from the API

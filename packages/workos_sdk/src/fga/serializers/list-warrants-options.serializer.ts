@@ -1,7 +1,7 @@
 import type {
   ListWarrantsOptions,
   SerializedListWarrantsOptions,
-} from "../interfaces/index.ts";
+} from "workos/fga/interfaces/index.ts";
 
 /**
  * Serializes list warrants options for the API

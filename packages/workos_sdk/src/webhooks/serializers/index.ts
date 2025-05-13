@@ -1,1 +1,1 @@
-export * from "./webhook-event.serializer.ts";
+export * from "workos/webhooks/serializers/webhook-event.serializer.ts";

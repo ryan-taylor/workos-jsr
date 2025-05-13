@@ -27,7 +27,7 @@ export interface AuditLogEvent {
 // Initialize WorkOS and Audit Logs
 export function initAuditLogs() {
   // Initialize WorkOS with the API key
-  const apiKey = Deno.env.get('WORKOS_API_KEY') || 'sk_test_your_key_here';
+  const apiKey = Deno.env.get('WORKOS_API_KEY') ?? 'sk_test_your_key_here';
   const workos = new WorkOS(apiKey);
 
   return { workos };

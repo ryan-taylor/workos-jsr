@@ -1,8 +1,8 @@
-import { deserializePortalLink } from "./serializers/portal-link.serializer.ts";
-import { serializeGenerateLinkOptions } from "./serializers/generate-link-options.serializer.ts";
-import type { GenerateLinkOptions, PortalLink } from "./interfaces.ts";
-import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
-import type { WorkOS } from "../workos.ts";
+import { deserializePortalLink } from "workos/portal/serializers/portal-link.serializer.ts";
+import { serializeGenerateLinkOptions } from "workos/portal/serializers/generate-link-options.serializer.ts";
+import type { GenerateLinkOptions, PortalLink } from "workos/portal/interfaces.ts";
+import { fetchAndDeserialize } from "workos/common/utils/fetch-and-deserialize.ts";
+import type { WorkOS } from "workos/workos.ts";
 
 /**
  * Service for generating WorkOS Admin Portal links.

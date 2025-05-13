@@ -1,13 +1,13 @@
-import { deserializeAuditLogEvent } from "./serializers/audit-log-event.serializer.ts";
-import { serializeListEventsOptions } from "./serializers/list-events-options.serializer.ts";
+import { deserializeAuditLogEvent } from "workos/audit-logs/serializers/audit-log-event.serializer.ts";
+import { serializeListEventsOptions } from "workos/audit-logs/serializers/list-events-options.serializer.ts";
 import type {
   AuditLogEvent,
   CreateEventOptions,
   AuditLogListEventsOptions,
-} from "./interfaces/index.ts";
-import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
-import type { WorkOS } from "../workos.ts";
-import type { List } from "../common/interfaces.ts";
+} from "workos/audit-logs/interfaces/index.ts";
+import { fetchAndDeserialize } from "workos/common/utils/fetch-and-deserialize.ts";
+import type { WorkOS } from "workos/workos.ts";
+import type { List } from "workos/common/interfaces.ts";
 
 /**
  * Service for working with WorkOS Audit Logs.

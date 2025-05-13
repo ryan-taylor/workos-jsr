@@ -1,5 +1,5 @@
-import type { PaginationOptions } from "../../common/interfaces.ts";
-import type { ResourceOp } from "./resource-op.enum.ts";
+import type { PaginationOptions } from "workos/common/interfaces.ts";
+import type { ResourceOp } from "workos/fga/interfaces/resource-op.enum.ts";
 
 export interface ResourceInterface {
   getResourceType(): string;

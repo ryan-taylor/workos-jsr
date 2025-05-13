@@ -17,8 +17,8 @@ export const SESSION_OPTIONS: SessionOptions = buildSessionOptions(Deno.env);
  * @returns An object containing WorkOS, UserManagement, and SessionProvider instances
  */
 export function initUserManagement() {
-  const apiKey = Deno.env.get('WORKOS_API_KEY') || '';
-  const clientId = Deno.env.get('WORKOS_CLIENT_ID');
+  const apiKey = Deno.env.get('WORKOS_API_KEY') ?? '';
+  const clientId = Deno.env.get('WORKOS_CLIENT_ID') ?? undefined;
   
   return initWorkOSUserManagement(apiKey, clientId);
 }

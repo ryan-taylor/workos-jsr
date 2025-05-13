@@ -1,4 +1,4 @@
-import type { Challenge } from "../interfaces/index.ts";
+import type { Challenge } from "workos/mfa/interfaces/index.ts";
 
 export function deserializeChallenge(item: unknown): Challenge {
   const data = item as Record<string, unknown>;

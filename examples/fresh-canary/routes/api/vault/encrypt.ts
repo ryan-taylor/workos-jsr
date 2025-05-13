@@ -1,7 +1,7 @@
 import { WorkOS } from '../../../../../src/workos.ts';
 import type { Handlers } from '$fresh/server.ts';
 
-const apiKey = Deno.env.get('WORKOS_API_KEY') || '';
+const apiKey = Deno.env.get('WORKOS_API_KEY') ?? '';
 const workos = new WorkOS(apiKey);
 
 export const handler: Handlers = {

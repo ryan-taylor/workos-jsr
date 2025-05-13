@@ -19,8 +19,8 @@ function isAuthenticated(request: Request): boolean {
   const [username, password] = credentials.split(':');
 
   // Check against environment variables or use defaults for development
-  const expectedUsername = Deno.env.get('METRICS_USERNAME') || 'admin';
-  const expectedPassword = Deno.env.get('METRICS_PASSWORD') || 'metrics';
+  const expectedUsername = Deno.env.get('METRICS_USERNAME') ?? 'admin';
+  const expectedPassword = Deno.env.get('METRICS_PASSWORD') ?? 'metrics';
 
   return username === expectedUsername && password === expectedPassword;
 }

@@ -1,6 +1,7 @@
 #!/usr/bin/env -S deno run -A --config=deno.json
+// deno-lint-ignore-file no-explicit-any
 
-import { exists, ensureDir } from "jsr:@std/fs@^1";
+import { ensureDir } from "jsr:@std/fs@^1";
 import { join } from "jsr:@std/path@^1";
 
 /**
@@ -99,10 +100,10 @@ export class NativeGenerator implements OpenApiGenerator {
       await ensureDir(output);
       
       // Generate model interfaces
-      const models = await this.generateModels(spec);
+      const models = this.generateModels(spec);
       
       // Generate API client
-      const client = await this.generateClient(spec, options);
+      const client = this.generateClient(spec, options);
       
       // Write the generated code to output files
       await Deno.writeTextFile(join(output, "models.ts"), models);
@@ -122,7 +123,7 @@ export class NativeGenerator implements OpenApiGenerator {
   /**
    * Generate TypeScript interfaces for models defined in the schema
    */
-  private async generateModels(spec: Record<string, any>): Promise<string> {
+  private generateModels(spec: Record<string, any>): string {
     let output = `// Generated TypeScript interfaces for OpenAPI schema\n\n`;
     
     // Extract schemas from the spec
@@ -150,10 +151,10 @@ export class NativeGenerator implements OpenApiGenerator {
   /**
    * Generate TypeScript client for API endpoints
    */
-  private async generateClient(
+  private generateClient(
     spec: Record<string, any>,
-    options: NativeGeneratorOptions
-  ): Promise<string> {
+    _options: NativeGeneratorOptions
+  ): string {
     let output = `// Generated TypeScript client for OpenAPI schema\n`;
     output += `// Uses fetch API for HTTP requests\n\n`;
     

@@ -27,6 +27,6 @@
   },
   "dependencies": {
     "@stackql/deno-openapi-dereferencer": "^0.1.0",
-    "@denosaurs/typefetch": "^0.2"
+    "deno_ast": "^1.0.0"
   }
 }

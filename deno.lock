@@ -1,24 +1,20 @@
 {
   "version": "5",
   "specifiers": {
-    "jsr:@denosaurs/tty@~0.2.1": "0.2.1",
-    "jsr:@denosaurs/typefetch@*": "0.0.34",
-    "jsr:@denosaurs/wait@0.2": "0.2.2",
     "jsr:@luca/esbuild-deno-loader@0.11.0": "0.11.0",
     "jsr:@stackql/deno-openapi-dereferencer@*": "0.3.0",
     "jsr:@std/bytes@^1.0.2": "1.0.5",
-    "jsr:@std/cli@1": "1.0.17",
     "jsr:@std/crypto@1": "1.0.4",
     "jsr:@std/encoding@1": "1.0.10",
     "jsr:@std/encoding@^1.0.5": "1.0.10",
-    "jsr:@std/fmt@1": "1.0.7",
     "jsr:@std/fs@1": "1.0.17",
+    "jsr:@std/fs@1.0.0": "1.0.0",
     "jsr:@std/http@1": "1.0.15",
     "jsr:@std/path@1": "1.0.9",
+    "jsr:@std/path@1.0.0": "1.0.0",
     "jsr:@std/path@^1.0.2": "1.0.9",
     "jsr:@std/path@^1.0.6": "1.0.9",
     "jsr:@std/path@^1.0.9": "1.0.9",
-    "jsr:@std/yaml@1": "1.0.6",
     "npm:@apidevtools/swagger-parser@*": "10.1.1_openapi-types@12.1.3_ajv@8.17.1",
     "npm:@apidevtools/swagger-parser@10.1.0": "10.1.0_openapi-types@12.1.3_ajv@8.17.1",
     "npm:autoprefixer@10.4.17": "10.4.17_postcss@8.4.35",
@@ -32,31 +28,9 @@
     "npm:postcss@8.4.33": "8.4.33",
     "npm:postcss@8.4.35": "8.4.35",
     "npm:ts-morph@*": "25.0.1",
-    "npm:ts-morph@22.0": "22.0.0"
+    "npm:typescript@5.3.3": "5.3.3"
   },
   "jsr": {
-    "@denosaurs/tty@0.2.1": {
-      "integrity": "f1fc651cc9021c90bf230a45c6eb893c26a54fae6a855e9cd26aad0083d772dd"
-    },
-    "@denosaurs/typefetch@0.0.34": {
-      "integrity": "215da0383d5453cd2b8633298e51601ab1d3ae391b3e5a041079f742eea13570",
-      "dependencies": [
-        "jsr:@denosaurs/wait",
-        "jsr:@std/cli",
-        "jsr:@std/http",
-        "jsr:@std/path@1",
-        "jsr:@std/yaml",
-        "npm:openapi-types",
-        "npm:ts-morph@22.0"
-      ]
-    },
-    "@denosaurs/wait@0.2.2": {
-      "integrity": "5ec0a7e72c57a96c9fdb2f4a52e2ce3b1ad010acc59fefe6f88054a9e27bc33d",
-      "dependencies": [
-        "jsr:@denosaurs/tty",
-        "jsr:@std/fmt"
-      ]
-    },
     "@luca/esbuild-deno-loader@0.11.0": {
       "integrity": "c05a989aa7c4ee6992a27be5f15cfc5be12834cab7ff84cabb47313737c51a2c",
       "dependencies": [
@@ -74,17 +48,17 @@
     "@std/bytes@1.0.5": {
       "integrity": "4465dd739d7963d964c809202ebea6d5c6b8e3829ef25c6a224290fbb8a1021e"
     },
-    "@std/cli@1.0.17": {
-      "integrity": "e15b9abe629e17be90cc6216327f03a29eae613365f1353837fa749aad29ce7b"
-    },
     "@std/crypto@1.0.4": {
       "integrity": "cee245c453bd5366207f4d8aa25ea3e9c86cecad2be3fefcaa6cb17203d79340"
     },
     "@std/encoding@1.0.10": {
       "integrity": "8783c6384a2d13abd5e9e87a7ae0520a30e9f56aeeaa3bdf910a3eaaf5c811a1"
     },
-    "@std/fmt@1.0.7": {
-      "integrity": "2a727c043d8df62cd0b819b3fb709b64dd622e42c3b1bb817ea7e6cc606360fb"
+    "@std/fs@1.0.0": {
+      "integrity": "d72e4a125af7168d717a2ed1dca77a728b422b0d138fd20579e3fa41a77da943",
+      "dependencies": [
+        "jsr:@std/path@^1.0.2"
+      ]
     },
     "@std/fs@1.0.17": {
       "integrity": "1c00c632677c1158988ef7a004cb16137f870aafdb8163b9dce86ec652f3952b",
@@ -95,11 +69,11 @@
     "@std/http@1.0.15": {
       "integrity": "435a4934b4e196e82a8233f724da525f7b7112f3566502f28815e94764c19159"
     },
+    "@std/path@1.0.0": {
+      "integrity": "77fcb858b6e38777d1154df0f02245ba0b07e2c40ca3c0eec57c9233188c2d21"
+    },
     "@std/path@1.0.9": {
       "integrity": "260a49f11edd3db93dd38350bf9cd1b4d1366afa98e81b86167b4e3dd750129e"
-    },
-    "@std/yaml@1.0.6": {
-      "integrity": "c9a5a914e1d51c46756cb10e356710035cfa905e713c90d3b711413fd3aead27"
     }
   },
   "npm": {
@@ -181,15 +155,6 @@
     },
     "@trysound/sax@0.2.0": {
       "integrity": "sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA=="
-    },
-    "@ts-morph/common@0.23.0": {
-      "integrity": "sha512-m7Lllj9n/S6sOkCkRftpM7L24uvmfXQFedlW/4hENcuJH1HHm9u5EgxZb9uVjQSCGrbBWBkOGgcTxNg36r6ywA==",
-      "dependencies": [
-        "fast-glob",
-        "minimatch",
-        "mkdirp",
-        "path-browserify"
-      ]
     },
     "@ts-morph/common@0.26.1": {
       "integrity": "sha512-Sn28TGl/4cFpcM+jwsH1wLncYq3FtN/BIpem+HOygfBWPT5pAeS5dB4VFVzV8FbnOKHpDLZmvAl4AjPEev5idA==",
@@ -568,10 +533,6 @@
     "minimist@1.2.8": {
       "integrity": "sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA=="
     },
-    "mkdirp@3.0.1": {
-      "integrity": "sha512-+NsyUUAZDmo6YVHzL/stxSu3t9YS1iljliy3BSDrXJ/dkn1KYdmtZODGGjLcc9XLgVVpH4KshHB8XmZgMhaBXg==",
-      "bin": true
-    },
     "mustache@4.2.0": {
       "integrity": "sha512-71ippSywq5Yb7/tVYyGbkBggbU8H3u5Rz56fH60jGFgr8uHwxs+aSKeqmluIVzM0m0kB7xQjKS6qPfd0b2ZoqQ==",
       "bin": true
@@ -896,19 +857,16 @@
         "is-number"
       ]
     },
-    "ts-morph@22.0.0": {
-      "integrity": "sha512-M9MqFGZREyeb5fTl6gNHKZLqBQA0TjA1lea+CR48R8EBTDuWrNqW6ccC5QvjNR4s6wDumD3LTCjOFSp9iwlzaw==",
-      "dependencies": [
-        "@ts-morph/common@0.23.0",
-        "code-block-writer"
-      ]
-    },
     "ts-morph@25.0.1": {
       "integrity": "sha512-QJEiTdnz1YjrB3JFhd626gX4rKHDLSjSVMvGGG4v7ONc3RBwa0Eei98G9AT9uNFDMtV54JyuXsFeC+OH0n6bXQ==",
       "dependencies": [
-        "@ts-morph/common@0.26.1",
+        "@ts-morph/common",
         "code-block-writer"
       ]
+    },
+    "typescript@5.3.3": {
+      "integrity": "sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==",
+      "bin": true
     },
     "uglify-js@3.19.3": {
       "integrity": "sha512-v3Xu+yuwBXisp6QYTcH4UbH+xYJXqnq2m/LtQVWKWzYc1iehYnLixoQDN9FH6/j9/oybfd6W9Ghwkl8+UMKTKQ==",
@@ -1773,7 +1731,6 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@denosaurs/typefetch@*",
       "jsr:@fresh/core@2.0.0-alpha.29",
       "jsr:@fresh/dev@2.0.0-alpha.29",
       "jsr:@fresh/plugin-tailwindcss@2.0.0-alpha.29",

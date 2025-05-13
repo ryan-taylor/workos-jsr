@@ -1,5 +1,5 @@
 import { crypto } from "jsr:@std/crypto@1";
-import { encodeUInt32 } from "../common/utils/leb128.ts";
+import { encodeUInt32 } from "workos/common/utils/leb128.ts";
 
 /**
  * Encrypts plaintext data using AES-GCM and a given data key.

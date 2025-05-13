@@ -4,15 +4,15 @@ import {
   beforeEach,
   describe,
   it,
-} from "../../../tests/deno-test-setup.ts";
+} from "workos/../tests/deno-test-setup.ts";
 
 import {
   fetchOnce,
   fetchURL,
   resetMockFetch,
   spy,
-} from "../utils/test-utils.ts";
-import { FetchHttpClient } from "./fetch-client.ts";
+} from "workos/common/utils/test-utils.ts";
+import { FetchHttpClient } from "workos/common/net/fetch-client.ts";
 
 const fetchClient = new FetchHttpClient("https://test.workos.com", {
   headers: {

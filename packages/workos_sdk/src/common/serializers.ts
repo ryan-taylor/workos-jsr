@@ -2,7 +2,7 @@
  * Base serializer functions and utilities
  */
 
-import type { Event, List, ListResponse } from "./interfaces.ts";
+import type { Event, List, ListResponse } from "workos/common/interfaces.ts";
 
 // Base serializer function
 export function serialize<T>(data: unknown): T {

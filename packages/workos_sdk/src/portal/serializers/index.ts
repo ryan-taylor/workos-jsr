@@ -1,2 +1,2 @@
-export * from "./generate-link-options.serializer.ts";
-export * from "./portal-link.serializer.ts";
+export * from "workos/portal/serializers/generate-link-options.serializer.ts";
+export * from "workos/portal/serializers/portal-link.serializer.ts";

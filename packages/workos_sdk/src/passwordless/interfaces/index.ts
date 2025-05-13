@@ -1,2 +1,2 @@
-export * from "./session.interface.ts";
-export * from "./create-session-options.interface.ts";
+export * from "workos/passwordless/interfaces/session.interface.ts";
+export * from "workos/passwordless/interfaces/create-session-options.interface.ts";

@@ -7,7 +7,7 @@ import { DenoCryptoProvider } from 'workos/common/crypto/deno-crypto-provider.ts
 // Session configuration - using same as user-management for consistency
 export const SESSION_OPTIONS = {
   cookieName: 'workos_session',
-  password: Deno.env.get('SESSION_SECRET') || 'use-a-strong-password-in-production',
+  password: Deno.env.get('SESSION_SECRET') ?? 'use-a-strong-password-in-production',
   ttl: 60 * 60 * 24 * 7, // 7 days in seconds
   secure: true,
   httpOnly: true,
@@ -69,8 +69,8 @@ export interface DirectoryUserWithGroups extends DirectoryUser {
  */
 export function initDirectorySync() {
   const workos = new WorkOS(
-    Deno.env.get('WORKOS_API_KEY') || '',
-    { clientId: Deno.env.get('WORKOS_CLIENT_ID') },
+    Deno.env.get('WORKOS_API_KEY') ?? '',
+    { clientId: Deno.env.get('WORKOS_CLIENT_ID') ?? undefined },
   );
 
   return { workos };

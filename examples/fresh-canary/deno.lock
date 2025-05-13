@@ -1,7 +1,7 @@
 {
   "version": "5",
   "specifiers": {
-    "jsr:@fresh/core@2.0.0-alpha.29": "2.0.0-alpha.29",
+    "jsr:@fresh/core@^2.0.0-alpha.29": "2.0.0-alpha.29",
     "jsr:@luca/esbuild-deno-loader@0.11.0": "0.11.0",
     "jsr:@std/bytes@^1.0.2": "1.0.5",
     "jsr:@std/crypto@1": "1.0.4",
@@ -1214,6 +1214,7 @@
     "https://deno.land/x/fresh@1.6.3/src/server/serializer.ts": "f0cffb863bbdbac6ed53fefe181e415d6aefc2101f2dc92a562b364088809e44",
     "https://deno.land/x/fresh@1.6.3/src/server/types.ts": "f5911c9eef864df8ef58fe5bd353ebd22267b35ef2ef8b21def825fd274d05a6",
     "https://deno.land/x/fresh@1.6.3/src/types.ts": "05169e3389979d8283de0ec1db3a765324ffd730b6af29ffe02752f341ae7d35",
+    "https://deno.land/x/fresh@1.6.5/runtime.ts": "49f4f70c24d14c5d5e112a671ef0314e438e5cd83eacb4f75c6db2fbdc22b540",
     "https://deno.land/x/fresh@1.6.5/server.ts": "d5817615a3ac822d422627f2cd6f850a31e11f7e73b328a79807f722e6519bac",
     "https://deno.land/x/fresh@1.6.5/src/build/aot_snapshot.ts": "4ac6330e5325dd9411fa2a46e97bb289f910fde4be82dc349d3e2b4bb1a7c07d",
     "https://deno.land/x/fresh@1.6.5/src/build/deps.ts": "2402e389a180b815f646de6fcbae3928539b77b154713a4795c248baf588b661",
@@ -1366,9 +1367,10 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@fresh/core@2.0.0-alpha.29",
-      "jsr:@fresh/dev@2.0.0-alpha.29",
-      "jsr:@fresh/plugin-tailwindcss@2.0.0-alpha.29",
+      "jsr:@fresh/core@^2.0.0-alpha.29",
+      "jsr:@fresh/dev@^2.0.0-alpha.29",
+      "jsr:@fresh/plugin-tailwindcss@^2.0.0-alpha.29",
+      "jsr:@panva/jose@*",
       "jsr:@std/assert@1.0.0",
       "jsr:@std/fs@1.0.0",
       "jsr:@std/http@1.0.0",

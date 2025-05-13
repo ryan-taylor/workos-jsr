@@ -1,7 +1,7 @@
 import type {
   WarrantToken,
   WarrantTokenResponse,
-} from "../interfaces/index.ts";
+} from "workos/fga/interfaces/index.ts";
 
 /**
  * Deserializes a warrant token response from the API

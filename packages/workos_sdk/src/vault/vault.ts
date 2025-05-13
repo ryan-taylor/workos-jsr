@@ -1,7 +1,7 @@
-import type { List, ListResponse, PaginationOptions } from "../common/interfaces.ts";
-import type { WorkOS } from "../workos.ts";
-import { decode, decrypt } from "./decrypt.ts";
-import { encrypt } from "./encrypt.ts";
+import type { List, ListResponse, PaginationOptions } from "workos/common/interfaces.ts";
+import type { WorkOS } from "workos/workos.ts";
+import { decode, decrypt } from "workos/vault/decrypt.ts";
+import { encrypt } from "workos/vault/encrypt.ts";
 import type {
   CreateDataKeyOptions,
   CreateDataKeyResponse,
@@ -22,11 +22,11 @@ import type {
   ReadObjectResponse,
   UpdateObjectOptions,
   VaultObject,
-} from "./interfaces.ts";
+} from "workos/vault/interfaces.ts";
 import {
   deserializeCreateDataKeyResponse,
   deserializeDecryptDataKeyResponse,
-} from "./serializers/vault-key.serializer.ts";
+} from "workos/vault/serializers/vault-key.serializer.ts";
 import {
   deserializeListObjects,
   deserializeObject,
@@ -34,7 +34,7 @@ import {
   desrializeListObjectVersions,
   serializeCreateObjectEntity,
   serializeUpdateObjectEntity,
-} from "./serializers/vault-object.serializer.ts";
+} from "workos/vault/serializers/vault-object.serializer.ts";
 
 /**
  * Service for Vault key-value storage and cryptographic operations in WorkOS.

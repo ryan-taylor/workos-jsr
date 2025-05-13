@@ -1,4 +1,4 @@
-import { CryptoProvider } from "./crypto-provider.ts";
+import { CryptoProvider } from "workos/common/crypto/crypto-provider.ts";
 
 /**
  * `CryptoProvider` which uses the SubtleCrypto interface of the Web Crypto API.

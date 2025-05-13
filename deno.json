@@ -16,6 +16,14 @@
     "ci:dialect-check": "deno run -A scripts/ci/dialect-check.ts",
     "precommit:check-adapter": "deno task prebuild:api"
   },
+  "lint": {
+    "rules": {
+      "tags": ["recommended"],
+      "exclude": [],
+      "include": ["no-npm-imports/no-sloppy-imports", "no-npm-imports/no-sloppy-node"]
+    },
+    "plugins": ["no-npm-imports=./tools/no_npm_imports.ts"]
+  },
   "dependencies": {
     "@std/crypto": "^1",
     "@std/fs": "^1",
@@ -23,6 +31,7 @@
     "@std/http": "^1",
     "@std/assert": "^1",
     "@std/testing": "^1",
-    "@denosaurs/typefetch": "^0.2"
+    "@denosaurs/typefetch": "^0.2",
+    "deno_ast": "^1.0.0"
   }
 }

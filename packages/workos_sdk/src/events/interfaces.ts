@@ -1,1 +1,1 @@
-export * from "./interfaces/index.ts"; 
+export * from "workos/events/interfaces/index.ts"; 

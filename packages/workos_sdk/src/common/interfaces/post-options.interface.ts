@@ -1,4 +1,4 @@
-import { JsonValue } from "./http-response.interface.ts";
+import { JsonValue } from "workos/common/interfaces/http-response.interface.ts";
 
 /**
  * Options for POST requests

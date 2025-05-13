@@ -1,4 +1,4 @@
-import type { Session } from "../interfaces/index.ts";
+import type { Session } from "workos/user-management/interfaces/index.ts";
 
 export function deserializeSession(item: unknown): Session {
   const data = item as Record<string, unknown>;

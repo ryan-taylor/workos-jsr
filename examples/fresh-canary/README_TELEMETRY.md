@@ -23,9 +23,9 @@ To enable telemetry, provide configuration when initializing the WorkOS client:
 import { WorkOS } from '@workos/sdk';
 
 const workos = new WorkOS(
-  Deno.env.get('WORKOS_API_KEY') || '',
+  Deno.env.get('WORKOS_API_KEY') ?? '',
   {
-    clientId: Deno.env.get('WORKOS_CLIENT_ID'),
+    clientId: Deno.env.get('WORKOS_CLIENT_ID') ?? undefined,
     telemetry: {
       enabled: true, // Enable telemetry
       endpoint: 'http://localhost:4318', // OTLP exporter endpoint
@@ -53,9 +53,9 @@ You can add custom attributes to all telemetry data:
 
 ```typescript
 const workos = new WorkOS(
-  Deno.env.get('WORKOS_API_KEY') || '',
+  Deno.env.get('WORKOS_API_KEY') ?? '',
   {
-    clientId: Deno.env.get('WORKOS_CLIENT_ID'),
+    clientId: Deno.env.get('WORKOS_CLIENT_ID') ?? undefined,
     telemetry: {
       enabled: true,
       endpoint: 'http://localhost:4318',
@@ -266,9 +266,9 @@ Enable debug mode to see detailed logs:
 
 ```typescript
 const workos = new WorkOS(
-  Deno.env.get('WORKOS_API_KEY') || '',
+  Deno.env.get('WORKOS_API_KEY') ?? '',
   {
-    clientId: Deno.env.get('WORKOS_CLIENT_ID'),
+    clientId: Deno.env.get('WORKOS_CLIENT_ID') ?? undefined,
     telemetry: {
       enabled: true,
       endpoint: 'http://localhost:4318',

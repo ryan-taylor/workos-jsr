@@ -1,4 +1,4 @@
-import type { AuditLogEvent } from "../interfaces/index.ts";
+import type { AuditLogEvent } from "workos/audit-logs/interfaces/index.ts";
 
 export function deserializeAuditLogEvent(item: unknown): AuditLogEvent {
   const data = item as Record<string, unknown>;

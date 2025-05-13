@@ -2,8 +2,8 @@ import { assertEquals, assertRejects } from "$std/assert/mod.ts";
 import { describe, it } from "$std/testing/bdd.ts";
 import { WorkOS } from "../workos.ts";
 import { fetchOnce, fetchURL } from "../common/utils/test-utils.ts";
-import tokenFixture from "./fixtures/token.json" assert { type: "json" };
-import getTokenErrorFixture from "./fixtures/get-token-error.json" assert {
+import tokenFixture from "./fixtures/token.json" with { type: "json" };
+import getTokenErrorFixture from "./fixtures/get-token-error.json" with {
   type: "json",
 };
 

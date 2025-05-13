@@ -2,7 +2,7 @@ import { assertEquals, assertExists, assertNotEquals } from "@std/assert";
 import {
   FreshSessionProvider,
   type SessionOptions,
-} from "./fresh-session-provider.ts";
+} from "workos/common/iron-session/fresh-session-provider.ts";
 
 Deno.test("FreshSessionProvider", async (t) => {
   const provider = new FreshSessionProvider();

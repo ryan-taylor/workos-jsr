@@ -1,9 +1,9 @@
-import { deserializeEvent } from "./serializers/event.serializer.ts";
-import { serializeListEventsOptions } from "./serializers/list-events-options.serializer.ts";
-import type { Event, EventsListOptions } from "./interfaces.ts";
-import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
-import type { List } from "../common/interfaces.ts";
-import type { WorkOS } from "../workos.ts";
+import { deserializeEvent } from "workos/events/serializers/event.serializer.ts";
+import { serializeListEventsOptions } from "workos/events/serializers/list-events-options.serializer.ts";
+import type { Event, EventsListOptions } from "workos/events/interfaces.ts";
+import { fetchAndDeserialize } from "workos/common/utils/fetch-and-deserialize.ts";
+import type { List } from "workos/common/interfaces.ts";
+import type { WorkOS } from "workos/workos.ts";
 
 /**
  * Service for retrieving WorkOS Events.

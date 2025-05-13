@@ -1,4 +1,4 @@
-import type { GenerateLinkOptions } from "../interfaces.ts";
+import type { GenerateLinkOptions } from "workos/portal/interfaces.ts";
 
 export function serializeGenerateLinkOptions(
   options: GenerateLinkOptions,

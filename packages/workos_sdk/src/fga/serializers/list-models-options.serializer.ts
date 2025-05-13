@@ -1,4 +1,4 @@
-import type { ListModelsOptions } from "../interfaces/index.ts";
+import type { ListModelsOptions } from "workos/fga/interfaces/index.ts";
 
 export function serializeListModelsOptions(
   options: ListModelsOptions,

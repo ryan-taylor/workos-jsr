@@ -1,11 +1,11 @@
-import type { WorkOS } from "../workos.ts";
+import type { WorkOS } from "workos/workos.ts";
 import type {
   CreateOrganizationDomainOptions,
   OrganizationDomain,
   OrganizationDomainResponse,
-} from "./interfaces/index.ts";
-import { serializeCreateOrganizationDomainOptions } from "./serializers/create-organization-domain-options.serializer.ts";
-import { deserializeOrganizationDomain } from "./serializers/organization-domain.serializer.ts";
+} from "workos/organization-domains/interfaces/index.ts";
+import { serializeCreateOrganizationDomainOptions } from "workos/organization-domains/serializers/create-organization-domain-options.serializer.ts";
+import { deserializeOrganizationDomain } from "workos/organization-domains/serializers/organization-domain.serializer.ts";
 
 /**
  * Service for managing Organization Domains in WorkOS.

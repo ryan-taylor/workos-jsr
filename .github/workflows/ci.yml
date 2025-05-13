@@ -77,6 +77,21 @@ jobs:
       - name: Deno Lint
         run: deno lint
       
+      - name: Detect npm specifiers
+        run: |
+          if grep -R --line-number --exclude-dir=.git -E '["'"'"']npm:' .; then
+            echo "::error ::npm imports detected";
+            exit 1;
+          fi
+      
+      - name: Check for npm dependencies
+        run: |
+          if deno info --json | jq -e '.modules[] | select(.specifier | startswith("npm:"))' > /dev/null; then
+            echo "::error::npm dependencies detected in the project"
+            deno info --json | jq '.modules[] | select(.specifier | startswith("npm:")) | .specifier'
+            exit 1
+          fi
+      
       - name: Unit & Integration Tests
         run: deno test -A
 

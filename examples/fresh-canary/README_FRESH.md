@@ -99,7 +99,10 @@ import {
 export const SESSION_OPTIONS = buildSessionOptions(Deno.env);
 
 export function initUserManagement() {
-  const apiKey = Deno.env.get('WORKOS_API_KEY') || '';
+  const apiKey = Deno.env.get('WORKOS_API_KEY');
+  if (apiKey === null) {
+    throw new Error("Environment variable WORKOS_API_KEY is required");
+  }
   const clientId = Deno.env.get('WORKOS_CLIENT_ID');
   
   return initWorkOSUserManagement(apiKey, clientId);
@@ -119,7 +122,7 @@ export const handler = {
     const authorizationURL = await workos.sso.getAuthorizationUrl({
       // Configure SSO options
       redirectURI: `${new URL(req.url).origin}/callback`,
-      clientID: Deno.env.get('WORKOS_CLIENT_ID') || '',
+      clientID: Deno.env.get('WORKOS_CLIENT_ID') ?? '',
     });
     
     return new Response(null, {

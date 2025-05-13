@@ -1,4 +1,4 @@
-import type { List, PaginationOptions } from "../interfaces.ts";
+import type { List, PaginationOptions } from "workos/common/interfaces.ts";
 
 export class AutoPaginatable<T> {
   readonly options: PaginationOptions;

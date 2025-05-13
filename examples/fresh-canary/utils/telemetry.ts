@@ -3,7 +3,7 @@
 // Service information
 export const SERVICE_NAME = 'fresh-canary';
 export const SERVICE_VERSION = '1.0.0';
-export const ENVIRONMENT = Deno.env.get('DENO_ENV') || 'development';
+export const ENVIRONMENT = Deno.env.get('DENO_ENV') ?? 'development';
 
 // Storage for metrics and spans
 type MetricValue = {

@@ -4,12 +4,12 @@ import type {
   RequestHeaders,
   RequestOptions,
   ResponseHeaders,
-} from "../interfaces/http-client.interface.ts";
+} from "workos/common/interfaces/http-client.interface.ts";
 import {
   HttpClient,
   HttpClientError,
   HttpClientResponse,
-} from "./http-client.ts";
+} from "workos/common/net/http-client.ts";
 
 /**
  * HTTP client implementation for Deno runtime

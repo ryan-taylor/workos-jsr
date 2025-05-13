@@ -1,13 +1,13 @@
-import { deserializeProfile } from "./serializers/profile.serializer.ts";
-import { deserializeConnection } from "./serializers/connection.serializer.ts";
-import { serializeGetAuthorizationUrlOptions } from "./serializers/get-authorization-url-options.serializer.ts";
+import { deserializeProfile } from "workos/sso/serializers/profile.serializer.ts";
+import { deserializeConnection } from "workos/sso/serializers/connection.serializer.ts";
+import { serializeGetAuthorizationUrlOptions } from "workos/sso/serializers/get-authorization-url-options.serializer.ts";
 import type {
   Connection,
   GetAuthorizationUrlOptions,
   Profile,
-} from "./interfaces/index.ts";
-import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
-import type { WorkOS } from "../workos.ts";
+} from "workos/sso/interfaces/index.ts";
+import { fetchAndDeserialize } from "workos/common/utils/fetch-and-deserialize.ts";
+import type { WorkOS } from "workos/workos.ts";
 
 /**
  * SSO service for handling Single Sign-On authentication flows.

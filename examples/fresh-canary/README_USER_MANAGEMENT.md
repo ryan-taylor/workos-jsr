@@ -118,7 +118,7 @@ Session data is stored in encrypted cookies with the following configuration:
 ```typescript
 const SESSION_OPTIONS = {
   cookieName: 'workos_session',
-  password: Deno.env.get('SESSION_SECRET'),
+  password: Deno.env.get('SESSION_SECRET') ?? 'session-secret-should-be-set-in-production',
   ttl: 60 * 60 * 24 * 7, // 7 days in seconds
   secure: true,
   httpOnly: true,
@@ -132,7 +132,7 @@ const SESSION_OPTIONS = {
 
 ```typescript
 const authResponse = await userManagement.authenticateWithPassword({
-  clientId: Deno.env.get('WORKOS_CLIENT_ID'),
+  clientId: Deno.env.get('WORKOS_CLIENT_ID') ?? '',
   email,
   password,
   session: {
@@ -147,14 +147,14 @@ const authResponse = await userManagement.authenticateWithPassword({
 ```typescript
 // Get authorization URL
 const authorizationURL = workos.sso.getAuthorizationUrl({
-  clientId: Deno.env.get('WORKOS_CLIENT_ID'),
+  clientId: Deno.env.get('WORKOS_CLIENT_ID') ?? '',
   redirectUri: callbackUrl,
   state: crypto.randomUUID(),
 });
 
 // Handle callback
 const authResponse = await userManagement.authenticateWithCode({
-  clientId: Deno.env.get('WORKOS_CLIENT_ID'),
+  clientId: Deno.env.get('WORKOS_CLIENT_ID') ?? '',
   code,
   session: {
     sealSession: true,

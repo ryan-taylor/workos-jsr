@@ -4,7 +4,7 @@ import type {
   RequestHeaders,
   RequestOptions,
   ResponseHeaders,
-} from "../interfaces/http-client.interface.ts";
+} from "workos/common/interfaces/http-client.interface.ts";
 
 /**
  * Abstract base class for HTTP clients that communicate with the WorkOS API.

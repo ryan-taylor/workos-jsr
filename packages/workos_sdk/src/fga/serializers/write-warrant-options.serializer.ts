@@ -2,8 +2,8 @@ import type {
   WriteWarrantOptions,
   SerializedWriteWarrantOptions,
   Subject,
-} from "../interfaces/index.ts";
-import { isResourceInterface } from "../utils/interface-check.ts";
+} from "workos/fga/interfaces/index.ts";
+import { isResourceInterface } from "workos/fga/utils/interface-check.ts";
 
 /**
  * Serializes write warrant options for the API

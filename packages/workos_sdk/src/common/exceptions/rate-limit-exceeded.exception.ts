@@ -1,4 +1,4 @@
-import { GenericServerException } from "./generic-server.exception.ts";
+import { GenericServerException } from "workos/common/exceptions/generic-server.exception.ts";
 
 // Inheriting from `GenericServerException` in order to maintain backwards
 // compatibility with what 429 errors would have previously been thrown as.

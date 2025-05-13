@@ -1,9 +1,9 @@
-import type { GetOptions } from "../../common/interfaces.ts";
+import type { GetOptions } from "workos/common/interfaces.ts";
 import type {
   ResourceInterface,
   ResourceOptions,
-} from "./resource.interface.ts";
-import type { WarrantOp } from "./warrant-op.enum.ts";
+} from "workos/fga/interfaces/resource.interface.ts";
+import type { WarrantOp } from "workos/fga/interfaces/warrant-op.enum.ts";
 
 export interface ListWarrantsOptions {
   resourceType?: string;

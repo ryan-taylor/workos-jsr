@@ -1,1 +1,1 @@
-export * from "./role.serializer.ts";
+export * from "workos/roles/serializers/role.serializer.ts";

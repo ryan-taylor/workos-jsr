@@ -1,5 +1,5 @@
-import type { SessionAuth } from "../interfaces/index.ts";
-import type { User } from "../interfaces/index.ts";
+import type { SessionAuth } from "workos/user-management/interfaces/index.ts";
+import type { User } from "workos/user-management/interfaces/index.ts";
 
 /**
  * Deserializes a raw session authentication response into a typed SessionAuth object

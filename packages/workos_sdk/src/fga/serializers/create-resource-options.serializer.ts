@@ -1,8 +1,8 @@
 import type {
   CreateResourceOptions,
   SerializedCreateResourceOptions,
-} from "../interfaces/index.ts";
-import { isResourceInterface } from "../utils/interface-check.ts";
+} from "workos/fga/interfaces/index.ts";
+import { isResourceInterface } from "workos/fga/utils/interface-check.ts";
 
 /**
  * Serializes create resource options for the API

@@ -23,7 +23,7 @@ export interface QueryResult {
 }
 
 // Initialize WorkOS client
-export const workos = new WorkOS(Deno.env.get('WORKOS_API_KEY') || '');
+export const workos = new WorkOS(Deno.env.get('WORKOS_API_KEY') ?? '');
 
 // Types for FGA operations
 export interface ResourceDefinition {

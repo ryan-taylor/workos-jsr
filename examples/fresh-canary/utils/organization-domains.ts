@@ -1,7 +1,7 @@
 import { WorkOS } from '../../../mod.ts';
 
 // Initialize the WorkOS client
-const workos = new WorkOS(Deno.env.get('WORKOS_API_KEY') || '');
+const workos = new WorkOS(Deno.env.get('WORKOS_API_KEY') ?? '');
 
 // List all domains for an organization
 export async function listDomains(organizationId?: string) {
@@ -21,7 +21,7 @@ export async function listDomains(organizationId?: string) {
 export async function addDomain(organizationId: string, domain: string) {
   try {
     const newDomain = await workos.organizationDomains.create({
-      organization_id: organizationId,
+      organizationId,
       domain,
     });
     return newDomain;
@@ -57,8 +57,8 @@ export async function deleteDomain(domainId: string) {
 // List all organizations
 export async function listOrganizations() {
   try {
-    const organizations = await workos.organizations.listOrganizations();
-    return organizations;
+    const { data } = await workos.get('/organizations');
+    return data;
   } catch (error) {
     console.error('Error listing organizations:', error);
     throw error;

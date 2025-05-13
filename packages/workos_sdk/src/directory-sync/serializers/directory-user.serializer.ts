@@ -1,4 +1,4 @@
-import type { DirectoryUser } from "../interfaces/index.ts";
+import type { DirectoryUser } from "workos/directory-sync/interfaces/index.ts";
 
 export function deserializeDirectoryUser(data: unknown): DirectoryUser {
   const record = data as Record<string, unknown>;

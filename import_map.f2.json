@@ -6,9 +6,9 @@
     "preact/": "https://esm.sh/preact@10.19.3/",
     "@preact/signals": "https://esm.sh/*@preact/signals@1.2.1",
     
-    "@fresh/core": "jsr:@fresh/core@2.0.0-alpha.29",
-    "@fresh/dev": "jsr:@fresh/dev@2.0.0-alpha.29",
-    "@fresh/plugin-tailwindcss": "jsr:@fresh/plugin-tailwindcss@2.0.0-alpha.29",
+    "@fresh/core": "jsr:@fresh/core@^2.0.0-alpha.29",
+    "@fresh/dev": "jsr:@fresh/dev@^2.0.0-alpha.29",
+    "@fresh/plugin-tailwindcss": "jsr:@fresh/plugin-tailwindcss@^2.0.0-alpha.29",
     
     "@workos/sdk/": "./packages/workos_sdk/",
     "workos": "./packages/workos_sdk/src/",
@@ -23,6 +23,7 @@
     "@std/fs": "jsr:@std/fs@^1",
     "@std/http": "jsr:@std/http@^1",
     "@std/testing/": "jsr:@std/testing@^1/",
-    "@std/testing/bdd": "jsr:@std/testing@^1/bdd"
+    "@std/testing/bdd": "jsr:@std/testing@^1/bdd",
+    "jsr:deno_ast@^1": "https://deno.land/x/deno_ast@0.46.7/mod.ts"
   }
 }

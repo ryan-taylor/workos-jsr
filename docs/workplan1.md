@@ -107,12 +107,36 @@ No test should remain ignored without a documented rationale.
   **Location**: `deno.json`, import maps, and source files
   **Issue**: Dependencies may lag behind upstream bug-fix/security releases.
   **Action**: Run `deno run -A https://deno.land/x/udd/cli.ts **/*.ts` to list outdated URLs, bump versions conservatively, regenerate `deno.lock` with `deno cache --lock-write`, and verify with the full test suite; document the process in `CONTRIBUTING.md`.
-  **Status**: Planned.
+  **Status**: Resolved.
 
 - **Task 22: Set Up Automated Linter & Formatter Checks**
   **Location**: `deno.json`, `.github/workflows/`
   **Issue**: Inconsistent code style and lint errors can slip into the main branch without automated gates.
   **Action**: Define `lint` and `fmt` tasks in `deno.json`; configure a pre-commit hook with `lefthook` to run `deno fmt --check && deno lint`; add a GitHub Actions job that caches dependencies and runs the same commands plus `markdownlint-cli2`; fail the build on any violations.
+  **Status**: Planned.
+
+- **Task 39: Resolve TypeScript Errors in User Management**
+  **Location**: `src/user-management/user-management.ts`
+  **Issue**: Multiple TypeScript errors including missing methods and properties, incorrect type usage, and syntax errors.
+  **Action**: Review and fix TypeScript errors by ensuring correct method definitions, updating type imports, and correcting syntax issues; verify with `deno check`.
+  **Status**: Planned.
+
+- **Task 40: Fix TypeScript Errors in Audit Logs Utility**
+  **Location**: `examples/fresh-canary/utils/audit-logs.ts`
+  **Issue**: Errors related to missing methods in the AuditLogs class.
+  **Action**: Update the code to use the correct methods or interfaces from the WorkOS SDK for audit logs; ensure compatibility with the current API.
+  **Status**: Planned.
+
+- **Task 41: Address TypeScript Errors in Vault Module**
+  **Location**: `archive/vault/vault.ts`, `archive/vault/serializers/vault-key.serializer.ts`
+  **Issue**: Import errors and type issues in archived Vault module files.
+  **Action**: Correct import paths or remove problematic imports if the module is no longer needed; consider excluding these files from type checking if they are purely archival.
+  **Status**: Planned.
+
+- **Task 42: Handle Deprecated User Management Code**
+  **Location**: `archive/legacy/user-management-deprecated.ts`
+  **Issue**: Deprecated code causing test failures due to import and type errors.
+  **Action**: Decide whether to remove this file entirely or exclude it from test and type checking processes; add comments justifying the decision; update documentation if necessary.
   **Status**: Planned.
 
 #### 6. Security & Compliance (New Section)

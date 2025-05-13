@@ -239,6 +239,32 @@ When adding new dependencies or updating existing ones:
 6. **Avoid duplicative mappings** that point to the same target
 7. **Remove unused mappings** when dependencies are no longer needed
 
+### Dependency Update Process
+
+To check for outdated dependencies and update them:
+
+1. **Check for outdated dependencies**:
+   ```bash
+   deno run -A https://deno.land/x/udd/cli.ts **/*.ts
+   ```
+   This will list any URLs with available updates.
+
+2. **Update versions conservatively**:
+   - For standard library dependencies, prefer minor version updates unless major version updates are required
+   - For third-party dependencies, review changelogs before upgrading to major versions
+
+3. **Regenerate the lock file**:
+   ```bash
+   deno cache --lock=deno.lock --lock-write
+   ```
+   This ensures all dependent modules are cached and the lock file is up to date.
+
+4. **Verify with full test suite**:
+   ```bash
+   deno task test
+   ```
+   Ensure all tests pass with the updated dependencies.
+
 ## Code Style Guidelines
 
 We follow these code style principles to ensure consistency throughout the

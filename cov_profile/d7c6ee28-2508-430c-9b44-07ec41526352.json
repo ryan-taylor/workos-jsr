@@ -1,0 +1,48 @@
+{
+  "scriptId": "334",
+  "url": "file:///Users/t/Developer/workos-node/packages/workos_sdk/src/common/utils/fetch-and-deserialize.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 2839, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "setDefaultOptions",
+      "ranges": [
+        { "startOffset": 109, "endOffset": 191, "count": 13 },
+        { "startOffset": 167, "endOffset": 174, "count": 0 }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "isOptionsObject",
+      "ranges": [{ "startOffset": 261, "endOffset": 351, "count": 18 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "fetchAndDeserialize",
+      "ranges": [
+        { "startOffset": 435, "endOffset": 2838, "count": 18 },
+        { "startOffset": 623, "endOffset": 2243, "count": 5 },
+        { "startOffset": 883, "endOffset": 1503, "count": 2 },
+        { "startOffset": 1014, "endOffset": 1133, "count": 1 },
+        { "startOffset": 1133, "endOffset": 1194, "count": 0 },
+        { "startOffset": 1194, "endOffset": 1419, "count": 1 },
+        { "startOffset": 1419, "endOffset": 1503, "count": 0 },
+        { "startOffset": 1503, "endOffset": 1882, "count": 3 },
+        { "startOffset": 1534, "endOffset": 1663, "count": 1 },
+        { "startOffset": 1629, "endOffset": 1663, "count": 0 },
+        { "startOffset": 1663, "endOffset": 1882, "count": 2 },
+        { "startOffset": 1802, "endOffset": 1861, "count": 0 },
+        { "startOffset": 1862, "endOffset": 1873, "count": 0 },
+        { "startOffset": 1888, "endOffset": 2243, "count": 0 },
+        { "startOffset": 2243, "endOffset": 2359, "count": 13 },
+        { "startOffset": 2361, "endOffset": 2475, "count": 0 },
+        { "startOffset": 2475, "endOffset": 2637, "count": 13 },
+        { "startOffset": 2637, "endOffset": 2837, "count": 2 }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

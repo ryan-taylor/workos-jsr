@@ -103,6 +103,7 @@ export { UserManagement } from "./src/user-management/user-management.ts";
 export { FGA } from "./src/fga/fga.ts";
 export { Widgets } from "./src/widgets/widgets.ts";
 export { Actions } from "./src/actions/actions.ts";
+export { Roles } from "./src/roles/roles.ts";
 export { Vault } from "./src/vault/vault.ts";
 
 // Session providers

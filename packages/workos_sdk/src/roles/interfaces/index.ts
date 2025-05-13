@@ -1,1 +1,1 @@
-export * from "workos/roles/interfaces/role.interface.ts";
+export * from "./role.interface.ts";

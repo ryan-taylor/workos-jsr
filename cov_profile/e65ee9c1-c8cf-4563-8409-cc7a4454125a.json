@@ -1,0 +1,57 @@
+{
+  "scriptId": "362",
+  "url": "file:///Users/t/Developer/workos-node/packages/workos_sdk/src/common/serializers.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 1538, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "serialize",
+      "ranges": [{ "startOffset": 86, "endOffset": 129, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "adaptListMetadata",
+      "ranges": [
+        { "startOffset": 205, "endOffset": 518, "count": 6 },
+        { "startOffset": 281, "endOffset": 293, "count": 2 },
+        { "startOffset": 293, "endOffset": 408, "count": 4 },
+        { "startOffset": 408, "endOffset": 501, "count": 0 },
+        { "startOffset": 501, "endOffset": 517, "count": 4 }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "serializeList",
+      "ranges": [{ "startOffset": 555, "endOffset": 783, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "deserializeList",
+      "ranges": [{ "startOffset": 791, "endOffset": 1054, "count": 3 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "serializeEvent",
+      "ranges": [{ "startOffset": 1092, "endOffset": 1260, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "deserializeEvent",
+      "ranges": [{ "startOffset": 1268, "endOffset": 1334, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "serializeDate",
+      "ranges": [{ "startOffset": 1368, "endOffset": 1439, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "serializeBoolean",
+      "ranges": [{ "startOffset": 1476, "endOffset": 1537, "count": 0 }],
+      "isBlockCoverage": false
+    }
+  ]
+}

@@ -34,6 +34,7 @@ import { Mfa } from './mfa/mfa.ts';
 import { AuditLogs } from './audit-logs/audit-logs.ts';
 import { UserManagement } from './user-management/user-management.ts';
 import { FGA } from './fga/fga.ts';
+import { Roles } from './roles/roles.ts';
 import { BadRequestException } from './common/exceptions/bad-request.exception.ts';
 
 import { type HttpClient, HttpClientError } from './common/net/http-client.ts';
@@ -82,6 +83,9 @@ export class WorkOS {
 
   /** Actions module for managing WorkOS Actions */
   readonly actions: Actions;
+
+  /** Roles module for managing WorkOS roles */
+  readonly roles: Roles = new Roles(this);
 
   /** Audit Logs module for accessing audit logs */
   readonly auditLogs: AuditLogs = new AuditLogs(this);

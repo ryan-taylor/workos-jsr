@@ -168,8 +168,8 @@ export async function getMockAuditLogs(options: {
         location: '192.168.1.3',
       },
       metadata: {
-        old_role: 'user',
         new_role: 'admin',
+        // old_role reference removed
       },
     },
     {

@@ -8,6 +8,28 @@ on:
     - cron: '0 2 * * 0'  # Run at 02:00 UTC every Sunday
 
 jobs:
+  coverage:
+    name: Coverage Check 📊
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: denoland/setup-deno@v1
+        with: { deno-version: "2.x" }
+      
+      - name: Run Tests with Coverage
+        run: deno task coverage
+      
+      - name: Check Coverage Threshold (80%)
+        run: deno run -A scripts/coverage-threshold.ts 80
+      
+      - name: Upload Coverage Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            coverage.lcov
+            cov_profile
+          retention-days: 7
   codegen:
     name: Generate SDK Code 📝
     runs-on: ubuntu-latest

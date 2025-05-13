@@ -1,4 +1,4 @@
-import type { OrganizationRoleResponse, Role } from "workos/roles/interfaces/index.ts";
+import type { OrganizationRoleResponse, Role } from "../interfaces/index.ts";
 
 export const deserializeRole = (role: OrganizationRoleResponse): Role => ({
   object: role.object,

@@ -101,7 +101,7 @@ No test should remain ignored without a documented rationale.
   **Location**: Whole repository (`src/`, `examples/`, `scripts/`)
   **Issue**: Legacy code flagged as deprecated, unused, or old increases maintenance overhead.
   **Action**: Execute `grep -R -n -E "deprecated|unused|old" --exclude-dir={archive,vendor,node_modules} . > deprecated-usage.log`, review each hit, remove truly obsolete modules or move to `archive/legacy/` with explanatory comments, and re-run `deno test && deno check` to ensure no regressions.
-  **Status**: Planned.
+  **Status**: Resolved.
 
 - **Task 21: Validate and Update Dependency Versions**
   **Location**: `deno.json`, import maps, and source files

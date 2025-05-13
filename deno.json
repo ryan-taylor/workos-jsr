@@ -9,6 +9,7 @@
     "pretest": "deno run -A scripts/check-import-map.ts",
     "test": "deno test -A --ignore=_reference,examples",
     "test:watch": "deno test -A --ignore=_reference,examples --watch",
+    "coverage": "deno test --coverage=cov_profile && deno coverage cov_profile --lcov > coverage.lcov",
     "test:coverage": "deno test -A tests_deno/lcov_test.ts --coverage=cov_profile && deno coverage cov_profile --lcov > coverage.lcov",
     "test:coverage:full": "deno test --no-check -A --ignore=_reference,examples,src/fga --coverage=cov_profile && deno coverage cov_profile --lcov > coverage.lcov",
     "test:coverage:report": "deno test -A tests_deno/lcov_test.ts --coverage=cov_profile && deno coverage cov_profile --lcov > coverage.lcov && deno run -A scripts/coverage-report.ts",

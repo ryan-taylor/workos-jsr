@@ -11,6 +11,8 @@ written in Deno and JavaScript/TypeScript. This project benefits from the
 official WorkOS SDK; sincere appreciation is extended to the WorkOS project team
 and all contributors for their efforts.
 
+> **Disclaimer:** This is a community-driven port maintained by a single developer and is **not** an official WorkOS product.
+
 The SDK is fully Deno-native, designed to work with Deno 2.x and Fresh 2.x with
 enhanced type safety and improved performance. Key features include:
 
@@ -20,6 +22,44 @@ enhanced type safety and improved performance. Key features include:
 - **Directory Sync**: Improved serialization and type-safe directory management
 - **Pure Deno Implementation**: No compatibility layers, built for Deno from the
   ground up
+
+## Why Deno 2.x + Fresh 2.x?
+
+The goal of this fork is **not** to mirror the existing Node SDK one-for-one, but rather to show what the WorkOS developer experience can feel like when it is built **for** the Deno runtime and the Fresh framework from day one.
+
+*🛠️ Ship Faster*
+- Zero-config: run `deno task dev` and start coding—no bundlers, transpliers, or package managers to configure.
+- First-class TypeScript and JSX/TSX support baked into the runtime eliminates **"works-on-my-machine"** classpath issues and reduces set-up time.
+- Fresh's islands architecture keeps your pages interactive with **minimal client-side JavaScript**, trimming megabytes off the bundle and making Lighthouse scores happier out-of-the-box.
+
+*🔒 Safer by Default*
+- Deno's permission model ("–allow-net", "–allow-env", etc.) means accidental file system or network access is impossible unless you explicitly opt-in—great for CI and defence-in-depth.
+- Auditable imports via **import maps** and cryptographically-pinned JSR packages remove the "left-pad" class of supply-chain surprises.
+
+*⚡️ Modern Runtime, Modern Performance*
+- Native Web APIs (fetch, web streams, URL, crypto, etc.)—no Node polyfills required.
+- Built-in test runner, linter and formatter keep quality high without reaching for extra tooling.
+- Edge-ready: the same code runs in Deno Deploy, Supabase Edge Functions, Vercel Edge, etc.
+
+### Pros vs. the official `workos-node` SDK
+
+**✅ Pros**
+- Deno-native: no compatibility shims, resulting in a smaller, faster bundle.
+- Stricter type safety – every response object is fully annotated, reducing runtime bugs and IDE guess-work.
+- Seamless Fresh 2.x integration (session cookies, islands routing, async handlers) provided out-of-the-box.
+- Built-in OpenTelemetry hooks for tracing and Prometheus-friendly metrics.
+- Single dependency (Deno) keeps image sizes small and simplifies CI/CD pipelines.
+- JSR distribution means instant, version-pinned imports—no `npm install`, no lockfiles.
+
+**⚠️ Trade-offs / Cons**
+- Smaller community and ecosystem compared to Node; some npm-only helpers may need a Deno port or polyfill.
+- Upstream WorkOS features may arrive here *after* the official SDK (PRs welcome!).
+- The npm compatibility build strives for parity but cannot expose Deno-exclusive APIs such as permissions.
+- If your runtime is strictly Node 14/16 LTS, the official SDK may still be the simpler drop-in.
+
+> 💡 **Bottom line:** If you are already betting on Deno 2.x or Fresh 2.x—or want a permission-aware, type-safe
+> WorkOS client that feels native to the modern Web Platform—this SDK will get you from idea to production
+> in fewer lines of code and with stronger guarantees.
 
 ## Relationship to the Official SDK
 
@@ -64,8 +104,7 @@ Or add the following to your `deno.json` imports:
 
 ### npm Compatibility
 
-While we focus on Deno as our primary platform, we also maintain an npm
-distribution for compatibility with Node.js environments:
+While this project focuses on Deno as the primary platform, an npm distribution is also maintained for compatibility with Node.js environments:
 
 ```bash
 npm install @ryantaylor/workos
@@ -118,7 +157,7 @@ Changes will be reflected in real time.
 ## Import Map Validation
 
 This project uses import maps to manage dependencies. To ensure all imports are
-properly mapped, we provide a validation tool:
+properly mapped, a validation tool is provided:
 
 ```bash
 deno run -A scripts/check-import-map.ts
@@ -177,7 +216,7 @@ Key metrics and traces include:
 - Directory sync operation metrics
 - FGA authorization checks and performance
 
-For production deployments, we recommend:
+Recommended for production deployments:
 
 - Setting up alerts for abnormal error rates or latency
 - Monitoring authentication failures as a security measure
@@ -330,7 +369,7 @@ export function initWorkOS() {
 
 ## Benefits of Deno-Native Implementation
 
-Our Deno-native approach provides several key advantages:
+The Deno-native approach taken in this project provides several key advantages:
 
 - **Enhanced Type Safety**: Proper typing throughout the codebase prevents
   runtime errors
@@ -385,7 +424,7 @@ is advised to avoid unexpected breaking changes.
 
 ### Testing with Deno
 
-We use Deno's built-in testing capabilities:
+The test suite uses Deno's built-in testing capabilities:
 
 ```bash
 # Run all tests
@@ -403,7 +442,7 @@ For more details about our testing approach, see
 
 ### Code Quality Tools
 
-We leverage Deno's built-in tools for code quality:
+This project leverages Deno's built-in tools for code quality:
 
 ```bash
 # Format code
@@ -433,3 +472,7 @@ procedures.
 - [Changelog](CHANGELOG.md)
 
 Hoser made in fabrique au 🇨🇦
+
+## Author
+
+Maintained by **Ryan Taylor** ([@ryantaylor](https://twitter.com/ryantaylor)).

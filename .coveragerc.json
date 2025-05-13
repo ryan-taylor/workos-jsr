@@ -1,0 +1,13 @@
+{
+  "exclude": [
+    "archive/**",
+    "coverage*/**",
+    "vendor/**",
+    "packages/workos_sdk/generated/**",
+    "cov_profile/**",
+    "cov/**",
+    ".deno_codegen_cache/**",
+    "npm/**",
+    "templates/**"
+  ]
+}

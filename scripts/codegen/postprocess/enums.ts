@@ -28,7 +28,7 @@ export interface EnumTransformOptions {
  *   export type Status = "ACTIVE" | "DELETING" | ...;
  */
 export const largeBrandedEnumTransform: CodeTransform = {
-  async process(project: Project, filePath: string): Promise<boolean> {
+  async process(sourceText: string, filePath: string): Promise<string | null> {
     // Get environment variables or use defaults
     const ENUM_LIMIT = parseInt(Deno.env.get("CODEGEN_ENUM_LIMIT") || "45", 10);
     const ENUM_UNIONS = Deno.env.get("CODEGEN_ENUM_UNIONS") || "auto";
@@ -39,18 +39,15 @@ export const largeBrandedEnumTransform: CodeTransform = {
 
     const options: EnumTransformOptions = {
       literalLimit: ENUM_LIMIT,
-      unionMode: (ENUM_UNIONS === "branded" || ENUM_UNIONS === "union") 
-        ? ENUM_UNIONS 
+      unionMode: (ENUM_UNIONS === "branded" || ENUM_UNIONS === "union")
+        ? ENUM_UNIONS
         : "auto"
     };
 
-    // Get the source file
-    const sourceFile = project.getSourceFile(filePath);
-    if (!sourceFile) {
-      console.warn(`File not found: ${filePath}`);
-      return false;
-    }
-
+    // Create a new project and add the source text as a file
+    const project = new Project();
+    const sourceFile = project.createSourceFile(`temp-${filePath}`, sourceText);
+    
     let changesMade = false;
     
     // Find all enum declarations
@@ -96,7 +93,8 @@ export const largeBrandedEnumTransform: CodeTransform = {
       addBrandedImport(sourceFile);
     }
 
-    return changesMade;
+    // Return the modified source text or null if no changes were made
+    return changesMade ? sourceFile.getText() : null;
   }
 };
 

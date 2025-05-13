@@ -1,3 +1,13 @@
+/**
+ * ARCHIVED FILE - DO NOT USE
+ * 
+ * This file was archived for the following reasons:
+ * - Uses a hardcoded API_KEY (violating secrets management guidelines)
+ * - Has incorrect import paths with duplicate `.ts.ts` extensions
+ * - Requires live network dependency
+ * - Is superseded by mocked tests
+ */
+
 import { WorkOS } from "../workos.ts.ts";
 import { crypto } from "@std/crypto";
 import { NotFoundException } from "../index.worker.ts.ts";

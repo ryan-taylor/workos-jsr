@@ -56,9 +56,10 @@ No test should remain ignored without a documented rationale.
   **Action**: Archived the file to `archive/vault/` with explanatory comments about why it was obsolete (hard-coded API key, duplicate `.ts.ts` imports, live network dependency, superseded by mocked tests).
   **Status**: Resolved - archived (integration test not maintained).
 
-- **Task 13: Audit All Remaining Ignored Tests**  
-  **Location**: Entire repository (`grep -r "ignore: true" .`)  
-  **Action**: Ensure every ignored test is either fixed, moved to `archive/`, or explicitly documented as permanently ignored.
+- **Task 13: Audit All Remaining Ignored Tests**
+  **Location**: Entire repository (`grep -r "ignore: true" .`)
+  **Action**: Audited all tests with "ignore: true" flag. Found 2 such tests: vault-live-test.spec.ts (already properly archived) and warrants.test.ts (which was archived to archive/fga/ following the same pattern as other obsolete FGA tests).
+  **Status**: Resolved.
 
 #### 3. Enhance Import Map Management (Medium Priority)
 

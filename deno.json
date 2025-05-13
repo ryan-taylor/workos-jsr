@@ -4,6 +4,7 @@
   "exports": "./mod.ts",
   "importMap": "./import_map.f2.json",
   "nodeModulesDir": "auto",
+  "exclude": ["archive/**"],
   "tasks": {
     "fmt": "deno fmt",
     "lint": "deno lint --ignore=.deno_codegen_cache,coverage_html,vendor",

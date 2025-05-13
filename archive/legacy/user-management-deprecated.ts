@@ -1,24 +1,40 @@
+// @ts-nocheck
 /**
- * ARCHIVED METHODS
- * --------------
+ * ARCHIVED METHODS - DEPRECATED USER MANAGEMENT CODE
+ * ------------------------------------------------
  * This file contains deprecated methods from the UserManagement class
  * that have been archived as part of a code cleanup effort.
- * 
- * These methods are no longer actively maintained and may be removed in future versions.
- * Please use the newer alternatives noted in each method's documentation.
+ *
+ * WARNING: DEPRECATED AND EXCLUDED FROM TYPE CHECKING
+ * This file is kept for historical reference only and will be removed in a future version.
+ * These methods are no longer actively maintained and should not be used in production code.
+ * The file is excluded from type checking via the deno.json "exclude" configuration.
+ *
+ * For new implementations, please use the newer alternatives noted in each method's documentation.
+ *
+ * FUTURE REMOVAL: This code is scheduled for complete removal in the next major version.
  */
 
-import { OauthException } from "../../src/common/exceptions/oauth.exception.ts";
-import { decodeJwt } from "../../src/common/crypto/jwt-utils.ts";
-import type { FreshSessionProvider } from "../../src/common/iron-session/fresh-session-provider.ts";
-import { RefreshAndSealSessionDataFailureReason } from "../../src/user-management/interfaces/refresh-and-seal-session-data.interface.ts";
-import type { AccessToken, SessionCookieData } from "../../src/user-management/interfaces/authenticate-with-session-cookie.interface.ts";
-import type { AuthenticationResponse } from "../../src/user-management/interfaces/index.ts";
-import type { SessionHandlerOptions } from "../../src/user-management/interfaces/session-handler-options.interface.ts";
-import type { SendMagicAuthCodeOptions, SerializedSendMagicAuthCodeOptions } from "../../src/user-management/interfaces/index.ts";
-import { serializeSendMagicAuthCodeOptions } from "../../src/user-management/serializers/index.ts";
-import type { SendPasswordResetEmailOptions, SerializedSendPasswordResetEmailOptions } from "../../src/user-management/interfaces/index.ts";
-import { serializeSendPasswordResetEmailOptions } from "../../src/user-management/serializers/index.ts";
+import { OauthException } from "../../packages/workos_sdk/src/common/exceptions/oauth.exception.ts";
+import { decodeJwt } from "../../packages/workos_sdk/src/common/crypto/jwt-utils.ts";
+import type { FreshSessionProvider } from "../../packages/workos_sdk/src/common/iron-session/fresh-session-provider.ts";
+import { RefreshAndSealSessionDataFailureReason } from "../../packages/workos_sdk/src/user-management/interfaces/refresh-and-seal-session-data.interface.ts";
+import type {
+  AccessToken,
+  SessionCookieData,
+} from "../../packages/workos_sdk/src/user-management/interfaces/authenticate-with-session-cookie.interface.ts";
+import type { AuthenticationResponse } from "../../packages/workos_sdk/src/user-management/interfaces/index.ts";
+import type { SessionHandlerOptions } from "../../packages/workos_sdk/src/user-management/interfaces/session-handler-options.interface.ts";
+import type {
+  SendMagicAuthCodeOptions,
+  SerializedSendMagicAuthCodeOptions,
+} from "../../packages/workos_sdk/src/user-management/interfaces/index.ts";
+import { serializeSendMagicAuthCodeOptions } from "../../packages/workos_sdk/src/user-management/serializers/index.ts";
+import type {
+  SendPasswordResetEmailOptions,
+  SerializedSendPasswordResetEmailOptions,
+} from "../../packages/workos_sdk/src/user-management/interfaces/index.ts";
+import { serializeSendPasswordResetEmailOptions } from "../../packages/workos_sdk/src/user-management/serializers/index.ts";
 
 // These deprecated methods were extracted from the UserManagement class
 
@@ -26,7 +42,10 @@ import { serializeSendPasswordResetEmailOptions } from "../../src/user-managemen
  * @deprecated Please use `createMagicAuth` instead.
  * This method will be removed in a future major version.
  */
-async function sendMagicAuthCode(workos: any, options: SendMagicAuthCodeOptions): Promise<void> {
+async function sendMagicAuthCode(
+  workos: any,
+  options: SendMagicAuthCodeOptions,
+): Promise<void> {
   await workos.post<any, SerializedSendMagicAuthCodeOptions>(
     "/user_management/magic_auth/send",
     serializeSendMagicAuthCodeOptions(options),
@@ -34,7 +53,7 @@ async function sendMagicAuthCode(workos: any, options: SendMagicAuthCodeOptions)
 }
 
 /**
- * @deprecated Please use `createPasswordReset` instead. 
+ * @deprecated Please use `createPasswordReset` instead.
  * This method will be removed in a future major version.
  */
 async function sendPasswordResetEmail(
@@ -64,22 +83,25 @@ async function getLogoutUrlFromSessionCookie(
   }: SessionHandlerOptions,
   workos: any,
 ): Promise<string> {
-  const authenticationResponse = await userManagement.authenticateWithSessionCookie({
-    sessionData,
-    cookiePassword,
-  });
+  const authenticationResponse = await userManagement
+    .authenticateWithSessionCookie({
+      sessionData,
+      cookiePassword,
+    });
 
   if (!authenticationResponse.authenticated) {
     const { reason } = authenticationResponse;
     throw new Error(`Failed to extract session ID for logout URL: ${reason}`);
   }
 
-  return userManagement.getLogoutUrl({ sessionId: authenticationResponse.sessionId });
+  return userManagement.getLogoutUrl({
+    sessionId: authenticationResponse.sessionId,
+  });
 }
 
 /**
  * @deprecated This method has been deprecated in favor of using the `authenticateWithRefreshToken` method.
- * 
+ *
  * This method refreshes the access token using a refresh token and seals the session data.
  */
 async function refreshAndSealSessionData(
@@ -94,19 +116,20 @@ async function refreshAndSealSessionData(
   workos: any,
   ironSessionProvider: FreshSessionProvider,
 ): Promise<{
-    accessToken: string;
-    refreshToken: string;
-    sealedSessionData: string;
-  }> {
+  accessToken: string;
+  refreshToken: string;
+  sealedSessionData: string;
+}> {
   if (!cookiePassword) {
     throw new Error("Cookie password is required");
   }
 
   try {
-    const authenticationResponse = await userManagement.authenticateWithRefreshToken({
-      refreshToken,
-      clientId: userManagement.clientId,
-    });
+    const authenticationResponse = await userManagement
+      .authenticateWithRefreshToken({
+        refreshToken,
+        clientId: userManagement.clientId,
+      });
 
     const { org_id: organizationIdFromAccessToken } = decodeJwt<AccessToken>(
       authenticationResponse.accessToken,
@@ -149,8 +172,8 @@ async function refreshAndSealSessionData(
 }
 
 export {
-  sendMagicAuthCode,
-  sendPasswordResetEmail,
   getLogoutUrlFromSessionCookie,
   refreshAndSealSessionData,
+  sendMagicAuthCode,
+  sendPasswordResetEmail,
 };

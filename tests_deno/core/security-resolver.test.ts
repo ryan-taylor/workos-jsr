@@ -1,5 +1,5 @@
-import { assertEquals, assertThrows } from "https://deno.land/std/testing/asserts.ts";
-import { describe, it } from "https://deno.land/std/testing/bdd.ts";
+import { assertEquals, assertThrows } from "jsr:@std/assert";
+import { describe, it } from "jsr:@std/testing/bdd";
 
 import {
   SupportedAuthScheme,

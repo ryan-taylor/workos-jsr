@@ -14,7 +14,7 @@
     "workos": "./packages/workos_sdk/src/",
     "workos/": "./packages/workos_sdk/src/",
     
-    "jose": "https://deno.land/x/jose@4.11.0/mod.ts",
+    "jose": "jsr:@panva/jose",
     "crypto": "jsr:@std/crypto@^1",
     "fs/promises": "jsr:@std/fs@^1",
     

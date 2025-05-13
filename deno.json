@@ -22,6 +22,7 @@
     "@std/path": "^1",
     "@std/http": "^1",
     "@std/assert": "^1",
-    "@std/testing": "^1"
+    "@std/testing": "^1",
+    "@denosaurs/typefetch": "^0.2"
   }
 }

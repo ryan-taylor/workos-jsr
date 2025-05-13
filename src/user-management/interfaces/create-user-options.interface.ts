@@ -1,4 +1,4 @@
-import type { PasswordHashType } from "./password-hash-type.interface.ts";
+import type { PasswordHashType } from "./password-hash-type.interface.ts.ts";
 
 export interface CreateUserOptions {
   email: string;

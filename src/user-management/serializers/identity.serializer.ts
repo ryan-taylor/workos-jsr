@@ -1,7 +1,7 @@
 import type {
   Identity,
   IdentityResponse,
-} from "../interfaces/identity.interface.ts";
+} from "../interfaces/identity.interface.ts.ts";
 
 export const deserializeIdentities = (
   identities: IdentityResponse[],

@@ -3,7 +3,7 @@ import type {
   EmailVerificationEvent,
   EmailVerificationEventResponse,
   EmailVerificationResponse,
-} from "../interfaces.ts";
+} from "../interfaces.ts.ts";
 
 export const deserializeEmailVerification = (
   emailVerification: EmailVerificationResponse,

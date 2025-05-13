@@ -4,9 +4,9 @@ import {
   assertInstanceOf,
 } from "https://deno.land/std/assert/mod.ts";
 
-import { resetMockFetch } from "../common/utils/test-utils.ts";
-import { BadRequestException } from "../common/exceptions/bad-request.exception.ts";
-import { WorkOS } from "../workos.ts";
+import { resetMockFetch } from "../common/utils/test-utils.ts.ts";
+import { BadRequestException } from "../common/exceptions/bad-request.exception.ts.ts";
+import { WorkOS } from "../workos.ts.ts";
 
 // Define common test data
 const event = {

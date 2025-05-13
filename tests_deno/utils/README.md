@@ -130,7 +130,7 @@ describe("feature tests", () => {
 
 ```typescript
 import { createTestGroup } from "./utils/test-utils.ts";
-import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
+import { assertEquals } from "@std/assert";
 
 const testGroup = createTestGroup();
 
@@ -143,7 +143,7 @@ testGroup.test("should do something", () => {
 Or even simpler with plain Deno.test:
 
 ```typescript
-import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
+import { assertEquals } from "@std/assert";
 
 Deno.test("should do something", () => {
   // Test code

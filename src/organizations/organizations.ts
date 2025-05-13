@@ -1,5 +1,5 @@
-import { AutoPaginatable } from "../common/utils/pagination.ts";
-import type { WorkOS } from "../workos.ts";
+import { AutoPaginatable } from "../common/utils/pagination.ts.ts";
+import type { WorkOS } from "../workos.ts.ts";
 import type {
   CreateOrganizationOptions,
   CreateOrganizationRequestOptions,
@@ -7,21 +7,21 @@ import type {
   Organization,
   OrganizationResponse,
   UpdateOrganizationOptions,
-} from "./interfaces.ts";
+} from "./interfaces.ts.ts";
 import {
   deserializeOrganization,
   serializeCreateOrganizationOptions,
   serializeUpdateOrganizationOptions,
-} from "./serializers.ts";
+} from "./serializers.ts.ts";
 
-import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
+import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts.ts";
 import type {
   ListOrganizationRolesResponse,
   RoleList,
-} from "../roles/interfaces.ts";
-import { deserializeRole } from "../roles/serializers/role.serializer.ts";
-import type { ListOrganizationRolesOptions } from "./interfaces/list-organization-roles-options.interface.ts";
-import type { PaginationOptions } from "../common/interfaces.ts";
+} from "../roles/interfaces.ts.ts";
+import { deserializeRole } from "../roles/serializers/role.serializer.ts.ts";
+import type { ListOrganizationRolesOptions } from "./interfaces/list-organization-roles-options.interface.ts.ts";
+import type { PaginationOptions } from "../common/interfaces.ts.ts";
 
 export class Organizations {
   constructor(private readonly workos: WorkOS) {}

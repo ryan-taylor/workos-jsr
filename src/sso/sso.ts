@@ -1,5 +1,5 @@
-import { AutoPaginatable } from "../common/utils/pagination.ts";
-import type { WorkOS } from "../workos.ts";
+import { AutoPaginatable } from "../common/utils/pagination.ts.ts";
+import type { WorkOS } from "../workos.ts.ts";
 import type {
   AuthorizationURLOptions,
   Connection,
@@ -11,15 +11,15 @@ import type {
   ProfileAndToken,
   ProfileAndTokenResponse,
   ProfileResponse,
-} from "./interfaces.ts";
+} from "./interfaces.ts.ts";
 import {
   deserializeConnection,
   deserializeProfile,
   deserializeProfileAndToken,
   serializeListConnectionsOptions,
-} from "./serializers.ts";
-import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
-import type { PaginationOptions, UnknownRecord } from "../common/interfaces.ts";
+} from "./serializers.ts.ts";
+import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts.ts";
+import type { PaginationOptions, UnknownRecord } from "../common/interfaces.ts.ts";
 
 const toQueryString = (options: Record<string, string | undefined>): string => {
   const searchParams = new URLSearchParams();

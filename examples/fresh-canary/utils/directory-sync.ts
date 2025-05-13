@@ -68,8 +68,13 @@ export interface DirectoryUserWithGroups extends DirectoryUser {
  * @returns WorkOS instance configured for directory sync
  */
 export function initDirectorySync() {
+  const apiKey = Deno.env.get('WORKOS_API_KEY');
+  if (apiKey === null) {
+    throw new Error("Environment variable WORKOS_API_KEY is required");
+  }
+  
   const workos = new WorkOS(
-    Deno.env.get('WORKOS_API_KEY') ?? '',
+    apiKey,
     { clientId: Deno.env.get('WORKOS_CLIENT_ID') ?? undefined },
   );
 

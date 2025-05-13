@@ -1,7 +1,7 @@
 import type {
   OrganizationDomain,
   OrganizationDomainResponse,
-} from "../../organization-domains/interfaces/organization-domain.interface.ts";
+} from "../../organization-domains/interfaces/organization-domain.interface.ts.ts";
 
 export interface Organization {
   object: "organization";

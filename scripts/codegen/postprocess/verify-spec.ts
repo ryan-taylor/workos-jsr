@@ -9,7 +9,7 @@
  * 3. Providing clear error messages when checksums don't match
  */
 
-import { join, dirname } from "https://deno.land/std/path/mod.ts";
+import { join, dirname } from "@std/path";
 import { processSpecAndGenerateChecksum } from "./dereference-spec.ts";
 
 /**

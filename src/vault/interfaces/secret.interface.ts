@@ -1,11 +1,11 @@
-import type { KeyContext } from "./key.interface.ts";
+import type { KeyContext } from "./key.interface.ts.ts";
 import type {
   ObjectDigest,
   ObjectMetadata,
   ObjectUpdateBy,
   ObjectVersion,
   VaultObject,
-} from "./object.interface.ts";
+} from "./object.interface.ts.ts";
 
 // tslint:disable:no-empty-interface
 

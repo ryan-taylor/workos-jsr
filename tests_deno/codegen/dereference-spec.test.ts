@@ -1,10 +1,10 @@
-import { assertEquals, assertExists } from "https://deno.land/std/assert/mod.ts";
+import { assertEquals, assertExists } from "@std/assert";
 import {
   processSpecAndGenerateChecksum,
   addProcessedChecksumToSpec,
   processSpec,
 } from "../../scripts/codegen/postprocess/dereference-spec.ts";
-import { join } from "https://deno.land/std/path/mod.ts";
+import { join } from "@std/path";
 
 const testDir = join(Deno.cwd(), "tests_deno", "codegen", "fixtures");
 

@@ -2,7 +2,7 @@ import type {
   AuthenticateUserWithEmailVerificationCredentials,
   AuthenticateWithEmailVerificationOptions,
   SerializedAuthenticateWithEmailVerificationOptions,
-} from "../interfaces/authenticate-with-email-verification-options.interface.ts";
+} from "../interfaces/authenticate-with-email-verification-options.interface.ts.ts";
 
 export const serializeAuthenticateWithEmailVerificationOptions = (
   options:

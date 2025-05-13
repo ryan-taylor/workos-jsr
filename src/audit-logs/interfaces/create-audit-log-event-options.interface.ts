@@ -1,4 +1,4 @@
-import type { PostOptions } from "../../common/interfaces.ts";
+import type { PostOptions } from "../../common/interfaces.ts.ts";
 
 export interface AuditLogActor {
   id: string;

@@ -1,4 +1,4 @@
-import { assertEquals } from "https://deno.land/std/assert/mod.ts";
+import { assertEquals } from "@std/assert";
 import { Project } from "npm:ts-morph";
 import { largeBrandedEnumTransform } from "../enums.ts";
 

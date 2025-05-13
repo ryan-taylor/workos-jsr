@@ -6,13 +6,13 @@ import {
   fetchHeaders,
   fetchOnce,
   resetMockFetch,
-} from "./common/utils/test-utils.ts";
-import { NotFoundException } from "./common/exceptions/not-found.exception.ts";
-import { WorkOS } from "./index.ts";
-import { WorkOS as WorkOSWorker } from "./index.worker.ts";
-import { FetchHttpClient } from "./common/net/fetch-client.ts";
-import { DenoHttpClient } from "./common/net/deno-client.ts";
-import { SubtleCryptoProvider } from "./common/crypto/subtle-crypto-provider.ts";
+} from "./common/utils/test-utils.ts.ts";
+import { NotFoundException } from "./common/exceptions/not-found.exception.ts.ts";
+import { WorkOS } from "./index.ts.ts";
+import { WorkOS as WorkOSWorker } from "./index.worker.ts.ts";
+import { FetchHttpClient } from "./common/net/fetch-client.ts.ts";
+import { DenoHttpClient } from "./common/net/deno-client.ts.ts";
+import { SubtleCryptoProvider } from "./common/crypto/subtle-crypto-provider.ts.ts";
 
 // Environment variable helpers
 function setupEnvVars() {

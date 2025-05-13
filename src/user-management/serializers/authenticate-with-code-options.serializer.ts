@@ -2,7 +2,7 @@ import type {
   AuthenticateUserWithCodeCredentials,
   AuthenticateWithCodeOptions,
   SerializedAuthenticateWithCodeOptions,
-} from "../interfaces.ts";
+} from "../interfaces.ts.ts";
 
 export const serializeAuthenticateWithCodeOptions = (
   options: AuthenticateWithCodeOptions & AuthenticateUserWithCodeCredentials,

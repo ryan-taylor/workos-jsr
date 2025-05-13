@@ -1,8 +1,8 @@
 import { assertEquals, assertNotEquals } from "std/assert/mod.ts";
 // @ts-ignore This test is ignored anyway so it's just for compiling
-import { WorkOS } from "../../../mod.ts";
+import { WorkOS } from "../../../mod.ts.ts";
 // @ts-ignore This is a compatibility shim
-import { CheckOp } from "../interfaces/warrant.ts";
+import { CheckOp } from "../interfaces/warrant.ts.ts";
 
 Deno.test({
   name: "Check many warrants",

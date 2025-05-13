@@ -47,7 +47,7 @@ In Deno, load environment variables from your `.env` file:
 
 ```typescript
 // main.ts
-import { load } from 'https://deno.land/std/dotenv/mod.ts';
+import { load } from 'jsr:@std/dotenv@^1';
 
 // Load environment variables from .env file
 await load({ export: true });

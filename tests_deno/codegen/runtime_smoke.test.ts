@@ -10,9 +10,9 @@
  * Run with: deno test --allow-all tests_deno/codegen/runtime_smoke.test.ts
  */
 
-import { assert, assertEquals, assertExists } from "https://deno.land/std/assert/mod.ts";
-import { join } from "https://deno.land/std/path/mod.ts";
-import { ensureDir } from "https://deno.land/std/fs/mod.ts";
+import { assert, assertEquals, assertExists } from "@std/assert";
+import { join } from "@std/path";
+import { ensureDir } from "@std/fs";
 
 // Import the code generator adapter
 import { OtcGenerator } from "../../scripts/codegen/adapter.ts";

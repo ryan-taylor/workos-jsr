@@ -6,11 +6,11 @@ import {
   fetchOnce,
   fetchURL,
   resetMockFetch,
-} from "../common/utils/test-utils.ts";
-import createSession from "./fixtures/create-session.json" with {
+} from "../common/utils/test-utils.ts.ts";
+import createSession from "./fixtures/create-session.json.ts" with {
   type: "json",
 };
-import { WorkOS } from "../workos.ts";
+import { WorkOS } from "../workos.ts.ts";
 
 // Setup function to reset mock fetch before each test
 function setup() {

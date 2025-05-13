@@ -7,8 +7,8 @@ import {
   fetchSearchParams,
   fetchURL,
   resetMockFetch,
-} from "../common/utils/test-utils.ts";
-import { WorkOS } from "../workos.ts";
+} from "../common/utils/test-utils.ts.ts";
+import { WorkOS } from "../workos.ts.ts";
 
 // Import only needed fixtures
 const userFixture = {

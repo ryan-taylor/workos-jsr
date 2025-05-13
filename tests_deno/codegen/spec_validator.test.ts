@@ -10,8 +10,8 @@
  * Run with: deno test --allow-read --allow-write tests_deno/codegen/spec_validator.test.ts
  */
 
-import { assert } from "https://deno.land/std/assert/mod.ts";
-import { exists } from "https://deno.land/std/fs/mod.ts";
+import { assert } from "@std/assert";
+import { exists } from "@std/fs";
 
 // Type definition for OpenAPI document
 interface OpenAPIDocument {

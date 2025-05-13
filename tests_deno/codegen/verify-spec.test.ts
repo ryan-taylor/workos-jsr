@@ -1,4 +1,4 @@
-import { assertEquals, assertExists, assertThrows } from "https://deno.land/std/assert/mod.ts";
+import { assertEquals, assertExists, assertThrows } from "@std/assert";
 import {
   verifySpec,
   VerificationOptions,
@@ -9,7 +9,7 @@ import {
   addProcessedChecksumToSpec,
   processSpec,
 } from "../../scripts/codegen/postprocess/dereference-spec.ts";
-import { join } from "https://deno.land/std/path/mod.ts";
+import { join } from "@std/path";
 
 const testDir = join(Deno.cwd(), "tests_deno", "codegen", "fixtures");
 

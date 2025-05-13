@@ -1,11 +1,14 @@
 import { WorkOS } from '../../../../../src/workos.ts';
-import type { Handlers } from '$fresh/server.ts';
+import type { Handlers } from 'https://deno.land/x/fresh@1.6.1/server.ts';
 
-const apiKey = Deno.env.get('WORKOS_API_KEY') ?? '';
+const apiKey = Deno.env.get('WORKOS_API_KEY');
+if (apiKey === null) {
+  throw new Error("Environment variable WORKOS_API_KEY is required");
+}
 const workos = new WorkOS(apiKey);
 
 export const handler: Handlers = {
-  async POST(req) {
+  async POST(req: Request) {
     try {
       const body = await req.json();
       const { encryptedData } = body;

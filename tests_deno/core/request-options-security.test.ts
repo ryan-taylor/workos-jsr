@@ -1,5 +1,5 @@
-import { assertEquals, assertThrows } from "https://deno.land/std/testing/asserts.ts";
-import { describe, it, beforeEach } from "https://deno.land/std/testing/bdd.ts";
+import { assertEquals, assertThrows } from "@std/assert";
+import { describe, it, beforeEach } from "@std/testing/bdd";
 
 import { SupportedAuthScheme } from "../../packages/workos_sdk/generated/core/auth-schemes.ts";
 import {

@@ -23,7 +23,11 @@ export interface QueryResult {
 }
 
 // Initialize WorkOS client
-export const workos = new WorkOS(Deno.env.get('WORKOS_API_KEY') ?? '');
+const apiKey = Deno.env.get('WORKOS_API_KEY');
+if (apiKey === null) {
+  throw new Error("Environment variable WORKOS_API_KEY is required");
+}
+export const workos = new WorkOS(apiKey);
 
 // Types for FGA operations
 export interface ResourceDefinition {

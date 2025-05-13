@@ -1,7 +1,7 @@
 import type {
   ListConnectionsOptions,
   SerializedListConnectionsOptions,
-} from "../interfaces.ts";
+} from "../interfaces.ts.ts";
 
 export const serializeListConnectionsOptions = (
   options: ListConnectionsOptions,

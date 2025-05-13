@@ -5,13 +5,13 @@ import {
   fetchBody,
   fetchOnce,
   resetMockFetch,
-} from "../common/utils/test-utils.ts";
-import { WorkOS } from "../workos.ts";
-import generateLinkInvalid from "./fixtures/generate-link-invalid.json" with {
+} from "../common/utils/test-utils.ts.ts";
+import { WorkOS } from "../workos.ts.ts";
+import generateLinkInvalid from "./fixtures/generate-link-invalid.json.ts" with {
   type: "json",
 };
-import generateLink from "./fixtures/generate-link.json" with { type: "json" };
-import { GeneratePortalLinkIntent } from "./interfaces/generate-portal-link-intent.interface.ts";
+import generateLink from "./fixtures/generate-link.json.ts" with { type: "json" };
+import { GeneratePortalLinkIntent } from "./interfaces/generate-portal-link-intent.interface.ts.ts";
 
 const workos = new WorkOS("sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU");
 

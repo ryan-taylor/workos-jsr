@@ -3,7 +3,7 @@ import {
   assertExists,
   assertRejects,
   assertMatch,
-} from "https://deno.land/std/assert/mod.ts";
+} from "@std/assert";
 import {
   OtcGenerator,
   getGenerator,
@@ -11,7 +11,7 @@ import {
 } from "../../scripts/codegen/adapter.ts";
 import { postProcess } from "../../scripts/codegen/postprocess/index.ts";
 import { detectAdapter } from "../../scripts/codegen/detect_adapter.ts";
-import { join } from "https://deno.land/std/path/mod.ts";
+import { join } from "@std/path";
 
 // Define constants for test paths
 const FIXTURE_DIR = join(Deno.cwd(), "tests_deno/codegen/fixtures");

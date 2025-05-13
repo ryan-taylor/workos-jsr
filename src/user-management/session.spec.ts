@@ -1,19 +1,19 @@
 // Import standard Deno assertions
 import { assertEquals, assertInstanceOf } from "jsr:@std/assert@1";
 
-import { WorkOS } from "../workos.ts";
-import { Session } from "./session.ts";
-import * as jwtUtils from "../common/crypto/jwt-utils.ts";
-import { FreshSessionProvider } from "../common/iron-session/fresh-session-provider.ts";
+import { WorkOS } from "../workos.ts.ts";
+import { Session } from "./session.ts.ts";
+import * as jwtUtils from "../common/crypto/jwt-utils.ts.ts";
+import { FreshSessionProvider } from "../common/iron-session/fresh-session-provider.ts.ts";
 // Use FreshSessionProvider for sealing session data in Deno
 const provider = new FreshSessionProvider();
-import { fetchOnce, resetMockFetch, spy } from "../common/utils/test-utils.ts";
+import { fetchOnce, resetMockFetch, spy } from "../common/utils/test-utils.ts.ts";
 import {
   AuthenticateWithSessionCookieFailureReason,
   AuthenticateWithSessionCookieSuccessResponse,
-} from "./interfaces/authenticate-with-session-cookie.interface.ts";
-import { RefreshAndSealSessionDataFailureReason } from "./interfaces/refresh-and-seal-session-data.interface.ts";
-import type { User } from "./interfaces/user.interface.ts";
+} from "./interfaces/authenticate-with-session-cookie.interface.ts.ts";
+import { RefreshAndSealSessionDataFailureReason } from "./interfaces/refresh-and-seal-session-data.interface.ts.ts";
+import type { User } from "./interfaces/user.interface.ts.ts";
 
 // Import user fixture directly
 const userFixture = {

@@ -17,8 +17,8 @@
  */
 
 import { verifySpec, VerificationOptions } from "./postprocess/verify-spec.ts";
-import { parse } from "https://deno.land/std/flags/mod.ts";
-import { join, resolve, basename } from "https://deno.land/std/path/mod.ts";
+import { parse } from "https://deno.land/std/flags/mod.ts"; // Keep this import since flags might not be available in JSR
+import { join, resolve, basename } from "@std/path";
 
 /**
  * Parse command line arguments

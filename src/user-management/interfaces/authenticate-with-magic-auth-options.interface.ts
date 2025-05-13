@@ -1,7 +1,7 @@
 import type {
   AuthenticateWithOptionsBase,
   SerializedAuthenticateWithOptionsBase,
-} from "./authenticate-with-options-base.interface.ts";
+} from "./authenticate-with-options-base.interface.ts.ts";
 
 export interface AuthenticateWithMagicAuthOptions
   extends AuthenticateWithOptionsBase {

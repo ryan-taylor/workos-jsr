@@ -1,7 +1,11 @@
 import { WorkOS } from '../../../mod.ts';
 
 // Initialize the WorkOS client
-const workos = new WorkOS(Deno.env.get('WORKOS_API_KEY') ?? '');
+const apiKey = Deno.env.get('WORKOS_API_KEY');
+if (apiKey === null) {
+  throw new Error("Environment variable WORKOS_API_KEY is required");
+}
+const workos = new WorkOS(apiKey);
 
 // List all domains for an organization
 export async function listDomains(organizationId?: string) {

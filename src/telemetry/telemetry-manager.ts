@@ -8,13 +8,13 @@
 import {
   defaultTelemetryConfig,
   type TelemetryConfig,
-} from "./telemetry-config.ts";
+} from "./telemetry-config.ts.ts";
 import {
   type Log,
   type Metric,
   OTLPHttpExporter,
   type Span,
-} from "./otlp-exporter.ts";
+} from "./otlp-exporter.ts.ts";
 
 /**
  * Timer that tracks the duration of an operation

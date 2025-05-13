@@ -1,6 +1,6 @@
 import { assertEquals, assertNotEquals } from "std/assert/mod.ts";
-import { WorkOS } from "../../workos.ts";
-import { WarrantOp } from "../interfaces/warrant.ts";
+import { WorkOS } from "../../workos.ts.ts";
+import { WarrantOp } from "../interfaces/warrant.ts.ts";
 
 Deno.test({
   name: "Warrants",

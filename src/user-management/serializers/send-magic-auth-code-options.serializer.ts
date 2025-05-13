@@ -1,7 +1,7 @@
 import type {
   SendMagicAuthCodeOptions,
   SerializedSendMagicAuthCodeOptions,
-} from "../interfaces.ts";
+} from "../interfaces.ts.ts";
 
 export const serializeSendMagicAuthCodeOptions = (
   options: SendMagicAuthCodeOptions,

@@ -1,4 +1,4 @@
-import type { List, ListResponse } from "../../common/interfaces.ts";
+import type { List, ListResponse } from "../../common/interfaces.ts.ts";
 import type {
   CreateObjectEntity,
   CreateObjectOptions,
@@ -13,7 +13,7 @@ import type {
   UpdateObjectEntity,
   UpdateObjectOptions,
   VaultObject,
-} from "../interfaces.ts";
+} from "../interfaces.ts.ts";
 
 export const deserializeObjectMetadata = (
   metadata: ReadObjectMetadataResponse,

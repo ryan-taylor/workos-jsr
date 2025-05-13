@@ -6,15 +6,15 @@ import {
   fetchOnce,
   fetchURL,
   resetMockFetch,
-} from "../common/utils/test-utils.ts";
-import { WorkOS } from "../workos.ts";
-import getOrganizationDomainPending from "./fixtures/get-organization-domain-pending.json" with {
+} from "../common/utils/test-utils.ts.ts";
+import { WorkOS } from "../workos.ts.ts";
+import getOrganizationDomainPending from "./fixtures/get-organization-domain-pending.json.ts" with {
   type: "json",
 };
-import getOrganizationDomainVerified from "./fixtures/get-organization-domain-verified.json" with {
+import getOrganizationDomainVerified from "./fixtures/get-organization-domain-verified.json.ts" with {
   type: "json",
 };
-import { OrganizationDomainState } from "./interfaces/index.ts";
+import { OrganizationDomainState } from "./interfaces/index.ts.ts";
 
 const workos = new WorkOS("sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU");
 

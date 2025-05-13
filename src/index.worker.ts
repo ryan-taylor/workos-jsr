@@ -1,7 +1,7 @@
-import { WorkOS as BaseWorkOS } from "./workos.ts";
-import { FetchHttpClient } from "./common/net/fetch-client.ts";
-import type { HttpClient } from "./common/net/http-client.ts";
-import type { WorkOSOptions } from "./common/interfaces/workos-options.interface.ts";
+import { WorkOS as BaseWorkOS } from "./workos.ts.ts";
+import { FetchHttpClient } from "./common/net/fetch-client.ts.ts";
+import type { HttpClient } from "./common/net/http-client.ts.ts";
+import type { WorkOSOptions } from "./common/interfaces/workos-options.interface.ts.ts";
 
 // Define an interface for the expected properties
 interface WorkOSWithProperties {

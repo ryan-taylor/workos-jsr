@@ -3,7 +3,7 @@ import type {
   InvitationEvent,
   InvitationEventResponse,
   InvitationResponse,
-} from "../interfaces/invitation.interface.ts";
+} from "../interfaces/invitation.interface.ts.ts";
 
 export const deserializeInvitation = (
   invitation: InvitationResponse,

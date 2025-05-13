@@ -1,8 +1,8 @@
-import {} from "../interfaces.ts";
+import {} from "../interfaces.ts.ts";
 import type {
   SendInvitationOptions,
   SerializedSendInvitationOptions,
-} from "../interfaces/send-invitation-options.interface.ts";
+} from "../interfaces/send-invitation-options.interface.ts.ts";
 
 export const serializeSendInvitationOptions = (
   options: SendInvitationOptions,

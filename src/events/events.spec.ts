@@ -1,19 +1,19 @@
 // Import standard Deno assertions
-import { assertEquals } from "https://deno.land/std/assert/mod.ts";
+import { assertEquals } from "@std/assert";
 
 import {
   fetchOnce,
   fetchSearchParams,
   resetMockFetch,
-} from "../common/utils/test-utils.ts";
+} from "../common/utils/test-utils.ts.ts";
 import type {
   DsyncUserUpdatedEvent,
   DsyncUserUpdatedEventResponse,
   Event,
   EventResponse,
-} from "../common/interfaces/event.interface.ts";
-import { WorkOS } from "../workos.ts";
-import { ConnectionType } from "../sso/interfaces/index.ts";
+} from "../common/interfaces/event.interface.ts.ts";
+import { WorkOS } from "../workos.ts.ts";
+import { ConnectionType } from "../sso/interfaces/index.ts.ts";
 
 // Define common test data
 const event: Event = {

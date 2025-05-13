@@ -10,9 +10,9 @@
  * Run with: deno test --allow-all tests_deno/codegen/typescript_compile.test.ts
  */
 
-import { assert, assertEquals, assertStringIncludes } from "https://deno.land/std/assert/mod.ts";
-import { join, dirname } from "https://deno.land/std/path/mod.ts";
-import { ensureDir } from "https://deno.land/std/fs/mod.ts";
+import { assert, assertEquals, assertStringIncludes } from "@std/assert";
+import { join, dirname } from "@std/path";
+import { ensureDir } from "@std/fs";
 
 // Import the code generator adapter
 import { getGenerator, OtcGenerator } from "../../scripts/codegen/adapter.ts";

@@ -1,7 +1,7 @@
 import type {
   OrganizationDomain,
   OrganizationDomainResponse,
-} from "../interfaces.ts";
+} from "../interfaces.ts.ts";
 
 export const deserializeOrganizationDomain = (
   organizationDomain: OrganizationDomainResponse,

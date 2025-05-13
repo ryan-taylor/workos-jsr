@@ -1,9 +1,9 @@
-import type { GetOptions } from "../../common/interfaces.ts";
+import type { GetOptions } from "../../common/interfaces.ts.ts";
 import type {
   ResourceInterface,
   ResourceOptions,
-} from "./resource.interface.ts";
-import type { WarrantOp } from "./warrant-op.enum.ts";
+} from "./resource.interface.ts.ts";
+import type { WarrantOp } from "./warrant-op.enum.ts.ts";
 
 export interface ListWarrantsOptions {
   resourceType?: string;

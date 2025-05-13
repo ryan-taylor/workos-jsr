@@ -1,6 +1,6 @@
 import { assertEquals, assertNotEquals } from "std/assert/mod.ts";
 // @ts-ignore This test is ignored anyway so it's just for compiling
-import { WorkOS } from "../../../mod.ts";
+import { WorkOS } from "../../../mod.ts.ts";
 
 Deno.test({
   name: "CRUD resources",

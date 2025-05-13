@@ -1,7 +1,7 @@
-import { WorkOS } from "../workos.ts";
+import { WorkOS } from "../workos.ts.ts";
 import { crypto } from "@std/crypto";
-import { NotFoundException } from "../index.worker.ts";
-import { ConflictException } from "../common/exceptions/conflict.exception.ts";
+import { NotFoundException } from "../index.worker.ts.ts";
+import { ConflictException } from "../common/exceptions/conflict.exception.ts.ts";
 import { assertEquals, assertRejects, assertThrows } from "@std/assert";
 
 Deno.test({

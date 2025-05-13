@@ -1,1 +1,1 @@
-export * from "../packages/workos_sdk/mod.ts"; 
+export * from "../packages/workos_sdk/mod.ts.ts"; 

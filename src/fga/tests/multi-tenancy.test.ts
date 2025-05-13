@@ -1,7 +1,7 @@
 import { assertEquals } from "std/assert/mod.ts";
 // @ts-ignore This test is ignored anyway so it's just for compiling
-import { WorkOS } from "../../../mod.ts";
-import { WarrantOp } from "../interfaces/warrant.ts";
+import { WorkOS } from "../../../mod.ts.ts";
+import { WarrantOp } from "../interfaces/warrant.ts.ts";
 
 Deno.test({
   name: "Multi-tenancy example",

@@ -1,8 +1,8 @@
 import type {
   CreateResourceOptions,
   SerializedCreateResourceOptions,
-} from "../interfaces.ts";
-import { isResourceInterface } from "../utils/interface-check.ts";
+} from "../interfaces.ts.ts";
+import { isResourceInterface } from "../utils/interface-check.ts.ts";
 
 export const serializeCreateResourceOptions = (
   options: CreateResourceOptions,

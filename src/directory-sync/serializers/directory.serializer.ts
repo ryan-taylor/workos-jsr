@@ -5,7 +5,7 @@ import type {
   DirectoryStateResponse,
   EventDirectory,
   EventDirectoryResponse,
-} from "../interfaces.ts";
+} from "../interfaces.ts.ts";
 
 export const deserializeDirectory = (
   directory: DirectoryResponse,

@@ -1,5 +1,5 @@
-import type { PaginationOptions } from "../../common/interfaces/pagination-options.interface.ts";
-import type { ResourceOp } from "./resource-op.enum.ts";
+import type { PaginationOptions } from "../../common/interfaces/pagination-options.interface.ts.ts";
+import type { ResourceOp } from "./resource-op.enum.ts.ts";
 
 export interface ResourceInterface {
   getResourceType(): string;

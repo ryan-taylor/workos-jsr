@@ -8,10 +8,10 @@ import {
   fetchSearchParams,
   fetchURL,
   resetMockFetch,
-} from "../common/utils/test-utils.ts";
+} from "../common/utils/test-utils.ts.ts";
 
-import { WorkOS } from "../workos.ts";
-import { ResourceOp, WarrantOp } from "./interfaces/index.ts";
+import { WorkOS } from "../workos.ts.ts";
+import { ResourceOp, WarrantOp } from "./interfaces/index.ts.ts";
 
 const workos = new WorkOS("sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU");
 

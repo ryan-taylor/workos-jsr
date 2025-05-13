@@ -6,6 +6,7 @@
   "tasks": {
     "lint": "deno lint --ignore=_reference/**",
     "check": "deno check mod.ts",
+    "pretest": "deno run -A scripts/check-import-map.ts",
     "test": "deno test -A --ignore=_reference,examples",
     "test:watch": "deno test -A --ignore=_reference,examples --watch",
     "test:coverage": "deno test -A tests_deno/lcov_test.ts --coverage=cov_profile && deno coverage cov_profile --lcov > coverage.lcov",

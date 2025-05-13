@@ -194,14 +194,14 @@ export class Session {
       if (
         error instanceof OauthException &&
         // TODO: Add additional known errors and remove re-throw
-        (error.error === RefreshAndSealSessionDataFailureReason.INVALID_GRANT ||
-          error.error ===
+        (error && typeof error === 'object' && 'error' in error && error.error === RefreshAndSealSessionDataFailureReason.INVALID_GRANT ||
+          error && typeof error === 'object' && 'error' in error && error.error ===
             RefreshAndSealSessionDataFailureReason.MFA_ENROLLMENT ||
-          error.error === RefreshAndSealSessionDataFailureReason.SSO_REQUIRED)
+          error && typeof error === 'object' && 'error' in error && error.error === RefreshAndSealSessionDataFailureReason.SSO_REQUIRED)
       ) {
         return {
           authenticated: false,
-          reason: error.error,
+          reason: error && typeof error === 'object' && 'error' in error ? error.error : RefreshAndSealSessionDataFailureReason.INVALID_GRANT,
         };
       }
 

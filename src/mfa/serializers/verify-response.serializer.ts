@@ -1,5 +1,8 @@
-import type { VerifyResponse, VerifyResponseResponse } from "../interfaces.ts.ts";
-import { deserializeChallenge } from "./challenge.serializer.ts.ts";
+import type {
+  VerifyResponse,
+  VerifyResponseResponse,
+} from "../interfaces/index.ts";
+import { deserializeChallenge } from "./challenge.serializer.ts";
 
 export const deserializeVerifyResponse = (
   verifyResponse: VerifyResponseResponse,

@@ -3,12 +3,12 @@ import type {
   FactorResponse,
   FactorWithSecrets,
   FactorWithSecretsResponse,
-} from "../interfaces.ts.ts";
-import { deserializeSms } from "./sms.serializer.ts.ts";
+} from "../interfaces/index.ts";
+import { deserializeSms } from "./sms.serializer.ts";
 import {
   deserializeTotp,
   deserializeTotpWithSecrets,
-} from "./totp.serializer.ts.ts";
+} from "./totp.serializer.ts";
 
 export const deserializeFactor = (factor: FactorResponse): Factor => ({
   object: factor.object,

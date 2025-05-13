@@ -77,12 +77,8 @@ jobs:
       - name: Deno Lint
         run: deno lint
       
-      - name: Detect npm specifiers
-        run: |
-          if grep -R --line-number --exclude-dir=.git -E '["'"'"']npm:' .; then
-            echo "::error ::npm imports detected";
-            exit 1;
-          fi
+      - name: Detect npm imports
+        run: deno run -A scripts/check-no-npm-imports.ts
       
       - name: Check for npm dependencies
         run: |

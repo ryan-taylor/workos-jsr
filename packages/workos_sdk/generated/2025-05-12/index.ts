@@ -1,10 +1,13 @@
-/**
- * This file re-exports everything from the generated code.
- * It will be automatically updated when the code generation script is run.
- */
+// Re-export DirectorySyncService for SDK compatibility
+export { DirectorySyncService } from "./services/directory-sync.service.ts";
 
-// Re-export from core
-export * from './core/request.ts';
+// Export a setWorkOSInstance utility function
+let workosInstance: any = null;
 
-// Re-export from services
-export * from './services/index.ts';
+export function setWorkOSInstance(instance: any): void {
+  workosInstance = instance;
+}
+
+export function getWorkOSInstance(): any {
+  return workosInstance;
+}

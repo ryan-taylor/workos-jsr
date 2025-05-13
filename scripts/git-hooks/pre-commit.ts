@@ -66,6 +66,15 @@ async function main() {
     Deno.exit(1);
   }
   
+  // Check for npm: imports in staged files
+  console.log("🔍 Checking for npm: imports in staged files...");
+  if (!await runCommand("deno", ["run", "-A", "scripts/check-no-npm-imports.ts", "--staged"])) {
+    console.error("❌ npm: imports detected");
+    console.error("npm: imports are forbidden as part of our Deno 2.x migration.");
+    console.error("Please remove or replace these imports with Deno-compatible alternatives.");
+    Deno.exit(1);
+  }
+  
   console.log("✅ Pre-commit hook completed successfully");
 }
 

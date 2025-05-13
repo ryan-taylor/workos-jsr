@@ -26,5 +26,9 @@
   },
   "tasks": {
     "start": "deno run -A --watch=static/,routes/ main.ts"
+  },
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact"
   }
 }

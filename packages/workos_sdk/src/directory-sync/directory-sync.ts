@@ -10,7 +10,7 @@ import type {
 } from "workos/directory-sync/interfaces/index.ts";
 import { fetchAndDeserialize } from "workos/common/utils/fetch-and-deserialize.ts";
 import type { WorkOS } from "workos/workos.ts";
-import { DirectorySyncService, setWorkOSInstance } from "workos/generated/2025-05-12/index.ts";
+import { DirectorySyncService, setWorkOSInstance } from "../../generated/2025-05-12/index.ts";
 import type { CommonGetOptions, List } from "workos/common/interfaces.ts";
 
 /**

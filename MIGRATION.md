@@ -1,8 +1,9 @@
-# WorkOS Node.js to Deno 2.x Migration Guide
+# Deno 2.x WorkOS SDK Implementation Guide
 
-This document outlines the key Node.js dependencies that need replacement as we
-migrate from Node.js to Deno 2.x, along with lessons learned, patterns that
-worked well, and common challenges encountered during the migration.
+This document outlines our approach to creating a Deno-native WorkOS SDK, including
+how we've replaced Node.js dependencies with Deno-native alternatives, patterns that
+work well in the Deno ecosystem, and solutions to common challenges. While we maintain
+npm compatibility as a secondary option, our primary focus is on Deno 2.x and JSR.io.
 
 ## Core Dependencies Requiring Replacement
 
@@ -23,13 +24,12 @@ particularly in:
 - **crypto providers**: Implementation of crypto functionality
   - `src/common/crypto/node-crypto-provider.ts`
   - `src/common/crypto/subtle-crypto-provider.ts`
-
-**Replacement Strategy:**
+**Deno-Native Implementation:**
 
 - Use Deno's standard library crypto: `https://deno.land/std/crypto/mod.ts`
-- For SubtleCrypto operations, leverage Web Crypto API which is fully supported
-  in Deno
-- Create adapter classes to maintain the same interface while using Deno's
+- Leverage Web Crypto API which is fully supported in Deno
+- Create well-typed interfaces that take full advantage of Deno's TypeScript support
+- Ensure all crypto operations are secure and optimized for Deno's runtime
   crypto implementations
 
 ### 2. HTTP/HTTPS Clients
@@ -40,11 +40,12 @@ The codebase uses Node.js HTTP/HTTPS modules for API requests:
 - `src/common/net/http-client.ts`: Base HTTP client abstraction
 - `src/common/net/fetch-client.ts`: Fetch-based HTTP client
 
-**Replacement Strategy:**
+**Deno-Native Implementation:**
 
-- Use Deno's native fetch API as the primary HTTP client
-- Adapt or refactor the NodeHttpClient implementation to use Deno's fetch
-- Eventually phase out the NodeHttpClient entirely in favor of FetchHttpClient
+- Use Deno's native fetch API as the only HTTP client
+- Create type-safe wrappers around fetch for better error handling and response processing
+- Implement proper retry and timeout logic using Deno's Promise APIs
+- Leverage Deno's native performance APIs for better telemetry
 
 ### 3. iron-session Library
 
@@ -55,12 +56,12 @@ Used for session management in the user-management module:
 - `src/common/iron-session/edge-iron-session-provider.ts`
 - `src/user-management/session.ts`
 
-**Replacement Strategy:**
+**Deno-Native Implementation:**
 
-- Use npm: specifier to import iron-session: `npm:iron-session@8.0.4`
-- Review and adapt any Node.js specific aspects of the iron-session integration
-- Consider using Deno's built-in Web Crypto API for some of the functionality if
-  needed
+- Use npm: specifier to import iron-session: `npm:iron-session@8.0.4` only if necessary
+- Create Deno-native session provider implementations
+- Leverage Deno's built-in Web Crypto API for cookie encryption and security
+- Provide seamless integration with Fresh session management
 
 ### 4. fs/promises Module
 
@@ -68,13 +69,12 @@ Used in tests for file operations:
 
 - `src/workos.spec.ts`: Used in test files for reading test fixtures
 
-**Replacement Strategy:**
+**Deno-Native Implementation:**
 
-- Use Deno's standard library for file operations:
-  `https://deno.land/std/fs/mod.ts`
-- Update test utilities to use Deno's file system APIs
-- Consider using Deno's test fixtures API for test data instead of file
-  operations where appropriate
+- Use Deno's standard library for file operations: `https://deno.land/std/fs/mod.ts`
+- Implement test fixtures using Deno's built-in testing utilities
+- Leverage Deno's permissions model for secure file access
+- Use Deno's built-in caching capabilities for test performance optimization
 
 ## Lessons Learned During Migration
 
@@ -90,17 +90,15 @@ aspects of the migration easier than expected:
   clients improved code portability
 - **URL and URLSearchParams**: Using these web standard APIs instead of custom
   URL handling simplified the code
+### 2. Modern Module Resolution
 
-### 2. Module Resolution Strategy
+We've adopted a fully Deno-native approach to module resolution:
 
-We found that a hybrid approach to module resolution worked best during the
-transition:
-
-- **Import Maps**: Using import maps to alias Node.js module paths to their Deno
-  equivalents allowed for a gradual migration
-- **Progressive Enhancement**: Starting with core utilities and progressively
-  moving to more complex modules helped maintain stability
-- **npm: Compatibility**: Deno's ability to use npm packages through the npm:
+- **Import Maps**: Using import maps for clear, consistent dependency management across the project
+- **JSR.io Integration**: Prioritizing JSR.io as our primary package registry
+- **Version Pinning**: Precisely specifying dependency versions for stability and reproducibility
+- **npm: Compatibility**: Using Deno's npm: specifier only when absolutely necessary, with a preference for
+  native Deno alternatives whenever possible
   specifier was invaluable for dependencies without direct Deno equivalents
 
 ### 3. TypeScript Compatibility
@@ -114,18 +112,15 @@ Deno's native TypeScript support required some adjustments:
 - **Configuration**: Transitioning from tsconfig.json to Deno's configuration
   required careful mapping of options
 
-### 4. Testing Approach
+### 4. Native Testing Approach
 
-Our testing strategy evolved significantly:
+Our testing strategy is fully native to Deno:
 
-- **Test Runner**: Complete migration from Jest/Vitest to Deno's built-in test
-  runner, removing all Jest/Vitest dependencies
-- **Mocking**: Implemented native mocking strategies that leverage Deno's
-  capabilities instead of relying on Jest's mocking
-- **Coverage Tools**: Fully adopted Deno's built-in coverage tools instead of
-  third-party coverage tools
-- **Compatibility Layer**: Removed the compatibility layer (deno-test-setup.ts)
-  that was temporarily used during transition
+- **Deno Test Runner**: Exclusive use of Deno's built-in test runner with no external dependencies
+- **Native Mocking**: Implementation of test mocks using Deno's own capabilities
+- **Deno Coverage**: Full integration with Deno's built-in coverage tools with HTML report generation
+- **Fresh Testing**: Specialized utilities for testing Fresh applications
+- **CI Integration**: Optimized GitHub Actions workflows for Deno testing with caching
 
 ## Patterns That Worked Well
 
@@ -210,14 +205,14 @@ contexts.
 
 ### 4. TypeScript Type Definitions
 
-**Challenge**: Maintaining type compatibility across Node.js and Deno.
+**Challenge**: Maximizing type safety and Deno-specific features.
 
 **Solution**:
 
-- Created shared type definitions used by both environments
-- Used conditional types to handle environment-specific differences
-- Leveraged TypeScript's module resolution to provide platform-specific
-  implementations
+- Created comprehensive TypeScript definitions optimized for Deno
+- Leveraged Deno's stricter type checking for better error prevention
+- Used Deno's native TypeScript compiler for maximum performance
+- Removed conditional types and platform-specific implementations in favor of pure Deno solutions
 
 ## Tips for Migrating React Projects to Fresh + Preact
 
@@ -276,22 +271,33 @@ interactivity:
 - Implement dynamic routes where needed
 - Use middleware for cross-cutting concerns like authentication
 
-## Migration Approach
+## Development Approach for Deno
 
-The recommended approach for this migration is incremental:
+Our development approach is now fully Deno-native:
 
-1. Start with core utility modules (crypto, HTTP clients)
-2. Move to service implementations
-3. Update tests
-4. Address edge cases and platform-specific code
+1. Start with JSR.io package structure and configuration
+2. Use Deno-native APIs throughout
+3. Implement comprehensive testing with Deno's test runner
+4. Optimize for Fresh 2.x integration
+5. Provide TypeScript definitions optimized for Deno
 
-Each step should include thorough testing to ensure feature parity and prevent
-regressions.
+Each feature is developed with Deno first, with npm compatibility as a secondary consideration.
 
-## Deno-Native Test Migration
+## JSR.io Publication Workflow
 
-As part of our migration to Deno 2.x, we've completely transitioned our testing
-infrastructure from Jest/Vitest to Deno's native testing capabilities:
+Our publication process is centered on JSR.io:
+
+1. Update version numbers in jsr.json and other relevant files
+2. Run all tests with `deno task test`
+3. Generate documentation if needed
+4. Create a git tag for the version
+5. Publish to JSR.io with `jsr publish`
+
+After publishing to JSR.io, we can optionally build and publish the npm package for those who require it.
+
+## Deno-Native Testing Infrastructure
+
+Our testing infrastructure is built exclusively on Deno's native capabilities:
 
 ### 1. Removing the Jest/Vitest Dependencies
 
@@ -310,11 +316,9 @@ commands:
 - `test:watch`: Changed from `vitest` to `deno test --watch`
 - `test:worker`: Updated to use Deno's test runner
 
-### 3. Removal of Compatibility Layer
+### 3. Pure Deno Testing Approach
 
-The temporary compatibility layer (tests/deno-test-setup.ts) that provided
-Jest-like functionality during the transition phase has been removed. This file
-included:
+We've completely eliminated any compatibility layers or Jest-like wrappers in favor of pure Deno testing patterns. This has allowed us to:
 
 - Mock implementations for fetch
 - Test lifecycle hooks (beforeEach, afterEach)
@@ -330,31 +334,39 @@ The migration to Deno's native testing brings several advantages:
 - Simplified testing setup with fewer dependencies
 - More consistent environment between development and testing
 
-### 5. Running Tests
+### 5. Running Tests with Deno
 
-To run tests with the new Deno-native approach:
+Our test commands are structured for developer productivity:
 
+```bash
+# Basic test commands
+deno task test                  # Run all tests
+deno task test:watch            # Run tests in watch mode
+deno task test path/to/test.ts  # Run specific test file
+
+# Coverage commands
+deno task test:coverage         # Run tests with basic coverage
+deno task test:coverage:full    # Run comprehensive test suite with coverage
+deno task coverage:report       # Generate human-readable console report
+deno task coverage:html         # Generate HTML coverage report
 ```
-deno test                  # Run all tests
-deno test --watch          # Run tests in watch mode
-deno test path/to/test.ts  # Run specific test file
-deno test --coverage       # Run tests with coverage report
-```
+
+For detailed information about our testing approach, see [docs/test-coverage.md](docs/test-coverage.md).
 
 ## Conclusion
+## Deno-First Development
 
-The migration from Node.js to Deno and from React to Fresh + Preact represents a
-significant architectural shift, but one that brings substantial benefits in
-terms of performance, maintainability, and developer experience. By following
-the strategies outlined in this guide, you can successfully navigate this
-migration while minimizing disruption and maximizing the advantages of the new
-platform.
+Our approach is now fully Deno-first, bringing substantial benefits in terms of performance, type safety, and developer experience. This document serves both as a record of our migration journey and as a guide for new developers joining the project.
 
-Key takeaways:
+Key principles:
 
-- Embrace web standards whenever possible
-- Use the adapter pattern for platform-specific code
-- Leverage Fresh's Islands architecture for optimal performance
-- Test thoroughly at each migration step
-- Take advantage of Deno's built-in TypeScript support and modern JavaScript
+- Deno is our primary target platform
+- JSR.io is our primary package registry
+- Fresh 2.x is our web framework of choice
+- TypeScript with strict typing is used throughout
+- Web standards are preferred over custom solutions
+- Testing is done with Deno's native testing tools
+- npm compatibility is maintained as a secondary option
+
+By following these principles, we've created a modern, performant, and type-safe SDK that leverages the full power of the Deno ecosystem while maintaining accessibility for developers still using Node.js.
   features

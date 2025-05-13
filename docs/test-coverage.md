@@ -1,12 +1,24 @@
-# Test Coverage with Deno
+# Test Coverage with Deno's Native Tools
 
-This project supports generating test coverage reports with LCOV format for integration with coverage visualization tools.
+This project leverages Deno's built-in coverage tools to provide comprehensive test coverage reporting. Deno's native test coverage capabilities allow us to analyze code coverage without relying on external tools or Node.js compatibility layers.
 
 ## Available Commands
 
-### `deno task test:watch`
+### Primary Test Commands
 
-Runs tests in watch mode, automatically re-running tests when files change.
+#### `deno task test`
+
+Runs the full test suite using Deno's native test runner.
+
+```sh
+deno task test
+```
+
+This is the primary command for verifying all functionality.
+
+#### `deno task test:watch`
+
+Runs tests in watch mode, automatically re-running tests when files change. This is ideal for development work.
 
 ```sh
 deno task test:watch
@@ -17,7 +29,9 @@ This command:
 2. Continuously watches for file changes
 3. Automatically re-runs tests when changes are detected
 
-The following commands are available for working with test coverage:
+### Coverage Commands
+
+The following commands are available for working with Deno's native coverage tools:
 
 ### `deno task test:coverage`
 
@@ -76,22 +90,53 @@ This command:
 3. Provides clickable file listings with line-by-line coverage information
 
 Note: This task requires the `genhtml` utility from the LCOV package to be installed on your system. The script will check for this dependency and provide installation instructions if needed.
+## Coverage Data Files and Formats
 
-## Coverage Profile Data
+Coverage data is stored in several locations and formats:
 
-Coverage data is stored in the `cov_profile` directory, which is git-ignored. The generated data includes:
+### Raw Coverage Profiles
+- **Location**: `cov_profile/` directory (git-ignored)
+- **Format**: JSON files containing detailed coverage information
+- **Purpose**: Source data for all coverage reports
 
-- Raw coverage profile data
-- An LCOV info file at `cov_profile/lcov.info`
-- An HTML report at `coverage_html/index.html` (when generated with `deno task coverage:html`)
+### LCOV Files
+- **Main file**: `coverage.lcov` in project root
+- **Secondary file**: `cov_profile/lcov.info`
+- **Format**: Standard LCOV format compatible with most coverage tools
+- **Purpose**: Integration with external coverage visualization tools
 
-Additionally, a `coverage.lcov` file is generated in the project root for easy integration with coverage visualization tools.
+### HTML Report
+- **Location**: `coverage_html/` directory
+- **Entry point**: `coverage_html/index.html`
+- **Format**: Interactive HTML with source code highlighting
+- **Purpose**: Human-readable visualization of coverage data
 
 ## Integration with CI/Coverage Tools
 
-The generated LCOV file can be used with tools like:
+Our Deno coverage implementation integrates with modern CI systems:
 
+### GitHub Actions
+- Automatically runs coverage on pull requests
+- Posts coverage summaries as PR comments
+- Tracks coverage trends over time
+
+### External Tools
+The generated LCOV files are compatible with:
 - Codecov
 - Coveralls
 - SonarQube
+- Other standard coverage visualization tools
+
+### Local Development
+For local development, the HTML report provides the most user-friendly way to explore coverage:
+1. Run `deno task coverage:html`
+2. Open `coverage_html/index.html` in your browser
+3. Navigate through the interactive report to identify areas needing more tests
+
+## JSR.io Publication Coverage Requirements
+
+Before publishing new versions to JSR.io, we verify coverage meets these requirements:
+- Overall coverage above 80%
+- No new untested code in critical modules
+- All new features have corresponding tests
 - GitHub Actions workflows for coverage reporting

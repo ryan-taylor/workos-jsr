@@ -21,7 +21,6 @@ This package is a fork of the [workos-inc/workos-node](https://github.com/workos
 ## Documentation
 
 Refer to the [WorkOS API Reference](https://workos.com/docs/reference/client-libraries) maintained by the WorkOS project for detailed API documentation. Thank you to the WorkOS maintainers and contributors for their continued work.
-Refer to the [WorkOS API Reference](https://workos.com/docs/reference/client-libraries) maintained by the WorkOS project for detailed API documentation. Thank you to the WorkOS maintainers and contributors for their continued work.
 
 ## Requirements
 
@@ -29,7 +28,9 @@ Refer to the [WorkOS API Reference](https://workos.com/docs/reference/client-lib
 
 ## Installation
 
-### Deno/Fresh
+### Deno (Recommended)
+
+This package is designed for Deno first. You can install it in one of two ways:
 
 Direct import:
 
@@ -37,7 +38,7 @@ Direct import:
 import { WorkOS } from "jsr:@ryantaylor/workos@^0.1.0";
 ```
 
-Or add the following to the `deno.json` imports:
+Or add the following to your `deno.json` imports:
 
 ```json
 {
@@ -46,6 +47,16 @@ Or add the following to the `deno.json` imports:
   }
 }
 ```
+
+### npm Compatibility
+
+While we focus on Deno as our primary platform, we also maintain an npm distribution for compatibility with Node.js environments:
+
+```bash
+npm install @ryantaylor/workos
+```
+
+See the "npm Compatibility" section below for more details.
 
 ## JSR.io Package
 
@@ -268,16 +279,74 @@ Our Deno-native approach provides several key advantages:
 ## SDK Versioning
 
 This SDK follows Semantic Versioning ([SemVer](https://semver.org/)): versions are formatted as X.Y.Z, where breaking changes are introduced only in major version increments.
+## JSR.io Publication Workflow
+
+This package is published to JSR.io, the modern registry for JavaScript and TypeScript packages. To publish new versions:
+
+1. Ensure all tests pass with `deno task test`
+2. Update version numbers in relevant files
+3. Create a new git tag for the version
+4. Run `jsr publish` to publish to JSR.io
+
+## npm Compatibility
+
+This package offers an npm distribution to support Node.js environments, but with some limitations:
+
+1. The npm distribution is generated from the Deno source code
+2. It may not include all Deno-specific features
+3. It's maintained primarily to support migration paths, not as a first-class Node.js SDK
+
+For detailed information on building and publishing the npm distribution, see the [npm/README.md](npm/README.md) file.
 
 ## Beta Releases
 
+
 Beta features are available via Beta release tags. Pinning to a specific version is advised to avoid unexpected breaking changes.
+
+## Development Workflow with Deno
+
+### Setting Up Development Environment
+
+1. Install Deno from [the official website](https://deno.land)
+2. Clone this repository
+3. Copy `.env.example` to `.env` and fill in your WorkOS API keys
+4. Run `deno task dev` to start the development server
+
+### Testing with Deno
+
+We use Deno's built-in testing capabilities:
+
+```bash
+# Run all tests
+deno task test
+
+# Run tests in watch mode during development
+deno task test:watch
+
+# Run tests with coverage
+deno task test:coverage
+```
+
+For more details about our testing approach, see [docs/test-coverage.md](docs/test-coverage.md).
+
+### Code Quality Tools
+
+We leverage Deno's built-in tools for code quality:
+
+```bash
+# Format code
+deno fmt
+
+# Check types
+deno check
+```
 
 ## Testing Approach
 
-- Unit tests cover all public methods and functionality
-- HTTP requests are mocked using utilities in `tests/utils.ts`
-- Coverage is verified through continuous integration workflows
+- All tests use Deno's native testing framework
+- HTTP requests are mocked using utilities in `tests_deno/utils/`
+- Coverage is tracked using Deno's built-in coverage tools
+- HTML coverage reports can be generated with `deno task coverage:html`
 
 ## Contributing
 

@@ -2,15 +2,45 @@
 
 Thank you for considering contributing to the Deno/JSR port of WorkOS! This document
 outlines the standards and processes we follow for this project.
+## Deno-Native Development
 
-## Deno-First Development
+This project is a Deno-native implementation of the WorkOS SDK. When contributing, please:
 
-This project is a Deno-first adaptation of the WorkOS SDK. When contributing, please:
+1. Always use Deno and Fresh 2.x compatibility as your primary target
+2. Use Deno-native APIs and approaches, avoiding Node.js patterns or compatibility layers
+3. Maintain strict TypeScript typing and leverage Deno's type system
+4. Test exclusively with Deno's native testing framework
+5. Document all code with Deno-centric usage examples
+6. Prioritize JSR.io publishing workflows and configurations
 
-1. Prioritize Deno and Fresh compatibility
-2. Use Deno-native approaches where possible
-3. Maintain TypeScript strictness
-4. Test against Fresh 2.x
+### Development Environment Setup
+
+To set up your development environment:
+
+1. Ensure you have Deno 2.x or later installed
+2. Clone the repository
+3. Copy `.env.example` to `.env` and configure your WorkOS API credentials
+4. Run `deno task dev` to start the development server
+
+### Running Tests
+
+We use Deno's native testing framework:
+
+```bash
+# Run all tests
+deno task test
+
+# Run tests in watch mode (during development)
+deno task test:watch
+
+# Generate test coverage
+deno task test:coverage
+
+# View coverage report
+deno task coverage:html
+```
+
+For detailed information about our testing approach, see [docs/test-coverage.md](docs/test-coverage.md).
 5. Document Deno-specific usage patterns
 
 ## Commit Message Convention
@@ -114,7 +144,7 @@ All quality gates are enforced through GitHub Actions:
 1. **Lint, Type-Check & Test**: Every push and pull request triggers automatic:
    - Deno linting and formatting
    - Type checking with strict TypeScript settings
-   - Unit & integration tests for Deno environments
+   - Unit & integration tests with Deno's native test runner
 
 2. **Commit Message Format**: All commits are automatically checked against the
    Conventional Commits specification using commitlint.
@@ -126,13 +156,39 @@ All quality gates are enforced through GitHub Actions:
 
 The pre-commit hook helps prevent CI failures by ensuring the generated code is always up-to-date with the specification.
 
+## Publishing to JSR.io
+
+This project is published to JSR.io, the modern registry for JavaScript and TypeScript packages. To publish a new version:
+
+1. Ensure all tests are passing with `deno task test`
+2. Update version numbers in:
+   - jsr.json
+   - VERSION.md
+   - Any other relevant files
+3. Create a git tag for the release version
+4. Run `jsr publish` to publish to JSR.io
+
+Make sure you have the appropriate permissions for publishing to the JSR.io registry.
+
 The configuration extends `@commitlint/config-conventional`, which enforces the
 Conventional Commits specification described above.
 
 ## Pull Request Process
 
-1. Ensure your code maintains comprehensive test coverage
-2. Verify compatibility with Deno and Fresh
-3. Update documentation if necessary
+1. Ensure your code maintains comprehensive test coverage using Deno's testing framework
+2. Verify compatibility with Deno 2.x and Fresh 2.x Canary
+3. Update documentation with Deno-specific examples
 4. Make sure all GitHub Actions checks pass
-5. Submit your pull request with a detailed description of your changes
+5. Submit your pull request with a detailed description of your changes that follows our commit message convention
+
+### Pull Request Checks
+
+Before submitting your PR, ensure:
+
+1. All tests pass with `deno task test`
+2. Code is formatted with `deno fmt`
+3. Types check with `deno check`
+4. Any new functionality includes appropriate tests
+5. Documentation is updated to reflect your changes
+
+For significant changes, consider adding examples in the examples directory that demonstrate the feature with Deno and Fresh.

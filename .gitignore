@@ -19,6 +19,8 @@ dist/
 # Coverage reports
 coverage/
 cov/
+coverage_html/
+cov_profile/html/
 
 # Logs
 *.log

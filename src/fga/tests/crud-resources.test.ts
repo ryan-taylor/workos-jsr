@@ -1,4 +1,4 @@
-import { assertEquals, assertNotEquals } from "std/assert/mod.ts";
+import { assertEquals, assertNotEquals } from "@std/assert";
 // @ts-ignore This test is ignored anyway so it's just for compiling
 import { WorkOS } from "../../../mod.ts.ts";
 

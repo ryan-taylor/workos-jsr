@@ -1,4 +1,4 @@
-import { assertEquals } from "std/assert/mod.ts";
+import { assertEquals } from "@std/assert";
 // @ts-ignore This test is ignored anyway so it's just for compiling
 import { WorkOS } from "../../../mod.ts.ts";
 import { WarrantOp } from "../interfaces/warrant.ts.ts";

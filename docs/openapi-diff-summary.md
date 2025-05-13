@@ -1,10 +1,15 @@
 # OpenAPI Diff Summary Generator
 
-This document explains how to use the OpenAPI diff summary tools to generate human-readable summaries of changes between different versions of OpenAPI specifications.
+This document explains how to use the OpenAPI diff summary tools to generate
+human-readable summaries of changes between different versions of OpenAPI
+specifications.
 
 ## Overview
 
-The OpenAPI diff summary tools build on the `oasdiff` integration to provide clear, human-readable summaries of changes between OpenAPI specifications. These tools help API maintainers and consumers understand what has changed between versions, with a focus on:
+The OpenAPI diff summary tools build on the `oasdiff` integration to provide
+clear, human-readable summaries of changes between OpenAPI specifications. These
+tools help API maintainers and consumers understand what has changed between
+versions, with a focus on:
 
 - Added, removed, and modified paths and operations
 - Breaking vs. non-breaking changes
@@ -17,12 +22,16 @@ The OpenAPI diff summary tools build on the `oasdiff` integration to provide cle
 The toolset includes:
 
 1. **openapi-diff.ts** - Low-level wrapper around the `oasdiff` binary
-2. **openapi-summary-generator.ts** - Core utility for transforming `oasdiff` JSON output into human-readable summaries
-3. **openapi-human-summary.ts** - High-level script that combines the above tools for a streamlined experience
+2. **openapi-summary-generator.ts** - Core utility for transforming `oasdiff`
+   JSON output into human-readable summaries
+3. **openapi-human-summary.ts** - High-level script that combines the above
+   tools for a streamlined experience
 
 ## Installation Requirements
 
-The tools require the `oasdiff` binary, which will be automatically installed when running any of the scripts. Make sure you have Deno installed on your system.
+The tools require the `oasdiff` binary, which will be automatically installed
+when running any of the scripts. Make sure you have Deno installed on your
+system.
 
 ## Basic Usage
 
@@ -33,6 +42,7 @@ deno run -A scripts/ci/openapi-human-summary.ts --base=path/to/old-spec.json --r
 ```
 
 This will:
+
 1. Compare the two specified OpenAPI specifications
 2. Generate a human-readable Markdown summary of the changes
 3. Display the summary in the terminal
@@ -51,7 +61,8 @@ deno run -A scripts/ci/openapi-human-summary.ts --base=path/to/old-spec.json --r
 
 ### Automatic Spec Discovery
 
-If you don't specify `--base` and `--revision`, the tool will automatically find the two most recent spec files in the specified directory:
+If you don't specify `--base` and `--revision`, the tool will automatically find
+the two most recent spec files in the specified directory:
 
 ```bash
 deno run -A scripts/ci/openapi-human-summary.ts --spec-dir=vendor/openapi --pattern="workos-*.json"
@@ -67,7 +78,8 @@ The summary generator can be integrated into GitHub Actions workflows:
 deno run -A scripts/ci/openapi-human-summary.ts --post-comment
 ```
 
-When run in a GitHub Actions environment with the `--post-comment` flag, the summary will be added to the GitHub step summary.
+When run in a GitHub Actions environment with the `--post-comment` flag, the
+summary will be added to the GitHub step summary.
 
 ### Example Workflow
 
@@ -77,7 +89,7 @@ name: API Diff Check
 on:
   pull_request:
     paths:
-      - 'vendor/openapi/**'
+      - "vendor/openapi/**"
 
 jobs:
   api-diff:
@@ -86,10 +98,10 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      
+
       - name: Setup Deno
         uses: denoland/setup-deno@v1
-      
+
       - name: Generate API Diff Summary
         run: deno run -A scripts/ci/openapi-human-summary.ts --post-comment
 ```
@@ -98,7 +110,8 @@ jobs:
 
 ### Using the Summary Generator Directly
 
-If you already have JSON output from `oasdiff`, you can use the summary generator directly:
+If you already have JSON output from `oasdiff`, you can use the summary
+generator directly:
 
 ```bash
 deno run -A scripts/ci/openapi-summary-generator.ts --input=path/to/diff.json --output=summary.md
@@ -114,9 +127,9 @@ import { generateSummary } from "./scripts/ci/openapi-summary-generator.ts";
 
 // Generate diff
 const diffResult = await runOasdiff(
-  "old-spec.json", 
-  "new-spec.json", 
-  "json"
+  "old-spec.json",
+  "new-spec.json",
+  "json",
 );
 
 // Save diff to file
@@ -130,11 +143,15 @@ const summary = await generateSummary("diff.json", "summary.md", "md");
 
 The generated summaries include:
 
-1. **Summary statistics** - Overview of total changes, breaking changes, and non-breaking changes
-2. **Breaking changes section** - Detailed list of breaking changes, grouped by path and method
-3. **Non-breaking changes section** - Detailed list of non-breaking changes, grouped by path and method
+1. **Summary statistics** - Overview of total changes, breaking changes, and
+   non-breaking changes
+2. **Breaking changes section** - Detailed list of breaking changes, grouped by
+   path and method
+3. **Non-breaking changes section** - Detailed list of non-breaking changes,
+   grouped by path and method
 
 Each change includes:
+
 - Path and HTTP method
 - Change type (added, deleted, modified)
 - Parameter changes (if any)
@@ -191,18 +208,25 @@ Here's an example of the Markdown output:
 
 ### Common Issues
 
-1. **Missing oasdiff binary**: The scripts will automatically attempt to install oasdiff. If installation fails, make sure you have proper permissions and network connectivity.
+1. **Missing oasdiff binary**: The scripts will automatically attempt to install
+   oasdiff. If installation fails, make sure you have proper permissions and
+   network connectivity.
 
 2. **Invalid spec files**: Make sure your OpenAPI spec files are valid JSON.
 
-3. **No changes detected**: If no changes are detected, check that the spec files are different.
+3. **No changes detected**: If no changes are detected, check that the spec
+   files are different.
 
 ## Best Practices
 
-1. **Include in Pull Request reviews**: Generate diff summaries for every PR that modifies the OpenAPI specs.
+1. **Include in Pull Request reviews**: Generate diff summaries for every PR
+   that modifies the OpenAPI specs.
 
-2. **Highlight breaking changes**: Pay special attention to breaking changes and ensure they are properly communicated to API consumers.
+2. **Highlight breaking changes**: Pay special attention to breaking changes and
+   ensure they are properly communicated to API consumers.
 
-3. **Version appropriately**: Major version bumps should accompany breaking changes.
+3. **Version appropriately**: Major version bumps should accompany breaking
+   changes.
 
-4. **Document upgrade paths**: When breaking changes are introduced, document how consumers can update their code.
+4. **Document upgrade paths**: When breaking changes are introduced, document
+   how consumers can update their code.

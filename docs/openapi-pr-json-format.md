@@ -1,10 +1,14 @@
 # OpenAPI PR JSON Format
 
-This document describes the JSON format designed specifically for displaying OpenAPI diff information in pull request comments.
+This document describes the JSON format designed specifically for displaying
+OpenAPI diff information in pull request comments.
 
 ## Overview
 
-The PR JSON format provides a structured, compact representation of API changes that is optimized for inclusion in GitHub PR comments. It organizes changes hierarchically and preserves important metadata while remaining small enough to fit within comment size limits.
+The PR JSON format provides a structured, compact representation of API changes
+that is optimized for inclusion in GitHub PR comments. It organizes changes
+hierarchically and preserves important metadata while remaining small enough to
+fit within comment size limits.
 
 ## Format Structure
 
@@ -149,10 +153,10 @@ Example GitHub Action workflow snippet:
     script: |
       const fs = require('fs');
       const diffData = JSON.parse(fs.readFileSync('pr-diff.json', 'utf8'));
-      
+
       // Format the comment from the JSON data
       const comment = formatPRComment(diffData);
-      
+
       // Post the comment to the PR
       github.rest.issues.createComment({
         issue_number: context.issue.number,
@@ -164,7 +168,8 @@ Example GitHub Action workflow snippet:
 
 ## Rendering in PR Comments
 
-The JSON format is designed to be transformed into markdown for PR comment display. A simple renderer might generate:
+The JSON format is designed to be transformed into markdown for PR comment
+display. A simple renderer might generate:
 
 ```markdown
 # API Changes Summary
@@ -174,6 +179,7 @@ The JSON format is designed to be transformed into markdown for PR comment displ
 ## ⚠️ Breaking Changes
 
 ### `/api/v1/resources`
+
 - 🔴 **DELETE** - Removed
 - 🟠 **PUT** - Modified
   - **Parameters:**
@@ -182,6 +188,7 @@ The JSON format is designed to be transformed into markdown for PR comment displ
 ## Non-Breaking Changes
 
 ### `/api/v1/users`
+
 - 🟢 **POST** - Added
 ```
 

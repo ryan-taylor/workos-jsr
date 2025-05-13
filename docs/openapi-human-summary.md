@@ -1,10 +1,16 @@
 # OpenAPI Human-Readable Summary Generator
 
-This document explains how to use the OpenAPI human-readable summary generator to create clear, actionable summaries of API changes between OpenAPI specification versions.
+This document explains how to use the OpenAPI human-readable summary generator
+to create clear, actionable summaries of API changes between OpenAPI
+specification versions.
 
 ## Overview
 
-The OpenAPI human-readable summary generator transforms the JSON output from `oasdiff` into a clear, structured summary that highlights the changes that matter most to API consumers. It categorizes changes into breaking and non-breaking changes and provides detailed information about added, removed, and modified endpoints, parameters, responses, and schemas.
+The OpenAPI human-readable summary generator transforms the JSON output from
+`oasdiff` into a clear, structured summary that highlights the changes that
+matter most to API consumers. It categorizes changes into breaking and
+non-breaking changes and provides detailed information about added, removed, and
+modified endpoints, parameters, responses, and schemas.
 
 ## Features
 
@@ -32,7 +38,8 @@ deno run -A scripts/ci/openapi-human-summary.ts --base=vendor/openapi/old-spec.j
 
 ### Using with Pre-Generated Diff JSON
 
-If you already have a JSON diff from oasdiff, you can use the summary generator directly:
+If you already have a JSON diff from oasdiff, you can use the summary generator
+directly:
 
 ```bash
 deno run -A scripts/ci/fixed-summary-generator.ts --input=path/to/diff.json --output=summary.md
@@ -46,7 +53,8 @@ The tool can post results as GitHub comments when run in CI:
 deno run -A scripts/ci/openapi-human-summary.ts --post-comment
 ```
 
-When the `--post-comment` flag is set, it will add the summary to the GitHub step summary in Actions workflows.
+When the `--post-comment` flag is set, it will add the summary to the GitHub
+step summary in Actions workflows.
 
 ## Example Output
 
@@ -123,9 +131,9 @@ import { generateSummary } from "./scripts/ci/fixed-summary-generator.ts";
 
 // Generate a summary from a diff file
 const summary = await generateSummary(
-  "path/to/diff.json",   // Input JSON file from oasdiff
-  "output.md",           // Optional output file path
-  "md"                   // Format: "md" or "html"
+  "path/to/diff.json", // Input JSON file from oasdiff
+  "output.md", // Optional output file path
+  "md", // Format: "md" or "html"
 );
 ```
 
@@ -140,16 +148,21 @@ The repository includes these scripts:
 
 ## Implementation Notes
 
-The summary generator processes the JSON output from oasdiff, which contains detailed information about API changes. It analyzes this information to create a human-readable summary that focuses on the most important changes for API consumers.
+The summary generator processes the JSON output from oasdiff, which contains
+detailed information about API changes. It analyzes this information to create a
+human-readable summary that focuses on the most important changes for API
+consumers.
 
 Breaking changes are identified based on several criteria:
+
 - Deleted endpoints
 - Required parameters added to existing endpoints
 - Parameters changed from optional to required
 - Significant changes to response structures
 - Changes to parameter or schema types
 
-The summary is structured to make it easy for reviewers to understand the impact of changes and identify potential issues.
+The summary is structured to make it easy for reviewers to understand the impact
+of changes and identify potential issues.
 
 ## Best Practices
 

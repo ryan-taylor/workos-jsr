@@ -1,13 +1,16 @@
-# Contributing to @ryantaylor/workos
+# Contributing to the WorkOS Node.js SDK
 
-Thank you for considering contributing to the Deno/JSR port of WorkOS! This document
-outlines the standards and processes we follow for this project.
+Thank you for considering contributing to the Deno/JSR port of WorkOS! This
+document outlines the standards and processes we follow for this project.
+
 ## Deno-Native Development
 
-This project is a Deno-native implementation of the WorkOS SDK. When contributing, please:
+This project is a Deno-native implementation of the WorkOS SDK. When
+contributing, please:
 
 1. Always use Deno and Fresh 2.x compatibility as your primary target
-2. Use Deno-native APIs and approaches, avoiding Node.js patterns or compatibility layers
+2. Use Deno-native APIs and approaches, avoiding Node.js patterns or
+   compatibility layers
 3. Maintain strict TypeScript typing and leverage Deno's type system
 4. Test exclusively with Deno's native testing framework
 5. Document all code with Deno-centric usage examples
@@ -40,8 +43,8 @@ deno task test:coverage
 deno task coverage:html
 ```
 
-For detailed information about our testing approach, see [docs/test-coverage.md](docs/test-coverage.md).
-5. Document Deno-specific usage patterns
+For detailed information about our testing approach, see
+[docs/test-coverage.md](docs/test-coverage.md).
 
 ## Commit Message Convention
 
@@ -149,29 +152,40 @@ All quality gates are enforced through GitHub Actions:
 2. **Commit Message Format**: All commits are automatically checked against the
    Conventional Commits specification using commitlint.
 
-3. **Pre-commit Hook for Generated Code**: A pre-commit hook ensures that the OpenAPI-generated code is up-to-date:
+3. **Pre-commit Hook for Generated Code**: A pre-commit hook ensures that the
+   OpenAPI-generated code is up-to-date:
    - Automatically runs `deno task generate:api` before each commit
    - Checks if there are any changes to the generated files
-   - Aborts the commit if the generated code is out-of-date, prompting you to run the task and commit the changes
+   - Aborts the commit if the generated code is out-of-date, prompting you to
+     run the task and commit the changes
 
-The pre-commit hook helps prevent CI failures by ensuring the generated code is always up-to-date with the specification.
+The pre-commit hook helps prevent CI failures by ensuring the generated code is
+always up-to-date with the specification.
 
 ## Import Map Management
 
 ### What are Import Maps?
 
-Import maps are a crucial feature in Deno that map import specifiers to their actual location, whether that's a URL, a local file, or a JSR package. They serve several important functions in this project:
+Import maps are a crucial feature in Deno that map import specifiers to their
+actual location, whether that's a URL, a local file, or a JSR package. They
+serve several important functions in this project:
 
-1. **Dependency Management**: Centralizing all external dependencies in one configuration file
-2. **URL Abstraction**: Allowing us to use clean import paths without hard-coding URLs throughout the codebase
+1. **Dependency Management**: Centralizing all external dependencies in one
+   configuration file
+2. **URL Abstraction**: Allowing us to use clean import paths without
+   hard-coding URLs throughout the codebase
 3. **Version Control**: Pinning specific versions of dependencies for stability
-4. **JSR Integration**: Simplifying migration from other sources (like deno.land/std or esm.sh) to JSR.io packages
+4. **JSR Integration**: Simplifying migration from other sources (like
+   deno.land/std or esm.sh) to JSR.io packages
 
-The import map is defined in the file specified by the `importMap` field in `deno.json` (default: `import_map.json`).
+The import map is defined in the file specified by the `importMap` field in
+`deno.json` (default: `import_map.json`).
 
 ### Validating the Import Map
 
-We have a validation script (`scripts/check-import-map.ts`) that automatically scans the codebase for unmapped imports. This tool helps prevent runtime errors due to missing dependencies.
+We have a validation script (`scripts/check-import-map.ts`) that automatically
+scans the codebase for unmapped imports. This tool helps prevent runtime errors
+due to missing dependencies.
 
 To run the script:
 
@@ -184,7 +198,9 @@ deno run -A scripts/check-import-map.ts --fix
 ```
 
 The script will:
-1. Scan directories specified in `TARGET_DIRS` for `.ts`, `.tsx`, `.js`, and `.jsx` files
+
+1. Scan directories specified in `TARGET_DIRS` for `.ts`, `.tsx`, `.js`, and
+   `.jsx` files
 2. Extract all import specifiers using regex patterns
 3. Check if each specifier is covered by the import map
 4. Report unmapped imports with JSR-formatted suggestions
@@ -195,17 +211,20 @@ The script will:
 When adding new dependencies or updating existing ones:
 
 1. **Scan for unmapped imports first**:
+
    ```bash
    deno run -A scripts/check-import-map.ts
    ```
 
-2. **Review suggested mappings** and consider if they should be added as-is or modified.
+2. **Review suggested mappings** and consider if they should be added as-is or
+   modified.
 
 3. **Update the import map** either:
    - Manually by editing the import map file, or
    - Automatically by running `deno run -A scripts/check-import-map.ts --fix`
 
-4. **Verify changes** by running the test suite to ensure everything works with the new mappings.
+4. **Verify changes** by running the test suite to ensure everything works with
+   the new mappings.
 
 5. **Commit the updated import map** along with any code changes.
 
@@ -215,13 +234,38 @@ When adding new dependencies or updating existing ones:
 2. **Use semantic versioning** when specifying package versions
 3. **Keep the import map organized** with related dependencies grouped together
 4. **Document non-obvious mappings** with comments in the import map file
-5. **Run the validation script before committing** changes to catch unmapped imports early
+5. **Run the validation script before committing** changes to catch unmapped
+   imports early
 6. **Avoid duplicative mappings** that point to the same target
 7. **Remove unused mappings** when dependencies are no longer needed
 
+## Code Style Guidelines
+
+We follow these code style principles to ensure consistency throughout the
+codebase:
+
+1. **TypeScript Strictness**: Use strict type checking with explicit type
+   annotations.
+2. **Modern JavaScript Features**: Leverage modern JavaScript syntax including
+   optional chaining, nullish coalescing, and top-level await.
+3. **Functional Patterns**: Prefer immutable data structures and pure functions
+   where appropriate.
+4. **Error Handling**: Always use explicit error handling with typed error
+   objects.
+5. **Documentation**: All public APIs must have JSDoc comments with parameter
+   and return type documentation.
+6. **Naming Conventions**:
+   - Use camelCase for variables, functions, and method names
+   - Use PascalCase for class, type, interface, and enum names
+   - Use UPPER_SNAKE_CASE for constants
+   - Use kebab-case for file names
+
+All code should be formatted using `deno fmt` before committing.
+
 ## Publishing to JSR.io
 
-This project is published to JSR.io, the modern registry for JavaScript and TypeScript packages. To publish a new version:
+This project is published to JSR.io, the modern registry for JavaScript and
+TypeScript packages. To publish a new version:
 
 1. Ensure all tests are passing with `deno task test`
 2. Update version numbers in:
@@ -231,18 +275,18 @@ This project is published to JSR.io, the modern registry for JavaScript and Type
 3. Create a git tag for the release version
 4. Run `jsr publish` to publish to JSR.io
 
-Make sure you have the appropriate permissions for publishing to the JSR.io registry.
-
-The configuration extends `@commitlint/config-conventional`, which enforces the
-Conventional Commits specification described above.
+Make sure you have the appropriate permissions for publishing to the JSR.io
+registry.
 
 ## Pull Request Process
 
-1. Ensure your code maintains comprehensive test coverage using Deno's testing framework
+1. Ensure your code maintains comprehensive test coverage using Deno's testing
+   framework
 2. Verify compatibility with Deno 2.x and Fresh 2.x Canary
 3. Update documentation with Deno-specific examples
 4. Make sure all GitHub Actions checks pass
-5. Submit your pull request with a detailed description of your changes that follows our commit message convention
+5. Submit your pull request with a detailed description of your changes that
+   follows our commit message convention
 
 ### Pull Request Checks
 
@@ -253,5 +297,8 @@ Before submitting your PR, ensure:
 3. Types check with `deno check`
 4. Any new functionality includes appropriate tests
 5. Documentation is updated to reflect your changes
+6. The import map is updated to include any new dependencies using the import
+   map validation script
 
-For significant changes, consider adding examples in the examples directory that demonstrate the feature with Deno and Fresh.
+For significant changes, consider adding examples in the examples directory that
+demonstrate the feature with Deno and Fresh.

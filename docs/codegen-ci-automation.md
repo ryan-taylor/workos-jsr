@@ -1,16 +1,20 @@
 # OpenAPI Codegen CI Automation
 
-This document describes the CI automation tools for the OpenAPI code generation system.
+This document describes the CI automation tools for the OpenAPI code generation
+system.
 
 ## Overview
 
-The CI automation tools provide safety rails when the WorkOS API spec evolves. They help catch dialect changes early and assist with upgrades between OpenAPI versions (3.0 → 3.1 → 4.0).
+The CI automation tools provide safety rails when the WorkOS API spec evolves.
+They help catch dialect changes early and assist with upgrades between OpenAPI
+versions (3.0 → 3.1 → 4.0).
 
 ## Tools
 
 ### 1. Dialect Diff Check (`scripts/ci/dialect-diff-check.sh`)
 
-This bash script detects changes in the OpenAPI dialect between spec versions and can:
+This bash script detects changes in the OpenAPI dialect between spec versions
+and can:
 
 - Extract the dialect information from OpenAPI specs
 - Compare it against the previous version
@@ -38,7 +42,8 @@ deno task ci:dialect-check --spec-dir=./custom/path
 
 ### 2. Codegen Upgrade (`scripts/codegen/upgrade.ts`)
 
-This script handles automatic detection and upgrading between different OpenAPI dialect versions. It:
+This script handles automatic detection and upgrading between different OpenAPI
+dialect versions. It:
 
 - Detects dialect bumps
 - Switches adapters automatically based on dialect
@@ -63,7 +68,8 @@ deno task codegen:upgrade --fallback=strict|warn|auto
 
 ### 3. Automatic Adapter Selection (`scripts/codegen/detect_adapter.ts`)
 
-This standalone script automatically detects OpenAPI versions and selects the appropriate generator adapter. It:
+This standalone script automatically detects OpenAPI versions and selects the
+appropriate generator adapter. It:
 
 - Examines OpenAPI spec files to determine their version
 - Selects the optimal adapter for code generation
@@ -86,19 +92,25 @@ const { version, adapter } = await detectAdapter("path/to/spec.json");
 
 ## Automatic Adapter Discovery
 
-The system automatically detects OpenAPI versions from specification files and selects the appropriate generator adapter. This eliminates the need for manual adapter configuration and ensures the correct generator is used for each spec version.
+The system automatically detects OpenAPI versions from specification files and
+selects the appropriate generator adapter. This eliminates the need for manual
+adapter configuration and ensures the correct generator is used for each spec
+version.
 
 ### How it Works
 
 1. The system examines an OpenAPI specification file to determine its version
 2. It looks first for an OpenAPI dialect identifier (`x-openapi-dialect`)
 3. If not found, it falls back to standard OpenAPI or Swagger version fields
-4. Based on the detected version, it selects the most appropriate generator adapter
-5. If no adapter explicitly supports the version, the fallback mechanism is applied
+4. Based on the detected version, it selects the most appropriate generator
+   adapter
+5. If no adapter explicitly supports the version, the fallback mechanism is
+   applied
 
 ### Fallback Mechanism
 
-The fallback mechanism handles cases where no adapter explicitly supports the detected OpenAPI version. It has three configurable modes:
+The fallback mechanism handles cases where no adapter explicitly supports the
+detected OpenAPI version. It has three configurable modes:
 
 #### Fallback Modes
 
@@ -118,7 +130,8 @@ The fallback mechanism handles cases where no adapter explicitly supports the de
 
 The fallback behavior can be configured in multiple ways:
 
-1. **Environment Variable**: Set `OPENAPI_ADAPTER_FALLBACK` to `strict`, `warn`, or `auto`
+1. **Environment Variable**: Set `OPENAPI_ADAPTER_FALLBACK` to `strict`, `warn`,
+   or `auto`
    ```bash
    # In your shell or CI configuration
    export OPENAPI_ADAPTER_FALLBACK=strict
@@ -131,7 +144,10 @@ The fallback behavior can be configured in multiple ways:
 
 3. **API Parameter**: When using as a module, pass the fallback mode directly
    ```typescript
-   import { detectAdapter, FallbackMode } from "./scripts/codegen/detect_adapter.ts";
+   import {
+     detectAdapter,
+     FallbackMode,
+   } from "./scripts/codegen/detect_adapter.ts";
    const result = await detectAdapter("path/to/spec.json", FallbackMode.STRICT);
    ```
 
@@ -164,7 +180,7 @@ const specPath = "./vendor/openapi/workos-latest.json";
 const outputDir = "./generated";
 
 const { adapter } = await detectAdapter(specPath);
-await adapter.generate(specPath, outputDir, { /* options */ });
+await adapter.generate(specPath, outputDir, {/* options */});
 ```
 
 ## CI Pipeline Integration
@@ -196,19 +212,24 @@ Here's an example of how to integrate these tools into a CI workflow:
 
 1. **No OpenAPI Version Detected**
    - Error: "Could not determine OpenAPI version from spec file"
-   - Solution: Ensure your spec has either an `openapi` or `swagger` field with a valid version string
+   - Solution: Ensure your spec has either an `openapi` or `swagger` field with
+     a valid version string
 
 2. **Unsupported Version with STRICT Mode**
    - Error: "No generator explicitly supports OpenAPI X.Y"
-   - Solution: Either change fallback mode to `warn` or `auto`, or use a supported OpenAPI version
+   - Solution: Either change fallback mode to `warn` or `auto`, or use a
+     supported OpenAPI version
 
 3. **Type Errors in Generated Code**
-   - Issue: Type errors may occur with fallback adapters for newer OpenAPI versions
-   - Solution: Check the post-processing steps and consider adding custom transforms for new dialect features
+   - Issue: Type errors may occur with fallback adapters for newer OpenAPI
+     versions
+   - Solution: Check the post-processing steps and consider adding custom
+     transforms for new dialect features
 
 ### Exit Codes
 
-The detection and upgrade tools use specific exit codes to indicate different states:
+The detection and upgrade tools use specific exit codes to indicate different
+states:
 
 - `0`: Success / No upgrade needed
 - `1`: Error occurred during execution
@@ -217,7 +238,9 @@ The detection and upgrade tools use specific exit codes to indicate different st
 
 ## OpenAPI 4.0 Preparation
 
-The OpenAPI Specification is evolving toward version 4.0, which will bring significant changes. Our automatic adapter system is designed to help manage this transition.
+The OpenAPI Specification is evolving toward version 4.0, which will bring
+significant changes. Our automatic adapter system is designed to help manage
+this transition.
 
 ### Current Status
 
@@ -240,14 +263,18 @@ As OpenAPI 4.0 approaches:
 
 To prepare for OpenAPI 4.0:
 
-1. **Set fallback mode to `WARN`** during development to be notified of version compatibility issues
+1. **Set fallback mode to `WARN`** during development to be notified of version
+   compatibility issues
 2. **Run with `STRICT` mode in CI** to catch incompatible specs early
 3. **Monitor dialect changes** using the `dialect-diff-check.sh` script
-4. **Consider enabling automated upgrades** in your workflow to handle dialect changes automatically
+4. **Consider enabling automated upgrades** in your workflow to handle dialect
+   changes automatically
 
 ## Best Practices
 
 - Run the dialect check early in your CI pipeline to catch API changes
 - Use the `codegen:upgrade` script when updating to a new spec version
-- Set `OPENAPI_ADAPTER_FALLBACK=strict` in CI to catch compatibility issues early
-- Use `detectAdapter` in custom scripts to ensure the correct adapter is selected
+- Set `OPENAPI_ADAPTER_FALLBACK=strict` in CI to catch compatibility issues
+  early
+- Use `detectAdapter` in custom scripts to ensure the correct adapter is
+  selected

@@ -2,25 +2,39 @@
 
 [![JSR Version](https://jsr.io/badges/@ryantaylor/workos)](https://jsr.io/@ryantaylor/workos)
 [![Build Status](https://github.com/ryan-taylor/workos-jsr/actions/workflows/ci.yml/badge.svg)](https://github.com/ryan-taylor/workos-jsr/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/badge/coverage-80%25-brightgreen)](coverage_html/index.html)
 
 ## Overview
 
-This library provides seamless integration with the WorkOS API for applications written in Deno and JavaScript/TypeScript. This project benefits from the official WorkOS SDK; sincere appreciation is extended to the WorkOS project team and all contributors for their efforts.
+This library provides seamless integration with the WorkOS API for applications
+written in Deno and JavaScript/TypeScript. This project benefits from the
+official WorkOS SDK; sincere appreciation is extended to the WorkOS project team
+and all contributors for their efforts.
 
-The SDK is fully Deno-native, designed to work with Deno 2.x and Fresh 2.x with enhanced type safety and improved performance. Key features include:
+The SDK is fully Deno-native, designed to work with Deno 2.x and Fresh 2.x with
+enhanced type safety and improved performance. Key features include:
 
-- **Fine-Grained Authorization (FGA)**: A complete implementation of WorkOS's authorization system
+- **Fine-Grained Authorization (FGA)**: A complete implementation of WorkOS's
+  authorization system
 - **Type-Safe User Management**: Enhanced session handling with proper typing
 - **Directory Sync**: Improved serialization and type-safe directory management
-- **Pure Deno Implementation**: No compatibility layers, built for Deno from the ground up
+- **Pure Deno Implementation**: No compatibility layers, built for Deno from the
+  ground up
 
 ## Relationship to the Official SDK
 
-This package is a fork of the [workos-inc/workos-node](https://github.com/workos-inc/workos-node) repository, adapted specifically for Deno and JSR compatibility. Upstream changes are tracked for reference, and semantic versioning is applied independently for this implementation.
+This package is a fork of the
+[workos-inc/workos-node](https://github.com/workos-inc/workos-node) repository,
+adapted specifically for Deno and JSR compatibility. Upstream changes are
+tracked for reference, and semantic versioning is applied independently for this
+implementation.
 
 ## Documentation
 
-Refer to the [WorkOS API Reference](https://workos.com/docs/reference/client-libraries) maintained by the WorkOS project for detailed API documentation. Thank you to the WorkOS maintainers and contributors for their continued work.
+Refer to the
+[WorkOS API Reference](https://workos.com/docs/reference/client-libraries)
+maintained by the WorkOS project for detailed API documentation. Thank you to
+the WorkOS maintainers and contributors for their continued work.
 
 ## Requirements
 
@@ -50,7 +64,8 @@ Or add the following to your `deno.json` imports:
 
 ### npm Compatibility
 
-While we focus on Deno as our primary platform, we also maintain an npm distribution for compatibility with Node.js environments:
+While we focus on Deno as our primary platform, we also maintain an npm
+distribution for compatibility with Node.js environments:
 
 ```bash
 npm install @ryantaylor/workos
@@ -60,7 +75,8 @@ See the "npm Compatibility" section below for more details.
 
 ## JSR.io Package
 
-This library is published to [JSR.io](https://jsr.io/@ryantaylor/workos), a modern registry optimized for Deno and web projects.
+This library is published to [JSR.io](https://jsr.io/@ryantaylor/workos), a
+modern registry optimized for Deno and web projects.
 
 ## Configuration
 
@@ -71,7 +87,7 @@ import { WorkOS } from "@ryantaylor/workos";
 
 const workos = new WorkOS(
   Deno.env.get("WORKOS_API_KEY") ?? "",
-  { clientId: Deno.env.get("WORKOS_CLIENT_ID") }
+  { clientId: Deno.env.get("WORKOS_CLIENT_ID") },
 );
 ```
 
@@ -86,7 +102,8 @@ SESSION_SECRET=a_strong_random_string_for_cookie_encryption
 WORKOS_WEBHOOK_SECRET=your_workos_webhook_signing_secret
 ```
 
-In production environments, it is recommended to use a secure secrets management service instead of environment files.
+In production environments, it is recommended to use a secure secrets management
+service instead of environment files.
 
 ## Getting Started
 
@@ -98,9 +115,38 @@ deno task dev
 
 Changes will be reflected in real time.
 
-## OpenTelemetry Integration
+## Import Map Validation
 
-Built-in support for OpenTelemetry enables observability of SDK usage, performance, and errors. Example configuration:
+This project uses import maps to manage dependencies. To ensure all imports are
+properly mapped, we provide a validation tool:
+
+```bash
+deno run -A scripts/check-import-map.ts
+```
+
+This script:
+
+- Scans TypeScript/JavaScript files in key directories
+- Identifies imports not covered by the import map
+- Provides JSR-formatted suggestions for unmapped imports
+
+To automatically fix unmapped imports, run:
+
+```bash
+deno run -A scripts/check-import-map.ts --fix
+```
+
+When adding new dependencies, always update your import map to ensure proper
+resolution. The validation tool will help identify:
+
+- Missing entries in your import map
+- Imports that could be converted to JSR format
+- Potential issues with dependency resolution
+
+## Observability with OpenTelemetry
+
+Built-in support for OpenTelemetry enables observability of SDK usage,
+performance, and errors. Example configuration:
 
 ```ts
 const workos = new WorkOS(
@@ -117,11 +163,25 @@ const workos = new WorkOS(
       },
       debug: false,
     },
-  }
+  },
 );
 ```
 
-Telemetry data is exported in the OTLP format and can be collected by an OpenTelemetry Collector, stored in Prometheus, and visualized in Grafana.
+Telemetry data is exported in the OTLP format and can be collected by an
+OpenTelemetry Collector, stored in Prometheus, and visualized in Grafana.
+
+Key metrics and traces include:
+
+- API request latency and error rates
+- Authentication attempt success/failure rates
+- Directory sync operation metrics
+- FGA authorization checks and performance
+
+For production deployments, we recommend:
+
+- Setting up alerts for abnormal error rates or latency
+- Monitoring authentication failures as a security measure
+- Tracking API usage to ensure you stay within rate limits
 
 ## Deployment
 
@@ -134,7 +194,8 @@ Telemetry data is exported in the OTLP format and can be collected by an OpenTel
 
 ### Fine-Grained Authorization (FGA)
 
-The FGA module provides a flexible, scalable authorization system that lets you model complex access control scenarios.
+The FGA module provides a flexible, scalable authorization system that lets you
+model complex access control scenarios.
 
 - Create and manage resources
 - Establish relationships with warrants
@@ -151,7 +212,7 @@ const fga = workos.fga;
 const resource = await fga.createResource({
   resourceType: "document",
   resourceId: "doc-123",
-  meta: { name: "Project Plan" }
+  meta: { name: "Project Plan" },
 });
 
 // Create a relationship (warrant)
@@ -160,7 +221,7 @@ await fga.writeWarrant({
   subjectId: "user-456",
   relation: "editor",
   resourceType: "document",
-  resourceId: "doc-123"
+  resourceId: "doc-123",
 });
 
 // Perform an authorization check
@@ -169,7 +230,7 @@ const checkResult = await fga.check({
   subjectId: "user-456",
   relation: "editor",
   resourceType: "document",
-  resourceId: "doc-123"
+  resourceId: "doc-123",
 });
 
 console.log("Is authorized:", checkResult.result);
@@ -192,7 +253,7 @@ const userManagement = workos.userManagement(sessionProvider);
 const sessionAuth = await userManagement.authenticateWithCode({
   clientId: Deno.env.get("WORKOS_CLIENT_ID") ?? "",
   code: "authorization_code",
-  redirectUri: "https://your-app.com/callback"
+  redirectUri: "https://your-app.com/callback",
 });
 
 // Type-safe access to user properties
@@ -202,7 +263,8 @@ console.log("User Email:", sessionAuth.user.email);
 
 ### Directory Sync
 
-The Directory Sync module manages directory connections with type-safe interfaces:
+The Directory Sync module manages directory connections with type-safe
+interfaces:
 
 - Retrieve directories with proper typing
 - List users and groups with improved serialization
@@ -217,13 +279,13 @@ const directory = await directorySync.getDirectory("directory_123");
 
 // List users with proper typing
 const users = await directorySync.listUsers({
-  directory: "directory_123"
+  directory: "directory_123",
 });
 
 // List groups with pagination
 const groups = await directorySync.listGroups({
   directory: "directory_123",
-  limit: 10
+  limit: 10,
 });
 ```
 
@@ -239,7 +301,7 @@ import { FreshSessionProvider } from "@ryantaylor/workos/common/iron-session/fre
 export function initWorkOS() {
   const workos = new WorkOS(
     Deno.env.get("WORKOS_API_KEY") ?? "",
-    { clientId: Deno.env.get("WORKOS_CLIENT_ID") }
+    { clientId: Deno.env.get("WORKOS_CLIENT_ID") },
   );
 
   // Initialize session provider for user management
@@ -255,10 +317,10 @@ export function initWorkOS() {
 
   // Get typed user management client
   const userManagement = workos.userManagement(sessionProvider);
-  
+
   // Get FGA client
   const fga = workos.fga;
-  
+
   // Get Directory Sync client
   const directorySync = workos.directorySync;
 
@@ -270,18 +332,24 @@ export function initWorkOS() {
 
 Our Deno-native approach provides several key advantages:
 
-- **Enhanced Type Safety**: Proper typing throughout the codebase prevents runtime errors
-- **No Compatibility Layers**: Direct use of Deno APIs without Node.js compatibility shims
+- **Enhanced Type Safety**: Proper typing throughout the codebase prevents
+  runtime errors
+- **No Compatibility Layers**: Direct use of Deno APIs without Node.js
+  compatibility shims
 - **Better Performance**: Native implementations of key functionality
 - **Fresh Framework Integration**: Seamless integration with Fresh 2.x
 - **Simplified Development**: Clean, consistent API patterns across all modules
 
 ## SDK Versioning
 
-This SDK follows Semantic Versioning ([SemVer](https://semver.org/)): versions are formatted as X.Y.Z, where breaking changes are introduced only in major version increments.
+This SDK follows Semantic Versioning ([SemVer](https://semver.org/)): versions
+are formatted as X.Y.Z, where breaking changes are introduced only in major
+version increments.
+
 ## JSR.io Publication Workflow
 
-This package is published to JSR.io, the modern registry for JavaScript and TypeScript packages. To publish new versions:
+This package is published to JSR.io, the modern registry for JavaScript and
+TypeScript packages. To publish new versions:
 
 1. Ensure all tests pass with `deno task test`
 2. Update version numbers in relevant files
@@ -290,18 +358,21 @@ This package is published to JSR.io, the modern registry for JavaScript and Type
 
 ## npm Compatibility
 
-This package offers an npm distribution to support Node.js environments, but with some limitations:
+This package offers an npm distribution to support Node.js environments, but
+with some limitations:
 
 1. The npm distribution is generated from the Deno source code
 2. It may not include all Deno-specific features
-3. It's maintained primarily to support migration paths, not as a first-class Node.js SDK
+3. It's maintained primarily to support migration paths, not as a first-class
+   Node.js SDK
 
-For detailed information on building and publishing the npm distribution, see the [npm/README.md](npm/README.md) file.
+For detailed information on building and publishing the npm distribution, see
+the [npm/README.md](npm/README.md) file.
 
 ## Beta Releases
 
-
-Beta features are available via Beta release tags. Pinning to a specific version is advised to avoid unexpected breaking changes.
+Beta features are available via Beta release tags. Pinning to a specific version
+is advised to avoid unexpected breaking changes.
 
 ## Development Workflow with Deno
 
@@ -327,7 +398,8 @@ deno task test:watch
 deno task test:coverage
 ```
 
-For more details about our testing approach, see [docs/test-coverage.md](docs/test-coverage.md).
+For more details about our testing approach, see
+[docs/test-coverage.md](docs/test-coverage.md).
 
 ### Code Quality Tools
 
@@ -350,7 +422,9 @@ deno check
 
 ## Contributing
 
-Contributions are welcome. Please review the guidelines in `CONTRIBUTING.md` for commit conventions and pull request procedures.
+Contributions are welcome. Please review the guidelines in
+[CONTRIBUTING.md](CONTRIBUTING.md) for commit conventions and pull request
+procedures.
 
 ## More Information
 

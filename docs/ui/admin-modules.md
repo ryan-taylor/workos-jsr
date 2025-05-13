@@ -1,10 +1,12 @@
 # Administrative Modules
 
-This document covers the implementation details for administrative modules in WorkOS, including Admin Portal, Vault, and Actions.
+This document covers the implementation details for administrative modules in
+WorkOS, including Admin Portal, Vault, and Actions.
 
 ## Admin Portal
 
-Admin Portal allows you to create branded administrative interfaces for your customers to manage their organization's settings, users, and connections.
+Admin Portal allows you to create branded administrative interfaces for your
+customers to manage their organization's settings, users, and connections.
 
 ### API Endpoint Setup
 
@@ -22,37 +24,37 @@ export const handler: Handler = async (req) => {
   if (redirectResponse) {
     return redirectResponse;
   }
-  
+
   if (req.method !== "POST") {
     return new Response("Method Not Allowed", { status: 405 });
   }
-  
+
   try {
     const { workos } = initPortal();
     const { organizationId, returnUrl, intent } = await req.json();
-    
+
     if (!organizationId) {
       return Response.json(
-        { error: "Organization ID is required" }, 
-        { status: 400 }
+        { error: "Organization ID is required" },
+        { status: 400 },
       );
     }
-    
+
     // Default to SSO intent if not specified
     const portalIntent = intent || "sso";
-    
+
     // Generate a portal link
     const portalSession = await workos.portal.generateLink({
       organization: organizationId,
       intent: portalIntent,
       returnUrl: returnUrl || new URL(req.url).origin,
     });
-    
+
     return Response.json({ link: portalSession.link });
   } catch (error) {
     return Response.json(
-      { error: error.message || "Failed to generate portal link" }, 
-      { status: 400 }
+      { error: error.message || "Failed to generate portal link" },
+      { status: 400 },
     );
   }
 };
@@ -75,9 +77,9 @@ export const handler: Handlers = {
     if (redirectResponse) {
       return redirectResponse;
     }
-    
+
     return ctx.render();
-  }
+  },
 };
 
 export default function AdminPortal() {
@@ -85,9 +87,10 @@ export default function AdminPortal() {
     <div class="container mx-auto px-4 py-8">
       <h1 class="text-2xl font-bold mb-6">Admin Portal</h1>
       <p class="mb-6">
-        Launch the admin portal to manage your organization's settings, users, and connections.
+        Launch the admin portal to manage your organization's settings, users,
+        and connections.
       </p>
-      
+
       <AdminPortalLauncher />
     </div>
   );
@@ -100,7 +103,7 @@ Create an Island component for launching the admin portal:
 
 ```typescript
 // islands/AdminPortalLauncher.tsx
-import { useState, useEffect } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 
 interface Organization {
   id: string;
@@ -114,19 +117,19 @@ export default function AdminPortalLauncher() {
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
-  
+
   useEffect(() => {
     fetchOrganizations();
   }, []);
-  
+
   const fetchOrganizations = async () => {
     try {
       const response = await fetch("/api/organizations");
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch organizations");
       }
-      
+
       const data = await response.json();
       setOrganizations(data.organizations.data || []);
     } catch (err) {
@@ -135,16 +138,16 @@ export default function AdminPortalLauncher() {
       setLoading(false);
     }
   };
-  
+
   const handleLaunchPortal = async () => {
     if (!selectedOrganization) {
       setError("Please select an organization");
       return;
     }
-    
+
     setGenerating(true);
     setError("");
-    
+
     try {
       const response = await fetch("/api/admin/portal", {
         method: "POST",
@@ -157,14 +160,14 @@ export default function AdminPortalLauncher() {
           returnUrl: window.location.href,
         }),
       });
-      
+
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.error || "Failed to generate portal link");
       }
-      
+
       const { link } = await response.json();
-      
+
       // Redirect to the portal
       window.location.href = link;
     } catch (err) {
@@ -172,11 +175,11 @@ export default function AdminPortalLauncher() {
       setGenerating(false);
     }
   };
-  
+
   if (loading) {
     return <div>Loading organizations...</div>;
   }
-  
+
   return (
     <div class="max-w-lg bg-white p-6 rounded-lg shadow-md">
       <div class="mb-4">
@@ -186,19 +189,20 @@ export default function AdminPortalLauncher() {
         <select
           id="organization"
           value={selectedOrganization}
-          onChange={(e) => setSelectedOrganization((e.target as HTMLSelectElement).value)}
+          onChange={(e) =>
+            setSelectedOrganization((e.target as HTMLSelectElement).value)}
           class="w-full p-2 border rounded"
           required
         >
           <option value="">-- Select an Organization --</option>
-          {organizations.map(org => (
+          {organizations.map((org) => (
             <option key={org.id} value={org.id}>
               {org.name}
             </option>
           ))}
         </select>
       </div>
-      
+
       <div class="mb-6">
         <label class="block mb-2">Portal Intent</label>
         <div class="flex space-x-4">
@@ -213,7 +217,7 @@ export default function AdminPortalLauncher() {
             />
             <span>SSO</span>
           </label>
-          
+
           <label class="flex items-center">
             <input
               type="radio"
@@ -225,7 +229,7 @@ export default function AdminPortalLauncher() {
             />
             <span>Directory Sync</span>
           </label>
-          
+
           <label class="flex items-center">
             <input
               type="radio"
@@ -239,7 +243,7 @@ export default function AdminPortalLauncher() {
           </label>
         </div>
       </div>
-      
+
       <button
         onClick={handleLaunchPortal}
         disabled={generating || !selectedOrganization}
@@ -247,7 +251,7 @@ export default function AdminPortalLauncher() {
       >
         {generating ? "Generating Link..." : "Launch Admin Portal"}
       </button>
-      
+
       {error && <div class="text-red-500 mt-4">{error}</div>}
     </div>
   );
@@ -256,7 +260,8 @@ export default function AdminPortalLauncher() {
 
 ## Vault
 
-Vault provides a secure way to store and manage sensitive data such as API keys, credentials, and other secrets.
+Vault provides a secure way to store and manage sensitive data such as API keys,
+credentials, and other secrets.
 
 ### API Endpoint Setup
 
@@ -274,27 +279,27 @@ export const handler: Handler = async (req) => {
   if (redirectResponse) {
     return redirectResponse;
   }
-  
+
   const { workos } = initVault();
-  
+
   if (req.method === "GET") {
     try {
       const url = new URL(req.url);
       const organizationId = url.searchParams.get("organization_id");
-      
+
       if (!organizationId) {
         return Response.json(
-          { error: "Organization ID is required" }, 
-          { status: 400 }
+          { error: "Organization ID is required" },
+          { status: 400 },
         );
       }
-      
+
       const { data: credentials } = await workos.vault.listCredentials({
         organizationId,
       });
-      
+
       // Sanitize response to not expose sensitive values
-      const sanitizedCredentials = credentials.map(cred => ({
+      const sanitizedCredentials = credentials.map((cred) => ({
         id: cred.id,
         type: cred.type,
         name: cred.name,
@@ -302,36 +307,40 @@ export const handler: Handler = async (req) => {
         createdAt: cred.createdAt,
         // Don't include clientSecret, clientId or other sensitive fields
       }));
-      
+
       return Response.json({ credentials: sanitizedCredentials });
     } catch (error) {
       return Response.json(
-        { error: error.message || "Failed to fetch credentials" }, 
-        { status: 400 }
+        { error: error.message || "Failed to fetch credentials" },
+        { status: 400 },
       );
     }
   } else if (req.method === "POST") {
     try {
-      const { type, name, organizationId, clientId, clientSecret } = await req.json();
-      
+      const { type, name, organizationId, clientId, clientSecret } = await req
+        .json();
+
       if (!type || !name || !organizationId) {
         return Response.json(
-          { error: "Type, name, and organization ID are required" }, 
-          { status: 400 }
+          { error: "Type, name, and organization ID are required" },
+          { status: 400 },
         );
       }
-      
+
       // Different credential types need different fields
       let credential;
-      
+
       if (type === "oauth") {
         if (!clientId || !clientSecret) {
           return Response.json(
-            { error: "Client ID and client secret are required for OAuth credentials" }, 
-            { status: 400 }
+            {
+              error:
+                "Client ID and client secret are required for OAuth credentials",
+            },
+            { status: 400 },
           );
         }
-        
+
         credential = await workos.vault.createCredential({
           type,
           name,
@@ -342,11 +351,11 @@ export const handler: Handler = async (req) => {
       } else {
         // Handle other credential types as needed
         return Response.json(
-          { error: `Unsupported credential type: ${type}` }, 
-          { status: 400 }
+          { error: `Unsupported credential type: ${type}` },
+          { status: 400 },
         );
       }
-      
+
       // Don't return sensitive information
       const sanitizedCredential = {
         id: credential.id,
@@ -355,12 +364,12 @@ export const handler: Handler = async (req) => {
         organizationId: credential.organizationId,
         createdAt: credential.createdAt,
       };
-      
+
       return Response.json({ credential: sanitizedCredential });
     } catch (error) {
       return Response.json(
-        { error: error.message || "Failed to create credential" }, 
-        { status: 400 }
+        { error: error.message || "Failed to create credential" },
+        { status: 400 },
       );
     }
   } else {
@@ -383,20 +392,20 @@ export const handler: Handler = async (req, ctx) => {
   if (redirectResponse) {
     return redirectResponse;
   }
-  
+
   const credentialId = ctx.params.id;
-  
+
   if (req.method === "DELETE") {
     try {
       const { workos } = initVault();
-      
+
       await workos.vault.deleteCredential(credentialId);
-      
+
       return Response.json({ success: true });
     } catch (error) {
       return Response.json(
-        { error: error.message || "Failed to delete credential" }, 
-        { status: 400 }
+        { error: error.message || "Failed to delete credential" },
+        { status: 400 },
       );
     }
   } else {
@@ -420,9 +429,9 @@ export const handler: Handlers = {
     if (redirectResponse) {
       return redirectResponse;
     }
-    
+
     return ctx.render();
-  }
+  },
 };
 
 export default function Vault() {
@@ -430,9 +439,10 @@ export default function Vault() {
     <div class="container mx-auto px-4 py-8">
       <h1 class="text-2xl font-bold mb-6">Vault Manager</h1>
       <p class="mb-6">
-        Securely store and manage credentials and secrets for your organizations.
+        Securely store and manage credentials and secrets for your
+        organizations.
       </p>
-      
+
       <VaultManager />
     </div>
   );
@@ -443,7 +453,7 @@ export default function Vault() {
 
 ```typescript
 // islands/VaultManager.tsx
-import { useState, useEffect } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 
 interface Organization {
   id: string;
@@ -464,7 +474,7 @@ export default function VaultManager() {
   const [credentials, setCredentials] = useState<Credential[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  
+
   // New credential form state
   const [showForm, setShowForm] = useState(false);
   const [credentialType, setCredentialType] = useState("oauth");
@@ -472,25 +482,25 @@ export default function VaultManager() {
   const [clientId, setClientId] = useState("");
   const [clientSecret, setClientSecret] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  
+
   useEffect(() => {
     fetchOrganizations();
   }, []);
-  
+
   useEffect(() => {
     if (selectedOrganization) {
       fetchCredentials();
     }
   }, [selectedOrganization]);
-  
+
   const fetchOrganizations = async () => {
     try {
       const response = await fetch("/api/organizations");
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch organizations");
       }
-      
+
       const data = await response.json();
       setOrganizations(data.organizations.data || []);
     } catch (err) {
@@ -499,20 +509,20 @@ export default function VaultManager() {
       setLoading(false);
     }
   };
-  
+
   const fetchCredentials = async () => {
     setLoading(true);
     setError("");
-    
+
     try {
       const response = await fetch(
-        `/api/vault/credentials?organization_id=${selectedOrganization}`
+        `/api/vault/credentials?organization_id=${selectedOrganization}`,
       );
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch credentials");
       }
-      
+
       const data = await response.json();
       setCredentials(data.credentials || []);
     } catch (err) {
@@ -521,12 +531,12 @@ export default function VaultManager() {
       setLoading(false);
     }
   };
-  
+
   const handleCreateCredential = async (e: Event) => {
     e.preventDefault();
     setSubmitting(true);
     setError("");
-    
+
     try {
       const response = await fetch("/api/vault/credentials", {
         method: "POST",
@@ -541,18 +551,18 @@ export default function VaultManager() {
           clientSecret,
         }),
       });
-      
+
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.error || "Failed to create credential");
       }
-      
+
       // Reset form
       setCredentialName("");
       setClientId("");
       setClientSecret("");
       setShowForm(false);
-      
+
       // Refresh credentials
       await fetchCredentials();
     } catch (err) {
@@ -561,35 +571,35 @@ export default function VaultManager() {
       setSubmitting(false);
     }
   };
-  
+
   const handleDeleteCredential = async (credentialId: string) => {
     if (!confirm("Are you sure you want to delete this credential?")) {
       return;
     }
-    
+
     setError("");
-    
+
     try {
       const response = await fetch(`/api/vault/credentials/${credentialId}`, {
         method: "DELETE",
       });
-      
+
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.error || "Failed to delete credential");
       }
-      
+
       // Refresh credentials
       await fetchCredentials();
     } catch (err) {
       setError(err.message || "An error occurred");
     }
   };
-  
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString();
   };
-  
+
   return (
     <div>
       <div class="mb-6">
@@ -599,18 +609,19 @@ export default function VaultManager() {
         <select
           id="organization"
           value={selectedOrganization}
-          onChange={(e) => setSelectedOrganization((e.target as HTMLSelectElement).value)}
+          onChange={(e) =>
+            setSelectedOrganization((e.target as HTMLSelectElement).value)}
           class="w-full max-w-md p-2 border rounded"
         >
           <option value="">-- Select an Organization --</option>
-          {organizations.map(org => (
+          {organizations.map((org) => (
             <option key={org.id} value={org.id}>
               {org.name}
             </option>
           ))}
         </select>
       </div>
-      
+
       {selectedOrganization && (
         <div>
           <div class="flex justify-between items-center mb-4">
@@ -622,60 +633,64 @@ export default function VaultManager() {
               {showForm ? "Cancel" : "Add Credential"}
             </button>
           </div>
-          
+
           {showForm && (
             <div class="bg-white p-6 rounded-lg shadow-md mb-6">
               <h3 class="text-lg font-medium mb-4">Create New Credential</h3>
-              
+
               <form onSubmit={handleCreateCredential}>
                 <div class="mb-4">
                   <label class="block mb-2">Credential Type</label>
                   <select
                     value={credentialType}
-                    onChange={(e) => setCredentialType((e.target as HTMLSelectElement).value)}
+                    onChange={(e) =>
+                      setCredentialType((e.target as HTMLSelectElement).value)}
                     class="w-full p-2 border rounded"
                     required
                   >
                     <option value="oauth">OAuth</option>
                   </select>
                 </div>
-                
+
                 <div class="mb-4">
                   <label class="block mb-2">Name</label>
                   <input
                     type="text"
                     value={credentialName}
-                    onChange={(e) => setCredentialName((e.target as HTMLInputElement).value)}
+                    onChange={(e) =>
+                      setCredentialName((e.target as HTMLInputElement).value)}
                     class="w-full p-2 border rounded"
                     placeholder="My OAuth Credential"
                     required
                   />
                 </div>
-                
+
                 <div class="mb-4">
                   <label class="block mb-2">Client ID</label>
                   <input
                     type="text"
                     value={clientId}
-                    onChange={(e) => setClientId((e.target as HTMLInputElement).value)}
+                    onChange={(e) =>
+                      setClientId((e.target as HTMLInputElement).value)}
                     class="w-full p-2 border rounded"
                     placeholder="client_123"
                     required
                   />
                 </div>
-                
+
                 <div class="mb-4">
                   <label class="block mb-2">Client Secret</label>
                   <input
                     type="password"
                     value={clientSecret}
-                    onChange={(e) => setClientSecret((e.target as HTMLInputElement).value)}
+                    onChange={(e) =>
+                      setClientSecret((e.target as HTMLInputElement).value)}
                     class="w-full p-2 border rounded"
                     placeholder="••••••••••••••••"
                     required
                   />
                 </div>
-                
+
                 <button
                   type="submit"
                   disabled={submitting}
@@ -686,15 +701,15 @@ export default function VaultManager() {
               </form>
             </div>
           )}
-          
+
           {loading && <div>Loading credentials...</div>}
-          
+
           {error && <div class="text-red-500 mb-4">{error}</div>}
-          
+
           {!loading && credentials.length === 0 && (
             <div>No credentials found for this organization.</div>
           )}
-          
+
           {credentials.length > 0 && (
             <div class="overflow-x-auto">
               <table class="w-full border-collapse table-auto">
@@ -707,7 +722,7 @@ export default function VaultManager() {
                   </tr>
                 </thead>
                 <tbody>
-                  {credentials.map(cred => (
+                  {credentials.map((cred) => (
                     <tr key={cred.id} class="border-b">
                       <td class="p-2 border">{cred.name}</td>
                       <td class="p-2 border">{cred.type}</td>
@@ -735,7 +750,8 @@ export default function VaultManager() {
 
 ## Actions
 
-Actions allow you to create custom workflows that trigger based on events in your WorkOS account.
+Actions allow you to create custom workflows that trigger based on events in
+your WorkOS account.
 
 ### API Endpoint Setup
 
@@ -753,47 +769,47 @@ export const handler: Handler = async (req) => {
   if (redirectResponse) {
     return redirectResponse;
   }
-  
+
   const { workos } = initActions();
-  
+
   if (req.method === "GET") {
     try {
       const url = new URL(req.url);
       const status = url.searchParams.get("status") || undefined;
-      
+
       const { data: actions } = await workos.actions.listActions({
         status,
       });
-      
+
       return Response.json({ actions });
     } catch (error) {
       return Response.json(
-        { error: error.message || "Failed to fetch actions" }, 
-        { status: 400 }
+        { error: error.message || "Failed to fetch actions" },
+        { status: 400 },
       );
     }
   } else if (req.method === "POST") {
     try {
       const { name, type, configuration } = await req.json();
-      
+
       if (!name || !type) {
         return Response.json(
-          { error: "Name and type are required" }, 
-          { status: 400 }
+          { error: "Name and type are required" },
+          { status: 400 },
         );
       }
-      
+
       const action = await workos.actions.createAction({
         name,
         type,
         configuration,
       });
-      
+
       return Response.json({ action });
     } catch (error) {
       return Response.json(
-        { error: error.message || "Failed to create action" }, 
-        { status: 400 }
+        { error: error.message || "Failed to create action" },
+        { status: 400 },
       );
     }
   } else {
@@ -816,47 +832,47 @@ export const handler: Handler = async (req, ctx) => {
   if (redirectResponse) {
     return redirectResponse;
   }
-  
+
   const actionId = ctx.params.id;
   const { workos } = initActions();
-  
+
   if (req.method === "GET") {
     try {
       const action = await workos.actions.getAction(actionId);
-      
+
       return Response.json({ action });
     } catch (error) {
       return Response.json(
-        { error: error.message || "Failed to fetch action" }, 
-        { status: 400 }
+        { error: error.message || "Failed to fetch action" },
+        { status: 400 },
       );
     }
   } else if (req.method === "DELETE") {
     try {
       await workos.actions.deleteAction(actionId);
-      
+
       return Response.json({ success: true });
     } catch (error) {
       return Response.json(
-        { error: error.message || "Failed to delete action" }, 
-        { status: 400 }
+        { error: error.message || "Failed to delete action" },
+        { status: 400 },
       );
     }
   } else if (req.method === "PATCH") {
     try {
       const { name, configuration, status } = await req.json();
-      
+
       const action = await workos.actions.updateAction(actionId, {
         name,
         configuration,
         status,
       });
-      
+
       return Response.json({ action });
     } catch (error) {
       return Response.json(
-        { error: error.message || "Failed to update action" }, 
-        { status: 400 }
+        { error: error.message || "Failed to update action" },
+        { status: 400 },
       );
     }
   } else {
@@ -880,9 +896,9 @@ export const handler: Handlers = {
     if (redirectResponse) {
       return redirectResponse;
     }
-    
+
     return ctx.render();
-  }
+  },
 };
 
 export default function Actions() {
@@ -892,7 +908,7 @@ export default function Actions() {
       <p class="mb-6">
         Create and manage automated workflows triggered by WorkOS events.
       </p>
-      
+
       <ActionsManager />
     </div>
   );
@@ -903,7 +919,7 @@ export default function Actions() {
 
 ```typescript
 // islands/ActionsManager.tsx
-import { useState, useEffect } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 
 interface Action {
   id: string;
@@ -919,7 +935,7 @@ export default function ActionsManager() {
   const [actions, setActions] = useState<Action[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  
+
   // New action form state
   const [showForm, setShowForm] = useState(false);
   const [actionType, setActionType] = useState("webhook");
@@ -927,22 +943,22 @@ export default function ActionsManager() {
   const [webhookUrl, setWebhookUrl] = useState("");
   const [webhookSecret, setWebhookSecret] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  
+
   useEffect(() => {
     fetchActions();
   }, []);
-  
+
   const fetchActions = async () => {
     setLoading(true);
     setError("");
-    
+
     try {
       const response = await fetch("/api/actions");
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch actions");
       }
-      
+
       const data = await response.json();
       setActions(data.actions || []);
     } catch (err) {
@@ -951,12 +967,12 @@ export default function ActionsManager() {
       setLoading(false);
     }
   };
-  
+
   const handleCreateAction = async (e: Event) => {
     e.preventDefault();
     setSubmitting(true);
     setError("");
-    
+
     try {
       const response = await fetch("/api/actions", {
         method: "POST",
@@ -966,24 +982,26 @@ export default function ActionsManager() {
         body: JSON.stringify({
           name: actionName,
           type: actionType,
-          configuration: actionType === "webhook" ? {
-            url: webhookUrl,
-            secret: webhookSecret,
-          } : {},
+          configuration: actionType === "webhook"
+            ? {
+              url: webhookUrl,
+              secret: webhookSecret,
+            }
+            : {},
         }),
       });
-      
+
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.error || "Failed to create action");
       }
-      
+
       // Reset form
       setActionName("");
       setWebhookUrl("");
       setWebhookSecret("");
       setShowForm(false);
-      
+
       // Refresh actions
       await fetchActions();
     } catch (err) {
@@ -992,13 +1010,13 @@ export default function ActionsManager() {
       setSubmitting(false);
     }
   };
-  
+
   const handleToggleStatus = async (action: Action) => {
     setError("");
-    
+
     try {
       const newStatus = action.status === "active" ? "inactive" : "active";
-      
+
       const response = await fetch(`/api/actions/${action.id}`, {
         method: "PATCH",
         headers: {
@@ -1008,47 +1026,47 @@ export default function ActionsManager() {
           status: newStatus,
         }),
       });
-      
+
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.error || "Failed to update action");
       }
-      
+
       // Refresh actions
       await fetchActions();
     } catch (err) {
       setError(err.message || "An error occurred");
     }
   };
-  
+
   const handleDeleteAction = async (actionId: string) => {
     if (!confirm("Are you sure you want to delete this action?")) {
       return;
     }
-    
+
     setError("");
-    
+
     try {
       const response = await fetch(`/api/actions/${actionId}`, {
         method: "DELETE",
       });
-      
+
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.error || "Failed to delete action");
       }
-      
+
       // Refresh actions
       await fetchActions();
     } catch (err) {
       setError(err.message || "An error occurred");
     }
   };
-  
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString();
   };
-  
+
   return (
     <div>
       <div class="flex justify-between items-center mb-4">
@@ -1060,36 +1078,38 @@ export default function ActionsManager() {
           {showForm ? "Cancel" : "Create Action"}
         </button>
       </div>
-      
+
       {showForm && (
         <div class="bg-white p-6 rounded-lg shadow-md mb-6">
           <h3 class="text-lg font-medium mb-4">Create New Action</h3>
-          
+
           <form onSubmit={handleCreateAction}>
             <div class="mb-4">
               <label class="block mb-2">Action Type</label>
               <select
                 value={actionType}
-                onChange={(e) => setActionType((e.target as HTMLSelectElement).value)}
+                onChange={(e) =>
+                  setActionType((e.target as HTMLSelectElement).value)}
                 class="w-full p-2 border rounded"
                 required
               >
                 <option value="webhook">Webhook</option>
               </select>
             </div>
-            
+
             <div class="mb-4">
               <label class="block mb-2">Name</label>
               <input
                 type="text"
                 value={actionName}
-                onChange={(e) => setActionName((e.target as HTMLInputElement).value)}
+                onChange={(e) =>
+                  setActionName((e.target as HTMLInputElement).value)}
                 class="w-full p-2 border rounded"
                 placeholder="My Webhook Action"
                 required
               />
             </div>
-            
+
             {actionType === "webhook" && (
               <>
                 <div class="mb-4">
@@ -1097,19 +1117,21 @@ export default function ActionsManager() {
                   <input
                     type="url"
                     value={webhookUrl}
-                    onChange={(e) => setWebhookUrl((e.target as HTMLInputElement).value)}
+                    onChange={(e) =>
+                      setWebhookUrl((e.target as HTMLInputElement).value)}
                     class="w-full p-2 border rounded"
                     placeholder="https://example.com/webhook"
                     required
                   />
                 </div>
-                
+
                 <div class="mb-4">
                   <label class="block mb-2">Webhook Secret</label>
                   <input
                     type="text"
                     value={webhookSecret}
-                    onChange={(e) => setWebhookSecret((e.target as HTMLInputElement).value)}
+                    onChange={(e) =>
+                      setWebhookSecret((e.target as HTMLInputElement).value)}
                     class="w-full p-2 border rounded"
                     placeholder="whsec_123"
                     required
@@ -1117,7 +1139,7 @@ export default function ActionsManager() {
                 </div>
               </>
             )}
-            
+
             <button
               type="submit"
               disabled={submitting}
@@ -1128,15 +1150,15 @@ export default function ActionsManager() {
           </form>
         </div>
       )}
-      
+
       {loading && <div>Loading actions...</div>}
-      
+
       {error && <div class="text-red-500 mb-4">{error}</div>}
-      
+
       {!loading && actions.length === 0 && (
         <div>No actions found. Create a new action to get started.</div>
       )}
-      
+
       {actions.length > 0 && (
         <div class="overflow-x-auto">
           <table class="w-full border-collapse table-auto">
@@ -1150,7 +1172,7 @@ export default function ActionsManager() {
               </tr>
             </thead>
             <tbody>
-              {actions.map(action => (
+              {actions.map((action) => (
                 <tr key={action.id} class="border-b">
                   <td class="p-2 border">{action.name}</td>
                   <td class="p-2 border">{action.type}</td>
@@ -1180,7 +1202,7 @@ export default function ActionsManager() {
                       >
                         {action.status === "active" ? "Deactivate" : "Activate"}
                       </button>
-                      
+
                       <button
                         onClick={() => handleDeleteAction(action.id)}
                         class="px-3 py-1 bg-red-500 text-white rounded text-sm"
@@ -1212,7 +1234,7 @@ import { WorkOS } from "workos";
 export function initPortal() {
   const workos = new WorkOS(Deno.env.get("WORKOS_API_KEY") || "");
   const portal = workos.portal;
-  
+
   return { workos, portal };
 }
 
@@ -1223,14 +1245,14 @@ export async function generatePortalLink(
     organizationId: string;
     intent?: string;
     returnUrl?: string;
-  }
+  },
 ) {
   const portalSession = await workos.portal.generateLink({
     organization: options.organizationId,
     intent: options.intent || "sso",
     returnUrl: options.returnUrl,
   });
-  
+
   return portalSession;
 }
 ```
@@ -1245,19 +1267,19 @@ import { WorkOS } from "workos";
 export function initVault() {
   const workos = new WorkOS(Deno.env.get("WORKOS_API_KEY") || "");
   const vault = workos.vault;
-  
+
   return { workos, vault };
 }
 
 // List credentials
 export async function listCredentials(
   workos: WorkOS,
-  organizationId: string
+  organizationId: string,
 ) {
   const { data: credentials } = await workos.vault.listCredentials({
     organizationId,
   });
-  
+
   return credentials;
 }
 
@@ -1269,7 +1291,7 @@ export async function createOAuthCredential(
     organizationId: string;
     clientId: string;
     clientSecret: string;
-  }
+  },
 ) {
   return await workos.vault.createCredential({
     type: "oauth",
@@ -1283,7 +1305,7 @@ export async function createOAuthCredential(
 // Delete a credential
 export async function deleteCredential(
   workos: WorkOS,
-  credentialId: string
+  credentialId: string,
 ) {
   return await workos.vault.deleteCredential(credentialId);
 }
@@ -1299,7 +1321,7 @@ import { WorkOS } from "workos";
 export function initActions() {
   const workos = new WorkOS(Deno.env.get("WORKOS_API_KEY") || "");
   const actions = workos.actions;
-  
+
   return { workos, actions };
 }
 
@@ -1308,12 +1330,12 @@ export async function listActions(
   workos: WorkOS,
   options: {
     status?: string;
-  } = {}
+  } = {},
 ) {
   const { data: actions } = await workos.actions.listActions({
     status: options.status as any,
   });
-  
+
   return actions;
 }
 
@@ -1324,7 +1346,7 @@ export async function createWebhookAction(
     name: string;
     url: string;
     secret: string;
-  }
+  },
 ) {
   return await workos.actions.createAction({
     name: options.name,
@@ -1344,18 +1366,18 @@ export async function updateAction(
     name?: string;
     status?: string;
     configuration?: Record<string, unknown>;
-  }
+  },
 ) {
   return await workos.actions.updateAction(
     actionId,
-    options
+    options,
   );
 }
 
 // Delete an action
 export async function deleteAction(
   workos: WorkOS,
-  actionId: string
+  actionId: string,
 ) {
   return await workos.actions.deleteAction(actionId);
 }
@@ -1409,3 +1431,4 @@ The screenshot should display the table of configured actions with their status 
 [SCREENSHOT: Webhook Action Configuration]
 Place a screenshot here showing the webhook action configuration form.
 The screenshot should display the form with fields for name, webhook URL, and webhook secret.
+```

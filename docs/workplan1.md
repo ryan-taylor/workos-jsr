@@ -81,15 +81,39 @@ No test should remain ignored without a documented rationale.
 
 - **Task 17: Achieve ≥ 80% Coverage**
    **Action**: Ran coverage reporting with `deno test --coverage` and wrote new tests to achieve >80% coverage.
-   **Status**: Resolved.
+   **Status**: Resolved – ≥ 80 % enforced in CI.
 
 #### 5. Project Maintenance & Documentation (Low → Medium)
 
-- **Task 18: Update CHANGELOG.md** with all fixes.
-- **Task 19: Review and Refresh All Documentation Files** (`README.md`, `CONTRIBUTING.md`, `MIGRATION.md`, etc.).
-- **Task 20: Clean Up Deprecated or Unused Code and Files** (search for `deprecated|unused|old`).
-- **Task 21: Validate and Update Dependency Versions** via `deno outdated` or manual review.
-- **Task 22: Set Up Automated Linter & Formatter Checks** (`deno lint`, `deno fmt`, pre-commit hook, CI workflow).
+- **Task 18: Update CHANGELOG.md**
+  **Location**: `CHANGELOG.md`
+  **Issue**: The changelog has not captured fixes completed in Tasks 1-17 and lacks a standard "Unreleased" section.
+  **Action**: Extract commit messages since the last tag with `git log $(git describe --tags --abbrev=0)..HEAD --no-merges --pretty=format:"* %s (%h)"`, group them under Added/Changed/Fixed/Removed headings per Keep a Changelog guidelines, add an "Unreleased" header referencing the next semantic version, and format the file with `deno fmt CHANGELOG.md`.
+  **Status**: Resolved – CHANGELOG updated and committed.
+
+- **Task 19: Review and Refresh All Documentation Files**
+  **Location**: Project documentation (`README.md`, `CONTRIBUTING.md`, `MIGRATION.md`, `docs/`)
+  **Issue**: Several documents reference outdated APIs, file paths, or coverage thresholds.
+  **Action**: Run `markdownlint-cli2 "**/*.md"` and `remark --use remark-preset-lint-recommended` to surface style issues; update code samples, badges, and links to reflect the current SDK; add guidance on import-map validation and observability; format all markdown via `deno fmt`.
+  **Status**: Resolved.
+
+- **Task 20: Clean Up Deprecated or Unused Code and Files**
+  **Location**: Whole repository (`src/`, `examples/`, `scripts/`)
+  **Issue**: Legacy code flagged as deprecated, unused, or old increases maintenance overhead.
+  **Action**: Execute `grep -R -n -E "deprecated|unused|old" --exclude-dir={archive,vendor,node_modules} . > deprecated-usage.log`, review each hit, remove truly obsolete modules or move to `archive/legacy/` with explanatory comments, and re-run `deno test && deno check` to ensure no regressions.
+  **Status**: Planned.
+
+- **Task 21: Validate and Update Dependency Versions**
+  **Location**: `deno.json`, import maps, and source files
+  **Issue**: Dependencies may lag behind upstream bug-fix/security releases.
+  **Action**: Run `deno run -A https://deno.land/x/udd/cli.ts **/*.ts` to list outdated URLs, bump versions conservatively, regenerate `deno.lock` with `deno cache --lock-write`, and verify with the full test suite; document the process in `CONTRIBUTING.md`.
+  **Status**: Planned.
+
+- **Task 22: Set Up Automated Linter & Formatter Checks**
+  **Location**: `deno.json`, `.github/workflows/`
+  **Issue**: Inconsistent code style and lint errors can slip into the main branch without automated gates.
+  **Action**: Define `lint` and `fmt` tasks in `deno.json`; configure a pre-commit hook with `lefthook` to run `deno fmt --check && deno lint`; add a GitHub Actions job that caches dependencies and runs the same commands plus `markdownlint-cli2`; fail the build on any violations.
+  **Status**: Planned.
 
 #### 6. Security & Compliance (New Section)
 

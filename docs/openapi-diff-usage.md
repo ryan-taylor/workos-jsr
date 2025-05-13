@@ -1,23 +1,29 @@
 # OpenAPI Diff Integration using oasdiff
 
-This document explains the oasdiff integration for generating path/verb diffs between OpenAPI specification versions.
+This document explains the oasdiff integration for generating path/verb diffs
+between OpenAPI specification versions.
 
 ## Overview
 
 The implementation provides a set of tools to:
+
 - Download and verify the oasdiff Go binary
 - Generate diffs between two OpenAPI specifications
 - Format and present the results in various formats (JSON, YAML, Markdown, etc.)
 - Integrate with CI/CD pipelines to detect and report API changes
 
 The integration consists of three main components:
+
 1. `install-oasdiff.ts`: Downloads and verifies the oasdiff binary
-2. `openapi-diff.ts`: A wrapper script for invoking oasdiff with appropriate parameters
-3. `api-path-diff-check.ts`: A CI-focused script that generates path/verb diffs and can post results as GitHub comments
+2. `openapi-diff.ts`: A wrapper script for invoking oasdiff with appropriate
+   parameters
+3. `api-path-diff-check.ts`: A CI-focused script that generates path/verb diffs
+   and can post results as GitHub comments
 
 ## Installation
 
-The oasdiff binary will be automatically downloaded and installed when needed. You don't need to install it manually.
+The oasdiff binary will be automatically downloaded and installed when needed.
+You don't need to install it manually.
 
 However, if you want to pre-install it:
 
@@ -26,6 +32,7 @@ deno run -A scripts/ci/install-oasdiff.ts
 ```
 
 This script supports the following options:
+
 - `--version=<ver>`: Specify a specific version of oasdiff to download
 - `--force`: Force download even if the binary already exists
 
@@ -42,7 +49,8 @@ deno run -A scripts/ci/openapi-diff.ts \
   --output=json
 ```
 
-This will output a JSON diff highlighting the paths, operations, and parameters that have been added, deleted, or modified.
+This will output a JSON diff highlighting the paths, operations, and parameters
+that have been added, deleted, or modified.
 
 ### Options for openapi-diff.ts
 
@@ -64,6 +72,7 @@ deno run -A scripts/ci/api-path-diff-check.ts \
 ```
 
 This script will:
+
 1. Find the two most recent spec files in the specified directory
 2. Compare them using oasdiff
 3. Generate both JSON and Markdown diffs
@@ -77,7 +86,8 @@ This script will:
 - `--post-comment`: Post results as a GitHub comment
 - `--base=<file>`: Explicitly specify base spec file (optional)
 - `--revision=<file>`: Explicitly specify revision spec file (optional)
-- `--output-dir=<dir>`: Directory to save diff output files (default: .tmp/openapi-diffs)
+- `--output-dir=<dir>`: Directory to save diff output files (default:
+  .tmp/openapi-diffs)
 
 ## Understanding the Output
 
@@ -86,11 +96,13 @@ The diff output includes:
 ### Paths Section
 
 Shows changes at the path level:
+
 - Added paths
 - Deleted paths
 - Modified paths (with details on what changed)
 
 Example:
+
 ```json
 "paths": {
   "added": [
@@ -109,11 +121,13 @@ Example:
 ### Endpoints Section
 
 Shows changes as flattened path+verb combinations:
+
 - Added endpoints
 - Deleted endpoints
 - Modified endpoints
 
 Example:
+
 ```json
 "endpoints": {
   "added": [

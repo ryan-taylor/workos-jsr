@@ -1,19 +1,19 @@
 // Import standard Deno assertions
 import { assertEquals, assertInstanceOf } from "jsr:@std/assert@1";
 
-import { WorkOS } from "../workos.ts.ts";
-import { Session } from "./session.ts.ts";
-import * as jwtUtils from "../common/crypto/jwt-utils.ts.ts";
-import { FreshSessionProvider } from "../common/iron-session/fresh-session-provider.ts.ts";
+import { WorkOS } from "../workos.ts";
+import { Session } from "./session.ts";
+import * as jwtUtils from "../common/crypto/jwt-utils.ts";
+import { FreshSessionProvider } from "../common/iron-session/fresh-session-provider.ts";
 // Use FreshSessionProvider for sealing session data in Deno
 const provider = new FreshSessionProvider();
-import { fetchOnce, resetMockFetch, spy } from "../common/utils/test-utils.ts.ts";
+import { fetchOnce, resetMockFetch, spy } from "../common/utils/test-utils.ts";
 import {
   AuthenticateWithSessionCookieFailureReason,
   AuthenticateWithSessionCookieSuccessResponse,
-} from "./interfaces/authenticate-with-session-cookie.interface.ts.ts";
-import { RefreshAndSealSessionDataFailureReason } from "./interfaces/refresh-and-seal-session-data.interface.ts.ts";
-import type { User } from "./interfaces/user.interface.ts.ts";
+} from "./interfaces/authenticate-with-session-cookie.interface.ts";
+import { RefreshAndSealSessionDataFailureReason } from "./interfaces/refresh-and-seal-session-data.interface.ts";
+import type { User } from "./interfaces/user.interface.ts";
 
 // Import user fixture directly
 const userFixture = {
@@ -184,8 +184,7 @@ Deno.test("Session - authenticate returns a successful response if the sessionDa
     const cookiePassword = "alongcookiesecretmadefortestingsessions";
 
     // Split the token into multiple lines to avoid hitting the line length limit
-    const accessToken =
-      "test_jwt_token" +
+    const accessToken = "test_jwt_token" +
       "siZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJlYXNvbiI6InRlc3QifSwic2lkIjoic2Vzc2lvbl8xMjMiLCJvcm" +
       "dfaWQiOiJvcmdfMTIzIiwicm9sZSI6Im1lbWJlciIsInBlcm1pc3Npb25zIjpbInBvc3RzOmNyZWF0ZSIsInBvc3RzOm" +
       "RlbGV0ZSJdLCJlbnRpdGxlbWVudHMiOlsiYXVkaXQtbG9ncyJdLCJ1c2VyIjp7Im9iamVjdCI6InVzZXIiLCJpZCI6In" +
@@ -276,8 +275,7 @@ Deno.test("Session - refresh when session data is valid returns a successful res
   const workos = setupTest();
 
   // Split the token into multiple lines to avoid hitting the line length limit
-  const accessToken =
-    "test_jwt_token" +
+  const accessToken = "test_jwt_token" +
     "UiLAogICJpYXQiOiAxNTE2MjM5MDIyLAogICJzaWQiOiAic2Vzc2lvbl8xMjMiLAogICJvcmdfaWQiOiAib3JnXzEyMyIsC" +
     "iAgInJvbGUiOiAibWVtYmVyIiwKICAicGVybWlzc2lvbnMiOiBbInBvc3RzOmNyZWF0ZSIsICJwb3N0czpkZWxldGUiXQp9." +
     "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
@@ -354,8 +352,7 @@ Deno.test("Session - refresh overwrites the cookie password if a new one is prov
   const workos = setupTest();
 
   // Split the token into multiple lines to avoid hitting the line length limit
-  const accessToken =
-    "test_jwt_token" +
+  const accessToken = "test_jwt_token" +
     "UiLAogICJpYXQiOiAxNTE2MjM5MDIyLAogICJzaWQiOiAic2Vzc2lvbl8xMjMiLAogICJvcmdfaWQiOiAib3JnXzEyMyIsC" +
     "iAgInJvbGUiOiAibWVtYmVyIiwKICAicGVybWlzc2lvbnMiOiBbInBvc3RzOmNyZWF0ZSIsICJwb3N0czpkZWxldGUiXQp9." +
     "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
@@ -449,8 +446,7 @@ Deno.test("Session - getLogoutUrl returns a logout URL for the user", async () =
     };
 
     // Split the token into multiple lines to avoid hitting the line length limit
-    const accessToken =
-      "test_jwt_token" +
+    const accessToken = "test_jwt_token" +
       "UiLAogICJpYXQiOiAxNTE2MjM5MDIyLAogICJzaWQiOiAic2Vzc2lvbl8xMjMiLAogICJvcmdfaWQiOiAib3JnXzEyMyIsC" +
       "iAgInJvbGUiOiAibWVtYmVyIiwKICAicGVybWlzc2lvbnMiOiBbInBvc3RzOmNyZWF0ZSIsICJwb3N0czpkZWxldGUiXQp9." +
       "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
@@ -528,8 +524,7 @@ Deno.test("Session - getLogoutUrl with returnTo URL returns a logout URL with re
     };
 
     // Split the token into multiple lines to avoid hitting the line length limit
-    const accessToken =
-      "test_jwt_token" +
+    const accessToken = "test_jwt_token" +
       "UiLAogICJpYXQiOiAxNTE2MjM5MDIyLAogICJzaWQiOiAic2Vzc2lvbl8xMjMiLAogICJvcmdfaWQiOiAib3JnXzEyMyIsC" +
       "iAgInJvbGUiOiAibWVtYmVyIiwKICAicGVybWlzc2lvbnMiOiBbInBvc3RzOmNyZWF0ZSIsICJwb3N0czpkZWxldGUiXQp9." +
       "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";

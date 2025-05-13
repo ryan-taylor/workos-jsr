@@ -3,7 +3,7 @@ import type {
   MagicAuthEvent,
   MagicAuthEventResponse,
   MagicAuthResponse,
-} from "../interfaces/magic-auth.interface.ts.ts";
+} from "../interfaces/magic-auth.interface.ts";
 
 export const deserializeMagicAuth = (
   magicAuth: MagicAuthResponse,

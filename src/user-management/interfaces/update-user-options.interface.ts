@@ -1,4 +1,4 @@
-import type { PasswordHashType } from "./password-hash-type.interface.ts.ts";
+import type { PasswordHashType } from "./password-hash-type.interface.ts";
 
 export interface UpdateUserOptions {
   userId: string;

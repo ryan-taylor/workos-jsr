@@ -1,7 +1,7 @@
 import type {
   AuthenticateWithOptionsBase,
   SerializedAuthenticateWithOptionsBase,
-} from "./authenticate-with-options-base.interface.ts.ts";
+} from "./authenticate-with-options-base.interface.ts";
 
 export interface AuthenticateWithPasswordOptions
   extends AuthenticateWithOptionsBase {

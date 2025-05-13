@@ -1,0 +1,7 @@
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      run: deno task lint:staged
+    fmt:
+      run: deno fmt --check {staged_files}

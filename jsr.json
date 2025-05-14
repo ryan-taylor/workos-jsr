@@ -3,7 +3,18 @@
   "version": "0.1.0",
   "exports": "./mod.ts",
   "description": "Pure Deno implementation of the WorkOS SDK with support for Fresh 1.x and 2.x",
-  "repository": "https://github.com/ryan-taylor/workos-jsr",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ryan-taylor/workos-jsr"
+  },
+  "homepage": "https://github.com/ryan-taylor/workos-jsr",
+  "documentation": "https://workos.com/docs/reference/client-libraries",
+  "authors": [
+    {
+      "name": "Ryan Taylor",
+      "url": "https://twitter.com/ryantaylor"
+    }
+  ],
   "license": "MIT",
   "files": [
     "mod.ts",
@@ -24,6 +35,21 @@
   ],
   "tasks": {
     "test": "deno test -A"
+  },
+  "keywords": [
+    "workos",
+    "deno",
+    "fresh",
+    "authentication",
+    "authorization",
+    "fga",
+    "sso",
+    "directory-sync",
+    "user-management",
+    "sdk"
+  ],
+  "examples": {
+    "User Management with Fresh 2.x": "https://github.com/ryan-taylor/workos-jsr/blob/main/README.md#usage-examples"
   },
   "dependencies": {
     "@panva/jose": "^4.0.0",

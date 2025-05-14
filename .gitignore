@@ -54,3 +54,5 @@ yarn.lock
 # oasdiff binary and temp files
 .tools/bin/
 .tmp/openapi-diffs/
+
+packages/workos_sdk/generated/

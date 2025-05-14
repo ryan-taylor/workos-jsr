@@ -1,5 +1,4 @@
-import { assertEquals, assertThrows } from "@std/assert";
-import { beforeEach, describe, it } from "@std/testing/bdd";
+import { assertEquals, assertThrows } from "../utils/test-utils.ts";
 
 import { SupportedAuthScheme } from "../../packages/workos_sdk/generated/core/auth-schemes.ts";
 import {
@@ -16,16 +15,18 @@ import {
   RequestOptions,
 } from "../../packages/workos_sdk/generated/core/request-options.ts";
 
-describe("Request Options with Multi-Scheme Security", () => {
-  // Test setup
-  beforeEach(() => {
+Deno.test("Request Options with Multi-Scheme Security", async (t) => {
+  // Helper for test setup - register security strategies before each test
+  const setupStrategies = () => {
     // Ensure strategies are registered
     registerSecurityStrategy(new ApiKeySecurityStrategy());
     registerSecurityStrategy(new HttpSecurityStrategy());
     registerSecurityStrategy(new OAuth2SecurityStrategy());
-  });
+  };
 
-  it("should handle single scheme security", () => {
+  await t.step("should handle single scheme security", () => {
+    setupStrategies();
+    
     const options: RequestOptions<"apiKey"> = {
       securityScheme: "apiKey",
       security: {
@@ -42,7 +43,9 @@ describe("Request Options with Multi-Scheme Security", () => {
     assertEquals(securedRequest.headers?.["X-API-Key"], "test-api-key");
   });
 
-  it("should select best scheme from multi-scheme endpoint", () => {
+  await t.step("should select best scheme from multi-scheme endpoint", () => {
+    setupStrategies();
+    
     // Endpoint supports http and apiKey but we have oauth2 credentials as well
     const options = {
       supportedSchemes: ["http", "apiKey"] as SupportedAuthScheme[],
@@ -73,7 +76,9 @@ describe("Request Options with Multi-Scheme Security", () => {
     );
   });
 
-  it("should honor custom priority order", () => {
+  await t.step("should honor custom priority order", () => {
+    setupStrategies();
+    
     const options = {
       supportedSchemes: ["http", "apiKey", "oauth2"] as SupportedAuthScheme[],
       availableCredentials: {
@@ -103,7 +108,9 @@ describe("Request Options with Multi-Scheme Security", () => {
     assertEquals(securedRequest.headers?.["X-API-Key"], "test-api-key");
   });
 
-  it("should use explicitly provided scheme if available", () => {
+  await t.step("should use explicitly provided scheme if available", () => {
+    setupStrategies();
+    
     const options = {
       securityScheme: "http" as const,
       security: {
@@ -135,7 +142,9 @@ describe("Request Options with Multi-Scheme Security", () => {
     );
   });
 
-  it("should throw error when no valid credentials for supported schemes", () => {
+  await t.step("should throw error when no valid credentials for supported schemes", () => {
+    setupStrategies();
+    
     const options = {
       supportedSchemes: ["http", "apiKey"] as SupportedAuthScheme[],
       availableCredentials: {
@@ -153,7 +162,9 @@ describe("Request Options with Multi-Scheme Security", () => {
     );
   });
 
-  it("should not throw if throwOnNoMatch is false", () => {
+  await t.step("should not throw if throwOnNoMatch is false", () => {
+    setupStrategies();
+    
     const options = {
       supportedSchemes: ["http", "apiKey"] as SupportedAuthScheme[],
       availableCredentials: {
@@ -173,7 +184,9 @@ describe("Request Options with Multi-Scheme Security", () => {
     assertEquals(securedRequest, request);
   });
 
-  it("should prioritize custom security strategy over everything else", () => {
+  await t.step("should prioritize custom security strategy over everything else", () => {
+    setupStrategies();
+    
     class CustomStrategy implements SecurityStrategy<"apiKey"> {
       readonly scheme = "apiKey" as const;
 

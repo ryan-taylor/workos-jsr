@@ -1,5 +1,4 @@
-import { assertEquals, assertThrows } from "jsr:@std/assert";
-import { describe, it } from "jsr:@std/testing/bdd";
+import { assertEquals, assertThrows } from "../utils/test-utils.ts";
 
 import {
   ApiKeySecurityStrategy,
@@ -13,7 +12,7 @@ import {
   SupportedAuthScheme,
 } from "../../packages/workos_sdk/generated/core/security.ts";
 
-describe("Security Resolver", () => {
+Deno.test("Security Resolver", async (t) => {
   // Create test strategies
   const apiKeyStrategy = new ApiKeySecurityStrategy();
   const httpStrategy = new HttpSecurityStrategy();
@@ -35,7 +34,7 @@ describe("Security Resolver", () => {
     accessToken: "test-oauth-token",
   };
 
-  it("should select the only available scheme", () => {
+  await t.step("should select the only available scheme", () => {
     const supportedSchemes: SupportedAuthScheme[] = ["apiKey"];
     const availableCredentials = {
       apiKey: apiKeyCredentials,
@@ -50,7 +49,7 @@ describe("Security Resolver", () => {
     assertEquals(result?.options, apiKeyCredentials);
   });
 
-  it("should respect priority order when multiple schemes are supported", () => {
+  await t.step("should respect priority order when multiple schemes are supported", () => {
     const supportedSchemes: SupportedAuthScheme[] = [
       "apiKey",
       "http",
@@ -73,7 +72,7 @@ describe("Security Resolver", () => {
     assertEquals(result?.options, oauth2Credentials);
   });
 
-  it("should allow overriding priority with custom order", () => {
+  await t.step("should allow overriding priority with custom order", () => {
     const supportedSchemes: SupportedAuthScheme[] = [
       "apiKey",
       "http",
@@ -96,7 +95,7 @@ describe("Security Resolver", () => {
     assertEquals(result?.options, apiKeyCredentials);
   });
 
-  it("should throw error when no matching credentials are found", () => {
+  await t.step("should throw error when no matching credentials are found", () => {
     const supportedSchemes: SupportedAuthScheme[] = ["oauth2", "http"];
     const availableCredentials = {
       apiKey: apiKeyCredentials,
@@ -109,7 +108,7 @@ describe("Security Resolver", () => {
     );
   });
 
-  it("should not throw error when throwOnNoMatch is false", () => {
+  await t.step("should not throw error when throwOnNoMatch is false", () => {
     const supportedSchemes: SupportedAuthScheme[] = ["oauth2", "http"];
     const availableCredentials = {
       apiKey: apiKeyCredentials,
@@ -124,7 +123,7 @@ describe("Security Resolver", () => {
     assertEquals(result, undefined);
   });
 
-  it("should correctly apply resolved security to request", () => {
+  await t.step("should correctly apply resolved security to request", () => {
     const supportedSchemes: SupportedAuthScheme[] = ["http", "apiKey"];
     const availableCredentials = {
       http: httpCredentials,
@@ -148,8 +147,12 @@ describe("Security Resolver", () => {
     );
   });
 
-  it("should handle multiple security schemes in request-options", () => {
+  // This commented test serves as a documentation of what would need to be implemented
+  // in a separate test file that imports request-options.ts
+  /*
+  await t.step("should handle multiple security schemes in request-options", () => {
     // This test would need to be implemented in a test file that imports request-options.ts
     // and tests the enhanced applySecurityToRequest function
   });
+  */
 });

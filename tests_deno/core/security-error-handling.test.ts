@@ -1,5 +1,4 @@
-import { assertEquals, assertThrows } from "@std/assert";
-import { beforeEach, describe, it } from "@std/testing/bdd";
+import { assertEquals, assertThrows } from "../utils/test-utils.ts";
 
 import { SupportedAuthScheme } from "../../packages/workos_sdk/generated/core/auth-schemes.ts";
 import {
@@ -19,16 +18,18 @@ import {
   SecurityStrategyNotRegisteredError,
 } from "../../packages/workos_sdk/generated/core/request-options.ts";
 
-describe("Security Error Handling", () => {
-  // Test setup
-  beforeEach(() => {
+Deno.test("Security Error Handling", async (t) => {
+  // Helper for test setup - register security strategies before each test
+  const setupStrategies = () => {
     // Ensure strategies are registered
     registerSecurityStrategy(new ApiKeySecurityStrategy());
     registerSecurityStrategy(new HttpSecurityStrategy());
     registerSecurityStrategy(new OAuth2SecurityStrategy());
-  });
+  };
 
-  it("should throw descriptive MissingCredentialsError for missing API key", () => {
+  await t.step("should throw descriptive MissingCredentialsError for missing API key", () => {
+    setupStrategies();
+    
     // Using type assertion to intentionally create invalid object for testing
     const options: RequestOptions<"apiKey"> = {
       securityScheme: "apiKey",
@@ -53,7 +54,9 @@ describe("Security Error Handling", () => {
     assertEquals(error.message.includes("X-API-Key"), true);
   });
 
-  it("should throw descriptive MissingCredentialsError for missing HTTP auth credentials", () => {
+  await t.step("should throw descriptive MissingCredentialsError for missing HTTP auth credentials", () => {
+    setupStrategies();
+    
     // Using type assertion to intentionally create invalid object for testing
     const options: RequestOptions<"http"> = {
       securityScheme: "http",
@@ -78,7 +81,9 @@ describe("Security Error Handling", () => {
     assertEquals(error.message.includes("Authorization header"), true);
   });
 
-  it("should throw descriptive MissingCredentialsError for missing OAuth2 access token", () => {
+  await t.step("should throw descriptive MissingCredentialsError for missing OAuth2 access token", () => {
+    setupStrategies();
+    
     // Using type assertion to intentionally create invalid object for testing
     const options: RequestOptions<"oauth2"> = {
       securityScheme: "oauth2",
@@ -103,7 +108,9 @@ describe("Security Error Handling", () => {
     assertEquals(error.message.includes("Authorization header"), true);
   });
 
-  it("should throw descriptive NoMatchingSecurityError for multi-scheme endpoints", () => {
+  await t.step("should throw descriptive NoMatchingSecurityError for multi-scheme endpoints", () => {
+    setupStrategies();
+    
     const options = {
       supportedSchemes: ["http", "apiKey"] as SupportedAuthScheme[],
       availableCredentials: {
@@ -148,7 +155,9 @@ describe("Security Error Handling", () => {
     assertEquals(error.message.includes("apiKey: Provide an API key"), true);
   });
 
-  it("should handle error gracefully when throwOnNoMatch is false", () => {
+  await t.step("should handle error gracefully when throwOnNoMatch is false", () => {
+    setupStrategies();
+    
     const options = {
       supportedSchemes: ["http", "apiKey"] as SupportedAuthScheme[],
       availableCredentials: {
@@ -168,7 +177,9 @@ describe("Security Error Handling", () => {
     assertEquals(securedRequest, request);
   });
 
-  it("should throw SecurityStrategyNotRegisteredError for unregistered schemes", () => {
+  await t.step("should throw SecurityStrategyNotRegisteredError for unregistered schemes", () => {
+    setupStrategies();
+    
     // Temporarily remove the strategy from registry to simulate unregistered scheme
     const originalStrategy = securityRegistry["apiKey"];
     securityRegistry["apiKey"] = undefined;

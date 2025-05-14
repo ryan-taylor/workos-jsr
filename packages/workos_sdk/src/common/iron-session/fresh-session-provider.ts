@@ -1,4 +1,11 @@
 import type { Cookie } from "jsr:@std/http@1/cookie";
+import {
+  createCompatibleMiddleware,
+  ensureContextState,
+  type FreshContext,
+  type FreshMiddleware,
+  type MiddlewareHandler
+} from "../utils/fresh-middleware-adapter.ts";
 /**
  * Options for sealing session data
  */
@@ -11,11 +18,7 @@ export type SealDataOptions = {
  */
 export type UnsealedDataType = Record<string, unknown>;
 
-// Define FreshContext type locally instead of importing from Fresh
-export interface FreshContext {
-  state: Record<string, unknown>;
-  next: () => Promise<Response>;
-}
+// Note: We're now using the FreshContext from fresh-middleware-adapter.ts
 
 /**
  * Interface for Fresh 2.x session options
@@ -283,43 +286,48 @@ export class FreshSessionProvider {
   }
 
   /**
-   * Fresh 2.x middleware for session management
+   * Create a middleware handler for session management that works with both Fresh 1.x and 2.x
    * @param options Session options
-   * @returns A Fresh middleware handler
+   * @returns A Fresh middleware compatible with the detected Fresh version
    */
   createSessionMiddleware(
     options: SessionOptions,
-  ): { handler: (req: Request, ctx: FreshContext) => Promise<Response> } {
-    // Use arrow function to preserve 'this' context
-    return {
-      handler: async (req: Request, ctx: FreshContext) => {
-        // Get the session from the request
-        const session = await this.getSession(req, options);
+  ): FreshMiddleware {
+    // Define the middleware handler function
+    const sessionHandler: MiddlewareHandler = async (req: Request, ctx: FreshContext) => {
+      // Ensure context state exists, standardizing across Fresh versions
+      const enhancedCtx = ensureContextState(ctx);
+      
+      // Get the session from the request
+      const session = await this.getSession(req, options);
 
-        // Add session to state for handler access
-        ctx.state.session = session || {};
+      // Add session to state for handler access
+      enhancedCtx.state.session = session || {};
 
-        // Store the original session state to detect changes
-        const originalSession = JSON.stringify(ctx.state.session);
+      // Store the original session state to detect changes
+      const originalSession = JSON.stringify(enhancedCtx.state.session);
 
-        // Process the request
-        const response = await ctx.next();
+      // Process the request
+      const response = await enhancedCtx.next();
 
-        // Check if session was modified
-        const currentSession = JSON.stringify(ctx.state.session);
+      // Check if session was modified
+      const currentSession = JSON.stringify(enhancedCtx.state.session);
 
-        if (currentSession !== originalSession) {
-          // Session was modified, update the cookie
-          return await this.createSessionResponse(
-            ctx.state.session as Record<string, unknown>,
-            options,
-            response,
-          );
-        }
+      if (currentSession !== originalSession) {
+        // Session was modified, update the cookie
+        return await this.createSessionResponse(
+          enhancedCtx.state.session as Record<string, unknown>,
+          options,
+          response,
+        );
+      }
 
-        return response;
-      },
+      return response;
     };
+    
+    // Use the compatibility adapter to return the appropriate middleware format
+    // based on the detected Fresh version (1.x or 2.x)
+    return createCompatibleMiddleware(sessionHandler);
   }
 
   /**

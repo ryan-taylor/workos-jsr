@@ -1,6 +1,6 @@
-import { Something } from "./something";
-import type { OtherThing } from "./otherThing";
-import { YetAnotherThing } from "../utils/things";
+import { Something } from "./something.ts";
+import type { OtherThing } from "./otherThing.ts";
+import { YetAnotherThing } from "../utils/things.ts";
 
 export interface TestInterface {
   field1: any;

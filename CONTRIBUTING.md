@@ -409,7 +409,9 @@ demonstrate the feature with Deno and Fresh.
 ## Branching Strategy
 
 - All development happens on short-lived feature branches off of `main`.
-- Branch names should start with `feat/`, `fix/`, or `chore/` followed by a concise description.
+- Branch names should start with `feat/`, `fix/`, or `chore/` followed by a
+  concise description.
 - After a pull request is merged, delete the branch both locally and remotely.
-- `main` is the single source of truth and will be automatically synced weekly with the upstream repository.
+- `main` is the single source of truth and will be automatically synced weekly
+  with the upstream repository.
 - Upstream releases are tracked via tags named `upstream-vX.Y.Z`.

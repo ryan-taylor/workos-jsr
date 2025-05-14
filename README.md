@@ -78,10 +78,10 @@ _⚡️ Modern Runtime, Modern Performance_
   need a Deno port or polyfill.
 - Upstream WorkOS features may arrive here _after_ the official SDK (PRs
   welcome!).
-- The npm compatibility build strives for parity but cannot expose
-  Deno-exclusive APIs such as permissions.
-- If your runtime is strictly Node 14/16 LTS, the official SDK may still be the
-  simpler drop-in.
+- This is now a pure Deno implementation with no Node.js compatibility layer -
+  all Node.js components have been completely removed.
+- If your runtime is Node.js, you should use the official WorkOS Node.js SDK as
+  this package no longer provides npm distribution.
 
 > 💡 **Bottom line:** If you are already betting on Deno 2.x or Fresh 2.x—or
 > want a permission-aware, type-safe WorkOS client that feels native to the
@@ -129,21 +129,19 @@ Or add the following to your `deno.json` imports:
 }
 ```
 
-### npm Compatibility
+### Pure Deno Implementation
 
-While this project focuses on Deno as the primary platform, an npm distribution
-is also maintained for compatibility with Node.js environments:
-
-```bash
-npm install @ryantaylor/workos
-```
-
-See the "npm Compatibility" section below for more details.
+This is now a pure Deno project without Node.js support. The project has fully
+removed all Node.js components (package.json, package-lock.json, node_modules)
+and only supports Deno as the runtime environment. All CI workflows have been
+updated to use only Deno. This decision allows for optimizations specific to the
+Deno platform and eliminates the overhead of maintaining compatibility layers.
 
 ## JSR.io Package
 
-This library is published to [JSR.io](https://jsr.io/@ryantaylor/workos), a
-modern registry optimized for Deno and web projects.
+This library is published exclusively to
+[JSR.io](https://jsr.io/@ryantaylor/workos), a modern registry optimized for
+Deno and web projects. There is no npm distribution of this package.
 
 ## Configuration
 
@@ -423,18 +421,16 @@ TypeScript packages. To publish new versions:
 3. Create a new git tag for the version
 4. Run `jsr publish` to publish to JSR.io
 
-## npm Compatibility
+## Migration from Node.js
 
-This package offers an npm distribution to support Node.js environments, but
-with some limitations:
+This package has been fully migrated from Node.js to Deno. All Node.js
+components have been removed, including package.json, package-lock.json, and
+node_modules. The CI workflows have also been updated to use only Deno.
 
-1. The npm distribution is generated from the Deno source code
-2. It may not include all Deno-specific features
-3. It's maintained primarily to support migration paths, not as a first-class
-   Node.js SDK
-
-For detailed information on building and publishing the npm distribution, see
-the [npm/README.md](npm/README.md) file.
+If you're migrating from a Node.js application, you'll need to switch to Deno to
+use this SDK. There is no longer a Node.js compatibility layer or npm
+distribution maintained for this project. Users of the previous Node.js version
+should use the official WorkOS Node.js SDK instead.
 
 ## Beta Releases
 

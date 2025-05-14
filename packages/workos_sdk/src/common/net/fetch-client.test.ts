@@ -1,10 +1,6 @@
 // Import Deno testing utilities
-import {
-  assertEquals,
-  beforeEach,
-  describe,
-  it,
-} from "../../../tests/deno-test-setup.ts";
+import { assertEquals } from "jsr:@std/assert@^1";
+import { beforeEach, describe, it } from "jsr:@std/testing@^1/bdd";
 
 import {
   fetchOnce,

@@ -1,21 +1,18 @@
 // Import Deno testing utilities
-import {
-  assertEquals,
-  beforeEach,
-  describe,
-  it,
-} from "../../../tests/deno-test-setup.ts";
+import { assertEquals } from "jsr:@std/assert@^1";
+import { beforeEach, describe, it } from "jsr:@std/testing@^1/bdd";
 
 import { crypto } from "jsr:@std/crypto@^1";
 import { SubtleCryptoProvider } from "./subtle-crypto-provider.ts";
 import { SignatureProvider } from "./signature-provider.ts";
 
 // Main test suite
-describe("CryptoProvider", () => {
+describe("SignatureProvider", () => {
   let payload: Record<string, unknown>;
   let secret: string;
   let timestamp: number;
   let signatureHash: string;
+  const signatureProvider = new SignatureProvider(new SubtleCryptoProvider());
 
   beforeEach(async () => {
     // Load webhook fixture directly
@@ -47,7 +44,7 @@ describe("CryptoProvider", () => {
     timestamp = Date.now() * 1000;
     const unhashedString = `${timestamp}.${JSON.stringify(payload)}`;
 
-    // Deno crypto uses Web Crypto API
+    // Use Web Crypto API
     const encoder = new TextEncoder();
     const key = await crypto.subtle.importKey(
       "raw",
@@ -72,48 +69,47 @@ describe("CryptoProvider", () => {
       .join("");
   });
 
-  describe("when computing HMAC signature", () => {
-    it("returns the same for two SubtleCryptoProvider instances", async () => {
-      const subtleCryptoProvider1 = new SubtleCryptoProvider();
-      const subtleCryptoProvider2 = new SubtleCryptoProvider();
-
-      const stringifiedPayload = JSON.stringify(payload);
-      const payloadHMAC = `${timestamp}.${stringifiedPayload}`;
-
-      const compare1 = await subtleCryptoProvider1.computeHMACSignatureAsync(
-        payloadHMAC,
-        secret,
-      );
-      const compare2 = await subtleCryptoProvider2.computeHMACSignatureAsync(
-        payloadHMAC,
-        secret,
-      );
-
-      assertEquals(compare1, compare2);
+  describe("verifyHeader", () => {
+    it("returns true when the signature is valid", async () => {
+      const sigHeader = `t=${timestamp}, v1=${signatureHash}`;
+      const options = { payload, sigHeader, secret };
+      const result = await signatureProvider.verifyHeader(options);
+      assertEquals(result, true);
     });
   });
 
-  describe("when securely comparing", () => {
-    it("returns the same for two SubtleCryptoProvider instances", async () => {
-      const subtleCryptoProvider1 = new SubtleCryptoProvider();
-      const subtleCryptoProvider2 = new SubtleCryptoProvider();
-      const signatureProvider = new SignatureProvider(subtleCryptoProvider1);
+  describe("getTimestampAndSignatureHash", () => {
+    it("returns the timestamp and signature when the signature is valid", () => {
+      const sigHeader = `t=${timestamp}, v1=${signatureHash}`;
+      const timestampAndSignature = signatureProvider
+        .getTimestampAndSignatureHash(sigHeader);
 
+      assertEquals(timestampAndSignature, [
+        timestamp.toString(),
+        signatureHash,
+      ]);
+    });
+  });
+
+  describe("computeSignature", () => {
+    it("returns the computed signature", async () => {
       const signature = await signatureProvider.computeSignature(
         timestamp,
         payload,
         secret,
       );
 
-      assertEquals(
-        subtleCryptoProvider1.secureCompare(signature, signatureHash),
-        subtleCryptoProvider2.secureCompare(signature, signatureHash),
-      );
+      assertEquals(signature, signatureHash);
+    });
+  });
 
-      assertEquals(
-        subtleCryptoProvider1.secureCompare(signature, "foo"),
-        subtleCryptoProvider2.secureCompare(signature, "foo"),
-      );
+  describe("when in an environment that supports SubtleCrypto", () => {
+    it("automatically uses the subtle crypto library", () => {
+      // Access private property with type assertion
+      const cryptoProvider =
+        (signatureProvider as unknown as { cryptoProvider: unknown })
+          .cryptoProvider;
+      assertEquals(cryptoProvider instanceof SubtleCryptoProvider, true);
     });
   });
 });

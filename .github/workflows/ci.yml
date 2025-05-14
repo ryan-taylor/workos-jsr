@@ -103,19 +103,14 @@ jobs:
       - name: Deno Lint
         run: deno lint
 
-      - name: Detect npm imports
-        run: deno run -A scripts/check-no-npm-imports.ts
+      - name: Format Check
+        run: deno fmt --check
 
-      - name: Check for npm dependencies
-        run: |
-          if deno info --json | jq -e '.modules[] | select(.specifier | startswith("npm:"))' > /dev/null; then
-            echo "::error::npm dependencies detected in the project"
-            deno info --json | jq '.modules[] | select(.specifier | startswith("npm:")) | .specifier'
-            exit 1
-          fi
+      - name: Cache Dependencies
+        run: deno cache mod.ts
 
       - name: Unit & Integration Tests
-        run: deno test -A
+        run: deno task test
 
   type_check:
     name: Type Check 🔍

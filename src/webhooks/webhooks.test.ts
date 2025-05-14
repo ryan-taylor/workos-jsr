@@ -1,7 +1,7 @@
 import { WorkOS } from "../workos.ts";
 import { crypto } from "@std/crypto";
 import { assertEquals, assertRejects } from "@std/assert";
-import { spy } from "@std/testing/mock";
+import { spy } from "jsr:@std/testing@^1/mock";
 import mockWebhook from "./fixtures/webhook.json.ts" with { type: "json" };
 import { SignatureVerificationException } from "../common/exceptions.ts";
 

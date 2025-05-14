@@ -50,12 +50,13 @@ jobs:
 
       - name: Type check
         # Use --no-check for test execution since we have type errors
-        run: deno check --no-lock $(find . -name '*.ts' -not -path '*/node_modules/*')
+        run: deno check --no-lock $(find . -name '*.ts')
+
+      - name: Cache Dependencies
+        run: deno cache mod.ts
 
       - name: Run tests
-        run: |
-          # Remove the compat flag as it's not supported in newer Deno versions
-          deno test -A --no-check
+        run: deno task test
 
       - name: Test Fresh example
         run: |

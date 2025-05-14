@@ -2,7 +2,7 @@ name: Upstream Sync
 
 on:
   schedule:
-    - cron: '0 0 * * 0' # Weekly on Sunday at 00:00 UTC
+    - cron: "0 0 * * 0" # Weekly on Sunday at 00:00 UTC
 
 jobs:
   sync:
@@ -26,4 +26,4 @@ jobs:
           git merge --ff-only upstream/main
 
       - name: Push changes
-        run: git push origin main 
+        run: git push origin main

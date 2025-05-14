@@ -32,22 +32,3 @@ jobs:
 
       - name: Run linter
         run: deno task lint
-
-  markdown-lint:
-    name: Markdown Lint
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "lts/*"
-
-      - name: Install markdownlint-cli2
-        run: npm install -g markdownlint-cli2
-
-      - name: Lint Markdown files
-        run: markdownlint-cli2 "**/*.md"

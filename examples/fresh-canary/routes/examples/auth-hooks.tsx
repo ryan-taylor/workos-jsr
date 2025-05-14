@@ -12,25 +12,29 @@ export const handler = {
   },
 };
 
-export default function AuthHooksPage({ data }: PageProps<{ user?: any | null }>) {
+export default function AuthHooksPage(
+  { data }: PageProps<{ user?: any | null }>,
+) {
   const { user } = data;
-  
+
   return (
     <>
       <Head>
         <title>Auth Hooks - WorkOS Fresh Example</title>
         <link rel="stylesheet" href="/styles.css" />
       </Head>
-      
+
       <div className="container">
         <header>
           <h1>Authentication Hooks</h1>
-          <p className="subtitle">Clean, reusable React hooks for auth state management</p>
+          <p className="subtitle">
+            Clean, reusable React hooks for auth state management
+          </p>
         </header>
-        
+
         <section className="content-section">
           <h2>Available Hooks</h2>
-          
+
           <div className="hook-docs">
             <div className="hook-item">
               <h3>useAuthFunctions</h3>
@@ -47,27 +51,27 @@ function MyComponent() {
     user,                // Signal<WorkOSUser | null>
     isLoading,           // Signal<boolean>
     isAuthenticated,     // ReadonlySignal<boolean>
-    
+
     // Refresh functionality
     refreshUser,         // () => Promise<void>
     isRefreshing,        // Signal<boolean>
-    
+
     // Login functionality
     login,               // (redirectUrl?: string) => void
     isLoggingIn,         // Signal<boolean>
     loginError,          // Signal<string | null>
-    
+
     // Logout functionality
     logout,              // () => void
     isLoggingOut,        // Signal<boolean>
     logoutError          // Signal<string | null>
   } = useAuthFunctions();
-  
+
   // Now you can use these in your component
 }`}
               </pre>
             </div>
-            
+
             <div className="hook-item">
               <h3>useLogin</h3>
               <p>Focused hook for login functionality</p>
@@ -82,7 +86,7 @@ function LoginComponent() {
     loginError,         // Signal<string | null>
     isAuthenticated     // ReadonlySignal<boolean>
   } = useLogin();
-  
+
   const handleLogin = () => {
     // Redirect to dashboard after login
     login("/dashboard");
@@ -90,7 +94,7 @@ function LoginComponent() {
 }`}
               </pre>
             </div>
-            
+
             <div className="hook-item">
               <h3>useLogout</h3>
               <p>Focused hook for logout functionality</p>
@@ -105,9 +109,9 @@ function LogoutButton() {
     logoutError,        // Signal<string | null>
     isAuthenticated     // ReadonlySignal<boolean>
   } = useLogout();
-  
+
   return (
-    <button 
+    <button
       onClick={logout}
       disabled={isLoggingOut.value}
     >
@@ -117,7 +121,7 @@ function LogoutButton() {
 }`}
               </pre>
             </div>
-            
+
             <div className="hook-item">
               <h3>useUserData</h3>
               <p>Hook for accessing and refreshing user data</p>
@@ -134,7 +138,7 @@ function UserProfile() {
     refreshUser,        // () => Promise<void>
     isRefreshing        // Signal<boolean>
   } = useUserData();
-  
+
   return (
     <div>
       {user.value && (
@@ -150,7 +154,7 @@ function UserProfile() {
 }`}
               </pre>
             </div>
-            
+
             <div className="hook-item">
               <h3>useRegister</h3>
               <p>Hook for user registration</p>
@@ -165,12 +169,12 @@ function RegistrationForm() {
     registerError,      // Signal<string | null>
     registerSuccess     // Signal<boolean>
   } = useRegister();
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Get form data
     const formData = new FormData(e.target);
-    
+
     await register({
       email: formData.get("email"),
       password: formData.get("password"),
@@ -181,7 +185,7 @@ function RegistrationForm() {
 }`}
               </pre>
             </div>
-            
+
             <div className="hook-item">
               <h3>usePasswordReset</h3>
               <p>Hook for requesting password reset</p>
@@ -196,7 +200,7 @@ function PasswordResetRequestForm() {
     requestError,       // Signal<string | null>
     requestSuccess      // Signal<boolean>
   } = usePasswordReset();
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const email = e.target.email.value;
@@ -205,7 +209,7 @@ function PasswordResetRequestForm() {
 }`}
               </pre>
             </div>
-            
+
             <div className="hook-item">
               <h3>useResetPasswordConfirm</h3>
               <p>Hook for confirming password reset with new password</p>
@@ -220,15 +224,15 @@ function PasswordResetConfirmForm() {
     confirmError,       // Signal<string | null>
     confirmSuccess      // Signal<boolean>
   } = useResetPasswordConfirm();
-  
+
   // Get token from URL
   const params = new URLSearchParams(window.location.search);
   const token = params.get("token");
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const password = e.target.password.value;
-    
+
     if (token) {
       await confirmReset(token, password);
     }
@@ -236,7 +240,7 @@ function PasswordResetConfirmForm() {
 }`}
               </pre>
             </div>
-            
+
             <div className="hook-item">
               <h3>useEmailVerification</h3>
               <p>Hook for verifying email addresses</p>
@@ -251,11 +255,11 @@ function EmailVerificationPage() {
     verifyError,        // Signal<string | null>
     verifySuccess       // Signal<boolean>
   } = useEmailVerification();
-  
+
   // Get token from URL
   const params = new URLSearchParams(window.location.search);
   const token = params.get("token");
-  
+
   useEffect(() => {
     if (token) {
       verifyEmail(token);
@@ -266,61 +270,82 @@ function EmailVerificationPage() {
             </div>
           </div>
         </section>
-        
+
         <section className="content-section">
           <h2>Live Demo</h2>
-          <p>This example shows the <code>useAuthFunctions</code> hook in action:</p>
-          
+          <p>
+            This example shows the <code>useAuthFunctions</code> hook in action:
+          </p>
+
           <div className="demo-container">
             <AuthProvider initialUser={user}>
               <AuthStateDemo />
             </AuthProvider>
           </div>
         </section>
-        
+
         <section className="content-section">
           <h2>Benefits of Custom Auth Hooks</h2>
-          
+
           <ul className="benefits-list">
             <li>
-              <strong>Separation of Concerns</strong> - Each hook handles a specific authentication function
+              <strong>Separation of Concerns</strong>{" "}
+              - Each hook handles a specific authentication function
             </li>
             <li>
-              <strong>Reusability</strong> - Use the same hooks across multiple components
+              <strong>Reusability</strong>{" "}
+              - Use the same hooks across multiple components
             </li>
             <li>
-              <strong>State Management</strong> - Each hook manages its own loading and error states
+              <strong>State Management</strong>{" "}
+              - Each hook manages its own loading and error states
             </li>
             <li>
-              <strong>Simplified Components</strong> - Components are cleaner with auth logic abstracted away
+              <strong>Simplified Components</strong>{" "}
+              - Components are cleaner with auth logic abstracted away
             </li>
             <li>
-              <strong>Consistent UX</strong> - Standardized handling of loading states and errors
+              <strong>Consistent UX</strong>{" "}
+              - Standardized handling of loading states and errors
             </li>
             <li>
-              <strong>Reactivity</strong> - Preact Signals provide reactive state updates
+              <strong>Reactivity</strong>{" "}
+              - Preact Signals provide reactive state updates
             </li>
           </ul>
         </section>
-        
+
         <section className="content-section">
           <h2>Implementation Details</h2>
-          
-          <p>These hooks are built on top of the AuthContext Provider and use Preact Signals for state management.</p>
-          
+
+          <p>
+            These hooks are built on top of the AuthContext Provider and use
+            Preact Signals for state management.
+          </p>
+
           <p>Key features:</p>
           <ul>
-            <li>All state is managed via Preact Signals for reactive updates</li>
+            <li>
+              All state is managed via Preact Signals for reactive updates
+            </li>
             <li>Error handling is built into each hook</li>
             <li>Loading states are tracked for better UX</li>
             <li>The hooks compose well together</li>
             <li>They provide a consistent API for authentication operations</li>
           </ul>
-          
+
           <p>View the source code:</p>
           <ul>
-            <li><a href="https://github.com/your-repo/path-to-file/utils/auth-hooks.ts">auth-hooks.ts</a></li>
-            <li><a href="https://github.com/your-repo/path-to-file/utils/auth-context.tsx">auth-context.tsx</a></li>
+            <li>
+              <a href="https://github.com/your-repo/path-to-file/utils/auth-hooks.ts">
+                auth-hooks.ts
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/your-repo/path-to-file/utils/auth-context.tsx">
+                auth-context.tsx
+              </a>
+            </li>
           </ul>
         </section>
       </div>

@@ -1,0 +1,55 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+
+import { assertPath } from "./assert_path.ts";
+
+export function stripSuffix(name: string, suffix: string): string {
+  if (suffix.length >= name.length) {
+    return name;
+  }
+
+  const lenDiff = name.length - suffix.length;
+
+  for (let i = suffix.length - 1; i >= 0; --i) {
+    if (name.charCodeAt(lenDiff + i) !== suffix.charCodeAt(i)) {
+      return name;
+    }
+  }
+
+  return name.slice(0, -suffix.length);
+}
+
+export function lastPathSegment(
+  path: string,
+  isSep: (char: number) => boolean,
+  start = 0,
+): string {
+  let matchedNonSeparator = false;
+  let end = path.length;
+
+  for (let i = path.length - 1; i >= start; --i) {
+    if (isSep(path.charCodeAt(i))) {
+      if (matchedNonSeparator) {
+        start = i + 1;
+        break;
+      }
+    } else if (!matchedNonSeparator) {
+      matchedNonSeparator = true;
+      end = i + 1;
+    }
+  }
+
+  return path.slice(start, end);
+}
+
+export function assertArgs(path: string, suffix: string) {
+  assertPath(path);
+  if (path.length === 0) return path;
+  if (typeof suffix !== "string") {
+    throw new TypeError(
+      `Suffix must be a string, received "${JSON.stringify(suffix)}"`,
+    );
+  }
+}
+
+// denoCacheMetadata={"headers":{"via":"1.1 google","etag":"\"0013c9322207c056738eba97f250230c\"","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","x-goog-hash":"crc32c=Se+50g==,md5=ABPJMiIHwFZzjrqX8lAjDA==","x-goog-storage-class":"STANDARD","content-length":"1243","server":"UploadServer","access-control-allow-origin":"*","content-type":"text/typescript","cache-control":"public, max-age=31536000, immutable","date":"Tue, 13 May 2025 01:47:32 GMT","x-jsr-cache-id":"YYZ","access-control-expose-headers":"*","x-content-type-options":"nosniff","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","cross-origin-resource-policy":"cross-origin","x-goog-generation":"1745475807029626","x-guploader-uploadid":"AAO2VwoC_BDjo2dQ1gXwRbqfQV-wc6DMgQV_xWp0Z0EE0XQO5uPrEivZxOS-eW4sqYWzErJzHvdGjVqh0K1YZw","x-goog-stored-content-encoding":"identity","x-goog-metageneration":"1","age":"0","x-jsr-cache-status":"revalidated","x-goog-stored-content-length":"1243","expires":"Wed, 13 May 2026 01:47:32 GMT","accept-ranges":"bytes","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","x-robots-tag":"noindex"},"url":"https://jsr.io/@std/path/1.0.9/_common/basename.ts","time":1747100852}

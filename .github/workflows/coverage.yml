@@ -21,7 +21,6 @@ jobs:
         uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
-          cache: true
 
       - name: Cache Deno directory
         uses: actions/cache@v3
@@ -32,24 +31,14 @@ jobs:
 
       - name: Run Tests with Coverage
         run: |
-          deno test --unstable --coverage=coverage
+          deno task coverage
 
-      - name: Generate lcov report
+      - name: Check Coverage Threshold (80%)
         run: |
-          deno coverage coverage --unstable --lcov > coverage/lcov.info
-
-      - name: Check Coverage Thresholds
-        run: |
-          COVERAGE=$(cat ./coverage/coverage-summary.json | jq '.total.lines.pct')
-          if (( $(echo "$COVERAGE < 100" | bc -l) )); then
-            echo "Coverage is below 100%: $COVERAGE%"
-            exit 1
-          else
-            echo "Coverage is 100%: $COVERAGE%"
-          fi
+          deno run -A scripts/coverage-threshold.ts 80
 
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
-          file: ./coverage/lcov.info
+          file: ./coverage.lcov
           fail_ci_if_error: true

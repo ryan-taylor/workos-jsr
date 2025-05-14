@@ -1,0 +1,100 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+import { dirname } from "jsr:@std/path@^1.0.9/dirname";
+import { ensureDir, ensureDirSync } from "./ensure_dir.ts";
+import { getFileInfoType } from "./_get_file_info_type.ts";
+import { toPathString } from "./_to_path_string.ts";
+
+/**
+ * Asynchronously ensures that the file exists.
+ *
+ * If the file already exists, this function does nothing. If the parent
+ * directories for the file do not exist, they are created.
+ *
+ * Requires `--allow-read` and `--allow-write` permissions.
+ *
+ * @see {@link https://docs.deno.com/runtime/manual/basics/permissions#file-system-access}
+ * for more information on Deno's permissions system.
+ *
+ * @param filePath The path of the file to ensure, as a string or URL.
+ *
+ * @returns A void promise that resolves once the file exists.
+ *
+ * @example Usage
+ * ```ts ignore
+ * import { ensureFile } from "@std/fs/ensure-file";
+ *
+ * await ensureFile("./folder/targetFile.dat");
+ * ```
+ */
+export async function ensureFile(filePath: string | URL): Promise<void> {
+  try {
+    // if file exists
+    const stat = await Deno.lstat(filePath);
+    if (!stat.isFile) {
+      throw new Error(
+        `Failed to ensure file exists: expected 'file', got '${
+          getFileInfoType(stat)
+        }'`,
+      );
+    }
+  } catch (err) {
+    // if file not exists
+    if (err instanceof Deno.errors.NotFound) {
+      // ensure dir exists
+      await ensureDir(dirname(toPathString(filePath)));
+      // create file
+      await Deno.writeFile(filePath, new Uint8Array());
+      return;
+    }
+
+    throw err;
+  }
+}
+
+/**
+ * Synchronously ensures that the file exists.
+ *
+ * If the file already exists, this function does nothing. If the parent
+ * directories for the file do not exist, they are created.
+ *
+ * Requires `--allow-read` and `--allow-write` permissions.
+ *
+ * @see {@link https://docs.deno.com/runtime/manual/basics/permissions#file-system-access}
+ * for more information on Deno's permissions system.
+ *
+ * @param filePath The path of the file to ensure, as a string or URL.
+ *
+ * @returns A void value that returns once the file exists.
+ *
+ * @example Usage
+ * ```ts ignore
+ * import { ensureFileSync } from "@std/fs/ensure-file";
+ *
+ * ensureFileSync("./folder/targetFile.dat");
+ * ```
+ */
+export function ensureFileSync(filePath: string | URL): void {
+  try {
+    // if file exists
+    const stat = Deno.lstatSync(filePath);
+    if (!stat.isFile) {
+      throw new Error(
+        `Failed to ensure file exists: expected 'file', got '${
+          getFileInfoType(stat)
+        }'`,
+      );
+    }
+  } catch (err) {
+    // if file not exists
+    if (err instanceof Deno.errors.NotFound) {
+      // ensure dir exists
+      ensureDirSync(dirname(toPathString(filePath)));
+      // create file
+      Deno.writeFileSync(filePath, new Uint8Array());
+      return;
+    }
+    throw err;
+  }
+}
+
+// denoCacheMetadata={"headers":{"x-jsr-cache-id":"YYZ","x-goog-stored-content-length":"2873","access-control-allow-origin":"*","x-goog-stored-content-encoding":"identity","accept-ranges":"bytes","last-modified":"Thu, 24 Apr 2025 06:23:46 GMT","expires":"Wed, 13 May 2026 01:47:31 GMT","etag":"\"b593f9c1181418525a790797ddf53128\"","server":"UploadServer","x-goog-storage-class":"STANDARD","x-guploader-uploadid":"AAO2Vwq1NChqiPj5uhWFQGnol58iXoW65DDWh483h3FPKzqz8u9U5bgJjHjVoEWmeBc6FkKEa-XOB5LQTBFmLw","content-length":"2873","x-robots-tag":"noindex","access-control-expose-headers":"*","cross-origin-resource-policy":"cross-origin","date":"Tue, 13 May 2025 01:47:31 GMT","age":"0","x-content-type-options":"nosniff","x-goog-hash":"crc32c=ySoIFQ==,md5=tZP5wRgUGFJaeQeX3fUxKA==","via":"1.1 google","x-jsr-cache-status":"revalidated","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","x-goog-generation":"1745475826487563","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","x-goog-metageneration":"1","cache-control":"public, max-age=31536000, immutable","content-type":"text/typescript"},"url":"https://jsr.io/@std/fs/1.0.17/ensure_file.ts","time":1747100851}

@@ -1,0 +1,300 @@
+{
+  "timestamp": "2025-05-13T21:24:57.350Z",
+  "burndownData": {
+    "totalTests": 26,
+    "passed": 24,
+    "failed": 2,
+    "ignored": 0,
+    "timeouts": 0,
+    "duration": 210,
+    "results": [
+      {
+        "name": "telemetry.spec.ts",
+        "file": "./tests_deno/telemetry.spec.ts",
+        "status": "failed",
+        "duration": 0,
+        "error": {
+          "message": "\u001b[0m\u001b[1m\u001b[31merror\u001b[0m: Module not found \"file:///Users/t/Developer/workos-node/src/telemetry/telemetry-config.ts.ts\".\n    at \u001b[0m\u001b[36mfile:///Users/t/Developer/workos-node/src/telemetry/telemetry-manager.ts\u001b[0m:\u001b[0m\u001b[33m11\u001b[0m:\u001b[0m\u001b[33m8\u001b[0m\n",
+          "category": "Script Error"
+        }
+      },
+      {
+        "name": "mfa.spec.ts",
+        "file": "./tests_deno/mfa.spec.ts",
+        "status": "passed",
+        "duration": 3
+      },
+      {
+        "name": "security-resolver.test.ts",
+        "file": "./tests_deno/core/security-resolver.test.ts",
+        "status": "passed",
+        "duration": 4
+      },
+      {
+        "name": "workos_core.test.ts",
+        "file": "./tests_deno/core/workos_core.test.ts",
+        "status": "passed",
+        "duration": 3
+      },
+      {
+        "name": "user_management.test.ts",
+        "file": "./tests_deno/core/user_management.test.ts",
+        "status": "passed",
+        "duration": 3
+      },
+      {
+        "name": "request-options-security.test.ts",
+        "file": "./tests_deno/core/request-options-security.test.ts",
+        "status": "passed",
+        "duration": 5
+      },
+      {
+        "name": "security-error-handling.test.ts",
+        "file": "./tests_deno/core/security-error-handling.test.ts",
+        "status": "passed",
+        "duration": 5
+      },
+      {
+        "name": "serializers.test.ts",
+        "file": "./tests_deno/core/serializers.test.ts",
+        "status": "passed",
+        "duration": 4
+      },
+      {
+        "name": "directory_sync.test.ts",
+        "file": "./tests_deno/core/directory_sync.test.ts",
+        "status": "passed",
+        "duration": 3
+      },
+      {
+        "name": "fetch-and-deserialize-negative.test.ts",
+        "file": "./tests_deno/core/fetch-and-deserialize-negative.test.ts",
+        "status": "passed",
+        "duration": 15
+      },
+      {
+        "name": "fetch-and-deserialize.test.ts",
+        "file": "./tests_deno/core/fetch-and-deserialize.test.ts",
+        "status": "passed",
+        "duration": 4
+      },
+      {
+        "name": "session.test.ts",
+        "file": "./tests_deno/fresh/middleware/session.test.ts",
+        "status": "passed",
+        "duration": 122
+      },
+      {
+        "name": "callback.test.ts",
+        "file": "./tests_deno/fresh/routes/callback.test.ts",
+        "status": "passed",
+        "duration": 4
+      },
+      {
+        "name": "directory-sync.spec.ts",
+        "file": "./tests_deno/directory-sync.spec.ts",
+        "status": "passed",
+        "duration": 3
+      },
+      {
+        "name": "portal.spec.ts",
+        "file": "./tests_deno/portal.spec.ts",
+        "status": "passed",
+        "duration": 2
+      },
+      {
+        "name": "runtime_smoke.test.ts",
+        "file": "./tests_deno/codegen/runtime_smoke.test.ts",
+        "status": "failed",
+        "duration": 0,
+        "error": {
+          "message": "Security wrapper instantiation ... \u001b[0m\u001b[38;5;245mcancelled\u001b[0m \u001b[0m\u001b[38;5;245m(0ms)\u001b[0m\nSecurity registry with different auth schemes ... \u001b[0m\u001b[38;5;245mcancelled\u001b[0m \u001b[0m\u001b[38;5;245m(0ms)\u001b[0m\nBasic request functionality ... \u001b[0m\u001b[38;5;245mcancelled\u001b[0m \u001b[0m\u001b[38;5;245m(0ms)\u001b[0m",
+          "category": "Runtime Error"
+        }
+      },
+      {
+        "name": "dereference-spec.test.ts",
+        "file": "./tests_deno/codegen/dereference-spec.test.ts",
+        "status": "passed",
+        "duration": 4
+      },
+      {
+        "name": "auth-schemes.test.ts",
+        "file": "./tests_deno/codegen/auth-schemes.test.ts",
+        "status": "passed",
+        "duration": 2
+      },
+      {
+        "name": "verify-spec.test.ts",
+        "file": "./tests_deno/codegen/verify-spec.test.ts",
+        "status": "passed",
+        "duration": 9
+      },
+      {
+        "name": "spec_validator.test.ts",
+        "file": "./tests_deno/codegen/spec_validator.test.ts",
+        "status": "passed",
+        "duration": 4
+      },
+      {
+        "name": "simple.test.ts",
+        "file": "./tests_deno/simple.test.ts",
+        "status": "passed",
+        "duration": 1
+      },
+      {
+        "name": "directory_sync_basic.test.ts",
+        "file": "./tests_deno/directory_sync_basic.test.ts",
+        "status": "passed",
+        "duration": 1
+      },
+      {
+        "name": "http_client.test.ts",
+        "file": "./tests_deno/http_client.test.ts",
+        "status": "passed",
+        "duration": 2
+      },
+      {
+        "name": "workos_basic.test.ts",
+        "file": "./tests_deno/workos_basic.test.ts",
+        "status": "passed",
+        "duration": 3
+      },
+      {
+        "name": "widgets.spec.ts",
+        "file": "./tests_deno/widgets.spec.ts",
+        "status": "passed",
+        "duration": 2
+      },
+      {
+        "name": "passwordless.spec.ts",
+        "file": "./tests_deno/passwordless.spec.ts",
+        "status": "passed",
+        "duration": 2
+      }
+    ],
+    "timestamp": "2025-05-13T21:24:57.350Z"
+  },
+  "analysis": {
+    "summary": {
+      "totalTests": 26,
+      "passed": 24,
+      "failed": 2,
+      "passRate": 0.9230769230769231,
+      "averageDuration": 8.076923076923077
+    },
+    "failuresByRootCause": {
+      "Import-Path": 1,
+      "Runtime": 1,
+      "Assertion": 0,
+      "Timeout": 0,
+      "Data-Dependency": 0,
+      "Unknown": 0
+    },
+    "potentiallyFlakyTests": [
+      {
+        "name": "telemetry.spec.ts",
+        "file": "./tests_deno/telemetry.spec.ts",
+        "reason": "Failed with zero duration, suggests setup/initialization issue"
+      },
+      {
+        "name": "runtime_smoke.test.ts",
+        "file": "./tests_deno/codegen/runtime_smoke.test.ts",
+        "reason": "Error suggests timing or network dependency issues"
+      },
+      {
+        "name": "runtime_smoke.test.ts",
+        "file": "./tests_deno/codegen/runtime_smoke.test.ts",
+        "reason": "Failed with zero duration, suggests setup/initialization issue"
+      }
+    ],
+    "performanceOutliers": [
+      {
+        "name": "session.test.ts",
+        "file": "./tests_deno/fresh/middleware/session.test.ts",
+        "duration": 122,
+        "deviation": 4.960061685887535
+      }
+    ],
+    "testOwnership": {
+      "./tests_deno/telemetry.spec.ts": [
+        "analytics-team@example.com"
+      ],
+      "./tests_deno/mfa.spec.ts": [
+        "qa-team@example.com"
+      ],
+      "./tests_deno/core/security-resolver.test.ts": [
+        "core-team@example.com"
+      ],
+      "./tests_deno/core/workos_core.test.ts": [
+        "core-team@example.com"
+      ],
+      "./tests_deno/core/user_management.test.ts": [
+        "core-team@example.com"
+      ],
+      "./tests_deno/core/request-options-security.test.ts": [
+        "core-team@example.com"
+      ],
+      "./tests_deno/core/security-error-handling.test.ts": [
+        "core-team@example.com"
+      ],
+      "./tests_deno/core/serializers.test.ts": [
+        "core-team@example.com"
+      ],
+      "./tests_deno/core/directory_sync.test.ts": [
+        "core-team@example.com"
+      ],
+      "./tests_deno/core/fetch-and-deserialize-negative.test.ts": [
+        "core-team@example.com"
+      ],
+      "./tests_deno/core/fetch-and-deserialize.test.ts": [
+        "core-team@example.com"
+      ],
+      "./tests_deno/fresh/middleware/session.test.ts": [
+        "web-team@example.com"
+      ],
+      "./tests_deno/fresh/routes/callback.test.ts": [
+        "web-team@example.com"
+      ],
+      "./tests_deno/directory-sync.spec.ts": [
+        "qa-team@example.com"
+      ],
+      "./tests_deno/portal.spec.ts": [
+        "qa-team@example.com"
+      ],
+      "./tests_deno/codegen/runtime_smoke.test.ts": [
+        "api-team@example.com"
+      ],
+      "./tests_deno/codegen/dereference-spec.test.ts": [
+        "api-team@example.com"
+      ],
+      "./tests_deno/codegen/auth-schemes.test.ts": [
+        "api-team@example.com"
+      ],
+      "./tests_deno/codegen/verify-spec.test.ts": [
+        "api-team@example.com"
+      ],
+      "./tests_deno/codegen/spec_validator.test.ts": [
+        "api-team@example.com"
+      ],
+      "./tests_deno/simple.test.ts": [
+        "qa-team@example.com"
+      ],
+      "./tests_deno/directory_sync_basic.test.ts": [
+        "qa-team@example.com"
+      ],
+      "./tests_deno/http_client.test.ts": [
+        "qa-team@example.com"
+      ],
+      "./tests_deno/workos_basic.test.ts": [
+        "qa-team@example.com"
+      ],
+      "./tests_deno/widgets.spec.ts": [
+        "qa-team@example.com"
+      ],
+      "./tests_deno/passwordless.spec.ts": [
+        "qa-team@example.com"
+      ]
+    }
+  }
+}

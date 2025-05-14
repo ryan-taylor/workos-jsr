@@ -1,4 +1,3 @@
-import {} from "../interfaces.ts";
 import type {
   SendInvitationOptions,
   SerializedSendInvitationOptions,

@@ -1,0 +1,183 @@
+{
+  "totalTests": 28,
+  "passed": 27,
+  "failed": 1,
+  "ignored": 0,
+  "timeouts": 0,
+  "duration": 836,
+  "results": [
+    {
+      "name": "telemetry.spec.ts",
+      "file": "./tests_deno/telemetry.spec.ts",
+      "status": "passed",
+      "duration": 13
+    },
+    {
+      "name": "mfa.spec.ts",
+      "file": "./tests_deno/mfa.spec.ts",
+      "status": "passed",
+      "duration": 4
+    },
+    {
+      "name": "security-resolver.test.ts",
+      "file": "./tests_deno/core/security-resolver.test.ts",
+      "status": "passed",
+      "duration": 4
+    },
+    {
+      "name": "workos_core.test.ts",
+      "file": "./tests_deno/core/workos_core.test.ts",
+      "status": "passed",
+      "duration": 3
+    },
+    {
+      "name": "user_management.test.ts",
+      "file": "./tests_deno/core/user_management.test.ts",
+      "status": "passed",
+      "duration": 3
+    },
+    {
+      "name": "request-options-security.test.ts",
+      "file": "./tests_deno/core/request-options-security.test.ts",
+      "status": "passed",
+      "duration": 4
+    },
+    {
+      "name": "security-error-handling.test.ts",
+      "file": "./tests_deno/core/security-error-handling.test.ts",
+      "status": "passed",
+      "duration": 4
+    },
+    {
+      "name": "serializers.test.ts",
+      "file": "./tests_deno/core/serializers.test.ts",
+      "status": "passed",
+      "duration": 4
+    },
+    {
+      "name": "directory_sync.test.ts",
+      "file": "./tests_deno/core/directory_sync.test.ts",
+      "status": "passed",
+      "duration": 3
+    },
+    {
+      "name": "fetch-and-deserialize-negative.test.ts",
+      "file": "./tests_deno/core/fetch-and-deserialize-negative.test.ts",
+      "status": "passed",
+      "duration": 13
+    },
+    {
+      "name": "fetch-and-deserialize.test.ts",
+      "file": "./tests_deno/core/fetch-and-deserialize.test.ts",
+      "status": "passed",
+      "duration": 4
+    },
+    {
+      "name": "session.test.ts",
+      "file": "./tests_deno/fresh/middleware/session.test.ts",
+      "status": "passed",
+      "duration": 120
+    },
+    {
+      "name": "callback.test.ts",
+      "file": "./tests_deno/fresh/routes/callback.test.ts",
+      "status": "passed",
+      "duration": 4
+    },
+    {
+      "name": "directory-sync.spec.ts",
+      "file": "./tests_deno/directory-sync.spec.ts",
+      "status": "passed",
+      "duration": 3
+    },
+    {
+      "name": "portal.spec.ts",
+      "file": "./tests_deno/portal.spec.ts",
+      "status": "passed",
+      "duration": 3
+    },
+    {
+      "name": "runtime_smoke.test.ts",
+      "file": "./tests_deno/codegen/runtime_smoke.test.ts",
+      "status": "passed",
+      "duration": 107
+    },
+    {
+      "name": "dereference-spec.test.ts",
+      "file": "./tests_deno/codegen/dereference-spec.test.ts",
+      "status": "passed",
+      "duration": 3
+    },
+    {
+      "name": "adapter-contract.test.ts",
+      "file": "./tests_deno/codegen/adapter-contract.test.ts",
+      "status": "failed",
+      "duration": 1,
+      "error": {
+        "message": "Adapter Contract Tests ... \u001b[0m\u001b[31mFAILED\u001b[0m (due to 3 failed steps) \u001b[0m\u001b[38;5;245m(112ms)\u001b[0m",
+        "category": "Runtime Error"
+      }
+    },
+    {
+      "name": "auth-schemes.test.ts",
+      "file": "./tests_deno/codegen/auth-schemes.test.ts",
+      "status": "passed",
+      "duration": 2
+    },
+    {
+      "name": "verify-spec.test.ts",
+      "file": "./tests_deno/codegen/verify-spec.test.ts",
+      "status": "passed",
+      "duration": 9
+    },
+    {
+      "name": "typescript_compile.test.ts",
+      "file": "./tests_deno/codegen/typescript_compile.test.ts",
+      "status": "passed",
+      "duration": 3
+    },
+    {
+      "name": "spec_validator.test.ts",
+      "file": "./tests_deno/codegen/spec_validator.test.ts",
+      "status": "passed",
+      "duration": 4
+    },
+    {
+      "name": "simple.test.ts",
+      "file": "./tests_deno/simple.test.ts",
+      "status": "passed",
+      "duration": 1
+    },
+    {
+      "name": "directory_sync_basic.test.ts",
+      "file": "./tests_deno/directory_sync_basic.test.ts",
+      "status": "passed",
+      "duration": 2
+    },
+    {
+      "name": "http_client.test.ts",
+      "file": "./tests_deno/http_client.test.ts",
+      "status": "passed",
+      "duration": 508
+    },
+    {
+      "name": "workos_basic.test.ts",
+      "file": "./tests_deno/workos_basic.test.ts",
+      "status": "passed",
+      "duration": 3
+    },
+    {
+      "name": "widgets.spec.ts",
+      "file": "./tests_deno/widgets.spec.ts",
+      "status": "passed",
+      "duration": 2
+    },
+    {
+      "name": "passwordless.spec.ts",
+      "file": "./tests_deno/passwordless.spec.ts",
+      "status": "passed",
+      "duration": 2
+    }
+  ],
+  "timestamp": "2025-05-14T01:54:14.769Z"
+}

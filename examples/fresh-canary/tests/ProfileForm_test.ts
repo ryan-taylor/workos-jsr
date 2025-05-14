@@ -10,13 +10,13 @@ import {
   type mockInputEvent,
   type render,
   restoreFetch,
-} from './test_config.ts';
-import ProfileForm from '../islands/ProfileForm.tsx';
+} from "./test_config.ts";
+import ProfileForm from "../islands/ProfileForm.tsx";
 
 // Mock user data
 const mockUser = createMockUser();
 
-Deno.test('ProfileForm - renders without errors', () => {
+Deno.test("ProfileForm - renders without errors", () => {
   // Create a mock render context
   const ctx = {
     user: mockUser,
@@ -26,15 +26,15 @@ Deno.test('ProfileForm - renders without errors', () => {
   const component = ProfileForm(ctx);
 
   // Assert component structure
-  assertEquals(typeof component, 'object');
-  assertContains(JSON.stringify(component), 'form');
-  assertContains(JSON.stringify(component), 'email');
-  assertContains(JSON.stringify(component), 'firstName');
-  assertContains(JSON.stringify(component), 'lastName');
-  assertContains(JSON.stringify(component), 'Update Profile');
+  assertEquals(typeof component, "object");
+  assertContains(JSON.stringify(component), "form");
+  assertContains(JSON.stringify(component), "email");
+  assertContains(JSON.stringify(component), "firstName");
+  assertContains(JSON.stringify(component), "lastName");
+  assertContains(JSON.stringify(component), "Update Profile");
 });
 
-Deno.test('ProfileForm - handles form input correctly', () => {
+Deno.test("ProfileForm - handles form input correctly", () => {
   // Create a mock render context
   const ctx = {
     user: mockUser,
@@ -50,8 +50,8 @@ Deno.test('ProfileForm - handles form input correctly', () => {
   };
 
   // Set new values
-  const newFirstName = 'Updated';
-  const newLastName = 'Name';
+  const newFirstName = "Updated";
+  const newLastName = "Name";
 
   setFirstName(newFirstName);
   setLastName(newLastName);
@@ -64,7 +64,7 @@ Deno.test('ProfileForm - handles form input correctly', () => {
   assertContains(JSON.stringify(component), newLastName);
 });
 
-Deno.test('ProfileForm - successful form submission', async () => {
+Deno.test("ProfileForm - successful form submission", async () => {
   // Create a mock render context
   const ctx = {
     user: mockUser,
@@ -101,24 +101,24 @@ Deno.test('ProfileForm - successful form submission', async () => {
     try {
       // Simulate form data
       const formData = new FormData();
-      formData.append('action', 'update_profile');
-      formData.append('firstName', mockUser.firstName || '');
-      formData.append('lastName', mockUser.lastName || '');
+      formData.append("action", "update_profile");
+      formData.append("firstName", mockUser.firstName || "");
+      formData.append("lastName", mockUser.lastName || "");
 
       // Submit form data
-      const response = await fetch('/account', {
-        method: 'POST',
+      const response = await fetch("/account", {
+        method: "POST",
         body: formData,
       });
 
       if (response.ok) {
-        setSuccessMessage('Profile updated successfully');
+        setSuccessMessage("Profile updated successfully");
       } else {
-        setErrorMessage('Failed to update profile');
+        setErrorMessage("Failed to update profile");
       }
     } catch (error) {
-      console.error('Error updating profile:', error);
-      setErrorMessage('An error occurred while updating profile');
+      console.error("Error updating profile:", error);
+      setErrorMessage("An error occurred while updating profile");
     } finally {
       setIsSubmitting(false);
     }
@@ -128,7 +128,7 @@ Deno.test('ProfileForm - successful form submission', async () => {
   await handleSubmit({ preventDefault: () => {} });
 
   // Assert success message was set
-  assertEquals(successMessage, 'Profile updated successfully');
+  assertEquals(successMessage, "Profile updated successfully");
   assertEquals(errorMessage, null);
   assertEquals(isSubmitting, false);
 
@@ -136,14 +136,14 @@ Deno.test('ProfileForm - successful form submission', async () => {
   restoreFetch();
 });
 
-Deno.test('ProfileForm - handles submission errors', async () => {
+Deno.test("ProfileForm - handles submission errors", async () => {
   // Create a mock render context
   const ctx = {
     user: mockUser,
   };
 
   // Mock error API response
-  mockFetchError(400, 'Failed to update profile');
+  mockFetchError(400, "Failed to update profile");
 
   // Create test state
   let successMessage = null;
@@ -173,24 +173,24 @@ Deno.test('ProfileForm - handles submission errors', async () => {
     try {
       // Simulate form data
       const formData = new FormData();
-      formData.append('action', 'update_profile');
-      formData.append('firstName', mockUser.firstName || '');
-      formData.append('lastName', mockUser.lastName || '');
+      formData.append("action", "update_profile");
+      formData.append("firstName", mockUser.firstName || "");
+      formData.append("lastName", mockUser.lastName || "");
 
       // Submit form data
-      const response = await fetch('/account', {
-        method: 'POST',
+      const response = await fetch("/account", {
+        method: "POST",
         body: formData,
       });
 
       if (response.ok) {
-        setSuccessMessage('Profile updated successfully');
+        setSuccessMessage("Profile updated successfully");
       } else {
-        setErrorMessage('Failed to update profile');
+        setErrorMessage("Failed to update profile");
       }
     } catch (error) {
-      console.error('Error updating profile:', error);
-      setErrorMessage('An error occurred while updating profile');
+      console.error("Error updating profile:", error);
+      setErrorMessage("An error occurred while updating profile");
     } finally {
       setIsSubmitting(false);
     }
@@ -201,7 +201,7 @@ Deno.test('ProfileForm - handles submission errors', async () => {
 
   // Assert error message was set
   assertEquals(successMessage, null);
-  assertEquals(errorMessage, 'Failed to update profile');
+  assertEquals(errorMessage, "Failed to update profile");
   assertEquals(isSubmitting, false);
 
   // Restore original fetch

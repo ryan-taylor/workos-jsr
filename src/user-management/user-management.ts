@@ -1,3 +1,11 @@
+// Define PaginationOptions interface to fix the missing type error
+interface PaginationOptions {
+  after?: string;
+  before?: string;
+  limit?: number;
+  [key: string]: any;
+}
+
 import {
   createRemoteJWKSet,
   decodeJwt,
@@ -480,86 +488,9 @@ export class UserManagement {
       return false;
     }
   }
-
   /**
-   * @deprecated This method is deprecated and will be removed in a future major version.
-   * Please use the new `loadSealedSession` helper and its corresponding methods instead.
+   * @deprecated Method 'prepareAuthenticationResponse' was moved to archive/legacy/user-management-deprecated.ts
    */
-  async refreshAndSealSessionData({
-    sessionData,
-    organizationId,
-    cookiePassword = Deno.env.get("WORKOS_COOKIE_PASSWORD"),
-  }: SessionHandlerOptions): Promise<RefreshAndSealSessionDataResponse> {
-    if (!cookiePassword) {
-      throw new Error("Cookie password is required");
-    }
-
-    if (!sessionData) {
-      return {
-        authenticated: false,
-        reason:
-          RefreshAndSealSessionDataFailureReason.NO_SESSION_COOKIE_PROVIDED,
-      };
-    }
-
-    const session = await this.ironSessionProvider.unsealData<
-      SessionCookieData
-    >(
-      sessionData,
-      {
-        password: cookiePassword,
-      },
-    );
-
-    if (!session.refreshToken || !session.user) {
-      return {
-        authenticated: false,
-        reason: RefreshAndSealSessionDataFailureReason.INVALID_SESSION_COOKIE,
-      };
-    }
-
-    const { org_id: organizationIdFromAccessToken } = decodeJwt<AccessToken>(
-      session.accessToken,
-    );
-
-    try {
-      const { sealedSession } = await this.authenticateWithRefreshToken({
-        clientId: this.workos.clientId as string,
-        refreshToken: session.refreshToken,
-        organizationId: organizationId ?? organizationIdFromAccessToken,
-        session: { sealSession: true, cookiePassword },
-      });
-
-      if (!sealedSession) {
-        return {
-          authenticated: false,
-          reason: RefreshAndSealSessionDataFailureReason.INVALID_SESSION_COOKIE,
-        };
-      }
-
-      return {
-        authenticated: true,
-        sealedSession,
-      };
-    } catch (error) {
-      if (
-        error instanceof OauthException &&
-        // TODO: Add additional known errors and remove re-throw
-        (error.error === RefreshAndSealSessionDataFailureReason.INVALID_GRANT ||
-          error.error ===
-            RefreshAndSealSessionDataFailureReason.MFA_ENROLLMENT ||
-          error.error === RefreshAndSealSessionDataFailureReason.SSO_REQUIRED)
-      ) {
-        return {
-          authenticated: false,
-          reason: error.error,
-        };
-      }
-
-      throw error;
-    }
-  }
-
   private async prepareAuthenticationResponse({
     authenticationResponse,
     session,

@@ -16,7 +16,7 @@ export class WorkOS extends BaseWorkOS {
   ): HttpClient {
     // Cast this to the interface with the required properties
     const self = this as unknown as WorkOSWithProperties;
-    
+
     const headers = {
       ...options.config?.headers,
       Authorization: `Bearer ${self.key}`,

@@ -1,10 +1,13 @@
 # Core Authentication Modules
 
-This document covers the implementation details for the core authentication modules in WorkOS, including SSO, User Management, Passwordless Authentication, and Multi-Factor Authentication (MFA).
+This document covers the implementation details for the core authentication
+modules in WorkOS, including SSO, User Management, Passwordless Authentication,
+and Multi-Factor Authentication (MFA).
 
 ## Single Sign-On (SSO)
 
-SSO allows users to authenticate using their existing enterprise identity provider accounts (Okta, Google, Microsoft, etc.).
+SSO allows users to authenticate using their existing enterprise identity
+provider accounts (Okta, Google, Microsoft, etc.).
 
 ### API Endpoint Setup
 
@@ -22,7 +25,7 @@ export const handler: Handler = async (req) => {
   const organization = url.searchParams.get("organization") || undefined;
   const provider = url.searchParams.get("provider") || undefined;
   const domain = url.searchParams.get("domain") || undefined;
-  
+
   try {
     const authorizationURL = workos.sso.getAuthorizationUrl({
       clientId: Deno.env.get("WORKOS_CLIENT_ID") || "",
@@ -33,7 +36,7 @@ export const handler: Handler = async (req) => {
       domain,
       state: crypto.randomUUID(),
     });
-    
+
     return Response.json({ url: authorizationURL });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 400 });
@@ -55,11 +58,11 @@ export const handler: Handlers = {
     const { userManagement } = initUserManagement();
     const url = new URL(req.url);
     const code = url.searchParams.get("code");
-    
+
     if (!code) {
       return new Response("Missing authorization code", { status: 400 });
     }
-    
+
     try {
       const authResponse = await userManagement.authenticateWithCode({
         clientId: Deno.env.get("WORKOS_CLIENT_ID") || "",
@@ -67,26 +70,26 @@ export const handler: Handlers = {
         session: {
           sealSession: true,
           cookiePassword: Deno.env.get("SESSION_SECRET") || "",
-        }
+        },
       });
-      
+
       // Create response and set session cookie
       const headers = new Headers();
       if (authResponse.cookie) {
         headers.set("Set-Cookie", authResponse.cookie);
       }
-      
+
       headers.set("Location", "/dashboard");
       return new Response(null, {
         status: 302,
         headers,
       });
     } catch (error) {
-      return new Response(`Authentication error: ${error.message}`, { 
-        status: 400 
+      return new Response(`Authentication error: ${error.message}`, {
+        status: 400,
       });
     }
-  }
+  },
 };
 
 export default function Callback() {
@@ -105,16 +108,16 @@ import { useState } from "preact/hooks";
 export default function SSOLogin() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  
+
   const handleSSOLogin = async (e: Event) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    
+
     try {
       const response = await fetch(`/api/sso/authorize?connection=conn_123`);
       const data = await response.json();
-      
+
       if (data.error) {
         setError(data.error);
       } else {
@@ -126,11 +129,11 @@ export default function SSOLogin() {
       setLoading(false);
     }
   };
-  
+
   return (
     <div>
-      <button 
-        onClick={handleSSOLogin} 
+      <button
+        onClick={handleSSOLogin}
         disabled={loading}
         class="btn btn-primary w-full"
       >
@@ -144,7 +147,8 @@ export default function SSOLogin() {
 
 ## User Management
 
-User Management provides complete authentication capabilities including registration, password-based login, and account management.
+User Management provides complete authentication capabilities including
+registration, password-based login, and account management.
 
 ### API Endpoint Setup
 
@@ -159,18 +163,18 @@ export const handler: Handler = async (req) => {
   if (req.method !== "POST") {
     return new Response("Method Not Allowed", { status: 405 });
   }
-  
+
   try {
     const { userManagement } = initUserManagement();
     const { email, password } = await req.json();
-    
+
     if (!email || !password) {
       return Response.json(
-        { error: "Email and password are required" }, 
-        { status: 400 }
+        { error: "Email and password are required" },
+        { status: 400 },
       );
     }
-    
+
     const authResponse = await userManagement.authenticateWithPassword({
       clientId: Deno.env.get("WORKOS_CLIENT_ID") || "",
       email,
@@ -178,20 +182,22 @@ export const handler: Handler = async (req) => {
       session: {
         sealSession: true,
         cookiePassword: Deno.env.get("SESSION_SECRET") || "",
-      }
+      },
     });
-    
+
     // Create response with session cookie
     const headers = new Headers();
     if (authResponse.cookie) {
       headers.set("Set-Cookie", authResponse.cookie);
     }
-    
-    return Response.json({ success: true, user: authResponse.user }, { headers });
+
+    return Response.json({ success: true, user: authResponse.user }, {
+      headers,
+    });
   } catch (error) {
     return Response.json(
-      { error: error.message || "Authentication failed" }, 
-      { status: 401 }
+      { error: error.message || "Authentication failed" },
+      { status: 401 },
     );
   }
 };
@@ -211,16 +217,16 @@ export const handler: Handlers = {
   async POST(req) {
     const { userManagement } = initUserManagement();
     const formData = await req.formData();
-    
+
     const email = formData.get("email")?.toString();
     const password = formData.get("password")?.toString();
     const firstName = formData.get("firstName")?.toString();
     const lastName = formData.get("lastName")?.toString();
-    
+
     if (!email || !password) {
       return new Response("Email and password are required", { status: 400 });
     }
-    
+
     try {
       const user = await userManagement.createUser({
         email,
@@ -228,7 +234,7 @@ export const handler: Handlers = {
         firstName,
         lastName,
       });
-      
+
       // Authenticate the user after registration
       const authResponse = await userManagement.authenticateWithPassword({
         clientId: Deno.env.get("WORKOS_CLIENT_ID") || "",
@@ -237,30 +243,30 @@ export const handler: Handlers = {
         session: {
           sealSession: true,
           cookiePassword: Deno.env.get("SESSION_SECRET") || "",
-        }
+        },
       });
-      
+
       // Create response and set session cookie
       const headers = new Headers();
       if (authResponse.cookie) {
         headers.set("Set-Cookie", authResponse.cookie);
       }
-      
+
       headers.set("Location", "/dashboard");
       return new Response(null, {
         status: 302,
         headers,
       });
     } catch (error) {
-      return new Response(`Registration error: ${error.message}`, { 
-        status: 400 
+      return new Response(`Registration error: ${error.message}`, {
+        status: 400,
       });
     }
   },
-  
+
   GET(req, ctx) {
     return ctx.render();
-  }
+  },
 };
 
 export default function Register(props: PageProps) {
@@ -282,33 +288,33 @@ import { useState } from "preact/hooks";
 export default function RegisterForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  
+
   const handleSubmit = async (e: Event) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    
+
     try {
       const form = e.target as HTMLFormElement;
       const formData = new FormData(form);
-      
+
       const response = await fetch("/register", {
         method: "POST",
         body: formData,
       });
-      
+
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(errorText);
       }
-      
+
       // Registration successful, redirect will be handled by the server
     } catch (err) {
       setError(err.message || "Registration failed");
       setLoading(false);
     }
   };
-  
+
   return (
     <form onSubmit={handleSubmit} class="max-w-md mx-auto">
       <div class="mb-4">
@@ -321,7 +327,7 @@ export default function RegisterForm() {
           class="w-full px-3 py-2 border rounded"
         />
       </div>
-      
+
       <div class="mb-4">
         <label class="block mb-2" for="password">Password</label>
         <input
@@ -332,7 +338,7 @@ export default function RegisterForm() {
           class="w-full px-3 py-2 border rounded"
         />
       </div>
-      
+
       <div class="mb-4">
         <label class="block mb-2" for="firstName">First Name</label>
         <input
@@ -342,7 +348,7 @@ export default function RegisterForm() {
           class="w-full px-3 py-2 border rounded"
         />
       </div>
-      
+
       <div class="mb-4">
         <label class="block mb-2" for="lastName">Last Name</label>
         <input
@@ -352,7 +358,7 @@ export default function RegisterForm() {
           class="w-full px-3 py-2 border rounded"
         />
       </div>
-      
+
       <button
         type="submit"
         disabled={loading}
@@ -360,7 +366,7 @@ export default function RegisterForm() {
       >
         {loading ? "Creating Account..." : "Sign Up"}
       </button>
-      
+
       {error && <p class="text-red-500 mt-2">{error}</p>}
     </form>
   );
@@ -369,7 +375,8 @@ export default function RegisterForm() {
 
 ## Passwordless Authentication
 
-Passwordless authentication allows users to sign in with one-time codes sent to their email.
+Passwordless authentication allows users to sign in with one-time codes sent to
+their email.
 
 ### API Endpoint Setup
 
@@ -384,34 +391,35 @@ export const handler: Handler = async (req) => {
   if (req.method !== "POST") {
     return new Response("Method Not Allowed", { status: 405 });
   }
-  
+
   try {
     const { workos } = initUserManagement();
     const { email, redirectUri } = await req.json();
-    
+
     if (!email) {
       return Response.json(
-        { error: "Email is required" }, 
-        { status: 400 }
+        { error: "Email is required" },
+        { status: 400 },
       );
     }
-    
+
     const session = await workos.passwordless.createSession({
       email,
       type: "MagicLink",
-      redirectUri: redirectUri || `${new URL(req.url).origin}/verify-passwordless`,
+      redirectUri: redirectUri ||
+        `${new URL(req.url).origin}/verify-passwordless`,
     });
-    
+
     await workos.passwordless.sendSession(session.id);
-    
-    return Response.json({ 
-      success: true, 
-      message: "Passwordless authentication link sent" 
+
+    return Response.json({
+      success: true,
+      message: "Passwordless authentication link sent",
     });
   } catch (error) {
     return Response.json(
-      { error: error.message || "Failed to send passwordless link" }, 
-      { status: 400 }
+      { error: error.message || "Failed to send passwordless link" },
+      { status: 400 },
     );
   }
 };
@@ -431,15 +439,15 @@ export const handler: Handlers = {
     const { workos, userManagement } = initUserManagement();
     const url = new URL(req.url);
     const code = url.searchParams.get("code");
-    
+
     if (!code) {
       return new Response("Missing verification code", { status: 400 });
     }
-    
+
     try {
       // Verify the passwordless session
       const { user } = await workos.passwordless.authenticateSession(code);
-      
+
       // Create a user session
       const authResponse = await userManagement.authenticateWithUser({
         clientId: Deno.env.get("WORKOS_CLIENT_ID") || "",
@@ -447,26 +455,26 @@ export const handler: Handlers = {
         session: {
           sealSession: true,
           cookiePassword: Deno.env.get("SESSION_SECRET") || "",
-        }
+        },
       });
-      
+
       // Create response and set session cookie
       const headers = new Headers();
       if (authResponse.cookie) {
         headers.set("Set-Cookie", authResponse.cookie);
       }
-      
+
       headers.set("Location", "/dashboard");
       return new Response(null, {
         status: 302,
         headers,
       });
     } catch (error) {
-      return new Response(`Verification error: ${error.message}`, { 
-        status: 400 
+      return new Response(`Verification error: ${error.message}`, {
+        status: 400,
       });
     }
-  }
+  },
 };
 
 export default function VerifyPasswordless() {
@@ -485,31 +493,31 @@ export default function PasswordlessLogin() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  
+
   const handleSubmit = async (e: Event) => {
     e.preventDefault();
     setLoading(true);
     setError("");
     setMessage("");
-    
+
     try {
       const response = await fetch("/api/auth/passwordless", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           email,
-          redirectUri: window.location.origin + "/verify-passwordless"
+          redirectUri: window.location.origin + "/verify-passwordless",
         }),
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.error || "Failed to send login link");
       }
-      
+
       setMessage("Check your email for a login link");
     } catch (err) {
       setError(err.message || "An error occurred");
@@ -517,7 +525,7 @@ export default function PasswordlessLogin() {
       setLoading(false);
     }
   };
-  
+
   return (
     <form onSubmit={handleSubmit} class="max-w-md mx-auto">
       <div class="mb-4">
@@ -531,7 +539,7 @@ export default function PasswordlessLogin() {
           class="w-full px-3 py-2 border rounded"
         />
       </div>
-      
+
       <button
         type="submit"
         disabled={loading}
@@ -539,7 +547,7 @@ export default function PasswordlessLogin() {
       >
         {loading ? "Sending..." : "Send Login Link"}
       </button>
-      
+
       {message && <p class="text-green-500 mt-2">{message}</p>}
       {error && <p class="text-red-500 mt-2">{error}</p>}
     </form>
@@ -549,7 +557,8 @@ export default function PasswordlessLogin() {
 
 ## Multi-Factor Authentication (MFA)
 
-MFA adds an additional layer of security by requiring a second verification factor.
+MFA adds an additional layer of security by requiring a second verification
+factor.
 
 ### API Endpoint Setup
 
@@ -565,29 +574,29 @@ export const handler: Handler = async (req) => {
   if (req.method !== "POST") {
     return new Response("Method Not Allowed", { status: 405 });
   }
-  
+
   try {
     const { workos } = initUserManagement();
     const user = await getCurrentUser(req);
-    
+
     if (!user) {
       return Response.json(
-        { error: "Authentication required" }, 
-        { status: 401 }
+        { error: "Authentication required" },
+        { status: 401 },
       );
     }
-    
+
     const { type } = await req.json();
-    
+
     if (!type || !["totp", "sms"].includes(type)) {
       return Response.json(
-        { error: "Valid factor type (totp or sms) is required" }, 
-        { status: 400 }
+        { error: "Valid factor type (totp or sms) is required" },
+        { status: 400 },
       );
     }
-    
+
     let factor;
-    
+
     if (type === "totp") {
       factor = await workos.mfa.enrollFactor({
         type: "totp",
@@ -597,23 +606,23 @@ export const handler: Handler = async (req) => {
       const { phone } = await req.json();
       if (!phone) {
         return Response.json(
-          { error: "Phone number is required for SMS factor" }, 
-          { status: 400 }
+          { error: "Phone number is required for SMS factor" },
+          { status: 400 },
         );
       }
-      
+
       factor = await workos.mfa.enrollFactor({
         type: "sms",
         userId: user.id,
         phoneNumber: phone,
       });
     }
-    
+
     return Response.json({ success: true, factor });
   } catch (error) {
     return Response.json(
-      { error: error.message || "Failed to enroll MFA factor" }, 
-      { status: 400 }
+      { error: error.message || "Failed to enroll MFA factor" },
+      { status: 400 },
     );
   }
 };
@@ -633,31 +642,33 @@ export const handler: Handlers = {
   async GET(req, ctx) {
     const url = new URL(req.url);
     const authenticationId = url.searchParams.get("authentication_id");
-    
+
     if (!authenticationId) {
       return new Response("Missing authentication ID", { status: 400 });
     }
-    
+
     return ctx.render({ authenticationId });
   },
-  
+
   async POST(req) {
     const { workos } = initUserManagement();
     const formData = await req.formData();
-    
+
     const authenticationId = formData.get("authenticationId")?.toString();
     const code = formData.get("code")?.toString();
-    
+
     if (!authenticationId || !code) {
-      return new Response("Authentication ID and code are required", { status: 400 });
+      return new Response("Authentication ID and code are required", {
+        status: 400,
+      });
     }
-    
+
     try {
       const authentication = await workos.mfa.verifyAuthentication({
         authenticationId,
         code,
       });
-      
+
       if (authentication.valid) {
         // Redirect to the intended destination
         const headers = new Headers();
@@ -670,16 +681,16 @@ export const handler: Handlers = {
         return new Response("Invalid verification code", { status: 400 });
       }
     } catch (error) {
-      return new Response(`Verification error: ${error.message}`, { 
-        status: 400 
+      return new Response(`Verification error: ${error.message}`, {
+        status: 400,
       });
     }
-  }
+  },
 };
 
 export default function VerifyMFA(props: PageProps) {
   const { authenticationId } = props.data;
-  
+
   return (
     <div class="container mx-auto px-4 py-8">
       <h1 class="text-2xl font-bold mb-6">Verify Two-Factor Authentication</h1>
@@ -699,31 +710,33 @@ interface VerifyMFAFormProps {
   authenticationId: string;
 }
 
-export default function VerifyMFAForm({ authenticationId }: VerifyMFAFormProps) {
+export default function VerifyMFAForm(
+  { authenticationId }: VerifyMFAFormProps,
+) {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  
+
   const handleSubmit = async (e: Event) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    
+
     try {
       const formData = new FormData();
       formData.append("authenticationId", authenticationId);
       formData.append("code", code);
-      
+
       const response = await fetch("/verify-mfa", {
         method: "POST",
         body: formData,
       });
-      
+
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(errorText);
       }
-      
+
       // Verification successful, redirect will be handled by the server
       window.location.href = "/dashboard";
     } catch (err) {
@@ -731,11 +744,11 @@ export default function VerifyMFAForm({ authenticationId }: VerifyMFAFormProps) 
       setLoading(false);
     }
   };
-  
+
   return (
     <form onSubmit={handleSubmit} class="max-w-md mx-auto">
       <input type="hidden" name="authenticationId" value={authenticationId} />
-      
+
       <div class="mb-4">
         <label class="block mb-2" for="code">Verification Code</label>
         <input
@@ -749,7 +762,7 @@ export default function VerifyMFAForm({ authenticationId }: VerifyMFAFormProps) 
           placeholder="Enter the code from your authenticator app"
         />
       </div>
-      
+
       <button
         type="submit"
         disabled={loading}
@@ -757,7 +770,7 @@ export default function VerifyMFAForm({ authenticationId }: VerifyMFAFormProps) 
       >
         {loading ? "Verifying..." : "Verify"}
       </button>
-      
+
       {error && <p class="text-red-500 mt-2">{error}</p>}
     </form>
   );
@@ -788,7 +801,7 @@ export function initUserManagement() {
   const workos = new WorkOS(Deno.env.get("WORKOS_API_KEY") || "");
   const userManagement = workos.userManagement;
   const sessionProvider = new FreshSessionProvider(SESSION_OPTIONS);
-  
+
   return { workos, userManagement, sessionProvider };
 }
 
@@ -796,18 +809,18 @@ export function initUserManagement() {
 export async function getCurrentUser(req: Request) {
   const { sessionProvider } = initUserManagement();
   const session = await sessionProvider.getSession(req);
-  
+
   return session?.user || null;
 }
 
 // Middleware to require authentication
 export async function requireAuth(req: Request) {
   const user = await getCurrentUser(req);
-  
+
   if (!user) {
     const url = new URL(req.url);
     const redirectUrl = `/login?redirect=${encodeURIComponent(url.pathname)}`;
-    
+
     return new Response(null, {
       status: 302,
       headers: {
@@ -815,25 +828,25 @@ export async function requireAuth(req: Request) {
       },
     });
   }
-  
+
   return null;
 }
 
 // Create a user session after authentication
 export async function createUserSession(
   authData: { user: any; accessToken: string; refreshToken: string },
-  redirectPath: string
+  redirectPath: string,
 ) {
   const { sessionProvider } = initUserManagement();
-  
+
   const session = {
     user: authData.user,
     accessToken: authData.accessToken,
     refreshToken: authData.refreshToken,
   };
-  
+
   const cookie = await sessionProvider.createSession(session);
-  
+
   return new Response(null, {
     status: 302,
     headers: {
@@ -854,30 +867,30 @@ import { WorkOS } from "workos";
 export function initMFA() {
   const workos = new WorkOS(Deno.env.get("WORKOS_API_KEY") || "");
   const mfa = workos.mfa;
-  
+
   return { workos, mfa };
 }
 
 // Start MFA authentication
 export async function startMFAAuthentication(userId: string, factorId: string) {
   const { mfa } = initMFA();
-  
+
   const authentication = await mfa.startAuthentication({
     userId,
     factorId,
   });
-  
+
   return authentication;
 }
 
 // List MFA factors for a user
 export async function listMFAFactors(userId: string) {
   const { mfa } = initMFA();
-  
+
   const { data: factors } = await mfa.listFactors({
     userId,
   });
-  
+
   return factors;
 }
 ```
@@ -932,3 +945,4 @@ The screenshot should display the email input field and "Send Login Link" button
 [SCREENSHOT: Passwordless Success Message]
 Place a screenshot here showing the success message after sending the login link.
 The screenshot should display the "Check your email for a login link" message.
+```

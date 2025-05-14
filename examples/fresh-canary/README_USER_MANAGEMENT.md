@@ -1,6 +1,7 @@
 # WorkOS User Management with Fresh 2.x
 
-This directory contains example implementations of the WorkOS User Management module integrated with Fresh 2.x on Deno.
+This directory contains example implementations of the WorkOS User Management
+module integrated with Fresh 2.x on Deno.
 
 ## Features
 
@@ -45,10 +46,11 @@ deno task start
 
 ### 1. Initialize User Management
 
-Use the `initUserManagement` utility function to get access to the WorkOS client, UserManagement module, and session provider:
+Use the `initUserManagement` utility function to get access to the WorkOS
+client, UserManagement module, and session provider:
 
 ```typescript
-import { initUserManagement } from '../utils/user-management.ts';
+import { initUserManagement } from "../utils/user-management.ts";
 
 const { workos, userManagement, sessionProvider } = initUserManagement();
 ```
@@ -58,7 +60,7 @@ const { workos, userManagement, sessionProvider } = initUserManagement();
 Use the `requireAuth` middleware to protect routes requiring authentication:
 
 ```typescript
-import { requireAuth } from '../utils/user-management.ts';
+import { requireAuth } from "../utils/user-management.ts";
 
 export const handler: Handlers = {
   async GET(req, ctx) {
@@ -79,7 +81,7 @@ export const handler: Handlers = {
 Get the current user from the session:
 
 ```typescript
-import { getCurrentUser } from '../utils/user-management.ts';
+import { getCurrentUser } from "../utils/user-management.ts";
 
 const user = await getCurrentUser(req);
 if (user) {
@@ -92,37 +94,40 @@ if (user) {
 After authentication, create a session:
 
 ```typescript
-import { createUserSession } from '../utils/user-management.ts';
+import { createUserSession } from "../utils/user-management.ts";
 
 // After successful authentication
 return await createUserSession(
   {
     user: {
-      id: 'user-id',
-      email: 'user@example.com',
+      id: "user-id",
+      email: "user@example.com",
       // other user properties
     },
-    accessToken: 'access-token',
-    refreshToken: 'refresh-token',
+    accessToken: "access-token",
+    refreshToken: "refresh-token",
   },
-  '/redirect-path',
+  "/redirect-path",
 );
 ```
 
 ## Session Management
 
-Sessions are managed using the `FreshSessionProvider` class which implements the WorkOS session interface while being compatible with Fresh 2.x. It uses the Web Crypto API for secure cookie encryption and provides middleware for Fresh.
+Sessions are managed using the `FreshSessionProvider` class which implements the
+WorkOS session interface while being compatible with Fresh 2.x. It uses the Web
+Crypto API for secure cookie encryption and provides middleware for Fresh.
 
 Session data is stored in encrypted cookies with the following configuration:
 
 ```typescript
 const SESSION_OPTIONS = {
-  cookieName: 'workos_session',
-  password: Deno.env.get('SESSION_SECRET'),
+  cookieName: "workos_session",
+  password: Deno.env.get("SESSION_SECRET") ??
+    "session-secret-should-be-set-in-production",
   ttl: 60 * 60 * 24 * 7, // 7 days in seconds
   secure: true,
   httpOnly: true,
-  sameSite: 'Lax',
+  sameSite: "Lax",
 };
 ```
 
@@ -132,7 +137,7 @@ const SESSION_OPTIONS = {
 
 ```typescript
 const authResponse = await userManagement.authenticateWithPassword({
-  clientId: Deno.env.get('WORKOS_CLIENT_ID'),
+  clientId: Deno.env.get("WORKOS_CLIENT_ID") ?? "",
   email,
   password,
   session: {
@@ -147,14 +152,14 @@ const authResponse = await userManagement.authenticateWithPassword({
 ```typescript
 // Get authorization URL
 const authorizationURL = workos.sso.getAuthorizationUrl({
-  clientId: Deno.env.get('WORKOS_CLIENT_ID'),
+  clientId: Deno.env.get("WORKOS_CLIENT_ID") ?? "",
   redirectUri: callbackUrl,
   state: crypto.randomUUID(),
 });
 
 // Handle callback
 const authResponse = await userManagement.authenticateWithCode({
-  clientId: Deno.env.get('WORKOS_CLIENT_ID'),
+  clientId: Deno.env.get("WORKOS_CLIENT_ID") ?? "",
   code,
   session: {
     sealSession: true,

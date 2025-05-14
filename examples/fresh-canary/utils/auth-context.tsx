@@ -1,9 +1,15 @@
 // Authentication context using Preact's createContext with Signals
-import { createContext } from 'preact';
-import { computed, type ReadonlySignal, type Signal, signal } from '@preact/signals';
-import { useContext } from 'preact/hooks';
-import type { ComponentChildren } from 'preact';
-import { getCurrentUser, type WorkOSUser } from './user-management.ts';
+/** @jsx h */
+import { createContext, h } from "preact";
+import {
+  computed,
+  type ReadonlySignal,
+  type Signal,
+  signal,
+} from "@preact/signals";
+import { useContext } from "preact/hooks";
+import type { ComponentChildren } from "preact";
+import { getCurrentUser, type WorkOSUser } from "./user-management.ts";
 
 // Auth state interface
 export interface AuthState {
@@ -65,12 +71,14 @@ export function AuthProvider({ initialUser, children }: AuthProviderProps) {
 
   // Login function - redirect to login page
   const login = (redirectUrl: string = globalThis.location.pathname) => {
-    globalThis.location.href = `/login?redirect=${encodeURIComponent(redirectUrl)}`;
+    globalThis.location.href = `/login?redirect=${
+      encodeURIComponent(redirectUrl)
+    }`;
   };
 
   // Logout function - redirect to logout page
   const logout = () => {
-    globalThis.location.href = '/logout';
+    globalThis.location.href = "/logout";
   };
 
   // Function to refresh the user data
@@ -80,17 +88,19 @@ export function AuthProvider({ initialUser, children }: AuthProviderProps) {
       state.error.value = null;
 
       // Fetch the current user from the server
-      const response = await fetch('/api/me');
+      const response = await fetch("/api/me");
 
       if (!response.ok) {
-        throw new Error('Failed to fetch user data');
+        throw new Error("Failed to fetch user data");
       }
 
       const userData = await response.json();
       state.user.value = userData;
     } catch (err) {
-      console.error('Error refreshing user:', err);
-      state.error.value = err instanceof Error ? err.message : 'An unknown error occurred';
+      console.error("Error refreshing user:", err);
+      state.error.value = err instanceof Error
+        ? err.message
+        : "An unknown error occurred";
     } finally {
       state.isLoading.value = false;
     }
@@ -116,7 +126,7 @@ export function useAuth(): AuthContextType {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
 
   return context;
@@ -143,7 +153,7 @@ export async function getAuthContextData(req: Request) {
     const user = await getCurrentUser(req);
     return { user };
   } catch (error) {
-    console.error('Failed to get auth context data:', error);
+    console.error("Failed to get auth context data:", error);
     return { user: null };
   }
 }

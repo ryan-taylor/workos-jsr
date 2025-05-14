@@ -11,15 +11,18 @@ export const handler = {
   },
 };
 
-export default function HydrationPage({ data }: PageProps<{ serverTime: string }>) {
+export default function HydrationPage(
+  { data }: PageProps<{ serverTime: string }>,
+) {
   const { serverTime } = data;
-  
+
   return (
     <>
       <Head>
         <title>Hydration in Fresh - WorkOS Fresh Example</title>
         <link rel="stylesheet" href="/styles.css" />
-        <style>{`
+        <style>
+          {`
           .hydration-demo {
             border: 1px solid #ddd;
             padding: 20px;
@@ -146,80 +149,100 @@ export default function HydrationPage({ data }: PageProps<{ serverTime: string }
             padding-left: 20px;
             border-left: 3px solid #007bff;
           }
-        `}</style>
+        `}
+        </style>
       </Head>
-      
+
       <div className="container">
         <header>
           <h1>Understanding Hydration in Fresh</h1>
-          <p className="subtitle">How Fresh's Islands Architecture Delivers the Best of Both Worlds</p>
+          <p className="subtitle">
+            How Fresh's Islands Architecture Delivers the Best of Both Worlds
+          </p>
         </header>
-        
+
         <section className="content-section">
           <h2>What is Hydration?</h2>
-          
+
           <div className="hydration-explanation">
             <p>
-              <strong>Hydration</strong> is the process where the JavaScript for interactive components 
-              gets loaded and executed on the client side, "hydrating" the static HTML that was initially 
-              rendered on the server.
+              <strong>Hydration</strong>{" "}
+              is the process where the JavaScript for interactive components
+              gets loaded and executed on the client side, "hydrating" the
+              static HTML that was initially rendered on the server.
             </p>
-            
+
             <p>
               This approach gives you the best of both worlds:
             </p>
-            
+
             <ul>
-              <li><strong>Fast Initial Page Load</strong> - Server-rendered HTML appears quickly</li>
-              <li><strong>SEO Benefits</strong> - Search engines see complete content</li>
-              <li><strong>Progressive Enhancement</strong> - Base content works without JavaScript</li>
-              <li><strong>Rich Interactivity</strong> - Components become fully interactive after hydration</li>
+              <li>
+                <strong>Fast Initial Page Load</strong>{" "}
+                - Server-rendered HTML appears quickly
+              </li>
+              <li>
+                <strong>SEO Benefits</strong>{" "}
+                - Search engines see complete content
+              </li>
+              <li>
+                <strong>Progressive Enhancement</strong>{" "}
+                - Base content works without JavaScript
+              </li>
+              <li>
+                <strong>Rich Interactivity</strong>{" "}
+                - Components become fully interactive after hydration
+              </li>
             </ul>
           </div>
         </section>
-        
+
         <section className="content-section">
           <h2>Fresh's Islands Architecture</h2>
-          
+
           <p>
-            Fresh uses an "Islands Architecture" approach to hydration, which offers significant 
-            performance benefits over traditional approaches.
+            Fresh uses an "Islands Architecture" approach to hydration, which
+            offers significant performance benefits over traditional approaches.
           </p>
-          
+
           <div className="architecture-diagram">
             <h3>How Islands Architecture Works:</h3>
-            
+
             <div className="step">
               <h4>1. Server Rendering</h4>
               <p>
-                The server renders the entire page as static HTML, including both static and interactive components.
+                The server renders the entire page as static HTML, including
+                both static and interactive components.
               </p>
             </div>
-            
+
             <div className="step">
               <h4>2. Selective Hydration</h4>
               <p>
-                Unlike traditional approaches that hydrate the entire page, Fresh only hydrates specific 
-                "islands" of interactivity (components in the <code>/islands</code> directory).
+                Unlike traditional approaches that hydrate the entire page,
+                Fresh only hydrates specific "islands" of interactivity
+                (components in the <code>/islands</code> directory).
               </p>
             </div>
-            
+
             <div className="step">
               <h4>3. Efficient Loading</h4>
               <p>
-                JavaScript is only loaded for interactive components, not for static content. This 
-                significantly reduces the amount of JavaScript shipped to the client.
+                JavaScript is only loaded for interactive components, not for
+                static content. This significantly reduces the amount of
+                JavaScript shipped to the client.
               </p>
             </div>
-            
+
             <div className="step">
               <h4>4. Parallel Processing</h4>
               <p>
-                Each island hydrates independently, allowing for parallel processing and faster overall hydration.
+                Each island hydrates independently, allowing for parallel
+                processing and faster overall hydration.
               </p>
             </div>
           </div>
-          
+
           <div className="code-example">
             <pre>{`// Example island component
 // File: islands/Counter.tsx
@@ -228,7 +251,7 @@ import { useState } from "preact/hooks";
 
 export default function Counter() {
   const [count, setState] = useState(0);
-  
+
   return (
     <div>
       <p>Count: {count}</p>
@@ -239,115 +262,137 @@ export default function Counter() {
   );
 }`}</pre>
           </div>
-          
+
           <p>
-            The component above will be server-rendered initially, but then hydrated on the client 
-            to become interactive. Components outside the islands directory remain static.
+            The component above will be server-rendered initially, but then
+            hydrated on the client to become interactive. Components outside the
+            islands directory remain static.
           </p>
         </section>
-        
+
         <section className="content-section">
           <h2>Hydration in Action</h2>
           <p>
-            The demo below shows the hydration process in real-time. When you first load this page, 
-            you see server-rendered HTML. As JavaScript loads, the components "hydrate" and become 
-            interactive.
+            The demo below shows the hydration process in real-time. When you
+            first load this page, you see server-rendered HTML. As JavaScript
+            loads, the components "hydrate" and become interactive.
           </p>
-          
+
           <HydrationDemo initialServerTime={serverTime} />
         </section>
-        
+
         <section className="content-section">
           <h2>Technical Implementation</h2>
-          
+
           <p>How Fresh handles hydration behind the scenes:</p>
-          
+
           <ol>
             <li>
-              <strong>Server-Side Rendering (SSR)</strong> - Fresh renders the entire page on the server, 
-              including islands, generating static HTML.
+              <strong>Server-Side Rendering (SSR)</strong>{" "}
+              - Fresh renders the entire page on the server, including islands,
+              generating static HTML.
             </li>
             <li>
-              <strong>Islands Identification</strong> - During build time, Fresh identifies all island 
-              components and generates the necessary client-side JavaScript bundles.
+              <strong>Islands Identification</strong>{" "}
+              - During build time, Fresh identifies all island components and
+              generates the necessary client-side JavaScript bundles.
             </li>
             <li>
-              <strong>Hydration Script Injection</strong> - A small hydration script is included in the 
-              page that loads the JavaScript for each island.
+              <strong>Hydration Script Injection</strong>{" "}
+              - A small hydration script is included in the page that loads the
+              JavaScript for each island.
             </li>
             <li>
-              <strong>Selective Hydration</strong> - Only the interactive islands receive JavaScript, 
-              saving bandwidth and improving performance.
+              <strong>Selective Hydration</strong>{" "}
+              - Only the interactive islands receive JavaScript, saving
+              bandwidth and improving performance.
             </li>
             <li>
-              <strong>State Reconciliation</strong> - The client-side code reconciles any differences 
-              between server and client renders (like the time example above).
+              <strong>State Reconciliation</strong>{" "}
+              - The client-side code reconciles any differences between server
+              and client renders (like the time example above).
             </li>
           </ol>
         </section>
-        
+
         <section className="content-section">
           <h2>Benefits of Fresh's Approach</h2>
-          
+
           <ul>
             <li>
-              <strong>Minimal JavaScript</strong> - Ships significantly less JavaScript than traditional SPA frameworks
+              <strong>Minimal JavaScript</strong>{" "}
+              - Ships significantly less JavaScript than traditional SPA
+              frameworks
             </li>
             <li>
-              <strong>Faster Page Loads</strong> - Initial HTML is delivered quickly from the server
+              <strong>Faster Page Loads</strong>{" "}
+              - Initial HTML is delivered quickly from the server
             </li>
             <li>
-              <strong>Progressive Enhancement</strong> - Core content works even before JavaScript loads
+              <strong>Progressive Enhancement</strong>{" "}
+              - Core content works even before JavaScript loads
             </li>
             <li>
-              <strong>Better Performance</strong> - Selective hydration means less work for the browser
+              <strong>Better Performance</strong>{" "}
+              - Selective hydration means less work for the browser
             </li>
             <li>
-              <strong>Improved Metrics</strong> - Better Core Web Vitals scores due to less JavaScript processing
+              <strong>Improved Metrics</strong>{" "}
+              - Better Core Web Vitals scores due to less JavaScript processing
             </li>
           </ul>
         </section>
-        
+
         <section className="content-section">
           <h2>Hydration Challenges</h2>
-          
+
           <p>
-            While hydration provides many benefits, there are challenges to be aware of:
+            While hydration provides many benefits, there are challenges to be
+            aware of:
           </p>
-          
+
           <ul>
             <li>
-              <strong>Hydration Mismatches</strong> - Differences between server and client renders can cause issues
+              <strong>Hydration Mismatches</strong>{" "}
+              - Differences between server and client renders can cause issues
             </li>
             <li>
-              <strong>Flickering</strong> - Content can sometimes "flicker" during hydration if there are mismatches
+              <strong>Flickering</strong>{" "}
+              - Content can sometimes "flicker" during hydration if there are
+              mismatches
             </li>
             <li>
-              <strong>Initial Non-Interactivity</strong> - Components aren't interactive until hydration completes
+              <strong>Initial Non-Interactivity</strong>{" "}
+              - Components aren't interactive until hydration completes
             </li>
           </ul>
-          
+
           <p>
-            Fresh handles these challenges well through its architecture and reconciliation process, 
-            but developers should still be aware of potential issues.
+            Fresh handles these challenges well through its architecture and
+            reconciliation process, but developers should still be aware of
+            potential issues.
           </p>
         </section>
-        
+
         <section className="content-section">
           <h2>Best Practices</h2>
-          
+
           <ul>
             <li>
-              <strong>Keep Islands Small</strong> - Only make components islands if they need interactivity
+              <strong>Keep Islands Small</strong>{" "}
+              - Only make components islands if they need interactivity
             </li>
             <li>
-              <strong>Minimize State Inconsistency</strong> - Avoid content that could differ between server and client
+              <strong>Minimize State Inconsistency</strong>{" "}
+              - Avoid content that could differ between server and client
             </li>
             <li>
-              <strong>Provide Loading States</strong> - Consider the pre-hydration appearance of interactive elements
+              <strong>Provide Loading States</strong>{" "}
+              - Consider the pre-hydration appearance of interactive elements
             </li>
             <li>
-              <strong>Use Island Props Carefully</strong> - Be aware that props passed to islands must be serializable
+              <strong>Use Island Props Carefully</strong>{" "}
+              - Be aware that props passed to islands must be serializable
             </li>
           </ul>
         </section>

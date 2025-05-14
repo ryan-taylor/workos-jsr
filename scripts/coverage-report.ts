@@ -9,8 +9,8 @@
  * information about specific functions and lines that need testing.
  */
 
-import { parseArgs } from "https://deno.land/std@0.219.0/cli/parse_args.ts";
-import { join } from "https://deno.land/std@0.219.0/path/mod.ts";
+import { parseArgs } from "https://deno.land/std@0.219.0/cli/parse_args.ts"; // Keep this import since flags might not be available in JSR
+import { join } from "jsr:@std/path@^1";
 
 const args = parseArgs(Deno.args, { boolean: ["skip_tests"] });
 const FOCUS_MODULES = ["mfa", "organizations", "sso"];

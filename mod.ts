@@ -1,5 +1,34 @@
 /**
  * WorkOS SDK for Deno - Flat ESM interface with all SDK APIs
+ *
+ * This module provides a complete WorkOS SDK implementation for Deno and Fresh projects,
+ * offering access to WorkOS features like SSO, Directory Sync, User Management,
+ * MFA, and more.
+ *
+ * Features:
+ * - Native Deno implementation with TypeScript types
+ * - Special support for Fresh framework
+ * - Complete API coverage for all WorkOS products
+ * - Modern ESM module format
+ *
+ * @example
+ * ```ts
+ * import { WorkOS } from "@ryantaylor/workos";
+ *
+ * // Initialize the WorkOS client with your API key
+ * const workos = new WorkOS(Deno.env.get("WORKOS_API_KEY"));
+ *
+ * // Use SSO to authenticate a user
+ * const authorizationURL = workos.sso.getAuthorizationUrl({
+ *   provider: 'GoogleOAuth',
+ *   redirectUri: 'https://example.com/callback',
+ *   clientId: workos.clientId
+ * });
+ *
+ * // In your callback handler
+ * const profile = await workos.sso.getProfile(code);
+ * ```
+ *
  * @module @ryantaylor/workos
  */
 
@@ -45,11 +74,30 @@ import {
 /**
  * WorkOS class extended for Deno and Fresh, using the FreshSessionProvider
  * instead of the default iron-session implementation.
+ *
+ * This class provides access to all WorkOS API features and is the main entry point
+ * for interacting with the WorkOS API in Deno applications.
+ *
+ * @example
+ * ```ts
+ * import { WorkOS } from "@ryantaylor/workos";
+ *
+ * const workos = new WorkOS(Deno.env.get("WORKOS_API_KEY"), {
+ *   clientId: Deno.env.get("WORKOS_CLIENT_ID")
+ * });
+ *
+ * // Access any WorkOS feature
+ * const organization = await workos.organizations.createOrganization({
+ *   name: "Acme Inc."
+ * });
+ * ```
  */
 export class WorkOS extends BaseWorkOS {
   /**
    * Override the createIronSessionProvider method to use our Fresh-native implementation
    * instead of the default implementation that throws an error.
+   *
+   * @returns A Fresh-compatible session provider for WorkOS authentication
    */
   override createIronSessionProvider(): FreshSessionProvider {
     return new FreshSessionProvider();
@@ -99,7 +147,7 @@ export type {
   WorkOSOptions,
   WorkOSResponseError,
 } from "./packages/workos_sdk/src/workos.ts";
-export type { 
+export type {
   CommonGetOptions as InternalGetOptions,
   CommonPostOptions as InternalPostOptions,
   CommonPutOptions as InternalPutOptions,
@@ -114,8 +162,8 @@ export type { SessionOptions } from "./packages/workos_sdk/src/common/iron-sessi
 // Replace wildcard with explicit exports for audit-logs
 export type {
   AuditLogEvent,
+  AuditLogListEventsOptions,
   CreateEventOptions,
-  AuditLogListEventsOptions
 } from "./packages/workos_sdk/src/audit-logs/interfaces/index.ts";
 
 export * from "./packages/workos_sdk/src/directory-sync/interfaces/index.ts";
@@ -123,7 +171,7 @@ export * from "./packages/workos_sdk/src/directory-sync/interfaces/index.ts";
 // Replace wildcard with explicit exports for events
 export type {
   Event,
-  EventsListOptions
+  EventsListOptions,
 } from "./packages/workos_sdk/src/events/interfaces/index.ts";
 
 export * from "./packages/workos_sdk/src/fga/interfaces/index.ts";

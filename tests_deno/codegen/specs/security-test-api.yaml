@@ -1,0 +1,39 @@
+openapi: 3.0.0
+info:
+  title: Security Test API
+  version: 1.0.0
+  description: API for testing security schemes
+servers:
+  - url: https://api.example.com
+paths:
+  /secure:
+    get:
+      operationId: getSecured
+      security:
+        - apiKey: []
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        message:
+          type: string

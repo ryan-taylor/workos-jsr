@@ -1,4 +1,8 @@
-import type { List, ListResponse, PaginationOptions } from "../common/interfaces.ts";
+import type {
+  List,
+  ListResponse,
+  PaginationOptions,
+} from "../common/interfaces.ts";
 import type { WorkOS } from "../workos.ts";
 import { decode, decrypt } from "./cryptography/decrypt.ts";
 import { encrypt } from "./cryptography/encrypt.ts";

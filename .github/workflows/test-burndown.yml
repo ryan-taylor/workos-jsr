@@ -1,0 +1,118 @@
+name: Test Burndown Automation
+
+on:
+  # Run after tests complete in the test matrix workflow
+  workflow_run:
+    workflows: ["Test Matrix"]
+    types:
+      - completed
+  # Also run on schedule to track progress over time
+  schedule:
+    - cron: "0 0 * * *" # Run daily at midnight UTC
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  generate-burndown:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: "2.x"
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/deno
+          key: ${{ runner.os }}-deno-${{ hashFiles('**/deno.json', '**/import_map.json') }}
+          restore-keys: |
+            ${{ runner.os }}-deno-
+
+      - name: Fetch historical burndown data
+        id: fetch-history
+        run: |
+          mkdir -p .burndown-history
+          # If this is a scheduled run, pull history from previous runs
+          if [[ "${{ github.event_name }}" == "schedule" || "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "Fetching historical burndown data..."
+            # Download historical data if it exists
+            if [ -d ".burndown-history" ]; then
+              echo "::set-output name=history_exists::true"
+            else
+              echo "::set-output name=history_exists::false"
+            fi
+          fi
+
+      - name: Run tests and generate test-burndown.json
+        id: test-run
+        run: |
+          # Run tests and capture output in test-burndown.json
+          deno test -A --no-check --reporter=json > test-results.json || true
+          # Convert test results to burndown format
+          deno run -A scripts/analyze-test-burndown.ts
+
+      - name: Run burndown analysis
+        run: |
+          # Generate the burndown reports
+          deno run -A tools/generate-burndown.ts
+          echo "Analysis complete. Generated test-burndown-report.md"
+
+      - name: Check against baseline
+        id: baseline-check
+        run: |
+          # Compare results against baseline (if exists)
+          if [ -f ".burndown-baseline.json" ]; then
+            deno run -A scripts/compare-to-baseline.ts
+            EXIT_CODE=$?
+            echo "::set-output name=has_new_failures::$EXIT_CODE"
+          else
+            echo "No baseline found. Creating initial baseline."
+            cp test-burndown-analysis.json .burndown-baseline.json
+            echo "::set-output name=has_new_failures::0"
+          fi
+
+      - name: Upload burndown reports as artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-burndown-reports
+          path: |
+            test-burndown.json
+            test-burndown-analysis.json
+            test-burndown-report.md
+            test-burndown-consistency.md
+            test-burndown-velocity.md
+
+      - name: Create issue for new test failures
+        if: steps.baseline-check.outputs.has_new_failures == '1' && github.event_name != 'workflow_dispatch'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('test-burndown-report.md', 'utf8');
+
+            // Create an issue with the burndown report
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'New Test Failures Detected',
+              body: report,
+              labels: ['test-failure', 'burndown']
+            });
+
+            console.log(`Created issue #${issue.data.number}`);
+
+      - name: Fail if burndown threshold exceeded
+        id: fail-check
+        run: |
+          # Check if failure rate exceeds threshold
+          deno run -A scripts/check-failure-threshold.ts
+          if [ $? -ne 0 ]; then
+            echo "Test failure threshold exceeded!"
+            exit 1
+          fi
+          echo "Test failures within acceptable threshold."

@@ -1,6 +1,13 @@
-import { FreshContext } from "@workos/fresh/mod.ts";
+import { FreshContext } from "@workos/fresh";
+/** @jsx h */
+import { h } from "preact";
+import { JSX } from "preact";
 
 export default function LoginPage(req: Request, ctx: FreshContext) {
+  if (!ctx.workos) {
+    throw new Error("WorkOS not initialized in context");
+  }
+
   const loginUrl = ctx.workos.sso.getAuthorizationURL({
     provider: "google",
     redirectUri: new URL("/callback", req.url).toString(),

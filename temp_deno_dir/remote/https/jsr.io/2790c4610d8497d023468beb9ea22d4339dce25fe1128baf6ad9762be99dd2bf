@@ -1,0 +1,32 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+import { AssertionError } from "./assertion_error.ts";
+
+/**
+ * Make an assertion that `actual` match RegExp `expected`. If not
+ * then throw.
+ *
+ * @example Usage
+ * ```ts ignore
+ * import { assertMatch } from "@std/assert";
+ *
+ * assertMatch("Raptor", /Raptor/); // Doesn't throw
+ * assertMatch("Denosaurus", /Raptor/); // Throws
+ * ```
+ *
+ * @param actual The actual value to be matched.
+ * @param expected The expected pattern to match.
+ * @param msg The optional message to display if the assertion fails.
+ */
+export function assertMatch(
+  actual: string,
+  expected: RegExp,
+  msg?: string,
+) {
+  if (expected.test(actual)) return;
+  const msgSuffix = msg ? `: ${msg}` : ".";
+  msg = `Expected actual: "${actual}" to match: "${expected}"${msgSuffix}`;
+  throw new AssertionError(msg);
+}
+
+// denoCacheMetadata={"headers":{"x-goog-storage-class":"STANDARD","date":"Tue, 13 May 2025 23:23:02 GMT","x-goog-generation":"1745475807399785","x-jsr-cache-status":"hit","x-robots-tag":"noindex","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","x-goog-hash":"crc32c=BJD63g==,md5=Tvx6FH/DO6e8FXPj5iz6nw==","via":"1.1 google","x-jsr-cache-id":"YYZ","access-control-expose-headers":"*","x-goog-metageneration":"1","content-length":"885","accept-ranges":"bytes","cache-control":"public, max-age=31536000, immutable","x-goog-stored-content-encoding":"identity","age":"1950","x-guploader-uploadid":"AAO2VwrlFwMcNljf1xLg4aSKr5lS497bvA10fF88PQFcKB9HmudO1_vc-a-C6A86KXpNAWKX","x-goog-stored-content-length":"885","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","etag":"\"4efc7a147fc33ba7bc1573e3e62cfa9f\"","expires":"Wed, 13 May 2026 23:23:02 GMT","cross-origin-resource-policy":"cross-origin","server":"UploadServer","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","access-control-allow-origin":"*","content-type":"text/typescript"},"url":"https://jsr.io/@std/assert/1.0.13/match.ts","time":1747180532}

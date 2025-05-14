@@ -1,0 +1,27 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+
+import { assertArg } from "../_common/from_file_url.ts";
+
+/**
+ * Converts a file URL to a path string.
+ *
+ * @example Usage
+ * ```ts
+ * import { fromFileUrl } from "@std/path/posix/from-file-url";
+ * import { assertEquals } from "@std/assert";
+ *
+ * assertEquals(fromFileUrl(new URL("file:///home/foo")), "/home/foo");
+ * ```
+ *
+ * @param url The file URL to convert.
+ * @returns The path string.
+ */
+export function fromFileUrl(url: URL | string): string {
+  url = assertArg(url);
+  return decodeURIComponent(
+    url.pathname.replace(/%(?![0-9A-Fa-f]{2})/g, "%25"),
+  );
+}
+
+// denoCacheMetadata={"headers":{"x-goog-metageneration":"1","via":"1.1 google","x-jsr-cache-status":"revalidated","access-control-allow-origin":"*","x-content-type-options":"nosniff","content-length":"668","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","x-guploader-uploadid":"AAO2VwplSj6T2wS3bnKcsnvyvwOxcYRT62jX5SGuYfLcd8yYp76j7G7PLFibSNNASi82SzTOL1d8Y2KEkxOYdA","age":"0","cache-control":"public, max-age=31536000, immutable","x-jsr-cache-id":"YYZ","x-goog-hash":"crc32c=sMVgBA==,md5=vpKCxau7/yEqpKm1rwtjmg==","content-type":"text/typescript","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","access-control-expose-headers":"*","x-robots-tag":"noindex","x-goog-generation":"1745475807107420","x-goog-stored-content-encoding":"identity","server":"UploadServer","etag":"\"be9282c5abbbff212aa4a9b5af0b639a\"","cross-origin-resource-policy":"cross-origin","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","accept-ranges":"bytes","x-goog-storage-class":"STANDARD","date":"Tue, 13 May 2025 01:47:32 GMT","expires":"Wed, 13 May 2026 01:47:32 GMT","x-goog-stored-content-length":"668"},"url":"https://jsr.io/@std/path/1.0.9/posix/from_file_url.ts","time":1747100852}

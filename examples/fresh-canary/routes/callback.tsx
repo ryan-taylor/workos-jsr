@@ -1,5 +1,6 @@
-import { FreshContext } from "@workos/fresh/mod.ts";
-import { redirect } from "@fresh/runtime.ts";
+/** @jsx h */
+import { h } from "preact";
+import { FreshContext } from "@workos/fresh";
 
 export default async function CallbackPage(req: Request, ctx: FreshContext) {
   const code = new URL(req.url).searchParams.get("code");
@@ -10,7 +11,10 @@ export default async function CallbackPage(req: Request, ctx: FreshContext) {
   try {
     const profile = await ctx.workos.sso.getProfileAndToken(code);
     await ctx.workos.setSession(profile);
-    return redirect("/dashboard");
+    return new Response(null, {
+      status: 302,
+      headers: { Location: "/dashboard" },
+    });
   } catch (error) {
     console.error("Authentication error:", error);
     return new Response("Authentication failed", { status: 500 });

@@ -1,0 +1,286 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "WorkOS API",
+    "description": "The WorkOS API. This is a stub specification for code generation testing.",
+    "version": "2025-05-12",
+    "contact": {
+      "name": "WorkOS Support",
+      "url": "https://workos.com/support",
+      "email": "support@workos.com"
+    },
+    "license": {
+      "name": "WorkOS License"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.workos.com/",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/directory_sync/directories": {
+      "get": {
+        "summary": "List directories",
+        "description": "Returns a list of Directory resources.",
+        "operationId": "listDirectories",
+        "tags": [
+          "Directory Sync"
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of records to return",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "description": "Pagination cursor to receive records after a specific ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "Sort order of records",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "default": "desc"
+            }
+          },
+          {
+            "name": "domain",
+            "in": "query",
+            "description": "Filter directories by domain",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of directories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DirectoriesResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/directory_sync/directories/{directory_id}": {
+      "get": {
+        "summary": "Get a directory",
+        "description": "Get details for a specific directory",
+        "operationId": "getDirectory",
+        "tags": [
+          "Directory Sync"
+        ],
+        "parameters": [
+          {
+            "name": "directory_id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the directory to retrieve",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Directory details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Directory"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Directory not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "API key required for authentication. Format: `Bearer YOUR_API_KEY`"
+      }
+    },
+    "schemas": {
+      "DirectoriesResponse": {
+        "type": "object",
+        "required": [
+          "data",
+          "list_metadata"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Directory"
+            }
+          },
+          "list_metadata": {
+            "$ref": "#/components/schemas/ListMetadata"
+          }
+        }
+      },
+      "Directory": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "type",
+          "state",
+          "organization_id",
+          "created_at",
+          "updated_at"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the directory"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the directory"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of directory",
+            "enum": [
+              "okta",
+              "azure_scim",
+              "google_workspace",
+              "generic_scim"
+            ]
+          },
+          "state": {
+            "type": "string",
+            "description": "State of the directory",
+            "enum": [
+              "active",
+              "inactive",
+              "validating",
+              "error"
+            ]
+          },
+          "domain": {
+            "type": "string",
+            "description": "Domain associated with the directory",
+            "nullable": true
+          },
+          "organization_id": {
+            "type": "string",
+            "description": "The ID of the organization this directory belongs to"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the directory was created"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the directory was last updated"
+          }
+        }
+      },
+      "ListMetadata": {
+        "type": "object",
+        "required": [
+          "before",
+          "after"
+        ],
+        "properties": {
+          "before": {
+            "type": "string",
+            "description": "Pagination cursor for the previous page",
+            "nullable": true
+          },
+          "after": {
+            "type": "string",
+            "description": "Pagination cursor for the next page",
+            "nullable": true
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Error code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKey": []
+    }
+  ],
+  "x-spec-content-sha": "402d596ded24b992101885b9824a6ed496b1d0da7ab5993ab85faee31ed3eb93",
+  "x-spec-processed-checksum": "402d596ded24b992101885b9824a6ed496b1d0da7ab5993ab85faee31ed3eb93"
+}

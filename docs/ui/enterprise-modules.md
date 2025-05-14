@@ -1,10 +1,13 @@
 # Enterprise Modules
 
-This document covers the implementation details for enterprise modules in WorkOS, including Directory Sync, Audit Logs, and Events.
+This document covers the implementation details for enterprise modules in
+WorkOS, including Directory Sync, Audit Logs, and Events.
 
 ## Directory Sync
 
-Directory Sync allows you to import and synchronize user information from enterprise identity providers such as Okta, Google Workspace, Azure AD, and others.
+Directory Sync allows you to import and synchronize user information from
+enterprise identity providers such as Okta, Google Workspace, Azure AD, and
+others.
 
 ### API Endpoint Setup
 
@@ -19,29 +22,29 @@ export const handler: Handler = async (req) => {
   if (req.method !== "POST") {
     return new Response("Method Not Allowed", { status: 405 });
   }
-  
+
   const webhookSecret = Deno.env.get("WORKOS_WEBHOOK_SECRET");
   if (!webhookSecret) {
     return new Response("Webhook secret not configured", { status: 500 });
   }
-  
+
   const { workos } = initDirectorySync();
   const signature = req.headers.get("workos-signature") || "";
-  
+
   try {
     // Get the raw body for verification
     const rawBody = await req.text();
-    
+
     // Verify webhook signature
     const payload = workos.webhooks.constructEvent({
       payload: rawBody,
       sigHeader: signature,
       secret: webhookSecret,
     });
-    
+
     // Process the webhook event
     const { event } = payload;
-    
+
     // Handle different directory sync events
     switch (event) {
       case "dsync.user.created":
@@ -79,7 +82,7 @@ export const handler: Handler = async (req) => {
       default:
         console.log("Unhandled event type:", event);
     }
-    
+
     return new Response("Webhook processed successfully", { status: 200 });
   } catch (error) {
     console.error("Webhook processing error:", error);
@@ -117,38 +120,38 @@ export const handler: Handlers = {
     if (redirectResponse) {
       return redirectResponse;
     }
-    
+
     const { workos } = initDirectorySync();
     const url = new URL(req.url);
     const directoryId = url.searchParams.get("directory") || "";
-    
+
     if (!directoryId) {
       return new Response("Directory ID is required", { status: 400 });
     }
-    
+
     try {
       const { data: users } = await workos.directorySync.listUsers({
         directory: directoryId,
         limit: 100,
       });
-      
+
       return ctx.render({ users, directoryId });
     } catch (error) {
-      return new Response(`Error fetching users: ${error.message}`, { 
-        status: 500 
+      return new Response(`Error fetching users: ${error.message}`, {
+        status: 500,
       });
     }
-  }
+  },
 };
 
 export default function DirectoryUsers({ data }: PageProps<PageData>) {
   const { users, directoryId } = data;
-  
+
   return (
     <div class="container mx-auto px-4 py-8">
       <h1 class="text-2xl font-bold mb-4">Directory Users</h1>
       <p class="mb-4">Directory ID: {directoryId}</p>
-      
+
       <div class="overflow-x-auto">
         <table class="w-full border-collapse table-auto">
           <thead>
@@ -159,14 +162,14 @@ export default function DirectoryUsers({ data }: PageProps<PageData>) {
             </tr>
           </thead>
           <tbody>
-            {users.map(user => (
+            {users.map((user) => (
               <tr key={user.id} class="border-b">
                 <td class="p-2 border">
                   {user.firstName} {user.lastName}
                 </td>
                 <td class="p-2 border">
-                  {user.emails.find(email => email.primary)?.value || 
-                   user.emails[0]?.value || "No email"}
+                  {user.emails.find((email) => email.primary)?.value ||
+                    user.emails[0]?.value || "No email"}
                 </td>
                 <td class="p-2 border">
                   <span class={user.active ? "text-green-500" : "text-red-500"}>
@@ -210,38 +213,38 @@ export const handler: Handlers = {
     if (redirectResponse) {
       return redirectResponse;
     }
-    
+
     const { workos } = initDirectorySync();
     const url = new URL(req.url);
     const directoryId = url.searchParams.get("directory") || "";
-    
+
     if (!directoryId) {
       return new Response("Directory ID is required", { status: 400 });
     }
-    
+
     try {
       const { data: groups } = await workos.directorySync.listGroups({
         directory: directoryId,
         limit: 100,
       });
-      
+
       return ctx.render({ groups, directoryId });
     } catch (error) {
-      return new Response(`Error fetching groups: ${error.message}`, { 
-        status: 500 
+      return new Response(`Error fetching groups: ${error.message}`, {
+        status: 500,
       });
     }
-  }
+  },
 };
 
 export default function DirectoryGroups({ data }: PageProps<PageData>) {
   const { groups, directoryId } = data;
-  
+
   return (
     <div class="container mx-auto px-4 py-8">
       <h1 class="text-2xl font-bold mb-4">Directory Groups</h1>
       <p class="mb-4">Directory ID: {directoryId}</p>
-      
+
       <div class="overflow-x-auto">
         <table class="w-full border-collapse table-auto">
           <thead>
@@ -252,12 +255,12 @@ export default function DirectoryGroups({ data }: PageProps<PageData>) {
             </tr>
           </thead>
           <tbody>
-            {groups.map(group => (
+            {groups.map((group) => (
               <tr key={group.id} class="border-b">
                 <td class="p-2 border">{group.name}</td>
                 <td class="p-2 border">{group.id}</td>
                 <td class="p-2 border">
-                  <a 
+                  <a
                     href={`/directory-sync/users?directory=${directoryId}&group=${group.id}`}
                     class="text-blue-500 hover:underline"
                   >
@@ -278,7 +281,7 @@ export default function DirectoryGroups({ data }: PageProps<PageData>) {
 
 ```typescript
 // islands/DirectorySelector.tsx
-import { useState, useEffect } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 
 interface Directory {
   id: string;
@@ -292,19 +295,19 @@ export default function DirectorySelector() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedDirectory, setSelectedDirectory] = useState("");
-  
+
   useEffect(() => {
     fetchDirectories();
   }, []);
-  
+
   const fetchDirectories = async () => {
     try {
       const response = await fetch("/api/directory-sync/directories");
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch directories");
       }
-      
+
       const data = await response.json();
       setDirectories(data.directories);
     } catch (err) {
@@ -313,34 +316,34 @@ export default function DirectorySelector() {
       setLoading(false);
     }
   };
-  
+
   const handleDirectoryChange = (e: Event) => {
     const value = (e.target as HTMLSelectElement).value;
     setSelectedDirectory(value);
-    
+
     if (value) {
       window.location.href = `/directory-sync/users?directory=${value}`;
     }
   };
-  
+
   if (loading) {
     return <div>Loading directories...</div>;
   }
-  
+
   if (error) {
     return <div class="text-red-500">{error}</div>;
   }
-  
+
   return (
     <div>
       <label class="block mb-2">Select Directory:</label>
-      <select 
+      <select
         value={selectedDirectory}
         onChange={handleDirectoryChange}
         class="w-full p-2 border rounded"
       >
         <option value="">-- Select a Directory --</option>
-        {directories.map(dir => (
+        {directories.map((dir) => (
           <option key={dir.id} value={dir.id}>
             {dir.name} ({dir.type}) - {dir.state}
           </option>
@@ -353,7 +356,8 @@ export default function DirectorySelector() {
 
 ## Audit Logs
 
-Audit Logs allow you to track and view authentication events, user actions, and administrative changes.
+Audit Logs allow you to track and view authentication events, user actions, and
+administrative changes.
 
 ### API Endpoint Setup
 
@@ -371,18 +375,19 @@ export const handler: Handler = async (req) => {
   if (redirectResponse) {
     return redirectResponse;
   }
-  
+
   const { workos } = initAuditLogs();
   const url = new URL(req.url);
   const organizationId = url.searchParams.get("organization_id");
   const rangeStart = url.searchParams.get("range_start");
   const rangeEnd = url.searchParams.get("range_end");
-  const limit = url.searchParams.get("limit") ? 
-    parseInt(url.searchParams.get("limit") || "10", 10) : 10;
+  const limit = url.searchParams.get("limit")
+    ? parseInt(url.searchParams.get("limit") || "10", 10)
+    : 10;
   const eventName = url.searchParams.get("event") || undefined;
   const actorName = url.searchParams.get("actor") || undefined;
   const actorId = url.searchParams.get("actor_id") || undefined;
-  
+
   try {
     const auditLogs = await workos.auditLogs.listEvents({
       organizationId: organizationId || "",
@@ -393,12 +398,12 @@ export const handler: Handler = async (req) => {
       actorName,
       actorId,
     });
-    
+
     return Response.json({ auditLogs });
   } catch (error) {
     return Response.json(
-      { error: error.message || "Failed to fetch audit logs" }, 
-      { status: 400 }
+      { error: error.message || "Failed to fetch audit logs" },
+      { status: 400 },
     );
   }
 };
@@ -419,9 +424,9 @@ export const handler: Handlers = {
     if (redirectResponse) {
       return redirectResponse;
     }
-    
+
     return ctx.render();
-  }
+  },
 };
 
 export default function AuditLogs() {
@@ -438,7 +443,7 @@ export default function AuditLogs() {
 
 ```typescript
 // islands/AuditLogsViewer.tsx
-import { useState, useEffect } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 
 interface AuditLogEvent {
   id: string;
@@ -466,40 +471,40 @@ export default function AuditLogsViewer() {
   const [rangeStart, setRangeStart] = useState("");
   const [rangeEnd, setRangeEnd] = useState("");
   const [eventFilter, setEventFilter] = useState("");
-  
+
   useEffect(() => {
     fetchAuditLogs();
   }, []);
-  
+
   const fetchAuditLogs = async () => {
     setLoading(true);
     setError("");
-    
+
     let url = "/api/audit-logs?limit=50";
-    
+
     if (organizationId) {
       url += `&organization_id=${organizationId}`;
     }
-    
+
     if (rangeStart) {
       url += `&range_start=${rangeStart}`;
     }
-    
+
     if (rangeEnd) {
       url += `&range_end=${rangeEnd}`;
     }
-    
+
     if (eventFilter) {
       url += `&event=${eventFilter}`;
     }
-    
+
     try {
       const response = await fetch(url);
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch audit logs");
       }
-      
+
       const data = await response.json();
       setLogs(data.auditLogs.data || []);
     } catch (err) {
@@ -508,17 +513,17 @@ export default function AuditLogsViewer() {
       setLoading(false);
     }
   };
-  
+
   const handleSubmit = (e: Event) => {
     e.preventDefault();
     fetchAuditLogs();
   };
-  
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleString();
   };
-  
+
   return (
     <div>
       <form onSubmit={handleSubmit} class="mb-6">
@@ -528,44 +533,48 @@ export default function AuditLogsViewer() {
             <input
               type="text"
               value={organizationId}
-              onChange={(e) => setOrganizationId((e.target as HTMLInputElement).value)}
+              onChange={(e) =>
+                setOrganizationId((e.target as HTMLInputElement).value)}
               class="w-full p-2 border rounded"
               placeholder="org_123"
             />
           </div>
-          
+
           <div>
             <label class="block mb-2">Event Type</label>
             <input
               type="text"
               value={eventFilter}
-              onChange={(e) => setEventFilter((e.target as HTMLInputElement).value)}
+              onChange={(e) =>
+                setEventFilter((e.target as HTMLInputElement).value)}
               class="w-full p-2 border rounded"
               placeholder="user.login"
             />
           </div>
-          
+
           <div>
             <label class="block mb-2">Start Date</label>
             <input
               type="datetime-local"
               value={rangeStart}
-              onChange={(e) => setRangeStart((e.target as HTMLInputElement).value)}
+              onChange={(e) =>
+                setRangeStart((e.target as HTMLInputElement).value)}
               class="w-full p-2 border rounded"
             />
           </div>
-          
+
           <div>
             <label class="block mb-2">End Date</label>
             <input
               type="datetime-local"
               value={rangeEnd}
-              onChange={(e) => setRangeEnd((e.target as HTMLInputElement).value)}
+              onChange={(e) =>
+                setRangeEnd((e.target as HTMLInputElement).value)}
               class="w-full p-2 border rounded"
             />
           </div>
         </div>
-        
+
         <button
           type="submit"
           class="px-4 py-2 bg-blue-500 text-white rounded"
@@ -573,14 +582,14 @@ export default function AuditLogsViewer() {
           Apply Filters
         </button>
       </form>
-      
+
       {loading && <div>Loading audit logs...</div>}
       {error && <div class="text-red-500 mb-4">{error}</div>}
-      
+
       {!loading && !error && logs.length === 0 && (
         <div>No audit logs found. Try adjusting your filters.</div>
       )}
-      
+
       {logs.length > 0 && (
         <div class="overflow-x-auto">
           <table class="w-full border-collapse table-auto">
@@ -594,7 +603,7 @@ export default function AuditLogsViewer() {
               </tr>
             </thead>
             <tbody>
-              {logs.map(log => (
+              {logs.map((log) => (
                 <tr key={log.id} class="border-b">
                   <td class="p-2 border">{formatDate(log.occurred_at)}</td>
                   <td class="p-2 border">{log.event}</td>
@@ -607,7 +616,8 @@ export default function AuditLogsViewer() {
                   <td class="p-2 border">
                     <button
                       class="text-blue-500 hover:underline"
-                      onClick={() => alert(JSON.stringify(log.metadata, null, 2))}
+                      onClick={() =>
+                        alert(JSON.stringify(log.metadata, null, 2))}
                     >
                       View Details
                     </button>
@@ -643,16 +653,17 @@ export const handler: Handler = async (req) => {
   if (redirectResponse) {
     return redirectResponse;
   }
-  
+
   const { workos } = initEvents();
   const url = new URL(req.url);
   const organizationId = url.searchParams.get("organization_id");
   const rangeStart = url.searchParams.get("range_start");
   const rangeEnd = url.searchParams.get("range_end");
-  const limit = url.searchParams.get("limit") ? 
-    parseInt(url.searchParams.get("limit") || "20", 10) : 20;
+  const limit = url.searchParams.get("limit")
+    ? parseInt(url.searchParams.get("limit") || "20", 10)
+    : 20;
   const eventName = url.searchParams.get("event") || undefined;
-  
+
   try {
     const events = await workos.events.listEvents({
       organizationId: organizationId || "",
@@ -661,12 +672,12 @@ export const handler: Handler = async (req) => {
       limit,
       eventName,
     });
-    
+
     return Response.json({ events });
   } catch (error) {
     return Response.json(
-      { error: error.message || "Failed to fetch events" }, 
-      { status: 400 }
+      { error: error.message || "Failed to fetch events" },
+      { status: 400 },
     );
   }
 };
@@ -687,9 +698,9 @@ export const handler: Handlers = {
     if (redirectResponse) {
       return redirectResponse;
     }
-    
+
     return ctx.render();
-  }
+  },
 };
 
 export default function Events() {
@@ -706,7 +717,7 @@ export default function Events() {
 
 ```typescript
 // islands/EventsViewer.tsx
-import { useState, useEffect } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 
 interface WorkOSEvent {
   id: string;
@@ -722,32 +733,32 @@ export default function EventsViewer() {
   const [error, setError] = useState("");
   const [organizationId, setOrganizationId] = useState("");
   const [eventFilter, setEventFilter] = useState("");
-  
+
   useEffect(() => {
     fetchEvents();
   }, []);
-  
+
   const fetchEvents = async () => {
     setLoading(true);
     setError("");
-    
+
     let url = "/api/events?limit=20";
-    
+
     if (organizationId) {
       url += `&organization_id=${organizationId}`;
     }
-    
+
     if (eventFilter) {
       url += `&event=${eventFilter}`;
     }
-    
+
     try {
       const response = await fetch(url);
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch events");
       }
-      
+
       const data = await response.json();
       setEvents(data.events.data || []);
     } catch (err) {
@@ -756,17 +767,17 @@ export default function EventsViewer() {
       setLoading(false);
     }
   };
-  
+
   const handleSubmit = (e: Event) => {
     e.preventDefault();
     fetchEvents();
   };
-  
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleString();
   };
-  
+
   return (
     <div>
       <form onSubmit={handleSubmit} class="mb-6">
@@ -776,24 +787,26 @@ export default function EventsViewer() {
             <input
               type="text"
               value={organizationId}
-              onChange={(e) => setOrganizationId((e.target as HTMLInputElement).value)}
+              onChange={(e) =>
+                setOrganizationId((e.target as HTMLInputElement).value)}
               class="w-full p-2 border rounded"
               placeholder="org_123"
             />
           </div>
-          
+
           <div>
             <label class="block mb-2">Event Type</label>
             <input
               type="text"
               value={eventFilter}
-              onChange={(e) => setEventFilter((e.target as HTMLInputElement).value)}
+              onChange={(e) =>
+                setEventFilter((e.target as HTMLInputElement).value)}
               class="w-full p-2 border rounded"
               placeholder="user.created"
             />
           </div>
         </div>
-        
+
         <button
           type="submit"
           class="px-4 py-2 bg-blue-500 text-white rounded"
@@ -801,14 +814,14 @@ export default function EventsViewer() {
           Apply Filters
         </button>
       </form>
-      
+
       {loading && <div>Loading events...</div>}
       {error && <div class="text-red-500 mb-4">{error}</div>}
-      
+
       {!loading && !error && events.length === 0 && (
         <div>No events found. Try adjusting your filters.</div>
       )}
-      
+
       {events.length > 0 && (
         <div class="overflow-x-auto">
           <table class="w-full border-collapse table-auto">
@@ -821,7 +834,7 @@ export default function EventsViewer() {
               </tr>
             </thead>
             <tbody>
-              {events.map(event => (
+              {events.map((event) => (
                 <tr key={event.id} class="border-b">
                   <td class="p-2 border">{formatDate(event.occurred_at)}</td>
                   <td class="p-2 border">{event.event}</td>
@@ -857,21 +870,21 @@ import { WorkOS } from "workos";
 export function initDirectorySync() {
   const workos = new WorkOS(Deno.env.get("WORKOS_API_KEY") || "");
   const directorySync = workos.directorySync;
-  
+
   return { workos, directorySync };
 }
 
 // List directories
 export async function listDirectories(
   workos: WorkOS,
-  options: { limit?: number; organizationId?: string; search?: string } = {}
+  options: { limit?: number; organizationId?: string; search?: string } = {},
 ) {
   const { data: directories } = await workos.directorySync.listDirectories({
     limit: options.limit,
     organizationId: options.organizationId,
     search: options.search,
   });
-  
+
   return directories;
 }
 
@@ -883,28 +896,28 @@ export async function getDirectory(workos: WorkOS, directoryId: string) {
 // List directory users
 export async function listDirectoryUsers(
   workos: WorkOS,
-  options: { directory: string; limit?: number; group?: string }
+  options: { directory: string; limit?: number; group?: string },
 ) {
   const { data: users } = await workos.directorySync.listUsers({
     directory: options.directory,
     limit: options.limit,
     group: options.group,
   });
-  
+
   return users;
 }
 
 // List directory groups
 export async function listDirectoryGroups(
   workos: WorkOS,
-  options: { directory: string; limit?: number; user?: string }
+  options: { directory: string; limit?: number; user?: string },
 ) {
   const { data: groups } = await workos.directorySync.listGroups({
     directory: options.directory,
     limit: options.limit,
     user: options.user,
   });
-  
+
   return groups;
 }
 ```
@@ -919,7 +932,7 @@ import { WorkOS } from "workos";
 export function initAuditLogs() {
   const workos = new WorkOS(Deno.env.get("WORKOS_API_KEY") || "");
   const auditLogs = workos.auditLogs;
-  
+
   return { workos, auditLogs };
 }
 
@@ -933,7 +946,7 @@ export async function createAuditLogEvent(
     actor: { id: string; name?: string; type: string };
     targets: Array<{ id: string; name?: string; type: string }>;
     metadata?: Record<string, unknown>;
-  }
+  },
 ) {
   return await workos.auditLogs.createEvent({
     organizationId: options.organizationId,
@@ -956,7 +969,7 @@ import { WorkOS } from "workos";
 export function initEvents() {
   const workos = new WorkOS(Deno.env.get("WORKOS_API_KEY") || "");
   const events = workos.events;
-  
+
   return { workos, events };
 }
 
@@ -969,7 +982,7 @@ export async function listEvents(
     rangeEnd?: Date;
     limit?: number;
     eventName?: string;
-  } = {}
+  } = {},
 ) {
   const { data: events } = await workos.events.listEvents({
     organizationId: options.organizationId,
@@ -978,7 +991,7 @@ export async function listEvents(
     limit: options.limit,
     eventName: options.eventName,
   });
-  
+
   return events;
 }
 ```
@@ -1031,3 +1044,4 @@ The screenshot should display the events table with timestamps, event types, and
 [SCREENSHOT: Event Details]
 Place a screenshot here showing the detailed view of a specific event.
 The screenshot should display the expanded JSON data of an event.
+```

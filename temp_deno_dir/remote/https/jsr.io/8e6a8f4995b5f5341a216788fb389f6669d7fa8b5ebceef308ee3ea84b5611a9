@@ -1,0 +1,49 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+
+/** A library of assertion functions.
+ * If the assertion is false an `AssertionError` will be thrown which will
+ * result in pretty-printed diff of the failing assertion.
+ *
+ * This module is browser compatible, but do not rely on good formatting of
+ * values for AssertionError messages in browsers.
+ *
+ * ```ts ignore
+ * import { assert } from "@std/assert";
+ *
+ * assert("I am truthy"); // Doesn't throw
+ * assert(false); // Throws `AssertionError`
+ * ```
+ *
+ * @module
+ */
+
+export * from "./almost_equals.ts";
+export * from "./array_includes.ts";
+export * from "./equals.ts";
+export * from "./exists.ts";
+export * from "./false.ts";
+export * from "./greater_or_equal.ts";
+export * from "./greater.ts";
+export * from "./instance_of.ts";
+export * from "./is_error.ts";
+export * from "./less_or_equal.ts";
+export * from "./less.ts";
+export * from "./match.ts";
+export * from "./not_equals.ts";
+export * from "./not_instance_of.ts";
+export * from "./not_match.ts";
+export * from "./not_strict_equals.ts";
+export * from "./object_match.ts";
+export * from "./rejects.ts";
+export * from "./strict_equals.ts";
+export * from "./string_includes.ts";
+export * from "./throws.ts";
+export * from "./assert.ts";
+export * from "./assertion_error.ts";
+export * from "./equal.ts";
+export * from "./fail.ts";
+export * from "./unimplemented.ts";
+export * from "./unreachable.ts";
+
+// denoCacheMetadata={"headers":{"via":"1.1 google","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","x-jsr-cache-id":"YYZ","access-control-expose-headers":"*","expires":"Wed, 13 May 2026 23:23:02 GMT","cache-control":"public, max-age=31536000, immutable","x-goog-generation":"1745475807282096","x-guploader-uploadid":"AAO2VwqE5U7fEntWXrUJQ8wt0jAFeCVR2gORHZD76JLtT8APZ67l1qdenfyuOoEl-HNCKqHO","x-goog-stored-content-length":"1459","x-goog-hash":"crc32c=VIUz6w==,md5=lPukFVeEPk+6FLg5agmWOg==","x-goog-storage-class":"STANDARD","server":"UploadServer","date":"Tue, 13 May 2025 23:23:02 GMT","age":"1950","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","content-type":"text/typescript","x-goog-stored-content-encoding":"identity","content-length":"1459","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","x-jsr-cache-status":"hit","x-robots-tag":"noindex","access-control-allow-origin":"*","etag":"\"94fba41557843e4fba14b8396a09963a\"","cross-origin-resource-policy":"cross-origin","accept-ranges":"bytes","x-content-type-options":"nosniff","x-goog-metageneration":"1"},"url":"https://jsr.io/@std/assert/1.0.13/mod.ts","time":1747180532}

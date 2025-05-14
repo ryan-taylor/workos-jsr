@@ -1,5 +1,5 @@
 import { deserializeUser } from "./user.serializer.ts";
-import userFixture from "../fixtures/user.json";
+import userFixture from "../fixtures/user.json.ts";
 
 describe("deserializeUser", () => {
   it("includes metadata if present", () => {

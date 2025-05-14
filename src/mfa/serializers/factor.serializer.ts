@@ -3,7 +3,7 @@ import type {
   FactorResponse,
   FactorWithSecrets,
   FactorWithSecretsResponse,
-} from "../interfaces.ts";
+} from "../interfaces/index.ts";
 import { deserializeSms } from "./sms.serializer.ts";
 import {
   deserializeTotp,

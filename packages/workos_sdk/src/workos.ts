@@ -34,6 +34,7 @@ import { Mfa } from "./mfa/mfa.ts";
 import { AuditLogs } from "./audit-logs/audit-logs.ts";
 import { UserManagement } from "./user-management/user-management.ts";
 import { FGA } from "./fga/fga.ts";
+import { Roles } from "./roles/roles.ts";
 import { BadRequestException } from "./common/exceptions/bad-request.exception.ts";
 
 import { type HttpClient, HttpClientError } from "./common/net/http-client.ts";
@@ -83,6 +84,9 @@ export class WorkOS {
   /** Actions module for managing WorkOS Actions */
   readonly actions: Actions;
 
+  /** Roles module for managing WorkOS roles */
+  readonly roles: Roles = new Roles(this);
+
   /** Audit Logs module for accessing audit logs */
   readonly auditLogs: AuditLogs = new AuditLogs(this);
 
@@ -93,7 +97,9 @@ export class WorkOS {
   readonly organizations: Organizations = new Organizations(this);
 
   /** Organization Domains module for managing domains */
-  readonly organizationDomains: OrganizationDomains = new OrganizationDomains(this);
+  readonly organizationDomains: OrganizationDomains = new OrganizationDomains(
+    this,
+  );
 
   /** Passwordless module for magic link and OTP authentication */
   readonly passwordless: Passwordless = new Passwordless(this);
@@ -155,7 +161,7 @@ export class WorkOS {
   constructor(readonly key?: string, readonly options: WorkOSOptions = {}) {
     if (!key) {
       // Use Deno.env.get for accessing environment variables
-      this.key = Deno.env.get("WORKOS_API_KEY");
+      this.key = Deno.env.get("WORKOS_API_KEY") || undefined;
 
       if (!this.key) {
         throw new NoApiKeyProvidedException();
@@ -167,7 +173,8 @@ export class WorkOS {
     }
 
     // Use options.clientId or get from environment variable
-    this.clientId = this.options.clientId || Deno.env.get("WORKOS_CLIENT_ID");
+    this.clientId = this.options.clientId ?? Deno.env.get("WORKOS_CLIENT_ID") ??
+      undefined;
 
     const protocol: string = this.options.https ? "https" : "http";
     const apiHostname: string = this.options.apiHostname || DEFAULT_HOSTNAME;
@@ -491,7 +498,9 @@ export class WorkOS {
         case 422: {
           throw new UnprocessableEntityException({
             code,
-            errors: errors?.map(({ attribute, code }) => ({
+            errors: errors?.map((
+              { attribute, code }: { attribute: string; code: string },
+            ) => ({
               field: attribute,
               code,
             })),

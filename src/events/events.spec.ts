@@ -1,5 +1,5 @@
 // Import standard Deno assertions
-import { assertEquals } from "https://deno.land/std/assert/mod.ts";
+import { assertEquals } from "@std/assert";
 
 import {
   fetchOnce,

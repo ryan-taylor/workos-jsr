@@ -1,5 +1,5 @@
-import type { Handlers } from '$fresh/server.ts';
-import { workos } from '../../../utils/workos.ts';
+import type { Handlers } from "$fresh/server.ts";
+import { workos } from "../../../utils/workos.ts";
 
 export const handler: Handlers = {
   async POST(req) {
@@ -9,11 +9,11 @@ export const handler: Handlers = {
       // Validate required fields
       if (!body.name) {
         return new Response(
-          JSON.stringify({ error: 'Organization name is required' }),
+          JSON.stringify({ error: "Organization name is required" }),
           {
             status: 400,
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
           },
         );
@@ -27,7 +27,8 @@ export const handler: Handlers = {
         metadata?: Record<string, string>;
       } = {
         name: body.name,
-        allow_profiles_outside_organization: body.allowProfilesOutsideOrganization || false,
+        allow_profiles_outside_organization:
+          body.allowProfilesOutsideOrganization || false,
       };
 
       // Add optional fields if provided
@@ -40,30 +41,34 @@ export const handler: Handlers = {
       }
 
       // Create organization
-      const organization = await workos.organizations.createOrganization(payload);
+      const organization = await workos.organizations.createOrganization(
+        payload,
+      );
 
       return new Response(
         JSON.stringify(organization),
         {
           status: 201,
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         },
       );
     } catch (error) {
-      console.error('Error creating organization:', error);
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error("Error creating organization:", error);
+      const errorMessage = error instanceof Error
+        ? error.message
+        : String(error);
 
       return new Response(
         JSON.stringify({
-          error: 'Failed to create organization',
+          error: "Failed to create organization",
           details: errorMessage,
         }),
         {
           status: 500,
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         },
       );

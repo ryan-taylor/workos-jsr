@@ -1,12 +1,16 @@
 // HydrationDemo component shows the hydration process in action
-import { useEffect, useRef, useState } from 'preact/hooks';
-import { IS_BROWSER } from '$fresh/runtime.ts';
+/** @jsx h */
+import { h } from "preact";
+import { useEffect, useRef, useState } from "preact/hooks";
+import { IS_BROWSER } from "https://deno.land/x/fresh@1.6.5/runtime.ts";
 
 interface HydrationDemoProps {
   initialServerTime?: string;
 }
 
-export default function HydrationDemo({ initialServerTime }: HydrationDemoProps) {
+export default function HydrationDemo(
+  { initialServerTime }: HydrationDemoProps,
+) {
   // State to track hydration status
   const [isHydrated, setIsHydrated] = useState(false);
 
@@ -59,37 +63,48 @@ export default function HydrationDemo({ initialServerTime }: HydrationDemoProps)
   };
 
   return (
-    <div className='hydration-demo'>
+    <div className="hydration-demo">
       <h2>Hydration Demonstration</h2>
 
       {/* Status section */}
-      <div className='status-section'>
+      <div className="status-section">
         <h3>Hydration Status</h3>
-        <div className={`hydration-status ${isHydrated ? 'hydrated' : 'not-hydrated'}`}>
+        <div
+          className={`hydration-status ${
+            isHydrated ? "hydrated" : "not-hydrated"
+          }`}
+        >
           <p>
-            <strong>Component is:</strong> <span>{isHydrated ? 'Hydrated ✅' : 'Not Hydrated ⏳'}</span>
+            <strong>Component is:</strong>{" "}
+            <span>{isHydrated ? "Hydrated ✅" : "Not Hydrated ⏳"}</span>
           </p>
         </div>
 
         {/* This content changes after hydration */}
-        <div className='content-before-after'>
+        <div className="content-before-after">
           <h3>Content Transformation</h3>
-          <div className='content-display'>
+          <div className="content-display">
             {isHydrated
               ? (
-                <div className='after-hydration'>
+                <div className="after-hydration">
                   <p>
                     This content is displayed <strong>after</strong> hydration
                   </p>
-                  <p>The Fresh islands architecture has successfully hydrated this component!</p>
+                  <p>
+                    The Fresh islands architecture has successfully hydrated
+                    this component!
+                  </p>
                 </div>
               )
               : (
-                <div className='before-hydration'>
+                <div className="before-hydration">
                   <p>
                     This content is displayed <strong>before</strong> hydration
                   </p>
-                  <p>This static HTML was rendered on the server and will be replaced.</p>
+                  <p>
+                    This static HTML was rendered on the server and will be
+                    replaced.
+                  </p>
                 </div>
               )}
           </div>
@@ -97,28 +112,29 @@ export default function HydrationDemo({ initialServerTime }: HydrationDemoProps)
       </div>
 
       {/* Interactive counter - only works after hydration */}
-      <div className='interactive-section'>
+      <div className="interactive-section">
         <h3>Interactive Counter</h3>
         <p>This counter only works after client-side hydration:</p>
-        <div className='counter'>
+        <div className="counter">
           <button
             onClick={incrementCounter}
             disabled={!isHydrated}
-            className={isHydrated ? 'active' : 'inactive'}
+            className={isHydrated ? "active" : "inactive"}
           >
-            {isHydrated ? 'Click to Increment' : 'Waiting for Hydration...'}
+            {isHydrated ? "Click to Increment" : "Waiting for Hydration..."}
           </button>
-          <p className='count-display'>Count: {count}</p>
+          <p className="count-display">Count: {count}</p>
           {!isHydrated && (
-            <p className='hydration-note'>
-              (Counter is not interactive until JavaScript hydrates the component)
+            <p className="hydration-note">
+              (Counter is not interactive until JavaScript hydrates the
+              component)
             </p>
           )}
         </div>
       </div>
 
       {/* Hydration timing metrics */}
-      <div className='metrics-section'>
+      <div className="metrics-section">
         <h3>Hydration Metrics</h3>
         {hydrationTime !== null
           ? (
@@ -130,30 +146,35 @@ export default function HydrationDemo({ initialServerTime }: HydrationDemoProps)
       </div>
 
       {/* Hydration mismatch demonstration */}
-      <div className='mismatch-section' ref={mismatchRef}>
+      <div className="mismatch-section" ref={mismatchRef}>
         <h3>Hydration Mismatch Detection</h3>
 
-        <div className='mismatch-demo'>
+        <div className="mismatch-demo">
           <p>
-            <strong>Server Time:</strong> {initialServerTime || 'Unknown'}
+            <strong>Server Time:</strong> {initialServerTime || "Unknown"}
           </p>
           <p>
             <strong>Client Time:</strong> {clientTime}
           </p>
 
-          <div className='random-value'>
+          <div className="random-value">
             <p>
               <strong>Random Value:</strong> {randomValue}
-              <span className='note'>(changes between server/client to demonstrate mismatch)</span>
+              <span className="note">
+                (changes between server/client to demonstrate mismatch)
+              </span>
             </p>
           </div>
 
           {mismatchDetected && (
-            <div className='mismatch-warning'>
+            <div className="mismatch-warning">
               <p>⚠️ Hydration Mismatch Detected!</p>
-              <p>The server-rendered content doesn't match the client content.</p>
-              <p className='explanation'>
-                In real applications, mismatches can cause UI flickering or unexpected behavior. Fresh handles these gracefully by applying
+              <p>
+                The server-rendered content doesn't match the client content.
+              </p>
+              <p className="explanation">
+                In real applications, mismatches can cause UI flickering or
+                unexpected behavior. Fresh handles these gracefully by applying
                 client-side changes after hydration.
               </p>
             </div>

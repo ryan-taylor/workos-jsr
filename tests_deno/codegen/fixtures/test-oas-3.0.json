@@ -1,0 +1,893 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Edge Case Test API",
+    "description": "A test API specification with various edge cases to verify adapter behavior",
+    "version": "1.0.0",
+    "contact": {
+      "name": "WorkOS API Team",
+      "url": "https://workos.com/api",
+      "email": "api@workos.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.example.com/v1",
+      "description": "Production server"
+    },
+    {
+      "url": "https://api.staging.example.com/v1",
+      "description": "Staging server"
+    }
+  ],
+  "paths": {
+    "/resources": {
+      "get": {
+        "summary": "List resources with complex parameters",
+        "description": "Demonstrates various parameter types and authentication",
+        "operationId": "listResources",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of results to return",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10
+            }
+          },
+          {
+            "name": "page-token",
+            "in": "query",
+            "description": "Token for pagination with unusual name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort.field",
+            "in": "query",
+            "description": "Field to sort by with dot notation",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["created_at", "updated_at", "name"]
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "Filter with a complex schema",
+            "required": false,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComplexFilter"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Resource"
+                      }
+                    },
+                    "next_page_token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create a resource with a complex request body",
+        "description": "Demonstrates request body validation with deeply nested objects",
+        "operationId": "createResource",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateResourceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Resource created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Resource"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": ["resources.write"]
+          }
+        ]
+      }
+    },
+    "/resources/{id}": {
+      "get": {
+        "summary": "Get a resource by ID",
+        "description": "Demonstrates path parameter usage",
+        "operationId": "getResource",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Resource ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "description": "Relations to include",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["metadata", "related", "all"]
+              }
+            },
+            "style": "form",
+            "explode": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Resource"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": ["resources.read"]
+          },
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Update a resource",
+        "description": "Demonstrates partial updates with oneOf schema",
+        "operationId": "updateResource",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Resource ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateResourceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resource updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Resource"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": ["resources.write"]
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete a resource",
+        "description": "Demonstrates basic operation with empty response",
+        "operationId": "deleteResource",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Resource ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Resource deleted successfully"
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/external-resources": {
+      "get": {
+        "summary": "Get external resources",
+        "description": "Demonstrates external schema references",
+        "operationId": "getExternalResources",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "external-schema.json#/ExternalObject"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/weird-property-names": {
+      "post": {
+        "summary": "Create object with unusual property names",
+        "description": "Demonstrates handling of special characters in property names",
+        "operationId": "createWeirdObject",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WeirdPropertyNames"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Object created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeirdPropertyNames"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/empty-schema": {
+      "post": {
+        "summary": "Create with empty schema",
+        "description": "Demonstrates handling of empty schemas",
+        "operationId": "createEmptySchema",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmptySchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created with empty schema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmptySchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/large-enum": {
+      "get": {
+        "summary": "Get large enum values",
+        "description": "Demonstrates handling of large enum arrays",
+        "operationId": "getLargeEnum",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LargeEnumContainer"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Resource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/Metadata"
+          },
+          "related_resources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Resource"
+            },
+            "description": "Circular reference to demonstrate handling of recursive schemas"
+          }
+        },
+        "required": ["id", "name", "created_at", "updated_at"]
+      },
+      "Metadata": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "Arbitrary metadata as key-value pairs"
+      },
+      "CreateResourceRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "type": {
+            "type": "string",
+            "enum": ["TYPE_A", "TYPE_B", "TYPE_C"]
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/Metadata"
+          },
+          "nested_data": {
+            "$ref": "#/components/schemas/DeeplyNestedObject"
+          }
+        },
+        "required": ["name", "type"]
+      },
+      "UpdateResourceRequest": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 500
+              }
+            },
+            "required": ["name"]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "metadata": {
+                "$ref": "#/components/schemas/Metadata"
+              }
+            },
+            "required": ["metadata"]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "nested_data": {
+                "$ref": "#/components/schemas/DeeplyNestedObject"
+              }
+            },
+            "required": ["nested_data"]
+          }
+        ]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "required": ["code", "message"]
+      },
+      "ComplexFilter": {
+        "type": "object",
+        "properties": {
+          "and": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ComplexFilter"
+            }
+          },
+          "or": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ComplexFilter"
+            }
+          },
+          "not": {
+            "$ref": "#/components/schemas/ComplexFilter"
+          },
+          "eq": {
+            "type": "object",
+            "additionalProperties": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "gt": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            }
+          },
+          "lt": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            }
+          },
+          "in": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "DeeplyNestedObject": {
+        "type": "object",
+        "properties": {
+          "level1": {
+            "type": "object",
+            "properties": {
+              "level2": {
+                "type": "object",
+                "properties": {
+                  "level3": {
+                    "type": "object",
+                    "properties": {
+                      "level4": {
+                        "type": "object",
+                        "properties": {
+                          "level5": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "type": "string"
+                              },
+                              "array": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "nestedArrayItem": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "EmptySchema": {},
+      "WeirdPropertyNames": {
+        "type": "object",
+        "properties": {
+          "special-dash": {
+            "type": "string"
+          },
+          "property.with.dots": {
+            "type": "string"
+          },
+          "property with spaces": {
+            "type": "string"
+          },
+          "$dollar_sign": {
+            "type": "string"
+          },
+          "unicode😀character": {
+            "type": "string"
+          },
+          "@at_symbol": {
+            "type": "string"
+          },
+          "123numeric_start": {
+            "type": "string"
+          },
+          "[bracket]": {
+            "type": "string"
+          }
+        }
+      },
+      "LargeEnumContainer": {
+        "type": "object",
+        "properties": {
+          "largeEnum": {
+            "type": "string",
+            "enum": [
+              "VALUE_1",
+              "VALUE_2",
+              "VALUE_3",
+              "VALUE_4",
+              "VALUE_5",
+              "VALUE_6",
+              "VALUE_7",
+              "VALUE_8",
+              "VALUE_9",
+              "VALUE_10",
+              "VALUE_11",
+              "VALUE_12",
+              "VALUE_13",
+              "VALUE_14",
+              "VALUE_15",
+              "VALUE_16",
+              "VALUE_17",
+              "VALUE_18",
+              "VALUE_19",
+              "VALUE_20",
+              "VALUE_21",
+              "VALUE_22",
+              "VALUE_23",
+              "VALUE_24",
+              "VALUE_25",
+              "VALUE_26",
+              "VALUE_27",
+              "VALUE_28",
+              "VALUE_29",
+              "VALUE_30",
+              "VALUE_31",
+              "VALUE_32",
+              "VALUE_33",
+              "VALUE_34",
+              "VALUE_35",
+              "VALUE_36",
+              "VALUE_37",
+              "VALUE_38",
+              "VALUE_39",
+              "VALUE_40",
+              "VALUE_41",
+              "VALUE_42",
+              "VALUE_43",
+              "VALUE_44",
+              "VALUE_45",
+              "VALUE_46",
+              "VALUE_47",
+              "VALUE_48",
+              "VALUE_49",
+              "VALUE_50",
+              "VALUE_51",
+              "VALUE_52",
+              "VALUE_53",
+              "VALUE_54",
+              "VALUE_55",
+              "VALUE_56",
+              "VALUE_57",
+              "VALUE_58",
+              "VALUE_59",
+              "VALUE_60",
+              "VALUE_61",
+              "VALUE_62",
+              "VALUE_63",
+              "VALUE_64",
+              "VALUE_65",
+              "VALUE_66",
+              "VALUE_67",
+              "VALUE_68",
+              "VALUE_69",
+              "VALUE_70",
+              "VALUE_71",
+              "VALUE_72",
+              "VALUE_73",
+              "VALUE_74",
+              "VALUE_75",
+              "VALUE_76",
+              "VALUE_77",
+              "VALUE_78",
+              "VALUE_79",
+              "VALUE_80",
+              "VALUE_81",
+              "VALUE_82",
+              "VALUE_83",
+              "VALUE_84",
+              "VALUE_85",
+              "VALUE_86",
+              "VALUE_87",
+              "VALUE_88",
+              "VALUE_89",
+              "VALUE_90",
+              "VALUE_91",
+              "VALUE_92",
+              "VALUE_93",
+              "VALUE_94",
+              "VALUE_95",
+              "VALUE_96",
+              "VALUE_97",
+              "VALUE_98",
+              "VALUE_99",
+              "VALUE_100"
+            ]
+          },
+          "externalEnum": {
+            "$ref": "external-schema.json#/ExternalEnum"
+          }
+        }
+      },
+      "ComplexTypeCompositions": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "baseProperty": {
+                "type": "string"
+              }
+            },
+            "required": ["baseProperty"]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "extension1": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "option1": {
+                    "type": "string"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "option2": {
+                    "type": "number"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "securitySchemes": {
+      "apiKey": {
+        "type": "apiKey",
+        "name": "X-API-Key",
+        "in": "header",
+        "description": "API key authentication"
+      },
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "JWT Bearer token authentication"
+      },
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "Basic authentication with username and password"
+      },
+      "oauth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://auth.example.com/oauth/authorize",
+            "tokenUrl": "https://auth.example.com/oauth/token",
+            "scopes": {
+              "resources.read": "Read resources",
+              "resources.write": "Write resources"
+            }
+          }
+        }
+      }
+    }
+  }
+}

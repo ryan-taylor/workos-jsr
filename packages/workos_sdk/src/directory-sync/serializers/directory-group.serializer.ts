@@ -1,31 +1,12 @@
-import type {
-  DirectoryGroup,
-  DirectoryGroupResponse,
-} from "../interfaces/index.ts";
+import type { DirectoryGroup } from "../interfaces/index.ts";
 
-export const deserializeDirectoryGroup = (
-  directoryGroup: DirectoryGroupResponse,
-): DirectoryGroup => ({
-  id: directoryGroup.id,
-  idpId: directoryGroup.idp_id,
-  directoryId: directoryGroup.directory_id,
-  organizationId: directoryGroup.organization_id,
-  name: directoryGroup.name,
-  createdAt: directoryGroup.created_at,
-  updatedAt: directoryGroup.updated_at,
-  rawAttributes: directoryGroup.raw_attributes,
-});
-
-export const deserializeUpdatedEventDirectoryGroup = (
-  directoryGroup: DirectoryGroupResponse & Record<"previous_attributes", any>,
-): DirectoryGroup & Record<"previousAttributes", any> => ({
-  id: directoryGroup.id,
-  idpId: directoryGroup.idp_id,
-  directoryId: directoryGroup.directory_id,
-  organizationId: directoryGroup.organization_id,
-  name: directoryGroup.name,
-  createdAt: directoryGroup.created_at,
-  updatedAt: directoryGroup.updated_at,
-  rawAttributes: directoryGroup.raw_attributes,
-  previousAttributes: directoryGroup.previous_attributes,
-});
+export function deserializeDirectoryGroup(data: unknown): DirectoryGroup {
+  const record = data as Record<string, unknown>;
+  return {
+    id: record.id as string,
+    name: record.name as string,
+    directory_id: record.directory_id as string,
+    created_at: record.created_at as string,
+    updated_at: record.updated_at as string,
+  };
+}

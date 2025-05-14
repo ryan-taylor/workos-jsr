@@ -7,7 +7,7 @@
   "license": "MIT",
   "files": [
     "mod.ts",
-    "packages/workos_sdk/mod.ts", 
+    "packages/workos_sdk/mod.ts",
     "packages/workos_sdk/src/**/*.ts"
   ],
   "exclude": [
@@ -24,5 +24,9 @@
   ],
   "tasks": {
     "test": "deno test -A"
+  },
+  "dependencies": {
+    "@stackql/deno-openapi-dereferencer": "^0.1.0",
+    "deno_ast": "^1.0.0"
   }
 }

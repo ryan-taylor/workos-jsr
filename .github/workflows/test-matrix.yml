@@ -56,7 +56,7 @@ jobs:
         run: |
           # Remove the compat flag as it's not supported in newer Deno versions
           deno test -A --no-check
-        
+
       - name: Test Fresh example
         run: |
           cd examples/fresh-canary

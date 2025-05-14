@@ -1,12 +1,15 @@
-import type { Handlers } from '$fresh/server.ts';
-import { createSessionMiddleware, type MiddlewareHandler } from 'workos_internal/mod.ts';
-import { createSpan, recordMetric } from '../utils/telemetry.ts';
-import { SESSION_OPTIONS } from '../utils/user-management.ts';
+import type { Handlers } from "$fresh/server.ts";
+import {
+  createSessionMiddleware,
+  type MiddlewareHandler,
+} from "workos_internal/mod.ts";
+import { createSpan, recordMetric } from "../utils/telemetry.ts";
+import { SESSION_OPTIONS } from "../utils/user-management.ts";
 
 // Create session middleware compatible with both Fresh 1.x and 2.x
 const sessionMiddlewareObj = createSessionMiddleware(SESSION_OPTIONS);
-const sessionMiddleware = 'handler' in sessionMiddlewareObj 
-  ? sessionMiddlewareObj.handler 
+const sessionMiddleware = "handler" in sessionMiddlewareObj
+  ? sessionMiddlewareObj.handler
   : sessionMiddlewareObj as MiddlewareHandler;
 
 /**
@@ -18,7 +21,7 @@ const telemetryMiddleware: MiddlewareHandler = async (req, ctx) => {
   const path = url.pathname;
 
   // Track the page view
-  recordMetric('page_views', 1, {
+  recordMetric("page_views", 1, {
     path,
     method: req.method,
   });
@@ -35,14 +38,14 @@ const telemetryMiddleware: MiddlewareHandler = async (req, ctx) => {
       const duration = requestEndTime - requestStartTime;
 
       // Record timing and request details
-      recordMetric('http_response_time', duration, {
+      recordMetric("http_response_time", duration, {
         path,
         method: req.method,
         status: resp.status.toString(),
       });
 
       // Count the request
-      recordMetric('http_requests_total', 1, {
+      recordMetric("http_requests_total", 1, {
         path,
         method: req.method,
         status: resp.status.toString(),
@@ -54,7 +57,7 @@ const telemetryMiddleware: MiddlewareHandler = async (req, ctx) => {
     {
       path,
       method: req.method,
-      userAgent: req.headers.get('user-agent') || 'unknown',
+      userAgent: req.headers.get("user-agent") || "unknown",
     },
   );
 };

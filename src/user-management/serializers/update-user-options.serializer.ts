@@ -1,7 +1,7 @@
 import type {
   SerializedUpdateUserOptions,
   UpdateUserOptions,
-} from "../interfaces.ts";
+} from "../interfaces/index.ts";
 
 export const serializeUpdateUserOptions = (
   options: UpdateUserOptions,

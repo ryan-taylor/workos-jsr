@@ -1,6 +1,10 @@
 // API endpoint to generate Admin Portal links
-import type { Handlers } from '$fresh/server.ts';
-import { generatePortalLink, GeneratePortalLinkIntent, type PortalLinkOptions } from '../../../utils/portal.ts';
+import type { Handlers } from "$fresh/server.ts";
+import {
+  generatePortalLink,
+  GeneratePortalLinkIntent,
+  type PortalLinkOptions,
+} from "../../../utils/portal.ts";
 
 // Interface for the request body
 interface GeneratePortalLinkRequest {
@@ -24,15 +28,15 @@ export const handler: Handlers = {
       // Validate required fields
       if (!body.organization) {
         return new Response(
-          JSON.stringify({ error: 'Organization ID is required' }),
-          { status: 400, headers: { 'Content-Type': 'application/json' } },
+          JSON.stringify({ error: "Organization ID is required" }),
+          { status: 400, headers: { "Content-Type": "application/json" } },
         );
       }
 
       if (!Object.values(GeneratePortalLinkIntent).includes(body.intent)) {
         return new Response(
-          JSON.stringify({ error: 'Invalid portal intent' }),
-          { status: 400, headers: { 'Content-Type': 'application/json' } },
+          JSON.stringify({ error: "Invalid portal intent" }),
+          { status: 400, headers: { "Content-Type": "application/json" } },
         );
       }
 
@@ -47,17 +51,19 @@ export const handler: Handlers = {
       // Return the generated link
       return new Response(
         JSON.stringify({ link }),
-        { headers: { 'Content-Type': 'application/json' } },
+        { headers: { "Content-Type": "application/json" } },
       );
     } catch (error) {
-      console.error('Error generating portal link:', error);
+      console.error("Error generating portal link:", error);
 
       // Return error response
       return new Response(
         JSON.stringify({
-          error: error instanceof Error ? error.message : 'An error occurred while generating the portal link',
+          error: error instanceof Error
+            ? error.message
+            : "An error occurred while generating the portal link",
         }),
-        { status: 500, headers: { 'Content-Type': 'application/json' } },
+        { status: 500, headers: { "Content-Type": "application/json" } },
       );
     }
   },

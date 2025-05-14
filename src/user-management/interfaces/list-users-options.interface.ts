@@ -1,4 +1,10 @@
-import type { PaginationOptions } from "../../common/interfaces/pagination-options.interface.ts";
+// Define PaginationOptions interface locally
+interface PaginationOptions {
+  after?: string;
+  before?: string;
+  limit?: number;
+  [key: string]: any;
+}
 
 export interface ListUsersOptions extends PaginationOptions {
   email?: string;

@@ -1,10 +1,12 @@
 # Fresh 2.x Canary Migration Guide
 
-This document outlines the changes made to ensure compatibility with Fresh 2.x Canary and optimize for Deno Deploy.
+This document outlines the changes made to ensure compatibility with Fresh 2.x
+Canary and optimize for Deno Deploy.
 
 ## Overview of Changes
 
-We've updated the codebase to be compatible with Fresh 2.x Canary and optimized for Deno Deploy. The changes include:
+We've updated the codebase to be compatible with Fresh 2.x Canary and optimized
+for Deno Deploy. The changes include:
 
 1. Updated dependencies to the latest versions
 2. Improved TypeScript typing for components
@@ -14,7 +16,8 @@ We've updated the codebase to be compatible with Fresh 2.x Canary and optimized 
 
 ## Dependency Updates
 
-We've updated the dependencies in `deno.json` to use the latest versions compatible with Fresh 2.x Canary:
+We've updated the dependencies in `deno.json` to use the latest versions
+compatible with Fresh 2.x Canary:
 
 ```json
 {
@@ -34,7 +37,8 @@ We've updated the dependencies in `deno.json` to use the latest versions compati
 
 ## TypeScript Configuration
 
-We've enhanced the TypeScript configuration to ensure better type safety and compatibility with Fresh 2.x Canary:
+We've enhanced the TypeScript configuration to ensure better type safety and
+compatibility with Fresh 2.x Canary:
 
 ```json
 {
@@ -67,7 +71,8 @@ export default function App({ Component, data }: AppProps<AppData>) {
 
 ### Island Components
 
-We've improved island components with better TypeScript typing and accessibility:
+We've improved island components with better TypeScript typing and
+accessibility:
 
 ```typescript
 interface ProfileFormProps {
@@ -92,12 +97,12 @@ export default defineConfig({
   router: {
     trailingSlash: false,
   },
-  
+
   // Optimize for Deno Deploy
   server: {
     port: 8000,
-    hostname: '0.0.0.0',
-  }
+    hostname: "0.0.0.0",
+  },
 });
 ```
 
@@ -113,14 +118,14 @@ We've enhanced accessibility throughout the application:
 Example:
 
 ```html
-<div class='success-message' role="alert">
+<div class="success-message" role="alert">
   {successMessage}
 </div>
 
 <input
-  type='email'
-  id='email'
-  value={user.email}
+  type="email"
+  id="email"
+  value="{user.email}"
   disabled
   aria-readonly="true"
 />
@@ -143,18 +148,22 @@ Example:
  * @param setter - State setter function
  * @returns Event handler function
  */
-const handleInputChange = (setter: (value: string) => void) => (e: Event): void => {
-  const target = e.target as HTMLInputElement;
-  setter(target.value);
-};
+const handleInputChange =
+  (setter: (value: string) => void) => (e: Event): void => {
+    const target = e.target as HTMLInputElement;
+    setter(target.value);
+  };
 ```
 
 ## Documentation
 
-We've added comprehensive documentation to help developers understand the codebase and best practices:
+We've added comprehensive documentation to help developers understand the
+codebase and best practices:
 
-1. [TypeScript Guide](./TYPESCRIPT_GUIDE.md) - Best practices for using TypeScript with Fresh 2.x Canary
-2. [Deno Deploy Optimization](./DENO_DEPLOY_OPTIMIZATION.md) - Best practices for optimizing for Deno Deploy
+1. [TypeScript Guide](./TYPESCRIPT_GUIDE.md) - Best practices for using
+   TypeScript with Fresh 2.x Canary
+2. [Deno Deploy Optimization](./DENO_DEPLOY_OPTIMIZATION.md) - Best practices
+   for optimizing for Deno Deploy
 
 ## Testing
 
@@ -178,4 +187,6 @@ To test the changes:
 
 ## Conclusion
 
-These changes ensure that the application is compatible with Fresh 2.x Canary and optimized for Deno Deploy. The improved TypeScript typing and accessibility enhancements also make the codebase more maintainable and user-friendly.
+These changes ensure that the application is compatible with Fresh 2.x Canary
+and optimized for Deno Deploy. The improved TypeScript typing and accessibility
+enhancements also make the codebase more maintainable and user-friendly.

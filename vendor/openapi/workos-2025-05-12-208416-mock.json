@@ -1,0 +1,10 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Mock WorkOS API",
+    "version": "1.0.0"
+  },
+  "x-spec-source": "test://mock-spec",
+  "x-openapi-dialect": "https://spec.openapis.org/dialect/3.0.0",
+  "x-spec-checksum": "33086dbd9745cd661af2879f75d08e2d1150b1252e99fd0e0a489b57835b105d"
+}

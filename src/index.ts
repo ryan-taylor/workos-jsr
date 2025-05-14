@@ -6,7 +6,7 @@ export { WorkOS };
 // Show deprecation warning
 console.warn(
   "Deprecation warning: Importing from 'src/' path is deprecated and will be removed in a future version. " +
-  "Please update imports to use the 'workos/' prefix instead."
+    "Please update imports to use the 'workos/' prefix instead.",
 );
 
 // Re-export modules to maintain backward compatibility
@@ -27,9 +27,9 @@ export { Webhooks } from "../packages/workos_sdk/src/webhooks/webhooks.ts";
 export { Widgets } from "../packages/workos_sdk/src/widgets/widgets.ts";
 
 // Common utility exports
-export { 
-  FetchHttpClient, 
-  SubtleCryptoProvider 
+export {
+  FetchHttpClient,
+  SubtleCryptoProvider,
 } from "../packages/workos_sdk/src/common/index.ts";
 
 // Type exports
@@ -41,7 +41,7 @@ export type {
   Event,
   EventType,
   List,
-  PaginationOptions
+  PaginationOptions,
 } from "../packages/workos_sdk/src/common/interfaces.ts";
 
 // Options type exports
@@ -49,5 +49,5 @@ export type {
   GetOptions,
   PostOptions,
   PutOptions,
-  WorkOSOptions
+  WorkOSOptions,
 } from "../packages/workos_sdk/src/workos.ts";

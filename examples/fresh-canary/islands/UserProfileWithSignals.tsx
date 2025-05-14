@@ -1,13 +1,15 @@
 // This component demonstrates Preact Signals for state management instead of useState hooks
-import { type signal, useComputed, useSignal } from '@preact/signals';
-import type { WorkOSUser } from '../utils/user-management.ts';
+import { type signal, useComputed, useSignal } from "@preact/signals";
+import type { WorkOSUser } from "../utils/user-management.ts";
 
 interface UserProfileWithSignalsProps {
   user: WorkOSUser;
   userProfile?: any;
 }
 
-export default function UserProfileWithSignals({ user, userProfile: initialUserProfile }: UserProfileWithSignalsProps) {
+export default function UserProfileWithSignals(
+  { user, userProfile: initialUserProfile }: UserProfileWithSignalsProps,
+) {
   // --- SIGNALS BASED STATE ---
   /*
    * Advantages of using Signals over useState:
@@ -28,15 +30,15 @@ export default function UserProfileWithSignals({ user, userProfile: initialUserP
   // Computed values automatically update when their dependencies change
   // This is similar to useMemo but with automatic dependency tracking
   const buttonText = useComputed(() => {
-    if (isLoadingSignal.value) return 'Refreshing...';
-    if (refreshedSignal.value) return '✓ Updated';
-    return 'Refresh';
+    if (isLoadingSignal.value) return "Refreshing...";
+    if (refreshedSignal.value) return "✓ Updated";
+    return "Refresh";
   });
 
   const buttonClass = useComputed(() => {
-    let classes = 'refresh-button';
-    if (isLoadingSignal.value) classes += ' loading';
-    if (refreshedSignal.value) classes += ' success';
+    let classes = "refresh-button";
+    if (isLoadingSignal.value) classes += " loading";
+    if (refreshedSignal.value) classes += " success";
     return classes;
   });
 
@@ -52,7 +54,7 @@ export default function UserProfileWithSignals({ user, userProfile: initialUserP
       const response = await fetch(`/api/user-profile?userId=${user.id}`);
 
       if (!response.ok) {
-        throw new Error('Failed to fetch user data');
+        throw new Error("Failed to fetch user data");
       }
 
       const data = await response.json();
@@ -67,16 +69,18 @@ export default function UserProfileWithSignals({ user, userProfile: initialUserP
         refreshedSignal.value = false;
       }, 3000);
     } catch (err) {
-      console.error('Error refreshing user data:', err);
-      errorSignal.value = err instanceof Error ? err.message : 'An unknown error occurred';
+      console.error("Error refreshing user data:", err);
+      errorSignal.value = err instanceof Error
+        ? err.message
+        : "An unknown error occurred";
     } finally {
       isLoadingSignal.value = false;
     }
   };
 
   return (
-    <div class='user-profile'>
-      <div class='profile-header'>
+    <div class="user-profile">
+      <div class="profile-header">
         <h2>User Profile (with Signals)</h2>
         <button
           class={buttonClass.value}
@@ -89,19 +93,19 @@ export default function UserProfileWithSignals({ user, userProfile: initialUserP
 
       {/* Using .value to access the signal's current value */}
       {errorSignal.value && (
-        <div class='error-message'>
+        <div class="error-message">
           {errorSignal.value}
         </div>
       )}
 
       {isLoadingSignal.value
         ? (
-          <div class='loading-state'>
+          <div class="loading-state">
             <p>Loading user data...</p>
           </div>
         )
         : (
-          <div class='user-info'>
+          <div class="user-info">
             <p>
               <strong>ID:</strong> {user.id}
             </p>
@@ -109,11 +113,12 @@ export default function UserProfileWithSignals({ user, userProfile: initialUserP
               <strong>Email:</strong> {user.email}
             </p>
             <p>
-              <strong>Name:</strong> {user.firstName || ''} {user.lastName || ''}
+              <strong>Name:</strong> {user.firstName || ""}{" "}
+              {user.lastName || ""}
             </p>
             {user.profilePictureUrl && (
-              <div class='profile-picture'>
-                <img src={user.profilePictureUrl} alt='Profile' />
+              <div class="profile-picture">
+                <img src={user.profilePictureUrl} alt="Profile" />
               </div>
             )}
 
@@ -124,19 +129,24 @@ export default function UserProfileWithSignals({ user, userProfile: initialUserP
           */
             }
             {userProfileSignal.value && (
-              <div class='additional-info'>
+              <div class="additional-info">
                 <h3>Additional Information</h3>
                 <p>
-                  <strong>Email Verified:</strong> {userProfileSignal.value.emailVerified ? 'Yes' : 'No'}
+                  <strong>Email Verified:</strong>{" "}
+                  {userProfileSignal.value.emailVerified ? "Yes" : "No"}
                 </p>
                 {userProfileSignal.value.createdAt && (
                   <p>
-                    <strong>Account Created:</strong> {new Date(userProfileSignal.value.createdAt).toLocaleString()}
+                    <strong>Account Created:</strong>{" "}
+                    {new Date(userProfileSignal.value.createdAt)
+                      .toLocaleString()}
                   </p>
                 )}
                 {userProfileSignal.value.updatedAt && (
                   <p>
-                    <strong>Last Updated:</strong> {new Date(userProfileSignal.value.updatedAt).toLocaleString()}
+                    <strong>Last Updated:</strong>{" "}
+                    {new Date(userProfileSignal.value.updatedAt)
+                      .toLocaleString()}
                   </p>
                 )}
               </div>

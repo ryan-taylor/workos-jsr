@@ -1,25 +1,31 @@
 // API endpoint for fetching directories with filtering options
-import { type Directory, initDirectorySync, listDirectories } from '../../../utils/directory-sync.ts';
-import { requireAuth } from '../../../utils/user-management.ts';
+import {
+  type Directory,
+  initDirectorySync,
+  listDirectories,
+} from "../../../utils/directory-sync.ts";
+import { requireAuth } from "../../../utils/user-management.ts";
 
 export async function handler(req: Request): Promise<Response> {
   // Check authentication
   const authResponse = await requireAuth(req);
   if (authResponse) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     });
   }
 
   try {
     // Parse query parameters
     const url = new URL(req.url);
-    const limit = url.searchParams.get('limit') ? parseInt(url.searchParams.get('limit')!) : undefined;
-    const before = url.searchParams.get('before') || undefined;
-    const after = url.searchParams.get('after') || undefined;
-    const organizationId = url.searchParams.get('organizationId') || undefined;
-    const search = url.searchParams.get('search') || undefined;
+    const limit = url.searchParams.get("limit")
+      ? parseInt(url.searchParams.get("limit")!)
+      : undefined;
+    const before = url.searchParams.get("before") || undefined;
+    const after = url.searchParams.get("after") || undefined;
+    const organizationId = url.searchParams.get("organizationId") || undefined;
+    const search = url.searchParams.get("search") || undefined;
 
     // Initialize Directory Sync and fetch directories
     const { workos } = initDirectorySync();
@@ -49,19 +55,21 @@ export async function handler(req: Request): Promise<Response> {
         listMetadata: result.listMetadata,
       }),
       {
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       },
     );
   } catch (error) {
-    console.error('Error fetching directories:', error);
+    console.error("Error fetching directories:", error);
 
     return new Response(
       JSON.stringify({
-        error: error instanceof Error ? error.message : 'Failed to load directories',
+        error: error instanceof Error
+          ? error.message
+          : "Failed to load directories",
       }),
       {
         status: 500,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       },
     );
   }

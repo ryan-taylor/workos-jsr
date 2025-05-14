@@ -1,0 +1,2 @@
+[0m[1m[31merror[0m: Module not found "file:///Users/t/Developer/workos-node/workos.ts".
+    at [0m[36mfile:///Users/t/Developer/workos-node/archive/fga/warrants.test.ts[0m:[0m[33m2[0m:[0m[33m24[0m

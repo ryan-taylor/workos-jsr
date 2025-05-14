@@ -8,10 +8,10 @@ import {
   resetMockFetch,
 } from "../common/utils/test-utils.ts";
 import { WorkOS } from "../workos.ts";
-import getOrganizationDomainPending from "./fixtures/get-organization-domain-pending.json" with {
+import getOrganizationDomainPending from "./fixtures/get-organization-domain-pending.json.ts" with {
   type: "json",
 };
-import getOrganizationDomainVerified from "./fixtures/get-organization-domain-verified.json" with {
+import getOrganizationDomainVerified from "./fixtures/get-organization-domain-verified.json.ts" with {
   type: "json",
 };
 import { OrganizationDomainState } from "./interfaces/index.ts";

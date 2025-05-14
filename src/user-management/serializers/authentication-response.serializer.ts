@@ -1,7 +1,7 @@
 import type {
   AuthenticationResponse,
   AuthenticationResponseResponse,
-} from "../interfaces.ts";
+} from "../interfaces/authentication-response.interface.ts";
 import { deserializeOauthTokens } from "./oauth-tokens.serializer.ts";
 import { deserializeUser } from "./user.serializer.ts";
 

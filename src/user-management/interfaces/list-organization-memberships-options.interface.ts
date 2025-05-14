@@ -1,5 +1,12 @@
-import type { PaginationOptions } from "../../common/interfaces.ts";
 import type { OrganizationMembershipStatus } from "./organization-membership.interface.ts";
+
+// Define PaginationOptions interface locally
+interface PaginationOptions {
+  after?: string;
+  before?: string;
+  limit?: number;
+  [key: string]: any;
+}
 
 export interface ListOrganizationMembershipsOptions extends PaginationOptions {
   organizationId?: string;

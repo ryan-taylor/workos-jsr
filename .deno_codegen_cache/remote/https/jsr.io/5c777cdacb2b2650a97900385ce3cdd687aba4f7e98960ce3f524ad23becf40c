@@ -1,0 +1,33 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+
+import { isWindows } from "./_os.ts";
+import { toNamespacedPath as posixToNamespacedPath } from "./posix/to_namespaced_path.ts";
+import { toNamespacedPath as windowsToNamespacedPath } from "./windows/to_namespaced_path.ts";
+
+/**
+ * Resolves path to a namespace path.  This is a no-op on
+ * non-windows systems.
+ *
+ * @example Usage
+ * ```ts
+ * import { toNamespacedPath } from "@std/path/to-namespaced-path";
+ * import { assertEquals } from "@std/assert";
+ *
+ * if (Deno.build.os === "windows") {
+ *   assertEquals(toNamespacedPath("C:\\foo\\bar"), "\\\\?\\C:\\foo\\bar");
+ * } else {
+ *   assertEquals(toNamespacedPath("/foo/bar"), "/foo/bar");
+ * }
+ * ```
+ *
+ * @param path Path to resolve to namespace.
+ * @returns The resolved namespace path.
+ */
+export function toNamespacedPath(path: string): string {
+  return isWindows
+    ? windowsToNamespacedPath(path)
+    : posixToNamespacedPath(path);
+}
+
+// denoCacheMetadata={"headers":{"x-goog-stored-content-encoding":"identity","content-length":"993","etag":"\"bc4a910d24a44f2823ca98afe0dba8de\"","age":"0","x-jsr-cache-id":"YYZ","access-control-allow-origin":"*","server":"UploadServer","x-content-type-options":"nosniff","date":"Tue, 13 May 2025 01:47:31 GMT","cache-control":"public, max-age=31536000, immutable","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","content-type":"text/typescript","x-goog-storage-class":"STANDARD","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","x-jsr-cache-status":"revalidated","via":"1.1 google","x-goog-generation":"1745475807115382","accept-ranges":"bytes","x-robots-tag":"noindex","access-control-expose-headers":"*","x-goog-metageneration":"1","x-goog-hash":"crc32c=JeWiEA==,md5=vEqRDSSkTygjypiv4Nuo3g==","cross-origin-resource-policy":"cross-origin","x-goog-stored-content-length":"993","expires":"Wed, 13 May 2026 01:47:31 GMT","x-guploader-uploadid":"AAO2Vwq3U9RFtodJyyePJjkps1iVLm8iP4X22SFq9udlg2yirD3UtSx9ssK5k5qQXnRoMizIa4o1dBJMUQZNxg"},"url":"https://jsr.io/@std/path/1.0.9/to_namespaced_path.ts","time":1747100851}

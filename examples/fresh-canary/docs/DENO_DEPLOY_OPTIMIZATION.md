@@ -1,10 +1,14 @@
 # Deno Deploy Optimization Guide for Fresh 2.x Canary
 
-This guide provides best practices for optimizing Fresh 2.x Canary applications for deployment on Deno Deploy.
+This guide provides best practices for optimizing Fresh 2.x Canary applications
+for deployment on Deno Deploy.
 
 ## What is Deno Deploy?
 
-Deno Deploy is a distributed system that runs JavaScript, TypeScript, and WebAssembly at the edge, close to users. It's built on the V8 JavaScript engine and integrates seamlessly with Deno applications, making it an ideal platform for deploying Fresh applications.
+Deno Deploy is a distributed system that runs JavaScript, TypeScript, and
+WebAssembly at the edge, close to users. It's built on the V8 JavaScript engine
+and integrates seamlessly with Deno applications, making it an ideal platform
+for deploying Fresh applications.
 
 ## Configuration for Deno Deploy
 
@@ -21,17 +25,18 @@ export default defineConfig({
     port: 8000,
     hostname: "0.0.0.0",
   },
-  
+
   // Better URL handling in edge environments
   router: {
     trailingSlash: false,
-  }
+  },
 });
 ```
 
 ### Import Map
 
-Your `deno.json` file should include an import map that uses URLs compatible with Deno Deploy:
+Your `deno.json` file should include an import map that uses URLs compatible
+with Deno Deploy:
 
 ```json
 {
@@ -47,7 +52,8 @@ Your `deno.json` file should include an import map that uses URLs compatible wit
 }
 ```
 
-Always use versioned URLs to ensure consistency between development and production environments.
+Always use versioned URLs to ensure consistency between development and
+production environments.
 
 ## Performance Optimizations
 
@@ -65,7 +71,8 @@ Always use versioned URLs to ensure consistency between development and producti
 
 ### Code Splitting
 
-Fresh automatically handles code splitting for islands, but you can further optimize by:
+Fresh automatically handles code splitting for islands, but you can further
+optimize by:
 
 1. **Keeping Islands Small**:
    - Create focused islands with specific functionality
@@ -92,23 +99,24 @@ Fresh automatically handles code splitting for islands, but you can further opti
 async function fetchWithCache(request: Request) {
   const cache = await caches.open("api-cache");
   const cachedResponse = await cache.match(request);
-  
+
   if (cachedResponse) {
     return cachedResponse;
   }
-  
+
   const response = await fetch(request);
   if (response.ok) {
     await cache.put(request, response.clone());
   }
-  
+
   return response;
 }
 ```
 
 ## Environment Variables and Secrets
 
-Deno Deploy supports environment variables for storing configuration and secrets:
+Deno Deploy supports environment variables for storing configuration and
+secrets:
 
 1. **Accessing Environment Variables**:
    ```typescript
@@ -117,7 +125,8 @@ Deno Deploy supports environment variables for storing configuration and secrets
 
 2. **Setting Environment Variables**:
    - Use the Deno Deploy dashboard to set environment variables
-   - For local development, use a `.env` file (but don't commit it to version control)
+   - For local development, use a `.env` file (but don't commit it to version
+     control)
 
 ## Handling Edge-Specific Features
 
@@ -131,13 +140,14 @@ export const handler: Handlers = {
     const country = req.headers.get("x-country") || "unknown";
     // Use country information to customize response
     return ctx.render({ country });
-  }
+  },
 };
 ```
 
 ### Regional Deployments
 
-Deno Deploy automatically deploys your application to multiple regions worldwide. To optimize for this:
+Deno Deploy automatically deploys your application to multiple regions
+worldwide. To optimize for this:
 
 1. **Avoid Region-Specific Code**:
    - Don't hardcode assumptions about server location
@@ -156,7 +166,7 @@ Deno Deploy automatically deploys your application to multiple regions worldwide
    } catch (error) {
      // Log the error
      console.error("Operation failed:", error);
-     
+
      // Return a graceful error response
      return new Response("Something went wrong", { status: 500 });
    }
@@ -172,13 +182,20 @@ Deno Deploy automatically deploys your application to multiple regions worldwide
 
 1. **Request Logging Middleware**:
    ```typescript
-   async function loggerMiddleware(req: Request, ctx: MiddlewareHandlerContext) {
+   async function loggerMiddleware(
+     req: Request,
+     ctx: MiddlewareHandlerContext,
+   ) {
      const start = performance.now();
      const resp = await ctx.next();
      const end = performance.now();
-     
-     console.log(`${req.method} ${req.url} - ${resp.status} - ${(end - start).toFixed(2)}ms`);
-     
+
+     console.log(
+       `${req.method} ${req.url} - ${resp.status} - ${
+         (end - start).toFixed(2)
+       }ms`,
+     );
+
      return resp;
    }
    ```
@@ -202,7 +219,7 @@ Deno Deploy automatically deploys your application to multiple regions worldwide
    ```yaml
    name: Deploy
    on: [push]
-   
+
    jobs:
      deploy:
        name: Deploy
@@ -210,11 +227,11 @@ Deno Deploy automatically deploys your application to multiple regions worldwide
        permissions:
          id-token: write
          contents: read
-       
+
        steps:
          - name: Clone repository
            uses: actions/checkout@v3
-         
+
          - name: Deploy to Deno Deploy
            uses: denoland/deployctl@v1
            with:
@@ -236,9 +253,15 @@ Before deploying, ensure your application is compatible with Deno Deploy:
    - Avoid npm packages that use Node.js-specific features
 
 3. **Test Locally with Restrictions**:
-   - Run your application with the `--no-npm` flag to ensure you're not using npm packages
-   - Use the `--allow-net` flag to restrict network access to only the domains you need
+   - Run your application with the `--no-npm` flag to ensure you're not using
+     npm packages
+   - Use the `--allow-net` flag to restrict network access to only the domains
+     you need
 
 ## Conclusion
 
-By following these optimization strategies, your Fresh 2.x Canary application will be well-optimized for Deno Deploy, providing fast, reliable performance for users worldwide. Deno Deploy's edge runtime combined with Fresh's efficient rendering approach creates a powerful platform for building modern web applications.
+By following these optimization strategies, your Fresh 2.x Canary application
+will be well-optimized for Deno Deploy, providing fast, reliable performance for
+users worldwide. Deno Deploy's edge runtime combined with Fresh's efficient
+rendering approach creates a powerful platform for building modern web
+applications.

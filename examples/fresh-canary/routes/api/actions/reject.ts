@@ -1,5 +1,5 @@
-import type { Handlers } from '$fresh/server.ts';
-import type { workos } from '../../../utils/workos.ts';
+import type { Handlers } from "$fresh/server.ts";
+import type { workos } from "../../../utils/workos.ts";
 
 // For this demo, we'll use the in-memory store for actions
 declare global {
@@ -18,12 +18,12 @@ export const handler: Handlers = {
       if (!body.id) {
         return new Response(
           JSON.stringify({
-            status: 'error',
-            message: 'Action ID is required',
+            status: "error",
+            message: "Action ID is required",
           }),
           {
             status: 400,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { "Content-Type": "application/json" },
           },
         );
       }
@@ -38,26 +38,26 @@ export const handler: Handlers = {
       if (!action) {
         return new Response(
           JSON.stringify({
-            status: 'error',
-            message: 'Action not found',
+            status: "error",
+            message: "Action not found",
           }),
           {
             status: 404,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { "Content-Type": "application/json" },
           },
         );
       }
 
       // Check if the action is already processed
-      if (action.status !== 'pending') {
+      if (action.status !== "pending") {
         return new Response(
           JSON.stringify({
-            status: 'error',
+            status: "error",
             message: `Action has already been ${action.status}`,
           }),
           {
             status: 400,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { "Content-Type": "application/json" },
           },
         );
       }
@@ -68,13 +68,13 @@ export const handler: Handlers = {
       // Create a mock approver (rejector in this case)
       const approver = {
         id: crypto.randomUUID(),
-        email: 'approver@example.com',
-        firstName: 'Demo',
-        lastName: 'Approver',
+        email: "approver@example.com",
+        firstName: "Demo",
+        lastName: "Approver",
       };
 
       // Update the action
-      action.status = 'rejected';
+      action.status = "rejected";
       action.approver = approver;
       action.rejectedAt = new Date();
 
@@ -88,26 +88,28 @@ export const handler: Handlers = {
 
       return new Response(
         JSON.stringify({
-          status: 'success',
-          message: 'Action rejected successfully',
+          status: "success",
+          message: "Action rejected successfully",
           data: action,
         }),
         {
           status: 200,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         },
       );
     } catch (error) {
-      console.error('Error rejecting action:', error);
+      console.error("Error rejecting action:", error);
 
       return new Response(
         JSON.stringify({
-          status: 'error',
-          message: error instanceof Error ? error.message : 'An unknown error occurred',
+          status: "error",
+          message: error instanceof Error
+            ? error.message
+            : "An unknown error occurred",
         }),
         {
           status: 500,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         },
       );
     }

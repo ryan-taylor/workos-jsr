@@ -1,0 +1,31 @@
+{
+  "version": "1.0.0",
+  "description": "Mustache templates for OpenAPI code generation",
+  "templates": [
+    {
+      "name": "index.mustache",
+      "description": "Main entry point template for generated code",
+      "required": true
+    },
+    {
+      "name": "model.mustache",
+      "description": "Template for data models/schemas",
+      "required": true
+    },
+    {
+      "name": "service.mustache",
+      "description": "Template for API service classes",
+      "required": true
+    },
+    {
+      "name": "client.mustache",
+      "description": "Template for HTTP client implementation",
+      "required": true
+    },
+    {
+      "name": "core/request.mustache",
+      "description": "Template for HTTP request handling",
+      "required": true
+    }
+  ]
+}

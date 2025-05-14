@@ -1,0 +1,32 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+
+import { isWindows } from "./_os.ts";
+import { format as posixFormat } from "./posix/format.ts";
+import { format as windowsFormat } from "./windows/format.ts";
+import type { ParsedPath } from "./types.ts";
+
+/**
+ * Generate a path from a {@linkcode ParsedPath} object. It does the
+ * opposite of {@linkcode https://jsr.io/@std/path/doc/~/parse | parse()}.
+ *
+ * @example Usage
+ * ```ts
+ * import { format } from "@std/path/format";
+ * import { assertEquals } from "@std/assert";
+ *
+ * if (Deno.build.os === "windows") {
+ *   assertEquals(format({ dir: "C:\\path\\to", base: "script.ts" }), "C:\\path\\to\\script.ts");
+ * } else {
+ *   assertEquals(format({ dir: "/path/to/dir", base: "script.ts" }), "/path/to/dir/script.ts");
+ * }
+ * ```
+ *
+ * @param pathObject Object with path components.
+ * @returns The formatted path.
+ */
+export function format(pathObject: Partial<ParsedPath>): string {
+  return isWindows ? windowsFormat(pathObject) : posixFormat(pathObject);
+}
+
+// denoCacheMetadata={"headers":{"etag":"\"d219934b36a9634faf0f2184a5f86250\"","cache-control":"public, max-age=31536000, immutable","x-robots-tag":"noindex","x-content-type-options":"nosniff","via":"1.1 google","x-goog-generation":"1745475807100291","x-goog-stored-content-encoding":"identity","expires":"Wed, 13 May 2026 01:47:31 GMT","content-type":"text/typescript","x-jsr-cache-status":"revalidated","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","access-control-allow-origin":"*","x-goog-metageneration":"1","server":"UploadServer","accept-ranges":"bytes","x-guploader-uploadid":"AAO2VwqabaNajjJBLSexs5NGHFHWKpGZDrfivzsIX7baTYxf8ygJIhjsaAkMED1e0O53s2wmCtpTOHUzioTQiA","x-goog-hash":"crc32c=5m5ZSA==,md5=0hmTSzapY0+vDyGEpfhiUA==","age":"0","access-control-expose-headers":"*","cross-origin-resource-policy":"cross-origin","x-goog-stored-content-length":"1062","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","content-length":"1062","x-jsr-cache-id":"YYZ","date":"Tue, 13 May 2025 01:47:31 GMT","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","x-goog-storage-class":"STANDARD"},"url":"https://jsr.io/@std/path/1.0.9/format.ts","time":1747100851}

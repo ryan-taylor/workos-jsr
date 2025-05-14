@@ -1,0 +1,232 @@
+{
+  "paths": {
+    "added": [
+      {
+        "path": "/projects/{id}",
+        "operations": {
+          "added": ["get", "patch"]
+        }
+      }
+    ],
+    "deleted": [
+      {
+        "path": "/users/{id}",
+        "operations": {
+          "deleted": ["delete"]
+        }
+      }
+    ],
+    "modified": [
+      {
+        "path": "/users",
+        "operations": {
+          "modified": {
+            "get": {
+              "parameters": {
+                "modified": {
+                  "limit": {
+                    "in": {
+                      "from": "query",
+                      "to": "query"
+                    },
+                    "required": {
+                      "from": false,
+                      "to": true
+                    },
+                    "schema": {
+                      "default": {
+                        "from": 10,
+                        "to": 20
+                      }
+                    }
+                  }
+                },
+                "added": [
+                  {
+                    "name": "filter",
+                    "in": "query",
+                    "required": false
+                  }
+                ]
+              },
+              "responses": {
+                "modified": {
+                  "200": {
+                    "content": {
+                      "modified": {
+                        "application/json": {
+                          "schema": {
+                            "type": {
+                              "from": "array",
+                              "to": "object"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "post": {
+              "responses": {
+                "added": {
+                  "409": {
+                    "description": "Email already in use"
+                  }
+                }
+              },
+              "requestBody": {
+                "content": {
+                  "modified": {
+                    "application/json": {
+                      "schema": {
+                        "required": {
+                          "added": ["password"]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "/users/{id}",
+        "operations": {
+          "added": ["put"],
+          "deleted": ["delete"]
+        }
+      },
+      {
+        "path": "/projects",
+        "operations": {
+          "added": ["post"],
+          "modified": {
+            "get": {
+              "parameters": {
+                "added": [
+                  {
+                    "name": "limit",
+                    "in": "query",
+                    "required": false
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "endpoints": {
+    "added": [
+      {
+        "path": "/projects/{id}",
+        "method": "get"
+      },
+      {
+        "path": "/projects/{id}",
+        "method": "patch"
+      },
+      {
+        "path": "/users/{id}",
+        "method": "put"
+      },
+      {
+        "path": "/projects",
+        "method": "post"
+      }
+    ],
+    "deleted": [
+      {
+        "path": "/users/{id}",
+        "method": "delete"
+      }
+    ],
+    "modified": [
+      {
+        "path": "/users",
+        "method": "get",
+        "parameters": {
+          "modified": {
+            "limit": {
+              "in": {
+                "from": "query",
+                "to": "query"
+              },
+              "required": {
+                "from": false,
+                "to": true
+              }
+            }
+          },
+          "added": [
+            {
+              "name": "filter",
+              "in": "query",
+              "required": false
+            }
+          ]
+        },
+        "responses": {
+          "modified": {
+            "200": {
+              "content": {
+                "modified": {
+                  "application/json": {
+                    "schema": {
+                      "type": {
+                        "from": "array",
+                        "to": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "/users",
+        "method": "post",
+        "requestBody": {
+          "content": {
+            "modified": {
+              "application/json": {
+                "schema": {
+                  "required": {
+                    "added": ["password"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "added": {
+            "409": {
+              "description": "Email already in use"
+            }
+          }
+        }
+      },
+      {
+        "path": "/projects",
+        "method": "get",
+        "parameters": {
+          "added": [
+            {
+              "name": "limit",
+              "in": "query",
+              "required": false
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

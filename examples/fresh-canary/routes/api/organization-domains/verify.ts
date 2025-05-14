@@ -1,4 +1,4 @@
-import { verifyDomain } from '../../../utils/organization-domains.ts';
+import { verifyDomain } from "../../../utils/organization-domains.ts";
 
 export const handler = {
   async POST(req: Request) {
@@ -9,11 +9,11 @@ export const handler = {
       if (!domainId) {
         return new Response(
           JSON.stringify({
-            message: 'Domain ID is required',
+            message: "Domain ID is required",
           }),
           {
             status: 400,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { "Content-Type": "application/json" },
           },
         );
       }
@@ -21,17 +21,19 @@ export const handler = {
       const verifiedDomain = await verifyDomain(domainId);
 
       return new Response(JSON.stringify(verifiedDomain), {
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       });
     } catch (error) {
-      console.error('Error verifying domain:', error);
+      console.error("Error verifying domain:", error);
       return new Response(
         JSON.stringify({
-          message: error instanceof Error ? error.message : 'An unknown error occurred',
+          message: error instanceof Error
+            ? error.message
+            : "An unknown error occurred",
         }),
         {
           status: 500,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         },
       );
     }

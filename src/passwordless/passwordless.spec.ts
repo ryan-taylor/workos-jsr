@@ -7,7 +7,7 @@ import {
   fetchURL,
   resetMockFetch,
 } from "../common/utils/test-utils.ts";
-import createSession from "./fixtures/create-session.json" with {
+import createSession from "./fixtures/create-session.json.ts" with {
   type: "json",
 };
 import { WorkOS } from "../workos.ts";

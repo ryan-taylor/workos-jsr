@@ -10,31 +10,31 @@ import {
   resetMockFetch,
 } from "../common/utils/test-utils.ts";
 import { WorkOS } from "../workos.ts";
-import clearStripeCustomerId from "./fixtures/clear-stripe-customer-id.json" with {
+import clearStripeCustomerId from "./fixtures/clear-stripe-customer-id.json.ts" with {
   type: "json",
 };
-import createOrganizationInvalid from "./fixtures/create-organization-invalid.json" with {
+import createOrganizationInvalid from "./fixtures/create-organization-invalid.json.ts" with {
   type: "json",
 };
-import createOrganization from "./fixtures/create-organization.json" with {
+import createOrganization from "./fixtures/create-organization.json.ts" with {
   type: "json",
 };
-import getOrganization from "./fixtures/get-organization.json" with {
+import getOrganization from "./fixtures/get-organization.json.ts" with {
   type: "json",
 };
-import listOrganizationsFixture from "./fixtures/list-organizations.json" with {
+import listOrganizationsFixture from "./fixtures/list-organizations.json.ts" with {
   type: "json",
 };
-import listOrganizationRolesFixture from "./fixtures/list-organization-roles.json" with {
+import listOrganizationRolesFixture from "./fixtures/list-organization-roles.json.ts" with {
   type: "json",
 };
-import updateOrganization from "./fixtures/update-organization.json" with {
+import updateOrganization from "./fixtures/update-organization.json.ts" with {
   type: "json",
 };
-import setStripeCustomerId from "./fixtures/set-stripe-customer-id.json" with {
+import setStripeCustomerId from "./fixtures/set-stripe-customer-id.json.ts" with {
   type: "json",
 };
-import setStripeCustomerIdDisabled from "./fixtures/set-stripe-customer-id-disabled.json" with {
+import setStripeCustomerIdDisabled from "./fixtures/set-stripe-customer-id-disabled.json.ts" with {
   type: "json",
 };
 import { DomainDataState } from "./interfaces/index.ts";

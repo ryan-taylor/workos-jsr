@@ -1,6 +1,9 @@
 import { crypto } from "jsr:@std/crypto@1";
 import { decodeUInt32 } from "../common/utils/leb128.ts";
 
+/**
+ * Decoded structure for encrypted payloads.
+ */
 export interface Decoded {
   iv: Uint8Array;
   tag: Uint8Array;
@@ -8,6 +11,14 @@ export interface Decoded {
   ciphertext: Uint8Array;
 }
 
+/**
+ * Decrypts an encrypted payload or Decoded object using AES-GCM.
+ *
+ * @param payload - Base64 string or Decoded payload object
+ * @param dataKey - Base64-encoded data key for decryption
+ * @param aad - Associated additional data for AEAD
+ * @returns Promise resolving to the decrypted plaintext string
+ */
 export const decrypt = async (
   payload: string | Decoded,
   dataKey: string,
@@ -52,6 +63,12 @@ export const decrypt = async (
   return decoder.decode(decryptedData);
 };
 
+/**
+ * Decodes a base64-encoded encrypted payload into its components.
+ *
+ * @param payload - Base64-encoded string containing IV, tag, key length, keys, and ciphertext
+ * @returns Decoded object with iv, tag, keys, and ciphertext
+ */
 export const decode = (payload: string): Decoded => {
   const inputData = base64ToUint8Array(payload);
   const iv = inputData.slice(0, 32);

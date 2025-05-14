@@ -1,0 +1,48 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+
+import type { GlobOptions } from "../_common/glob_to_reg_exp.ts";
+import { join } from "./join.ts";
+import { SEPARATOR } from "./constants.ts";
+import { normalizeGlob } from "./normalize_glob.ts";
+
+export type { GlobOptions };
+
+/**
+ * Like join(), but doesn't collapse "**\/.." when `globstar` is true.
+ *
+ * @example Usage
+ *
+ * ```ts
+ * import { joinGlobs } from "@std/path/windows/join-globs";
+ * import { assertEquals } from "@std/assert";
+ *
+ * const joined = joinGlobs(["foo", "**", "bar"], { globstar: true });
+ * assertEquals(joined, "foo\\**\\bar");
+ * ```
+ *
+ * @param globs The globs to join.
+ * @param options The options for glob pattern.
+ * @returns The joined glob pattern.
+ */
+export function joinGlobs(
+  globs: string[],
+  options: Pick<GlobOptions, "globstar"> = {},
+): string {
+  const { globstar = false } = options;
+  if (!globstar || globs.length === 0) {
+    return join(...globs);
+  }
+  let joined: string | undefined;
+  for (const glob of globs) {
+    const path = glob;
+    if (path.length > 0) {
+      if (!joined) joined = path;
+      else joined += `${SEPARATOR}${path}`;
+    }
+  }
+  if (!joined) return ".";
+  return normalizeGlob(joined, { globstar });
+}
+
+// denoCacheMetadata={"headers":{"accept-ranges":"bytes","etag":"\"6d0ad2d513cb0940e2cefcaf5df16a3c\"","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","x-jsr-cache-status":"revalidated","cross-origin-resource-policy":"cross-origin","x-goog-hash":"crc32c=+Fbpcw==,md5=bQrS1RPLCUDizvyvXfFqPA==","x-guploader-uploadid":"AAO2Vwoj-BiK12Oex6cWa8Q4z6tKtvWi9W0LPyEM0-6KgmXKiKLDxIG_sket_w4hLOTfc2Nl5uIox7Cu1rTq-A","x-goog-storage-class":"STANDARD","x-goog-stored-content-encoding":"identity","cache-control":"public, max-age=31536000, immutable","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","x-goog-metageneration":"1","age":"0","access-control-expose-headers":"*","expires":"Wed, 13 May 2026 01:47:32 GMT","via":"1.1 google","server":"UploadServer","date":"Tue, 13 May 2025 01:47:32 GMT","x-robots-tag":"noindex","access-control-allow-origin":"*","content-type":"text/typescript","x-content-type-options":"nosniff","content-length":"1280","x-goog-generation":"1745475807198440","x-jsr-cache-id":"YYZ","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","x-goog-stored-content-length":"1280"},"url":"https://jsr.io/@std/path/1.0.9/windows/join_globs.ts","time":1747100852}

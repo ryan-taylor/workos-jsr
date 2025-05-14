@@ -1,12 +1,12 @@
 // Utility functions for integrating User Management with Fresh 2.x
 
 import {
-  FreshSessionProvider,
   buildSessionOptions,
+  FreshSessionProvider,
+  initUserManagement as initWorkOSUserManagement,
+  type SessionData,
   type SessionOptions,
   type WorkOSUser,
-  type SessionData,
-  initUserManagement as initWorkOSUserManagement
 } from "../workos_internal/mod.ts";
 
 // Session configuration using the factory function
@@ -17,10 +17,15 @@ export const SESSION_OPTIONS: SessionOptions = buildSessionOptions(Deno.env);
  * @returns An object containing WorkOS, UserManagement, and SessionProvider instances
  */
 export function initUserManagement() {
-  const apiKey = Deno.env.get('WORKOS_API_KEY') || '';
-  const clientId = Deno.env.get('WORKOS_CLIENT_ID');
-  
-  return initWorkOSUserManagement(apiKey, clientId);
+  const clientIdValue = Deno.env.get("WORKOS_CLIENT_ID");
+  const apiKey = Deno.env.get("WORKOS_API_KEY");
+  if (!apiKey || !clientIdValue) {
+    throw new Error("Missing environment variables for WorkOS configuration");
+  }
+  // Explicitly assign to typed variables to help TypeScript with type narrowing
+  const clientId: string = clientIdValue;
+  const apiKeyString: string = apiKey;
+  return initWorkOSUserManagement(apiKeyString, clientId);
 }
 
 /**
@@ -29,12 +34,15 @@ export function initUserManagement() {
  */
 export async function requireAuth(req: Request): Promise<Response | null> {
   const sessionProvider = new FreshSessionProvider();
-  const session = await sessionProvider.getSession<SessionData>(req, SESSION_OPTIONS);
+  const session = await sessionProvider.getSession<SessionData>(
+    req,
+    SESSION_OPTIONS,
+  );
 
   if (!session || !session.user) {
     return new Response(null, {
       status: 302,
-      headers: { Location: '/login?redirect=' + encodeURIComponent(req.url) },
+      headers: { Location: "/login?redirect=" + encodeURIComponent(req.url) },
     });
   }
 
@@ -46,7 +54,10 @@ export async function requireAuth(req: Request): Promise<Response | null> {
  */
 export async function getCurrentUser(req: Request): Promise<WorkOSUser | null> {
   const sessionProvider = new FreshSessionProvider();
-  const session = await sessionProvider.getSession<SessionData>(req, SESSION_OPTIONS);
+  const session = await sessionProvider.getSession<SessionData>(
+    req,
+    SESSION_OPTIONS,
+  );
 
   return session?.user || null;
 }
@@ -56,7 +67,7 @@ export async function getCurrentUser(req: Request): Promise<WorkOSUser | null> {
  */
 export async function createUserSession(
   sessionData: SessionData,
-  redirectUrl: string = '/',
+  redirectUrl: string = "/",
 ): Promise<Response> {
   const sessionProvider = new FreshSessionProvider();
 
@@ -73,4 +84,4 @@ export async function createUserSession(
 }
 
 // Re-export types for convenience
-export type { WorkOSUser, SessionData };
+export type { SessionData, WorkOSUser };

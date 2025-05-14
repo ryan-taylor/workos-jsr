@@ -1,0 +1,23 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+import { AssertionError } from "./assertion_error.ts";
+/**
+ * Make an assertion, error will be thrown if `expr` have truthy value.
+ *
+ * @example Usage
+ * ```ts ignore
+ * import { assertFalse } from "@std/assert";
+ *
+ * assertFalse(false); // Doesn't throw
+ * assertFalse(true); // Throws
+ * ```
+ *
+ * @param expr The expression to test.
+ * @param msg The optional message to display if the assertion fails.
+ */ export function assertFalse(expr, msg = "") {
+  if (expr) {
+    throw new AssertionError(msg);
+  }
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImh0dHBzOi8vanNyLmlvL0BzdGQvYXNzZXJ0LzEuMC4xMy9mYWxzZS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyIvLyBDb3B5cmlnaHQgMjAxOC0yMDI1IHRoZSBEZW5vIGF1dGhvcnMuIE1JVCBsaWNlbnNlLlxuLy8gVGhpcyBtb2R1bGUgaXMgYnJvd3NlciBjb21wYXRpYmxlLlxuaW1wb3J0IHsgQXNzZXJ0aW9uRXJyb3IgfSBmcm9tIFwiLi9hc3NlcnRpb25fZXJyb3IudHNcIjtcblxuLyoqIEFzc2VydGlvbiBjb25kaXRpb24gZm9yIHtAbGlua2NvZGUgYXNzZXJ0RmFsc2V9LiAqL1xuZXhwb3J0IHR5cGUgRmFsc3kgPSBmYWxzZSB8IDAgfCAwbiB8IFwiXCIgfCBudWxsIHwgdW5kZWZpbmVkO1xuXG4vKipcbiAqIE1ha2UgYW4gYXNzZXJ0aW9uLCBlcnJvciB3aWxsIGJlIHRocm93biBpZiBgZXhwcmAgaGF2ZSB0cnV0aHkgdmFsdWUuXG4gKlxuICogQGV4YW1wbGUgVXNhZ2VcbiAqIGBgYHRzIGlnbm9yZVxuICogaW1wb3J0IHsgYXNzZXJ0RmFsc2UgfSBmcm9tIFwiQHN0ZC9hc3NlcnRcIjtcbiAqXG4gKiBhc3NlcnRGYWxzZShmYWxzZSk7IC8vIERvZXNuJ3QgdGhyb3dcbiAqIGFzc2VydEZhbHNlKHRydWUpOyAvLyBUaHJvd3NcbiAqIGBgYFxuICpcbiAqIEBwYXJhbSBleHByIFRoZSBleHByZXNzaW9uIHRvIHRlc3QuXG4gKiBAcGFyYW0gbXNnIFRoZSBvcHRpb25hbCBtZXNzYWdlIHRvIGRpc3BsYXkgaWYgdGhlIGFzc2VydGlvbiBmYWlscy5cbiAqL1xuZXhwb3J0IGZ1bmN0aW9uIGFzc2VydEZhbHNlKGV4cHI6IHVua25vd24sIG1zZyA9IFwiXCIpOiBhc3NlcnRzIGV4cHIgaXMgRmFsc3kge1xuICBpZiAoZXhwcikge1xuICAgIHRocm93IG5ldyBBc3NlcnRpb25FcnJvcihtc2cpO1xuICB9XG59XG4iXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEscURBQXFEO0FBQ3JELHFDQUFxQztBQUNyQyxTQUFTLGNBQWMsUUFBUSx1QkFBdUI7QUFLdEQ7Ozs7Ozs7Ozs7Ozs7Q0FhQyxHQUNELE9BQU8sU0FBUyxZQUFZLElBQWEsRUFBRSxNQUFNLEVBQUU7RUFDakQsSUFBSSxNQUFNO0lBQ1IsTUFBTSxJQUFJLGVBQWU7RUFDM0I7QUFDRiJ9
+// denoCacheMetadata=14180627025788053418,15173276271374414136

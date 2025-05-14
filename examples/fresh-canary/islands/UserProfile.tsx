@@ -1,12 +1,16 @@
-import { useState } from 'preact/hooks';
-import type { WorkOSUser } from '../utils/user-management.ts';
+/** @jsx h */
+import { h } from "preact";
+import { useState } from "preact/hooks";
+import type { WorkOSUser } from "../utils/user-management.ts";
 
 interface UserProfileProps {
   user: WorkOSUser;
   userProfile?: any;
 }
 
-export default function UserProfile({ user, userProfile: initialUserProfile }: UserProfileProps) {
+export default function UserProfile(
+  { user, userProfile: initialUserProfile }: UserProfileProps,
+) {
   // State for user profile data
   const [userProfile, setUserProfile] = useState<any>(initialUserProfile);
 
@@ -26,7 +30,7 @@ export default function UserProfile({ user, userProfile: initialUserProfile }: U
       const response = await fetch(`/api/user-profile?userId=${user.id}`);
 
       if (!response.ok) {
-        throw new Error('Failed to fetch user data');
+        throw new Error("Failed to fetch user data");
       }
 
       const data = await response.json();
@@ -38,40 +42,44 @@ export default function UserProfile({ user, userProfile: initialUserProfile }: U
         setRefreshed(false);
       }, 3000);
     } catch (err) {
-      console.error('Error refreshing user data:', err);
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
+      console.error("Error refreshing user data:", err);
+      setError(
+        err instanceof Error ? err.message : "An unknown error occurred",
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div class='user-profile'>
-      <div class='profile-header'>
+    <div class="user-profile">
+      <div class="profile-header">
         <h2>User Profile</h2>
         <button
-          class={`refresh-button ${isLoading ? 'loading' : ''} ${refreshed ? 'success' : ''}`}
+          class={`refresh-button ${isLoading ? "loading" : ""} ${
+            refreshed ? "success" : ""
+          }`}
           onClick={refreshUserData}
           disabled={isLoading}
         >
-          {isLoading ? 'Refreshing...' : refreshed ? '✓ Updated' : 'Refresh'}
+          {isLoading ? "Refreshing..." : refreshed ? "✓ Updated" : "Refresh"}
         </button>
       </div>
 
       {error && (
-        <div class='error-message'>
+        <div class="error-message">
           {error}
         </div>
       )}
 
       {isLoading
         ? (
-          <div class='loading-state'>
+          <div class="loading-state">
             <p>Loading user data...</p>
           </div>
         )
         : (
-          <div class='user-info'>
+          <div class="user-info">
             <p>
               <strong>ID:</strong> {user.id}
             </p>
@@ -79,28 +87,32 @@ export default function UserProfile({ user, userProfile: initialUserProfile }: U
               <strong>Email:</strong> {user.email}
             </p>
             <p>
-              <strong>Name:</strong> {user.firstName || ''} {user.lastName || ''}
+              <strong>Name:</strong> {user.firstName || ""}{" "}
+              {user.lastName || ""}
             </p>
             {user.profilePictureUrl && (
-              <div class='profile-picture'>
-                <img src={user.profilePictureUrl} alt='Profile' />
+              <div class="profile-picture">
+                <img src={user.profilePictureUrl} alt="Profile" />
               </div>
             )}
 
             {userProfile && (
-              <div class='additional-info'>
+              <div class="additional-info">
                 <h3>Additional Information</h3>
                 <p>
-                  <strong>Email Verified:</strong> {userProfile.emailVerified ? 'Yes' : 'No'}
+                  <strong>Email Verified:</strong>{" "}
+                  {userProfile.emailVerified ? "Yes" : "No"}
                 </p>
                 {userProfile.createdAt && (
                   <p>
-                    <strong>Account Created:</strong> {new Date(userProfile.createdAt).toLocaleString()}
+                    <strong>Account Created:</strong>{" "}
+                    {new Date(userProfile.createdAt).toLocaleString()}
                   </p>
                 )}
                 {userProfile.updatedAt && (
                   <p>
-                    <strong>Last Updated:</strong> {new Date(userProfile.updatedAt).toLocaleString()}
+                    <strong>Last Updated:</strong>{" "}
+                    {new Date(userProfile.updatedAt).toLocaleString()}
                   </p>
                 )}
               </div>

@@ -1,0 +1,34 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+
+import { isWindows } from "./_os.ts";
+import { relative as posixRelative } from "./posix/relative.ts";
+import { relative as windowsRelative } from "./windows/relative.ts";
+
+/**
+ * Return the relative path from `from` to `to` based on current working
+ * directory.
+ *
+ * @example Usage
+ * ```ts
+ * import { relative } from "@std/path/relative";
+ * import { assertEquals } from "@std/assert";
+ *
+ * if (Deno.build.os === "windows") {
+ *   const path = relative("C:\\foobar\\test\\aaa", "C:\\foobar\\impl\\bbb");
+ *   assertEquals(path, "..\\..\\impl\\bbb");
+ * } else {
+ *   const path = relative("/data/foobar/test/aaa", "/data/foobar/impl/bbb");
+ *   assertEquals(path, "../../impl/bbb");
+ * }
+ * ```
+ *
+ * @param from Path in current working directory.
+ * @param to Path in current working directory.
+ * @returns The relative path from `from` to `to`.
+ */
+export function relative(from: string, to: string): string {
+  return isWindows ? windowsRelative(from, to) : posixRelative(from, to);
+}
+
+// denoCacheMetadata={"headers":{"x-jsr-cache-status":"revalidated","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","x-goog-hash":"crc32c=OzMthQ==,md5=Q3lrlAz9HyoJLiM2rtMn9g==","x-goog-metageneration":"1","date":"Tue, 13 May 2025 01:47:31 GMT","etag":"\"43796b940cfd1f2a092e2336aed327f6\"","content-type":"text/typescript","access-control-allow-origin":"*","access-control-expose-headers":"*","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","server":"UploadServer","x-content-type-options":"nosniff","accept-ranges":"bytes","x-goog-stored-content-encoding":"identity","content-length":"1087","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","expires":"Wed, 13 May 2026 01:47:31 GMT","x-goog-generation":"1745475807172111","x-robots-tag":"noindex","x-guploader-uploadid":"AAO2VwoRDu_YcGg4tmUHU3GxAx2-SZkQw4oMDgEf2dAr1CfTZ2ypX_Ffdajn8ZwFFQoFceCa5gF4Q_V9VBuejA","age":"0","x-jsr-cache-id":"YYZ","cache-control":"public, max-age=31536000, immutable","cross-origin-resource-policy":"cross-origin","x-goog-stored-content-length":"1087","x-goog-storage-class":"STANDARD","via":"1.1 google"},"url":"https://jsr.io/@std/path/1.0.9/relative.ts","time":1747100851}

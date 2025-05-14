@@ -1,0 +1,14 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+
+export function assertArg(url: URL | string) {
+  url = url instanceof URL ? url : new URL(url);
+  if (url.protocol !== "file:") {
+    throw new TypeError(
+      `URL must be a file URL: received "${url.protocol}"`,
+    );
+  }
+  return url;
+}
+
+// denoCacheMetadata={"headers":{"age":"0","x-goog-storage-class":"STANDARD","x-jsr-cache-status":"revalidated","x-robots-tag":"noindex","x-guploader-uploadid":"AAO2Vwq9Z5deQy_jPXuQl_JjhColKCDZxyGp_HKHmMOF-UrW5XbzgDHKyTPYCWMOiHjGojQB4t5kYxQMyKOSlg","access-control-allow-origin":"*","cross-origin-resource-policy":"cross-origin","via":"1.1 google","expires":"Wed, 13 May 2026 01:47:32 GMT","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","server":"UploadServer","x-content-type-options":"nosniff","x-goog-hash":"crc32c=jve+TQ==,md5=l3GYseoisXKf7l0OQ6iRRQ==","cache-control":"public, max-age=31536000, immutable","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","access-control-expose-headers":"*","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","content-length":"335","x-goog-stored-content-length":"335","date":"Tue, 13 May 2025 01:47:32 GMT","accept-ranges":"bytes","x-goog-generation":"1745475807123596","etag":"\"977198b1ea22b1729fee5d0e43a89145\"","x-goog-stored-content-encoding":"identity","content-type":"text/typescript","x-jsr-cache-id":"YYZ","x-goog-metageneration":"1"},"url":"https://jsr.io/@std/path/1.0.9/_common/from_file_url.ts","time":1747100852}

@@ -1,7 +1,7 @@
 // Custom hooks for auth state management
-import { type Signal, signal } from '@preact/signals';
-import { useAuth } from './auth-context.tsx';
-import type { WorkOSUser } from './user-management.ts';
+import { type Signal, signal } from "@preact/signals";
+import { useAuth } from "./auth-context.tsx";
+import type { WorkOSUser } from "./user-management.ts";
 
 // Hook for login functionality
 export function useLogin() {
@@ -17,8 +17,10 @@ export function useLogin() {
       loginError.value = null;
       contextLogin(redirectUrl);
     } catch (error) {
-      loginError.value = error instanceof Error ? error.message : 'Login failed';
-      console.error('Login error:', error);
+      loginError.value = error instanceof Error
+        ? error.message
+        : "Login failed";
+      console.error("Login error:", error);
     } finally {
       // Note: The actual redirect happens, so this doesn't execute,
       // but it's good practice to include for error cases
@@ -48,8 +50,10 @@ export function useLogout() {
       logoutError.value = null;
       contextLogout();
     } catch (error) {
-      logoutError.value = error instanceof Error ? error.message : 'Logout failed';
-      console.error('Logout error:', error);
+      logoutError.value = error instanceof Error
+        ? error.message
+        : "Logout failed";
+      console.error("Logout error:", error);
     } finally {
       // Note: The actual redirect happens, so this doesn't execute,
       // but it's good practice to include for error cases
@@ -83,24 +87,26 @@ export function useRegister() {
       registerError.value = null;
       registerSuccess.value = false;
 
-      const response = await fetch('/api/register', {
-        method: 'POST',
+      const response = await fetch("/api/register", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(userData),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Registration failed');
+        throw new Error(errorData.message || "Registration failed");
       }
 
       registerSuccess.value = true;
       return true;
     } catch (error) {
-      registerError.value = error instanceof Error ? error.message : 'Registration failed';
-      console.error('Registration error:', error);
+      registerError.value = error instanceof Error
+        ? error.message
+        : "Registration failed";
+      console.error("Registration error:", error);
       return false;
     } finally {
       isRegistering.value = false;
@@ -128,8 +134,10 @@ export function useUserData() {
       refreshError.value = null;
       await contextRefreshUser();
     } catch (error) {
-      refreshError.value = error instanceof Error ? error.message : 'Failed to refresh user data';
-      console.error('Refresh error:', error);
+      refreshError.value = error instanceof Error
+        ? error.message
+        : "Failed to refresh user data";
+      console.error("Refresh error:", error);
     } finally {
       isRefreshing.value = false;
     }
@@ -158,24 +166,26 @@ export function usePasswordReset() {
       requestError.value = null;
       requestSuccess.value = false;
 
-      const response = await fetch('/api/forgot-password', {
-        method: 'POST',
+      const response = await fetch("/api/forgot-password", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Password reset request failed');
+        throw new Error(errorData.message || "Password reset request failed");
       }
 
       requestSuccess.value = true;
       return true;
     } catch (error) {
-      requestError.value = error instanceof Error ? error.message : 'Password reset request failed';
-      console.error('Password reset request error:', error);
+      requestError.value = error instanceof Error
+        ? error.message
+        : "Password reset request failed";
+      console.error("Password reset request error:", error);
       return false;
     } finally {
       isRequesting.value = false;
@@ -203,24 +213,28 @@ export function useResetPasswordConfirm() {
       confirmError.value = null;
       confirmSuccess.value = false;
 
-      const response = await fetch('/api/reset-password', {
-        method: 'POST',
+      const response = await fetch("/api/reset-password", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ token, password }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Password reset confirmation failed');
+        throw new Error(
+          errorData.message || "Password reset confirmation failed",
+        );
       }
 
       confirmSuccess.value = true;
       return true;
     } catch (error) {
-      confirmError.value = error instanceof Error ? error.message : 'Password reset confirmation failed';
-      console.error('Password reset confirmation error:', error);
+      confirmError.value = error instanceof Error
+        ? error.message
+        : "Password reset confirmation failed";
+      console.error("Password reset confirmation error:", error);
       return false;
     } finally {
       isConfirming.value = false;
@@ -248,24 +262,26 @@ export function useEmailVerification() {
       verifyError.value = null;
       verifySuccess.value = false;
 
-      const response = await fetch('/api/verify-email', {
-        method: 'POST',
+      const response = await fetch("/api/verify-email", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ token }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Email verification failed');
+        throw new Error(errorData.message || "Email verification failed");
       }
 
       verifySuccess.value = true;
       return true;
     } catch (error) {
-      verifyError.value = error instanceof Error ? error.message : 'Email verification failed';
-      console.error('Email verification error:', error);
+      verifyError.value = error instanceof Error
+        ? error.message
+        : "Email verification failed";
+      console.error("Email verification error:", error);
       return false;
     } finally {
       isVerifying.value = false;

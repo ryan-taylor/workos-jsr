@@ -1,4 +1,9 @@
-import type { CreateDataKeyResponse, DataKey, DataKeyPair, DecryptDataKeyResponse } from "../interfaces.ts";
+import type {
+  CreateDataKeyResponse,
+  DataKey,
+  DataKeyPair,
+  DecryptDataKeyResponse,
+} from "../interfaces.ts";
 
 export const deserializeCreateDataKeyResponse = (
   data: CreateDataKeyResponse,
@@ -19,4 +24,4 @@ export const deserializeDecryptDataKeyResponse = (
     id: data.data_key.id,
     key: data.data_key.key,
   };
-}; 
+};

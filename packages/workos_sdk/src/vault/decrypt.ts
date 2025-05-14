@@ -1,4 +1,4 @@
-import { crypto } from "jsr:@std/crypto@1";
+import { crypto } from "jsr:@std/crypto@^1";
 import { decodeUInt32 } from "../common/utils/leb128.ts";
 
 /**

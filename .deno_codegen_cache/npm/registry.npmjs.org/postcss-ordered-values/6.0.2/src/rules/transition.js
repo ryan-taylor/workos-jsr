@@ -1,19 +1,19 @@
-'use strict';
-const { unit } = require('postcss-value-parser');
-const { getArguments } = require('cssnano-utils');
-const addSpace = require('../lib/addSpace');
-const getValue = require('../lib/getValue');
+"use strict";
+const { unit } = require("postcss-value-parser");
+const { getArguments } = require("cssnano-utils");
+const addSpace = require("../lib/addSpace");
+const getValue = require("../lib/getValue");
 
 // transition: [ none | <single-transition-property> ] || <time> || <single-transition-timing-function> || <time>
 
 const timingFunctions = new Set([
-  'ease',
-  'linear',
-  'ease-in',
-  'ease-out',
-  'ease-in-out',
-  'step-start',
-  'step-end',
+  "ease",
+  "linear",
+  "ease-in",
+  "ease-out",
+  "ease-in-out",
+  "step-start",
+  "step-end",
 ]);
 
 /**
@@ -34,13 +34,13 @@ function normalize(args) {
     arg.forEach((node) => {
       const { type, value } = node;
 
-      if (type === 'space') {
+      if (type === "space") {
         return;
       }
 
       if (
-        type === 'function' &&
-        new Set(['steps', 'cubic-bezier']).has(value.toLowerCase())
+        type === "function" &&
+        new Set(["steps", "cubic-bezier"]).has(value.toLowerCase())
       ) {
         state.timingFunction = [...state.timingFunction, node, addSpace()];
       } else if (unit(value)) {

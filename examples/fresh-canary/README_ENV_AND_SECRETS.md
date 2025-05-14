@@ -1,6 +1,7 @@
 # Environment Variables and Secrets Management
 
-This guide explains how to properly manage environment variables and secrets when working with the WorkOS SDK in a Fresh application.
+This guide explains how to properly manage environment variables and secrets
+when working with the WorkOS SDK in a Fresh application.
 
 ## Environment Variables Overview
 
@@ -34,7 +35,8 @@ WORKOS_WEBHOOK_SECRET=whsec_xxxxxxxxxxxx
 OTLP_ENDPOINT=http://localhost:4318
 ```
 
-**IMPORTANT**: Never commit your `.env` file to version control. Add it to your `.gitignore` file:
+**IMPORTANT**: Never commit your `.env` file to version control. Add it to your
+`.gitignore` file:
 
 ```
 # .gitignore
@@ -47,22 +49,24 @@ In Deno, load environment variables from your `.env` file:
 
 ```typescript
 // main.ts
-import { load } from 'jsr:@std/dotenv@^1';
+import { load } from "jsr:@std/dotenv@^1";
 
 // Load environment variables from .env file
 await load({ export: true });
 
 // Now variables are available via Deno.env.get
-console.log(Deno.env.get('WORKOS_API_KEY'));
+console.log(Deno.env.get("WORKOS_API_KEY"));
 ```
 
 ## Production Deployment with Secrets
 
-For production environments, you should not use `.env` files. Instead, use a secrets management system.
+For production environments, you should not use `.env` files. Instead, use a
+secrets management system.
 
 ### Using Doppler (Recommended)
 
-[Doppler](https://www.doppler.com/) is a secure secrets manager that works well with Deno applications.
+[Doppler](https://www.doppler.com/) is a secure secrets manager that works well
+with Deno applications.
 
 1. Install the Doppler CLI:
    ```bash
@@ -84,7 +88,8 @@ For production environments, you should not use `.env` files. Instead, use a sec
 
 ### Deno Deploy Integration
 
-When deploying to Deno Deploy, configure environment variables through their dashboard:
+When deploying to Deno Deploy, configure environment variables through their
+dashboard:
 
 1. Go to the [Deno Deploy dashboard](https://dash.deno.com/)
 2. Select your project
@@ -129,7 +134,8 @@ jobs:
 Follow these best practices for secret management:
 
 1. **Regular rotation**: Change secrets periodically (especially SESSION_SECRET)
-2. **Different secrets for environments**: Use different secrets for development, staging, and production
+2. **Different secrets for environments**: Use different secrets for
+   development, staging, and production
 3. **Access control**: Limit who has access to production secrets
 4. **Secret auditing**: Monitor and log access to secrets
 5. **Secret versioning**: Version your secrets to make rotation easier
@@ -142,35 +148,36 @@ When accessing secrets in your application code, use a consistent pattern:
 // utils/config.ts
 export function getConfig() {
   return {
-    workosApiKey: Deno.env.get('WORKOS_API_KEY') || '',
-    workosClientId: Deno.env.get('WORKOS_CLIENT_ID') || '',
-    sessionSecret: Deno.env.get('SESSION_SECRET') || '',
-    webhookSecret: Deno.env.get('WORKOS_WEBHOOK_SECRET') || '',
-    isProduction: Deno.env.get('DENO_DEPLOYMENT_ID') !== undefined,
+    workosApiKey: Deno.env.get("WORKOS_API_KEY") || "",
+    workosClientId: Deno.env.get("WORKOS_CLIENT_ID") || "",
+    sessionSecret: Deno.env.get("SESSION_SECRET") || "",
+    webhookSecret: Deno.env.get("WORKOS_WEBHOOK_SECRET") || "",
+    isProduction: Deno.env.get("DENO_DEPLOYMENT_ID") !== undefined,
   };
 }
 
 // Then import and use this elsewhere
-import { getConfig } from '../utils/config.ts';
+import { getConfig } from "../utils/config.ts";
 const config = getConfig();
 ```
 
 ## Telemetry Configuration
 
-When enabling telemetry, you can also configure the OpenTelemetry endpoint through environment variables:
+When enabling telemetry, you can also configure the OpenTelemetry endpoint
+through environment variables:
 
 ```typescript
-import { WorkOS } from '@workos/sdk';
+import { WorkOS } from "@workos/sdk";
 
 const workos = new WorkOS(
-  Deno.env.get('WORKOS_API_KEY') || '',
+  Deno.env.get("WORKOS_API_KEY") || "",
   {
-    clientId: Deno.env.get('WORKOS_CLIENT_ID'),
+    clientId: Deno.env.get("WORKOS_CLIENT_ID"),
     telemetry: {
       enabled: true,
-      endpoint: Deno.env.get('OTLP_ENDPOINT') || 'http://localhost:4318',
-      serviceName: Deno.env.get('SERVICE_NAME') || 'fresh-app',
-      debug: Deno.env.get('TELEMETRY_DEBUG') === 'true',
+      endpoint: Deno.env.get("OTLP_ENDPOINT") || "http://localhost:4318",
+      serviceName: Deno.env.get("SERVICE_NAME") || "fresh-app",
+      debug: Deno.env.get("TELEMETRY_DEBUG") === "true",
     },
   },
 );
@@ -180,20 +187,24 @@ const workos = new WorkOS(
 
 ### Common Issues
 
-1. **Environment variables not loading**: Verify that your `.env` file is in the root directory and properly formatted
-2. **Permissions errors**: Ensure your Deno application has the `--allow-env` flag to access environment variables
-3. **Secrets not available in deployments**: Check if your deployment platform correctly has the secrets configured
+1. **Environment variables not loading**: Verify that your `.env` file is in the
+   root directory and properly formatted
+2. **Permissions errors**: Ensure your Deno application has the `--allow-env`
+   flag to access environment variables
+3. **Secrets not available in deployments**: Check if your deployment platform
+   correctly has the secrets configured
 
 ### Debugging Environment Variables
 
-To debug environment variables, you can temporarily log them (NEVER in production code):
+To debug environment variables, you can temporarily log them (NEVER in
+production code):
 
 ```typescript
 console.log({
-  apiKeySet: !!Deno.env.get('WORKOS_API_KEY'),
-  clientIdSet: !!Deno.env.get('WORKOS_CLIENT_ID'),
-  sessionSecretSet: !!Deno.env.get('SESSION_SECRET'),
-  webhookSecretSet: !!Deno.env.get('WORKOS_WEBHOOK_SECRET'),
+  apiKeySet: !!Deno.env.get("WORKOS_API_KEY"),
+  clientIdSet: !!Deno.env.get("WORKOS_CLIENT_ID"),
+  sessionSecretSet: !!Deno.env.get("SESSION_SECRET"),
+  webhookSecretSet: !!Deno.env.get("WORKOS_WEBHOOK_SECRET"),
 });
 ```
 
@@ -202,5 +213,6 @@ console.log({
 1. **Never log the actual values** of secrets or API keys
 2. **Set appropriate cookie settings** (httpOnly, secure, sameSite)
 3. **Use HTTPS** for all production environments
-4. **Implement proper CORS headers** to restrict which domains can access your API
+4. **Implement proper CORS headers** to restrict which domains can access your
+   API
 5. **Set minimum permission scopes** for service accounts and API keys

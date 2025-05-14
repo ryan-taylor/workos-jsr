@@ -1,4 +1,4 @@
-import type { DirectoryGroup } from "workos/directory-sync/interfaces/index.ts";
+import type { DirectoryGroup } from "../interfaces/index.ts";
 
 export function deserializeDirectoryGroup(data: unknown): DirectoryGroup {
   const record = data as Record<string, unknown>;

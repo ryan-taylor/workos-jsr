@@ -1,25 +1,25 @@
-'use strict'
+"use strict";
 
 /* eslint-disable no-var */
 
-var reusify = require('reusify')
+var reusify = require("reusify");
 
-function fastqueue (context, worker, _concurrency) {
-  if (typeof context === 'function') {
-    _concurrency = worker
-    worker = context
-    context = null
+function fastqueue(context, worker, _concurrency) {
+  if (typeof context === "function") {
+    _concurrency = worker;
+    worker = context;
+    context = null;
   }
 
   if (!(_concurrency >= 1)) {
-    throw new Error('fastqueue concurrency must be equal to or greater than 1')
+    throw new Error("fastqueue concurrency must be equal to or greater than 1");
   }
 
-  var cache = reusify(Task)
-  var queueHead = null
-  var queueTail = null
-  var _running = 0
-  var errorHandler = null
+  var cache = reusify(Task);
+  var queueHead = null;
+  var queueTail = null;
+  var _running = 0;
+  var errorHandler = null;
 
   var self = {
     push: push,
@@ -28,19 +28,21 @@ function fastqueue (context, worker, _concurrency) {
     pause: pause,
     paused: false,
 
-    get concurrency () {
-      return _concurrency
+    get concurrency() {
+      return _concurrency;
     },
-    set concurrency (value) {
+    set concurrency(value) {
       if (!(value >= 1)) {
-        throw new Error('fastqueue concurrency must be equal to or greater than 1')
+        throw new Error(
+          "fastqueue concurrency must be equal to or greater than 1",
+        );
       }
-      _concurrency = value
+      _concurrency = value;
 
-      if (self.paused) return
+      if (self.paused) return;
       for (; queueHead && _running < _concurrency;) {
-        _running++
-        release()
+        _running++;
+        release();
       }
     },
 
@@ -53,259 +55,259 @@ function fastqueue (context, worker, _concurrency) {
     empty: noop,
     kill: kill,
     killAndDrain: killAndDrain,
-    error: error
+    error: error,
+  };
+
+  return self;
+
+  function running() {
+    return _running;
   }
 
-  return self
-
-  function running () {
-    return _running
+  function pause() {
+    self.paused = true;
   }
 
-  function pause () {
-    self.paused = true
-  }
-
-  function length () {
-    var current = queueHead
-    var counter = 0
+  function length() {
+    var current = queueHead;
+    var counter = 0;
 
     while (current) {
-      current = current.next
-      counter++
+      current = current.next;
+      counter++;
     }
 
-    return counter
+    return counter;
   }
 
-  function getQueue () {
-    var current = queueHead
-    var tasks = []
+  function getQueue() {
+    var current = queueHead;
+    var tasks = [];
 
     while (current) {
-      tasks.push(current.value)
-      current = current.next
+      tasks.push(current.value);
+      current = current.next;
     }
 
-    return tasks
+    return tasks;
   }
 
-  function resume () {
-    if (!self.paused) return
-    self.paused = false
+  function resume() {
+    if (!self.paused) return;
+    self.paused = false;
     if (queueHead === null) {
-      _running++
-      release()
-      return
+      _running++;
+      release();
+      return;
     }
     for (; queueHead && _running < _concurrency;) {
-      _running++
-      release()
+      _running++;
+      release();
     }
   }
 
-  function idle () {
-    return _running === 0 && self.length() === 0
+  function idle() {
+    return _running === 0 && self.length() === 0;
   }
 
-  function push (value, done) {
-    var current = cache.get()
+  function push(value, done) {
+    var current = cache.get();
 
-    current.context = context
-    current.release = release
-    current.value = value
-    current.callback = done || noop
-    current.errorHandler = errorHandler
+    current.context = context;
+    current.release = release;
+    current.value = value;
+    current.callback = done || noop;
+    current.errorHandler = errorHandler;
 
     if (_running >= _concurrency || self.paused) {
       if (queueTail) {
-        queueTail.next = current
-        queueTail = current
+        queueTail.next = current;
+        queueTail = current;
       } else {
-        queueHead = current
-        queueTail = current
-        self.saturated()
+        queueHead = current;
+        queueTail = current;
+        self.saturated();
       }
     } else {
-      _running++
-      worker.call(context, current.value, current.worked)
+      _running++;
+      worker.call(context, current.value, current.worked);
     }
   }
 
-  function unshift (value, done) {
-    var current = cache.get()
+  function unshift(value, done) {
+    var current = cache.get();
 
-    current.context = context
-    current.release = release
-    current.value = value
-    current.callback = done || noop
-    current.errorHandler = errorHandler
+    current.context = context;
+    current.release = release;
+    current.value = value;
+    current.callback = done || noop;
+    current.errorHandler = errorHandler;
 
     if (_running >= _concurrency || self.paused) {
       if (queueHead) {
-        current.next = queueHead
-        queueHead = current
+        current.next = queueHead;
+        queueHead = current;
       } else {
-        queueHead = current
-        queueTail = current
-        self.saturated()
+        queueHead = current;
+        queueTail = current;
+        self.saturated();
       }
     } else {
-      _running++
-      worker.call(context, current.value, current.worked)
+      _running++;
+      worker.call(context, current.value, current.worked);
     }
   }
 
-  function release (holder) {
+  function release(holder) {
     if (holder) {
-      cache.release(holder)
+      cache.release(holder);
     }
-    var next = queueHead
+    var next = queueHead;
     if (next && _running <= _concurrency) {
       if (!self.paused) {
         if (queueTail === queueHead) {
-          queueTail = null
+          queueTail = null;
         }
-        queueHead = next.next
-        next.next = null
-        worker.call(context, next.value, next.worked)
+        queueHead = next.next;
+        next.next = null;
+        worker.call(context, next.value, next.worked);
         if (queueTail === null) {
-          self.empty()
+          self.empty();
         }
       } else {
-        _running--
+        _running--;
       }
     } else if (--_running === 0) {
-      self.drain()
+      self.drain();
     }
   }
 
-  function kill () {
-    queueHead = null
-    queueTail = null
-    self.drain = noop
+  function kill() {
+    queueHead = null;
+    queueTail = null;
+    self.drain = noop;
   }
 
-  function killAndDrain () {
-    queueHead = null
-    queueTail = null
-    self.drain()
-    self.drain = noop
+  function killAndDrain() {
+    queueHead = null;
+    queueTail = null;
+    self.drain();
+    self.drain = noop;
   }
 
-  function error (handler) {
-    errorHandler = handler
+  function error(handler) {
+    errorHandler = handler;
   }
 }
 
-function noop () {}
+function noop() {}
 
-function Task () {
-  this.value = null
-  this.callback = noop
-  this.next = null
-  this.release = noop
-  this.context = null
-  this.errorHandler = null
+function Task() {
+  this.value = null;
+  this.callback = noop;
+  this.next = null;
+  this.release = noop;
+  this.context = null;
+  this.errorHandler = null;
 
-  var self = this
+  var self = this;
 
-  this.worked = function worked (err, result) {
-    var callback = self.callback
-    var errorHandler = self.errorHandler
-    var val = self.value
-    self.value = null
-    self.callback = noop
+  this.worked = function worked(err, result) {
+    var callback = self.callback;
+    var errorHandler = self.errorHandler;
+    var val = self.value;
+    self.value = null;
+    self.callback = noop;
     if (self.errorHandler) {
-      errorHandler(err, val)
+      errorHandler(err, val);
     }
-    callback.call(self.context, err, result)
-    self.release(self)
-  }
+    callback.call(self.context, err, result);
+    self.release(self);
+  };
 }
 
-function queueAsPromised (context, worker, _concurrency) {
-  if (typeof context === 'function') {
-    _concurrency = worker
-    worker = context
-    context = null
+function queueAsPromised(context, worker, _concurrency) {
+  if (typeof context === "function") {
+    _concurrency = worker;
+    worker = context;
+    context = null;
   }
 
-  function asyncWrapper (arg, cb) {
+  function asyncWrapper(arg, cb) {
     worker.call(this, arg)
       .then(function (res) {
-        cb(null, res)
-      }, cb)
+        cb(null, res);
+      }, cb);
   }
 
-  var queue = fastqueue(context, asyncWrapper, _concurrency)
+  var queue = fastqueue(context, asyncWrapper, _concurrency);
 
-  var pushCb = queue.push
-  var unshiftCb = queue.unshift
+  var pushCb = queue.push;
+  var unshiftCb = queue.unshift;
 
-  queue.push = push
-  queue.unshift = unshift
-  queue.drained = drained
+  queue.push = push;
+  queue.unshift = unshift;
+  queue.drained = drained;
 
-  return queue
+  return queue;
 
-  function push (value) {
+  function push(value) {
     var p = new Promise(function (resolve, reject) {
       pushCb(value, function (err, result) {
         if (err) {
-          reject(err)
-          return
+          reject(err);
+          return;
         }
-        resolve(result)
-      })
-    })
+        resolve(result);
+      });
+    });
 
     // Let's fork the promise chain to
     // make the error bubble up to the user but
     // not lead to a unhandledRejection
-    p.catch(noop)
+    p.catch(noop);
 
-    return p
+    return p;
   }
 
-  function unshift (value) {
+  function unshift(value) {
     var p = new Promise(function (resolve, reject) {
       unshiftCb(value, function (err, result) {
         if (err) {
-          reject(err)
-          return
+          reject(err);
+          return;
         }
-        resolve(result)
-      })
-    })
+        resolve(result);
+      });
+    });
 
     // Let's fork the promise chain to
     // make the error bubble up to the user but
     // not lead to a unhandledRejection
-    p.catch(noop)
+    p.catch(noop);
 
-    return p
+    return p;
   }
 
-  function drained () {
+  function drained() {
     var p = new Promise(function (resolve) {
       process.nextTick(function () {
         if (queue.idle()) {
-          resolve()
+          resolve();
         } else {
-          var previousDrain = queue.drain
+          var previousDrain = queue.drain;
           queue.drain = function () {
-            if (typeof previousDrain === 'function') previousDrain()
-            resolve()
-            queue.drain = previousDrain
-          }
+            if (typeof previousDrain === "function") previousDrain();
+            resolve();
+            queue.drain = previousDrain;
+          };
         }
-      })
-    })
+      });
+    });
 
-    return p
+    return p;
   }
 }
 
-module.exports = fastqueue
-module.exports.promise = queueAsPromised
+module.exports = fastqueue;
+module.exports.promise = queueAsPromised;

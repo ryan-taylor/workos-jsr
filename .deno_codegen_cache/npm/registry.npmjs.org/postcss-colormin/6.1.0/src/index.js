@@ -1,9 +1,9 @@
-'use strict';
-const { dirname } = require('path');
-const browserslist = require('browserslist');
-const { isSupported } = require('caniuse-api');
-const valueParser = require('postcss-value-parser');
-const minifyColor = require('./minifyColor');
+"use strict";
+const { dirname } = require("path");
+const browserslist = require("browserslist");
+const { isSupported } = require("caniuse-api");
+const valueParser = require("postcss-value-parser");
+const minifyColor = require("./minifyColor");
 
 /**
  * @param {{nodes: valueParser.Node[]}} parent
@@ -14,7 +14,7 @@ function walk(parent, callback) {
   parent.nodes.forEach((node, index) => {
     const bubble = callback(node, index, parent);
 
-    if (node.type === 'function' && bubble !== false) {
+    if (node.type === "function" && bubble !== false) {
       walk(node, callback);
     }
   });
@@ -26,15 +26,15 @@ function walk(parent, callback) {
  *
  * https://developer.mozilla.org/en-US/docs/Web/Events/click#Internet_Explorer
  */
-const browsersWithTransparentBug = new Set(['ie 8', 'ie 9']);
-const mathFunctions = new Set(['calc', 'min', 'max', 'clamp']);
+const browsersWithTransparentBug = new Set(["ie 8", "ie 9"]);
+const mathFunctions = new Set(["calc", "min", "max", "clamp"]);
 
 /**
  * @param {valueParser.Node} node
  * @return {boolean}
  */
 function isMathFunctionNode(node) {
-  if (node.type !== 'function') {
+  if (node.type !== "function") {
     return false;
   }
   return mathFunctions.has(node.value.toLowerCase());
@@ -49,33 +49,33 @@ function transform(value, options) {
   const parsed = valueParser(value);
 
   walk(parsed, (node, index, parent) => {
-    if (node.type === 'function') {
+    if (node.type === "function") {
       if (/^(rgb|hsl)a?$/i.test(node.value)) {
         const { value: originalValue } = node;
 
         node.value = minifyColor(valueParser.stringify(node), options);
-        /** @type {string} */ (node.type) = 'word';
+        /** @type {string} */ (node.type) = "word";
 
         const next = parent.nodes[index + 1];
 
         if (
           node.value !== originalValue &&
           next &&
-          (next.type === 'word' || next.type === 'function')
+          (next.type === "word" || next.type === "function")
         ) {
           parent.nodes.splice(
             index + 1,
             0,
             /** @type {valueParser.SpaceNode} */ ({
-              type: 'space',
-              value: ' ',
-            })
+              type: "space",
+              value: " ",
+            }),
           );
         }
       } else if (isMathFunctionNode(node)) {
         return false;
       }
-    } else if (node.type === 'word') {
+    } else if (node.type === "word") {
       node.value = minifyColor(node.value, options);
     }
   });
@@ -94,7 +94,7 @@ function addPluginDefaults(options, browsers) {
     transparent:
       browsers.some((b) => browsersWithTransparentBug.has(b)) === false,
     // Does the browser support "transparent" value properly
-    alphaHex: isSupported('css-rrggbbaa', browsers),
+    alphaHex: isSupported("css-rrggbbaa", browsers),
     name: true,
   };
   return { ...defaults, ...options };
@@ -123,7 +123,7 @@ function addPluginDefaults(options, browsers) {
  */
 function pluginCreator(config = {}) {
   return {
-    postcssPlugin: 'postcss-colormin',
+    postcssPlugin: "postcss-colormin",
 
     /**
      * @param {import('postcss').Result & {opts: BrowserslistOptions & {file?: string}}} result
@@ -144,7 +144,7 @@ function pluginCreator(config = {}) {
           css.walkDecls((decl) => {
             if (
               /^(composes|font|src$|filter|-webkit-tap-highlight-color)/i.test(
-                decl.prop
+                decl.prop,
               )
             ) {
               return;

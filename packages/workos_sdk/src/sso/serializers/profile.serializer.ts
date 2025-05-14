@@ -1,4 +1,4 @@
-import type { Profile } from "workos/sso/interfaces/index.ts";
+import type { Profile } from "../interfaces/index.ts";
 
 export function deserializeProfile(data: unknown): Profile {
   const record = data as Record<string, unknown>;

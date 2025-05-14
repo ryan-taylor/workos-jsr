@@ -8,16 +8,14 @@ Load module from string in Node.
 $ npm install --save require-from-string
 ```
 
-
 ## Usage
 
 ```js
-var requireFromString = require('require-from-string');
+var requireFromString = require("require-from-string");
 
-requireFromString('module.exports = 1');
+requireFromString("module.exports = 1");
 //=> 1
 ```
-
 
 ## API
 
@@ -25,28 +23,31 @@ requireFromString('module.exports = 1');
 
 #### code
 
-*Required*  
+_Required_\
 Type: `string`
 
 Module code.
 
 #### filename
-Type: `string`  
+
+Type: `string`\
 Default: `''`
 
 Optional filename.
 
-
 #### options
+
 Type: `object`
 
 ##### appendPaths
+
 Type: `Array`
 
 List of `paths`, that will be appended to module `paths`. Useful, when you want
 to be able require modules from these paths.
 
 ##### prependPaths
+
 Type: `Array`
 
 Same as `appendPaths`, but paths will be prepended.

@@ -19,16 +19,20 @@ have also included `schema-base.yaml` that extends the main schema to validate
 that all schemas use the default OAS base vocabulary.
 
 ## Contributing
+
 To submit improvements to the schema, modify the schema.yaml file only.
 
 The TSC will then:
+
 - Run tests on the updated schema
 - Update the iteration version
 - Convert the schema.yaml to schema.json
 - Publish the new version
 
 ## Tests
-The test suite is included as a git submodule of https://github.com/Mermade/openapi3-examples.
+
+The test suite is included as a git submodule of
+https://github.com/Mermade/openapi3-examples.
 
 ```bash
 npx mocha --recursive tests

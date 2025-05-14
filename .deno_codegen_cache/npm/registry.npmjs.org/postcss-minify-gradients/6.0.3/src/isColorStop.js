@@ -1,28 +1,28 @@
-'use strict';
-const { unit } = require('postcss-value-parser');
-const { colord, extend } = require('colord');
-const namesPlugin = require('colord/plugins/names');
+"use strict";
+const { unit } = require("postcss-value-parser");
+const { colord, extend } = require("colord");
+const namesPlugin = require("colord/plugins/names");
 
 extend([/** @type {any} */ (namesPlugin)]);
 
 /* Code derived from https://github.com/pigcan/is-color-stop */
 
 const lengthUnits = new Set([
-  'PX',
-  'IN',
-  'CM',
-  'MM',
-  'EM',
-  'REM',
-  'POINTS',
-  'PC',
-  'EX',
-  'CH',
-  'VW',
-  'VH',
-  'VMIN',
-  'VMAX',
-  '%',
+  "PX",
+  "IN",
+  "CM",
+  "MM",
+  "EM",
+  "REM",
+  "POINTS",
+  "PC",
+  "EX",
+  "CH",
+  "VW",
+  "VH",
+  "VMIN",
+  "VMAX",
+  "%",
 ]);
 
 /**

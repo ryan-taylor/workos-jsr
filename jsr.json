@@ -7,7 +7,7 @@
   "license": "MIT",
   "files": [
     "mod.ts",
-    "packages/workos_sdk/mod.ts", 
+    "packages/workos_sdk/mod.ts",
     "packages/workos_sdk/src/**/*.ts"
   ],
   "exclude": [

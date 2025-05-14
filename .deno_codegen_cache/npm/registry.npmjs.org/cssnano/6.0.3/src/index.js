@@ -1,10 +1,10 @@
-'use strict';
-const path = require('path');
+"use strict";
+const path = require("path");
 /** @type {any} */
-const postcss = require('postcss');
-const { lilconfigSync } = require('lilconfig');
+const postcss = require("postcss");
+const { lilconfigSync } = require("lilconfig");
 
-const cssnano = 'cssnano';
+const cssnano = "cssnano";
 
 /** @typedef {{preset?: any, plugins?: any[], configFile?: string}} Options */
 /**
@@ -47,12 +47,12 @@ function resolvePreset(preset) {
   }
 
   // Provide an alias for the default preset, as it is built-in.
-  if (fn === 'default') {
-    return require('cssnano-preset-default')(options).plugins;
+  if (fn === "default") {
+    return require("cssnano-preset-default")(options).plugins;
   }
 
   // For non-JS setups; we'll need to invoke the preset ourselves.
-  if (typeof fn === 'function') {
+  if (typeof fn === "function") {
     return fn(options).plugins;
   }
 
@@ -70,7 +70,7 @@ function resolvePreset(preset) {
 
   // If all else fails, we probably have a typo in the config somewhere
   throw new Error(
-    `Cannot load preset "${fn}". Please check your configuration for errors and try again.`
+    `Cannot load preset "${fn}". Please check your configuration for errors and try again.`,
   );
 }
 
@@ -97,11 +97,11 @@ function resolveConfig(options) {
 
   const configExplorer = lilconfigSync(cssnano, {
     searchPlaces: [
-      'package.json',
-      '.cssnanorc',
-      '.cssnanorc.json',
-      '.cssnanorc.js',
-      'cssnano.config.js',
+      "package.json",
+      ".cssnanorc",
+      ".cssnanorc.json",
+      ".cssnanorc.js",
+      "cssnano.config.js",
     ],
   });
   const config = configPath
@@ -109,7 +109,7 @@ function resolveConfig(options) {
     : configExplorer.search(searchPath);
 
   if (config === null) {
-    return resolvePreset('default');
+    return resolvePreset("default");
   }
 
   return resolvePreset(config.config.preset || config.config);
@@ -129,12 +129,12 @@ function cssnanoPlugin(options = {}) {
     options.plugins.forEach((plugin) => {
       if (Array.isArray(plugin)) {
         const [pluginDef, opts = {}] = plugin;
-        if (typeof pluginDef === 'string' && isResolvable(pluginDef)) {
+        if (typeof pluginDef === "string" && isResolvable(pluginDef)) {
           options.preset.plugins.push([require(pluginDef), opts]);
         } else {
           options.preset.plugins.push([pluginDef, opts]);
         }
-      } else if (typeof plugin === 'string' && isResolvable(plugin)) {
+      } else if (typeof plugin === "string" && isResolvable(plugin)) {
         options.preset.plugins.push([require(plugin), {}]);
       } else {
         options.preset.plugins.push([plugin, {}]);
@@ -147,9 +147,9 @@ function cssnanoPlugin(options = {}) {
     if (Array.isArray(nanoPlugin)) {
       const [processor, opts] = nanoPlugin;
       if (
-        typeof opts === 'undefined' ||
-        (typeof opts === 'object' && !opts.exclude) ||
-        (typeof opts === 'boolean' && opts === true)
+        typeof opts === "undefined" ||
+        (typeof opts === "object" && !opts.exclude) ||
+        (typeof opts === "boolean" && opts === true)
       ) {
         plugins.push(processor(opts));
       }

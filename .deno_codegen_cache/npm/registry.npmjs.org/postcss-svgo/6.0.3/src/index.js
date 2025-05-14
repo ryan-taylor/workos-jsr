@@ -1,9 +1,9 @@
-'use strict';
-const valueParser = require('postcss-value-parser');
-const { optimize } = require('svgo');
-const { encode, decode } = require('./lib/url');
+"use strict";
+const valueParser = require("postcss-value-parser");
+const { optimize } = require("svgo");
+const { encode, decode } = require("./lib/url");
 
-const PLUGIN = 'postcss-svgo';
+const PLUGIN = "postcss-svgo";
 const dataURI = /data:image\/svg\+xml(;((charset=)?utf-8|base64))?,/i;
 const dataURIBase64 = /data:image\/svg\+xml;base64,/i;
 
@@ -61,8 +61,8 @@ function minify(decl, opts, postcssResult) {
 
   const minified = parsed.walk((node) => {
     if (
-      node.type !== 'function' ||
-      node.value.toLowerCase() !== 'url' ||
+      node.type !== "function" ||
+      node.value.toLowerCase() !== "url" ||
       !node.nodes.length
     ) {
       return;
@@ -78,21 +78,21 @@ function minify(decl, opts, postcssResult) {
         const url = new URL(value);
         const base64String = `${url.protocol}${url.pathname}`.replace(
           dataURI,
-          ''
+          "",
         );
-        const svg = Buffer.from(base64String, 'base64').toString('utf8');
+        const svg = Buffer.from(base64String, "base64").toString("utf8");
         const { result } = minifySVG(svg, opts);
-        const data = Buffer.from(result).toString('base64');
-        optimizedValue = 'data:image/svg+xml;base64,' + data + url.hash;
+        const data = Buffer.from(result).toString("base64");
+        optimizedValue = "data:image/svg+xml;base64," + data + url.hash;
       } else if (dataURI.test(value)) {
-        const svg = value.replace(dataURI, '');
+        const svg = value.replace(dataURI, "");
         const { result, isUriEncoded } = minifySVG(svg, opts);
         let data = isUriEncoded ? encode(result) : result;
         // Should always encode # otherwise we yield a broken SVG
         // in Firefox (works in Chrome however). See this issue:
         // https://github.com/cssnano/cssnano/issues/245
-        data = data.replace(/#/g, '%23');
-        optimizedValue = 'data:image/svg+xml;charset=utf-8,' + data;
+        data = data.replace(/#/g, "%23");
+        optimizedValue = "data:image/svg+xml;charset=utf-8," + data;
         quote = isUriEncoded ? '"' : "'";
       } else {
         return;
@@ -104,9 +104,9 @@ function minify(decl, opts, postcssResult) {
     node.nodes[0] = Object.assign({}, node.nodes[0], {
       value: optimizedValue,
       quote: quote,
-      type: 'string',
-      before: '',
-      after: '',
+      type: "string",
+      before: "",
+      after: "",
     });
 
     return false;

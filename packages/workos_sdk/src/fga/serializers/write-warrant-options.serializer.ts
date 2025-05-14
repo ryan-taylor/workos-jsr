@@ -1,9 +1,9 @@
 import type {
-  WriteWarrantOptions,
   SerializedWriteWarrantOptions,
   Subject,
-} from "workos/fga/interfaces/index.ts";
-import { isResourceInterface } from "workos/fga/utils/interface-check.ts";
+  WriteWarrantOptions,
+} from "../interfaces/index.ts";
+import { isResourceInterface } from "../utils/interface-check.ts";
 
 /**
  * Serializes write warrant options for the API
@@ -14,11 +14,11 @@ export const serializeWriteWarrantOptions = (
   options: WriteWarrantOptions,
 ): SerializedWriteWarrantOptions => {
   const { resource, relation, subject, policy, op } = options;
-  
+
   const resourceType = isResourceInterface(resource)
     ? resource.getResourceType()
     : resource.resourceType;
-  
+
   const resourceId = isResourceInterface(resource)
     ? resource.getResourceId()
     : resource.resourceId;

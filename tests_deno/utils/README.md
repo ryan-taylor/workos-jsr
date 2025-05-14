@@ -1,6 +1,9 @@
 # Deno Test Utilities
 
-This directory contains Deno-native test utilities that replace the Jest/Vitest compatibility layer found in `tests/deno-test-setup.ts`. These utilities provide a clean, Deno-native way to write tests without relying on Jest-specific patterns.
+This directory contains Deno-native test utilities that replace the Jest/Vitest
+compatibility layer found in `tests/deno-test-setup.ts`. These utilities provide
+a clean, Deno-native way to write tests without relying on Jest-specific
+patterns.
 
 ## Features
 
@@ -14,15 +17,15 @@ This directory contains Deno-native test utilities that replace the Jest/Vitest 
 Import the utilities in your test file:
 
 ```typescript
-import { 
-  mockResponse, 
-  mockResponseOnce, 
-  resetMockFetch, 
-  fetchUtils, 
-  spy, 
-  testWithContext, 
+import {
   createTestGroup,
-  setupFetchMock 
+  fetchUtils,
+  mockResponse,
+  mockResponseOnce,
+  resetMockFetch,
+  setupFetchMock,
+  spy,
+  testWithContext,
 } from "./utils/test-utils.ts";
 ```
 
@@ -40,11 +43,11 @@ try {
   // Make requests
   const response = await fetch("https://api.example.com/data");
   const data = await response.json();
-  
+
   // Verify the calls
   console.assert(fetchUtils.url() === "https://api.example.com/data");
   console.assert(fetchUtils.method() === "GET");
-  
+
   // Get all fetch calls
   const calls = fetchUtils.calls();
 } finally {
@@ -86,7 +89,7 @@ testWithContext("test with setup and teardown", async () => {
   },
   teardown: async () => {
     // Cleanup code
-  }
+  },
 });
 ```
 
@@ -99,7 +102,7 @@ const testGroup = createTestGroup({
   },
   afterEach: async () => {
     // Cleanup after each test
-  }
+  },
 });
 
 testGroup.test("first test", async () => {
@@ -116,7 +119,7 @@ testGroup.test("second test", async () => {
 ### Old Pattern (Jest/Vitest compatibility layer)
 
 ```typescript
-import { describe, it, expect } from "../tests/deno-test-setup.ts";
+import { describe, expect, it } from "../tests/deno-test-setup.ts";
 
 describe("feature tests", () => {
   it("should do something", () => {
@@ -153,7 +156,8 @@ Deno.test("should do something", () => {
 
 ## Working with WorkOS SDK
 
-The utils directory also includes `test_helpers.ts` with utilities specifically for testing the WorkOS SDK:
+The utils directory also includes `test_helpers.ts` with utilities specifically
+for testing the WorkOS SDK:
 
 ```typescript
 import { createMockWorkOS } from "./utils/test_helpers.ts";
@@ -161,14 +165,15 @@ import { createMockWorkOS } from "./utils/test_helpers.ts";
 Deno.test("WorkOS API test", async () => {
   const mockResponse = { id: "123", type: "test" };
   const { workos, client } = createMockWorkOS(mockResponse);
-  
+
   // Call WorkOS methods
   const result = await workos.someMethod();
-  
+
   // Check the request details
   const requestDetails = client.getRequestDetails();
   assertEquals(requestDetails.url, "expected/path");
 });
 ```
 
-See the `test-utils-example.ts` file for more detailed examples of how to use these utilities.
+See the `test-utils-example.ts` file for more detailed examples of how to use
+these utilities.

@@ -5,15 +5,15 @@ import {
   fetchOnce,
   fetchSearchParams,
   resetMockFetch,
-} from "../common/utils/test-utils.ts.ts";
+} from "../common/utils/test-utils.ts";
 import type {
   DsyncUserUpdatedEvent,
   DsyncUserUpdatedEventResponse,
   Event,
   EventResponse,
-} from "../common/interfaces/event.interface.ts.ts";
-import { WorkOS } from "../workos.ts.ts";
-import { ConnectionType } from "../sso/interfaces/index.ts.ts";
+} from "../common/interfaces/event.interface.ts";
+import { WorkOS } from "../workos.ts";
+import { ConnectionType } from "../sso/interfaces/index.ts";
 
 // Define common test data
 const event: Event = {

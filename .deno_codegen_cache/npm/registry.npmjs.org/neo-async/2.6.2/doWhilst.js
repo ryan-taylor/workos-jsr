@@ -1,3 +1,3 @@
-'use strict';
+"use strict";
 
-module.exports = require('./async').doWhilst;
+module.exports = require("./async").doWhilst;

@@ -1,18 +1,18 @@
-'use strict';
-const joinGridValue = require('../lib/joinGridValue');
+"use strict";
+const joinGridValue = require("../lib/joinGridValue");
 
 /**
  * @param {import('postcss-value-parser').ParsedValue} gridAutoFlow
  * @return {import('postcss-value-parser').ParsedValue | string}
  */
 const normalizeGridAutoFlow = (gridAutoFlow) => {
-  let newValue = { front: '', back: '' };
+  let newValue = { front: "", back: "" };
   let shouldNormalize = false;
   gridAutoFlow.walk((node) => {
-    if (node.value === 'dense') {
+    if (node.value === "dense") {
       shouldNormalize = true;
       newValue.back = node.value;
-    } else if (['row', 'column'].includes(node.value.trim().toLowerCase())) {
+    } else if (["row", "column"].includes(node.value.trim().toLowerCase())) {
       shouldNormalize = true;
       newValue.front = node.value;
     } else {
@@ -30,11 +30,11 @@ const normalizeGridAutoFlow = (gridAutoFlow) => {
  * @return {import('postcss-value-parser').ParsedValue | string}
  */
 const normalizeGridColumnRowGap = (gridGap) => {
-  let newValue = { front: '', back: '' };
+  let newValue = { front: "", back: "" };
   let shouldNormalize = false;
   gridGap.walk((node) => {
     // console.log(node);
-    if (node.value === 'normal') {
+    if (node.value === "normal") {
       shouldNormalize = true;
       newValue.front = node.value;
     } else {
@@ -53,37 +53,37 @@ const normalizeGridColumnRowGap = (gridGap) => {
  */
 const normalizeGridColumnRow = (grid) => {
   // cant do normalization here using node, so copy it as a string
-  let gridValue = grid.toString().split('/'); // node -> string value, split ->  " 2 / 3 span " ->  [' 2','3 span ']
+  let gridValue = grid.toString().split("/"); // node -> string value, split ->  " 2 / 3 span " ->  [' 2','3 span ']
   if (gridValue.length > 1) {
     return joinGridValue(
       gridValue.map((gridLine) => {
         let normalizeValue = {
-          front: '',
-          back: '',
+          front: "",
+          back: "",
         };
         gridLine = gridLine.trim(); // '3 span ' -> '3 span'
-        gridLine.split(' ').forEach((node) => {
+        gridLine.split(" ").forEach((node) => {
           // ['3','span']
-          if (node === 'span') {
+          if (node === "span") {
             normalizeValue.front = node; // span _
           } else {
             normalizeValue.back = `${normalizeValue.back} ${node}`; // _ 3
           }
         });
         return `${normalizeValue.front.trim()} ${normalizeValue.back.trim()}`; // span 3
-      })
+      }),
       // returns "2 / span 3"
     );
   }
   // doing this separating if `/` is not present as while joining('/') , it will add `/` at the end
   return gridValue.map((gridLine) => {
     let normalizeValue = {
-      front: '',
-      back: '',
+      front: "",
+      back: "",
     };
     gridLine = gridLine.trim();
-    gridLine.split(' ').forEach((node) => {
-      if (node === 'span') {
+    gridLine.split(" ").forEach((node) => {
+      if (node === "span") {
         normalizeValue.front = node;
       } else {
         normalizeValue.back = `${normalizeValue.back} ${node}`;

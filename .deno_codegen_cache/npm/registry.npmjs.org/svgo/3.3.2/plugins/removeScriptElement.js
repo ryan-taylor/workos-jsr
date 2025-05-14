@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
-const { detachNodeFromParent } = require('../lib/xast.js');
-const { attrsGroups } = require('./_collections.js');
+const { detachNodeFromParent } = require("../lib/xast.js");
+const { attrsGroups } = require("./_collections.js");
 
-exports.name = 'removeScriptElement';
-exports.description = 'removes scripts (disabled by default)';
+exports.name = "removeScriptElement";
+exports.description = "removes scripts (disabled by default)";
 
 /** Union of all event attributes. */
 const eventAttrs = [
@@ -27,7 +27,7 @@ exports.fn = () => {
   return {
     element: {
       enter: (node, parentNode) => {
-        if (node.name === 'script') {
+        if (node.name === "script") {
           detachNodeFromParent(node, parentNode);
           return;
         }
@@ -39,15 +39,15 @@ exports.fn = () => {
         }
       },
       exit: (node, parentNode) => {
-        if (node.name !== 'a') {
+        if (node.name !== "a") {
           return;
         }
 
         for (const attr of Object.keys(node.attributes)) {
-          if (attr === 'href' || attr.endsWith(':href')) {
+          if (attr === "href" || attr.endsWith(":href")) {
             if (
               node.attributes[attr] == null ||
-              !node.attributes[attr].trimStart().startsWith('javascript:')
+              !node.attributes[attr].trimStart().startsWith("javascript:")
             ) {
               continue;
             }
@@ -57,7 +57,7 @@ exports.fn = () => {
 
             // TODO remove legacy parentNode in v4
             for (const child of node.children) {
-              Object.defineProperty(child, 'parentNode', {
+              Object.defineProperty(child, "parentNode", {
                 writable: true,
                 value: parentNode,
               });

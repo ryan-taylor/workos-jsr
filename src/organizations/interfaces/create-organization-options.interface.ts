@@ -1,5 +1,5 @@
-import type { PostOptions } from "../../common/interfaces.ts.ts";
-import type { DomainData } from "./domain-data.interface.ts.ts";
+import type { PostOptions } from "../../common/interfaces.ts";
+import type { DomainData } from "./domain-data.interface.ts";
 
 export interface CreateOrganizationOptions {
   name: string;

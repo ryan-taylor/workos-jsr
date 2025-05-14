@@ -1,9 +1,9 @@
-import { WorkOS } from "../workos.ts.ts";
+import { WorkOS } from "../workos.ts";
 import { crypto } from "@std/crypto";
 import { assertEquals, assertRejects } from "@std/assert";
 import { spy } from "@std/testing/mock";
 import mockWebhook from "./fixtures/webhook.json.ts" with { type: "json" };
-import { SignatureVerificationException } from "../common/exceptions.ts.ts";
+import { SignatureVerificationException } from "../common/exceptions.ts";
 
 const workos = new WorkOS("sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU");
 

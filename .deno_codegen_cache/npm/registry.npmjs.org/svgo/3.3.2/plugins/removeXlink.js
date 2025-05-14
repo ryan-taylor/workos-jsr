@@ -1,17 +1,17 @@
-'use strict';
+"use strict";
 
-const { elems } = require('./_collections');
+const { elems } = require("./_collections");
 
 /**
  * @typedef {import('../lib/types').XastElement} XastElement
  */
 
-exports.name = 'removeXlink';
+exports.name = "removeXlink";
 exports.description =
-  'remove xlink namespace and replaces attributes with the SVG 2 equivalent where applicable';
+  "remove xlink namespace and replaces attributes with the SVG 2 equivalent where applicable";
 
 /** URI indicating the Xlink namespace. */
-const XLINK_NAMESPACE = 'http://www.w3.org/1999/xlink';
+const XLINK_NAMESPACE = "http://www.w3.org/1999/xlink";
 
 /**
  * Map of `xlink:show` values to the SVG 2 `target` attribute values.
@@ -20,8 +20,8 @@ const XLINK_NAMESPACE = 'http://www.w3.org/1999/xlink';
  * @see https://developer.mozilla.org/docs/Web/SVG/Attribute/xlink:show#usage_notes
  */
 const SHOW_TO_TARGET = {
-  new: '_blank',
-  replace: '_self',
+  new: "_blank",
+  replace: "_self",
 };
 
 /**
@@ -33,11 +33,11 @@ const SHOW_TO_TARGET = {
  * @see https://developer.mozilla.org/docs/Web/SVG/Attribute/href
  */
 const LEGACY_ELEMENTS = new Set([
-  'cursor',
-  'filter',
-  'font-face-uri',
-  'glyphRef',
-  'tref',
+  "cursor",
+  "filter",
+  "font-face-uri",
+  "glyphRef",
+  "tref",
 ]);
 
 /**
@@ -91,8 +91,8 @@ exports.fn = (_, params) => {
     element: {
       enter: (node) => {
         for (const [key, value] of Object.entries(node.attributes)) {
-          if (key.startsWith('xmlns:')) {
-            const prefix = key.split(':', 2)[1];
+          if (key.startsWith("xmlns:")) {
+            const prefix = key.split(":", 2)[1];
 
             if (value === XLINK_NAMESPACE) {
               xlinkPrefixes.push(prefix);
@@ -111,7 +111,7 @@ exports.fn = (_, params) => {
           return;
         }
 
-        const showAttrs = findPrefixedAttrs(node, xlinkPrefixes, 'show');
+        const showAttrs = findPrefixedAttrs(node, xlinkPrefixes, "show");
         let showHandled = node.attributes.target != null;
         for (let i = showAttrs.length - 1; i >= 0; i--) {
           const attr = showAttrs[i];
@@ -131,12 +131,12 @@ exports.fn = (_, params) => {
           showHandled = true;
         }
 
-        const titleAttrs = findPrefixedAttrs(node, xlinkPrefixes, 'title');
+        const titleAttrs = findPrefixedAttrs(node, xlinkPrefixes, "title");
         for (let i = titleAttrs.length - 1; i >= 0; i--) {
           const attr = titleAttrs[i];
           const value = node.attributes[attr];
           const hasTitle = node.children.filter(
-            (child) => child.type === 'element' && child.name === 'title',
+            (child) => child.type === "element" && child.name === "title",
           );
 
           if (hasTitle.length > 0) {
@@ -146,18 +146,18 @@ exports.fn = (_, params) => {
 
           /** @type {XastElement} */
           const titleTag = {
-            type: 'element',
-            name: 'title',
+            type: "element",
+            name: "title",
             attributes: {},
             children: [
               {
-                type: 'text',
+                type: "text",
                 value,
               },
             ],
           };
 
-          Object.defineProperty(titleTag, 'parentNode', {
+          Object.defineProperty(titleTag, "parentNode", {
             writable: true,
             value: node,
           });
@@ -166,7 +166,7 @@ exports.fn = (_, params) => {
           delete node.attributes[attr];
         }
 
-        const hrefAttrs = findPrefixedAttrs(node, xlinkPrefixes, 'href');
+        const hrefAttrs = findPrefixedAttrs(node, xlinkPrefixes, "href");
 
         if (
           hrefAttrs.length > 0 &&
@@ -174,7 +174,7 @@ exports.fn = (_, params) => {
           !includeLegacy
         ) {
           hrefAttrs
-            .map((attr) => attr.split(':', 1)[0])
+            .map((attr) => attr.split(":", 1)[0])
             .forEach((prefix) => usedInLegacyElement.push(prefix));
           return;
         }
@@ -194,7 +194,7 @@ exports.fn = (_, params) => {
       },
       exit: (node) => {
         for (const [key, value] of Object.entries(node.attributes)) {
-          const [prefix, attr] = key.split(':', 2);
+          const [prefix, attr] = key.split(":", 2);
 
           if (
             xlinkPrefixes.includes(prefix) &&
@@ -206,7 +206,7 @@ exports.fn = (_, params) => {
             continue;
           }
 
-          if (key.startsWith('xmlns:') && !usedInLegacyElement.includes(attr)) {
+          if (key.startsWith("xmlns:") && !usedInLegacyElement.includes(attr)) {
             if (value === XLINK_NAMESPACE) {
               const index = xlinkPrefixes.indexOf(attr);
               xlinkPrefixes.splice(index, 1);

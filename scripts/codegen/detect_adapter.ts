@@ -2,14 +2,14 @@
 
 /**
  * OpenAPI Adapter Detection Script
- * 
+ *
  * This standalone script provides automatic detection of OpenAPI versions
  * and selects the appropriate generator adapter. It can be used by:
  * - Build process
  * - CI workflows
  * - Pre-commit hooks
  * - Upgrade scripts
- * 
+ *
  * Usage:
  *   import { detectAdapter } from "./scripts/codegen/detect_adapter.ts";
  *   const { version, adapter } = await detectAdapter("path/to/spec.json");
@@ -17,9 +17,9 @@
 
 import {
   FallbackMode,
-  OpenApiGenerator,
   getFallbackModeFromEnv,
-  getGenerator
+  getGenerator,
+  OpenApiGenerator,
 } from "./adapter.ts";
 
 /**
@@ -44,7 +44,7 @@ export interface AdapterDetectionResult {
 
 /**
  * Extracts the OpenAPI version from a specification file
- * 
+ *
  * @param specPath Path to the OpenAPI specification file
  * @returns The detected version and dialect information
  */
@@ -57,11 +57,11 @@ export async function extractOpenApiVersion(specPath: string): Promise<{
   try {
     const content = await Deno.readTextFile(specPath);
     const spec = JSON.parse(content);
-    
+
     // Get dialect from custom extension or from openapi/swagger field
     let dialect = spec["x-openapi-dialect"] || "";
     let version = "";
-    
+
     if (!dialect) {
       // Try to extract from standard fields
       if (spec.openapi) {
@@ -79,17 +79,17 @@ export async function extractOpenApiVersion(specPath: string): Promise<{
       const versionMatch = dialect.match(/\/([0-9]+\.[0-9]+)/);
       version = versionMatch ? versionMatch[1] : "unknown";
     }
-    
+
     // Parse version components
     const versionParts = version.split(".");
     const majorVersion = parseInt(versionParts[0]) || 0;
     const minorVersion = parseInt(versionParts[1]) || 0;
-    
+
     return {
       version,
       dialect,
       majorVersion,
-      minorVersion
+      minorVersion,
     };
   } catch (error) {
     console.error(`Error extracting OpenAPI version from ${specPath}:`, error);
@@ -106,21 +106,22 @@ export async function extractOpenApiVersion(specPath: string): Promise<{
  */
 export async function detectAdapter(
   specPath: string,
-  fallbackMode?: FallbackMode
+  fallbackMode?: FallbackMode,
 ): Promise<AdapterDetectionResult> {
   // Extract the OpenAPI version from the spec file
-  const { version, majorVersion, minorVersion, dialect } = await extractOpenApiVersion(specPath);
-  
+  const { version, majorVersion, minorVersion, dialect } =
+    await extractOpenApiVersion(specPath);
+
   // Use provided fallback mode or get from environment
   const effectiveFallbackMode = fallbackMode || getFallbackModeFromEnv();
-  
+
   try {
     // Get the appropriate generator for this version
     const adapter = getGenerator(version, effectiveFallbackMode);
-    
+
     // Check if adapter explicitly supports this version
     const isExplicitlySupported = adapter.supports(version);
-    
+
     return {
       version,
       adapter,
@@ -129,12 +130,15 @@ export async function detectAdapter(
       dialect,
       isExplicitlySupported,
       // Only include appliedFallback if a fallback was used
-      ...(isExplicitlySupported ? {} : { appliedFallback: effectiveFallbackMode })
+      ...(isExplicitlySupported
+        ? {}
+        : { appliedFallback: effectiveFallbackMode }),
     };
   } catch (error) {
     // Enhance error with diagnostic information
     if (error instanceof Error) {
-      error.message = `Failed to detect adapter for OpenAPI ${version}: ${error.message}\n` +
+      error.message =
+        `Failed to detect adapter for OpenAPI ${version}: ${error.message}\n` +
         `File: ${specPath}\n` +
         `Fallback mode: ${effectiveFallbackMode}`;
     }
@@ -152,9 +156,9 @@ if (import.meta.main) {
       console.error("Usage: deno run -A detect_adapter.ts <path-to-spec-file>");
       Deno.exit(1);
     }
-    
+
     const specPath = Deno.args[0];
-    
+
     // Check if file exists
     try {
       const stat = await Deno.stat(specPath);
@@ -168,30 +172,33 @@ if (import.meta.main) {
     }
     // Get fallback mode from command line args if provided
     let fallbackMode: FallbackMode | undefined;
-    const fallbackArg = Deno.args.find(arg => arg.startsWith("--fallback="));
+    const fallbackArg = Deno.args.find((arg) => arg.startsWith("--fallback="));
     if (fallbackArg) {
       const mode = fallbackArg.split("=")[1]?.toLowerCase();
       if (mode === "strict") fallbackMode = FallbackMode.STRICT;
       else if (mode === "warn") fallbackMode = FallbackMode.WARN;
       else if (mode === "auto") fallbackMode = FallbackMode.AUTO;
     }
-    
+
     // Detect adapter and print result
     const result = await detectAdapter(specPath, fallbackMode);
-    
-    console.log(JSON.stringify({
-      specPath,
-      version: result.version,
-      dialect: result.dialect,
-      majorVersion: result.majorVersion,
-      minorVersion: result.minorVersion,
-      adapterName: result.adapter.name,
-      explicitSupport: result.isExplicitlySupported,
-      fallbackApplied: result.appliedFallback || null,
-      fallbackMode: fallbackMode || getFallbackModeFromEnv()
-    }, null, 2));
-    
-    
+
+    console.log(JSON.stringify(
+      {
+        specPath,
+        version: result.version,
+        dialect: result.dialect,
+        majorVersion: result.majorVersion,
+        minorVersion: result.minorVersion,
+        adapterName: result.adapter.name,
+        explicitSupport: result.isExplicitlySupported,
+        fallbackApplied: result.appliedFallback || null,
+        fallbackMode: fallbackMode || getFallbackModeFromEnv(),
+      },
+      null,
+      2,
+    ));
+
     Deno.exit(0);
   } catch (error) {
     console.error("Error:", error);

@@ -14,8 +14,8 @@ import { join } from "jsr:@std/path@^1";
     return {
       valid: false,
       missingTemplates: [
-        "template_manifest.json"
-      ]
+        "template_manifest.json",
+      ],
     };
   }
   console.log(`Template manifest found at ${manifestPath}`);
@@ -24,10 +24,12 @@ import { join } from "jsr:@std/path@^1";
   const manifest = JSON.parse(manifestText);
   // Check each required template
   const missingTemplates = [];
-  for (const template of manifest.templates){
+  for (const template of manifest.templates) {
     if (template.required) {
       const templatePath = join(templateDir, template.name);
-      console.log(`Checking for required template: ${template.name} at ${templatePath}`);
+      console.log(
+        `Checking for required template: ${template.name} at ${templatePath}`,
+      );
       if (!await exists(templatePath)) {
         console.warn(`Required template missing: ${template.name}`);
         missingTemplates.push(template.name);
@@ -44,7 +46,7 @@ import { join } from "jsr:@std/path@^1";
   }
   return {
     valid,
-    missingTemplates
+    missingTemplates,
   };
 }
 /**

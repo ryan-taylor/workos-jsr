@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const { detachNodeFromParent } = require('../lib/xast.js');
+const { detachNodeFromParent } = require("../lib/xast.js");
 
-exports.name = 'removeEmptyText';
-exports.description = 'removes empty <text> elements';
+exports.name = "removeEmptyText";
+exports.description = "removes empty <text> elements";
 
 /**
  * Remove empty Text elements.
@@ -30,18 +30,18 @@ exports.fn = (root, params) => {
     element: {
       enter: (node, parentNode) => {
         // Remove empty text element
-        if (text && node.name === 'text' && node.children.length === 0) {
+        if (text && node.name === "text" && node.children.length === 0) {
           detachNodeFromParent(node, parentNode);
         }
         // Remove empty tspan element
-        if (tspan && node.name === 'tspan' && node.children.length === 0) {
+        if (tspan && node.name === "tspan" && node.children.length === 0) {
           detachNodeFromParent(node, parentNode);
         }
         // Remove tref with empty xlink:href attribute
         if (
           tref &&
-          node.name === 'tref' &&
-          node.attributes['xlink:href'] == null
+          node.name === "tref" &&
+          node.attributes["xlink:href"] == null
         ) {
           detachNodeFromParent(node, parentNode);
         }

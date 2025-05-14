@@ -1,21 +1,21 @@
-'use strict';
+"use strict";
 
 /**
  * @typedef {import('../lib/types').XastElement} XastElement
  * @typedef {import('../lib/types').XastParent} XastParent
  */
 
-const { attrsGroupsDefaults, colorsProps } = require('./_collections');
+const { attrsGroupsDefaults, colorsProps } = require("./_collections");
 const {
   detachNodeFromParent,
   querySelectorAll,
   querySelector,
-} = require('../lib/xast');
-const { computeStyle, collectStylesheet } = require('../lib/style');
+} = require("../lib/xast");
+const { computeStyle, collectStylesheet } = require("../lib/style");
 
-exports.name = 'convertOneStopGradients';
+exports.name = "convertOneStopGradients";
 exports.description =
-  'converts one-stop (single color) gradients to a plain color';
+  "converts one-stop (single color) gradients to a plain color";
 
 /**
  * Converts one-stop (single color) gradients to a plain color.
@@ -51,54 +51,54 @@ exports.fn = (root) => {
   return {
     element: {
       enter: (node, parentNode) => {
-        if (node.attributes['xlink:href'] != null) {
+        if (node.attributes["xlink:href"] != null) {
           xlinkHrefCount++;
         }
 
-        if (node.name === 'defs') {
+        if (node.name === "defs") {
           allDefs.set(node, parentNode);
           return;
         }
 
-        if (node.name !== 'linearGradient' && node.name !== 'radialGradient') {
+        if (node.name !== "linearGradient" && node.name !== "radialGradient") {
           return;
         }
 
         const stops = node.children.filter((child) => {
-          return child.type === 'element' && child.name === 'stop';
+          return child.type === "element" && child.name === "stop";
         });
 
-        const href = node.attributes['xlink:href'] || node.attributes['href'];
+        const href = node.attributes["xlink:href"] || node.attributes["href"];
         let effectiveNode =
-          stops.length === 0 && href != null && href.startsWith('#')
+          stops.length === 0 && href != null && href.startsWith("#")
             ? querySelector(root, href)
             : node;
 
-        if (effectiveNode == null || effectiveNode.type !== 'element') {
+        if (effectiveNode == null || effectiveNode.type !== "element") {
           gradientsToDetach.set(node, parentNode);
           return;
         }
 
         const effectiveStops = effectiveNode.children.filter((child) => {
-          return child.type === 'element' && child.name === 'stop';
+          return child.type === "element" && child.name === "stop";
         });
 
         if (
           effectiveStops.length !== 1 ||
-          effectiveStops[0].type !== 'element'
+          effectiveStops[0].type !== "element"
         ) {
           return;
         }
 
-        if (parentNode.type === 'element' && parentNode.name === 'defs') {
+        if (parentNode.type === "element" && parentNode.name === "defs") {
           effectedDefs.add(parentNode);
         }
 
         gradientsToDetach.set(node, parentNode);
 
         let color;
-        const style = computeStyle(stylesheet, effectiveStops[0])['stop-color'];
-        if (style != null && style.type === 'static') {
+        const style = computeStyle(stylesheet, effectiveStops[0])["stop-color"];
+        if (style != null && style.type === "static") {
           color = style.value;
         }
 
@@ -106,10 +106,10 @@ exports.fn = (root) => {
 
         const selector = [...colorsProps]
           .map((attr) => `[${attr}="${selectorVal}"]`)
-          .join(',');
+          .join(",");
         const elements = querySelectorAll(root, selector);
         for (const element of elements) {
-          if (element.type !== 'element') {
+          if (element.type !== "element") {
             continue;
           }
 
@@ -131,21 +131,21 @@ exports.fn = (root) => {
           `[style*=${selectorVal}]`,
         );
         for (const element of styledElements) {
-          if (element.type !== 'element') {
+          if (element.type !== "element") {
             continue;
           }
 
           element.attributes.style = element.attributes.style.replace(
             selectorVal,
-            color || attrsGroupsDefaults.presentation['stop-color'],
+            color || attrsGroupsDefaults.presentation["stop-color"],
           );
         }
       },
 
       exit: (node) => {
-        if (node.name === 'svg') {
+        if (node.name === "svg") {
           for (const [gradient, parent] of gradientsToDetach.entries()) {
-            if (gradient.attributes['xlink:href'] != null) {
+            if (gradient.attributes["xlink:href"] != null) {
               xlinkHrefCount--;
             }
 
@@ -153,7 +153,7 @@ exports.fn = (root) => {
           }
 
           if (xlinkHrefCount === 0) {
-            delete node.attributes['xmlns:xlink'];
+            delete node.attributes["xmlns:xlink"];
           }
 
           for (const [defs, parent] of allDefs.entries()) {

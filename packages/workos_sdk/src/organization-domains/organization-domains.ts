@@ -1,18 +1,18 @@
-import type { WorkOS } from "workos/workos.ts";
+import type { WorkOS } from "../workos.ts";
 import type {
   CreateOrganizationDomainOptions,
   OrganizationDomain,
   OrganizationDomainResponse,
-} from "workos/organization-domains/interfaces/index.ts";
-import { serializeCreateOrganizationDomainOptions } from "workos/organization-domains/serializers/create-organization-domain-options.serializer.ts";
-import { deserializeOrganizationDomain } from "workos/organization-domains/serializers/organization-domain.serializer.ts";
+} from "./interfaces/index.ts";
+import { serializeCreateOrganizationDomainOptions } from "./serializers/create-organization-domain-options.serializer.ts";
+import { deserializeOrganizationDomain } from "./serializers/organization-domain.serializer.ts";
 
 /**
  * Service for managing Organization Domains in WorkOS.
- * 
+ *
  * Organization Domains API allows managing domains associated with an organization,
  * including creation and verification of domain ownership.
- * 
+ *
  * @example
  * ```ts
  * // Create a new organization domain
@@ -32,7 +32,7 @@ export class OrganizationDomains {
 
   /**
    * Retrieves an organization domain by its ID.
-   * 
+   *
    * @param id - The unique identifier of the organization domain
    * @returns Promise resolving to the OrganizationDomain object
    */
@@ -46,7 +46,7 @@ export class OrganizationDomains {
 
   /**
    * Initiates domain verification for an organization domain.
-   * 
+   *
    * @param id - The unique identifier of the organization domain
    * @returns Promise resolving to the updated OrganizationDomain object
    */
@@ -61,7 +61,7 @@ export class OrganizationDomains {
 
   /**
    * Creates a new organization domain.
-   * 
+   *
    * @param payload - Options for creating a new organization domain
    * @returns Promise resolving to the created OrganizationDomain object
    */

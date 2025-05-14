@@ -1,13 +1,13 @@
 import type {
+  CheckOptions,
+  V2CheckBatchOptions,
   V2CheckItem,
   V2CheckOptions,
+  V2SerializedCheckBatchOptions,
   V2SerializedCheckItem,
   V2SerializedCheckOptions,
-  V2CheckBatchOptions,
-  V2SerializedCheckBatchOptions,
-  CheckOptions,
-} from "workos/fga/interfaces/index.ts";
-import { isResourceInterface } from "workos/fga/utils/interface-check.ts";
+} from "../interfaces/index.ts";
+import { isResourceInterface } from "../utils/interface-check.ts";
 
 /**
  * Serializes a check item for the API
@@ -51,40 +51,44 @@ const serializeCheckItem = (item: V2CheckItem): V2SerializedCheckItem => {
 
 /**
  * Serializes check options for the API
- * 
+ *
  * This translates from the standard CheckOptions format to the internal format
  * used by the API which is represented by V2CheckOptions.
- * 
+ *
  * @param options The check options
  * @returns The serialized check options
  */
-export const serializeCheckOptions = (options: CheckOptions): V2SerializedCheckOptions => {
+export const serializeCheckOptions = (
+  options: CheckOptions,
+): V2SerializedCheckOptions => {
   // Handle V2 batch format if it has the 'checks' property
   if (options.checks) {
     return serializeCheckBatchOptions(options as V2CheckBatchOptions);
   }
-  
+
   // Handle standard format (requires user, relation, object properties)
   const { user, relation, object } = options;
-  
+
   // Verify that all required properties exist for standard format
   if (!user || !relation || !object) {
-    throw new Error('CheckOptions must include user, relation, and object properties');
+    throw new Error(
+      "CheckOptions must include user, relation, and object properties",
+    );
   }
-  
+
   // Create a structured check item
   const checkItem: V2CheckItem = {
     resource: {
-      resourceType: object.split(':')[0],
-      resourceId: object.split(':')[1],
+      resourceType: object.split(":")[0],
+      resourceId: object.split(":")[1],
     },
     relation,
     subject: {
-      resourceType: user.split(':')[0],
-      resourceId: user.split(':')[1],
-    }
+      resourceType: user.split(":")[0],
+      resourceId: user.split(":")[1],
+    },
   };
-  
+
   return {
     checks: [serializeCheckItem(checkItem)],
   };

@@ -23,7 +23,7 @@ export function isFresh2(): boolean {
   if (envFlag !== undefined) {
     return envFlag.toLowerCase() === "true";
   }
-  
+
   // Default to true for Fresh 2.x
   return true;
 }
@@ -41,5 +41,7 @@ export function isDeno2(): boolean {
 
 // Verify runtime compatibility
 if (!isDeno2()) {
-  console.warn("Warning: WorkOS SDK is optimized for Deno 2.x. Some features may not work correctly on older versions.");
+  console.warn(
+    "Warning: WorkOS SDK is optimized for Deno 2.x. Some features may not work correctly on older versions.",
+  );
 }

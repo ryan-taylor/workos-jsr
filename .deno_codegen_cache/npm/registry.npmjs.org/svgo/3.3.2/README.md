@@ -4,15 +4,20 @@
 
 # SVGO [![npm](https://img.shields.io/npm/v/svgo)](https://npmjs.org/package/svgo) [![chat](https://img.shields.io/discord/815166721315831868)](https://discord.gg/z8jX8NYxrE) [![docs](https://img.shields.io/badge/docs-svgo.dev-blue)](https://svgo.dev/)
 
-SVGO, short for **SVG O**ptimizer, is a Node.js library and command-line application for optimizing SVG files.
+SVGO, short for **SVG O**ptimizer, is a Node.js library and command-line
+application for optimizing SVG files.
 
 ## Why?
 
-SVG files, especially those exported from vector editors, usually contain a lot of redundant information. This includes editor metadata, comments, hidden elements, default or suboptimal values, and other stuff that can be safely removed or converted without impacting rendering.
+SVG files, especially those exported from vector editors, usually contain a lot
+of redundant information. This includes editor metadata, comments, hidden
+elements, default or suboptimal values, and other stuff that can be safely
+removed or converted without impacting rendering.
 
 ## Installation
 
-You can install SVGO globally through npm, yarn, or pnpm. Alternatively, drop the global flag (`global`/`-g`) to use it in your Node.js project.
+You can install SVGO globally through npm, yarn, or pnpm. Alternatively, drop
+the global flag (`global`/`-g`) to use it in your Node.js project.
 
 ```sh
 # npm
@@ -47,29 +52,34 @@ svgo --help
 
 ## Configuration
 
-SVGO has a plugin architecture. You can read more about all plugins in [Plugins | SVGO Documentation](https://svgo.dev/docs/plugins/), and the default plugins in [Preset Default | SVGO Documentation](https://svgo.dev/docs/preset-default/).
+SVGO has a plugin architecture. You can read more about all plugins in
+[Plugins | SVGO Documentation](https://svgo.dev/docs/plugins/), and the default
+plugins in
+[Preset Default | SVGO Documentation](https://svgo.dev/docs/preset-default/).
 
-SVGO reads the configuration from `svgo.config.js` or the `--config path/to/config.js` command-line option. Some other parameters can be configured though command-line options too.
+SVGO reads the configuration from `svgo.config.js` or the
+`--config path/to/config.js` command-line option. Some other parameters can be
+configured though command-line options too.
 
 **`svgo.config.js`**
 
 ```js
 module.exports = {
   multipass: false, // boolean
-  datauri: 'base64', // 'base64'|'enc'|'unenc'
+  datauri: "base64", // 'base64'|'enc'|'unenc'
   js2svg: {
     indent: 4, // number
     pretty: false, // boolean
   },
   plugins: [
-    'preset-default', // built-in plugins enabled by default
-    'prefixIds', // enable built-in plugins by name
+    "preset-default", // built-in plugins enabled by default
+    "prefixIds", // enable built-in plugins by name
 
     // enable built-in plugins with an object to configure plugins
     {
-      name: 'prefixIds',
+      name: "prefixIds",
       params: {
-        prefix: 'uwu',
+        prefix: "uwu",
       },
     },
   ],
@@ -78,7 +88,8 @@ module.exports = {
 
 ### Default preset
 
-Instead of configuring SVGO from scratch, you can tweak the default preset to suit your needs by configuring or disabling the respective plugin.
+Instead of configuring SVGO from scratch, you can tweak the default preset to
+suit your needs by configuring or disabling the respective plugin.
 
 **`svgo.config.js`**
 
@@ -86,7 +97,7 @@ Instead of configuring SVGO from scratch, you can tweak the default preset to su
 module.exports = {
   plugins: [
     {
-      name: 'preset-default',
+      name: "preset-default",
       params: {
         overrides: {
           // disable a default plugin
@@ -103,7 +114,8 @@ module.exports = {
 };
 ```
 
-You can find a list of the default plugins in the order they run in [Preset Default | SVGO Documentation](https://svgo.dev/docs/preset-default/#plugins-list).
+You can find a list of the default plugins in the order they run in
+[Preset Default | SVGO Documentation](https://svgo.dev/docs/preset-default/#plugins-list).
 
 ### Custom plugins
 
@@ -112,7 +124,7 @@ You can also specify custom plugins:
 **`svgo.config.js`**
 
 ```js
-const importedPlugin = require('./imported-plugin');
+const importedPlugin = require("./imported-plugin");
 
 module.exports = {
   plugins: [
@@ -121,9 +133,9 @@ module.exports = {
 
     // plugin defined inline
     {
-      name: 'customPlugin',
+      name: "customPlugin",
       params: {
-        paramName: 'paramValue',
+        paramName: "paramValue",
       },
       fn: (ast, params, info) => {},
     },
@@ -140,10 +152,10 @@ SVGO provides a few low level utilities.
 The core of SVGO is `optimize` function.
 
 ```js
-const { optimize } = require('svgo');
+const { optimize } = require("svgo");
 
 const result = optimize(svgString, {
-  path: 'path-to.svg', // recommended
+  path: "path-to.svg", // recommended
   multipass: true, // all other config fields are available here
 });
 
@@ -152,10 +164,11 @@ const optimizedSvgString = result.data;
 
 ### loadConfig
 
-If you write a tool on top of SVGO you may want to resolve the `svgo.config.js` file.
+If you write a tool on top of SVGO you may want to resolve the `svgo.config.js`
+file.
 
 ```js
-const { loadConfig } = require('svgo');
+const { loadConfig } = require("svgo");
 
 const config = await loadConfig();
 ```
@@ -194,6 +207,7 @@ const config = await loadConfig(configFile, cwd);
 
 ## License and Copyright
 
-This software is released under the terms of the [MIT license](https://github.com/svg/svgo/blob/main/LICENSE).
+This software is released under the terms of the
+[MIT license](https://github.com/svg/svgo/blob/main/LICENSE).
 
 Logo by [André Castillo](https://github.com/DerianAndre).

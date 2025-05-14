@@ -1,15 +1,15 @@
-'use strict';
+"use strict";
 
 /**
  * @typedef {import('../lib/types.js').PluginInfo} PluginInfo
  * @typedef {import('../lib/types').XastElement} XastElement
  */
 
-const csstree = require('css-tree');
-const { referencesProps } = require('./_collections.js');
+const csstree = require("css-tree");
+const { referencesProps } = require("./_collections.js");
 
-exports.name = 'prefixIds';
-exports.description = 'prefix IDs';
+exports.name = "prefixIds";
+exports.description = "prefix IDs";
 
 /**
  * extract basename from path
@@ -21,7 +21,7 @@ const getBasename = (path) => {
   if (matched) {
     return matched[1];
   }
-  return '';
+  return "";
 };
 
 /**
@@ -29,7 +29,7 @@ const getBasename = (path) => {
  * @type {(string: string) => string}
  */
 const escapeIdentifierName = (str) => {
-  return str.replace(/[. ]/g, '_');
+  return str.replace(/[. ]/g, "_");
 };
 
 /**
@@ -69,8 +69,8 @@ const prefixId = (prefixGenerator, body) => {
  * @returns {?string} The given string with a prefix inserted, or null if the string did not start with "#".
  */
 const prefixReference = (prefixGenerator, reference) => {
-  if (reference.startsWith('#')) {
-    return '#' + prefixId(prefixGenerator, reference.slice(1));
+  if (reference.startsWith("#")) {
+    return "#" + prefixId(prefixGenerator, reference.slice(1));
   }
   return null;
 };
@@ -87,7 +87,7 @@ const prefixReference = (prefixGenerator, reference) => {
  * @returns {string} A generated prefix.
  */
 const generatePrefix = (body, node, info, prefixGenerator, delim, history) => {
-  if (typeof prefixGenerator === 'function') {
+  if (typeof prefixGenerator === "function") {
     let prefix = history.get(body);
 
     if (prefix != null) {
@@ -99,19 +99,19 @@ const generatePrefix = (body, node, info, prefixGenerator, delim, history) => {
     return prefix;
   }
 
-  if (typeof prefixGenerator === 'string') {
+  if (typeof prefixGenerator === "string") {
     return prefixGenerator + delim;
   }
 
   if (prefixGenerator === false) {
-    return '';
+    return "";
   }
 
   if (info.path != null && info.path.length > 0) {
     return escapeIdentifierName(getBasename(info.path)) + delim;
   }
 
-  return 'prefix' + delim;
+  return "prefix" + delim;
 };
 
 /**
@@ -122,7 +122,7 @@ const generatePrefix = (body, node, info, prefixGenerator, delim, history) => {
  */
 exports.fn = (_root, params, info) => {
   const {
-    delim = '__',
+    delim = "__",
     prefix,
     prefixIds = true,
     prefixClassNames = true,
@@ -142,14 +142,14 @@ exports.fn = (_root, params, info) => {
           generatePrefix(id, node, info, prefix, delim, prefixMap);
 
         // prefix id/class selectors and url() references in styles
-        if (node.name === 'style') {
+        if (node.name === "style") {
           // skip empty <style/> elements
           if (node.children.length === 0) {
             return;
           }
 
           for (const child of node.children) {
-            if (child.type !== 'text' && child.type !== 'cdata') {
+            if (child.type !== "text" && child.type !== "cdata") {
               continue;
             }
 
@@ -167,13 +167,13 @@ exports.fn = (_root, params, info) => {
 
             csstree.walk(cssAst, (node) => {
               if (
-                (prefixIds && node.type === 'IdSelector') ||
-                (prefixClassNames && node.type === 'ClassSelector')
+                (prefixIds && node.type === "IdSelector") ||
+                (prefixClassNames && node.type === "ClassSelector")
               ) {
                 node.name = prefixId(prefixGenerator, node.name);
                 return;
               }
-              if (node.type === 'Url' && node.value.length > 0) {
+              if (node.type === "Url" && node.value.length > 0) {
                 const prefixed = prefixReference(
                   prefixGenerator,
                   unquote(node.value),
@@ -207,12 +207,12 @@ exports.fn = (_root, params, info) => {
           node.attributes.class = node.attributes.class
             .split(/\s+/)
             .map((name) => prefixId(prefixGenerator, name))
-            .join(' ');
+            .join(" ");
         }
 
         // prefix a href attribute value
         // xlink:href is deprecated, must be still supported
-        for (const name of ['href', 'xlink:href']) {
+        for (const name of ["href", "xlink:href"]) {
           if (
             node.attributes[name] != null &&
             node.attributes[name].length !== 0
@@ -247,19 +247,19 @@ exports.fn = (_root, params, info) => {
         }
 
         // prefix begin/end attribute value
-        for (const name of ['begin', 'end']) {
+        for (const name of ["begin", "end"]) {
           if (
             node.attributes[name] != null &&
             node.attributes[name].length !== 0
           ) {
             const parts = node.attributes[name].split(/\s*;\s+/).map((val) => {
-              if (val.endsWith('.end') || val.endsWith('.start')) {
-                const [id, postfix] = val.split('.');
+              if (val.endsWith(".end") || val.endsWith(".start")) {
+                const [id, postfix] = val.split(".");
                 return `${prefixId(prefixGenerator, id)}.${postfix}`;
               }
               return val;
             });
-            node.attributes[name] = parts.join('; ');
+            node.attributes[name] = parts.join("; ");
           }
         }
       },

@@ -1,20 +1,20 @@
-import { deserializeProfile } from "workos/sso/serializers/profile.serializer.ts";
-import { deserializeConnection } from "workos/sso/serializers/connection.serializer.ts";
-import { serializeGetAuthorizationUrlOptions } from "workos/sso/serializers/get-authorization-url-options.serializer.ts";
+import { deserializeProfile } from "./serializers/profile.serializer.ts";
+import { deserializeConnection } from "./serializers/connection.serializer.ts";
+import { serializeGetAuthorizationUrlOptions } from "./serializers/get-authorization-url-options.serializer.ts";
 import type {
   Connection,
   GetAuthorizationUrlOptions,
   Profile,
-} from "workos/sso/interfaces/index.ts";
-import { fetchAndDeserialize } from "workos/common/utils/fetch-and-deserialize.ts";
-import type { WorkOS } from "workos/workos.ts";
+} from "./interfaces/index.ts";
+import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
+import type { WorkOS } from "../workos.ts";
 
 /**
  * SSO service for handling Single Sign-On authentication flows.
- * 
+ *
  * This class provides methods to authenticate users via SAML and OAuth workflows,
  * retrieve user profile information, and manage SSO connections.
- * 
+ *
  * @example
  * ```ts
  * // Generate an authorization URL
@@ -23,7 +23,7 @@ import type { WorkOS } from "workos/workos.ts";
  *   redirectUri: 'https://example.com/callback',
  *   clientId: 'client_123'
  * });
- * 
+ *
  * // Later, in your callback handler, exchange the code for a profile
  * const profile = await workos.sso.getProfile(code);
  * ```
@@ -33,10 +33,10 @@ export class SSO {
 
   /**
    * Exchange an authentication code for a user profile.
-   * 
+   *
    * @param code - The authorization code received from the SSO callback
    * @returns Promise resolving to the authenticated user's profile
-   * 
+   *
    * @example
    * ```ts
    * // In your callback route handler
@@ -60,10 +60,10 @@ export class SSO {
 
   /**
    * Retrieve an SSO connection by its ID.
-   * 
+   *
    * @param id - The unique identifier of the connection
    * @returns Promise resolving to the connection details
-   * 
+   *
    * @example
    * ```ts
    * const connection = await workos.sso.getConnection('conn_01EHQMYV6MBK39QC5PZXHY59C3');
@@ -71,7 +71,10 @@ export class SSO {
    * ```
    */
   async getConnection(id: string): Promise<Connection> {
-    const result = await fetchAndDeserialize<Record<string, unknown>, Connection>({
+    const result = await fetchAndDeserialize<
+      Record<string, unknown>,
+      Connection
+    >({
       workos: this.workos,
       path: `/connections/${id}`,
       method: "GET",
@@ -85,10 +88,10 @@ export class SSO {
 
   /**
    * Generate an authorization URL for initiating an SSO flow.
-   * 
+   *
    * @param options - Configuration options for the authorization URL
    * @returns The authorization URL to redirect users to
-   * 
+   *
    * @example
    * ```ts
    * const authorizationURL = workos.sso.getAuthorizationUrl({
@@ -97,7 +100,7 @@ export class SSO {
    *   clientId: 'client_123',
    *   state: 'random-secure-state'
    * });
-   * 
+   *
    * // Redirect the user to this URL to start the SSO flow
    * ```
    */

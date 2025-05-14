@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const { detachNodeFromParent } = require('../lib/xast.js');
+const { detachNodeFromParent } = require("../lib/xast.js");
 
-exports.name = 'removeComments';
-exports.description = 'removes comments';
+exports.name = "removeComments";
+exports.description = "removes comments";
 
 /**
  * If a comment matches one of the following patterns, it will be

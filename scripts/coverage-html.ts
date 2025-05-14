@@ -1,17 +1,17 @@
 #!/usr/bin/env -S deno run -A
 /**
  * HTML Coverage Report Generator
- * 
+ *
  * This script generates HTML coverage reports from the LCOV file produced by Deno's
  * coverage tool. It uses the `genhtml` utility from the LCOV package, which must be
  * installed on the system.
- * 
+ *
  * Usage:
  *    deno run -A scripts/coverage-html.ts [--input=coverage.lcov] [--output=coverage_html]
  */
 
 import { parseArgs } from "https://deno.land/std@0.219.0/cli/parse_args.ts"; // Keep this import since flags might not be available in JSR
-import { join, dirname } from "jsr:@std/path@^1";
+import { dirname, join } from "jsr:@std/path@^1";
 import { ensureDir } from "jsr:@std/fs@^1";
 
 // Parse command line arguments
@@ -33,7 +33,9 @@ try {
 } catch (error) {
   if (error instanceof Deno.errors.NotFound) {
     console.error(`Error: LCOV file '${lcovFile}' not found.`);
-    console.error("Run 'deno task test:coverage' first to generate the LCOV file.");
+    console.error(
+      "Run 'deno task test:coverage' first to generate the LCOV file.",
+    );
     Deno.exit(1);
   }
   throw error;
@@ -50,7 +52,7 @@ async function checkGenhtml(): Promise<boolean> {
       stdout: "null",
       stderr: "null",
     });
-    
+
     const { success } = await command.output();
     return success;
   } catch (error) {
@@ -61,11 +63,11 @@ async function checkGenhtml(): Promise<boolean> {
 // Copy directory recursively
 async function copyDir(src: string, dest: string): Promise<void> {
   await ensureDir(dest);
-  
+
   for await (const entry of Deno.readDir(src)) {
     const srcPath = join(src, entry.name);
     const destPath = join(dest, entry.name);
-    
+
     if (entry.isDirectory) {
       await copyDir(srcPath, destPath);
     } else {
@@ -77,28 +79,32 @@ async function copyDir(src: string, dest: string): Promise<void> {
 // Main function
 async function main() {
   console.log("Generating HTML coverage report...");
-  
+
   // Check if genhtml is installed
   const genHtmlAvailable = await checkGenhtml();
-  
+
   if (!genHtmlAvailable) {
-    console.log("Note: 'genhtml' command not found. Using Deno's built-in HTML report instead.");
+    console.log(
+      "Note: 'genhtml' command not found. Using Deno's built-in HTML report instead.",
+    );
     console.log("For enhanced HTML reports, install the LCOV package:");
     console.log("  - On Ubuntu/Debian: sudo apt install lcov");
     console.log("  - On macOS: brew install lcov");
     console.log("  - On Windows: Install via WSL or manually\n");
-    
+
     // Check if the built-in Deno HTML report exists
     const denoHtmlPath = "cov_profile/html";
     try {
       await Deno.stat(denoHtmlPath);
-      
+
       // Copy the built-in Deno HTML report to the desired output directory
       console.log(`Copying Deno's built-in HTML report to ${outputDir}...`);
       await copyDir(denoHtmlPath, outputDir);
-      
-      console.log(`\nHTML coverage report copied successfully to ${outputDir}/index.html`);
-      
+
+      console.log(
+        `\nHTML coverage report copied successfully to ${outputDir}/index.html`,
+      );
+
       // Provide a quick way to open the report
       if (Deno.build.os === "darwin") {
         console.log("\nRun the following command to open the report:");
@@ -107,41 +113,52 @@ async function main() {
         console.log("\nRun the following command to open the report:");
         console.log(`start ${outputDir}\\index.html`);
       } else {
-        console.log("\nOpen the following file in your browser to view the report:");
+        console.log(
+          "\nOpen the following file in your browser to view the report:",
+        );
         console.log(`${Deno.cwd()}/${outputDir}/index.html`);
       }
-      
+
       return;
     } catch (error) {
       if (error instanceof Deno.errors.NotFound) {
-        console.error("Error: Deno's built-in HTML report not found at cov_profile/html");
-        console.error("Run 'deno task test:coverage' first to generate coverage data");
+        console.error(
+          "Error: Deno's built-in HTML report not found at cov_profile/html",
+        );
+        console.error(
+          "Run 'deno task test:coverage' first to generate coverage data",
+        );
         Deno.exit(1);
       }
       throw error;
     }
   }
-  
+
   // Generate enhanced HTML report using genhtml
   console.log("Generating enhanced HTML report with genhtml...");
   const command = new Deno.Command("genhtml", {
     args: [
       lcovFile,
-      "--output-directory", outputDir,
-      "--title", "WorkOS SDK Coverage Report",
+      "--output-directory",
+      outputDir,
+      "--title",
+      "WorkOS SDK Coverage Report",
       "--legend",
       "--highlight",
-      "--prefix", Deno.cwd(),
+      "--prefix",
+      Deno.cwd(),
     ],
     stdout: "inherit",
     stderr: "inherit",
   });
-  
+
   const { success, code } = await command.output();
-  
+
   if (success) {
-    console.log(`\nHTML coverage report generated successfully at ${outputDir}/index.html`);
-    
+    console.log(
+      `\nHTML coverage report generated successfully at ${outputDir}/index.html`,
+    );
+
     // Provide a quick way to open the report
     if (Deno.build.os === "darwin") {
       console.log("\nRun the following command to open the report:");
@@ -150,11 +167,15 @@ async function main() {
       console.log("\nRun the following command to open the report:");
       console.log(`start ${outputDir}\\index.html`);
     } else {
-      console.log("\nOpen the following file in your browser to view the report:");
+      console.log(
+        "\nOpen the following file in your browser to view the report:",
+      );
       console.log(`${Deno.cwd()}/${outputDir}/index.html`);
     }
   } else {
-    console.error(`\nError: Failed to generate HTML report (exit code: ${code})`);
+    console.error(
+      `\nError: Failed to generate HTML report (exit code: ${code})`,
+    );
     Deno.exit(code);
   }
 }

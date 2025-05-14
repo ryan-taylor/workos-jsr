@@ -1,24 +1,27 @@
 import {
   deserializeDirectory,
   deserializeDirectoryGroup,
-  deserializeDirectoryUser
-} from "workos/directory-sync/serializers/index.ts";
+  deserializeDirectoryUser,
+} from "./serializers/index.ts";
 import type {
   Directory,
   DirectoryGroup,
-  DirectoryUser
-} from "workos/directory-sync/interfaces/index.ts";
-import { fetchAndDeserialize } from "workos/common/utils/fetch-and-deserialize.ts";
-import type { WorkOS } from "workos/workos.ts";
-import { DirectorySyncService, setWorkOSInstance } from "../../generated/2025-05-12/index.ts";
-import type { CommonGetOptions, List } from "workos/common/interfaces.ts";
+  DirectoryUser,
+} from "./interfaces/index.ts";
+import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
+import type { WorkOS } from "../workos.ts";
+import {
+  DirectorySyncService,
+  setWorkOSInstance,
+} from "../../generated/2025-05-12/index.ts";
+import type { CommonGetOptions, List } from "../common/interfaces.ts";
 
 /**
  * Service for WorkOS Directory Sync.
- * 
+ *
  * The Directory Sync API allows you to manage directory connections and sync users
  * between your application and external identity providers.
- * 
+ *
  * @example
  * ```ts
  * // Retrieve a directory by ID
@@ -53,33 +56,39 @@ export class DirectorySync {
 
   /**
    * Lists directories with optional pagination/query params.
-   * 
+   *
    * @param query - Optional query parameters for filtering
    * @returns Promise resolving to a paginated List of Directory objects
    */
-  async listDirectories(query: Record<string, unknown> = {}): Promise<List<Directory>> {
+  async listDirectories(
+    query: Record<string, unknown> = {},
+  ): Promise<List<Directory>> {
     // Use the generated service to list directories
     return await this.directorySyncService.listDirectories(query);
   }
 
   /**
    * Lists groups for a directory.
-   * 
+   *
    * @param query - Optional query parameters for filtering
    * @returns Promise resolving to a paginated List of DirectoryGroup objects
    */
-  async listGroups(query: Record<string, unknown> = {}): Promise<List<DirectoryGroup>> {
+  async listGroups(
+    query: Record<string, unknown> = {},
+  ): Promise<List<DirectoryGroup>> {
     // Use the generated service to list groups
     return await this.directorySyncService.listGroups(query);
   }
 
   /**
    * Lists users for a directory.
-   * 
+   *
    * @param query - Optional query parameters for filtering
    * @returns Promise resolving to a paginated List of DirectoryUser objects
    */
-  async listUsers(query: Record<string, unknown> = {}): Promise<List<DirectoryUser>> {
+  async listUsers(
+    query: Record<string, unknown> = {},
+  ): Promise<List<DirectoryUser>> {
     // Use the generated service to list users
     return await this.directorySyncService.listUsers(query);
   }

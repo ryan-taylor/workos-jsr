@@ -1,4 +1,4 @@
-import type { List, ListResponse } from "workos/common/interfaces.ts";
+import type { List, ListResponse } from "../interfaces.ts";
 
 export const deserializeList = <TSerialized, TDeserialized>(
   list: ListResponse<TSerialized>,

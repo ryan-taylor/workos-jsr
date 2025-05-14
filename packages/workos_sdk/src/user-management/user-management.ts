@@ -1,24 +1,24 @@
-import { deserializeUser } from "workos/user-management/serializers/user.serializer.ts";
-import { deserializeSession } from "workos/user-management/serializers/session.serializer.ts";
-import { deserializeSessionAuth } from "workos/user-management/serializers/session-auth.serializer.ts";
+import { deserializeUser } from "./serializers/user.serializer.ts";
+import { deserializeSession } from "./serializers/session.serializer.ts";
+import { deserializeSessionAuth } from "./serializers/session-auth.serializer.ts";
 import type {
   AuthenticateOptions,
   CreateUserOptions,
   Session,
   SessionAuth,
   User,
-} from "workos/user-management/interfaces/index.ts";
-import { fetchAndDeserialize } from "workos/common/utils/fetch-and-deserialize.ts";
-import type { WorkOS } from "workos/workos.ts";
-import type { GetOptions } from "workos/common/interfaces.ts";
-import type { List } from "workos/common/interfaces.ts";
+} from "./interfaces/index.ts";
+import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
+import type { WorkOS } from "../workos.ts";
+import type { GetOptions } from "../common/interfaces.ts";
+import type { List } from "../common/interfaces.ts";
 
 /**
  * Service for User Management in WorkOS.
- * 
+ *
  * The User Management API allows creation, retrieval, authentication, and session management
  * for users in your WorkOS organization.
- * 
+ *
  * @example
  * ```ts
  * // Create a new user
@@ -43,7 +43,7 @@ export class UserManagement {
 
   /**
    * Creates a new user in WorkOS.
-   * 
+   *
    * @param options - Configuration options for creating a user
    * @returns Promise resolving to the created User
    */
@@ -57,22 +57,22 @@ export class UserManagement {
 
   /**
    * Retrieves a user by their ID.
-   * 
+   *
    * @param id - The unique identifier of the user
    * @returns Promise resolving to the User
    */
   async getUser(id: string): Promise<User> {
     // Direct API call to avoid list deserialization for a single item
     const response = await this.workos.get<Record<string, unknown>>(
-      `/user_management/users/${id}`
+      `/user_management/users/${id}`,
     );
-    
+
     return deserializeUser(response.data);
   }
 
   /**
    * Authenticates a user with credentials.
-   * 
+   *
    * @param options - Configuration options for authentication
    * @returns Promise resolving to a Session object
    */
@@ -87,13 +87,13 @@ export class UserManagement {
       "/user_management/authenticate",
       options,
     );
-    
+
     return deserializeSessionAuth(response.data as Record<string, unknown>);
   }
 
   /**
    * Retrieves a session by its ID.
-   * 
+   *
    * @param id - The unique identifier of the session
    * @returns Promise resolving to the Session
    */
@@ -144,7 +144,9 @@ export class UserManagement {
    * @param options - Authentication options including email and password
    * @returns Promise resolving to a SessionAuth object
    */
-  async authenticateWithPassword(options: AuthenticateOptions): Promise<SessionAuth> {
+  async authenticateWithPassword(
+    options: AuthenticateOptions,
+  ): Promise<SessionAuth> {
     return await this.authenticate(options);
   }
 
@@ -158,6 +160,9 @@ export class UserManagement {
    * @returns Promise that resolves when the session is successfully revoked
    */
   async revokeSession({ sessionId }: { sessionId: string }): Promise<void> {
-    await this.workos.post(`/user_management/sessions/${sessionId}/revoke`, null);
+    await this.workos.post(
+      `/user_management/sessions/${sessionId}/revoke`,
+      null,
+    );
   }
 }

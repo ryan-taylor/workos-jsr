@@ -1,5 +1,5 @@
-import type { WorkOS } from "../workos.ts.ts";
-import { AutoPaginatable } from "../common/utils/pagination.ts.ts";
+import type { WorkOS } from "../workos.ts";
+import { AutoPaginatable } from "../common/utils/pagination.ts";
 import type {
   DefaultCustomAttributes,
   Directory,
@@ -11,15 +11,15 @@ import type {
   ListDirectoriesOptions,
   ListDirectoryGroupsOptions,
   ListDirectoryUsersOptions,
-} from "./interfaces.ts.ts";
+} from "./interfaces.ts";
 import {
   deserializeDirectory,
   deserializeDirectoryGroup,
   deserializeDirectoryUserWithGroups,
   serializeListDirectoriesOptions,
-} from "./serializers.ts.ts";
-import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts.ts";
-import type { PaginationOptions } from "../common/interfaces.ts.ts";
+} from "./serializers.ts";
+import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
+import type { PaginationOptions } from "../common/interfaces.ts";
 
 export class DirectorySync {
   constructor(private readonly workos: WorkOS) {}

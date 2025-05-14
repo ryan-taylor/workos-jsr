@@ -6,10 +6,10 @@ import {
   fetchOnce,
   fetchURL,
   resetMockFetch,
-} from "../common/utils/test-utils.ts.ts";
-import { UnprocessableEntityException } from "../common/exceptions/unprocessable-entity.exception.ts.ts";
+} from "../common/utils/test-utils.ts";
+import { UnprocessableEntityException } from "../common/exceptions/unprocessable-entity.exception.ts";
 
-import { WorkOS } from "../workos.ts.ts";
+import { WorkOS } from "../workos.ts";
 import type {
   Challenge,
   ChallengeResponse,
@@ -19,7 +19,7 @@ import type {
   FactorWithSecretsResponse,
   VerifyResponse,
   VerifyResponseResponse,
-} from "./interfaces/index.ts.ts";
+} from "./interfaces/index.ts";
 
 // Setup function to reset mock fetch before each test
 function setup() {

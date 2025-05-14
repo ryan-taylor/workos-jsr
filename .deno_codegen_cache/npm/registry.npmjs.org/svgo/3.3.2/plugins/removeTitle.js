@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const { detachNodeFromParent } = require('../lib/xast.js');
+const { detachNodeFromParent } = require("../lib/xast.js");
 
-exports.name = 'removeTitle';
-exports.description = 'removes <title>';
+exports.name = "removeTitle";
+exports.description = "removes <title>";
 
 /**
  * Remove <title>.
@@ -18,7 +18,7 @@ exports.fn = () => {
   return {
     element: {
       enter: (node, parentNode) => {
-        if (node.name === 'title') {
+        if (node.name === "title") {
           detachNodeFromParent(node, parentNode);
         }
       },

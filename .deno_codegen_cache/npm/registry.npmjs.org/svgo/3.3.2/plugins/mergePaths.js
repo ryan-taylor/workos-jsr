@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * @typedef {import("../lib/types").PathDataItem} PathDataItem
@@ -6,11 +6,11 @@
  * @typedef {import('../lib/types').XastElement} XastElement
  */
 
-const { collectStylesheet, computeStyle } = require('../lib/style.js');
-const { path2js, js2path, intersects } = require('./_path.js');
+const { collectStylesheet, computeStyle } = require("../lib/style.js");
+const { path2js, js2path, intersects } = require("./_path.js");
 
-exports.name = 'mergePaths';
-exports.description = 'merges multiple paths in one if possible';
+exports.name = "mergePaths";
+exports.description = "merges multiple paths in one if possible";
 
 /**
  * Merge multiple Paths into one.
@@ -55,12 +55,12 @@ exports.fn = (root, params) => {
           const child = node.children[i];
 
           if (
-            prevChild.type !== 'element' ||
-            prevChild.name !== 'path' ||
+            prevChild.type !== "element" ||
+            prevChild.name !== "path" ||
             prevChild.children.length !== 0 ||
             prevChild.attributes.d == null
           ) {
-            if (prevPathData && prevChild.type === 'element') {
+            if (prevPathData && prevChild.type === "element") {
               updatePreviousPath(prevChild, prevPathData);
             }
             prevChild = child;
@@ -68,8 +68,8 @@ exports.fn = (root, params) => {
           }
 
           if (
-            child.type !== 'element' ||
-            child.name !== 'path' ||
+            child.type !== "element" ||
+            child.name !== "path" ||
             child.children.length !== 0 ||
             child.attributes.d == null
           ) {
@@ -82,9 +82,9 @@ exports.fn = (root, params) => {
 
           const computedStyle = computeStyle(stylesheet, child);
           if (
-            computedStyle['marker-start'] ||
-            computedStyle['marker-mid'] ||
-            computedStyle['marker-end']
+            computedStyle["marker-start"] ||
+            computedStyle["marker-mid"] ||
+            computedStyle["marker-end"]
           ) {
             if (prevPathData) {
               updatePreviousPath(prevChild, prevPathData);
@@ -103,8 +103,8 @@ exports.fn = (root, params) => {
 
           const areAttrsEqual = childAttrs.some((attr) => {
             return (
-              attr !== 'd' &&
-              prevChild.type === 'element' &&
+              attr !== "d" &&
+              prevChild.type === "element" &&
               prevChild.attributes[attr] !== child.attributes[attr]
             );
           });
@@ -135,7 +135,7 @@ exports.fn = (root, params) => {
           prevPathData = null;
         }
 
-        if (prevPathData && prevChild.type === 'element') {
+        if (prevPathData && prevChild.type === "element") {
           updatePreviousPath(prevChild, prevPathData);
         }
 

@@ -1,17 +1,24 @@
 # escalade [![CI](https://github.com/lukeed/escalade/workflows/CI/badge.svg)](https://github.com/lukeed/escalade/actions) [![licenses](https://licenses.dev/b/npm/escalade)](https://licenses.dev/npm/escalade) [![codecov](https://badgen.now.sh/codecov/c/github/lukeed/escalade)](https://codecov.io/gh/lukeed/escalade)
 
-> A tiny (183B to 210B) and [fast](#benchmarks) utility to ascend parent directories
+> A tiny (183B to 210B) and [fast](#benchmarks) utility to ascend parent
+> directories
 
-With [escalade](https://en.wikipedia.org/wiki/Escalade), you can scale parent directories until you've found what you're looking for.<br>Given an input file or directory, `escalade` will continue executing your callback function until either:
+With [escalade](https://en.wikipedia.org/wiki/Escalade), you can scale parent
+directories until you've found what you're looking for.<br>Given an input file
+or directory, `escalade` will continue executing your callback function until
+either:
 
-1) the callback returns a truthy value
-2) `escalade` has reached the system root directory (eg, `/`)
+1. the callback returns a truthy value
+2. `escalade` has reached the system root directory (eg, `/`)
 
-> **Important:**<br>Please note that `escalade` only deals with direct ancestry – it will not dive into parents' sibling directories.
+> **Important:**<br>Please note that `escalade` only deals with direct ancestry
+> – it will not dive into parents' sibling directories.
 
 ---
 
-**Notice:** As of v3.1.0, `escalade` now includes [Deno support](http://deno.land/x/escalade)! Please see [Deno Usage](#deno) below.
+**Notice:** As of v3.1.0, `escalade` now includes
+[Deno support](http://deno.land/x/escalade)! Please see [Deno Usage](#deno)
+below.
 
 ---
 
@@ -21,29 +28,31 @@ With [escalade](https://en.wikipedia.org/wiki/Escalade), you can scale parent di
 $ npm install --save escalade
 ```
 
-
 ## Modes
 
 There are two "versions" of `escalade` available:
 
 #### "async"
-> **Node.js:** >= 8.x<br>
-> **Size (gzip):** 210 bytes<br>
-> **Availability:** [CommonJS](https://unpkg.com/escalade/dist/index.js), [ES Module](https://unpkg.com/escalade/dist/index.mjs)
 
-This is the primary/default mode. It makes use of `async`/`await` and [`util.promisify`](https://nodejs.org/api/util.html#util_util_promisify_original).
+> **Node.js:** >= 8.x<br> **Size (gzip):** 210 bytes<br> **Availability:**
+> [CommonJS](https://unpkg.com/escalade/dist/index.js),
+> [ES Module](https://unpkg.com/escalade/dist/index.mjs)
+
+This is the primary/default mode. It makes use of `async`/`await` and
+[`util.promisify`](https://nodejs.org/api/util.html#util_util_promisify_original).
 
 #### "sync"
-> **Node.js:** >= 6.x<br>
-> **Size (gzip):** 183 bytes<br>
-> **Availability:** [CommonJS](https://unpkg.com/escalade/sync/index.js), [ES Module](https://unpkg.com/escalade/sync/index.mjs)
 
-This is the opt-in mode, ideal for scenarios where `async` usage cannot be supported.
+> **Node.js:** >= 6.x<br> **Size (gzip):** 183 bytes<br> **Availability:**
+> [CommonJS](https://unpkg.com/escalade/sync/index.js),
+> [ES Module](https://unpkg.com/escalade/sync/index.mjs)
 
+This is the opt-in mode, ideal for scenarios where `async` usage cannot be
+supported.
 
 ## Usage
 
-***Example Structure***
+_**Example Structure**_
 
 ```
 /Users/lukeed
@@ -58,24 +67,24 @@ This is the opt-in mode, ideal for scenarios where `async` usage cannot be suppo
             └── demo.js
 ```
 
-***Example Usage***
+_**Example Usage**_
 
 ```js
 //~> demo.js
-import { join } from 'path';
-import escalade from 'escalade';
+import { join } from "path";
+import escalade from "escalade";
 
-const input = join(__dirname, 'demo.js');
+const input = join(__dirname, "demo.js");
 // or: const input = __dirname;
 
 const pkg = await escalade(input, (dir, names) => {
-  console.log('~> dir:', dir);
-  console.log('~> names:', names);
-  console.log('---');
+  console.log("~> dir:", dir);
+  console.log("~> names:", names);
+  console.log("---");
 
-  if (names.includes('package.json')) {
+  if (names.includes("package.json")) {
     // will be resolved into absolute
-    return 'package.json';
+    return "package.json";
   }
 });
 
@@ -98,8 +107,8 @@ console.log(pkg);
 // Now search for "missing123.txt"
 // (Assume it doesn't exist anywhere!)
 const missing = await escalade(input, (dir, names) => {
-  console.log('~> dir:', dir);
-  return names.includes('missing123.txt') && 'missing123.txt';
+  console.log("~> dir:", dir);
+  return names.includes("missing123.txt") && "missing123.txt";
 });
 
 //~> dir: /Users/lukeed/oss/escalade/test/fixtures/foobar
@@ -115,44 +124,56 @@ console.log(missing);
 //=> undefined
 ```
 
-> **Note:** To run the above example with "sync" mode, import from `escalade/sync` and remove the `await` keyword.
-
+> **Note:** To run the above example with "sync" mode, import from
+> `escalade/sync` and remove the `await` keyword.
 
 ## API
 
 ### escalade(input, callback)
+
 Returns: `string|void` or `Promise<string|void>`
 
-When your `callback` locates a file, `escalade` will resolve/return with an absolute path.<br>
-If your `callback` was never satisfied, then `escalade` will resolve/return with nothing (undefined).
+When your `callback` locates a file, `escalade` will resolve/return with an
+absolute path.<br> If your `callback` was never satisfied, then `escalade` will
+resolve/return with nothing (undefined).
 
-> **Important:**<br>The `sync` and `async` versions share the same API.<br>The **only** difference is that `sync` is not Promise-based.
+> **Important:**<br>The `sync` and `async` versions share the same API.<br>The
+> **only** difference is that `sync` is not Promise-based.
 
 #### input
+
 Type: `string`
 
 The path from which to start ascending.
 
-This may be a file or a directory path.<br>However, when `input` is a file, `escalade` will begin with its parent directory.
+This may be a file or a directory path.<br>However, when `input` is a file,
+`escalade` will begin with its parent directory.
 
-> **Important:** Unless given an absolute path, `input` will be resolved from `process.cwd()` location.
+> **Important:** Unless given an absolute path, `input` will be resolved from
+> `process.cwd()` location.
 
 #### callback
+
 Type: `Function`
 
-The callback to execute for each ancestry level. It always is given two arguments:
+The callback to execute for each ancestry level. It always is given two
+arguments:
 
-1) `dir` - an absolute path of the current parent directory
-2) `names` - a list (`string[]`) of contents _relative to_ the `dir` parent
+1. `dir` - an absolute path of the current parent directory
+2. `names` - a list (`string[]`) of contents _relative to_ the `dir` parent
 
 > **Note:** The `names` list can contain names of files _and_ directories.
 
-When your callback returns a _falsey_ value, then `escalade` will continue with `dir`'s parent directory, re-invoking your callback with new argument values.
+When your callback returns a _falsey_ value, then `escalade` will continue with
+`dir`'s parent directory, re-invoking your callback with new argument values.
 
-When your callback returns a string, then `escalade` stops iteration immediately.<br>
-If the string is an absolute path, then it's left as is. Otherwise, the string is resolved into an absolute path _from_ the `dir` that housed the satisfying condition.
+When your callback returns a string, then `escalade` stops iteration
+immediately.<br> If the string is an absolute path, then it's left as is.
+Otherwise, the string is resolved into an absolute path _from_ the `dir` that
+housed the satisfying condition.
 
-> **Important:** Your `callback` can be a `Promise/AsyncFunction` when using the "async" version of `escalade`.
+> **Important:** Your `callback` can be a `Promise/AsyncFunction` when using the
+> "async" version of `escalade`.
 
 ## Benchmarks
 
@@ -187,24 +208,27 @@ If the string is an absolute path, then it's left as is. Otherwise, the string i
 
 As of v3.1.0, `escalade` is available on the Deno registry.
 
-Please note that the [API](#api) is identical and that there are still [two modes](#modes) from which to choose:
+Please note that the [API](#api) is identical and that there are still
+[two modes](#modes) from which to choose:
 
 ```ts
 // Choose "async" mode
-import escalade from 'https://deno.land/escalade/async.ts';
+import escalade from "https://deno.land/escalade/async.ts";
 
 // Choose "sync" mode
-import escalade from 'https://deno.land/escalade/sync.ts';
+import escalade from "https://deno.land/escalade/sync.ts";
 ```
 
 > **Important:** The `allow-read` permission is required!
 
-
 ## Related
 
-- [premove](https://github.com/lukeed/premove) - A tiny (247B) utility to remove items recursively
-- [totalist](https://github.com/lukeed/totalist) - A tiny (195B to 224B) utility to recursively list all (total) files in a directory
-- [mk-dirs](https://github.com/lukeed/mk-dirs) - A tiny (420B) utility to make a directory and its parents, recursively
+- [premove](https://github.com/lukeed/premove) - A tiny (247B) utility to remove
+  items recursively
+- [totalist](https://github.com/lukeed/totalist) - A tiny (195B to 224B) utility
+  to recursively list all (total) files in a directory
+- [mk-dirs](https://github.com/lukeed/mk-dirs) - A tiny (420B) utility to make a
+  directory and its parents, recursively
 
 ## License
 

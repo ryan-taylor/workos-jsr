@@ -5,9 +5,9 @@ import {
   deserializeEventDirectory,
   deserializeUpdatedEventDirectoryGroup,
   deserializeUpdatedEventDirectoryUser,
-} from "workos/directory-sync/serializers.ts";
-import { deserializeOrganization } from "workos/organizations/serializers.ts";
-import { deserializeConnection } from "workos/sso/serializers.ts";
+} from "../../directory-sync/serializers.ts";
+import { deserializeOrganization } from "../../organizations/serializers.ts";
+import { deserializeConnection } from "../../sso/serializers.ts";
 import {
   deserializeAuthenticationEvent,
   deserializeEmailVerificationEvent,
@@ -15,13 +15,17 @@ import {
   deserializeMagicAuthEvent,
   deserializePasswordResetEvent,
   deserializeUser,
-} from "workos/user-management/serializers.ts";
-import { deserializeOrganizationDomain } from "workos/organization-domains/serializers/organization-domain.serializer.ts";
-import { deserializeOrganizationMembership } from "workos/user-management/serializers/organization-membership.serializer.ts";
-import { deserializeRoleEvent } from "workos/user-management/serializers/role.serializer.ts";
-import { deserializeSession } from "workos/user-management/serializers/session.serializer.ts";
-import type { Event, EventBase, EventResponse } from "workos/common/interfaces.ts";
-import { deserializeAuthenticationRadarRiskDetectedEvent } from "workos/user-management/serializers/authentication-radar-risk-event-serializer.ts";
+} from "../../user-management/serializers.ts";
+import { deserializeOrganizationDomain } from "../../organization-domains/serializers/organization-domain.serializer.ts";
+import { deserializeOrganizationMembership } from "../../user-management/serializers/organization-membership.serializer.ts";
+import { deserializeRoleEvent } from "../../user-management/serializers/role.serializer.ts";
+import { deserializeSession } from "../../user-management/serializers/session.serializer.ts";
+import type {
+  Event,
+  EventBase,
+  EventResponse,
+} from "../interfaces.ts";
+import { deserializeAuthenticationRadarRiskDetectedEvent } from "../../user-management/serializers/authentication-radar-risk-event-serializer.ts";
 
 export const deserializeEvent = (event: EventResponse): Event => {
   // Create the base event object

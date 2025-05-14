@@ -1,18 +1,18 @@
-'use strict';
+"use strict";
 
-const { visitSkip, detachNodeFromParent } = require('../lib/xast.js');
-const { collectStylesheet, computeStyle } = require('../lib/style.js');
+const { visitSkip, detachNodeFromParent } = require("../lib/xast.js");
+const { collectStylesheet, computeStyle } = require("../lib/style.js");
 const {
   elems,
   attrsGroups,
   elemsGroups,
   attrsGroupsDefaults,
   presentationNonInheritableGroupAttrs,
-} = require('./_collections');
+} = require("./_collections");
 
-exports.name = 'removeUnknownsAndDefaults';
+exports.name = "removeUnknownsAndDefaults";
 exports.description =
-  'removes unknown elements content and attributes, removes attrs with default values';
+  "removes unknown elements content and attributes, removes attrs with default values";
 
 // resolve all groups references
 
@@ -111,23 +111,23 @@ exports.fn = (root, params) => {
     instruction: {
       enter: (node) => {
         if (defaultMarkupDeclarations) {
-          node.value = node.value.replace(/\s*standalone\s*=\s*(["'])no\1/, '');
+          node.value = node.value.replace(/\s*standalone\s*=\s*(["'])no\1/, "");
         }
       },
     },
     element: {
       enter: (node, parentNode) => {
         // skip namespaced elements
-        if (node.name.includes(':')) {
+        if (node.name.includes(":")) {
           return;
         }
         // skip visiting foreignObject subtree
-        if (node.name === 'foreignObject') {
+        if (node.name === "foreignObject") {
           return visitSkip;
         }
 
         // remove unknown element's content
-        if (unknownContent && parentNode.type === 'element') {
+        if (unknownContent && parentNode.type === "element") {
           const allowedChildren = allowedChildrenPerElement.get(
             parentNode.name,
           );
@@ -148,30 +148,29 @@ exports.fn = (root, params) => {
 
         const allowedAttributes = allowedAttributesPerElement.get(node.name);
         const attributesDefaults = attributesDefaultsPerElement.get(node.name);
-        const computedParentStyle =
-          parentNode.type === 'element'
-            ? computeStyle(stylesheet, parentNode)
-            : null;
+        const computedParentStyle = parentNode.type === "element"
+          ? computeStyle(stylesheet, parentNode)
+          : null;
 
         // remove element's unknown attrs and attrs with default values
         for (const [name, value] of Object.entries(node.attributes)) {
-          if (keepDataAttrs && name.startsWith('data-')) {
+          if (keepDataAttrs && name.startsWith("data-")) {
             continue;
           }
-          if (keepAriaAttrs && name.startsWith('aria-')) {
+          if (keepAriaAttrs && name.startsWith("aria-")) {
             continue;
           }
-          if (keepRoleAttr && name === 'role') {
+          if (keepRoleAttr && name === "role") {
             continue;
           }
           // skip xmlns attribute
-          if (name === 'xmlns') {
+          if (name === "xmlns") {
             continue;
           }
           // skip namespaced attributes except xml:* and xlink:*
-          if (name.includes(':')) {
-            const [prefix] = name.split(':');
-            if (prefix !== 'xml' && prefix !== 'xlink') {
+          if (name.includes(":")) {
+            const [prefix] = name.split(":");
+            if (prefix !== "xml" && prefix !== "xlink") {
               continue;
             }
           }
@@ -199,7 +198,7 @@ exports.fn = (root, params) => {
             if (
               presentationNonInheritableGroupAttrs.has(name) === false &&
               style != null &&
-              style.type === 'static' &&
+              style.type === "static" &&
               style.value === value
             ) {
               delete node.attributes[name];

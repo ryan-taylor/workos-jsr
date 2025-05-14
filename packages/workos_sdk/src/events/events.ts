@@ -1,16 +1,16 @@
-import { deserializeEvent } from "workos/events/serializers/event.serializer.ts";
-import { serializeListEventsOptions } from "workos/events/serializers/list-events-options.serializer.ts";
-import type { Event, EventsListOptions } from "workos/events/interfaces.ts";
-import { fetchAndDeserialize } from "workos/common/utils/fetch-and-deserialize.ts";
-import type { List } from "workos/common/interfaces.ts";
-import type { WorkOS } from "workos/workos.ts";
+import { deserializeEvent } from "./serializers/event.serializer.ts";
+import { serializeListEventsOptions } from "./serializers/list-events-options.serializer.ts";
+import type { Event, EventsListOptions } from "./interfaces.ts";
+import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
+import type { List } from "../common/interfaces.ts";
+import type { WorkOS } from "../workos.ts";
 
 /**
  * Service for retrieving WorkOS Events.
- * 
+ *
  * The Events API provides access to audit events and other system-generated events
  * that occur within your organization.
- * 
+ *
  * @example
  * ```ts
  * // Retrieve the latest events
@@ -26,10 +26,10 @@ export class Events {
 
   /**
    * Lists events with optional filtering and pagination.
-   * 
+   *
    * @param options - Configuration options for listing events
    * @returns Promise resolving to an array of Event objects
-   * 
+   *
    * @example
    * ```ts
    * const events = await workos.events.listEvents({
@@ -46,15 +46,15 @@ export class Events {
         path: "/events",
         deserializer: deserializeEvent,
         queryParams: serializeListEventsOptions(options),
-      }
+      },
     );
-    
+
     // Handle the case where result might be a List<Event>
-    if (result && typeof result === 'object' && 'data' in result) {
+    if (result && typeof result === "object" && "data" in result) {
       // It's a List, return data array
       return (result as List<Event>).data;
     }
-    
+
     // Convert single item to array if needed
     return Array.isArray(result) ? result : [result];
   }

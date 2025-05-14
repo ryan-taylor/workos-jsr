@@ -1,5 +1,5 @@
 import { assertEquals, assertThrows } from "@std/assert";
-import { WebCryptoProvider } from "workos/common/crypto/web-crypto-provider.ts";
+import { WebCryptoProvider } from "./web-crypto-provider.ts";
 
 Deno.test("WebCryptoProvider", async (t) => {
   // Create an instance of the provider

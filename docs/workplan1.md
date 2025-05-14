@@ -233,6 +233,12 @@ No test should remain ignored without a documented rationale.
   Introduce a minimal `deno bench` suite; upload benchmark artefacts to CI so
   regressions are visible.
 
+- **Task 43: Resolve Test Failures and Missing Modules in Core/Common Directories**
+  **Location**: `src/`, `src/common/`, and related core modules
+  **Issue**: Test failures and TypeScript errors due to missing modules (e.g., in `src/common/`) and broken import paths in core modules.
+  **Action**: Investigate and resolve missing module errors, fix all broken import paths, restore or implement any missing files in `src/common/`, and ensure all core modules pass tests and type checking (`deno check`, `deno test`).
+  **Status**: Planned.
+
 ---
 
 ### Prioritisation & Workflow (No Timelines)

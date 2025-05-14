@@ -31,7 +31,7 @@ import { isPosixPathSeparator } from "./_util.ts";
     dir: "",
     base: "",
     ext: "",
-    name: ""
+    name: "",
   };
   if (path.length === 0) return ret;
   const isAbsolute = isPosixPathSeparator(path.charCodeAt(0));
@@ -51,7 +51,7 @@ import { isPosixPathSeparator } from "./_util.ts";
   // after any path separator we find
   let preDotState = 0;
   // Get non-dir info
-  for(; i >= start; --i){
+  for (; i >= start; --i) {
     const code = path.charCodeAt(i);
     if (isPosixPathSeparator(code)) {
       // If we reached a path separator that was not part of a set of path
@@ -78,9 +78,11 @@ import { isPosixPathSeparator } from "./_util.ts";
       preDotState = -1;
     }
   }
-  if (startDot === -1 || end === -1 || // We saw a non-dot character immediately before the dot
-  preDotState === 0 || // The (right-most) trimmed path component is exactly '..'
-  preDotState === 1 && startDot === end - 1 && startDot === startPart + 1) {
+  if (
+    startDot === -1 || end === -1 || // We saw a non-dot character immediately before the dot
+    preDotState === 0 || // The (right-most) trimmed path component is exactly '..'
+    preDotState === 1 && startDot === end - 1 && startDot === startPart + 1
+  ) {
     if (end !== -1) {
       if (startPart === 0 && isAbsolute) {
         ret.base = ret.name = path.slice(1, end);
@@ -101,7 +103,10 @@ import { isPosixPathSeparator } from "./_util.ts";
     ret.ext = path.slice(startDot, end);
   }
   if (startPart > 0) {
-    ret.dir = stripTrailingSeparators(path.slice(0, startPart - 1), isPosixPathSeparator);
+    ret.dir = stripTrailingSeparators(
+      path.slice(0, startPart - 1),
+      isPosixPathSeparator,
+    );
   } else if (isAbsolute) ret.dir = "/";
   return ret;
 }

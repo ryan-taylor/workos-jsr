@@ -1,16 +1,21 @@
 /** @jsx h */
 import { h } from "preact";
-import type { Handlers } from '$fresh/server.ts';
-import type { PageProps } from '$fresh/server.ts';
-import { getCurrentUser, initUserManagement, requireAuth, type WorkOSUser } from '../utils/user-management.ts';
-import UserProfileWithTelemetry from '../islands/UserProfileWithTelemetry.tsx';
+import type { Handlers } from "$fresh/server.ts";
+import type { PageProps } from "$fresh/server.ts";
+import {
+  getCurrentUser,
+  initUserManagement,
+  requireAuth,
+  type WorkOSUser,
+} from "../utils/user-management.ts";
+import UserProfileWithTelemetry from "../islands/UserProfileWithTelemetry.tsx";
 
 // Add performance tracking to page load
-import { measureExecutionTime } from '../utils/telemetry.ts';
+import { measureExecutionTime } from "../utils/telemetry.ts";
 
 export const handler: Handlers = {
   async GET(req, ctx) {
-    return await measureExecutionTime('protected_page_load', async () => {
+    return await measureExecutionTime("protected_page_load", async () => {
       // Check if user is authenticated
       const redirectResponse = await requireAuth(req);
       if (redirectResponse) {
@@ -27,7 +32,7 @@ export const handler: Handlers = {
       let userProfile = null;
       if (user) {
         userProfile = await measureExecutionTime(
-          'user_profile_fetch',
+          "user_profile_fetch",
           () => userManagement.getUser(user.id),
           { userId: user.id },
         );
@@ -52,16 +57,16 @@ export default function ProtectedPage({ data }: PageProps<{
   const { user, userProfile } = data;
 
   return (
-    <div class='container'>
+    <div class="container">
       <h1>Protected Page</h1>
       <p>You are logged in and can view this protected content.</p>
 
       {/* Island component for user profile with telemetry and refresh capability */}
       <UserProfileWithTelemetry user={user} userProfile={userProfile} />
 
-      <div class='actions'>
-        <a href='/account' class='button'>Manage Account</a>
-        <a href='/logout' class='button'>Logout</a>
+      <div class="actions">
+        <a href="/account" class="button">Manage Account</a>
+        <a href="/logout" class="button">Logout</a>
       </div>
     </div>
   );

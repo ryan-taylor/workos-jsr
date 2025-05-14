@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
-const { detachNodeFromParent } = require('../lib/xast.js');
+const { detachNodeFromParent } = require("../lib/xast.js");
 
-exports.name = 'removeElementsByAttr';
+exports.name = "removeElementsByAttr";
 exports.description =
-  'removes arbitrary elements by ID or className (disabled by default)';
+  "removes arbitrary elements by ID or className (disabled by default)";
 
 /**
  * Remove arbitrary SVG elements by ID or className.
@@ -40,14 +40,16 @@ exports.description =
  * @type {import('./plugins-types').Plugin<'removeElementsByAttr'>}
  */
 exports.fn = (root, params) => {
-  const ids =
-    params.id == null ? [] : Array.isArray(params.id) ? params.id : [params.id];
-  const classes =
-    params.class == null
-      ? []
-      : Array.isArray(params.class)
-        ? params.class
-        : [params.class];
+  const ids = params.id == null
+    ? []
+    : Array.isArray(params.id)
+    ? params.id
+    : [params.id];
+  const classes = params.class == null
+    ? []
+    : Array.isArray(params.class)
+    ? params.class
+    : [params.class];
   return {
     element: {
       enter: (node, parentNode) => {
@@ -59,7 +61,7 @@ exports.fn = (root, params) => {
         }
         // remove element if it's `class` contains any of the configured `class` params
         if (node.attributes.class && classes.length !== 0) {
-          const classList = node.attributes.class.split(' ');
+          const classList = node.attributes.class.split(" ");
           for (const item of classes) {
             if (classList.includes(item)) {
               detachNodeFromParent(node, parentNode);

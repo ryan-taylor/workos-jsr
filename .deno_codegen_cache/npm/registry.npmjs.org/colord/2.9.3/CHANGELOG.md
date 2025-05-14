@@ -1,6 +1,7 @@
 ### 2.9.3
 
-- Fix types export for TypeScript 4.7 ❤️ [@pkishorez](https://github.com/pkishorez)
+- Fix types export for TypeScript 4.7 ❤️
+  [@pkishorez](https://github.com/pkishorez)
 
 ### 2.9.2
 
@@ -17,23 +18,29 @@
 
 ### 2.8.0
 
-- New `delta` method to calculate the perceived color difference between two colors ❤️ [@EricRovell](https://github.com/EricRovell)
+- New `delta` method to calculate the perceived color difference between two
+  colors ❤️ [@EricRovell](https://github.com/EricRovell)
 
 ### 2.7.0
 
-- Improve `mix` plugin by adding new `tints`, `tones` and `shades` methods ❤️ [@EricRovell](https://github.com/EricRovell)
+- Improve `mix` plugin by adding new `tints`, `tones` and `shades` methods ❤️
+  [@EricRovell](https://github.com/EricRovell)
 
 ### 2.6.0
 
-- Support "double split complementary" color harmony generation ❤️ [@EricRovell](https://github.com/EricRovell) & [@lbragile](https://github.com/lbragile)
+- Support "double split complementary" color harmony generation ❤️
+  [@EricRovell](https://github.com/EricRovell) &
+  [@lbragile](https://github.com/lbragile)
 
 ### 2.5.0
 
-- New `closest` option of `toName` method allows you to find the closest color if there is no exact match
+- New `closest` option of `toName` method allows you to find the closest color
+  if there is no exact match
 
 ### 2.4.0
 
-- New plugin: Color harmonies generator ❤️ [@EricRovell](https://github.com/EricRovell)
+- New plugin: Color harmonies generator ❤️
+  [@EricRovell](https://github.com/EricRovell)
 
 ### 2.3.0
 
@@ -71,7 +78,8 @@
 
 ### 1.6.0
 
-- Improvement: You can now use every angle unit supported by CSS (`deg`, `rad`, `grad`, `turn`)
+- Improvement: You can now use every angle unit supported by CSS (`deg`, `rad`,
+  `grad`, `turn`)
 
 ### 1.5.0
 
@@ -84,7 +92,8 @@
 ### 1.4.0
 
 - New plugin: Color mixing
-- Adjust XYZ, LAB and LCH conversions to the D50 white point ([according to the latest CSS specs](https://drafts.csswg.org/css-color-5/#color-spaces)).
+- Adjust XYZ, LAB and LCH conversions to the D50 white point
+  ([according to the latest CSS specs](https://drafts.csswg.org/css-color-5/#color-spaces)).
 
 ### 1.3.1
 
@@ -96,8 +105,10 @@
 
 ### 1.2.1
 
-- Fix: Do not treat 7-digit hex as a valid color ❤️ [@subzey](https://github.com/subzey)
-- Parser update: Turn NaN input values into valid numbers ❤️ [@subzey](https://github.com/subzey)
+- Fix: Do not treat 7-digit hex as a valid color ❤️
+  [@subzey](https://github.com/subzey)
+- Parser update: Turn NaN input values into valid numbers ❤️
+  [@subzey](https://github.com/subzey)
 
 ### 1.2.0
 
@@ -117,7 +128,8 @@
 
 ### 0.10.2
 
-- Sort named colors dictionary for better compression ❤️ [@subzey](https://github.com/subzey)
+- Sort named colors dictionary for better compression ❤️
+  [@subzey](https://github.com/subzey)
 
 ### 0.10.1
 

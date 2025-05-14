@@ -1,13 +1,13 @@
-import { deserializeFactor } from "workos/mfa/serializers/factor.serializer.ts";
-import { deserializeChallenge } from "workos/mfa/serializers/challenge.serializer.ts";
+import { deserializeFactor } from "./serializers/factor.serializer.ts";
+import { deserializeChallenge } from "./serializers/challenge.serializer.ts";
 import type {
   Challenge,
   ChallengeFactorOptions,
   EnrollFactorOptions,
   Factor,
   VerifyChallengeOptions,
-} from "workos/mfa/interfaces/index.ts";
-import type { WorkOS } from "workos/workos.ts";
+} from "./interfaces/index.ts";
+import type { WorkOS } from "../workos.ts";
 
 class MFAImpl {
   constructor(private workos: WorkOS) {}

@@ -1,54 +1,56 @@
-'use strict';
+"use strict";
 
-const cssTree = require('css-tree');
+const cssTree = require("css-tree");
 
 function compressBackground(node) {
-    function flush() {
-        if (!buffer.length) {
-            buffer.unshift(
-                {
-                    type: 'Number',
-                    loc: null,
-                    value: '0'
-                },
-                {
-                    type: 'Number',
-                    loc: null,
-                    value: '0'
-                }
-            );
-        }
-
-        newValue.push.apply(newValue, buffer);
-
-        buffer = [];
+  function flush() {
+    if (!buffer.length) {
+      buffer.unshift(
+        {
+          type: "Number",
+          loc: null,
+          value: "0",
+        },
+        {
+          type: "Number",
+          loc: null,
+          value: "0",
+        },
+      );
     }
 
-    let newValue = [];
-    let buffer = [];
+    newValue.push.apply(newValue, buffer);
 
-    node.children.forEach((node) => {
-        if (node.type === 'Operator' && node.value === ',') {
-            flush();
-            newValue.push(node);
-            return;
-        }
+    buffer = [];
+  }
 
-        // remove defaults
-        if (node.type === 'Identifier') {
-            if (node.name === 'transparent' ||
-                node.name === 'none' ||
-                node.name === 'repeat' ||
-                node.name === 'scroll') {
-                return;
-            }
-        }
+  let newValue = [];
+  let buffer = [];
 
-        buffer.push(node);
-    });
+  node.children.forEach((node) => {
+    if (node.type === "Operator" && node.value === ",") {
+      flush();
+      newValue.push(node);
+      return;
+    }
 
-    flush();
-    node.children = new cssTree.List().fromArray(newValue);
+    // remove defaults
+    if (node.type === "Identifier") {
+      if (
+        node.name === "transparent" ||
+        node.name === "none" ||
+        node.name === "repeat" ||
+        node.name === "scroll"
+      ) {
+        return;
+      }
+    }
+
+    buffer.push(node);
+  });
+
+  flush();
+  node.children = new cssTree.List().fromArray(newValue);
 }
 
 module.exports = compressBackground;

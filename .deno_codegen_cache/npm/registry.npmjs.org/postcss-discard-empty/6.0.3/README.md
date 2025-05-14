@@ -27,7 +27,9 @@ h3 {color:red}
 ### Output
 
 ```css
-h3 {color:red}
+h3 {
+  color: red;
+}
 ```
 
 ## Usage
@@ -35,15 +37,13 @@ h3 {color:red}
 See the [PostCSS documentation](https://github.com/postcss/postcss#usage) for
 examples for your environment.
 
-
 ## Contributors
 
-See [CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
-
+See
+[CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
 
 ## License
 
 MIT © [Ben Briggs](http://beneb.info)
-
 
 [postcss]: https://github.com/postcss/postcss

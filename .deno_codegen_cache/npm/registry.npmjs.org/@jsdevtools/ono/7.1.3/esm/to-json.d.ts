@@ -8,4 +8,7 @@ export declare function toJSON<E extends ErrorLike>(this: E): ErrorPOJO & E;
  * Returns own, inherited, enumerable, non-enumerable, string, and symbol keys of `obj`.
  * Does NOT return members of the base Object prototype, or the specified omitted keys.
  */
-export declare function getDeepKeys(obj: object, omit?: Array<string | symbol>): Set<string | symbol>;
+export declare function getDeepKeys(
+  obj: object,
+  omit?: Array<string | symbol>,
+): Set<string | symbol>;

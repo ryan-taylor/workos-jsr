@@ -1,12 +1,12 @@
-'use strict';
-const processors = require('./lib/decl');
+"use strict";
+const processors = require("./lib/decl");
 /**
  * @type {import('postcss').PluginCreator<void>}
  * @return {import('postcss').Plugin}
  */
 function pluginCreator() {
   return {
-    postcssPlugin: 'postcss-merge-longhand',
+    postcssPlugin: "postcss-merge-longhand",
 
     OnceExit(css) {
       css.walkRules((rule) => {

@@ -1,46 +1,49 @@
-'use strict';
+"use strict";
 
-const cssTree = require('css-tree');
+const cssTree = require("css-tree");
 
 function processRule(node, item, list) {
-    const selectors = node.prelude.children;
+  const selectors = node.prelude.children;
 
-    // generate new rule sets:
-    // .a, .b { color: red; }
-    // ->
-    // .a { color: red; }
-    // .b { color: red; }
+  // generate new rule sets:
+  // .a, .b { color: red; }
+  // ->
+  // .a { color: red; }
+  // .b { color: red; }
 
-    // while there are more than 1 simple selector split for rulesets
-    while (selectors.head !== selectors.tail) {
-        const newSelectors = new cssTree.List();
+  // while there are more than 1 simple selector split for rulesets
+  while (selectors.head !== selectors.tail) {
+    const newSelectors = new cssTree.List();
 
-        newSelectors.insert(selectors.remove(selectors.head));
+    newSelectors.insert(selectors.remove(selectors.head));
 
-        list.insert(list.createItem({
-            type: 'Rule',
-            loc: node.loc,
-            prelude: {
-                type: 'SelectorList',
-                loc: node.prelude.loc,
-                children: newSelectors
-            },
-            block: {
-                type: 'Block',
-                loc: node.block.loc,
-                children: node.block.children.copy()
-            },
-            pseudoSignature: node.pseudoSignature
-        }), item);
-    }
+    list.insert(
+      list.createItem({
+        type: "Rule",
+        loc: node.loc,
+        prelude: {
+          type: "SelectorList",
+          loc: node.prelude.loc,
+          children: newSelectors,
+        },
+        block: {
+          type: "Block",
+          loc: node.block.loc,
+          children: node.block.children.copy(),
+        },
+        pseudoSignature: node.pseudoSignature,
+      }),
+      item,
+    );
+  }
 }
 
 function disjoinRule(ast) {
-    cssTree.walk(ast, {
-        visit: 'Rule',
-        reverse: true,
-        enter: processRule
-    });
+  cssTree.walk(ast, {
+    visit: "Rule",
+    reverse: true,
+    enter: processRule,
+  });
 }
 
 module.exports = disjoinRule;

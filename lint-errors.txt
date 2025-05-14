@@ -1,0 +1,2 @@
+[0m[32mTask[0m [0m[36mlint[0m deno lint --ignore=_reference/**
+glob: no matches found '/Users/t/Developer/workos-node/--ignore=_reference/**'

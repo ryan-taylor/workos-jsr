@@ -16,7 +16,7 @@ npm install postcss-normalize-positions --save
 
 ```css
 div {
-    background-position: bottom left;
+  background-position: bottom left;
 }
 ```
 
@@ -24,9 +24,9 @@ div {
 
 ```css
 div {
-    background-position:0 100%;
+  background-position: 0 100%;
 }
-``` 
+```
 
 ## Usage
 
@@ -35,7 +35,8 @@ examples for your environment.
 
 ## Contributors
 
-See [CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
+See
+[CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
 
 ## License
 

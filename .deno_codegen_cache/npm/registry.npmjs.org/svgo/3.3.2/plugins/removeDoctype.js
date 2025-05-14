@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const { detachNodeFromParent } = require('../lib/xast.js');
+const { detachNodeFromParent } = require("../lib/xast.js");
 
-exports.name = 'removeDoctype';
-exports.description = 'removes doctype declaration';
+exports.name = "removeDoctype";
+exports.description = "removes doctype declaration";
 
 /**
  * Remove DOCTYPE declaration.

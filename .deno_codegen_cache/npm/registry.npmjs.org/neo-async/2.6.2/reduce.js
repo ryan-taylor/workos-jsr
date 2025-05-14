@@ -1,3 +1,3 @@
-'use strict';
+"use strict";
 
-module.exports = require('./async').reduce;
+module.exports = require("./async").reduce;

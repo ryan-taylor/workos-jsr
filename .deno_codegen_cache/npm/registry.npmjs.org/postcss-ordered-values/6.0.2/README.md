@@ -2,7 +2,6 @@
 
 > Ensure values are ordered consistently in your CSS.
 
-
 ## Install
 
 With [npm](https://npmjs.org/package/postcss-ordered-values) do:
@@ -10,7 +9,6 @@ With [npm](https://npmjs.org/package/postcss-ordered-values) do:
 ```
 npm install postcss-ordered-values --save
 ```
-
 
 ## Example
 
@@ -23,10 +21,10 @@ modules to understand which declarations are duplicates.
 
 ```css
 h1 {
-    border: solid 1px red;
-    border: red solid .5em;
-    border: rgba(0, 30, 105, 0.8) solid 1px;
-    border: 1px solid red;
+  border: solid 1px red;
+  border: red solid 0.5em;
+  border: rgba(0, 30, 105, 0.8) solid 1px;
+  border: 1px solid red;
 }
 ```
 
@@ -34,36 +32,33 @@ h1 {
 
 ```css
 h1 {
-    border: 1px solid red;
-    border: .5em solid red;
-    border: 1px solid rgba(0, 30, 105, 0.8);
-    border: 1px solid red;
+  border: 1px solid red;
+  border: 0.5em solid red;
+  border: 1px solid rgba(0, 30, 105, 0.8);
+  border: 1px solid red;
 }
 ```
-
 
 ## Support List
 
 For more examples, see the [tests](src/__tests__/index.js).
 
-* `animation`, `-webkit-animation`
-* `border(border-left|right|top|bottom)`
-* `box-shadow`
-* `outline`
-* `flex-flow`
-* `transition`, `-webkit-transition`
-
+- `animation`, `-webkit-animation`
+- `border(border-left|right|top|bottom)`
+- `box-shadow`
+- `outline`
+- `flex-flow`
+- `transition`, `-webkit-transition`
 
 ## Usage
 
 See the [PostCSS documentation](https://github.com/postcss/postcss#usage) for
 examples for your environment.
 
-
 ## Contributors
 
-See [CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
-
+See
+[CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
 
 ## License
 

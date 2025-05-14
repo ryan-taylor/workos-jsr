@@ -1,7 +1,11 @@
-import type { List, ListResponse, PaginationOptions } from "workos/common/interfaces.ts";
-import type { WorkOS } from "workos/workos.ts";
-import { decode, decrypt } from "workos/vault/decrypt.ts";
-import { encrypt } from "workos/vault/encrypt.ts";
+import type {
+  List,
+  ListResponse,
+  PaginationOptions,
+} from "../common/interfaces.ts";
+import type { WorkOS } from "../workos.ts";
+import { decode, decrypt } from "./decrypt.ts";
+import { encrypt } from "./encrypt.ts";
 import type {
   CreateDataKeyOptions,
   CreateDataKeyResponse,
@@ -22,11 +26,11 @@ import type {
   ReadObjectResponse,
   UpdateObjectOptions,
   VaultObject,
-} from "workos/vault/interfaces.ts";
+} from "./interfaces.ts";
 import {
   deserializeCreateDataKeyResponse,
   deserializeDecryptDataKeyResponse,
-} from "workos/vault/serializers/vault-key.serializer.ts";
+} from "./serializers/vault-key.serializer.ts";
 import {
   deserializeListObjects,
   deserializeObject,
@@ -34,14 +38,14 @@ import {
   desrializeListObjectVersions,
   serializeCreateObjectEntity,
   serializeUpdateObjectEntity,
-} from "workos/vault/serializers/vault-object.serializer.ts";
+} from "./serializers/vault-object.serializer.ts";
 
 /**
  * Service for Vault key-value storage and cryptographic operations in WorkOS.
- * 
+ *
  * The Vault API provides secure storage for sensitive data, data key management,
  * encryption, and decryption services.
- * 
+ *
  * @example
  * ```ts
  * // Create a new object
@@ -57,7 +61,7 @@ export class Vault {
 
   /**
    * Creates or updates a key-value object in the Vault.
-   * 
+   *
    * @param options - Options containing object ID and value to store
    * @returns Promise resolving to metadata about the stored object
    */
@@ -71,7 +75,7 @@ export class Vault {
 
   /**
    * Lists object keys in the Vault with optional pagination.
-   * 
+   *
    * @param options - Pagination options (after cursor and limit)
    * @returns Promise resolving to a list of object digests
    */
@@ -94,7 +98,7 @@ export class Vault {
 
   /**
    * Retrieves version history for a specific object.
-   * 
+   *
    * @param options - Options containing object ID to list versions for
    * @returns Promise resolving to an array of object versions
    */
@@ -109,7 +113,7 @@ export class Vault {
 
   /**
    * Reads the latest value of an object from the Vault.
-   * 
+   *
    * @param options - Options containing object ID to read
    * @returns Promise resolving to the decrypted VaultObject
    */
@@ -122,7 +126,7 @@ export class Vault {
 
   /**
    * Retrieves metadata for an object without its value.
-   * 
+   *
    * @param options - Options containing object ID to describe
    * @returns Promise resolving to the VaultObject metadata
    */
@@ -135,7 +139,7 @@ export class Vault {
 
   /**
    * Updates the value of an existing object in the Vault.
-   * 
+   *
    * @param options - Options containing object ID and new value
    * @returns Promise resolving to the updated VaultObject
    */
@@ -149,7 +153,7 @@ export class Vault {
 
   /**
    * Deletes an object from the Vault.
-   * 
+   *
    * @param options - Options containing object ID to delete
    * @returns Promise that resolves when deletion is complete
    */
@@ -159,7 +163,7 @@ export class Vault {
 
   /**
    * Creates a new data key for client-side encryption.
-   * 
+   *
    * @param options - Options for creating a data key, including context
    * @returns Promise resolving to a DataKeyPair (plaintext and encrypted keys)
    */
@@ -173,7 +177,7 @@ export class Vault {
 
   /**
    * Decrypts an encrypted data key to retrieve the plaintext key.
-   * 
+   *
    * @param options - Options containing encrypted keys to decrypt
    * @returns Promise resolving to a DataKey containing the plaintext key
    */
@@ -187,7 +191,7 @@ export class Vault {
 
   /**
    * Convenience method to encrypt arbitrary data using a newly generated data key.
-   * 
+   *
    * @param data - The plaintext data to encrypt
    * @param context - Key context metadata for the data key
    * @param associatedData - Optional associated data for AEAD encryption
@@ -206,7 +210,7 @@ export class Vault {
 
   /**
    * Convenience method to decrypt data previously encrypted by `encrypt`.
-   * 
+   *
    * @param encryptedData - The encrypted payload to decrypt
    * @param associatedData - Optional associated data used during encryption
    * @returns Promise resolving to the decrypted plaintext string
@@ -216,7 +220,9 @@ export class Vault {
     associatedData?: string,
   ): Promise<string> {
     const decoded = decode(encryptedData);
-    const keysArray = Array.isArray(decoded.keys) ? decoded.keys : [decoded.keys];
+    const keysArray = Array.isArray(decoded.keys)
+      ? decoded.keys
+      : [decoded.keys];
     const dataKey = await this.decryptDataKey({ keys: keysArray });
     return decrypt(decoded, dataKey.key, associatedData || "");
   }
@@ -249,4 +255,4 @@ export class Vault {
    * @deprecated Use `deleteObject` instead.
    */
   deleteSecret = this.deleteObject;
-} 
+}

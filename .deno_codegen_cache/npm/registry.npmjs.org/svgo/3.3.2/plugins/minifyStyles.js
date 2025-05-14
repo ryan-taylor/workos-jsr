@@ -1,16 +1,16 @@
-'use strict';
+"use strict";
 
 /**
  * @typedef {import('../lib/types').XastElement} XastElement
  * @typedef {import('../lib/types').XastParent} XastParent
  */
 
-const csso = require('csso');
-const { detachNodeFromParent } = require('../lib/xast');
-const { hasScripts } = require('../lib/svgo/tools');
+const csso = require("csso");
+const { detachNodeFromParent } = require("../lib/xast");
+const { hasScripts } = require("../lib/svgo/tools");
 
-exports.name = 'minifyStyles';
-exports.description = 'minifies styles and removes unused styles';
+exports.name = "minifyStyles";
+exports.description = "minifies styles and removes unused styles";
 
 /**
  * Minifies styles (<style> element + style attribute) using CSSO.
@@ -44,7 +44,7 @@ exports.fn = (_root, { usage, ...params }) => {
    */
   let forceUsageDeoptimized = false;
 
-  if (typeof usage === 'boolean') {
+  if (typeof usage === "boolean") {
     enableTagsUsage = usage;
     enableIdsUsage = usage;
     enableClassesUsage = usage;
@@ -76,7 +76,7 @@ exports.fn = (_root, { usage, ...params }) => {
           }
         }
         // collect style elements or elements with style attribute
-        if (node.name === 'style' && node.children.length !== 0) {
+        if (node.name === "style" && node.children.length !== 0) {
           styleElements.set(node, parentNode);
         } else if (node.attributes.style != null) {
           elementsWithStyleAttributes.push(node);
@@ -102,8 +102,8 @@ exports.fn = (_root, { usage, ...params }) => {
         // minify style elements
         for (const [styleNode, styleNodeParent] of styleElements.entries()) {
           if (
-            styleNode.children[0].type === 'text' ||
-            styleNode.children[0].type === 'cdata'
+            styleNode.children[0].type === "text" ||
+            styleNode.children[0].type === "cdata"
           ) {
             const cssText = styleNode.children[0].value;
             const minified = csso.minify(cssText, {
@@ -118,11 +118,11 @@ exports.fn = (_root, { usage, ...params }) => {
 
             // preserve cdata if necessary
             // TODO split cdata -> text optimisation into separate plugin
-            if (cssText.indexOf('>') >= 0 || cssText.indexOf('<') >= 0) {
-              styleNode.children[0].type = 'cdata';
+            if (cssText.indexOf(">") >= 0 || cssText.indexOf("<") >= 0) {
+              styleNode.children[0].type = "cdata";
               styleNode.children[0].value = minified;
             } else {
-              styleNode.children[0].type = 'text';
+              styleNode.children[0].type = "text";
               styleNode.children[0].value = minified;
             }
           }

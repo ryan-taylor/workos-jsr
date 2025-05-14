@@ -1,5 +1,5 @@
-'use strict';
-const selectorParser = require('postcss-selector-parser');
+"use strict";
+const selectorParser = require("postcss-selector-parser");
 
 /**
  * @param {string} selectors
@@ -26,7 +26,7 @@ function unique(rule) {
  */
 function pluginCreator() {
   return {
-    postcssPlugin: 'postcss-unique-selectors',
+    postcssPlugin: "postcss-unique-selectors",
     OnceExit(css) {
       css.walkRules((nodes) => {
         /** @type {string[]} */
@@ -34,7 +34,7 @@ function pluginCreator() {
         /** @type {selectorParser.SyncProcessor<void>} */
         const removeAndSaveComments = (selNode) => {
           selNode.walk((sel) => {
-            if (sel.type === 'comment') {
+            if (sel.type === "comment") {
               comments.push(sel.value);
               sel.remove();
               return;

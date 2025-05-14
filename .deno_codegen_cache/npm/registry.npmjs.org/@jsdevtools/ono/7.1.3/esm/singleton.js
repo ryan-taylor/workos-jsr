@@ -14,21 +14,27 @@ const onoMap = ono;
  * If an inner error is provided, then the new error will match its type, if possible.
  */
 function ono(...args) {
-    let originalError = args[0];
-    // Is the first argument an Error-like object?
-    if (typeof originalError === "object" && typeof originalError.name === "string") {
-        // Try to find an Ono singleton method that matches this error type
-        for (let typedOno of Object.values(onoMap)) {
-            if (typeof typedOno === "function" && typedOno.name === "ono") {
-                let species = typedOno[Symbol.species];
-                if (species && species !== Error && (originalError instanceof species || originalError.name === species.name)) {
-                    // Create an error of the same type
-                    return typedOno.apply(undefined, args);
-                }
-            }
+  let originalError = args[0];
+  // Is the first argument an Error-like object?
+  if (
+    typeof originalError === "object" && typeof originalError.name === "string"
+  ) {
+    // Try to find an Ono singleton method that matches this error type
+    for (let typedOno of Object.values(onoMap)) {
+      if (typeof typedOno === "function" && typedOno.name === "ono") {
+        let species = typedOno[Symbol.species];
+        if (
+          species && species !== Error &&
+          (originalError instanceof species ||
+            originalError.name === species.name)
+        ) {
+          // Create an error of the same type
+          return typedOno.apply(undefined, args);
         }
+      }
     }
-    // By default, create a base Error object
-    return ono.error.apply(undefined, args);
+  }
+  // By default, create a base Error object
+  return ono.error.apply(undefined, args);
 }
 //# sourceMappingURL=singleton.js.map

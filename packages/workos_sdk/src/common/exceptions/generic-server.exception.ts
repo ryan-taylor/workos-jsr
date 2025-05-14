@@ -1,4 +1,4 @@
-import type { RequestException } from "workos/common/interfaces/request-exception.interface.ts";
+import type { RequestException } from "../interfaces/request-exception.interface.ts";
 
 export class GenericServerException extends Error implements RequestException {
   override readonly name: string = "GenericServerException";

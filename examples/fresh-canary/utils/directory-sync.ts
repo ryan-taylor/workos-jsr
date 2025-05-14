@@ -1,27 +1,28 @@
 // Utility functions for integrating Directory Sync with Fresh 2.x
 
-import { WorkOS } from '../../../mod.ts';
-import type { FreshSessionProvider } from '../../../packages/workos_sdk/src/common/iron-session/fresh-session-provider.ts';
-import { SubtleCryptoProvider } from '../../../packages/workos_sdk/src/common/crypto/subtle-crypto-provider.ts';
-import { Webhooks } from '../../../packages/workos_sdk/src/webhooks/webhooks.ts';
+import { WorkOS } from "../../../mod.ts";
+import type { FreshSessionProvider } from "../../../packages/workos_sdk/src/common/iron-session/fresh-session-provider.ts";
+import { SubtleCryptoProvider } from "../../../packages/workos_sdk/src/common/crypto/subtle-crypto-provider.ts";
+import { Webhooks } from "../../../packages/workos_sdk/src/webhooks/webhooks.ts";
 
 // Session configuration - using same as user-management for consistency
 export const SESSION_OPTIONS = {
-  cookieName: 'workos_session',
-  password: Deno.env.get('SESSION_SECRET') ?? 'use-a-strong-password-in-production',
+  cookieName: "workos_session",
+  password: Deno.env.get("SESSION_SECRET") ??
+    "use-a-strong-password-in-production",
   ttl: 60 * 60 * 24 * 7, // 7 days in seconds
   secure: true,
   httpOnly: true,
-  sameSite: 'Lax' as const,
+  sameSite: "Lax" as const,
 };
 
 // Import types from the SDK
 import type {
   Directory,
   DirectoryGroup,
-  DirectoryUser
-} from '../../../packages/workos_sdk/src/directory-sync/interfaces/index.ts';
-import type { List } from '../../../packages/workos_sdk/src/common/interfaces.ts';
+  DirectoryUser,
+} from "../../../packages/workos_sdk/src/directory-sync/interfaces/index.ts";
+import type { List } from "../../../packages/workos_sdk/src/common/interfaces.ts";
 
 // Extended interface for users with groups
 export interface DirectoryUserWithGroups extends DirectoryUser {
@@ -33,14 +34,14 @@ export interface DirectoryUserWithGroups extends DirectoryUser {
  * @returns WorkOS instance configured for directory sync
  */
 export function initDirectorySync() {
-  const apiKey = Deno.env.get('WORKOS_API_KEY');
+  const apiKey = Deno.env.get("WORKOS_API_KEY");
   if (apiKey === null) {
     throw new Error("Environment variable WORKOS_API_KEY is required");
   }
-  
+
   const workos = new WorkOS(
     apiKey,
-    { clientId: Deno.env.get('WORKOS_CLIENT_ID') ?? undefined },
+    { clientId: Deno.env.get("WORKOS_CLIENT_ID") ?? undefined },
   );
 
   return { workos };
@@ -68,7 +69,10 @@ export async function listDirectories(workos: WorkOS, options?: {
  * @param directoryId Directory ID
  * @returns Directory details
  */
-export async function getDirectory(workos: WorkOS, directoryId: string): Promise<Directory> {
+export async function getDirectory(
+  workos: WorkOS,
+  directoryId: string,
+): Promise<Directory> {
   const result = await workos.directorySync.getDirectory(directoryId);
   return result;
 }
@@ -96,7 +100,10 @@ export async function listDirectoryGroups(workos: WorkOS, options: {
  * @returns Group details
  * Note: getGroup is not available in the DirectorySync API for Deno 2.x
  */
-export async function getDirectoryGroup(workos: WorkOS, groupId: string): Promise<DirectoryGroup | null> {
+export async function getDirectoryGroup(
+  workos: WorkOS,
+  groupId: string,
+): Promise<DirectoryGroup | null> {
   // This functionality is not directly available in Deno 2.x version
   console.warn("getDirectoryGroup not available in current SDK version");
   return null;
@@ -125,7 +132,10 @@ export async function listDirectoryUsers(workos: WorkOS, options: {
  * @returns User details
  * Note: getUser is not available in the DirectorySync API for Deno 2.x
  */
-export async function getDirectoryUser(workos: WorkOS, userId: string): Promise<DirectoryUser | null> {
+export async function getDirectoryUser(
+  workos: WorkOS,
+  userId: string,
+): Promise<DirectoryUser | null> {
   // This functionality is not directly available in Deno 2.x version
   console.warn("getDirectoryUser not available in current SDK version");
   return null;
@@ -140,12 +150,16 @@ export function initWebhooks() {
 
   return {
     webhooks: new WorkOS().webhooks,
-    constructEvent: async (payload: unknown, sigHeader: string, secret: string) => {
+    constructEvent: async (
+      payload: unknown,
+      sigHeader: string,
+      secret: string,
+    ) => {
       // Use the static Webhooks.constructEvent method
       return Webhooks.constructEvent(
-        typeof payload === 'string' ? payload : JSON.stringify(payload),
+        typeof payload === "string" ? payload : JSON.stringify(payload),
         sigHeader,
-        secret
+        secret,
       );
     },
   };

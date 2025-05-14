@@ -12,7 +12,7 @@ npm install postcss-merge-rules --save
 
 ## Examples
 
-This module will attempt to merge *adjacent* CSS rules:
+This module will attempt to merge _adjacent_ CSS rules:
 
 ### By declarations
 
@@ -20,22 +20,22 @@ This module will attempt to merge *adjacent* CSS rules:
 
 ```css
 a {
-    color: blue;
-    font-weight: bold
+  color: blue;
+  font-weight: bold;
 }
 
 p {
-    color: blue;
-    font-weight: bold
+  color: blue;
+  font-weight: bold;
 }
 ```
 
 #### Output
 
 ```css
-a,p {
-    color: blue;
-    font-weight: bold
+a, p {
+  color: blue;
+  font-weight: bold;
 }
 ```
 
@@ -45,11 +45,11 @@ a,p {
 
 ```css
 a {
-    color: blue
+  color: blue;
 }
 
 a {
-    font-weight: bold
+  font-weight: bold;
 }
 ```
 
@@ -57,8 +57,8 @@ a {
 
 ```css
 a {
-    color: blue;
-    font-weight: bold
+  color: blue;
+  font-weight: bold;
 }
 ```
 
@@ -68,24 +68,24 @@ a {
 
 ```css
 a {
-    font-weight: bold
+  font-weight: bold;
 }
 
 p {
-    color: blue;
-    font-weight: bold
+  color: blue;
+  font-weight: bold;
 }
 ```
 
 #### Output
 
 ```css
-a,p {
-    font-weight: bold
+a, p {
+  font-weight: bold;
 }
 
 p {
-    color: blue
+  color: blue;
 }
 ```
 
@@ -96,7 +96,8 @@ examples for your environment.
 
 ## Contributors
 
-See [CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
+See
+[CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
 
 ## License
 

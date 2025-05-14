@@ -1,6 +1,7 @@
 # WorkOS Fresh Example
 
-This example demonstrates how to integrate WorkOS authentication with a Fresh application.
+This example demonstrates how to integrate WorkOS authentication with a Fresh
+application.
 
 ## Setup
 

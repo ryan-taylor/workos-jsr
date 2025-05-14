@@ -21,8 +21,8 @@ import { normalize } from "./normalize.ts";
  * @param paths The paths to join.
  * @returns The joined path.
  */ export function join(...paths) {
-  paths.forEach((path)=>assertPath(path));
-  paths = paths.filter((path)=>path.length > 0);
+  paths.forEach((path) => assertPath(path));
+  paths = paths.filter((path) => path.length > 0);
   if (paths.length === 0) return ".";
   // Make sure that the joined path doesn't start with two slashes, because
   // normalize() will mistake it for an UNC path then.
@@ -59,7 +59,7 @@ import { normalize } from "./normalize.ts";
   let joined = paths.join("\\");
   if (needsReplace) {
     // Find any more consecutive slashes we need to replace
-    for(; slashCount < joined.length; ++slashCount){
+    for (; slashCount < joined.length; ++slashCount) {
       if (!isPathSeparator(joined.charCodeAt(slashCount))) break;
     }
     // Replace the slashes if needed

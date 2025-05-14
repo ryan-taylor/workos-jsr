@@ -28,14 +28,14 @@ import { assertArgs } from "../_common/relative.ts";
   // Trim any leading backslashes
   let fromStart = 1;
   const fromEnd = from.length;
-  for(; fromStart < fromEnd; ++fromStart){
+  for (; fromStart < fromEnd; ++fromStart) {
     if (!isPosixPathSeparator(from.charCodeAt(fromStart))) break;
   }
   const fromLen = fromEnd - fromStart;
   // Trim any leading backslashes
   let toStart = 1;
   const toEnd = to.length;
-  for(; toStart < toEnd; ++toStart){
+  for (; toStart < toEnd; ++toStart) {
     if (!isPosixPathSeparator(to.charCodeAt(toStart))) break;
   }
   const toLen = toEnd - toStart;
@@ -43,7 +43,7 @@ import { assertArgs } from "../_common/relative.ts";
   const length = fromLen < toLen ? fromLen : toLen;
   let lastCommonSep = -1;
   let i = 0;
-  for(; i <= length; ++i){
+  for (; i <= length; ++i) {
     if (i === length) {
       if (toLen > length) {
         if (isPosixPathSeparator(to.charCodeAt(toStart + i))) {
@@ -76,7 +76,7 @@ import { assertArgs } from "../_common/relative.ts";
   let out = "";
   // Generate the relative path based on the path difference between `to`
   // and `from`
-  for(i = fromStart + lastCommonSep + 1; i <= fromEnd; ++i){
+  for (i = fromStart + lastCommonSep + 1; i <= fromEnd; ++i) {
     if (i === fromEnd || isPosixPathSeparator(from.charCodeAt(i))) {
       if (out.length === 0) out += "..";
       else out += "/..";

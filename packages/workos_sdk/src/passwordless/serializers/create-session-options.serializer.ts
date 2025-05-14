@@ -1,4 +1,4 @@
-import type { CreateSessionOptions } from "workos/passwordless/interfaces/index.ts";
+import type { CreateSessionOptions } from "../interfaces/index.ts";
 
 export function serializeCreateSessionOptions(
   options: CreateSessionOptions,

@@ -1,111 +1,113 @@
-'use strict';
+"use strict";
 
-const types = require('../../tokenizer/types.cjs');
+const types = require("../../tokenizer/types.cjs");
 
-const LESSTHANSIGN = 60;    // <
-const EQUALSIGN = 61;       // =
+const LESSTHANSIGN = 60; // <
+const EQUALSIGN = 61; // =
 const GREATERTHANSIGN = 62; // >
 
-const name = 'FeatureRange';
+const name = "FeatureRange";
 const structure = {
-    kind: String,
-    left: ['Identifier', 'Number', 'Dimension', 'Ratio'],
-    leftComparison: String,
-    middle: ['Identifier', 'Number', 'Dimension', 'Ratio'],
-    rightComparison: [String, null],
-    right: ['Identifier', 'Number', 'Dimension', 'Ratio', null]
+  kind: String,
+  left: ["Identifier", "Number", "Dimension", "Ratio"],
+  leftComparison: String,
+  middle: ["Identifier", "Number", "Dimension", "Ratio"],
+  rightComparison: [String, null],
+  right: ["Identifier", "Number", "Dimension", "Ratio", null],
 };
 
 function readTerm() {
-    this.skipSC();
+  this.skipSC();
 
-    switch (this.tokenType) {
-        case types.Number:
-            if (this.lookupNonWSType(1) === types.Delim) {
-                return this.Ratio();
-            } else {
-                return this.Number();
-            }
+  switch (this.tokenType) {
+    case types.Number:
+      if (this.lookupNonWSType(1) === types.Delim) {
+        return this.Ratio();
+      } else {
+        return this.Number();
+      }
 
-        case types.Dimension:
-            return this.Dimension();
+    case types.Dimension:
+      return this.Dimension();
 
-        case types.Ident:
-            return this.Identifier();
+    case types.Ident:
+      return this.Identifier();
 
-        default:
-            this.error('Number, dimension, ratio or identifier is expected');
-    }
+    default:
+      this.error("Number, dimension, ratio or identifier is expected");
+  }
 }
 
 function readComparison(expectColon) {
-    this.skipSC();
+  this.skipSC();
 
-    if (this.isDelim(LESSTHANSIGN) ||
-        this.isDelim(GREATERTHANSIGN)) {
-        const value = this.source[this.tokenStart];
+  if (
+    this.isDelim(LESSTHANSIGN) ||
+    this.isDelim(GREATERTHANSIGN)
+  ) {
+    const value = this.source[this.tokenStart];
 
-        this.next();
-
-        if (this.isDelim(EQUALSIGN)) {
-            this.next();
-            return value + '=';
-        }
-
-        return value;
-    }
+    this.next();
 
     if (this.isDelim(EQUALSIGN)) {
-        return '=';
+      this.next();
+      return value + "=";
     }
 
-    this.error(`Expected ${expectColon ? '":", ' : ''}"<", ">", "=" or ")"`);
+    return value;
+  }
+
+  if (this.isDelim(EQUALSIGN)) {
+    return "=";
+  }
+
+  this.error(`Expected ${expectColon ? '":", ' : ""}"<", ">", "=" or ")"`);
 }
 
-function parse(kind = 'unknown') {
-    const start = this.tokenStart;
+function parse(kind = "unknown") {
+  const start = this.tokenStart;
 
-    this.skipSC();
-    this.eat(types.LeftParenthesis);
+  this.skipSC();
+  this.eat(types.LeftParenthesis);
 
-    const left = readTerm.call(this);
-    const leftComparison = readComparison.call(this, left.type === 'Identifier');
-    const middle = readTerm.call(this);
-    let rightComparison = null;
-    let right = null;
+  const left = readTerm.call(this);
+  const leftComparison = readComparison.call(this, left.type === "Identifier");
+  const middle = readTerm.call(this);
+  let rightComparison = null;
+  let right = null;
 
-    if (this.lookupNonWSType(0) !== types.RightParenthesis) {
-        rightComparison = readComparison.call(this);
-        right = readTerm.call(this);
-    }
+  if (this.lookupNonWSType(0) !== types.RightParenthesis) {
+    rightComparison = readComparison.call(this);
+    right = readTerm.call(this);
+  }
 
-    this.skipSC();
-    this.eat(types.RightParenthesis);
+  this.skipSC();
+  this.eat(types.RightParenthesis);
 
-    return {
-        type: 'FeatureRange',
-        loc: this.getLocation(start, this.tokenStart),
-        kind,
-        left,
-        leftComparison,
-        middle,
-        rightComparison,
-        right
-    };
+  return {
+    type: "FeatureRange",
+    loc: this.getLocation(start, this.tokenStart),
+    kind,
+    left,
+    leftComparison,
+    middle,
+    rightComparison,
+    right,
+  };
 }
 
 function generate(node) {
-    this.token(types.LeftParenthesis, '(');
-    this.node(node.left);
-    this.tokenize(node.leftComparison);
-    this.node(node.middle);
+  this.token(types.LeftParenthesis, "(");
+  this.node(node.left);
+  this.tokenize(node.leftComparison);
+  this.node(node.middle);
 
-    if (node.right) {
-        this.tokenize(node.rightComparison);
-        this.node(node.right);
-    }
+  if (node.right) {
+    this.tokenize(node.rightComparison);
+    this.node(node.right);
+  }
 
-    this.token(types.RightParenthesis, ')');
+  this.token(types.RightParenthesis, ")");
 }
 
 exports.generate = generate;

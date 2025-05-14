@@ -2,10 +2,10 @@
 
 /**
  * OpenAPI Code Generation Upgrade Script
- * 
+ *
  * This script handles automatic detection and upgrading between
  * different OpenAPI dialect versions (3.0 → 3.1 → 4.0).
- * 
+ *
  * Features:
  * - Detects dialect changes in spec files
  * - Switches adapters automatically based on dialect
@@ -13,17 +13,14 @@
  * - Applies post-processing
  * - Runs type checking
  * - Provides clear feedback on upgrade status
- * 
+ *
  * Usage:
  *   deno task codegen:upgrade [--force] [--check-only]
  */
 
 import { ensureDir, existsSync } from "jsr:@std/fs@^1";
 import { basename, dirname, join } from "jsr:@std/path@^1";
-import {
-  detectAdapter,
-  extractOpenApiVersion
-} from "./detect_adapter.ts";
+import { detectAdapter, extractOpenApiVersion } from "./detect_adapter.ts";
 import { FallbackMode, getFallbackModeFromEnv } from "./adapter.ts";
 import { postProcess } from "./postprocess/index.ts";
 import { validateTemplates } from "./validate-templates.ts";
@@ -39,7 +36,7 @@ const checkOnly = args.includes("--check-only");
 
 // Check for fallback mode override
 let fallbackMode: FallbackMode | undefined;
-const fallbackArg = args.find(arg => arg.startsWith("--fallback="));
+const fallbackArg = args.find((arg) => arg.startsWith("--fallback="));
 if (fallbackArg) {
   const mode = fallbackArg.split("=")[1]?.toLowerCase();
   if (mode === "strict") fallbackMode = FallbackMode.STRICT;
@@ -67,11 +64,11 @@ type DialectInfo = {
 async function findSpecFiles(): Promise<SpecFileInfo[]> {
   try {
     const entries = [];
-    
+
     for await (const entry of Deno.readDir(SPEC_DIR)) {
       if (
-        entry.isFile && 
-        entry.name.startsWith("workos-") && 
+        entry.isFile &&
+        entry.name.startsWith("workos-") &&
         entry.name.endsWith(".json") &&
         /workos-\d{4}-\d{2}-\d{2}(-[a-f0-9]+)?(-\w+)?\.json/.test(entry.name)
       ) {
@@ -84,7 +81,7 @@ async function findSpecFiles(): Promise<SpecFileInfo[]> {
         });
       }
     }
-    
+
     // Sort by date (newest first)
     return entries.sort((a, b) => b.date.localeCompare(a.date));
   } catch (error) {
@@ -103,94 +100,106 @@ async function checkDialectUpgrade(): Promise<{
   outputDir?: string;
 }> {
   const specFiles = await findSpecFiles();
-  
+
   if (specFiles.length === 0) {
     console.error("No spec files found in vendor/openapi");
     Deno.exit(1);
   }
-  
+
   // Get the latest spec file
   const latestSpec = specFiles[0];
   console.log(`Latest spec: ${latestSpec.name}`);
-  
+
   // Get dialect info for the latest spec using the new detect_adapter module
   const latestDialect = await extractOpenApiVersion(latestSpec.path);
-  console.log(`Latest dialect: ${latestDialect.dialect || "unknown"} (version ${latestDialect.version})`);
-  
+  console.log(
+    `Latest dialect: ${
+      latestDialect.dialect || "unknown"
+    } (version ${latestDialect.version})`,
+  );
+
   // Define output directory
   const outputDir = `${GENERATED_DIR}/${latestSpec.date}`;
-  
+
   // If only one spec exists, no comparison possible
   if (specFiles.length === 1) {
     console.log("Only one spec file found, no dialect comparison possible");
-    return { 
+    return {
       needsUpgrade: false,
       to: latestDialect,
-      outputDir
+      outputDir,
     };
   }
-  
+
   // Get the previous spec file
   const previousSpec = specFiles[1];
   console.log(`Previous spec: ${previousSpec.name}`);
   // Get dialect info for the previous spec using the new detect_adapter module
   const previousDialect = await extractOpenApiVersion(previousSpec.path);
-  console.log(`Previous dialect: ${previousDialect.dialect || "unknown"} (version ${previousDialect.version})`);
-  
-  
+  console.log(
+    `Previous dialect: ${
+      previousDialect.dialect || "unknown"
+    } (version ${previousDialect.version})`,
+  );
+
   // Compare the dialects (handle undefined dialect gracefully)
-  const dialectChanged = (previousDialect.dialect || "") !== (latestDialect.dialect || "");
-  
+  const dialectChanged =
+    (previousDialect.dialect || "") !== (latestDialect.dialect || "");
+
   if (dialectChanged) {
     console.log("🚨 Dialect change detected 🚨");
-    
+
     // Check if this is a version upgrade
     let upgradeType = "";
-    
+
     if (
       latestDialect.majorVersion > previousDialect.majorVersion ||
-      (latestDialect.majorVersion === previousDialect.majorVersion && 
-       latestDialect.minorVersion > previousDialect.minorVersion)
+      (latestDialect.majorVersion === previousDialect.majorVersion &&
+        latestDialect.minorVersion > previousDialect.minorVersion)
     ) {
       upgradeType = "Upgrade";
     } else if (
       latestDialect.majorVersion < previousDialect.majorVersion ||
-      (latestDialect.majorVersion === previousDialect.majorVersion && 
-       latestDialect.minorVersion < previousDialect.minorVersion)
+      (latestDialect.majorVersion === previousDialect.majorVersion &&
+        latestDialect.minorVersion < previousDialect.minorVersion)
     ) {
       upgradeType = "Downgrade";
     } else {
       upgradeType = "Change";
     }
-    
-    console.log(`Dialect ${upgradeType}: ${previousDialect.version} → ${latestDialect.version}`);
-    
+
+    console.log(
+      `Dialect ${upgradeType}: ${previousDialect.version} → ${latestDialect.version}`,
+    );
+
     return {
       needsUpgrade: true,
       from: previousDialect,
       to: latestDialect,
-      outputDir
+      outputDir,
     };
   }
-  
+
   console.log("No dialect change detected");
-  
+
   // Check if current version will require fallback
   const { adapter, isExplicitlySupported } = await detectAdapter(
     latestSpec.path,
-    fallbackMode || getFallbackModeFromEnv()
+    fallbackMode || getFallbackModeFromEnv(),
   );
-  
+
   if (!isExplicitlySupported) {
-    console.log(`⚠️ Warning: The latest spec (${latestSpec.name}) uses OpenAPI version ${latestDialect.version} which is not explicitly supported.`);
+    console.log(
+      `⚠️ Warning: The latest spec (${latestSpec.name}) uses OpenAPI version ${latestDialect.version} which is not explicitly supported.`,
+    );
     console.log(`A fallback mechanism will be applied during code generation.`);
   }
-  
+
   return {
     needsUpgrade: false,
     from: previousDialect,
     to: latestDialect,
-    outputDir
+    outputDir,
   };
 }
 
@@ -200,47 +209,65 @@ async function checkDialectUpgrade(): Promise<{
 async function performUpgrade(
   specFile: string,
   outputDir: string,
-  dialectInfo: DialectInfo
+  dialectInfo: DialectInfo,
 ): Promise<boolean> {
   try {
-    console.log(`\n=== Performing upgrade to OpenAPI ${dialectInfo.version} ===`);
-    
+    console.log(
+      `\n=== Performing upgrade to OpenAPI ${dialectInfo.version} ===`,
+    );
+
     // Ensure output directory exists
     await ensureDir(outputDir);
     console.log(`Output directory: ${outputDir}`);
-    
+
     // Validate templates before code generation
     const templatesDir = "./scripts/codegen/templates";
     console.log(`Validating templates in ${templatesDir}...`);
     const validationResult = await validateTemplates(templatesDir);
-    
+
     if (!validationResult.valid && !forceMode) {
       console.error("Template validation failed: missing required templates");
-      console.error(`Missing templates: ${validationResult.missingTemplates.join(", ")}`);
+      console.error(
+        `Missing templates: ${validationResult.missingTemplates.join(", ")}`,
+      );
       console.error("Use --force to generate anyway");
       return false;
     }
-    
+
     if (!validationResult.valid && forceMode) {
-      console.warn("Continuing with code generation despite missing templates (--force)");
+      console.warn(
+        "Continuing with code generation despite missing templates (--force)",
+      );
     }
     // Get appropriate generator for the OpenAPI version using detect_adapter
     console.log(`Selecting generator for OpenAPI ${dialectInfo.version}...`);
-    const { adapter, isExplicitlySupported, appliedFallback } = await detectAdapter(
-      specFile,
-      fallbackMode
-    );
-    
+    const { adapter, isExplicitlySupported, appliedFallback } =
+      await detectAdapter(
+        specFile,
+        fallbackMode,
+      );
+
     // Display warning if fallback was applied
     if (!isExplicitlySupported) {
-      if (appliedFallback === FallbackMode.WARN || appliedFallback === FallbackMode.AUTO) {
-        console.warn(`⚠️ Warning: OpenAPI version ${dialectInfo.version} is not explicitly supported by any adapter.`);
-        console.warn(`Using ${adapter.name} as a fallback (mode: ${appliedFallback}).`);
-        console.warn(`You can set the OPENAPI_ADAPTER_FALLBACK environment variable to 'strict', 'warn', or 'auto'.`);
-        console.warn(`Or use the --fallback=strict|warn|auto command line option to customize behavior.`);
+      if (
+        appliedFallback === FallbackMode.WARN ||
+        appliedFallback === FallbackMode.AUTO
+      ) {
+        console.warn(
+          `⚠️ Warning: OpenAPI version ${dialectInfo.version} is not explicitly supported by any adapter.`,
+        );
+        console.warn(
+          `Using ${adapter.name} as a fallback (mode: ${appliedFallback}).`,
+        );
+        console.warn(
+          `You can set the OPENAPI_ADAPTER_FALLBACK environment variable to 'strict', 'warn', or 'auto'.`,
+        );
+        console.warn(
+          `Or use the --fallback=strict|warn|auto command line option to customize behavior.`,
+        );
       }
     }
-    
+
     // Generate code using the selected adapter
     console.log(`Generating code from ${specFile}...`);
     await adapter.generate(specFile, outputDir, {
@@ -248,13 +275,13 @@ async function performUpgrade(
       useUnionTypes: true,
       templates: templatesDir,
     });
-    
+
     console.log("Code generation complete!");
-    
+
     // Apply post-processing transforms
     console.log("Applying post-processing transforms...");
     await postProcess(outputDir);
-    
+
     // Format the generated code
     console.log("Formatting generated code...");
     const formatCommand = new Deno.Command("deno", {
@@ -262,12 +289,12 @@ async function performUpgrade(
       stdout: "piped",
       stderr: "piped",
     });
-    
+
     const formatResult = await formatCommand.output();
     if (formatResult.code !== 0) {
       console.warn("Warning: Formatting may have encountered issues");
     }
-    
+
     // Run type check on the generated code
     console.log("Running type check on generated code...");
     const checkCommand = new Deno.Command("deno", {
@@ -275,18 +302,20 @@ async function performUpgrade(
       stdout: "piped",
       stderr: "piped",
     });
-    
+
     const checkResult = await checkCommand.output();
     const checkErrText = new TextDecoder().decode(checkResult.stderr);
-    
+
     if (checkResult.code !== 0) {
       console.error("Type check failed with errors:");
       console.error(checkErrText);
       return false;
     }
-    
+
     console.log("Type check passed!");
-    console.log(`\n✅ Successfully upgraded OpenAPI code to version ${dialectInfo.version}`);
+    console.log(
+      `\n✅ Successfully upgraded OpenAPI code to version ${dialectInfo.version}`,
+    );
     return true;
   } catch (error) {
     console.error("Error during upgrade:", error);
@@ -300,15 +329,17 @@ async function performUpgrade(
 async function main() {
   try {
     console.log("🔍 Checking for OpenAPI dialect changes...");
-    
+
     // Check if an upgrade is needed
     const upgradeCheck = await checkDialectUpgrade();
-    
+
     if (checkOnly) {
       // In check-only mode, just report status and exit
       if (upgradeCheck.needsUpgrade) {
         console.log("\n⚠️ Dialect upgrade needed");
-        console.log(`Run 'deno task codegen:upgrade' to perform the upgrade from ${upgradeCheck.from?.version} to ${upgradeCheck.to?.version}`);
+        console.log(
+          `Run 'deno task codegen:upgrade' to perform the upgrade from ${upgradeCheck.from?.version} to ${upgradeCheck.to?.version}`,
+        );
         Deno.exit(2); // Exit with code 2 to indicate upgrade needed
       } else {
         // Check for fallback with the latest spec
@@ -316,14 +347,20 @@ async function main() {
         const latestSpec = specFiles[0];
         const { isExplicitlySupported } = await detectAdapter(
           latestSpec.path,
-          fallbackMode || getFallbackModeFromEnv()
+          fallbackMode || getFallbackModeFromEnv(),
         );
-        
+
         if (!isExplicitlySupported) {
           console.log("\n⚠️ OpenAPI version not explicitly supported");
-          console.log(`The latest spec (${latestSpec.name}) uses OpenAPI version ${upgradeCheck.to?.version} which will require a fallback adapter.`);
-          console.log(`Run 'deno task codegen:upgrade' to regenerate using fallback mechanism.`);
-          console.log(`Or set OPENAPI_ADAPTER_FALLBACK=strict to enforce strict compatibility.`);
+          console.log(
+            `The latest spec (${latestSpec.name}) uses OpenAPI version ${upgradeCheck.to?.version} which will require a fallback adapter.`,
+          );
+          console.log(
+            `Run 'deno task codegen:upgrade' to regenerate using fallback mechanism.`,
+          );
+          console.log(
+            `Or set OPENAPI_ADAPTER_FALLBACK=strict to enforce strict compatibility.`,
+          );
           Deno.exit(3); // Exit with code 3 to indicate fallback needed
         } else {
           console.log("\n✅ No dialect upgrade needed");
@@ -331,24 +368,24 @@ async function main() {
         }
       }
     }
-    
+
     // If no upgrade needed and not in force mode, exit
     if (!upgradeCheck.needsUpgrade && !forceMode) {
       console.log("No upgrade needed. Use --force to regenerate anyway.");
       Deno.exit(0);
     }
-    
+
     // Get the most recent spec file for generation
     const specFiles = await findSpecFiles();
     const latestSpec = specFiles[0];
-    
+
     // Perform the upgrade
     const success = await performUpgrade(
       latestSpec.path,
       upgradeCheck.outputDir as string,
-      upgradeCheck.to as DialectInfo
+      upgradeCheck.to as DialectInfo,
     );
-    
+
     // Exit with appropriate code
     Deno.exit(success ? 0 : 1);
   } catch (error) {

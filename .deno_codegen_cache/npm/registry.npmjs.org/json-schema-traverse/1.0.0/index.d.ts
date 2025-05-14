@@ -1,12 +1,12 @@
 declare function traverse(
   schema: traverse.SchemaObject,
   opts: traverse.Options,
-  cb?: traverse.Callback
+  cb?: traverse.Callback,
 ): void;
 
 declare function traverse(
   schema: traverse.SchemaObject,
-  cb: traverse.Callback
+  cb: traverse.Callback,
 ): void;
 
 declare namespace traverse {
@@ -23,7 +23,7 @@ declare namespace traverse {
     parentJsonPtr?: string,
     parentKeyword?: string,
     parentSchema?: SchemaObject,
-    keyIndex?: string | number
+    keyIndex?: string | number,
   ) => void;
 
   interface Options {
@@ -31,9 +31,9 @@ declare namespace traverse {
     cb?:
       | Callback
       | {
-          pre?: Callback;
-          post?: Callback;
-        };
+        pre?: Callback;
+        post?: Callback;
+      };
   }
 }
 

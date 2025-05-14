@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
-const { querySelectorAll } = require('../lib/xast.js');
+const { querySelectorAll } = require("../lib/xast.js");
 
-exports.name = 'removeAttributesBySelector';
+exports.name = "removeAttributesBySelector";
 exports.description =
-  'removes attributes of elements that match a css selector';
+  "removes attributes of elements that match a css selector";
 
 /**
  * Removes attributes of elements that match a css selector.
@@ -82,7 +82,7 @@ exports.fn = (root, params) => {
   for (const { selector, attributes } of selectors) {
     const nodes = querySelectorAll(root, selector);
     for (const node of nodes) {
-      if (node.type === 'element') {
+      if (node.type === "element") {
         if (Array.isArray(attributes)) {
           for (const name of attributes) {
             delete node.attributes[name];

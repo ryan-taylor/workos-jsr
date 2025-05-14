@@ -1,3 +1,3 @@
-'use strict';
+"use strict";
 
-module.exports = require('./async').foldl;
+module.exports = require("./async").foldl;

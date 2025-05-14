@@ -5,10 +5,10 @@
  * Released under the MIT License.
  */
 
-var isExtglob = require('is-extglob');
-var chars = { '{': '}', '(': ')', '[': ']'};
-var strictCheck = function(str) {
-  if (str[0] === '!') {
+var isExtglob = require("is-extglob");
+var chars = { "{": "}", "(": ")", "[": "]" };
+var strictCheck = function (str) {
+  if (str[0] === "!") {
     return true;
   }
   var index = 0;
@@ -18,57 +18,64 @@ var strictCheck = function(str) {
   var closeParenIndex = -2;
   var backSlashIndex = -2;
   while (index < str.length) {
-    if (str[index] === '*') {
+    if (str[index] === "*") {
       return true;
     }
 
-    if (str[index + 1] === '?' && /[\].+)]/.test(str[index])) {
+    if (str[index + 1] === "?" && /[\].+)]/.test(str[index])) {
       return true;
     }
 
-    if (closeSquareIndex !== -1 && str[index] === '[' && str[index + 1] !== ']') {
+    if (
+      closeSquareIndex !== -1 && str[index] === "[" && str[index + 1] !== "]"
+    ) {
       if (closeSquareIndex < index) {
-        closeSquareIndex = str.indexOf(']', index);
+        closeSquareIndex = str.indexOf("]", index);
       }
       if (closeSquareIndex > index) {
         if (backSlashIndex === -1 || backSlashIndex > closeSquareIndex) {
           return true;
         }
-        backSlashIndex = str.indexOf('\\', index);
+        backSlashIndex = str.indexOf("\\", index);
         if (backSlashIndex === -1 || backSlashIndex > closeSquareIndex) {
           return true;
         }
       }
     }
 
-    if (closeCurlyIndex !== -1 && str[index] === '{' && str[index + 1] !== '}') {
-      closeCurlyIndex = str.indexOf('}', index);
+    if (
+      closeCurlyIndex !== -1 && str[index] === "{" && str[index + 1] !== "}"
+    ) {
+      closeCurlyIndex = str.indexOf("}", index);
       if (closeCurlyIndex > index) {
-        backSlashIndex = str.indexOf('\\', index);
+        backSlashIndex = str.indexOf("\\", index);
         if (backSlashIndex === -1 || backSlashIndex > closeCurlyIndex) {
           return true;
         }
       }
     }
 
-    if (closeParenIndex !== -1 && str[index] === '(' && str[index + 1] === '?' && /[:!=]/.test(str[index + 2]) && str[index + 3] !== ')') {
-      closeParenIndex = str.indexOf(')', index);
+    if (
+      closeParenIndex !== -1 && str[index] === "(" && str[index + 1] === "?" &&
+      /[:!=]/.test(str[index + 2]) && str[index + 3] !== ")"
+    ) {
+      closeParenIndex = str.indexOf(")", index);
       if (closeParenIndex > index) {
-        backSlashIndex = str.indexOf('\\', index);
+        backSlashIndex = str.indexOf("\\", index);
         if (backSlashIndex === -1 || backSlashIndex > closeParenIndex) {
           return true;
         }
       }
     }
 
-    if (pipeIndex !== -1 && str[index] === '(' && str[index + 1] !== '|') {
+    if (pipeIndex !== -1 && str[index] === "(" && str[index + 1] !== "|") {
       if (pipeIndex < index) {
-        pipeIndex = str.indexOf('|', index);
+        pipeIndex = str.indexOf("|", index);
       }
-      if (pipeIndex !== -1 && str[pipeIndex + 1] !== ')') {
-        closeParenIndex = str.indexOf(')', pipeIndex);
+      if (pipeIndex !== -1 && str[pipeIndex + 1] !== ")") {
+        closeParenIndex = str.indexOf(")", pipeIndex);
         if (closeParenIndex > pipeIndex) {
-          backSlashIndex = str.indexOf('\\', pipeIndex);
+          backSlashIndex = str.indexOf("\\", pipeIndex);
           if (backSlashIndex === -1 || backSlashIndex > closeParenIndex) {
             return true;
           }
@@ -76,7 +83,7 @@ var strictCheck = function(str) {
       }
     }
 
-    if (str[index] === '\\') {
+    if (str[index] === "\\") {
       var open = str[index + 1];
       index += 2;
       var close = chars[open];
@@ -88,7 +95,7 @@ var strictCheck = function(str) {
         }
       }
 
-      if (str[index] === '!') {
+      if (str[index] === "!") {
         return true;
       }
     } else {
@@ -98,8 +105,8 @@ var strictCheck = function(str) {
   return false;
 };
 
-var relaxedCheck = function(str) {
-  if (str[0] === '!') {
+var relaxedCheck = function (str) {
+  if (str[0] === "!") {
     return true;
   }
   var index = 0;
@@ -108,7 +115,7 @@ var relaxedCheck = function(str) {
       return true;
     }
 
-    if (str[index] === '\\') {
+    if (str[index] === "\\") {
       var open = str[index + 1];
       index += 2;
       var close = chars[open];
@@ -120,7 +127,7 @@ var relaxedCheck = function(str) {
         }
       }
 
-      if (str[index] === '!') {
+      if (str[index] === "!") {
         return true;
       }
     } else {
@@ -131,7 +138,7 @@ var relaxedCheck = function(str) {
 };
 
 module.exports = function isGlob(str, options) {
-  if (typeof str !== 'string' || str === '') {
+  if (typeof str !== "string" || str === "") {
     return false;
   }
 

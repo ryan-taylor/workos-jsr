@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
 /**
  * @typedef {import('../lib/types').XastElement} XastElement
  * @typedef {import('../lib/types').PathDataItem} PathDataItem
  */
 
-const { parsePathData, stringifyPathData } = require('../lib/path.js');
+const { parsePathData, stringifyPathData } = require("../lib/path.js");
 
 /**
  * @type {[number, number]}
@@ -29,8 +29,8 @@ const path2js = (path) => {
     pathData.push({ command, args });
   }
   // First moveto is actually absolute. Subsequent coordinates were separated above.
-  if (pathData.length && pathData[0].command == 'm') {
-    pathData[0].command = 'M';
+  if (pathData.length && pathData[0].command == "m") {
+    pathData[0].command = "M";
   }
   // @ts-ignore legacy
   path.pathJS = pathData;
@@ -42,7 +42,6 @@ exports.path2js = path2js;
  * Convert relative Path data to absolute.
  *
  * @type {(data: PathDataItem[]) => PathDataItem[]}
- *
  */
 const convertRelativeToAbsolute = (data) => {
   /**
@@ -56,12 +55,12 @@ const convertRelativeToAbsolute = (data) => {
     args = args.slice();
 
     // moveto (x y)
-    if (command === 'm') {
+    if (command === "m") {
       args[0] += cursor[0];
       args[1] += cursor[1];
-      command = 'M';
+      command = "M";
     }
-    if (command === 'M') {
+    if (command === "M") {
       cursor[0] = args[0];
       cursor[1] = args[1];
       start[0] = cursor[0];
@@ -69,102 +68,102 @@ const convertRelativeToAbsolute = (data) => {
     }
 
     // horizontal lineto (x)
-    if (command === 'h') {
+    if (command === "h") {
       args[0] += cursor[0];
-      command = 'H';
+      command = "H";
     }
-    if (command === 'H') {
+    if (command === "H") {
       cursor[0] = args[0];
     }
 
     // vertical lineto (y)
-    if (command === 'v') {
+    if (command === "v") {
       args[0] += cursor[1];
-      command = 'V';
+      command = "V";
     }
-    if (command === 'V') {
+    if (command === "V") {
       cursor[1] = args[0];
     }
 
     // lineto (x y)
-    if (command === 'l') {
+    if (command === "l") {
       args[0] += cursor[0];
       args[1] += cursor[1];
-      command = 'L';
+      command = "L";
     }
-    if (command === 'L') {
+    if (command === "L") {
       cursor[0] = args[0];
       cursor[1] = args[1];
     }
 
     // curveto (x1 y1 x2 y2 x y)
-    if (command === 'c') {
+    if (command === "c") {
       args[0] += cursor[0];
       args[1] += cursor[1];
       args[2] += cursor[0];
       args[3] += cursor[1];
       args[4] += cursor[0];
       args[5] += cursor[1];
-      command = 'C';
+      command = "C";
     }
-    if (command === 'C') {
+    if (command === "C") {
       cursor[0] = args[4];
       cursor[1] = args[5];
     }
 
     // smooth curveto (x2 y2 x y)
-    if (command === 's') {
+    if (command === "s") {
       args[0] += cursor[0];
       args[1] += cursor[1];
       args[2] += cursor[0];
       args[3] += cursor[1];
-      command = 'S';
+      command = "S";
     }
-    if (command === 'S') {
+    if (command === "S") {
       cursor[0] = args[2];
       cursor[1] = args[3];
     }
 
     // quadratic Bézier curveto (x1 y1 x y)
-    if (command === 'q') {
+    if (command === "q") {
       args[0] += cursor[0];
       args[1] += cursor[1];
       args[2] += cursor[0];
       args[3] += cursor[1];
-      command = 'Q';
+      command = "Q";
     }
-    if (command === 'Q') {
+    if (command === "Q") {
       cursor[0] = args[2];
       cursor[1] = args[3];
     }
 
     // smooth quadratic Bézier curveto (x y)
-    if (command === 't') {
+    if (command === "t") {
       args[0] += cursor[0];
       args[1] += cursor[1];
-      command = 'T';
+      command = "T";
     }
-    if (command === 'T') {
+    if (command === "T") {
       cursor[0] = args[0];
       cursor[1] = args[1];
     }
 
     // elliptical arc (rx ry x-axis-rotation large-arc-flag sweep-flag x y)
-    if (command === 'a') {
+    if (command === "a") {
       args[5] += cursor[0];
       args[6] += cursor[1];
-      command = 'A';
+      command = "A";
     }
-    if (command === 'A') {
+    if (command === "A") {
       cursor[0] = args[5];
       cursor[1] = args[6];
     }
 
     // closepath
-    if (command === 'z' || command === 'Z') {
+    if (command === "z" || command === "Z") {
       cursor[0] = start[0];
       cursor[1] = start[1];
-      command = 'z';
+      command = "z";
     }
 
     newData.push({ command, args });
@@ -190,10 +189,10 @@ exports.js2path = function (path, data, params) {
     // remove moveto commands which are followed by moveto commands
     if (
       pathData.length !== 0 &&
-      (item.command === 'M' || item.command === 'm')
+      (item.command === "M" || item.command === "m")
     ) {
       const last = pathData[pathData.length - 1];
-      if (last.command === 'M' || last.command === 'm') {
+      if (last.command === "M" || last.command === "m") {
         pathData.pop();
       }
     }
@@ -247,8 +246,9 @@ exports.intersects = function (path1, path2) {
         );
       });
     })
-  )
+  ) {
     return false;
+  }
 
   // Get a convex hull from points of each subpath. Has the most complexity O(n·log n).
   const hullNest1 = points1.list.map(convexHull);
@@ -269,7 +269,7 @@ exports.intersects = function (path1, path2) {
       while (true) {
         if (iterations-- == 0) {
           console.error(
-            'Error: infinite loop while processing mergePaths plugin.',
+            "Error: infinite loop while processing mergePaths plugin.",
           );
           return true; // true is the safe value that means “do nothing with paths”
         }
@@ -297,14 +297,11 @@ exports.intersects = function (path1, path2) {
    * @type {(polygon: Point, direction: number[]) => number[]}
    */
   function supportPoint(polygon, direction) {
-    var index =
-        direction[1] >= 0
-          ? direction[0] < 0
-            ? polygon.maxY
-            : polygon.maxX
-          : direction[0] < 0
-            ? polygon.minX
-            : polygon.minY,
+    var index = direction[1] >= 0
+        ? direction[0] < 0 ? polygon.maxY : polygon.maxX
+        : direction[0] < 0
+        ? polygon.minX
+        : polygon.minY,
       max = -Infinity,
       value;
     while ((value = dot(polygon.list[index], direction)) > max) {
@@ -464,13 +461,13 @@ function gatherPoints(pathData) {
 
   for (let i = 0; i < pathData.length; i += 1) {
     const pathDataItem = pathData[i];
-    let subPath =
-      points.list.length === 0
-        ? { list: [], minX: 0, minY: 0, maxX: 0, maxY: 0 }
-        : points.list[points.list.length - 1];
+    let subPath = points.list.length === 0
+      ? { list: [], minX: 0, minY: 0, maxX: 0, maxY: 0 }
+      : points.list[points.list.length - 1];
     let prev = i === 0 ? null : pathData[i - 1];
-    let basePoint =
-      subPath.list.length === 0 ? null : subPath.list[subPath.list.length - 1];
+    let basePoint = subPath.list.length === 0
+      ? null
+      : subPath.list[subPath.list.length - 1];
     let data = pathDataItem.args;
     let ctrlPoint = basePoint;
 
@@ -481,33 +478,33 @@ function gatherPoints(pathData) {
     const toAbsolute = (n, i) => n + (basePoint == null ? 0 : basePoint[i % 2]);
 
     switch (pathDataItem.command) {
-      case 'M':
+      case "M":
         subPath = { list: [], minX: 0, minY: 0, maxX: 0, maxY: 0 };
         points.list.push(subPath);
         break;
 
-      case 'H':
+      case "H":
         if (basePoint != null) {
           addPoint(subPath, [data[0], basePoint[1]]);
         }
         break;
 
-      case 'V':
+      case "V":
         if (basePoint != null) {
           addPoint(subPath, [basePoint[0], data[0]]);
         }
         break;
 
-      case 'Q':
+      case "Q":
         addPoint(subPath, data.slice(0, 2));
         prevCtrlPoint = [data[2] - data[0], data[3] - data[1]]; // Save control point for shorthand
         break;
 
-      case 'T':
+      case "T":
         if (
           basePoint != null &&
           prev != null &&
-          (prev.command == 'Q' || prev.command == 'T')
+          (prev.command == "Q" || prev.command == "T")
         ) {
           ctrlPoint = [
             basePoint[0] + prevCtrlPoint[0],
@@ -518,7 +515,7 @@ function gatherPoints(pathData) {
         }
         break;
 
-      case 'C':
+      case "C":
         if (basePoint != null) {
           // Approximate quibic Bezier curve with middle points between control points
           addPoint(subPath, [
@@ -537,11 +534,11 @@ function gatherPoints(pathData) {
         prevCtrlPoint = [data[4] - data[2], data[5] - data[3]]; // Save control point for shorthand
         break;
 
-      case 'S':
+      case "S":
         if (
           basePoint != null &&
           prev != null &&
-          (prev.command == 'C' || prev.command == 'S')
+          (prev.command == "C" || prev.command == "S")
         ) {
           addPoint(subPath, [
             basePoint[0] + 0.5 * prevCtrlPoint[0],
@@ -565,7 +562,7 @@ function gatherPoints(pathData) {
         prevCtrlPoint = [data[2] - data[0], data[3] - data[1]];
         break;
 
-      case 'A':
+      case "A":
         if (basePoint != null) {
           // Convert the arc to bezier curves and use the same approximation
           // @ts-ignore no idea what's going on here
@@ -573,7 +570,6 @@ function gatherPoints(pathData) {
           for (
             var cData;
             (cData = curves.splice(0, 6).map(toAbsolute)).length;
-
           ) {
             if (basePoint != null) {
               addPoint(subPath, [
@@ -589,7 +585,7 @@ function gatherPoints(pathData) {
               0.5 * (cData[2] + cData[4]),
               0.5 * (cData[3] + cData[5]),
             ]);
-            if (curves.length) addPoint(subPath, (basePoint = cData.slice(-2)));
+            if (curves.length) addPoint(subPath, basePoint = cData.slice(-2));
           }
         }
         break;
@@ -634,7 +630,7 @@ function convexHull(points) {
   var upper = [],
     maxY = points.list.length - 1,
     top = 0;
-  for (let i = points.list.length; i--; ) {
+  for (let i = points.list.length; i--;) {
     while (
       upper.length >= 2 &&
       cross(upper[upper.length - 2], upper[upper.length - 1], points.list[i]) <=
@@ -740,8 +736,7 @@ const a2c = (
     }
     var rx2 = rx * rx;
     var ry2 = ry * ry;
-    var k =
-      (large_arc_flag == sweep_flag ? -1 : 1) *
+    var k = (large_arc_flag == sweep_flag ? -1 : 1) *
       Math.sqrt(
         Math.abs(
           (rx2 * ry2 - rx2 * y * y - ry2 * x * x) / (rx2 * y * y + ry2 * x * x),
@@ -805,10 +800,9 @@ const a2c = (
     res = m.concat(res);
     var newres = [];
     for (var i = 0, n = res.length; i < n; i++) {
-      newres[i] =
-        i % 2
-          ? rotateY(res[i - 1], res[i], rad)
-          : rotateX(res[i], res[i + 1], rad);
+      newres[i] = i % 2
+        ? rotateY(res[i - 1], res[i], rad)
+        : rotateX(res[i], res[i + 1], rad);
     }
     return newres;
   }

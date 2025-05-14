@@ -7,7 +7,7 @@ export default async function DashboardPage(_req: Request, ctx: FreshContext) {
   if (!session) {
     return new Response(null, {
       status: 302,
-      headers: { Location: "/login" }
+      headers: { Location: "/login" },
     });
   }
 

@@ -1,0 +1,32 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+import { AssertionError } from "./assertion_error.ts";
+
+/**
+ * Make an assertion that `actual` not match RegExp `expected`. If match
+ * then throw.
+ *
+ * @example Usage
+ * ```ts ignore
+ * import { assertNotMatch } from "@std/assert";
+ *
+ * assertNotMatch("Denosaurus", /Raptor/); // Doesn't throw
+ * assertNotMatch("Raptor", /Raptor/); // Throws
+ * ```
+ *
+ * @param actual The actual value to match.
+ * @param expected The expected value to not match.
+ * @param msg The optional message to display if the assertion fails.
+ */
+export function assertNotMatch(
+  actual: string,
+  expected: RegExp,
+  msg?: string,
+) {
+  if (!expected.test(actual)) return;
+  const msgSuffix = msg ? `: ${msg}` : ".";
+  msg = `Expected actual: "${actual}" to not match: "${expected}"${msgSuffix}`;
+  throw new AssertionError(msg);
+}
+
+// denoCacheMetadata={"headers":{"cross-origin-resource-policy":"cross-origin","accept-ranges":"bytes","expires":"Wed, 13 May 2026 23:23:02 GMT","x-goog-hash":"crc32c=2xEB1g==,md5=110NAsEwplO4RvL63KuXKw==","x-content-type-options":"nosniff","x-guploader-uploadid":"AAO2VwqVSP0Q_8ZhHVz64jLuS4R6beKvgA-i7tdwq49tdaUEzIti9qDxSxP_J5Rr2aemzs3M","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","x-goog-generation":"1745475807343749","server":"UploadServer","via":"1.1 google","x-jsr-cache-id":"YYZ","x-goog-stored-content-encoding":"identity","x-goog-storage-class":"STANDARD","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","etag":"\"d75d0d02c130a653b846f2fadcab972b\"","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","x-jsr-cache-status":"hit","content-length":"905","cache-control":"public, max-age=31536000, immutable","access-control-allow-origin":"*","x-goog-stored-content-length":"905","age":"1950","date":"Tue, 13 May 2025 23:23:02 GMT","content-type":"text/typescript","x-robots-tag":"noindex","access-control-expose-headers":"*","x-goog-metageneration":"1"},"url":"https://jsr.io/@std/assert/1.0.13/not_match.ts","time":1747180532}

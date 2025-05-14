@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const { toFixed } = require('../lib/svgo/tools');
+const { toFixed } = require("../lib/svgo/tools");
 
 /**
  * @typedef {{ name: string, data: number[] }} TransformItem
@@ -20,12 +20,12 @@ const { toFixed } = require('../lib/svgo/tools');
  */
 
 const transformTypes = new Set([
-  'matrix',
-  'rotate',
-  'scale',
-  'skewX',
-  'skewY',
-  'translate',
+  "matrix",
+  "rotate",
+  "scale",
+  "skewX",
+  "skewY",
+  "translate",
 ]);
 
 const regTransformSplit =
@@ -78,16 +78,17 @@ exports.transform2js = (transformString) => {
  */
 exports.transformsMultiply = (transforms) => {
   const matrixData = transforms.map((transform) => {
-    if (transform.name === 'matrix') {
+    if (transform.name === "matrix") {
       return transform.data;
     }
     return transformToMatrix(transform);
   });
 
   const matrixTransform = {
-    name: 'matrix',
-    data:
-      matrixData.length > 0 ? matrixData.reduce(multiplyTransformMatrices) : [],
+    name: "matrix",
+    data: matrixData.length > 0
+      ? matrixData.reduce(multiplyTransformMatrices)
+      : [],
   };
 
   return matrixTransform;
@@ -181,7 +182,7 @@ exports.matrixToTransform = (transform, params) => {
   // [..., ..., ..., ..., tx, ty] → translate(tx, ty)
   if (data[4] || data[5]) {
     transforms.push({
-      name: 'translate',
+      name: "translate",
       data: data.slice(4, data[5] ? 6 : 5),
     });
   }
@@ -198,14 +199,14 @@ exports.matrixToTransform = (transform, params) => {
   // [sx, 0, tan(a)·sy, sy, 0, 0] → skewX(a)·scale(sx, sy)
   if (!data[1] && data[2]) {
     transforms.push({
-      name: 'skewX',
+      name: "skewX",
       data: [mth.atan(data[2] / sy, floatPrecision)],
     });
 
     // [sx, sx·tan(a), 0, sy, 0, 0] → skewY(a)·scale(sx, sy)
   } else if (data[1] && !data[2]) {
     transforms.push({
-      name: 'skewY',
+      name: "skewY",
       data: [mth.atan(data[1] / data[0], floatPrecision)],
     });
     sx = data[0];
@@ -230,23 +231,24 @@ exports.matrixToTransform = (transform, params) => {
         sy = -sy;
       }
 
-      transforms.push({ name: 'scale', data: [sx, sy] });
+      transforms.push({ name: "scale", data: [sx, sy] });
     }
     const angle = Math.min(Math.max(-1, data[0] / sx), 1);
     const rotate = [
       mth.acos(angle, floatPrecision) *
-        ((scaleBefore ? 1 : sy) * data[1] < 0 ? -1 : 1),
+      ((scaleBefore ? 1 : sy) * data[1] < 0 ? -1 : 1),
     ];
 
     if (rotate[0]) {
-      transforms.push({ name: 'rotate', data: rotate });
+      transforms.push({ name: "rotate", data: rotate });
     }
 
-    if (rowsSum && colsSum)
+    if (rowsSum && colsSum) {
       transforms.push({
-        name: 'skewX',
+        name: "skewX",
         data: [mth.atan(colsSum / (sx * sx), floatPrecision)],
       });
+    }
 
     // rotate(a, cx, cy) can consume translate() within optional arguments cx, cy (rotation point)
     if (rotate[0] && (data[4] || data[5])) {
@@ -269,7 +271,7 @@ exports.matrixToTransform = (transform, params) => {
 
   if ((scaleBefore && (sx != 1 || sy != 1)) || !transforms.length) {
     transforms.push({
-      name: 'scale',
+      name: "scale",
       data: sx == sy ? [sx] : [sx, sy],
     });
   }
@@ -283,14 +285,14 @@ exports.matrixToTransform = (transform, params) => {
  * @type {(transform: TransformItem) => number[] }
  */
 const transformToMatrix = (transform) => {
-  if (transform.name === 'matrix') {
+  if (transform.name === "matrix") {
     return transform.data;
   }
   switch (transform.name) {
-    case 'translate':
+    case "translate":
       // [1, 0, 0, 1, tx, ty]
       return [1, 0, 0, 1, transform.data[0], transform.data[1] || 0];
-    case 'scale':
+    case "scale":
       // [sx, 0, 0, sy, 0, 0]
       return [
         transform.data[0],
@@ -300,7 +302,7 @@ const transformToMatrix = (transform) => {
         0,
         0,
       ];
-    case 'rotate':
+    case "rotate":
       // [cos(a), sin(a), -sin(a), cos(a), x, y]
       var cos = mth.cos(transform.data[0]),
         sin = mth.sin(transform.data[0]),
@@ -314,10 +316,10 @@ const transformToMatrix = (transform) => {
         (1 - cos) * cx + sin * cy,
         (1 - cos) * cy - sin * cx,
       ];
-    case 'skewX':
+    case "skewX":
       // [1, 0, tan(a), 1, 0, 0]
       return [1, 0, mth.tan(transform.data[0]), 1, 0, 0];
-    case 'skewY':
+    case "skewY":
       // [1, tan(a), 0, 1, 0, 0]
       return [1, mth.tan(transform.data[0]), 0, 1, 0, 0];
     default:
@@ -347,8 +349,7 @@ exports.transformArc = (cursor, arc, transform) => {
   const sin = Math.sin(rot);
   // skip if radius is 0
   if (a > 0 && b > 0) {
-    let h =
-      Math.pow(x * cos + y * sin, 2) / (4 * a * a) +
+    let h = Math.pow(x * cos + y * sin, 2) / (4 * a * a) +
       Math.pow(y * cos - x * sin, 2) / (4 * b * b);
     if (h > 1) {
       h = Math.sqrt(h);
@@ -361,8 +362,8 @@ exports.transformArc = (cursor, arc, transform) => {
   // Decompose the new ellipse matrix
   const lastCol = m[2] * m[2] + m[3] * m[3];
   const squareSum = m[0] * m[0] + m[1] * m[1] + lastCol;
-  const root =
-    Math.hypot(m[0] - m[3], m[1] + m[2]) * Math.hypot(m[0] + m[3], m[1] - m[2]);
+  const root = Math.hypot(m[0] - m[3], m[1] + m[2]) *
+    Math.hypot(m[0] + m[3], m[1] - m[2]);
 
   if (!root) {
     // circle
@@ -378,10 +379,9 @@ exports.transformArc = (cursor, arc, transform) => {
     const term2 = m[1] * sub + m[3] * rowsSum;
     arc[0] = Math.sqrt(majorAxisSqr);
     arc[1] = Math.sqrt(minorAxisSqr);
-    arc[2] =
-      (((major ? term2 < 0 : term1 > 0) ? -1 : 1) *
-        Math.acos((major ? term1 : term2) / Math.hypot(term1, term2)) *
-        180) /
+    arc[2] = (((major ? term2 < 0 : term1 > 0) ? -1 : 1) *
+      Math.acos((major ? term1 : term2) / Math.hypot(term1, term2)) *
+      180) /
       Math.PI;
   }
 

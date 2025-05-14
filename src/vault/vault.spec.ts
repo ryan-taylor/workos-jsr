@@ -6,16 +6,16 @@ import {
   fetchOnce,
   fetchURL,
   resetMockFetch,
-} from "../common/utils/test-utils.ts.ts";
-import { WorkOS } from "../workos.ts.ts";
-import type { List } from "../common/interfaces/index.ts.ts";
+} from "../common/utils/test-utils.ts";
+import { WorkOS } from "../workos.ts";
+import type { List } from "../common/interfaces/index.ts";
 import type {
   SecretDigest,
   SecretMetadata,
   SecretVersion,
   VaultSecret,
-} from "./interfaces/index.ts.ts";
-import { ConflictException } from "../common/exceptions/conflict.exception.ts.ts";
+} from "./interfaces/index.ts";
+import { ConflictException } from "../common/exceptions/conflict.exception.ts";
 
 const workos = new WorkOS("sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU");
 

@@ -8,22 +8,22 @@ import type { SupportedAuthScheme } from "./auth-schemes.ts";
 import {
   resolveSecurityStrategy,
   SecurityResolutionResult,
-  SecurityResolverOptions
+  SecurityResolverOptions,
 } from "./security-resolver.ts";
 import {
-  SecurityOptions,
-  SecurityStrategy,
   getSecurityStrategy,
-  SecurityScheme
+  SecurityOptions,
+  SecurityScheme,
+  SecurityStrategy,
 } from "./security.ts";
 import { SecurityStrategyNotRegisteredError } from "./security-errors.ts";
 
 // Re-export security error types
 export {
-  SecurityError,
   MissingCredentialsError,
   NoMatchingSecurityError,
-  SecurityStrategyNotRegisteredError
+  SecurityError,
+  SecurityStrategyNotRegisteredError,
 } from "./security-errors.ts";
 
 /**
@@ -50,7 +50,7 @@ export interface RequestOptions<S extends SupportedAuthScheme = "apiKey"> {
    * This takes precedence over securityScheme if both are provided
    */
   securityStrategy?: SecurityStrategy<S>;
-  
+
   /**
    * Supported security schemes for the endpoint
    * For multi-scheme endpoints (logical OR), provide an array of all supported schemes
@@ -58,14 +58,16 @@ export interface RequestOptions<S extends SupportedAuthScheme = "apiKey"> {
    * based on available credentials
    */
   supportedSchemes?: SupportedAuthScheme[];
-  
+
   /**
    * Available credentials for different security schemes
    * When multiple schemes are supported, this allows providing credentials
    * for multiple schemes, and the best one will be selected
    */
-  availableCredentials?: Partial<Record<SupportedAuthScheme, SecurityOptions<any>>>;
-  
+  availableCredentials?: Partial<
+    Record<SupportedAuthScheme, SecurityOptions<any>>
+  >;
+
   /**
    * Options for the security resolver when handling multi-scheme endpoints
    */
@@ -94,12 +96,12 @@ export interface RequestOptions<S extends SupportedAuthScheme = "apiKey"> {
      * Maximum number of retries
      */
     maxRetries: number;
-    
+
     /**
      * Base delay between retries in milliseconds
      */
     baseDelay: number;
-    
+
     /**
      * Maximum delay between retries in milliseconds
      */
@@ -109,7 +111,9 @@ export interface RequestOptions<S extends SupportedAuthScheme = "apiKey"> {
   /**
    * Function to transform the request before it's sent
    */
-  requestTransformer?: (request: Record<string, unknown>) => Record<string, unknown>;
+  requestTransformer?: (
+    request: Record<string, unknown>,
+  ) => Record<string, unknown>;
 
   /**
    * Function to transform the response after it's received
@@ -127,7 +131,7 @@ export interface RequestOptions<S extends SupportedAuthScheme = "apiKey"> {
  */
 export function applySecurityToRequest<S extends SupportedAuthScheme>(
   request: Record<string, unknown>,
-  options: RequestOptions<S>
+  options: RequestOptions<S>,
 ): Record<string, unknown> {
   // If no security options provided, return the request as is
   if (
@@ -142,46 +146,46 @@ export function applySecurityToRequest<S extends SupportedAuthScheme>(
   if (options.securityStrategy) {
     return options.securityStrategy.applyToRequest(request, options.security);
   }
-  
+
   // Case 2: Multi-scheme endpoint (logical OR authentication)
   if (options.supportedSchemes && options.supportedSchemes.length > 0) {
     // Prepare available credentials map
     let availableCredentials = options.availableCredentials || {};
-    
+
     // If specific securityScheme and security are provided, add them to the available credentials
     if (options.securityScheme && options.security) {
       availableCredentials = {
         ...availableCredentials,
-        [options.securityScheme]: options.security
+        [options.securityScheme]: options.security,
       };
     }
-    
+
     // Resolve the best security strategy based on available credentials
     const resolvedSecurity = resolveSecurityStrategy(
       options.supportedSchemes,
       availableCredentials,
-      options.securityResolverOptions
+      options.securityResolverOptions,
     );
-    
+
     // Apply the resolved security strategy to the request
     if (resolvedSecurity) {
       return resolvedSecurity.strategy.applyToRequest(
         request,
-        resolvedSecurity.options
+        resolvedSecurity.options,
       );
     }
-    
+
     // No matching security found, but throwOnNoMatch is false
     return request;
   }
-  
+
   // Case 3: Single-scheme endpoint (traditional approach)
   const securityScheme = options.securityScheme as SupportedAuthScheme;
   const strategy = getSecurityStrategy(securityScheme);
-  
+
   if (!strategy) {
     throw new SecurityStrategyNotRegisteredError(securityScheme);
   }
-  
+
   return strategy.applyToRequest(request, options.security);
 }

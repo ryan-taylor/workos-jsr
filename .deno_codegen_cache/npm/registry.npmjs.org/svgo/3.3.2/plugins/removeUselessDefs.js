@@ -1,14 +1,14 @@
-'use strict';
+"use strict";
 
 /**
  * @typedef {import('../lib/types').XastElement} XastElement
  */
 
-const { detachNodeFromParent } = require('../lib/xast.js');
-const { elemsGroups } = require('./_collections.js');
+const { detachNodeFromParent } = require("../lib/xast.js");
+const { elemsGroups } = require("./_collections.js");
 
-exports.name = 'removeUselessDefs';
-exports.description = 'removes elements in <defs> without id';
+exports.name = "removeUselessDefs";
+exports.description = "removes elements in <defs> without id";
 
 /**
  * Removes content of defs and properties that aren't rendered directly without ids.
@@ -21,7 +21,7 @@ exports.fn = () => {
   return {
     element: {
       enter: (node, parentNode) => {
-        if (node.name === 'defs') {
+        if (node.name === "defs") {
           /**
            * @type {XastElement[]}
            */
@@ -32,7 +32,7 @@ exports.fn = () => {
           }
           // TODO remove legacy parentNode in v4
           for (const usefulNode of usefulNodes) {
-            Object.defineProperty(usefulNode, 'parentNode', {
+            Object.defineProperty(usefulNode, "parentNode", {
               writable: true,
               value: node,
             });
@@ -54,8 +54,8 @@ exports.fn = () => {
  */
 const collectUsefulNodes = (node, usefulNodes) => {
   for (const child of node.children) {
-    if (child.type === 'element') {
-      if (child.attributes.id != null || child.name === 'style') {
+    if (child.type === "element") {
+      if (child.attributes.id != null || child.name === "style") {
         usefulNodes.push(child);
       } else {
         collectUsefulNodes(child, usefulNodes);

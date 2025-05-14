@@ -1,4 +1,4 @@
-export function bubbleSort (list, comparator) {
+export function bubbleSort(list, comparator) {
   let upperIndex = list.length - 1;
 
   while (upperIndex > 0) {

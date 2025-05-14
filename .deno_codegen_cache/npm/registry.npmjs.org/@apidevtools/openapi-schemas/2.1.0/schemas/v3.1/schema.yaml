@@ -1,5 +1,5 @@
-$id: 'https://spec.openapis.org/oas/3.1/schema/2021-04-15'
-$schema: 'https://json-schema.org/draft/2020-12/schema'
+$id: "https://spec.openapis.org/oas/3.1/schema/2021-04-15"
+$schema: "https://json-schema.org/draft/2020-12/schema"
 
 type: object
 properties:
@@ -7,43 +7,43 @@ properties:
     type: string
     pattern: '^3\.1\.\d+(-.+)?$'
   info:
-    $ref: '#/$defs/info'
+    $ref: "#/$defs/info"
   jsonSchemaDialect:
-    $ref: '#/$defs/uri'
-    default: 'https://spec.openapis.org/oas/3.1/dialect/base'
+    $ref: "#/$defs/uri"
+    default: "https://spec.openapis.org/oas/3.1/dialect/base"
   servers:
     type: array
     items:
-      $ref: '#/$defs/server'
+      $ref: "#/$defs/server"
   paths:
-    $ref: '#/$defs/paths'
+    $ref: "#/$defs/paths"
   webhooks:
     type: object
     additionalProperties:
-      $ref: '#/$defs/path-item-or-reference'
+      $ref: "#/$defs/path-item-or-reference"
   components:
-    $ref: '#/$defs/components'
+    $ref: "#/$defs/components"
   security:
     type: array
     items:
-      $ref: '#/$defs/security-requirement'
+      $ref: "#/$defs/security-requirement"
   tags:
     type: array
     items:
-      $ref: '#/$defs/tag'
+      $ref: "#/$defs/tag"
   externalDocs:
-    $ref: '#/$defs/external-documentation'
+    $ref: "#/$defs/external-documentation"
 required:
   - openapi
   - info
 anyOf:
   - required:
-    - paths
+      - paths
   - required:
-    - components
+      - components
   - required:
-    - webhooks
-$ref: '#/$defs/specification-extensions'
+      - webhooks
+$ref: "#/$defs/specification-extensions"
 unevaluatedProperties: false
 
 $defs:
@@ -59,15 +59,15 @@ $defs:
       termsOfService:
         type: string
       contact:
-        $ref: '#/$defs/contact'
+        $ref: "#/$defs/contact"
       license:
-        $ref: '#/$defs/license'
+        $ref: "#/$defs/license"
       version:
         type: string
     required:
       - title
       - version
-    $ref: '#/$defs/specification-extensions'
+    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
 
   contact:
@@ -79,7 +79,7 @@ $defs:
         type: string
       email:
         type: string
-    $ref: '#/$defs/specification-extensions'
+    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
 
   license:
@@ -90,31 +90,31 @@ $defs:
       identifier:
         type: string
       url:
-        $ref: '#/$defs/uri'
+        $ref: "#/$defs/uri"
     required:
       - name
     oneOf:
       - required:
-        - identifier
+          - identifier
       - required:
-        - url
-    $ref: '#/$defs/specification-extensions'
+          - url
+    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
 
   server:
     type: object
     properties:
       url:
-        $ref: '#/$defs/uri'
+        $ref: "#/$defs/uri"
       description:
         type: string
       variables:
         type: object
         additionalProperties:
-          $ref: '#/$defs/server-variable'
+          $ref: "#/$defs/server-variable"
     required:
       - url
-    $ref: '#/$defs/specification-extensions'
+    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
 
   server-variable:
@@ -131,7 +131,7 @@ $defs:
         type: string
     required:
       - default
-    $ref: '#/$defs/specification-extensions'
+    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
 
   components:
@@ -140,57 +140,57 @@ $defs:
       schemas:
         type: object
         additionalProperties:
-          $dynamicRef: '#meta'
+          $dynamicRef: "#meta"
       responses:
         type: object
         additionalProperties:
-          $ref: '#/$defs/response-or-reference'
+          $ref: "#/$defs/response-or-reference"
       parameters:
         type: object
         additionalProperties:
-          $ref: '#/$defs/parameter-or-reference'
+          $ref: "#/$defs/parameter-or-reference"
       examples:
         type: object
         additionalProperties:
-          $ref: '#/$defs/example-or-reference'
+          $ref: "#/$defs/example-or-reference"
       requestBodies:
         type: object
         additionalProperties:
-          $ref: '#/$defs/request-body-or-reference'
+          $ref: "#/$defs/request-body-or-reference"
       headers:
         type: object
         additionalProperties:
-          $ref: '#/$defs/header-or-reference'
+          $ref: "#/$defs/header-or-reference"
       securitySchemes:
         type: object
         additionalProperties:
-          $ref: '#/$defs/security-scheme-or-reference'
+          $ref: "#/$defs/security-scheme-or-reference"
       links:
         type: object
         additionalProperties:
-          $ref: '#/$defs/link-or-reference'
+          $ref: "#/$defs/link-or-reference"
       callbacks:
         type: object
         additionalProperties:
-          $ref: '#/$defs/callbacks-or-reference'
+          $ref: "#/$defs/callbacks-or-reference"
       pathItems:
         type: object
         additionalProperties:
-          $ref: '#/$defs/path-item-or-reference'
+          $ref: "#/$defs/path-item-or-reference"
     patternProperties:
-      '^(schemas|responses|parameters|examples|requestBodies|headers|securitySchemes|links|callbacks|pathItems)$':
+      "^(schemas|responses|parameters|examples|requestBodies|headers|securitySchemes|links|callbacks|pathItems)$":
         $comment: Enumerating all of the property names in the regex above is necessary for unevaluatedProperties to work as expected
         propertyNames:
-          pattern: '^[a-zA-Z0-9._-]+$'
-    $ref: '#/$defs/specification-extensions'
+          pattern: "^[a-zA-Z0-9._-]+$"
+    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
 
   paths:
     type: object
     patternProperties:
-      '^/':
-        $ref: '#/$defs/path-item'
-    $ref: '#/$defs/specification-extensions'
+      "^/":
+        $ref: "#/$defs/path-item"
+    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
 
   path-item:
@@ -203,15 +203,15 @@ $defs:
       servers:
         type: array
         items:
-          $ref: '#/$defs/server'
+          $ref: "#/$defs/server"
       parameters:
         type: array
         items:
-          $ref: '#/$defs/parameter-or-reference'
+          $ref: "#/$defs/parameter-or-reference"
     patternProperties:
-      '^(get|put|post|delete|options|head|patch|trace)$':
-        $ref: '#/$defs/operation'
-    $ref: '#/$defs/specification-extensions'
+      "^(get|put|post|delete|options|head|patch|trace)$":
+        $ref: "#/$defs/operation"
+    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
 
   path-item-or-reference:
@@ -219,9 +219,9 @@ $defs:
       required:
         - $ref
     then:
-      $ref: '#/$defs/reference'
+      $ref: "#/$defs/reference"
     else:
-      $ref: '#/$defs/path-item'
+      $ref: "#/$defs/path-item"
 
   operation:
     type: object
@@ -235,33 +235,33 @@ $defs:
       description:
         type: string
       externalDocs:
-        $ref: '#/$defs/external-documentation'
+        $ref: "#/$defs/external-documentation"
       operationId:
         type: string
       parameters:
         type: array
         items:
-          $ref: '#/$defs/parameter-or-reference'
+          $ref: "#/$defs/parameter-or-reference"
       requestBody:
-        $ref: '#/$defs/request-body-or-reference'
+        $ref: "#/$defs/request-body-or-reference"
       responses:
-        $ref: '#/$defs/responses'
+        $ref: "#/$defs/responses"
       callbacks:
         type: object
         additionalProperties:
-          $ref: '#/$defs/callbacks-or-reference'
+          $ref: "#/$defs/callbacks-or-reference"
       deprecated:
         default: false
         type: boolean
       security:
         type: array
         items:
-          $ref: '#/$defs/security-requirement'
+          $ref: "#/$defs/security-requirement"
       servers:
         type: array
         items:
-          $ref: '#/$defs/server'
-    $ref: '#/$defs/specification-extensions'
+          $ref: "#/$defs/server"
+    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
 
   external-documentation:
@@ -270,10 +270,10 @@ $defs:
       description:
         type: string
       url:
-        $ref: '#/$defs/uri'
+        $ref: "#/$defs/uri"
     required:
       - url
-    $ref: '#/$defs/specification-extensions'
+    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
 
   parameter:
@@ -299,16 +299,16 @@ $defs:
         default: false
         type: boolean
       schema:
-        $dynamicRef: '#meta'
+        $dynamicRef: "#meta"
       content:
-        $ref: '#/$defs/content'
+        $ref: "#/$defs/content"
     required:
       - in
     oneOf:
       - required:
-        - schema
+          - schema
       - required:
-        - content
+          - content
     dependentSchemas:
       schema:
         properties:
@@ -320,12 +320,12 @@ $defs:
             default: false
             type: boolean
         allOf:
-          - $ref: '#/$defs/examples'
-          - $ref: '#/$defs/parameter/dependentSchemas/schema/$defs/styles-for-path'
-          - $ref: '#/$defs/parameter/dependentSchemas/schema/$defs/styles-for-header'
-          - $ref: '#/$defs/parameter/dependentSchemas/schema/$defs/styles-for-query'
-          - $ref: '#/$defs/parameter/dependentSchemas/schema/$defs/styles-for-cookie'
-          - $ref: '#/$defs/parameter/dependentSchemas/schema/$defs/styles-for-form'
+          - $ref: "#/$defs/examples"
+          - $ref: "#/$defs/parameter/dependentSchemas/schema/$defs/styles-for-path"
+          - $ref: "#/$defs/parameter/dependentSchemas/schema/$defs/styles-for-header"
+          - $ref: "#/$defs/parameter/dependentSchemas/schema/$defs/styles-for-query"
+          - $ref: "#/$defs/parameter/dependentSchemas/schema/$defs/styles-for-cookie"
+          - $ref: "#/$defs/parameter/dependentSchemas/schema/$defs/styles-for-form"
 
         $defs:
           styles-for-path:
@@ -409,7 +409,7 @@ $defs:
                 explode:
                   default: false
 
-    $ref: '#/$defs/specification-extensions'
+    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
 
   parameter-or-reference:
@@ -417,9 +417,9 @@ $defs:
       required:
         - $ref
     then:
-      $ref: '#/$defs/reference'
+      $ref: "#/$defs/reference"
     else:
-      $ref: '#/$defs/parameter'
+      $ref: "#/$defs/parameter"
 
   request-body:
     type: object
@@ -427,13 +427,13 @@ $defs:
       description:
         type: string
       content:
-        $ref: '#/$defs/content'
+        $ref: "#/$defs/content"
       required:
         default: false
         type: boolean
     required:
       - content
-    $ref: '#/$defs/specification-extensions'
+    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
 
   request-body-or-reference:
@@ -441,14 +441,14 @@ $defs:
       required:
         - $ref
     then:
-      $ref: '#/$defs/reference'
+      $ref: "#/$defs/reference"
     else:
-      $ref: '#/$defs/request-body'
+      $ref: "#/$defs/request-body"
 
   content:
     type: object
     additionalProperties:
-      $ref: '#/$defs/media-type'
+      $ref: "#/$defs/media-type"
     propertyNames:
       format: media-range
 
@@ -456,14 +456,14 @@ $defs:
     type: object
     properties:
       schema:
-        $dynamicRef: '#meta'
+        $dynamicRef: "#meta"
       encoding:
         type: object
         additionalProperties:
-          $ref: '#/$defs/encoding'
+          $ref: "#/$defs/encoding"
     allOf:
-      - $ref: '#/$defs/specification-extensions'
-      - $ref: '#/$defs/examples'
+      - $ref: "#/$defs/specification-extensions"
+      - $ref: "#/$defs/examples"
     unevaluatedProperties: false
 
   encoding:
@@ -475,7 +475,7 @@ $defs:
       headers:
         type: object
         additionalProperties:
-          $ref: '#/$defs/header-or-reference'
+          $ref: "#/$defs/header-or-reference"
       style:
         default: form
         enum:
@@ -489,8 +489,8 @@ $defs:
         default: false
         type: boolean
     allOf:
-      - $ref: '#/$defs/specification-extensions'
-      - $ref: '#/$defs/encoding/$defs/explode-default'
+      - $ref: "#/$defs/specification-extensions"
+      - $ref: "#/$defs/encoding/$defs/explode-default"
     unevaluatedProperties: false
 
     $defs:
@@ -514,11 +514,11 @@ $defs:
     type: object
     properties:
       default:
-        $ref: '#/$defs/response-or-reference'
+        $ref: "#/$defs/response-or-reference"
     patternProperties:
-      '^[1-5][0-9X]{2}$':
-        $ref: '#/$defs/response-or-reference'
-    $ref: '#/$defs/specification-extensions'
+      "^[1-5][0-9X]{2}$":
+        $ref: "#/$defs/response-or-reference"
+    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
 
   response:
@@ -529,16 +529,16 @@ $defs:
       headers:
         type: object
         additionalProperties:
-          $ref: '#/$defs/header-or-reference'
+          $ref: "#/$defs/header-or-reference"
       content:
-        $ref: '#/$defs/content'
+        $ref: "#/$defs/content"
       links:
         type: object
         additionalProperties:
-          $ref: '#/$defs/link-or-reference'
+          $ref: "#/$defs/link-or-reference"
     required:
       - description
-    $ref: '#/$defs/specification-extensions'
+    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
 
   response-or-reference:
@@ -546,24 +546,24 @@ $defs:
       required:
         - $ref
     then:
-      $ref: '#/$defs/reference'
+      $ref: "#/$defs/reference"
     else:
-      $ref: '#/$defs/response'
+      $ref: "#/$defs/response"
 
   callbacks:
     type: object
-    $ref: '#/$defs/specification-extensions'
+    $ref: "#/$defs/specification-extensions"
     additionalProperties:
-      $ref: '#/$defs/path-item-or-reference'
+      $ref: "#/$defs/path-item-or-reference"
 
   callbacks-or-reference:
     if:
       required:
         - $ref
     then:
-      $ref: '#/$defs/reference'
+      $ref: "#/$defs/reference"
     else:
-      $ref: '#/$defs/callbacks'
+      $ref: "#/$defs/callbacks"
 
   example:
     type: object
@@ -574,8 +574,8 @@ $defs:
         type: string
       value: true
       externalValue:
-        $ref: '#/$defs/uri'
-    $ref: '#/$defs/specification-extensions'
+        $ref: "#/$defs/uri"
+    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
 
   example-or-reference:
@@ -583,29 +583,29 @@ $defs:
       required:
         - $ref
     then:
-      $ref: '#/$defs/reference'
+      $ref: "#/$defs/reference"
     else:
-      $ref: '#/$defs/example'
+      $ref: "#/$defs/example"
 
   link:
     type: object
     properties:
       operationRef:
-        $ref: '#/$defs/uri'
+        $ref: "#/$defs/uri"
       operationId: true
       parameters:
-        $ref: '#/$defs/map-of-strings'
+        $ref: "#/$defs/map-of-strings"
       requestBody: true
       description:
         type: string
       body:
-        $ref: '#/$defs/server'
+        $ref: "#/$defs/server"
     oneOf:
       - required:
-        - operationRef
+          - operationRef
       - required:
-        - operationId
-    $ref: '#/$defs/specification-extensions'
+          - operationId
+    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
 
   link-or-reference:
@@ -613,9 +613,9 @@ $defs:
       required:
         - $ref
     then:
-      $ref: '#/$defs/reference'
+      $ref: "#/$defs/reference"
     else:
-      $ref: '#/$defs/link'
+      $ref: "#/$defs/link"
 
   header:
     type: object
@@ -645,13 +645,13 @@ $defs:
             default: false
             type: boolean
           schema:
-            $dynamicRef: '#meta'
-        $ref: '#/$defs/examples'
+            $dynamicRef: "#meta"
+        $ref: "#/$defs/examples"
       content:
         properties:
           content:
-            $ref: '#/$defs/content'
-    $ref: '#/$defs/specification-extensions'
+            $ref: "#/$defs/content"
+    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
 
   header-or-reference:
@@ -659,9 +659,9 @@ $defs:
       required:
         - $ref
     then:
-      $ref: '#/$defs/reference'
+      $ref: "#/$defs/reference"
     else:
-      $ref: '#/$defs/header'
+      $ref: "#/$defs/header"
 
   tag:
     type: object
@@ -671,17 +671,17 @@ $defs:
       description:
         type: string
       externalDocs:
-        $ref: '#/$defs/external-documentation'
+        $ref: "#/$defs/external-documentation"
     required:
       - name
-    $ref: '#/$defs/specification-extensions'
+    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
 
   reference:
     type: object
     properties:
       $ref:
-        $ref: '#/$defs/uri'
+        $ref: "#/$defs/uri"
       summary:
         type: string
       description:
@@ -709,12 +709,12 @@ $defs:
     required:
       - type
     allOf:
-      - $ref: '#/$defs/specification-extensions'
-      - $ref: '#/$defs/security-scheme/$defs/type-apikey'
-      - $ref: '#/$defs/security-scheme/$defs/type-http'
-      - $ref: '#/$defs/security-scheme/$defs/type-http-bearer'
-      - $ref: '#/$defs/security-scheme/$defs/type-oauth2'
-      - $ref: '#/$defs/security-scheme/$defs/type-oidc'
+      - $ref: "#/$defs/specification-extensions"
+      - $ref: "#/$defs/security-scheme/$defs/type-apikey"
+      - $ref: "#/$defs/security-scheme/$defs/type-http"
+      - $ref: "#/$defs/security-scheme/$defs/type-http-bearer"
+      - $ref: "#/$defs/security-scheme/$defs/type-oauth2"
+      - $ref: "#/$defs/security-scheme/$defs/type-oidc"
     unevaluatedProperties: false
 
     $defs:
@@ -779,7 +779,7 @@ $defs:
         then:
           properties:
             flows:
-              $ref: '#/$defs/oauth-flows'
+              $ref: "#/$defs/oauth-flows"
           required:
             - flows
 
@@ -793,7 +793,7 @@ $defs:
         then:
           properties:
             openIdConnectUrl:
-              $ref: '#/$defs/uri'
+              $ref: "#/$defs/uri"
           required:
             - openIdConnectUrl
 
@@ -802,22 +802,22 @@ $defs:
       required:
         - $ref
     then:
-      $ref: '#/$defs/reference'
+      $ref: "#/$defs/reference"
     else:
-      $ref: '#/$defs/security-scheme'
+      $ref: "#/$defs/security-scheme"
 
   oauth-flows:
     type: object
     properties:
       implicit:
-        $ref: '#/$defs/oauth-flows/$defs/implicit'
+        $ref: "#/$defs/oauth-flows/$defs/implicit"
       password:
-        $ref: '#/$defs/oauth-flows/$defs/password'
+        $ref: "#/$defs/oauth-flows/$defs/password"
       clientCredentials:
-        $ref: '#/$defs/oauth-flows/$defs/client-credentials'
+        $ref: "#/$defs/oauth-flows/$defs/client-credentials"
       authorizationCode:
-        $ref: '#/$defs/oauth-flows/$defs/authorization-code'
-    $ref: '#/$defs/specification-extensions'
+        $ref: "#/$defs/oauth-flows/$defs/authorization-code"
+    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
 
     $defs:
@@ -829,11 +829,11 @@ $defs:
           refreshUrl:
             type: string
           scopes:
-            $ref: '#/$defs/map-of-strings'
+            $ref: "#/$defs/map-of-strings"
         required:
           - authorizationUrl
           - scopes
-        $ref: '#/$defs/specification-extensions'
+        $ref: "#/$defs/specification-extensions"
         unevaluatedProperties: false
 
       password:
@@ -844,11 +844,11 @@ $defs:
           refreshUrl:
             type: string
           scopes:
-            $ref: '#/$defs/map-of-strings'
+            $ref: "#/$defs/map-of-strings"
         required:
           - tokenUrl
           - scopes
-        $ref: '#/$defs/specification-extensions'
+        $ref: "#/$defs/specification-extensions"
         unevaluatedProperties: false
 
       client-credentials:
@@ -859,11 +859,11 @@ $defs:
           refreshUrl:
             type: string
           scopes:
-            $ref: '#/$defs/map-of-strings'
+            $ref: "#/$defs/map-of-strings"
         required:
           - tokenUrl
           - scopes
-        $ref: '#/$defs/specification-extensions'
+        $ref: "#/$defs/specification-extensions"
         unevaluatedProperties: false
 
       authorization-code:
@@ -876,12 +876,12 @@ $defs:
           refreshUrl:
             type: string
           scopes:
-            $ref: '#/$defs/map-of-strings'
+            $ref: "#/$defs/map-of-strings"
         required:
           - authorizationUrl
           - tokenUrl
           - scopes
-        $ref: '#/$defs/specification-extensions'
+        $ref: "#/$defs/specification-extensions"
         unevaluatedProperties: false
 
   security-requirement:
@@ -893,7 +893,7 @@ $defs:
 
   specification-extensions:
     patternProperties:
-      '^x-': true
+      "^x-": true
 
   examples:
     properties:
@@ -901,7 +901,7 @@ $defs:
       examples:
         type: object
         additionalProperties:
-          $ref: '#/$defs/example-or-reference'
+          $ref: "#/$defs/example-or-reference"
 
   uri:
     type: string

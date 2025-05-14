@@ -14,35 +14,35 @@
 const $ = (s) => document.querySelector(s);
 
 const updateResults = () => {
-    const jsonSample = $('#jsonSample');
-    const reportValidity = () => {
-        // Doesn't work without a timeout
-        setTimeout(() => {
-            jsonSample.reportValidity();
-        });
-    };
-    let json;
-    try {
-        json = JSON.parse(jsonSample.value);
-        jsonSample.setCustomValidity('');
-        reportValidity();
-    } catch (err) {
-        jsonSample.setCustomValidity('Error parsing JSON: ' + err.toString());
-        reportValidity();
-        return;
-    }
-    const result = JSONPath.JSONPath({
-        path: $('#jsonpath').value,
-        json
+  const jsonSample = $("#jsonSample");
+  const reportValidity = () => {
+    // Doesn't work without a timeout
+    setTimeout(() => {
+      jsonSample.reportValidity();
     });
+  };
+  let json;
+  try {
+    json = JSON.parse(jsonSample.value);
+    jsonSample.setCustomValidity("");
+    reportValidity();
+  } catch (err) {
+    jsonSample.setCustomValidity("Error parsing JSON: " + err.toString());
+    reportValidity();
+    return;
+  }
+  const result = JSONPath.JSONPath({
+    path: $("#jsonpath").value,
+    json,
+  });
 
-    $('#results').value = JSON.stringify(result, null, 2);
+  $("#results").value = JSON.stringify(result, null, 2);
 };
 
-$('#jsonpath').addEventListener('input', () => {
-    updateResults();
+$("#jsonpath").addEventListener("input", () => {
+  updateResults();
 });
 
-$('#jsonSample').addEventListener('input', () => {
-    updateResults();
+$("#jsonSample").addEventListener("input", () => {
+  updateResults();
 });

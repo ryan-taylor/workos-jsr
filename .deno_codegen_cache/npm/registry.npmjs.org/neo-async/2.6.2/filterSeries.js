@@ -1,3 +1,3 @@
-'use strict';
+"use strict";
 
-module.exports = require('./async').filterSeries;
+module.exports = require("./async").filterSeries;

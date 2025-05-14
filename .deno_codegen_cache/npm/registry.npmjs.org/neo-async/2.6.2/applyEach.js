@@ -1,3 +1,3 @@
-'use strict';
+"use strict";
 
-module.exports = require('./async').applyEach;
+module.exports = require("./async").applyEach;

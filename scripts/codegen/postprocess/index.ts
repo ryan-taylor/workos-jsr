@@ -4,15 +4,19 @@
 import { walk } from "jsr:@std/fs@^1";
 import { join } from "jsr:@std/path@^1";
 // Lazy load deno_ast only when needed to avoid linter complaints about uncached remote imports.
-let denoAst: { parse: (src: string, opts: Record<string, unknown>) => unknown } | null = null;
+let denoAst:
+  | { parse: (src: string, opts: Record<string, unknown>) => unknown }
+  | null = null;
 
-async function getDenoAst(): Promise<{ parse: (src: string, opts: Record<string, unknown>) => unknown }> {
+async function getDenoAst(): Promise<
+  { parse: (src: string, opts: Record<string, unknown>) => unknown }
+> {
   if (denoAst === null) {
     // Ensure Deno permissions allow remote imports with --allow-net flag
     denoAst = await import("https://deno.land/x/deno_ast@0.46.7/mod.ts");
   }
   if (denoAst === null) {
-    throw new Error('Failed to load deno_ast module');
+    throw new Error("Failed to load deno_ast module");
   }
   return denoAst;
 }
@@ -20,7 +24,7 @@ import { enumUnionTransform } from "./transforms/enum-union-transform.ts";
 import { largeBrandedEnumTransform } from "./enums.ts";
 
 /**
- * Interface for code transforms 
+ * Interface for code transforms
  */
 /**
  * Interface for code transforms
@@ -85,11 +89,13 @@ export async function postProcess(
 
   // Add all TypeScript files in the input directory
   const files: string[] = [];
-  for await (const entry of walk(inputDir, {
-    includeDirs: false,
-    exts: [".ts"],
-    followSymlinks: false,
-  })) {
+  for await (
+    const entry of walk(inputDir, {
+      includeDirs: false,
+      exts: [".ts"],
+      followSymlinks: false,
+    })
+  ) {
     files.push(entry.path);
   }
 
@@ -150,9 +156,9 @@ async function formatGeneratedCode(inputDir: string): Promise<void> {
       stdout: "piped",
       stderr: "piped",
     });
-    
+
     const { code, stdout, stderr } = await command.output();
-    
+
     if (code !== 0) {
       const errText = new TextDecoder().decode(stderr);
       console.error("Error formatting code:", errText);
@@ -171,7 +177,7 @@ async function main() {
     console.error("Usage: deno run -A postprocess.ts <input-directory>");
     Deno.exit(1);
   }
-  
+
   const inputDir = Deno.args[0];
   await postProcess(inputDir);
 }

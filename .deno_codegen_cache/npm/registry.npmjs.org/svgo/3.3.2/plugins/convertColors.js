@@ -1,14 +1,14 @@
-'use strict';
+"use strict";
 
-const collections = require('./_collections.js');
+const collections = require("./_collections.js");
 
-exports.name = 'convertColors';
-exports.description = 'converts colors: rgb() to #rrggbb and #rrggbb to #rgb';
+exports.name = "convertColors";
+exports.description = "converts colors: rgb() to #rrggbb and #rrggbb to #rgb";
 
-const rNumber = '([+-]?(?:\\d*\\.\\d+|\\d+\\.?)%?)';
-const rComma = '\\s*,\\s*';
+const rNumber = "([+-]?(?:\\d*\\.\\d+|\\d+\\.?)%?)";
+const rComma = "\\s*,\\s*";
 const regRGB = new RegExp(
-  '^rgb\\(\\s*' + rNumber + rComma + rNumber + rComma + rNumber + '\\s*\\)$',
+  "^rgb\\(\\s*" + rNumber + rComma + rNumber + rComma + rNumber + "\\s*\\)$",
 );
 const regHEX = /^#(([a-fA-F0-9])\2){3}$/;
 
@@ -36,7 +36,7 @@ const convertRgbToHex = ([r, g, b]) => {
     b;
   // serialize [1][r][g][b] to a hex string, and
   // remove the 1 to get the number with 0s intact
-  return '#' + hexNumber.toString(16).slice(1).toUpperCase();
+  return "#" + hexNumber.toString(16).slice(1).toUpperCase();
 };
 
 /**
@@ -82,15 +82,15 @@ exports.fn = (_root, params) => {
             // convert colors to currentColor
             if (currentColor) {
               let matched;
-              if (typeof currentColor === 'string') {
+              if (typeof currentColor === "string") {
                 matched = val === currentColor;
               } else if (currentColor instanceof RegExp) {
                 matched = currentColor.exec(val) != null;
               } else {
-                matched = val !== 'none';
+                matched = val !== "none";
               }
               if (matched) {
-                val = 'currentColor';
+                val = "currentColor";
               }
             }
 
@@ -108,7 +108,7 @@ exports.fn = (_root, params) => {
               if (match != null) {
                 let nums = match.slice(1, 4).map((m) => {
                   let n;
-                  if (m.indexOf('%') > -1) {
+                  if (m.indexOf("%") > -1) {
                     n = Math.round(parseFloat(m) * 2.55);
                   } else {
                     n = Number(m);
@@ -123,7 +123,7 @@ exports.fn = (_root, params) => {
             if (shorthex) {
               let match = val.match(regHEX);
               if (match != null) {
-                val = '#' + match[0][1] + match[0][3] + match[0][5];
+                val = "#" + match[0][1] + match[0][3] + match[0][5];
               }
             }
 

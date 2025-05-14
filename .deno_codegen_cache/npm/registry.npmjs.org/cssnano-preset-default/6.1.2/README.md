@@ -50,23 +50,26 @@
 ## Overview
 
 This default preset for cssnano only includes transforms that make no
-assumptions about your CSS other than what is passed in. In previous
-iterations of cssnano, assumptions were made about your CSS which caused
-output to look different in certain use cases, but not others. These
-transforms have been moved from the defaults to other presets, to make
-this preset require only minimal configuration.
+assumptions about your CSS other than what is passed in. In previous iterations
+of cssnano, assumptions were made about your CSS which caused output to look
+different in certain use cases, but not others. These transforms have been moved
+from the defaults to other presets, to make this preset require only minimal
+configuration.
 
 ## Usage
 
 ### Install
 
-Note that this preset comes bundled with cssnano _by default_, so you don't need to install it separately.
+Note that this preset comes bundled with cssnano _by default_, so you don't need
+to install it separately.
 
 ### Configuration
 
-If you would like to use the default configuration, then you don't need to add anything to your `package.json`.
+If you would like to use the default configuration, then you don't need to add
+anything to your `package.json`.
 
-But should you wish to customise this, you can pass an array with the second parameter as the options object to use. For example, to remove all comments:
+But should you wish to customise this, you can pass an array with the second
+parameter as the options object to use. For example, to remove all comments:
 
 ```diff
  {
@@ -80,19 +83,24 @@ But should you wish to customise this, you can pass an array with the second par
  }
 ```
 
-Depending on your usage, the JSON configuration might not work for you, such as in cases where you would like to use options with customisable function parameters. For this use case, we recommend a `cssnano.config.js` at the same location as your `package.json`. You can then load a preset and export it with your custom parameters:
+Depending on your usage, the JSON configuration might not work for you, such as
+in cases where you would like to use options with customisable function
+parameters. For this use case, we recommend a `cssnano.config.js` at the same
+location as your `package.json`. You can then load a preset and export it with
+your custom parameters:
 
 ```js
-const defaultPreset = require('cssnano-preset-default');
+const defaultPreset = require("cssnano-preset-default");
 
 module.exports = defaultPreset({
   discardComments: {
-    remove: (comment) => comment[0] === '@',
+    remove: (comment) => comment[0] === "@",
   },
 });
 ```
 
-Note that you may wish to publish your own preset to npm for reusability, should it differ a lot from this one. This is highly encouraged!
+Note that you may wish to publish your own preset to npm for reusability, should
+it differ a lot from this one. This is highly encouraged!
 
 ## Plugins
 
@@ -104,7 +112,7 @@ This plugin is loaded with the following configuration:
 
 ```js
 {
-	keepOverrides: true
+  keepOverrides: true;
 }
 ```
 
@@ -288,7 +296,8 @@ This plugin is loaded with its default configuration.
 
 ## Contributors
 
-See [CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
+See
+[CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
 
 ## License
 

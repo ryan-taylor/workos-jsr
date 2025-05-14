@@ -1,16 +1,16 @@
-import type { CryptoProvider } from "../common/crypto/crypto-provider.ts.ts";
-import { SignatureProvider } from "../common/crypto/signature-provider.ts.ts";
-import { unreachable } from "../common/utils/unreachable.ts.ts";
+import type { CryptoProvider } from "../common/crypto/crypto-provider.ts";
+import { SignatureProvider } from "../common/crypto/signature-provider.ts";
+import { unreachable } from "../common/utils/unreachable.ts";
 import type {
   ActionContext,
   ActionPayload,
-} from "./interfaces/action.interface.ts.ts";
+} from "./interfaces/action.interface.ts";
 import type {
   AuthenticationActionResponseData,
   ResponsePayload,
   UserRegistrationActionResponseData,
-} from "./interfaces/response-payload.interface.ts.ts";
-import { deserializeAction } from "./serializers/action.serializer.ts.ts";
+} from "./interfaces/response-payload.interface.ts";
+import { deserializeAction } from "./serializers/action.serializer.ts";
 
 export class Actions {
   private signatureProvider: SignatureProvider;

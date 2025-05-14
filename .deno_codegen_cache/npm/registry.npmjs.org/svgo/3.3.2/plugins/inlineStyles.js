@@ -1,24 +1,24 @@
-'use strict';
+"use strict";
 
 /**
  * @typedef {import('../lib/types').XastElement} XastElement
  * @typedef {import('../lib/types').XastParent} XastParent
  */
 
-const csstree = require('css-tree');
+const csstree = require("css-tree");
 const {
   syntax: { specificity },
-} = require('csso');
+} = require("csso");
 const {
   visitSkip,
   querySelectorAll,
   detachNodeFromParent,
-} = require('../lib/xast.js');
-const { compareSpecificity, includesAttrSelector } = require('../lib/style');
-const { attrsGroups, pseudoClasses } = require('./_collections');
+} = require("../lib/xast.js");
+const { compareSpecificity, includesAttrSelector } = require("../lib/style");
+const { attrsGroups, pseudoClasses } = require("./_collections");
 
-exports.name = 'inlineStyles';
-exports.description = 'inline styles (additional options)';
+exports.name = "inlineStyles";
+exports.description = "inline styles (additional options)";
 
 /**
  * Some pseudo-classes can only be calculated by clients, like :visited,
@@ -45,8 +45,8 @@ exports.fn = (root, params) => {
   const {
     onlyMatchedOnce = true,
     removeMatchedSelectors = true,
-    useMqs = ['', 'screen'],
-    usePseudos = [''],
+    useMqs = ["", "screen"],
+    usePseudos = [""],
   } = params;
 
   /**
@@ -66,25 +66,25 @@ exports.fn = (root, params) => {
   return {
     element: {
       enter: (node, parentNode) => {
-        if (node.name === 'foreignObject') {
+        if (node.name === "foreignObject") {
           return visitSkip;
         }
-        if (node.name !== 'style' || node.children.length === 0) {
+        if (node.name !== "style" || node.children.length === 0) {
           return;
         }
         if (
           node.attributes.type != null &&
-          node.attributes.type !== '' &&
-          node.attributes.type !== 'text/css'
+          node.attributes.type !== "" &&
+          node.attributes.type !== "text/css"
         ) {
           return;
         }
 
         const cssText = node.children
-          .filter((child) => child.type === 'text' || child.type === 'cdata')
+          .filter((child) => child.type === "text" || child.type === "cdata")
           // @ts-ignore
           .map((child) => child.value)
-          .join('');
+          .join("");
 
         /** @type {?csstree.CssNode} */
         let cssAst = null;
@@ -96,18 +96,18 @@ exports.fn = (root, params) => {
         } catch {
           return;
         }
-        if (cssAst.type === 'StyleSheet') {
+        if (cssAst.type === "StyleSheet") {
           styles.push({ node, parentNode, cssAst });
         }
 
         // collect selectors
         csstree.walk(cssAst, {
-          visit: 'Rule',
+          visit: "Rule",
           enter(node) {
             const atrule = this.atrule;
 
             // skip media queries not included into useMqs param
-            let mediaQuery = '';
+            let mediaQuery = "";
             if (atrule != null) {
               mediaQuery = atrule.name;
               if (atrule.prelude != null) {
@@ -118,9 +118,9 @@ exports.fn = (root, params) => {
               return;
             }
 
-            if (node.prelude.type === 'SelectorList') {
+            if (node.prelude.type === "SelectorList") {
               node.prelude.children.forEach((childNode, item) => {
-                if (childNode.type === 'Selector') {
+                if (childNode.type === "Selector") {
                   /**
                    * @type {{
                    *   item: csstree.ListItem<csstree.CssNode>,
@@ -132,8 +132,8 @@ exports.fn = (root, params) => {
                   childNode.children.forEach(
                     (grandchildNode, grandchildItem, grandchildList) => {
                       const isPseudo =
-                        grandchildNode.type === 'PseudoClassSelector' ||
-                        grandchildNode.type === 'PseudoElementSelector';
+                        grandchildNode.type === "PseudoClassSelector" ||
+                        grandchildNode.type === "PseudoElementSelector";
 
                       if (
                         isPseudo &&
@@ -148,7 +148,7 @@ exports.fn = (root, params) => {
                   );
 
                   const pseudoSelectors = csstree.generate({
-                    type: 'Selector',
+                    type: "Selector",
                     children: new csstree.List().fromArray(
                       pseudos.map((pseudo) => pseudo.item.data),
                     ),
@@ -190,7 +190,7 @@ exports.fn = (root, params) => {
           const matchedElements = [];
           try {
             for (const node of querySelectorAll(root, selectorText)) {
-              if (node.type === 'element') {
+              if (node.type === "element") {
                 matchedElements.push(node);
               }
             }
@@ -211,13 +211,13 @@ exports.fn = (root, params) => {
           // apply <style/> to matched elements
           for (const selectedEl of matchedElements) {
             const styleDeclarationList = csstree.parse(
-              selectedEl.attributes.style ?? '',
+              selectedEl.attributes.style ?? "",
               {
-                context: 'declarationList',
+                context: "declarationList",
                 parseValue: false,
               },
             );
-            if (styleDeclarationList.type !== 'DeclarationList') {
+            if (styleDeclarationList.type !== "DeclarationList") {
               continue;
             }
             const styleDeclarationItems = new Map();
@@ -226,7 +226,7 @@ exports.fn = (root, params) => {
             let firstListItem;
 
             csstree.walk(styleDeclarationList, {
-              visit: 'Declaration',
+              visit: "Declaration",
               enter(node, item) {
                 if (firstListItem == null) {
                   firstListItem = item;
@@ -237,7 +237,7 @@ exports.fn = (root, params) => {
             });
             // merge declarations
             csstree.walk(selector.rule, {
-              visit: 'Declaration',
+              visit: "Declaration",
               enter(ruleDeclaration) {
                 // existing inline styles have higher priority
                 // no inline styles, external styles,                                    external styles used
@@ -248,15 +248,15 @@ exports.fn = (root, params) => {
                 if (
                   attrsGroups.presentation.has(property) &&
                   !selectors.some((selector) =>
-                    includesAttrSelector(selector.item, property),
+                    includesAttrSelector(selector.item, property)
                   )
                 ) {
                   delete selectedEl.attributes[property];
                 }
 
                 const matchedItem = styleDeclarationItems.get(property);
-                const ruleDeclarationItem =
-                  styleDeclarationList.children.createItem(ruleDeclaration);
+                const ruleDeclarationItem = styleDeclarationList.children
+                  .createItem(ruleDeclaration);
                 if (matchedItem == null) {
                   styleDeclarationList.children.insert(
                     ruleDeclarationItem,
@@ -284,7 +284,7 @@ exports.fn = (root, params) => {
           if (
             removeMatchedSelectors &&
             matchedElements.length !== 0 &&
-            selector.rule.prelude.type === 'SelectorList'
+            selector.rule.prelude.type === "SelectorList"
           ) {
             // clean up matching simple selectors if option removeMatchedSelectors is enabled
             selector.rule.prelude.children.remove(selector.item);
@@ -313,19 +313,19 @@ exports.fn = (root, params) => {
             const classList = new Set(
               selectedEl.attributes.class == null
                 ? null
-                : selectedEl.attributes.class.split(' '),
+                : selectedEl.attributes.class.split(" "),
             );
 
             for (const child of selector.node.children) {
               if (
-                child.type === 'ClassSelector' &&
+                child.type === "ClassSelector" &&
                 !selectors.some((selector) =>
                   includesAttrSelector(
                     selector.item,
-                    'class',
+                    "class",
                     child.name,
                     true,
-                  ),
+                  )
                 )
               ) {
                 classList.delete(child.name);
@@ -335,21 +335,21 @@ exports.fn = (root, params) => {
             if (classList.size === 0) {
               delete selectedEl.attributes.class;
             } else {
-              selectedEl.attributes.class = Array.from(classList).join(' ');
+              selectedEl.attributes.class = Array.from(classList).join(" ");
             }
 
             // ID
             const firstSubSelector = selector.node.children.first;
             if (
-              firstSubSelector?.type === 'IdSelector' &&
+              firstSubSelector?.type === "IdSelector" &&
               selectedEl.attributes.id === firstSubSelector.name &&
               !selectors.some((selector) =>
                 includesAttrSelector(
                   selector.item,
-                  'id',
+                  "id",
                   firstSubSelector.name,
                   true,
-                ),
+                )
               )
             ) {
               delete selectedEl.attributes.id;
@@ -359,12 +359,12 @@ exports.fn = (root, params) => {
 
         for (const style of styles) {
           csstree.walk(style.cssAst, {
-            visit: 'Rule',
+            visit: "Rule",
             enter: function (node, item, list) {
               // clean up <style/> rulesets without any css selectors left
               if (
-                node.type === 'Rule' &&
-                node.prelude.type === 'SelectorList' &&
+                node.type === "Rule" &&
+                node.prelude.type === "SelectorList" &&
                 node.prelude.children.isEmpty
               ) {
                 list.remove(item);
@@ -379,7 +379,7 @@ exports.fn = (root, params) => {
           } else {
             // update style element if any styles left
             const firstChild = style.node.children[0];
-            if (firstChild.type === 'text' || firstChild.type === 'cdata') {
+            if (firstChild.type === "text" || firstChild.type === "cdata") {
               firstChild.value = csstree.generate(style.cssAst);
             }
           }

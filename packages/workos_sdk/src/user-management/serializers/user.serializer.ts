@@ -1,4 +1,4 @@
-import type { User } from "workos/user-management/interfaces/index.ts";
+import type { User } from "../interfaces/index.ts";
 
 export function deserializeUser(item: unknown): User {
   const data = item as Record<string, unknown>;

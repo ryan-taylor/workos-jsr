@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
-const { removeLeadingZero } = require('../lib/svgo/tools');
+const { removeLeadingZero } = require("../lib/svgo/tools");
 
-exports.name = 'cleanupNumericValues';
+exports.name = "cleanupNumericValues";
 exports.description =
-  'rounds numeric values to the fixed precision, removes default ‘px’ units';
+  "rounds numeric values to the fixed precision, removes default ‘px’ units";
 
 const regNumericValues =
   /^([-+]?\d*\.?\d+([eE][-+]?\d+)?)(px|pt|pc|mm|cm|m|in|ft|em|ex|%)?$/;
@@ -47,12 +47,12 @@ exports.fn = (_root, params) => {
                 ? value
                 : Number(num.toFixed(floatPrecision));
             })
-            .join(' ');
+            .join(" ");
         }
 
         for (const [name, value] of Object.entries(node.attributes)) {
           // The `version` attribute is a text string and cannot be rounded
-          if (name === 'version') {
+          if (name === "version") {
             continue;
           }
 
@@ -65,14 +65,14 @@ exports.fn = (_root, params) => {
             /**
              * @type {any}
              */
-            let matchedUnit = match[3] || '';
+            let matchedUnit = match[3] || "";
             /**
              * @type{'' | keyof typeof absoluteLengths}
              */
             let units = matchedUnit;
 
             // convert absolute values to pixels
-            if (convertToPx && units !== '' && units in absoluteLengths) {
+            if (convertToPx && units !== "" && units in absoluteLengths) {
               const pxNum = Number(
                 (absoluteLengths[units] * Number(match[1])).toFixed(
                   floatPrecision,
@@ -80,7 +80,7 @@ exports.fn = (_root, params) => {
               );
               if (pxNum.toString().length < match[0].length) {
                 num = pxNum;
-                units = 'px';
+                units = "px";
               }
             }
 
@@ -93,8 +93,8 @@ exports.fn = (_root, params) => {
             }
 
             // remove default 'px' units
-            if (defaultPx && units === 'px') {
-              units = '';
+            if (defaultPx && units === "px") {
+              units = "";
             }
 
             node.attributes[name] = str + units;

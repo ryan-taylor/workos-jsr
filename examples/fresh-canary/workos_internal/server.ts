@@ -1,11 +1,20 @@
- /**
+/**
  * Server-specific code for WorkOS integration with Fresh
  * This file serves as the API boundary for Deno/Fresh-specific functionality
  */
 
-import { FreshSessionProvider, type SessionOptions } from "./common/iron-session/fresh-session-provider.ts";
-import { asFreshMiddleware, type MiddlewareHandler } from "./middleware/fresh-middleware.ts";
-import { createSecurityMiddleware as createSecurityMiddlewareInternal, type SecurityOptions } from "./middleware/security.ts";
+import {
+  FreshSessionProvider,
+  type SessionOptions,
+} from "./common/iron-session/fresh-session-provider.ts";
+import {
+  asFreshMiddleware,
+  type MiddlewareHandler,
+} from "./middleware/fresh-middleware.ts";
+import {
+  createSecurityMiddleware as createSecurityMiddlewareInternal,
+  type SecurityOptions,
+} from "./middleware/security.ts";
 
 /**
  * Build session options from environment variables
@@ -17,7 +26,8 @@ export function buildSessionOptions(env: {
 }): SessionOptions {
   return {
     cookieName: "workos_session",
-    password: env.get("SESSION_SECRET") || "use-a-strong-password-in-production",
+    password: env.get("SESSION_SECRET") ||
+      "use-a-strong-password-in-production",
     ttl: 60 * 60 * 24 * 7, // 7 days in seconds
     secure: true,
     httpOnly: true,
@@ -66,7 +76,7 @@ export function isFresh2(): boolean {
   if (envFlag !== undefined) {
     return envFlag.toLowerCase() === "true";
   }
-  
+
   // Default to true for Fresh 2.x
   return true;
 }
@@ -86,7 +96,10 @@ export function isDeno2(): boolean {
 }
 
 // Re-export types and classes needed by consumers
-export type { SessionOptions, FreshContext } from "./common/iron-session/fresh-session-provider.ts";
+export type {
+  FreshContext,
+  SessionOptions,
+} from "./common/iron-session/fresh-session-provider.ts";
 export { FreshSessionProvider } from "./common/iron-session/fresh-session-provider.ts";
 export type { MiddlewareHandler } from "./middleware/fresh-middleware.ts";
 export type { SecurityOptions } from "./middleware/security.ts";

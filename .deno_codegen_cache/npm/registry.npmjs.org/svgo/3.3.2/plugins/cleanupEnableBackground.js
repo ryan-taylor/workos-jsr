@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
-const csstree = require('css-tree');
-const { visit } = require('../lib/xast.js');
+const csstree = require("css-tree");
+const { visit } = require("../lib/xast.js");
 
-exports.name = 'cleanupEnableBackground';
+exports.name = "cleanupEnableBackground";
 exports.description =
-  'remove or cleanup enable-background attribute when possible';
+  "remove or cleanup enable-background attribute when possible";
 
 const regEnableBackground =
   /^new\s0\s0\s([-+]?\d*\.?\d+([eE][-+]?\d+)?)\s([-+]?\d*\.?\d+([eE][-+]?\d+)?)$/;
@@ -27,7 +27,7 @@ exports.fn = (root) => {
   visit(root, {
     element: {
       enter: (node) => {
-        if (node.name === 'filter') {
+        if (node.name === "filter") {
           hasFilter = true;
         }
       },
@@ -44,17 +44,17 @@ exports.fn = (root) => {
 
         if (node.attributes.style != null) {
           newStyle = csstree.parse(node.attributes.style, {
-            context: 'declarationList',
+            context: "declarationList",
           });
 
-          if (newStyle.type === 'DeclarationList') {
+          if (newStyle.type === "DeclarationList") {
             /** @type {csstree.ListItem<csstree.CssNode>[]} */
             const enableBackgroundDeclarations = [];
 
             csstree.walk(newStyle, (node, nodeItem) => {
               if (
-                node.type === 'Declaration' &&
-                node.property === 'enable-background'
+                node.type === "Declaration" &&
+                node.property === "enable-background"
               ) {
                 enableBackgroundDeclarations.push(nodeItem);
                 enableBackgroundDeclaration = nodeItem;
@@ -68,9 +68,9 @@ exports.fn = (root) => {
         }
 
         if (!hasFilter) {
-          delete node.attributes['enable-background'];
+          delete node.attributes["enable-background"];
 
-          if (newStyle?.type === 'DeclarationList') {
+          if (newStyle?.type === "DeclarationList") {
             if (enableBackgroundDeclaration) {
               newStyle.children.remove(enableBackgroundDeclaration);
             }
@@ -85,16 +85,16 @@ exports.fn = (root) => {
           return;
         }
 
-        const hasDimensions =
-          node.attributes.width != null && node.attributes.height != null;
+        const hasDimensions = node.attributes.width != null &&
+          node.attributes.height != null;
 
         if (
-          (node.name === 'svg' ||
-            node.name === 'mask' ||
-            node.name === 'pattern') &&
+          (node.name === "svg" ||
+            node.name === "mask" ||
+            node.name === "pattern") &&
           hasDimensions
         ) {
-          const attrValue = node.attributes['enable-background'];
+          const attrValue = node.attributes["enable-background"];
           const attrCleaned = cleanupValue(
             attrValue,
             node.name,
@@ -103,13 +103,13 @@ exports.fn = (root) => {
           );
 
           if (attrCleaned) {
-            node.attributes['enable-background'] = attrCleaned;
+            node.attributes["enable-background"] = attrCleaned;
           } else {
-            delete node.attributes['enable-background'];
+            delete node.attributes["enable-background"];
           }
 
           if (
-            newStyle?.type === 'DeclarationList' &&
+            newStyle?.type === "DeclarationList" &&
             enableBackgroundDeclaration
           ) {
             const styleValue = csstree.generate(
@@ -126,7 +126,7 @@ exports.fn = (root) => {
             if (styleCleaned) {
               // @ts-ignore
               enableBackgroundDeclaration.data.value = {
-                type: 'Raw',
+                type: "Raw",
                 value: styleCleaned,
               };
             } else {
@@ -135,7 +135,7 @@ exports.fn = (root) => {
           }
         }
 
-        if (newStyle?.type === 'DeclarationList') {
+        if (newStyle?.type === "DeclarationList") {
           if (newStyle.children.isEmpty) {
             delete node.attributes.style;
           } else {
@@ -158,7 +158,7 @@ const cleanupValue = (value, nodeName, width, height) => {
   const match = regEnableBackground.exec(value);
 
   if (match != null && width === match[1] && height === match[3]) {
-    return nodeName === 'svg' ? undefined : 'new';
+    return nodeName === "svg" ? undefined : "new";
   }
 
   return value;

@@ -1,10 +1,10 @@
-'use strict';
-const BasePlugin = require('../plugin');
-const { IE_5_5, IE_6, IE_7 } = require('../dictionary/browsers');
-const { PROPERTY } = require('../dictionary/identifiers');
-const { ATRULE, DECL } = require('../dictionary/postcss');
+"use strict";
+const BasePlugin = require("../plugin");
+const { IE_5_5, IE_6, IE_7 } = require("../dictionary/browsers");
+const { PROPERTY } = require("../dictionary/identifiers");
+const { ATRULE, DECL } = require("../dictionary/postcss");
 
-const hacks = '!_$_&_*_)_=_%_+_,_._/_`_]_#_~_?_:_|'.split('_');
+const hacks = "!_$_&_*_)_=_%_+_,_._/_`_]_#_~_?_:_|".split("_");
 
 module.exports = class LeadingStar extends BasePlugin {
   /** @param {import('postcss').Result=} result */
@@ -44,7 +44,7 @@ module.exports = class LeadingStar extends BasePlugin {
       // test for the @property: value; hack
       const { name } = node;
       const len = name.length - 1;
-      if (name.lastIndexOf(':') === len) {
+      if (name.lastIndexOf(":") === len) {
         this.push(node, {
           identifier: PROPERTY,
           hack: `@${name.substr(0, len)}`,

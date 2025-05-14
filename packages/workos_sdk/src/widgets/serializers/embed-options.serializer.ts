@@ -1,4 +1,4 @@
-import type { EmbedOptions } from "workos/widgets/interfaces/index.ts";
+import type { EmbedOptions } from "../interfaces/index.ts";
 
 export function serializeEmbedOptions(
   options: EmbedOptions,

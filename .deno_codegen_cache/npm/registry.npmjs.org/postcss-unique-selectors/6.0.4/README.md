@@ -17,16 +17,16 @@ Selectors are sorted naturally, and deduplicated:
 ### Input
 
 ```css
-h1,h3,h2,h1 {
-    color: red
+h1, h3, h2, h1 {
+  color: red;
 }
 ```
 
 ### Output
 
 ```css
-h1,h2,h3 {
-    color: red
+h1, h2, h3 {
+  color: red;
 }
 ```
 
@@ -37,7 +37,8 @@ examples for your environment.
 
 ## Contributors
 
-See [CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
+See
+[CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
 
 ## License
 

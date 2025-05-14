@@ -1,3 +1,3 @@
-export * from "workos/sso/serializers/profile.serializer.ts";
-export * from "workos/sso/serializers/connection.serializer.ts";
-export * from "workos/sso/serializers/get-authorization-url-options.serializer.ts";
+export * from "./profile.serializer.ts";
+export * from "./connection.serializer.ts";
+export * from "./get-authorization-url-options.serializer.ts";

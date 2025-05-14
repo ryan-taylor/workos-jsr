@@ -12,4 +12,5 @@ currently being supported with security updates.
 
 ## Reporting a Vulnerability
 
-Please report all vulnerabilities at [https://github.com/mcollina/fastq/security](https://github.com/mcollina/fastq/security).
+Please report all vulnerabilities at
+[https://github.com/mcollina/fastq/security](https://github.com/mcollina/fastq/security).

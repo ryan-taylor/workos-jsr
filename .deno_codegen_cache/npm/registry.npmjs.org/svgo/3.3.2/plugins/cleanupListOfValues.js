@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const { removeLeadingZero } = require('../lib/svgo/tools.js');
+const { removeLeadingZero } = require("../lib/svgo/tools.js");
 
-exports.name = 'cleanupListOfValues';
-exports.description = 'rounds list of values to the fixed precision';
+exports.name = "cleanupListOfValues";
+exports.description = "rounds list of values to the fixed precision";
 
 const regNumericValues =
   /^([-+]?\d*\.?\d+([eE][-+]?\d+)?)(px|pt|pc|mm|cm|m|in|ft|em|ex|%)?$/;
@@ -59,7 +59,7 @@ exports.fn = (_root, params) => {
         /**
          * @type {any}
          */
-        let matchedUnit = match[3] || '';
+        let matchedUnit = match[3] || "";
         /**
          * @type{'' | keyof typeof absoluteLengths}
          */
@@ -73,7 +73,7 @@ exports.fn = (_root, params) => {
 
           if (pxNum.toString().length < match[0].length) {
             num = pxNum;
-            units = 'px';
+            units = "px";
           }
         }
 
@@ -86,21 +86,20 @@ exports.fn = (_root, params) => {
         }
 
         // remove default 'px' units
-        if (defaultPx && units === 'px') {
-          units = '';
+        if (defaultPx && units === "px") {
+          units = "";
         }
 
         roundedList.push(str + units);
-      }
-      // if attribute value is "new"(only enable-background).
+      } // if attribute value is "new"(only enable-background).
       else if (matchNew) {
-        roundedList.push('new');
+        roundedList.push("new");
       } else if (elem) {
         roundedList.push(elem);
       }
     }
 
-    return roundedList.join(' ');
+    return roundedList.join(" ");
   };
 
   return {
@@ -110,9 +109,9 @@ exports.fn = (_root, params) => {
           node.attributes.points = roundValues(node.attributes.points);
         }
 
-        if (node.attributes['enable-background'] != null) {
-          node.attributes['enable-background'] = roundValues(
-            node.attributes['enable-background'],
+        if (node.attributes["enable-background"] != null) {
+          node.attributes["enable-background"] = roundValues(
+            node.attributes["enable-background"],
           );
         }
 
@@ -120,9 +119,9 @@ exports.fn = (_root, params) => {
           node.attributes.viewBox = roundValues(node.attributes.viewBox);
         }
 
-        if (node.attributes['stroke-dasharray'] != null) {
-          node.attributes['stroke-dasharray'] = roundValues(
-            node.attributes['stroke-dasharray'],
+        if (node.attributes["stroke-dasharray"] != null) {
+          node.attributes["stroke-dasharray"] = roundValues(
+            node.attributes["stroke-dasharray"],
           );
         }
 

@@ -9,12 +9,12 @@ paths:
       summary: Test endpoint
       operationId: getTest
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TestResponse'
+                $ref: "#/components/schemas/TestResponse"
 components:
   schemas:
     TestResponse:

@@ -1,5 +1,5 @@
-'use strict';
-const valueParser = require('postcss-value-parser');
+"use strict";
+const valueParser = require("postcss-value-parser");
 
 /**
  * @param {(number|string)[]} list
@@ -13,12 +13,12 @@ function getValues(list, node, index) {
     let value = NaN;
 
     if (
-      node.type === 'function' &&
-      (node.value === 'var' || node.value === 'env') &&
+      node.type === "function" &&
+      (node.value === "var" || node.value === "env") &&
       node.nodes.length === 1
     ) {
       value = valueParser.stringify(node.nodes);
-    } else if (node.type === 'word') {
+    } else if (node.type === "word") {
       value = parseFloat(node.value);
     }
 
@@ -54,7 +54,7 @@ function matrix3d(node, values) {
   ) {
     const { nodes } = node;
 
-    node.value = 'matrix';
+    node.value = "matrix";
     node.nodes = [
       nodes[0], // a
       nodes[1], // ,
@@ -72,9 +72,9 @@ function matrix3d(node, values) {
 }
 
 const rotate3dMappings = new Map([
-  [[1, 0, 0].toString(), 'rotateX'], // rotate3d(1, 0, 0, a) => rotateX(a)
-  [[0, 1, 0].toString(), 'rotateY'], // rotate3d(0, 1, 0, a) => rotateY(a)
-  [[0, 0, 1].toString(), 'rotate'], // rotate3d(0, 0, 1, a) => rotate(a)
+  [[1, 0, 0].toString(), "rotateX"], // rotate3d(1, 0, 0, a) => rotateX(a)
+  [[0, 1, 0].toString(), "rotateY"], // rotate3d(0, 1, 0, a) => rotateY(a)
+  [[0, 0, 1].toString(), "rotate"], // rotate3d(0, 0, 1, a) => rotate(a)
 ]);
 
 /**
@@ -107,7 +107,7 @@ function rotateZ(node, values) {
   }
 
   // rotateZ(rz) => rotate(rz)
-  node.value = 'rotate';
+  node.value = "rotate";
 }
 
 /**
@@ -132,7 +132,7 @@ function scale(node, values) {
 
   // scale(sx, 1) => scaleX(sx)
   if (second === 1) {
-    node.value = 'scaleX';
+    node.value = "scaleX";
     node.nodes = [nodes[0]];
 
     return;
@@ -140,7 +140,7 @@ function scale(node, values) {
 
   // scale(1, sy) => scaleY(sy)
   if (first === 1) {
-    node.value = 'scaleY';
+    node.value = "scaleY";
     node.nodes = [nodes[2]];
 
     return;
@@ -162,7 +162,7 @@ function scale3d(node, values) {
 
   // scale3d(sx, 1, 1) => scaleX(sx)
   if (second === 1 && third === 1) {
-    node.value = 'scaleX';
+    node.value = "scaleX";
     node.nodes = [nodes[0]];
 
     return;
@@ -170,7 +170,7 @@ function scale3d(node, values) {
 
   // scale3d(1, sy, 1) => scaleY(sy)
   if (first === 1 && third === 1) {
-    node.value = 'scaleY';
+    node.value = "scaleY";
     node.nodes = [nodes[2]];
 
     return;
@@ -178,7 +178,7 @@ function scale3d(node, values) {
 
   // scale3d(1, 1, sz) => scaleZ(sz)
   if (first === 1 && second === 1) {
-    node.value = 'scaleZ';
+    node.value = "scaleZ";
     node.nodes = [nodes[4]];
 
     return;
@@ -206,7 +206,7 @@ function translate(node, values) {
 
   // translate(0, ty) => translateY(ty)
   if (values[0] === 0) {
-    node.value = 'translateY';
+    node.value = "translateY";
     node.nodes = [nodes[2]];
 
     return;
@@ -227,19 +227,19 @@ function translate3d(node, values) {
 
   // translate3d(0, 0, tz) => translateZ(tz)
   if (values[0] === 0 && values[1] === 0) {
-    node.value = 'translateZ';
+    node.value = "translateZ";
     node.nodes = [nodes[4]];
   }
 }
 
 const reducers = new Map([
-  ['matrix3d', matrix3d],
-  ['rotate3d', rotate3d],
-  ['rotateZ', rotateZ],
-  ['scale', scale],
-  ['scale3d', scale3d],
-  ['translate', translate],
-  ['translate3d', translate3d],
+  ["matrix3d", matrix3d],
+  ["rotate3d", rotate3d],
+  ["rotateZ", rotateZ],
+  ["scale", scale],
+  ["scale3d", scale3d],
+  ["translate", translate],
+  ["translate3d", translate3d],
 ]);
 /**
  * @param {string} name
@@ -248,8 +248,8 @@ const reducers = new Map([
 function normalizeReducerName(name) {
   const lowerCasedName = name.toLowerCase();
 
-  if (lowerCasedName === 'rotatez') {
-    return 'rotateZ';
+  if (lowerCasedName === "rotatez") {
+    return "rotateZ";
   }
 
   return lowerCasedName;
@@ -260,7 +260,7 @@ function normalizeReducerName(name) {
  * @return {false}
  */
 function reduce(node) {
-  if (node.type === 'function') {
+  if (node.type === "function") {
     const normalizedReducerName = normalizeReducerName(node.value);
     const reducer = reducers.get(normalizedReducerName);
     if (reducer !== undefined) {
@@ -276,7 +276,7 @@ function reduce(node) {
  */
 function pluginCreator() {
   return {
-    postcssPlugin: 'postcss-reduce-transforms',
+    postcssPlugin: "postcss-reduce-transforms",
     prepare() {
       const cache = new Map();
       return {

@@ -6,8 +6,11 @@ export declare function normalizeOptions(options?: OnoOptions): OnoOptions;
 /**
  * Normalizes the Ono arguments, accounting for defaults, options, and optional arguments.
  */
-export declare function normalizeArgs<E extends ErrorLike, P extends object>(args: unknown[], options: OnoOptions): {
-    originalError: E | undefined;
-    props: P | undefined;
-    message: string;
+export declare function normalizeArgs<E extends ErrorLike, P extends object>(
+  args: unknown[],
+  options: OnoOptions,
+): {
+  originalError: E | undefined;
+  props: P | undefined;
+  message: string;
 };

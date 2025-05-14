@@ -4,27 +4,32 @@
  */
 
 import type {
-  SupportedAuthScheme,
-  HttpAuthScheme,
   ApiKeyLocation,
-  OAuth2Flow
+  HttpAuthScheme,
+  OAuth2Flow,
+  SupportedAuthScheme,
 } from "./auth-schemes.ts";
 import {
   MissingCredentialsError,
-  SecurityStrategyNotRegisteredError
+  SecurityStrategyNotRegisteredError,
 } from "./security-errors.ts";
 
 // Re-export types from auth-schemes.ts
-export type { SupportedAuthScheme, HttpAuthScheme, ApiKeyLocation, OAuth2Flow } from "./auth-schemes.ts";
+export type {
+  ApiKeyLocation,
+  HttpAuthScheme,
+  OAuth2Flow,
+  SupportedAuthScheme,
+} from "./auth-schemes.ts";
 
 // Re-export types and functions from security-resolver.ts
 export type {
+  SecurityResolutionResult,
   SecurityResolverOptions,
-  SecurityResolutionResult
 } from "./security-resolver.ts";
-export { 
+export {
+  applyResolvedSecurityToRequest,
   resolveSecurityStrategy,
-  applyResolvedSecurityToRequest
 } from "./security-resolver.ts";
 
 /**
@@ -47,24 +52,26 @@ export type SecurityScheme = SupportedAuthScheme;
  * Each security scheme should implement this interface to apply
  * authentication to requests
  */
-export interface SecurityStrategy<S extends SupportedAuthScheme = SupportedAuthScheme> {
+export interface SecurityStrategy<
+  S extends SupportedAuthScheme = SupportedAuthScheme,
+> {
   /**
    * The type of security scheme this strategy handles
    */
   readonly scheme: S;
-  
+
   /**
    * Apply security to a request
    * This method should modify the request parameters to include
    * authentication details
-   * 
+   *
    * @param request The request parameters to modify
    * @param options Security-specific options
    * @returns The modified request parameters
    */
   applyToRequest<T extends RequestLike>(
     request: T,
-    options?: SecurityOptions<S>
+    options?: SecurityOptions<S>,
   ): T;
 }
 
@@ -86,12 +93,12 @@ export interface ApiKeySecurityOptions extends BaseSecurityOptions {
    * The API key to use for authentication
    */
   apiKey: string;
-  
+
   /**
    * Where to place the API key (header, query, cookie)
    */
   in?: ApiKeyLocation;
-  
+
   /**
    * The name of the parameter to use
    */
@@ -106,7 +113,7 @@ export interface HttpSecurityOptions extends BaseSecurityOptions {
    * The HTTP authentication scheme (basic, bearer, etc.)
    */
   scheme: HttpAuthScheme;
-  
+
   /**
    * The authentication credentials
    */
@@ -121,12 +128,12 @@ export interface OAuth2SecurityOptions extends BaseSecurityOptions {
    * The OAuth2 access token
    */
   accessToken: string;
-  
+
   /**
    * The token type (bearer, etc.)
    */
   tokenType?: string;
-  
+
   /**
    * Scopes to include with the request
    */
@@ -151,22 +158,22 @@ export interface MutualTLSSecurityOptions extends BaseSecurityOptions {
    * Path to client certificate
    */
   certPath?: string;
-  
+
   /**
    * Path to client key
    */
   keyPath?: string;
-  
+
   /**
    * Client certificate data (if not using file path)
    */
   cert?: string;
-  
+
   /**
    * Client key data (if not using file path)
    */
   key?: string;
-  
+
   /**
    * Certificate passphrase if required
    */
@@ -176,13 +183,13 @@ export interface MutualTLSSecurityOptions extends BaseSecurityOptions {
 /**
  * Type mapping for security options based on scheme
  */
-export type SecurityOptions<S extends SupportedAuthScheme> =
-  S extends "apiKey" ? ApiKeySecurityOptions :
-  S extends "http" ? HttpSecurityOptions :
-  S extends "oauth2" ? OAuth2SecurityOptions :
-  S extends "openIdConnect" ? OpenIdConnectSecurityOptions :
-  S extends "mutualTLS" ? MutualTLSSecurityOptions :
-  BaseSecurityOptions;
+export type SecurityOptions<S extends SupportedAuthScheme> = S extends "apiKey"
+  ? ApiKeySecurityOptions
+  : S extends "http" ? HttpSecurityOptions
+  : S extends "oauth2" ? OAuth2SecurityOptions
+  : S extends "openIdConnect" ? OpenIdConnectSecurityOptions
+  : S extends "mutualTLS" ? MutualTLSSecurityOptions
+  : BaseSecurityOptions;
 
 /**
  * Registry of security strategies
@@ -218,9 +225,10 @@ export const securityRegistry: SecurityStrategyMap = {};
  * @param strategy The security strategy to register
  */
 export function registerSecurityStrategy<S extends SupportedAuthScheme>(
-  strategy: SecurityStrategy<S>
+  strategy: SecurityStrategy<S>,
 ): void {
-  (securityRegistry[strategy.scheme] as SecurityStrategy<S> | undefined) = strategy;
+  (securityRegistry[strategy.scheme] as SecurityStrategy<S> | undefined) =
+    strategy;
 }
 
 /**
@@ -231,7 +239,7 @@ export function registerSecurityStrategy<S extends SupportedAuthScheme>(
  * @throws SecurityStrategyNotRegisteredError if no strategy is registered for the scheme
  */
 export function getSecurityStrategy<S extends SupportedAuthScheme>(
-  scheme: S
+  scheme: S,
 ): SecurityStrategy<S> {
   const strategy = securityRegistry[scheme] as SecurityStrategy<S> | undefined;
   if (!strategy) {
@@ -253,21 +261,21 @@ export class ApiKeySecurityStrategy implements SecurityStrategy<"apiKey"> {
   readonly scheme = "apiKey" as const;
 
   constructor(
-    private defaultOptions: Partial<ApiKeySecurityOptions> = {}
+    private defaultOptions: Partial<ApiKeySecurityOptions> = {},
   ) {}
 
   applyToRequest<T extends RequestLike>(
     request: T,
-    options?: ApiKeySecurityOptions
+    options?: ApiKeySecurityOptions,
   ): T {
     const mergedOptions = { ...this.defaultOptions, ...options };
     if (!mergedOptions.apiKey) {
       throw MissingCredentialsError.forApiKey(
-        ['apiKey'],
+        ["apiKey"],
         {
           name: mergedOptions.name,
-          location: mergedOptions.in
-        }
+          location: mergedOptions.in,
+        },
       );
     }
 
@@ -278,23 +286,23 @@ export class ApiKeySecurityStrategy implements SecurityStrategy<"apiKey"> {
     if (in_ === "header") {
       result.headers = {
         ...((result.headers as Record<string, string>) || {}),
-        [name]: mergedOptions.apiKey
+        [name]: mergedOptions.apiKey,
       };
     } else if (in_ === "query") {
       result.query = {
         ...((result.query as Record<string, unknown>) || {}),
-        [name]: mergedOptions.apiKey
+        [name]: mergedOptions.apiKey,
       };
     } else if (in_ === "cookie") {
       const cookieValue = `${name}=${mergedOptions.apiKey}`;
-      const headers = ((result.headers as Record<string, string>) || {});
-      
+      const headers = (result.headers as Record<string, string>) || {};
+
       if (headers.cookie) {
         headers.cookie += `; ${cookieValue}`;
       } else {
         headers.cookie = cookieValue;
       }
-      
+
       result.headers = headers;
     }
 
@@ -309,16 +317,18 @@ export class HttpSecurityStrategy implements SecurityStrategy<"http"> {
   readonly scheme = "http" as const;
 
   constructor(
-    private defaultOptions: Partial<HttpSecurityOptions> = {}
+    private defaultOptions: Partial<HttpSecurityOptions> = {},
   ) {}
 
   applyToRequest<T extends RequestLike>(
     request: T,
-    options?: HttpSecurityOptions
+    options?: HttpSecurityOptions,
   ): T {
     const mergedOptions = { ...this.defaultOptions, ...options };
     if (!mergedOptions.credentials) {
-      throw MissingCredentialsError.forHttp(['credentials'], { scheme: mergedOptions.scheme });
+      throw MissingCredentialsError.forHttp(["credentials"], {
+        scheme: mergedOptions.scheme,
+      });
     }
 
     const authScheme = mergedOptions.scheme || "bearer";
@@ -336,7 +346,7 @@ export class HttpSecurityStrategy implements SecurityStrategy<"http"> {
     const result = { ...request };
     result.headers = {
       ...((result.headers as Record<string, string>) || {}),
-      "Authorization": headerValue
+      "Authorization": headerValue,
     };
 
     return result;
@@ -350,24 +360,24 @@ export class OAuth2SecurityStrategy implements SecurityStrategy<"oauth2"> {
   readonly scheme = "oauth2" as const;
 
   constructor(
-    private defaultOptions: Partial<OAuth2SecurityOptions> = {}
+    private defaultOptions: Partial<OAuth2SecurityOptions> = {},
   ) {}
 
   applyToRequest<T extends RequestLike>(
     request: T,
-    options?: OAuth2SecurityOptions
+    options?: OAuth2SecurityOptions,
   ): T {
     const mergedOptions = { ...this.defaultOptions, ...options };
     if (!mergedOptions.accessToken) {
-      throw MissingCredentialsError.forOAuth2(['accessToken']);
+      throw MissingCredentialsError.forOAuth2(["accessToken"]);
     }
 
     const tokenType = mergedOptions.tokenType || "Bearer";
-    
+
     const result = { ...request };
     result.headers = {
       ...((result.headers as Record<string, string>) || {}),
-      "Authorization": `${tokenType} ${mergedOptions.accessToken}`
+      "Authorization": `${tokenType} ${mergedOptions.accessToken}`,
     };
 
     return result;

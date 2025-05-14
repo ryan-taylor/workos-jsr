@@ -1,18 +1,24 @@
-/**m
+/**
  * ARCHIVED MODULE
  * --------------
  * This Vault module has been archived as it is no longer actively maintained.
  * The functionality has been superseded by newer secure storage solutions.
  * Please use the new Object Storage API for similar functionality.
- * 
+ *
  * This file was moved from src/vault/vault.ts to archive/vault/vault.ts
  * as part of a code cleanup effort.
+ *
+ * @ts-nocheck - This file is archived and should be excluded from type checking
  */
 
-import type { List, ListResponse, PaginationOptions } from "../common/interfaces.ts.ts";
-import type { WorkOS } from "../workos.ts.ts";
-import { decode, decrypt } from "./cryptography/decrypt.ts.ts";
-import { encrypt } from "./cryptography/encrypt.ts.ts";
+import type {
+  List,
+  ListResponse,
+  PaginationOptions,
+} from "../../src/common/interfaces.ts";
+import type { WorkOS } from "../../src/workos.ts";
+import { decode, decrypt } from "./cryptography/decrypt.ts";
+import { encrypt } from "./cryptography/encrypt.ts";
 import type {
   CreateDataKeyOptions,
   CreateDataKeyResponse,
@@ -33,11 +39,11 @@ import type {
   ReadObjectResponse,
   UpdateObjectOptions,
   VaultObject,
-} from "./interfaces.ts.ts";
+} from "./interfaces.ts";
 import {
   deserializeCreateDataKeyResponse,
   deserializeDecryptDataKeyResponse,
-} from "./serializers/vault-key.serializer.ts.ts";
+} from "./serializers/vault-key.serializer.ts";
 import {
   deserializeListObjects,
   deserializeObject,
@@ -45,7 +51,7 @@ import {
   desrializeListObjectVersions,
   serializeCreateObjectEntity,
   serializeUpdateObjectEntity,
-} from "./serializers/vault-object.serializer.ts.ts";
+} from "./serializers/vault-object.serializer.ts";
 
 export class Vault {
   constructor(private readonly workos: WorkOS) {}

@@ -1,22 +1,22 @@
-'use strict';
+"use strict";
 
 /**
  * @typedef {import('../lib/types').PathDataItem} PathDataItem
  * @typedef {import('../lib/types').XastElement} XastElement
  */
 
-const { collectStylesheet, computeStyle } = require('../lib/style.js');
+const { collectStylesheet, computeStyle } = require("../lib/style.js");
 const {
   transformsMultiply,
   transform2js,
   transformArc,
-} = require('./_transforms.js');
-const { path2js } = require('./_path.js');
+} = require("./_transforms.js");
+const { path2js } = require("./_path.js");
 const {
   removeLeadingZero,
   includesUrlReference,
-} = require('../lib/svgo/tools.js');
-const { referencesProps, attrsGroupsDefaults } = require('./_collections.js');
+} = require("../lib/svgo/tools.js");
+const { referencesProps, attrsGroupsDefaults } = require("./_collections.js");
 
 /**
  * @typedef {PathDataItem[]} PathData
@@ -51,7 +51,7 @@ const applyTransforms = (root, params) => {
         // gradients or clip-path which are also subjects to transform.
         if (
           node.attributes.transform == null ||
-          node.attributes.transform === '' ||
+          node.attributes.transform === "" ||
           // styles are not considered when applying transform
           // can be fixed properly with new style engine
           node.attributes.style != null ||
@@ -68,7 +68,7 @@ const applyTransforms = (root, params) => {
 
         // Transform overridden in <style> tag which is not considered
         if (
-          transformStyle.type === 'static' &&
+          transformStyle.type === "static" &&
           transformStyle.value !== node.attributes.transform
         ) {
           return;
@@ -78,20 +78,18 @@ const applyTransforms = (root, params) => {
           transform2js(node.attributes.transform),
         );
 
-        const stroke =
-          computedStyle.stroke?.type === 'static'
-            ? computedStyle.stroke.value
-            : null;
+        const stroke = computedStyle.stroke?.type === "static"
+          ? computedStyle.stroke.value
+          : null;
 
-        const strokeWidth =
-          computedStyle['stroke-width']?.type === 'static'
-            ? computedStyle['stroke-width'].value
-            : null;
+        const strokeWidth = computedStyle["stroke-width"]?.type === "static"
+          ? computedStyle["stroke-width"].value
+          : null;
         const transformPrecision = params.transformPrecision;
 
         if (
-          computedStyle.stroke?.type === 'dynamic' ||
-          computedStyle['stroke-width']?.type === 'dynamic'
+          computedStyle.stroke?.type === "dynamic" ||
+          computedStyle["stroke-width"]?.type === "dynamic"
         ) {
           return;
         }
@@ -102,7 +100,7 @@ const applyTransforms = (root, params) => {
           ).toFixed(transformPrecision),
         );
 
-        if (stroke && stroke != 'none') {
+        if (stroke && stroke != "none") {
           if (!params.applyTransformsStroked) {
             return;
           }
@@ -119,32 +117,35 @@ const applyTransforms = (root, params) => {
 
           // apply transform to stroke-width, stroke-dashoffset and stroke-dasharray
           if (scale !== 1) {
-            if (node.attributes['vector-effect'] !== 'non-scaling-stroke') {
-              node.attributes['stroke-width'] = (
-                strokeWidth || attrsGroupsDefaults.presentation['stroke-width']
+            if (node.attributes["vector-effect"] !== "non-scaling-stroke") {
+              node.attributes["stroke-width"] = (
+                strokeWidth || attrsGroupsDefaults.presentation["stroke-width"]
               )
                 .trim()
-                .replace(regNumericValues, (num) =>
-                  removeLeadingZero(Number(num) * scale),
+                .replace(
+                  regNumericValues,
+                  (num) => removeLeadingZero(Number(num) * scale),
                 );
 
-              if (node.attributes['stroke-dashoffset'] != null) {
-                node.attributes['stroke-dashoffset'] = node.attributes[
-                  'stroke-dashoffset'
+              if (node.attributes["stroke-dashoffset"] != null) {
+                node.attributes["stroke-dashoffset"] = node.attributes[
+                  "stroke-dashoffset"
                 ]
                   .trim()
-                  .replace(regNumericValues, (num) =>
-                    removeLeadingZero(Number(num) * scale),
+                  .replace(
+                    regNumericValues,
+                    (num) => removeLeadingZero(Number(num) * scale),
                   );
               }
 
-              if (node.attributes['stroke-dasharray'] != null) {
-                node.attributes['stroke-dasharray'] = node.attributes[
-                  'stroke-dasharray'
+              if (node.attributes["stroke-dasharray"] != null) {
+                node.attributes["stroke-dasharray"] = node.attributes[
+                  "stroke-dasharray"
                 ]
                   .trim()
-                  .replace(regNumericValues, (num) =>
-                    removeLeadingZero(Number(num) * scale),
+                  .replace(
+                    regNumericValues,
+                    (num) => removeLeadingZero(Number(num) * scale),
                   );
               }
             }
@@ -197,7 +198,7 @@ const applyMatrixToPathData = (pathData, matrix) => {
     let { command, args } = pathItem;
 
     // moveto (x y)
-    if (command === 'M') {
+    if (command === "M") {
       cursor[0] = args[0];
       cursor[1] = args[1];
       start[0] = cursor[0];
@@ -206,7 +207,7 @@ const applyMatrixToPathData = (pathData, matrix) => {
       args[0] = x;
       args[1] = y;
     }
-    if (command === 'm') {
+    if (command === "m") {
       cursor[0] += args[0];
       cursor[1] += args[1];
       start[0] = cursor[0];
@@ -218,35 +219,35 @@ const applyMatrixToPathData = (pathData, matrix) => {
 
     // horizontal lineto (x)
     // convert to lineto to handle two-dimentional transforms
-    if (command === 'H') {
-      command = 'L';
+    if (command === "H") {
+      command = "L";
       args = [args[0], cursor[1]];
     }
-    if (command === 'h') {
-      command = 'l';
+    if (command === "h") {
+      command = "l";
       args = [args[0], 0];
     }
 
     // vertical lineto (y)
     // convert to lineto to handle two-dimentional transforms
-    if (command === 'V') {
-      command = 'L';
+    if (command === "V") {
+      command = "L";
       args = [cursor[0], args[0]];
     }
-    if (command === 'v') {
-      command = 'l';
+    if (command === "v") {
+      command = "l";
       args = [0, args[0]];
     }
 
     // lineto (x y)
-    if (command === 'L') {
+    if (command === "L") {
       cursor[0] = args[0];
       cursor[1] = args[1];
       const [x, y] = transformAbsolutePoint(matrix, args[0], args[1]);
       args[0] = x;
       args[1] = y;
     }
-    if (command === 'l') {
+    if (command === "l") {
       cursor[0] += args[0];
       cursor[1] += args[1];
       const [x, y] = transformRelativePoint(matrix, args[0], args[1]);
@@ -255,7 +256,7 @@ const applyMatrixToPathData = (pathData, matrix) => {
     }
 
     // curveto (x1 y1 x2 y2 x y)
-    if (command === 'C') {
+    if (command === "C") {
       cursor[0] = args[4];
       cursor[1] = args[5];
       const [x1, y1] = transformAbsolutePoint(matrix, args[0], args[1]);
@@ -268,7 +269,7 @@ const applyMatrixToPathData = (pathData, matrix) => {
       args[4] = x;
       args[5] = y;
     }
-    if (command === 'c') {
+    if (command === "c") {
       cursor[0] += args[4];
       cursor[1] += args[5];
       const [x1, y1] = transformRelativePoint(matrix, args[0], args[1]);
@@ -283,7 +284,7 @@ const applyMatrixToPathData = (pathData, matrix) => {
     }
 
     // smooth curveto (x2 y2 x y)
-    if (command === 'S') {
+    if (command === "S") {
       cursor[0] = args[2];
       cursor[1] = args[3];
       const [x2, y2] = transformAbsolutePoint(matrix, args[0], args[1]);
@@ -293,7 +294,7 @@ const applyMatrixToPathData = (pathData, matrix) => {
       args[2] = x;
       args[3] = y;
     }
-    if (command === 's') {
+    if (command === "s") {
       cursor[0] += args[2];
       cursor[1] += args[3];
       const [x2, y2] = transformRelativePoint(matrix, args[0], args[1]);
@@ -305,7 +306,7 @@ const applyMatrixToPathData = (pathData, matrix) => {
     }
 
     // quadratic Bézier curveto (x1 y1 x y)
-    if (command === 'Q') {
+    if (command === "Q") {
       cursor[0] = args[2];
       cursor[1] = args[3];
       const [x1, y1] = transformAbsolutePoint(matrix, args[0], args[1]);
@@ -315,7 +316,7 @@ const applyMatrixToPathData = (pathData, matrix) => {
       args[2] = x;
       args[3] = y;
     }
-    if (command === 'q') {
+    if (command === "q") {
       cursor[0] += args[2];
       cursor[1] += args[3];
       const [x1, y1] = transformRelativePoint(matrix, args[0], args[1]);
@@ -327,14 +328,14 @@ const applyMatrixToPathData = (pathData, matrix) => {
     }
 
     // smooth quadratic Bézier curveto (x y)
-    if (command === 'T') {
+    if (command === "T") {
       cursor[0] = args[0];
       cursor[1] = args[1];
       const [x, y] = transformAbsolutePoint(matrix, args[0], args[1]);
       args[0] = x;
       args[1] = y;
     }
-    if (command === 't') {
+    if (command === "t") {
       cursor[0] += args[0];
       cursor[1] += args[1];
       const [x, y] = transformRelativePoint(matrix, args[0], args[1]);
@@ -343,7 +344,7 @@ const applyMatrixToPathData = (pathData, matrix) => {
     }
 
     // elliptical arc (rx ry x-axis-rotation large-arc-flag sweep-flag x y)
-    if (command === 'A') {
+    if (command === "A") {
       transformArc(cursor, args, matrix);
       cursor[0] = args[5];
       cursor[1] = args[6];
@@ -359,7 +360,7 @@ const applyMatrixToPathData = (pathData, matrix) => {
       args[5] = x;
       args[6] = y;
     }
-    if (command === 'a') {
+    if (command === "a") {
       transformArc([0, 0], args, matrix);
       cursor[0] += args[5];
       cursor[1] += args[6];
@@ -377,7 +378,7 @@ const applyMatrixToPathData = (pathData, matrix) => {
     }
 
     // closepath
-    if (command === 'z' || command === 'Z') {
+    if (command === "z" || command === "Z") {
       cursor[0] = start[0];
       cursor[1] = start[1];
     }

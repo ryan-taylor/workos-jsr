@@ -1,3 +1,3 @@
-'use strict';
+"use strict";
 
-module.exports = require('./async').forEachLimit;
+module.exports = require("./async").forEachLimit;

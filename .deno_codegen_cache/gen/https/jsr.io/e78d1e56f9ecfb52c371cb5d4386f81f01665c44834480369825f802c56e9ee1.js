@@ -20,14 +20,16 @@ import { isPosixPathSeparator } from "./_util.ts";
  */ export function resolve(...pathSegments) {
   let resolvedPath = "";
   let resolvedAbsolute = false;
-  for(let i = pathSegments.length - 1; i >= -1 && !resolvedAbsolute; i--){
+  for (let i = pathSegments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
     let path;
     if (i >= 0) path = pathSegments[i];
     else {
       // deno-lint-ignore no-explicit-any
       const { Deno } = globalThis;
       if (typeof Deno?.cwd !== "function") {
-        throw new TypeError("Resolved a relative path without a current working directory (CWD)");
+        throw new TypeError(
+          "Resolved a relative path without a current working directory (CWD)",
+        );
       }
       path = Deno.cwd();
     }
@@ -42,7 +44,12 @@ import { isPosixPathSeparator } from "./_util.ts";
   // At this point the path should be resolved to a full absolute path, but
   // handle relative paths to be safe (might happen when Deno.cwd() fails)
   // Normalize the path
-  resolvedPath = normalizeString(resolvedPath, !resolvedAbsolute, "/", isPosixPathSeparator);
+  resolvedPath = normalizeString(
+    resolvedPath,
+    !resolvedAbsolute,
+    "/",
+    isPosixPathSeparator,
+  );
   if (resolvedAbsolute) {
     if (resolvedPath.length > 0) return `/${resolvedPath}`;
     else return "/";

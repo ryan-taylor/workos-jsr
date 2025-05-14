@@ -18,14 +18,15 @@
   const chars = {
     "{": "}",
     "(": ")",
-    "[": "]"
+    "[": "]",
   };
-  const regex = /\\(.)|(^!|\*|\?|[\].+)]\?|\[[^\\\]]+\]|\{[^\\}]+\}|\(\?[:!=][^\\)]+\)|\([^|]+\|[^\\)]+\))/;
+  const regex =
+    /\\(.)|(^!|\*|\?|[\].+)]\?|\[[^\\\]]+\]|\{[^\\}]+\}|\(\?[:!=][^\\)]+\)|\([^|]+\|[^\\)]+\))/;
   if (str === "") {
     return false;
   }
   let match;
-  while(match = regex.exec(str)){
+  while (match = regex.exec(str)) {
     if (match[2]) return true;
     let idx = match.index + match[0].length;
     // if an open bracket/brace/paren is escaped,

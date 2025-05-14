@@ -3,8 +3,8 @@ function plural(word: string): string {
   return `${word}s`;
 }
 
-import type { UnprocessableEntityError } from "workos/common/interfaces/unprocessable-entity-error.interface.ts";
-import type { RequestException } from "workos/common/interfaces/request-exception.interface.ts";
+import type { UnprocessableEntityError } from "../interfaces/unprocessable-entity-error.interface.ts";
+import type { RequestException } from "../interfaces/request-exception.interface.ts";
 
 export class UnprocessableEntityException extends Error
   implements RequestException {

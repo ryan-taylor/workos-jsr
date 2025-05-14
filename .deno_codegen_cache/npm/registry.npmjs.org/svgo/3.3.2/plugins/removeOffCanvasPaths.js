@@ -1,16 +1,16 @@
-'use strict';
+"use strict";
 
 /**
  * @typedef {import('../lib/types').PathDataItem} PathDataItem
  */
 
-const { visitSkip, detachNodeFromParent } = require('../lib/xast.js');
-const { parsePathData } = require('../lib/path.js');
-const { intersects } = require('./_path.js');
+const { visitSkip, detachNodeFromParent } = require("../lib/xast.js");
+const { parsePathData } = require("../lib/path.js");
+const { intersects } = require("./_path.js");
 
-exports.name = 'removeOffCanvasPaths';
+exports.name = "removeOffCanvasPaths";
 exports.description =
-  'removes elements that are drawn outside of the viewbox (disabled by default)';
+  "removes elements that are drawn outside of the viewbox (disabled by default)";
 
 /**
  * Remove elements that are drawn outside of the viewbox.
@@ -35,8 +35,8 @@ exports.fn = () => {
   return {
     element: {
       enter: (node, parentNode) => {
-        if (node.name === 'svg' && parentNode.type === 'root') {
-          let viewBox = '';
+        if (node.name === "svg" && parentNode.type === "root") {
+          let viewBox = "";
           // find viewbox
           if (node.attributes.viewBox != null) {
             // remove commas and plus signs, normalize and trim whitespace
@@ -51,12 +51,12 @@ exports.fn = () => {
           // parse viewbox
           // remove commas and plus signs, normalize and trim whitespace
           viewBox = viewBox
-            .replace(/[,+]|px/g, ' ')
-            .replace(/\s+/g, ' ')
-            .replace(/^\s*|\s*$/g, '');
+            .replace(/[,+]|px/g, " ")
+            .replace(/\s+/g, " ")
+            .replace(/^\s*|\s*$/g, "");
           // ensure that the dimensions are 4 values separated by space
-          const m =
-            /^(-?\d*\.?\d+) (-?\d*\.?\d+) (\d*\.?\d+) (\d*\.?\d+)$/.exec(
+          const m = /^(-?\d*\.?\d+) (-?\d*\.?\d+) (\d*\.?\d+) (\d*\.?\d+)$/
+            .exec(
               viewBox,
             );
           if (m == null) {
@@ -84,7 +84,7 @@ exports.fn = () => {
         }
 
         if (
-          node.name === 'path' &&
+          node.name === "path" &&
           node.attributes.d != null &&
           viewBoxData != null
         ) {
@@ -93,7 +93,7 @@ exports.fn = () => {
           // consider that a M command within the viewBox is visible
           let visible = false;
           for (const pathDataItem of pathData) {
-            if (pathDataItem.command === 'M') {
+            if (pathDataItem.command === "M") {
               const [x, y] = pathDataItem.args;
               if (
                 x >= viewBoxData.left &&
@@ -111,7 +111,7 @@ exports.fn = () => {
 
           if (pathData.length === 2) {
             // close the path too short for intersects()
-            pathData.push({ command: 'z', args: [] });
+            pathData.push({ command: "z", args: [] });
           }
 
           const { left, top, width, height } = viewBoxData;
@@ -119,11 +119,11 @@ exports.fn = () => {
            * @type {PathDataItem[]}
            */
           const viewBoxPathData = [
-            { command: 'M', args: [left, top] },
-            { command: 'h', args: [width] },
-            { command: 'v', args: [height] },
-            { command: 'H', args: [left] },
-            { command: 'z', args: [] },
+            { command: "M", args: [left, top] },
+            { command: "h", args: [width] },
+            { command: "v", args: [height] },
+            { command: "H", args: [left] },
+            { command: "z", args: [] },
           ];
 
           if (intersects(viewBoxPathData, pathData) === false) {

@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-exports.name = 'sortAttrs';
-exports.description = 'Sort element attributes for better compression';
+exports.name = "sortAttrs";
+exports.description = "Sort element attributes for better compression";
 
 /**
  * Sort element attributes for better compression
@@ -13,43 +13,43 @@ exports.description = 'Sort element attributes for better compression';
 exports.fn = (_root, params) => {
   const {
     order = [
-      'id',
-      'width',
-      'height',
-      'x',
-      'x1',
-      'x2',
-      'y',
-      'y1',
-      'y2',
-      'cx',
-      'cy',
-      'r',
-      'fill',
-      'stroke',
-      'marker',
-      'd',
-      'points',
+      "id",
+      "width",
+      "height",
+      "x",
+      "x1",
+      "x2",
+      "y",
+      "y1",
+      "y2",
+      "cx",
+      "cy",
+      "r",
+      "fill",
+      "stroke",
+      "marker",
+      "d",
+      "points",
     ],
-    xmlnsOrder = 'front',
+    xmlnsOrder = "front",
   } = params;
 
   /**
    * @type {(name: string) => number}
    */
   const getNsPriority = (name) => {
-    if (xmlnsOrder === 'front') {
+    if (xmlnsOrder === "front") {
       // put xmlns first
-      if (name === 'xmlns') {
+      if (name === "xmlns") {
         return 3;
       }
       // xmlns:* attributes second
-      if (name.startsWith('xmlns:')) {
+      if (name.startsWith("xmlns:")) {
         return 2;
       }
     }
     // other namespaces after and sort them alphabetically
-    if (name.includes(':')) {
+    if (name.includes(":")) {
       return 1;
     }
     // other attributes
@@ -69,8 +69,8 @@ exports.fn = (_root, params) => {
     }
     // extract the first part from attributes
     // for example "fill" from "fill" and "fill-opacity"
-    const [aPart] = aName.split('-');
-    const [bPart] = bName.split('-');
+    const [aPart] = aName.split("-");
+    const [bPart] = bName.split("-");
     // rely on alphabetical sort when the first part is the same
     if (aPart !== bPart) {
       const aInOrderFlag = order.includes(aPart) ? 1 : 0;

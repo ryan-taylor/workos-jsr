@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-exports.name = 'sortDefsChildren';
-exports.description = 'Sorts children of <defs> to improve compression';
+exports.name = "sortDefsChildren";
+exports.description = "Sorts children of <defs> to improve compression";
 
 /**
  * Sorts children of defs in order to improve compression.
@@ -15,13 +15,13 @@ exports.fn = () => {
   return {
     element: {
       enter: (node) => {
-        if (node.name === 'defs') {
+        if (node.name === "defs") {
           /**
            * @type {Map<string, number>}
            */
           const frequencies = new Map();
           for (const child of node.children) {
-            if (child.type === 'element') {
+            if (child.type === "element") {
               const frequency = frequencies.get(child.name);
               if (frequency == null) {
                 frequencies.set(child.name, 1);
@@ -31,7 +31,7 @@ exports.fn = () => {
             }
           }
           node.children.sort((a, b) => {
-            if (a.type !== 'element' || b.type !== 'element') {
+            if (a.type !== "element" || b.type !== "element") {
               return 0;
             }
             const aFrequency = frequencies.get(a.name);

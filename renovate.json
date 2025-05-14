@@ -8,7 +8,9 @@
       "matchPaths": ["vendor/openapi/**"],
       "labels": ["spec-update"],
       "reviewers": [],
-      "prBodyNotes": ["This PR contains OpenAPI spec updates that should follow a lighter review process."],
+      "prBodyNotes": [
+        "This PR contains OpenAPI spec updates that should follow a lighter review process."
+      ],
       "automerge": false
     }
   ],

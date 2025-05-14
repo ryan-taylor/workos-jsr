@@ -5,12 +5,12 @@ import type {
   DirectoryUserResponse,
   EventDirectory,
   EventDirectoryResponse,
-} from "workos/directory-sync/interfaces.ts";
+} from "../../directory-sync/interfaces.ts";
 import type {
   Organization,
   OrganizationResponse,
-} from "workos/organizations/interfaces.ts";
-import type { Connection, ConnectionResponse } from "workos/sso/interfaces.ts";
+} from "../../organizations/interfaces.ts";
+import type { Connection, ConnectionResponse } from "../../sso/interfaces.ts";
 import type {
   AuthenticationEvent,
   AuthenticationEventResponse,
@@ -26,23 +26,23 @@ import type {
   SessionResponse,
   User,
   UserResponse,
-} from "workos/user-management/interfaces.ts";
+} from "../../user-management/interfaces.ts";
 import type {
   OrganizationMembership,
   OrganizationMembershipResponse,
-} from "workos/user-management/interfaces/organization-membership.interface.ts";
+} from "../../user-management/interfaces/organization-membership.interface.ts";
 import type {
   RoleEvent,
   RoleEventResponse,
-} from "workos/roles/interfaces/role.interface.ts";
+} from "../../roles/interfaces/role.interface.ts";
 import type {
   OrganizationDomain,
   OrganizationDomainResponse,
-} from "workos/organization-domains/interfaces.ts";
+} from "../../organization-domains/interfaces.ts";
 import type {
   AuthenticationRadarRiskDetectedEventData,
   AuthenticationRadarRiskDetectedEventResponseData,
-} from "workos/user-management/interfaces/authentication-radar-risk-detected-event.interface.ts";
+} from "../../user-management/interfaces/authentication-radar-risk-detected-event.interface.ts";
 
 export interface EventBase {
   id: string;

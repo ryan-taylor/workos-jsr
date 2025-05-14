@@ -9,11 +9,14 @@ import {
   fetchURL,
   type MockResponseData,
   resetMockFetch,
-} from "../common/utils/test-utils.ts.ts";
+} from "../common/utils/test-utils.ts";
 
-import { WorkOS } from "../workos.ts.ts";
-import { type ConnectionResponse, ConnectionType } from "./interfaces/index.ts.ts";
-import type { ListResponse } from "../common/interfaces/index.ts.ts";
+import { WorkOS } from "../workos.ts";
+import {
+  type ConnectionResponse,
+  ConnectionType,
+} from "./interfaces/index.ts";
+import type { ListResponse } from "../common/interfaces/index.ts";
 
 // Test data setup
 const connectionResponse: ConnectionResponse = {

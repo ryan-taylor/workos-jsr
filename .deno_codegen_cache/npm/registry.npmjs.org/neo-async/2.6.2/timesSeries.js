@@ -1,3 +1,3 @@
-'use strict';
+"use strict";
 
-module.exports = require('./async').timesSeries;
+module.exports = require("./async").timesSeries;

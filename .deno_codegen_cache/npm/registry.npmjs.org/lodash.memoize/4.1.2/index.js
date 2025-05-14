@@ -8,14 +8,14 @@
  */
 
 /** Used as the `TypeError` message for "Functions" methods. */
-var FUNC_ERROR_TEXT = 'Expected a function';
+var FUNC_ERROR_TEXT = "Expected a function";
 
 /** Used to stand-in for `undefined` hash values. */
-var HASH_UNDEFINED = '__lodash_hash_undefined__';
+var HASH_UNDEFINED = "__lodash_hash_undefined__";
 
 /** `Object#toString` result references. */
-var funcTag = '[object Function]',
-    genTag = '[object GeneratorFunction]';
+var funcTag = "[object Function]",
+  genTag = "[object GeneratorFunction]";
 
 /**
  * Used to match `RegExp`
@@ -27,13 +27,15 @@ var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
 var reIsHostCtor = /^\[object .+?Constructor\]$/;
 
 /** Detect free variable `global` from Node.js. */
-var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+var freeGlobal = typeof global == "object" && global &&
+  global.Object === Object && global;
 
 /** Detect free variable `self`. */
-var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+var freeSelf = typeof self == "object" && self && self.Object === Object &&
+  self;
 
 /** Used as a reference to the global object. */
-var root = freeGlobal || freeSelf || Function('return this')();
+var root = freeGlobal || freeSelf || Function("return this")();
 
 /**
  * Gets the value at `key` of `object`.
@@ -58,9 +60,9 @@ function isHostObject(value) {
   // Many host objects are `Object` objects that can coerce to strings
   // despite having improperly defined `toString` methods.
   var result = false;
-  if (value != null && typeof value.toString != 'function') {
+  if (value != null && typeof value.toString != "function") {
     try {
-      result = !!(value + '');
+      result = !!(value + "");
     } catch (e) {}
   }
   return result;
@@ -68,17 +70,19 @@ function isHostObject(value) {
 
 /** Used for built-in method references. */
 var arrayProto = Array.prototype,
-    funcProto = Function.prototype,
-    objectProto = Object.prototype;
+  funcProto = Function.prototype,
+  objectProto = Object.prototype;
 
 /** Used to detect overreaching core-js shims. */
-var coreJsData = root['__core-js_shared__'];
+var coreJsData = root["__core-js_shared__"];
 
 /** Used to detect methods masquerading as native. */
-var maskSrcKey = (function() {
-  var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');
-  return uid ? ('Symbol(src)_1.' + uid) : '';
-}());
+var maskSrcKey = function () {
+  var uid = /[^.]+$/.exec(
+    coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || "",
+  );
+  return uid ? ("Symbol(src)_1." + uid) : "";
+}();
 
 /** Used to resolve the decompiled source of functions. */
 var funcToString = funcProto.toString;
@@ -94,17 +98,22 @@ var hasOwnProperty = objectProto.hasOwnProperty;
 var objectToString = objectProto.toString;
 
 /** Used to detect if a method is native. */
-var reIsNative = RegExp('^' +
-  funcToString.call(hasOwnProperty).replace(reRegExpChar, '\\$&')
-  .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
+var reIsNative = RegExp(
+  "^" +
+    funcToString.call(hasOwnProperty).replace(reRegExpChar, "\\$&")
+      .replace(
+        /hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g,
+        "$1.*?",
+      ) +
+    "$",
 );
 
 /** Built-in value references. */
 var splice = arrayProto.splice;
 
 /* Built-in method references that are verified to be native. */
-var Map = getNative(root, 'Map'),
-    nativeCreate = getNative(Object, 'create');
+var Map = getNative(root, "Map"),
+  nativeCreate = getNative(Object, "create");
 
 /**
  * Creates a hash object.
@@ -115,7 +124,7 @@ var Map = getNative(root, 'Map'),
  */
 function Hash(entries) {
   var index = -1,
-      length = entries ? entries.length : 0;
+    length = entries ? entries.length : 0;
 
   this.clear();
   while (++index < length) {
@@ -178,7 +187,9 @@ function hashGet(key) {
  */
 function hashHas(key) {
   var data = this.__data__;
-  return nativeCreate ? data[key] !== undefined : hasOwnProperty.call(data, key);
+  return nativeCreate
+    ? data[key] !== undefined
+    : hasOwnProperty.call(data, key);
 }
 
 /**
@@ -199,7 +210,7 @@ function hashSet(key, value) {
 
 // Add methods to `Hash`.
 Hash.prototype.clear = hashClear;
-Hash.prototype['delete'] = hashDelete;
+Hash.prototype["delete"] = hashDelete;
 Hash.prototype.get = hashGet;
 Hash.prototype.has = hashHas;
 Hash.prototype.set = hashSet;
@@ -213,7 +224,7 @@ Hash.prototype.set = hashSet;
  */
 function ListCache(entries) {
   var index = -1,
-      length = entries ? entries.length : 0;
+    length = entries ? entries.length : 0;
 
   this.clear();
   while (++index < length) {
@@ -244,7 +255,7 @@ function listCacheClear() {
  */
 function listCacheDelete(key) {
   var data = this.__data__,
-      index = assocIndexOf(data, key);
+    index = assocIndexOf(data, key);
 
   if (index < 0) {
     return false;
@@ -269,7 +280,7 @@ function listCacheDelete(key) {
  */
 function listCacheGet(key) {
   var data = this.__data__,
-      index = assocIndexOf(data, key);
+    index = assocIndexOf(data, key);
 
   return index < 0 ? undefined : data[index][1];
 }
@@ -299,7 +310,7 @@ function listCacheHas(key) {
  */
 function listCacheSet(key, value) {
   var data = this.__data__,
-      index = assocIndexOf(data, key);
+    index = assocIndexOf(data, key);
 
   if (index < 0) {
     data.push([key, value]);
@@ -311,7 +322,7 @@ function listCacheSet(key, value) {
 
 // Add methods to `ListCache`.
 ListCache.prototype.clear = listCacheClear;
-ListCache.prototype['delete'] = listCacheDelete;
+ListCache.prototype["delete"] = listCacheDelete;
 ListCache.prototype.get = listCacheGet;
 ListCache.prototype.has = listCacheHas;
 ListCache.prototype.set = listCacheSet;
@@ -325,7 +336,7 @@ ListCache.prototype.set = listCacheSet;
  */
 function MapCache(entries) {
   var index = -1,
-      length = entries ? entries.length : 0;
+    length = entries ? entries.length : 0;
 
   this.clear();
   while (++index < length) {
@@ -343,9 +354,9 @@ function MapCache(entries) {
  */
 function mapCacheClear() {
   this.__data__ = {
-    'hash': new Hash,
-    'map': new (Map || ListCache),
-    'string': new Hash
+    "hash": new Hash(),
+    "map": new (Map || ListCache)(),
+    "string": new Hash(),
   };
 }
 
@@ -359,7 +370,7 @@ function mapCacheClear() {
  * @returns {boolean} Returns `true` if the entry was removed, else `false`.
  */
 function mapCacheDelete(key) {
-  return getMapData(this, key)['delete'](key);
+  return getMapData(this, key)["delete"](key);
 }
 
 /**
@@ -405,7 +416,7 @@ function mapCacheSet(key, value) {
 
 // Add methods to `MapCache`.
 MapCache.prototype.clear = mapCacheClear;
-MapCache.prototype['delete'] = mapCacheDelete;
+MapCache.prototype["delete"] = mapCacheDelete;
 MapCache.prototype.get = mapCacheGet;
 MapCache.prototype.has = mapCacheHas;
 MapCache.prototype.set = mapCacheSet;
@@ -440,7 +451,9 @@ function baseIsNative(value) {
   if (!isObject(value) || isMasked(value)) {
     return false;
   }
-  var pattern = (isFunction(value) || isHostObject(value)) ? reIsNative : reIsHostCtor;
+  var pattern = (isFunction(value) || isHostObject(value))
+    ? reIsNative
+    : reIsHostCtor;
   return pattern.test(toSource(value));
 }
 
@@ -455,7 +468,7 @@ function baseIsNative(value) {
 function getMapData(map, key) {
   var data = map.__data__;
   return isKeyable(key)
-    ? data[typeof key == 'string' ? 'string' : 'hash']
+    ? data[typeof key == "string" ? "string" : "hash"]
     : data.map;
 }
 
@@ -481,8 +494,9 @@ function getNative(object, key) {
  */
 function isKeyable(value) {
   var type = typeof value;
-  return (type == 'string' || type == 'number' || type == 'symbol' || type == 'boolean')
-    ? (value !== '__proto__')
+  return (type == "string" || type == "number" || type == "symbol" ||
+      type == "boolean")
+    ? (value !== "__proto__")
     : (value === null);
 }
 
@@ -510,10 +524,10 @@ function toSource(func) {
       return funcToString.call(func);
     } catch (e) {}
     try {
-      return (func + '');
+      return (func + "");
     } catch (e) {}
   }
-  return '';
+  return "";
 }
 
 /**
@@ -561,13 +575,15 @@ function toSource(func) {
  * _.memoize.Cache = WeakMap;
  */
 function memoize(func, resolver) {
-  if (typeof func != 'function' || (resolver && typeof resolver != 'function')) {
+  if (
+    typeof func != "function" || (resolver && typeof resolver != "function")
+  ) {
     throw new TypeError(FUNC_ERROR_TEXT);
   }
-  var memoized = function() {
+  var memoized = function () {
     var args = arguments,
-        key = resolver ? resolver.apply(this, args) : args[0],
-        cache = memoized.cache;
+      key = resolver ? resolver.apply(this, args) : args[0],
+      cache = memoized.cache;
 
     if (cache.has(key)) {
       return cache.get(key);
@@ -576,7 +592,7 @@ function memoize(func, resolver) {
     memoized.cache = cache.set(key, result);
     return result;
   };
-  memoized.cache = new (memoize.Cache || MapCache);
+  memoized.cache = new (memoize.Cache || MapCache)();
   return memoized;
 }
 
@@ -639,7 +655,7 @@ function eq(value, other) {
 function isFunction(value) {
   // The use of `Object#toString` avoids issues with the `typeof` operator
   // in Safari 8-9 which returns 'object' for typed array and other constructors.
-  var tag = isObject(value) ? objectToString.call(value) : '';
+  var tag = isObject(value) ? objectToString.call(value) : "";
   return tag == funcTag || tag == genTag;
 }
 
@@ -670,7 +686,7 @@ function isFunction(value) {
  */
 function isObject(value) {
   var type = typeof value;
-  return !!value && (type == 'object' || type == 'function');
+  return !!value && (type == "object" || type == "function");
 }
 
 module.exports = memoize;

@@ -1,6 +1,6 @@
-'use strict';
-const valueParser = require('postcss-value-parser');
-const mappings = require('./lib/map.js');
+"use strict";
+const valueParser = require("postcss-value-parser");
+const mappings = require("./lib/map.js");
 
 /**
  * @param {string} value
@@ -15,7 +15,7 @@ function transform(value) {
 
   const values = nodes
     .filter((list, index) => index % 2 === 0)
-    .filter((node) => node.type === 'word')
+    .filter((node) => node.type === "word")
     .map((n) => n.value.toLowerCase());
 
   if (values.length === 0) {
@@ -37,7 +37,7 @@ function transform(value) {
  */
 function pluginCreator() {
   return {
-    postcssPlugin: 'postcss-normalize-display-values',
+    postcssPlugin: "postcss-normalize-display-values",
 
     prepare() {
       const cache = new Map();

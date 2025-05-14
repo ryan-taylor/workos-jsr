@@ -1,7 +1,7 @@
-'use strict';
-const path = require('path');
-const valueParser = require('postcss-value-parser');
-const normalize = require('./normalize.js');
+"use strict";
+const path = require("path");
+const valueParser = require("postcss-value-parser");
+const normalize = require("./normalize.js");
 
 const multiline = /\\[\r\n]/;
 // eslint-disable-next-line no-useless-escape
@@ -30,7 +30,7 @@ function isAbsolute(url) {
  * @return {string}
  */
 function convert(url) {
-  if (isAbsolute(url) || url.startsWith('//')) {
+  if (isAbsolute(url) || url.startsWith("//")) {
     let normalizedURL;
 
     try {
@@ -43,7 +43,7 @@ function convert(url) {
   }
 
   // `path.normalize` always returns backslashes on Windows, need replace in `/`
-  return path.normalize(url).replace(new RegExp('\\' + path.sep, 'g'), '/');
+  return path.normalize(url).replace(new RegExp("\\" + path.sep, "g"), "/");
 }
 
 /**
@@ -54,16 +54,17 @@ function transformNamespace(rule) {
   rule.params = valueParser(rule.params)
     .walk((node) => {
       if (
-        node.type === 'function' &&
-        node.value.toLowerCase() === 'url' &&
+        node.type === "function" &&
+        node.value.toLowerCase() === "url" &&
         node.nodes.length
       ) {
-        /** @type {valueParser.Node} */ (node).type = 'string';
-        /** @type {any} */ (node).quote =
-          node.nodes[0].type === 'string' ? node.nodes[0].quote : '"';
+        /** @type {valueParser.Node} */ (node).type = "string";
+        /** @type {any} */ (node).quote = node.nodes[0].type === "string"
+          ? node.nodes[0].quote
+          : '"';
         node.value = node.nodes[0].value;
       }
-      if (node.type === 'string') {
+      if (node.type === "string") {
         node.value = node.value.trim();
       }
       return false;
@@ -78,11 +79,11 @@ function transformNamespace(rule) {
 function transformDecl(decl) {
   decl.value = valueParser(decl.value)
     .walk((node) => {
-      if (node.type !== 'function' || node.value.toLowerCase() !== 'url') {
+      if (node.type !== "function" || node.value.toLowerCase() !== "url") {
         return false;
       }
 
-      node.before = node.after = '';
+      node.before = node.after = "";
 
       if (!node.nodes.length) {
         return false;
@@ -90,12 +91,12 @@ function transformDecl(decl) {
       let url = node.nodes[0];
       let escaped;
 
-      url.value = url.value.trim().replace(multiline, '');
+      url.value = url.value.trim().replace(multiline, "");
 
       // Skip empty URLs
       // Empty URL function equals request to current stylesheet where it is declared
       if (url.value.length === 0) {
-        /** @type {any} */ (url).quote = '';
+        /** @type {any} */ (url).quote = "";
 
         return false;
       }
@@ -108,15 +109,15 @@ function transformDecl(decl) {
         url.value = convert(url.value);
       }
 
-      if (escapeChars.test(url.value) && url.type === 'string') {
-        escaped = url.value.replace(escapeChars, '\\$1');
+      if (escapeChars.test(url.value) && url.type === "string") {
+        escaped = url.value.replace(escapeChars, "\\$1");
 
         if (escaped.length < url.value.length + 2) {
           url.value = escaped;
-          /** @type {valueParser.Node} */ (url).type = 'word';
+          /** @type {valueParser.Node} */ (url).type = "word";
         }
       } else {
-        url.type = 'word';
+        url.type = "word";
       }
 
       return false;
@@ -130,15 +131,15 @@ function transformDecl(decl) {
  */
 function pluginCreator() {
   return {
-    postcssPlugin: 'postcss-normalize-url',
+    postcssPlugin: "postcss-normalize-url",
 
     OnceExit(css) {
       css.walk((node) => {
-        if (node.type === 'decl') {
+        if (node.type === "decl") {
           return transformDecl(node);
         } else if (
-          node.type === 'atrule' &&
-          node.name.toLowerCase() === 'namespace'
+          node.type === "atrule" &&
+          node.name.toLowerCase() === "namespace"
         ) {
           return transformNamespace(node);
         }

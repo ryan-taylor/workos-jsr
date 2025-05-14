@@ -16,12 +16,12 @@
 ### User-impacting
 
 - Breaking enhancement: Create as true ESM module
-- Breaking change: Utilize `.cjs` extension for UMD and CJS builds (very
-    old browsers might not support, but needed with the change given that
-    Webpack may complain if there even exists CJS within what it thinks is
-    an ESM file, the ".js", our default)
-- Breaking change: Utilize `.js` extension instead of `.mjs` for now default
-    ESM builds
+- Breaking change: Utilize `.cjs` extension for UMD and CJS builds (very old
+  browsers might not support, but needed with the change given that Webpack may
+  complain if there even exists CJS within what it thinks is an ESM file, the
+  ".js", our default)
+- Breaking change: Utilize `.js` extension instead of `.mjs` for now default ESM
+  builds
 
 ### Dev-impacting
 
@@ -46,16 +46,16 @@
 
 ## 5.0.5 (2021-04-09)
 
-- Fix: Avoid cache corruption when the returned structure is modified.
-    Fixes #102. (@tejodorus)
+- Fix: Avoid cache corruption when the returned structure is modified. Fixes
+  #102. (@tejodorus)
 
 ## 5.0.4 (2021-03-02)
 
-- Fix: allow falsey at values in filter (now may require checking for
-    presence of `@` in some cases); fixes #136
+- Fix: allow falsey at values in filter (now may require checking for presence
+  of `@` in some cases); fixes #136
 - Docs: Add old missing release info (reconciling with GitHub releases)
 - Docs: Update README to reflect 1.2.0 was not a released version (subsume
-    release details into 2.0.0)
+  release details into 2.0.0)
 - Linting: As per latest ash-nazg
 - npm: Update devDeps.
 
@@ -82,16 +82,15 @@
 
 ## 5.0.0 (2021-01-14)
 
-- Breaking change: Add `type: 'commonjs'` and `exports: {import, require}`
-    (with `node-import-test` npm script to demo)
-- Breaking change: Change paths for browser (now is
-   `dist/index-browser-umd.js` or `dist/index-browser-es.js`)
-   (for Node, `main` and `module` point to new Node-specific dist)
-- Breaking enhancement:  Add `browser` for browser bundling;
-    allowing static analysis environments, doesn't have however
-    conditional code to require `vm`); for ESM browser bundling,
-    now must check `browser` in Rollup Node resolver plugin;
-    see README
+- Breaking change: Add `type: 'commonjs'` and `exports: {import, require}` (with
+  `node-import-test` npm script to demo)
+- Breaking change: Change paths for browser (now is `dist/index-browser-umd.js`
+  or `dist/index-browser-es.js`) (for Node, `main` and `module` point to new
+  Node-specific dist)
+- Breaking enhancement: Add `browser` for browser bundling; allowing static
+  analysis environments, doesn't have however conditional code to require `vm`);
+  for ESM browser bundling, now must check `browser` in Rollup Node resolver
+  plugin; see README
 - Build: Update per latest devDeps.
 - Docs: Add Regex (`.match`) example on value (@jeffreypriebe)
 - Docs: Add Regex (`.match`) example on property
@@ -107,14 +106,14 @@
 - Travis: Check Node 14
 - Travis: add default `dist` field to avoid extra config reporting
 - npm: Update from deprecated `rollup-plugin-babel` to `@rollup/plugin-babel`
-    (and make `babelHelpers` explicit)
+  (and make `babelHelpers` explicit)
 - npm: Reorder scripts by test execution order
 - npm: Update devDeps
 
 ## 4.0.0 (2020-04-09)
 
-- Breaking change/fix: Disallow `resultType` from being lower-cased
-    (broke `parentProperty`)
+- Breaking change/fix: Disallow `resultType` from being lower-cased (broke
+  `parentProperty`)
 - Breaking change: Expect Node >= 10
 - Build: As per latest rollup
 - Linting: Check hidden files; update as per latest ash-nazg
@@ -129,9 +128,9 @@
 - Fix: Ensure throwing with a bad result type
 - Fix: Allow empty string keys
 - Fix: Avoid erring when value before parent selector is falsey
-- Fix: If `resultType` is "all", if path resolves internally to a
-    non-array (string), ensure it is converted to an array before
-    converting to pointer for `pointer`
+- Fix: If `resultType` is "all", if path resolves internally to a non-array
+  (string), ensure it is converted to an array before converting to pointer for
+  `pointer`
 - Enhancement: Allow path as array in non-object signature
 - Docs: Add locally-generated badges for testing, coverage, etc.
 - Linting (ESLint): As per latest ash-nazg
@@ -147,23 +146,23 @@
 ## 2.0.0 (2019-11-23)
 
 - Breaking change: Throw `TypeError` instead of `Error` for missing
-    `otherTypeCallback` when using `@other`
+  `otherTypeCallback` when using `@other`
 - Breaking change: Throw `TypeError` instead of `Error` for missing `path`
 - Enhancement: Throw `TypeError` for missing `json` (fixes #110)
-- Enhancement: Use more efficient `new Function` over `eval`;
-    also allows use of cyclic context objects
+- Enhancement: Use more efficient `new Function` over `eval`; also allows use of
+  cyclic context objects
 - Enhancement: Add `@root` filter selector
 - Maintenance: Add `.editorconfig`
-- Docs: Document options in jsdoc; add return values to callbacks;
-    fix constructor doc sig.
+- Docs: Document options in jsdoc; add return values to callbacks; fix
+  constructor doc sig.
 - Testing: Add test for missing `path` or `json`
 - Testing: Remove unneeded closures
 - npm: Update devDeps and `package-lock.json`
 
 ## 1.1.0 (September 26, 2019)
 
-- Enhancement: Add explicit 'any' to `evaluate()` declaration (for use
-  with `noImplicitAny` TypeScript option)
+- Enhancement: Add explicit 'any' to `evaluate()` declaration (for use with
+  `noImplicitAny` TypeScript option)
 - Build: Update minified build files
 - Travis: Update to check Node 6, 10, 12
 - npm: Ignore `.idea`/`.remarkrc` files
@@ -191,17 +190,18 @@
 - Testing: Add performance test to browser, but bump duration
 - npm: Update devDeps; add core-js-bundle to peerDependencies
 - npm: Ignore some unneeded files
-- Bump Node version in Travis to avoid erring with object rest
-    in eslint-plugin-node routine
+- Bump Node version in Travis to avoid erring with object rest in
+  eslint-plugin-node routine
 
 ## 0.19.0 (May 16, 2019)
 
 - Docs (README): Indicate features, including performance (removing old note)
 - Docs (README): Add headings for setup and fix headings levels
-- Docs (README): Indicate parent selector was not present in original spec
-    (not just not documented)
+- Docs (README): Indicate parent selector was not present in original spec (not
+  just not documented)
 - Docs (README): Fix escaping
-- Linting: Switch to Unix line breaks and other changes per ash-nazg, including linting Markdown JS
+- Linting: Switch to Unix line breaks and other changes per ash-nazg, including
+  linting Markdown JS
 - Linting: Use recommended `.json` extension
 - Linting: Switch to ash-nazg
 - Linting: Add lgtm.yml file for lgtm.com
@@ -214,38 +214,38 @@
 ## 0.18.0 (October 20, 2018)
 
 - Security enhancement: Use global eval instead of regular eval
-- Fix: Handle React-Native environment's lack of support for
-    Node vm (@simon-scherzinger); closes #87
-- Refactoring: Use arrow functions, for-of, declare block scope vars
-    closer to block
+- Fix: Handle React-Native environment's lack of support for Node vm
+  (@simon-scherzinger); closes #87
+- Refactoring: Use arrow functions, for-of, declare block scope vars closer to
+  block
 - Docs: Clarify current `wrap` behavior
 - npm: Add Rollup to test scripts
 
 ## 0.17.0 (October 19, 2018)
 
 - Breaking change: With Node use, must now use
-    `require('jsonpath-plus').JSONPath`.
-- Breaking change: Stop including polyfills for array and string `includes`
-    (can get with `@babel/polyfill` or own)
+  `require('jsonpath-plus').JSONPath`.
+- Breaking change: Stop including polyfills for array and string `includes` (can
+  get with `@babel/polyfill` or own)
 - Breaking change: Remove deprecated `JSONPath.eval`
 - License: Remove old and unneeded license portion from within source file
-    (already have external file)
-- Fix: Support object shorthand functions on sandbox objects
-    (`toString()` had not been working properly with them)
+  (already have external file)
+- Fix: Support object shorthand functions on sandbox objects (`toString()` had
+  not been working properly with them)
 - Enhancement: Add Rollup/Babel/Terser and `module` in `package.json`
 - Refactoring: Use ES6 features such as object shorthand
 - Linting: prefer const and no var
 - Testing: Replace custom server code with `node-static` and add `opn-cli`;
-    mostly switch to ESM
+  mostly switch to ESM
 - npm: Update devDeps; add `package-lock.json`; remove non-functioning remark
 
 ## 0.16.0 (January 14, 2017)
 
-- Breaking change: Give preference to treating special chars in a property
-    as special (override with backtick operator)
+- Breaking change: Give preference to treating special chars in a property as
+  special (override with backtick operator)
 - Breaking feature: Add custom \` operator to allow unambiguous literal
-    sequences (if an initial backtick is needed, an additional one must
-    now be added)
+  sequences (if an initial backtick is needed, an additional one must now be
+  added)
 - Fix: `toPathArray` caching bug
 - Improvements: Performance optimizations
 - Dev testing: Rename test file
@@ -261,13 +261,12 @@
 - Dev testing: Lint JS test support files
 - Dev testing: Split out tests into `eslint`, `remark`, `lint`, `nodeunit`
 - Dev testing: Remove need for nodeunit build step
-- Dev testing: Simplify nodeunit usage and make available
-  as `npm run browser-test`
+- Dev testing: Simplify nodeunit usage and make available as
+  `npm run browser-test`
 
 ## 0.14.0 (Jan 10, 2016)
 
-- Feature: Add `@scalar()` type operator (in JavaScript mode, will also
-    include)
+- Feature: Add `@scalar()` type operator (in JavaScript mode, will also include)
 
 ## 0.13.1 (Jan 5, 2016)
 
@@ -275,52 +274,52 @@
 
 ## 0.13.0 (Dec 13, 2015)
 
-- Breaking change (from version 0.11): Silently strip `~` and `^` operators
-  and type operators such as `@string()` in `JSONPath.toPathString()` calls.
-- Breaking change: Remove `Array.isArray` polyfill as no longer
-  supporting IE <= 8
+- Breaking change (from version 0.11): Silently strip `~` and `^` operators and
+  type operators such as `@string()` in `JSONPath.toPathString()` calls.
+- Breaking change: Remove `Array.isArray` polyfill as no longer supporting IE <=
+  8
 - Feature: Allow omission of options first argument to `JSONPath`
 - Feature: Add `JSONPath.toPointer()` and "pointer" `resultType` option.
 - Fix: Correctly support `callback` and `otherTypeCallback` as numbered
   arguments to `JSONPath`.
 - Fix: Enhance Node checking to avoid issue reported with angular-mock
-- Fix: Allow for `@` or other special characters in at-sign-prefixed
-  property names (by use of `[?(@['...'])]` or  `[(@['...'])]`).
+- Fix: Allow for `@` or other special characters in at-sign-prefixed property
+  names (by use of `[?(@['...'])]` or `[(@['...'])]`).
 
 ## 0.12.0 (Dec 12, 2015 10:39pm)
 
-- Breaking change: Problems with upper-case letters in npm is causing
-  us to rename the package, so have renamed package to "jsonpath-plus"
-  (there are already package with lower-case "jsonpath" or "json-path").
-  The new name also reflects that there have been changes to the
-  original spec.
+- Breaking change: Problems with upper-case letters in npm is causing us to
+  rename the package, so have renamed package to "jsonpath-plus" (there are
+  already package with lower-case "jsonpath" or "json-path"). The new name also
+  reflects that there have been changes to the original spec.
 
 ## 0.11.2 (Dec 12, 2015 10:36pm)
 
-- Docs: Actually add the warning in the README that problems in npm
-  with upper-case letters is causing us to rename to "jsonpath-plus"
-  (next version will actually apply the change).
+- Docs: Actually add the warning in the README that problems in npm with
+  upper-case letters is causing us to rename to "jsonpath-plus" (next version
+  will actually apply the change).
 
 ## 0.11.1 (Dec 12, 2015 10:11pm)
 
-- Docs: Give warning in README that problems in npm with upper-case letters
-  is causing us to rename to "jsonpath-plus" (next version will actually
-  apply the change).
+- Docs: Give warning in README that problems in npm with upper-case letters is
+  causing us to rename to "jsonpath-plus" (next version will actually apply the
+  change).
 
 ## 0.11.0 (Dec 12, 2015)
 
-- Breaking change: For unwrapped results, return `undefined` instead
-  of `false` upon failure to find path (to allow distinguishing of
-  `undefined`--a non-allowed JSON value--from the valid JSON values,
-  `null` or `false`) and return the exact value upon falsy single
-  results (in order to allow return of `null`)
+- Breaking change: For unwrapped results, return `undefined` instead of `false`
+  upon failure to find path (to allow distinguishing of `undefined`--a
+  non-allowed JSON value--from the valid JSON values, `null` or `false`) and
+  return the exact value upon falsy single results (in order to allow return of
+  `null`)
 - Deprecated: Use of `jsonPath.eval()`; use new class-based API instead
 - Feature: AMD export
-- Feature: By using `self` instead of `window` export, allow JSONPath
-  to be trivially imported into web workers, without breaking
-  compatibility in normal scenarios. See [MDN on self](https://developer.mozilla.org/en-US/docs/Web/API/Window/self)
-- Feature: Offer new class-based API and object-based arguments (with
-  option to run new queries via `evaluate()` method without resupplying config)
+- Feature: By using `self` instead of `window` export, allow JSONPath to be
+  trivially imported into web workers, without breaking compatibility in normal
+  scenarios. See
+  [MDN on self](https://developer.mozilla.org/en-US/docs/Web/API/Window/self)
+- Feature: Offer new class-based API and object-based arguments (with option to
+  run new queries via `evaluate()` method without resupplying config)
 - Feature: Allow new `preventEval=true` and `autostart=false` option
 - Feature: Allow new callback option to allow a callback function to execute as
   each final result node is obtained
@@ -330,15 +329,15 @@
   non-JSON types that can nevertheless be used with JSONPath when querying
   non-JSON JavaScript objects (`@undefined()`, `@function()`, `@nonFinite()`).
   Finally, `@other()` is made available in conjunction with a new callback
-  option, `otherTypeCallback`, can be used to allow user-defined type
-  detection (at least until JSON Schema awareness may be provided).
-- Feature: Support "parent" and "parentProperty" for resultType along with
-  "all" (which also includes "path" and "value" together)
-- Feature: Support custom `@parent`, `@parentProperty`, `@property` (in
-  addition to custom property `@path`) inside evaluations
+  option, `otherTypeCallback`, can be used to allow user-defined type detection
+  (at least until JSON Schema awareness may be provided).
+- Feature: Support "parent" and "parentProperty" for resultType along with "all"
+  (which also includes "path" and "value" together)
+- Feature: Support custom `@parent`, `@parentProperty`, `@property` (in addition
+  to custom property `@path`) inside evaluations
 - Feature: Support a custom operator (`~`) to allow grabbing of property names
-- Feature: Support `$` for retrieval of root, and document this as well as
-  `$..` behavior
+- Feature: Support `$` for retrieval of root, and document this as well as `$..`
+  behavior
 - Feature: Expose cache on `JSONPath.cache` for those who wish to preserve and
   reuse it
 - Feature: Expose class methods `toPathString` for converting a path as array

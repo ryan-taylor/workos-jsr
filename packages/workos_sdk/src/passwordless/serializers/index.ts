@@ -1,2 +1,2 @@
-export * from "workos/passwordless/serializers/session.serializer.ts";
-export * from "workos/passwordless/serializers/create-session-options.serializer.ts";
+export * from "./session.serializer.ts";
+export * from "./create-session-options.serializer.ts";

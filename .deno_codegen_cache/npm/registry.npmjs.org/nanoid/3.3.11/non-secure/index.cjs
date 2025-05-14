@@ -5,30 +5,30 @@
 // References to the brotli default dictionary:
 // `-26T`, `1983`, `40px`, `75px`, `bush`, `jack`, `mind`, `very`, and `wolf`
 let urlAlphabet =
-  'useandom-26T198340PX75pxJACKVERYMINDBUSHWOLF_GQZbfghjklqvwyzrict'
+  "useandom-26T198340PX75pxJACKVERYMINDBUSHWOLF_GQZbfghjklqvwyzrict";
 
 let customAlphabet = (alphabet, defaultSize = 21) => {
   return (size = defaultSize) => {
-    let id = ''
+    let id = "";
     // A compact alternative for `for (var i = 0; i < step; i++)`.
-    let i = size | 0
+    let i = size | 0;
     while (i--) {
       // `| 0` is more compact and faster than `Math.floor()`.
-      id += alphabet[(Math.random() * alphabet.length) | 0]
+      id += alphabet[(Math.random() * alphabet.length) | 0];
     }
-    return id
-  }
-}
+    return id;
+  };
+};
 
 let nanoid = (size = 21) => {
-  let id = ''
+  let id = "";
   // A compact alternative for `for (var i = 0; i < step; i++)`.
-  let i = size | 0
+  let i = size | 0;
   while (i--) {
     // `| 0` is more compact and faster than `Math.floor()`.
-    id += urlAlphabet[(Math.random() * 64) | 0]
+    id += urlAlphabet[(Math.random() * 64) | 0];
   }
-  return id
-}
+  return id;
+};
 
-module.exports = { nanoid, customAlphabet }
+module.exports = { nanoid, customAlphabet };

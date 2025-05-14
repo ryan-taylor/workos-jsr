@@ -1,33 +1,33 @@
-'use strict'
+"use strict";
 
-function reusify (Constructor) {
-  var head = new Constructor()
-  var tail = head
+function reusify(Constructor) {
+  var head = new Constructor();
+  var tail = head;
 
-  function get () {
-    var current = head
+  function get() {
+    var current = head;
 
     if (current.next) {
-      head = current.next
+      head = current.next;
     } else {
-      head = new Constructor()
-      tail = head
+      head = new Constructor();
+      tail = head;
     }
 
-    current.next = null
+    current.next = null;
 
-    return current
+    return current;
   }
 
-  function release (obj) {
-    tail.next = obj
-    tail = obj
+  function release(obj) {
+    tail.next = obj;
+    tail = obj;
   }
 
   return {
     get: get,
-    release: release
-  }
+    release: release,
+  };
 }
 
-module.exports = reusify
+module.exports = reusify;

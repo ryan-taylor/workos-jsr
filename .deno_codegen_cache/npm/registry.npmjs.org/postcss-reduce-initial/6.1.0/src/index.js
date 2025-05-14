@@ -1,12 +1,12 @@
-'use strict';
-const { dirname } = require('path');
-const browserslist = require('browserslist');
-const { isSupported } = require('caniuse-api');
-const fromInitial = require('./data/fromInitial.json');
-const toInitial = require('./data/toInitial.json');
-const ignoreProps = require('./lib/ignoreProps.js');
+"use strict";
+const { dirname } = require("path");
+const browserslist = require("browserslist");
+const { isSupported } = require("caniuse-api");
+const fromInitial = require("./data/fromInitial.json");
+const toInitial = require("./data/toInitial.json");
+const ignoreProps = require("./lib/ignoreProps.js");
 
-const initial = 'initial';
+const initial = "initial";
 
 // In most of the browser including chrome the initial for `writing-mode` is not `horizontal-tb`. Ref https://github.com/cssnano/cssnano/pull/905
 const defaultIgnoreProps = ignoreProps;
@@ -24,7 +24,7 @@ const defaultIgnoreProps = ignoreProps;
  */
 function pluginCreator(options = {}) {
   return {
-    postcssPlugin: 'postcss-reduce-initial',
+    postcssPlugin: "postcss-reduce-initial",
 
     /**
      * @param {import('postcss').Result & {opts: BrowserslistOptions & {file?: string}}} result
@@ -37,13 +37,13 @@ function pluginCreator(options = {}) {
         env: options.env || env,
       });
 
-      const initialSupport = isSupported('css-initial-value', browsers);
+      const initialSupport = isSupported("css-initial-value", browsers);
       return {
         OnceExit(css) {
           css.walkDecls((decl) => {
             const lowerCasedProp = decl.prop.toLowerCase();
             const ignoreProp = new Set(
-              defaultIgnoreProps.concat(options.ignore || [])
+              defaultIgnoreProps.concat(options.ignore || []),
             );
 
             if (ignoreProp.has(lowerCasedProp)) {

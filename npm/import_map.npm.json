@@ -3,8 +3,8 @@
     "preact": "https://esm.sh/preact@10",
     "preact/hooks": "https://esm.sh/preact@10/hooks",
     "jose": "jsr:@panva/jose",
-"crypto": "jsr:@std/crypto@^1",
-"fs/promises": "jsr:@std/fs@^1",
+    "crypto": "jsr:@std/crypto@^1",
+    "fs/promises": "jsr:@std/fs@^1",
 
     "@std/assert": "jsr:@std/assert@1.0.0",
     "@std/path": "jsr:@std/path@1.0.0",

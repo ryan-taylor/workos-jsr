@@ -15,17 +15,20 @@ export class ApiClient {
     path: string,
     params: Record<string, string> = {},
     body?: unknown,
-    headers: Record<string, string> = {}
+    headers: Record<string, string> = {},
   ): Promise<T> {
     // Build query string from params
     const query = new URLSearchParams(params).toString();
-    const url = `${this.baseUrl}${path}${query ? `?${query}` : ''}`;
+    const url = `${this.baseUrl}${path}${query ? `?${query}` : ""}`;
 
     // Set up request options
     const options: RequestInit = { method, headers: { ...headers } };
     if (body) {
       options.body = JSON.stringify(body);
-      options.headers = { ...options.headers, 'Content-Type': 'application/json' };
+      options.headers = {
+        ...options.headers,
+        "Content-Type": "application/json",
+      };
     }
 
     // Make the request
@@ -37,7 +40,7 @@ export class ApiClient {
     }
 
     // Parse JSON response
-    if (response.headers.get('content-type')?.includes('application/json')) {
+    if (response.headers.get("content-type")?.includes("application/json")) {
       return await response.json() as T;
     } else {
       return undefined as unknown as T;
@@ -47,7 +50,7 @@ export class ApiClient {
   async listDirectories(
     limit?: number,
     after?: string,
-    order?: 'asc' | 'desc',
+    order?: "asc" | "desc",
     domain?: string,
   ): Promise<Models.DirectoriesResponse> {
     let resolvedPath = `/directory_sync/directories`;
@@ -76,5 +79,4 @@ export class ApiClient {
       undefined,
     );
   }
-
 }

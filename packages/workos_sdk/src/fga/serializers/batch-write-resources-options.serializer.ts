@@ -1,14 +1,14 @@
 import type {
   BatchWriteResourcesOptions,
-  SerializedBatchWriteResourcesOptions,
   CreateResourceOptions,
-  SerializedCreateResourceOptions,
   DeleteResourceOptions,
+  SerializedBatchWriteResourcesOptions,
+  SerializedCreateResourceOptions,
   SerializedDeleteResourceOptions,
-} from "workos/fga/interfaces/index.ts";
-import { ResourceOp } from "workos/fga/interfaces/index.ts";
-import { serializeCreateResourceOptions } from "workos/fga/serializers/create-resource-options.serializer.ts";
-import { serializeDeleteResourceOptions } from "workos/fga/serializers/delete-resource-options.serializer.ts";
+} from "../interfaces/index.ts";
+import { ResourceOp } from "../interfaces/index.ts";
+import { serializeCreateResourceOptions } from "./create-resource-options.serializer.ts";
+import { serializeDeleteResourceOptions } from "./delete-resource-options.serializer.ts";
 
 /**
  * Serializes batch write resources options for the API

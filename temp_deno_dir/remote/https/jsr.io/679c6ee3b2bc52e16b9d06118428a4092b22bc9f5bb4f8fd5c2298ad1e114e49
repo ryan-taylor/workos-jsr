@@ -1,0 +1,38 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+import { format } from "jsr:@std/internal@^1.0.6/format";
+import { AssertionError } from "./assertion_error.ts";
+
+/**
+ * Make an assertion that `actual` is less than or equal to `expected`.
+ * If not then throw.
+ *
+ * @example Usage
+ * ```ts ignore
+ * import { assertLessOrEqual } from "@std/assert";
+ *
+ * assertLessOrEqual(1, 2); // Doesn't throw
+ * assertLessOrEqual(1, 1); // Doesn't throw
+ * assertLessOrEqual(1, 0); // Throws
+ * ```
+ *
+ * @typeParam T The type of the values to compare.
+ * @param actual The actual value to compare.
+ * @param expected The expected value to compare.
+ * @param msg The optional message to display if the assertion fails.
+ */
+export function assertLessOrEqual<T>(
+  actual: T,
+  expected: T,
+  msg?: string,
+) {
+  if (actual <= expected) return;
+
+  const actualString = format(actual);
+  const expectedString = format(expected);
+  throw new AssertionError(
+    msg ?? `Expect ${actualString} <= ${expectedString}`,
+  );
+}
+
+// denoCacheMetadata={"headers":{"x-goog-hash":"crc32c=+vFxaQ==,md5=YFq7K2BVs23ufzlUunlgWw==","x-jsr-cache-status":"hit","x-robots-tag":"noindex","expires":"Wed, 13 May 2026 23:23:02 GMT","x-goog-stored-content-length":"1051","x-goog-storage-class":"STANDARD","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","cache-control":"public, max-age=31536000, immutable","etag":"\"605abb2b6055b36dee7f3954ba79605b\"","content-type":"text/typescript","date":"Tue, 13 May 2025 23:23:02 GMT","x-goog-generation":"1745475807415551","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","accept-ranges":"bytes","x-jsr-cache-id":"YYZ","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","x-goog-metageneration":"1","age":"1950","x-guploader-uploadid":"AAO2Vwr85AvWU8jDF98L8NicPcltGEO0vMpQBgAERkcp1OoflADJURGm3KHz4rEM31y-ZQ5m","access-control-allow-origin":"*","x-content-type-options":"nosniff","via":"1.1 google","access-control-expose-headers":"*","cross-origin-resource-policy":"cross-origin","x-goog-stored-content-encoding":"identity","content-length":"1051","server":"UploadServer"},"url":"https://jsr.io/@std/assert/1.0.13/less_or_equal.ts","time":1747180532}

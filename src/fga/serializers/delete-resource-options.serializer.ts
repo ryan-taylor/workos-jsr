@@ -1,8 +1,8 @@
 import type {
   DeleteResourceOptions,
   SerializedDeleteResourceOptions,
-} from "../interfaces.ts.ts";
-import { isResourceInterface } from "../utils/interface-check.ts.ts";
+} from "../interfaces.ts";
+import { isResourceInterface } from "../utils/interface-check.ts";
 
 export const serializeDeleteResourceOptions = (
   options: DeleteResourceOptions,

@@ -1,4 +1,4 @@
-import type { Warrant } from "workos/fga/interfaces/warrant.interface.ts";
+import type { Warrant } from "./warrant.interface.ts";
 
 export interface QueryOptions {
   q: string;

@@ -1,7 +1,7 @@
 import type {
   ListEventOptions,
   SerializedListEventOptions,
-} from "../interfaces.ts.ts";
+} from "../interfaces.ts";
 
 export const serializeListEventOptions = (
   options: ListEventOptions,

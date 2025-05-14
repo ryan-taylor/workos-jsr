@@ -18,7 +18,7 @@
     console.log(`Successfully processed OpenAPI spec and generated checksum.`);
     return {
       content: processedContent,
-      checksum
+      checksum,
     };
   } catch (error) {
     console.error(`Error processing OpenAPI spec at ${specPath}:`, error);
@@ -34,7 +34,9 @@
   const data = encoder.encode(content);
   const hashBuffer = await crypto.subtle.digest("SHA-256", data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map((b)=>b.toString(16).padStart(2, "0")).join("");
+  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join(
+    "",
+  );
   return hashHex;
 }
 /**
@@ -68,18 +70,23 @@
     const originalSpec = JSON.parse(originalContent);
     // Get the original raw checksum if it exists
     // Try the new standardized field name first, then fall back to the legacy name
-    const rawChecksum = originalSpec["x-spec-content-sha"] || originalSpec["x-spec-checksum"] || "";
+    const rawChecksum = originalSpec["x-spec-content-sha"] ||
+      originalSpec["x-spec-checksum"] || "";
     // Process the spec and generate a checksum
-    const { content: processedContent, checksum: processedChecksum } = await processSpecAndGenerateChecksum(specPath);
+    const { content: processedContent, checksum: processedChecksum } =
+      await processSpecAndGenerateChecksum(specPath);
     // Add the processed checksum to the original spec
-    const updatedContent = addProcessedChecksumToSpec(originalContent, processedChecksum);
+    const updatedContent = addProcessedChecksumToSpec(
+      originalContent,
+      processedChecksum,
+    );
     // Write the updated spec back to the file
     await Deno.writeTextFile(specPath, updatedContent);
     console.log(`Updated spec with content SHA checksum: ${processedChecksum}`);
     return {
       specPath,
       rawChecksum,
-      processedChecksum
+      processedChecksum,
     };
   } catch (error) {
     console.error(`Error processing spec at ${specPath}:`, error);
@@ -91,7 +98,9 @@ if (import.meta.main) {
   try {
     // Ensure a spec file path was provided
     if (Deno.args.length < 1) {
-      console.error("Usage: deno run -A dereference-spec.ts <path-to-spec-file>");
+      console.error(
+        "Usage: deno run -A dereference-spec.ts <path-to-spec-file>",
+      );
       Deno.exit(1);
     }
     const specPath = Deno.args[0];

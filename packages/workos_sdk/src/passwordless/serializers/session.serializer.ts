@@ -1,4 +1,4 @@
-import type { PasswordlessSession } from "workos/passwordless/interfaces/index.ts";
+import type { PasswordlessSession } from "../interfaces/index.ts";
 
 export function deserializeSession(
   data: Record<string, unknown>,

@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 /**
  * @param {string | undefined} value
  * @return {string | undefined}
@@ -12,7 +12,7 @@ function trimValue(value) {
  * @return {boolean}
  */
 function empty(node) {
-  return !node.nodes.filter((child) => child.type !== 'comment').length;
+  return !node.nodes.filter((child) => child.type !== "comment").length;
 }
 
 /**
@@ -36,12 +36,12 @@ function equals(nodeA, nodeB) {
   }
 
   switch (a.type) {
-    case 'rule':
+    case "rule":
       if (a.selector !== b.selector) {
         return false;
       }
       break;
-    case 'atrule':
+    case "atrule":
       if (a.name !== b.name || a.params !== b.params) {
         return false;
       }
@@ -57,7 +57,7 @@ function equals(nodeA, nodeB) {
         return false;
       }
       break;
-    case 'decl':
+    case "decl":
       if (a.prop !== b.prop || a.value !== b.value) {
         return false;
       }
@@ -91,9 +91,9 @@ function dedupeRule(last, nodes) {
   let index = nodes.indexOf(last) - 1;
   while (index >= 0) {
     const node = nodes[index--];
-    if (node && node.type === 'rule' && node.selector === last.selector) {
+    if (node && node.type === "rule" && node.selector === last.selector) {
       last.each((child) => {
-        if (child.type === 'decl') {
+        if (child.type === "decl") {
           dedupeNode(child, node.nodes);
         }
       });
@@ -142,9 +142,9 @@ function dedupe(root) {
       continue;
     }
     dedupe(last);
-    if (last.type === 'rule') {
+    if (last.type === "rule") {
       dedupeRule(last, nodes);
-    } else if (last.type === 'atrule' || last.type === 'decl') {
+    } else if (last.type === "atrule" || last.type === "decl") {
       dedupeNode(last, nodes);
     }
   }
@@ -156,7 +156,7 @@ function dedupe(root) {
  */
 function pluginCreator() {
   return {
-    postcssPlugin: 'postcss-discard-duplicates',
+    postcssPlugin: "postcss-discard-duplicates",
     OnceExit(css) {
       dedupe(css);
     },

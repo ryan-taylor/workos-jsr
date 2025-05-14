@@ -1,48 +1,52 @@
 export interface MathExpression {
-  type: 'MathExpression';
+  type: "MathExpression";
   right: CalcNode;
   left: CalcNode;
-  operator: '*' | '+' | '-' | '/';
+  operator: "*" | "+" | "-" | "/";
 }
 
 export interface ParenthesizedExpression {
-  type: 'ParenthesizedExpression';
+  type: "ParenthesizedExpression";
   content: CalcNode;
 }
 
 export interface DimensionExpression {
   type:
-    | 'LengthValue'
-    | 'AngleValue'
-    | 'TimeValue'
-    | 'FrequencyValue'
-    | 'PercentageValue'
-    | 'ResolutionValue'
-    | 'EmValue'
-    | 'ExValue'
-    | 'ChValue'
-    | 'RemValue'
-    | 'VhValue'
-    | 'VwValue'
-    | 'VminValue'
-    | 'VmaxValue';
+    | "LengthValue"
+    | "AngleValue"
+    | "TimeValue"
+    | "FrequencyValue"
+    | "PercentageValue"
+    | "ResolutionValue"
+    | "EmValue"
+    | "ExValue"
+    | "ChValue"
+    | "RemValue"
+    | "VhValue"
+    | "VwValue"
+    | "VminValue"
+    | "VmaxValue";
   value: number;
   unit: string;
 }
 
 export interface NumberExpression {
-  type: 'Number';
+  type: "Number";
   value: number;
 }
 
 export interface FunctionExpression {
-  type: 'Function';
+  type: "Function";
   value: string;
 }
 
 export type ValueExpression = DimensionExpression | NumberExpression;
 
-export type CalcNode = MathExpression | ValueExpression | FunctionExpression | ParenthesizedExpression;
+export type CalcNode =
+  | MathExpression
+  | ValueExpression
+  | FunctionExpression
+  | ParenthesizedExpression;
 
 export interface Parser {
   parse: (arg: string) => CalcNode;

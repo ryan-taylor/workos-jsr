@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'preact/hooks';
-import { signal } from '@preact/signals';
-import type { JSX } from 'preact';
+import { useEffect, useState } from "preact/hooks";
+import { signal } from "@preact/signals";
+import type { JSX } from "preact";
 
 // Telemetry metrics signals for real-time updates
 const activeUsers = signal(0);
@@ -87,8 +87,10 @@ export default function TelemetryDashboard() {
 
         operationsPerModule.value = {
           sso: operationsPerModule.value.sso + moduleDistribution.sso,
-          directorySync: operationsPerModule.value.directorySync + moduleDistribution.directorySync,
-          userManagement: operationsPerModule.value.userManagement + moduleDistribution.userManagement,
+          directorySync: operationsPerModule.value.directorySync +
+            moduleDistribution.directorySync,
+          userManagement: operationsPerModule.value.userManagement +
+            moduleDistribution.userManagement,
           other: operationsPerModule.value.other + moduleDistribution.other,
           total: operationsPerModule.value.total + newApiCalls,
         };
@@ -99,7 +101,9 @@ export default function TelemetryDashboard() {
         setLastUpdated(new Date());
         setError(null);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch telemetry data');
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch telemetry data",
+        );
       } finally {
         setIsLoading(false);
       }
@@ -122,13 +126,13 @@ export default function TelemetryDashboard() {
     const maxValue = Math.max(...apiCallHistory.value, 5); // Minimum height of 5
 
     return (
-      <div class='flex items-end h-24 gap-1 mb-4 bg-gray-100 rounded p-2'>
+      <div class="flex items-end h-24 gap-1 mb-4 bg-gray-100 rounded p-2">
         {apiCallHistory.value.map((value, index) => {
           const height = (value / maxValue) * 100;
           return (
             <div
               key={index}
-              class='bg-blue-500 rounded w-full'
+              class="bg-blue-500 rounded w-full"
               style={{ height: `${height}%` }}
               title={`${value} calls`}
             >
@@ -140,95 +144,104 @@ export default function TelemetryDashboard() {
   };
 
   return (
-    <div class='p-4 bg-white rounded-lg shadow-md'>
-      <div class='flex justify-between items-center mb-6'>
-        <h2 class='text-2xl font-bold text-gray-800'>SDK Telemetry Dashboard</h2>
-        <div class='text-sm text-gray-500'>
+    <div class="p-4 bg-white rounded-lg shadow-md">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">
+          SDK Telemetry Dashboard
+        </h2>
+        <div class="text-sm text-gray-500">
           Last updated: {lastUpdated.toLocaleTimeString()}
-          {isLoading && <span class='ml-2 inline-block w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin'></span>}
+          {isLoading && (
+            <span class="ml-2 inline-block w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin">
+            </span>
+          )}
         </div>
       </div>
 
       {error && (
-        <div class='bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4'>
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
           <p>{error}</p>
         </div>
       )}
 
-      <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6'>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {/* Active Users */}
-        <div class='bg-blue-50 p-4 rounded-lg shadow'>
-          <h3 class='text-lg font-semibold text-gray-700'>Active Users</h3>
-          <p class='text-3xl font-bold text-blue-600'>{activeUsers}</p>
+        <div class="bg-blue-50 p-4 rounded-lg shadow">
+          <h3 class="text-lg font-semibold text-gray-700">Active Users</h3>
+          <p class="text-3xl font-bold text-blue-600">{activeUsers}</p>
         </div>
 
         {/* Authentication Success Rate */}
-        <div class='bg-green-50 p-4 rounded-lg shadow'>
-          <h3 class='text-lg font-semibold text-gray-700'>Auth Success Rate</h3>
-          <p class='text-3xl font-bold text-green-600'>
+        <div class="bg-green-50 p-4 rounded-lg shadow">
+          <h3 class="text-lg font-semibold text-gray-700">Auth Success Rate</h3>
+          <p class="text-3xl font-bold text-green-600">
             {authAttempts.value.success + authAttempts.value.failure > 0
-              ? Math.round((authAttempts.value.success / (authAttempts.value.success + authAttempts.value.failure)) * 100)
+              ? Math.round(
+                (authAttempts.value.success /
+                  (authAttempts.value.success + authAttempts.value.failure)) *
+                  100,
+              )
               : 0}%
           </p>
-          <p class='text-sm text-gray-500'>
-            {authAttempts.value.success} successful / {authAttempts.value.failure} failed
+          <p class="text-sm text-gray-500">
+            {authAttempts.value.success} successful /{" "}
+            {authAttempts.value.failure} failed
           </p>
         </div>
 
         {/* API Calls */}
-        <div class='bg-purple-50 p-4 rounded-lg shadow'>
-          <h3 class='text-lg font-semibold text-gray-700'>API Calls</h3>
-          <p class='text-3xl font-bold text-purple-600'>{apiCallStats.value.total}</p>
-          <p class='text-sm text-gray-500'>
-            {apiCallStats.value.success} successful / {apiCallStats.value.error} errors
+        <div class="bg-purple-50 p-4 rounded-lg shadow">
+          <h3 class="text-lg font-semibold text-gray-700">API Calls</h3>
+          <p class="text-3xl font-bold text-purple-600">
+            {apiCallStats.value.total}
+          </p>
+          <p class="text-sm text-gray-500">
+            {apiCallStats.value.success} successful / {apiCallStats.value.error}
+            {" "}
+            errors
           </p>
         </div>
 
         {/* Average Response Time */}
-        <div class='bg-yellow-50 p-4 rounded-lg shadow'>
-          <h3 class='text-lg font-semibold text-gray-700'>Avg Response Time</h3>
-          <p class='text-3xl font-bold text-yellow-600'>{apiCallStats.value.avgResponseTime} ms</p>
+        <div class="bg-yellow-50 p-4 rounded-lg shadow">
+          <h3 class="text-lg font-semibold text-gray-700">Avg Response Time</h3>
+          <p class="text-3xl font-bold text-yellow-600">
+            {apiCallStats.value.avgResponseTime} ms
+          </p>
         </div>
       </div>
 
-      <div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* API Call History Chart */}
-        <div class='bg-gray-50 p-4 rounded-lg shadow'>
-          <h3 class='text-lg font-semibold text-gray-700 mb-2'>API Calls (Last 10 updates)</h3>
+        <div class="bg-gray-50 p-4 rounded-lg shadow">
+          <h3 class="text-lg font-semibold text-gray-700 mb-2">
+            API Calls (Last 10 updates)
+          </h3>
           {renderApiCallChart()}
         </div>
 
         {/* Operations by Module */}
-        <div class='bg-gray-50 p-4 rounded-lg shadow'>
-          <h3 class='text-lg font-semibold text-gray-700 mb-4'>Operations by Module</h3>
-          <div class='space-y-3'>
+        <div class="bg-gray-50 p-4 rounded-lg shadow">
+          <h3 class="text-lg font-semibold text-gray-700 mb-4">
+            Operations by Module
+          </h3>
+          <div class="space-y-3">
             <div>
-              <div class='flex justify-between mb-1'>
-                <span class='text-sm font-medium text-gray-700'>SSO</span>
-                <span class='text-sm font-medium text-gray-700'>{operationsPerModule.value.sso}</span>
+              <div class="flex justify-between mb-1">
+                <span class="text-sm font-medium text-gray-700">SSO</span>
+                <span class="text-sm font-medium text-gray-700">
+                  {operationsPerModule.value.sso}
+                </span>
               </div>
-              <div class='w-full bg-gray-200 rounded-full h-2'>
+              <div class="w-full bg-gray-200 rounded-full h-2">
                 <div
-                  class='bg-indigo-600 h-2 rounded-full'
-                  style={{
-                    width: `${operationsPerModule.value.total > 0 ? (operationsPerModule.value.sso / operationsPerModule.value.total) * 100 : 0}%`,
-                  }}
-                >
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <div class='flex justify-between mb-1'>
-                <span class='text-sm font-medium text-gray-700'>Directory Sync</span>
-                <span class='text-sm font-medium text-gray-700'>{operationsPerModule.value.directorySync}</span>
-              </div>
-              <div class='w-full bg-gray-200 rounded-full h-2'>
-                <div
-                  class='bg-green-600 h-2 rounded-full'
+                  class="bg-indigo-600 h-2 rounded-full"
                   style={{
                     width: `${
-                      operationsPerModule.value.total > 0 ? (operationsPerModule.value.directorySync / operationsPerModule.value.total) * 100 : 0
+                      operationsPerModule.value.total > 0
+                        ? (operationsPerModule.value.sso /
+                          operationsPerModule.value.total) * 100
+                        : 0
                     }%`,
                   }}
                 >
@@ -237,16 +250,23 @@ export default function TelemetryDashboard() {
             </div>
 
             <div>
-              <div class='flex justify-between mb-1'>
-                <span class='text-sm font-medium text-gray-700'>User Management</span>
-                <span class='text-sm font-medium text-gray-700'>{operationsPerModule.value.userManagement}</span>
+              <div class="flex justify-between mb-1">
+                <span class="text-sm font-medium text-gray-700">
+                  Directory Sync
+                </span>
+                <span class="text-sm font-medium text-gray-700">
+                  {operationsPerModule.value.directorySync}
+                </span>
               </div>
-              <div class='w-full bg-gray-200 rounded-full h-2'>
+              <div class="w-full bg-gray-200 rounded-full h-2">
                 <div
-                  class='bg-blue-600 h-2 rounded-full'
+                  class="bg-green-600 h-2 rounded-full"
                   style={{
                     width: `${
-                      operationsPerModule.value.total > 0 ? (operationsPerModule.value.userManagement / operationsPerModule.value.total) * 100 : 0
+                      operationsPerModule.value.total > 0
+                        ? (operationsPerModule.value.directorySync /
+                          operationsPerModule.value.total) * 100
+                        : 0
                     }%`,
                   }}
                 >
@@ -255,15 +275,47 @@ export default function TelemetryDashboard() {
             </div>
 
             <div>
-              <div class='flex justify-between mb-1'>
-                <span class='text-sm font-medium text-gray-700'>Other</span>
-                <span class='text-sm font-medium text-gray-700'>{operationsPerModule.value.other}</span>
+              <div class="flex justify-between mb-1">
+                <span class="text-sm font-medium text-gray-700">
+                  User Management
+                </span>
+                <span class="text-sm font-medium text-gray-700">
+                  {operationsPerModule.value.userManagement}
+                </span>
               </div>
-              <div class='w-full bg-gray-200 rounded-full h-2'>
+              <div class="w-full bg-gray-200 rounded-full h-2">
                 <div
-                  class='bg-gray-600 h-2 rounded-full'
+                  class="bg-blue-600 h-2 rounded-full"
                   style={{
-                    width: `${operationsPerModule.value.total > 0 ? (operationsPerModule.value.other / operationsPerModule.value.total) * 100 : 0}%`,
+                    width: `${
+                      operationsPerModule.value.total > 0
+                        ? (operationsPerModule.value.userManagement /
+                          operationsPerModule.value.total) * 100
+                        : 0
+                    }%`,
+                  }}
+                >
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-sm font-medium text-gray-700">Other</span>
+                <span class="text-sm font-medium text-gray-700">
+                  {operationsPerModule.value.other}
+                </span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  class="bg-gray-600 h-2 rounded-full"
+                  style={{
+                    width: `${
+                      operationsPerModule.value.total > 0
+                        ? (operationsPerModule.value.other /
+                          operationsPerModule.value.total) * 100
+                        : 0
+                    }%`,
                   }}
                 >
                 </div>
@@ -273,12 +325,14 @@ export default function TelemetryDashboard() {
         </div>
       </div>
 
-      <div class='mt-6 text-sm text-gray-500'>
-        <p class='mb-1'>
-          This dashboard demonstrates how the OpenTelemetry integration can be used to monitor WorkOS SDK usage in real-time.
+      <div class="mt-6 text-sm text-gray-500">
+        <p class="mb-1">
+          This dashboard demonstrates how the OpenTelemetry integration can be
+          used to monitor WorkOS SDK usage in real-time.
         </p>
         <p>
-          In a production environment, telemetry data would be collected from actual SDK usage and stored in a time-series database.
+          In a production environment, telemetry data would be collected from
+          actual SDK usage and stored in a time-series database.
         </p>
       </div>
     </div>

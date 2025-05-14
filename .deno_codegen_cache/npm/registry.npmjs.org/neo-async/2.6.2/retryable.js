@@ -1,3 +1,3 @@
-'use strict';
+"use strict";
 
-module.exports = require('./async').retryable;
+module.exports = require("./async").retryable;

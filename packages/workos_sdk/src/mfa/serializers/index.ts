@@ -1,2 +1,2 @@
-export * from "workos/mfa/serializers/factor.serializer.ts";
-export * from "workos/mfa/serializers/challenge.serializer.ts";
+export * from "./factor.serializer.ts";
+export * from "./challenge.serializer.ts";

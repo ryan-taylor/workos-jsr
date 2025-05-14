@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const { collectStylesheet } = require('../lib/style');
-const { detachNodeFromParent, querySelectorAll } = require('../lib/xast');
+const { collectStylesheet } = require("../lib/style");
+const { detachNodeFromParent, querySelectorAll } = require("../lib/xast");
 
 /**
  * @typedef {import('../lib/types').XastElement} XastElement
@@ -9,11 +9,10 @@ const { detachNodeFromParent, querySelectorAll } = require('../lib/xast');
  * @typedef {import('../lib/types').XastNode} XastNode
  */
 
-exports.name = 'reusePaths';
-exports.description =
-  'Finds <path> elements with the same d, fill, and ' +
-  'stroke, and converts them to <use> elements ' +
-  'referencing a single <path> def.';
+exports.name = "reusePaths";
+exports.description = "Finds <path> elements with the same d, fill, and " +
+  "stroke, and converts them to <use> elements " +
+  "referencing a single <path> def.";
 
 /**
  * Finds <path> elements with the same d, fill, and stroke, and converts them to
@@ -50,11 +49,11 @@ exports.fn = (root) => {
   return {
     element: {
       enter: (node, parentNode) => {
-        if (node.name === 'path' && node.attributes.d != null) {
+        if (node.name === "path" && node.attributes.d != null) {
           const d = node.attributes.d;
-          const fill = node.attributes.fill || '';
-          const stroke = node.attributes.stroke || '';
-          const key = d + ';s:' + stroke + ';f:' + fill;
+          const fill = node.attributes.fill || "";
+          const stroke = node.attributes.stroke || "";
+          const key = d + ";s:" + stroke + ";f:" + fill;
           let list = paths.get(key);
           if (list == null) {
             list = [];
@@ -65,18 +64,18 @@ exports.fn = (root) => {
 
         if (
           svgDefs == null &&
-          node.name === 'defs' &&
-          parentNode.type === 'element' &&
-          parentNode.name === 'svg'
+          node.name === "defs" &&
+          parentNode.type === "element" &&
+          parentNode.name === "svg"
         ) {
           svgDefs = node;
         }
 
-        if (node.name === 'use') {
-          for (const name of ['href', 'xlink:href']) {
+        if (node.name === "use") {
+          for (const name of ["href", "xlink:href"]) {
             const href = node.attributes[name];
 
-            if (href != null && href.startsWith('#') && href.length > 1) {
+            if (href != null && href.startsWith("#") && href.length > 1) {
               hrefs.add(href.slice(1));
             }
           }
@@ -84,18 +83,18 @@ exports.fn = (root) => {
       },
 
       exit: (node, parentNode) => {
-        if (node.name === 'svg' && parentNode.type === 'root') {
+        if (node.name === "svg" && parentNode.type === "root") {
           let defsTag = svgDefs;
 
           if (defsTag == null) {
             defsTag = {
-              type: 'element',
-              name: 'defs',
+              type: "element",
+              name: "defs",
               attributes: {},
               children: [],
             };
             // TODO remove legacy parentNode in v4
-            Object.defineProperty(defsTag, 'parentNode', {
+            Object.defineProperty(defsTag, "parentNode", {
               writable: true,
               value: node,
             });
@@ -106,13 +105,13 @@ exports.fn = (root) => {
             if (list.length > 1) {
               /** @type {XastElement} */
               const reusablePath = {
-                type: 'element',
-                name: 'path',
+                type: "element",
+                name: "path",
                 attributes: {},
                 children: [],
               };
 
-              for (const attr of ['fill', 'stroke', 'd']) {
+              for (const attr of ["fill", "stroke", "d"]) {
                 if (list[0].attributes[attr] != null) {
                   reusablePath.attributes[attr] = list[0].attributes[attr];
                 }
@@ -126,13 +125,13 @@ exports.fn = (root) => {
                   (rule) => rule.selector === `#${originalId}`,
                 )
               ) {
-                reusablePath.attributes.id = 'reuse-' + index++;
+                reusablePath.attributes.id = "reuse-" + index++;
               } else {
                 reusablePath.attributes.id = originalId;
                 delete list[0].attributes.id;
               }
               // TODO remove legacy parentNode in v4
-              Object.defineProperty(reusablePath, 'parentNode', {
+              Object.defineProperty(reusablePath, "parentNode", {
                 writable: true,
                 value: defsTag,
               });
@@ -157,15 +156,16 @@ exports.fn = (root) => {
                     pathNode.attributes.id != null
                   ) {
                     detachNodeFromParent(pathNode, defsTag);
-                    const selector = `[xlink\\:href=#${pathNode.attributes.id}], [href=#${pathNode.attributes.id}]`;
+                    const selector =
+                      `[xlink\\:href=#${pathNode.attributes.id}], [href=#${pathNode.attributes.id}]`;
                     for (const child of querySelectorAll(node, selector)) {
-                      if (child.type !== 'element') {
+                      if (child.type !== "element") {
                         continue;
                       }
-                      for (const name of ['href', 'xlink:href']) {
+                      for (const name of ["href", "xlink:href"]) {
                         if (child.attributes[name] != null) {
-                          child.attributes[name] =
-                            '#' + reusablePath.attributes.id;
+                          child.attributes[name] = "#" +
+                            reusablePath.attributes.id;
                         }
                       }
                     }
@@ -173,15 +173,15 @@ exports.fn = (root) => {
                   }
                 }
 
-                pathNode.name = 'use';
-                pathNode.attributes['xlink:href'] =
-                  '#' + reusablePath.attributes.id;
+                pathNode.name = "use";
+                pathNode.attributes["xlink:href"] = "#" +
+                  reusablePath.attributes.id;
               }
             }
           }
           if (defsTag.children.length !== 0) {
-            if (node.attributes['xmlns:xlink'] == null) {
-              node.attributes['xmlns:xlink'] = 'http://www.w3.org/1999/xlink';
+            if (node.attributes["xmlns:xlink"] == null) {
+              node.attributes["xmlns:xlink"] = "http://www.w3.org/1999/xlink";
             }
 
             if (svgDefs == null) {

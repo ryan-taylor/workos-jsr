@@ -1,3 +1,3 @@
-'use strict';
+"use strict";
 
-module.exports = require('./async').angelfall;
+module.exports = require("./async").angelfall;

@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const { detachNodeFromParent } = require('../lib/xast.js');
+const { detachNodeFromParent } = require("../lib/xast.js");
 
-exports.name = 'removeXMLProcInst';
-exports.description = 'removes XML processing instructions';
+exports.name = "removeXMLProcInst";
+exports.description = "removes XML processing instructions";
 
 /**
  * Remove XML Processing Instruction.
@@ -19,7 +19,7 @@ exports.fn = () => {
   return {
     instruction: {
       enter: (node, parentNode) => {
-        if (node.name === 'xml') {
+        if (node.name === "xml") {
           detachNodeFromParent(node, parentNode);
         }
       },

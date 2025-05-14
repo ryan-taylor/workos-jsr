@@ -13,7 +13,7 @@ export default async function CallbackPage(req: Request, ctx: FreshContext) {
     await ctx.workos.setSession(profile);
     return new Response(null, {
       status: 302,
-      headers: { Location: "/dashboard" }
+      headers: { Location: "/dashboard" },
     });
   } catch (error) {
     console.error("Authentication error:", error);

@@ -1,12 +1,12 @@
-'use strict';
-const { dirname } = require('path');
-const browserslist = require('browserslist');
-const { sameParent } = require('cssnano-utils');
+"use strict";
+const { dirname } = require("path");
+const browserslist = require("browserslist");
+const { sameParent } = require("cssnano-utils");
 const {
   ensureCompatibility,
   sameVendor,
   noVendor,
-} = require('./lib/ensureCompatibility');
+} = require("./lib/ensureCompatibility");
 
 /**
  * @param {import('postcss').Declaration} a
@@ -73,14 +73,14 @@ function canMerge(ruleA, ruleB, browsers, compatibilityCache) {
 
   const parent = sameParent(
     /** @type {any} */ (ruleA),
-    /** @type {any} */ (ruleB)
+    /** @type {any} */ (ruleB),
   );
   if (
     parent &&
     ruleA.parent &&
-    ruleA.parent.type === 'atrule' &&
+    ruleA.parent.type === "atrule" &&
     /** @type {import('postcss').AtRule} */ (ruleA.parent).name.includes(
-      'keyframes'
+      "keyframes",
     )
   ) {
     return false;
@@ -96,14 +96,14 @@ function canMerge(ruleA, ruleB, browsers, compatibilityCache) {
  * @return {boolean}
  */
 function isRuleOrAtRule(node) {
-  return node.type === 'rule' || node.type === 'atrule';
+  return node.type === "rule" || node.type === "atrule";
 }
 /**
  * @param {import('postcss').ChildNode} node
  * @return {node is import('postcss').Declaration}
  */
 function isDeclaration(node) {
-  return node.type === 'decl';
+  return node.type === "decl";
 }
 /**
  * @param {import('postcss').Rule} rule
@@ -121,7 +121,7 @@ const joinSelectors = (...rules) => rules.map((s) => s.selector).join();
  * @return {number}
  */
 function ruleLength(...rules) {
-  return rules.map((r) => (r.nodes.length ? String(r) : '')).join('').length;
+  return rules.map((r) => (r.nodes.length ? String(r) : "")).join("").length;
 }
 
 /**
@@ -134,16 +134,16 @@ function splitProp(prop) {
   // cause issues. e.g. moving -webkit-background-clip when there
   // is a background shorthand definition.
 
-  const parts = prop.split('-');
-  if (prop[0] !== '-') {
+  const parts = prop.split("-");
+  if (prop[0] !== "-") {
     return {
-      prefix: '',
+      prefix: "",
       base: parts[0],
       rest: parts.slice(1),
     };
   }
   // Don't split css variables
-  if (prop[1] === '-') {
+  if (prop[1] === "-") {
     return {
       prefix: null,
       base: null,
@@ -176,7 +176,7 @@ function isConflictingProp(propA, propB) {
   }
 
   // Different base and none is `place`;
-  if (a.base !== b.base && a.base !== 'place' && b.base !== 'place') {
+  if (a.base !== b.base && a.base !== "place" && b.base !== "place") {
     return false;
   }
 
@@ -186,13 +186,13 @@ function isConflictingProp(propA, propB) {
   }
 
   /* Do not merge conflicting border properties */
-  if (a.base === 'border') {
+  if (a.base === "border") {
     const allRestProps = new Set([...a.rest, ...b.rest]);
     if (
-      allRestProps.has('image') ||
-      allRestProps.has('width') ||
-      allRestProps.has('color') ||
-      allRestProps.has('style')
+      allRestProps.has("image") ||
+      allRestProps.has("width") ||
+      allRestProps.has("color") ||
+      allRestProps.has("style")
     ) {
       return true;
     }
@@ -244,7 +244,7 @@ function partialMerge(first, second) {
       ).next();
     nextRule = parentSibling && parentSibling.nodes && parentSibling.nodes[0];
   }
-  if (nextRule && nextRule.type === 'rule' && canMerge(second, nextRule)) {
+  if (nextRule && nextRule.type === "rule" && canMerge(second, nextRule)) {
     let nextIntersection = intersect(getDecls(second), getDecls(nextRule));
     if (nextIntersection.length > intersection.length) {
       mergeParents(second, nextRule);
@@ -288,10 +288,10 @@ function partialMerge(first, second) {
       return false;
     }
     if (
-      decl.prop.toLowerCase() !== 'direction' &&
-      decl.prop.toLowerCase() !== 'unicode-bidi' &&
+      decl.prop.toLowerCase() !== "direction" &&
+      decl.prop.toLowerCase() !== "unicode-bidi" &&
       secondDecls.some(
-        (declaration) => declaration.prop.toLowerCase() === 'all'
+        (declaration) => declaration.prop.toLowerCase() === "all",
       )
     ) {
       return false;
@@ -332,7 +332,7 @@ function partialMerge(first, second) {
     moveDecl((decl) => {
       decl.remove();
       receivingBlock.append(decl);
-    })
+    }),
   );
   secondClone.walkDecls(moveDecl((decl) => decl.remove()));
   const merged = ruleLength(firstClone, receivingBlock, secondClone);
@@ -393,7 +393,7 @@ function selectorMerger(browsers, compatibilityCache) {
     if (cache.selector === rule.selector) {
       const cached = getDecls(cache);
       rule.walk((node) => {
-        if (node.type === 'decl' && indexOfDeclaration(cached, node) !== -1) {
+        if (node.type === "decl" && indexOfDeclaration(cached, node) !== -1) {
           node.remove();
           return;
         }
@@ -421,7 +421,7 @@ function selectorMerger(browsers, compatibilityCache) {
  */
 function pluginCreator(opts = {}) {
   return {
-    postcssPlugin: 'postcss-merge-rules',
+    postcssPlugin: "postcss-merge-rules",
 
     /**
      * @param {import('postcss').Result & {opts: BrowserslistOptions & {file?: string}}} result

@@ -6,19 +6,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 declare namespace commander {
-
   interface CommanderError extends Error {
     code: string;
     exitCode: number;
     message: string;
     nestedError?: string;
   }
-  type CommanderErrorConstructor = new (exitCode: number, code: string, message: string) => CommanderError;
+  type CommanderErrorConstructor = new (
+    exitCode: number,
+    code: string,
+    message: string,
+  ) => CommanderError;
 
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface InvalidOptionArgumentError extends CommanderError {
   }
-  type InvalidOptionArgumentErrorConstructor = new (message: string) => InvalidOptionArgumentError;
+  type InvalidOptionArgumentErrorConstructor = new (
+    message: string,
+  ) => InvalidOptionArgumentError;
 
   interface Option {
     flags: string;
@@ -112,7 +117,9 @@ declare namespace commander {
     /** Get an array of the visible options. Includes a placeholder for the implicit help option, if there is one. */
     visibleOptions(cmd: Command): Option[];
     /** Get an array of the arguments which have descriptions. */
-    visibleArguments(cmd: Command): Array<{ term: string; description: string}>;
+    visibleArguments(
+      cmd: Command,
+    ): Array<{ term: string; description: string }>;
 
     /** Get the longest command term length. */
     longestSubcommandTermLength(cmd: Command, helper: Help): number;
@@ -127,7 +134,12 @@ declare namespace commander {
      * Wrap the given string to width characters per line, with lines after the first indented.
      * Do not wrap if insufficient room for wrapping (minColumnWidth), or string is manually formatted.
      */
-    wrap(str: string, width: number, indent: number, minColumnWidth?: number): string;
+    wrap(
+      str: string,
+      width: number,
+      indent: number,
+      minColumnWidth?: number,
+    ): string;
 
     /** Generate the built-in help text. */
     formatHelp(cmd: Command, helper: Help): string;
@@ -136,7 +148,7 @@ declare namespace commander {
   type HelpConfiguration = Partial<Help>;
 
   interface ParseOptions {
-    from: 'node' | 'electron' | 'user';
+    from: "node" | "electron" | "user";
   }
   interface HelpContext { // optional parameter for .help() and .outputHelp()
     error: boolean;
@@ -151,10 +163,9 @@ declare namespace commander {
     getOutHelpWidth?(): number;
     getErrHelpWidth?(): number;
     outputError?(str: string, write: (str: string) => void): void;
-
   }
 
-  type AddHelpTextPosition = 'beforeAll' | 'before' | 'after' | 'afterAll';
+  type AddHelpTextPosition = "beforeAll" | "before" | "after" | "afterAll";
 
   interface OptionValues {
     [key: string]: any;
@@ -195,7 +206,10 @@ declare namespace commander {
      * @param opts - configuration options
      * @returns new command
      */
-    command(nameAndArgs: string, opts?: CommandOptions): ReturnType<this['createCommand']>;
+    command(
+      nameAndArgs: string,
+      opts?: CommandOptions,
+    ): ReturnType<this["createCommand"]>;
     /**
      * Define a command, implemented in a separate executable file.
      *
@@ -214,7 +228,11 @@ declare namespace commander {
      * @param opts - configuration options
      * @returns `this` command for chaining
      */
-    command(nameAndArgs: string, description: string, opts?: commander.ExecutableCommandOptions): this;
+    command(
+      nameAndArgs: string,
+      description: string,
+      opts?: commander.ExecutableCommandOptions,
+    ): this;
 
     /**
      * Factory routine to create a new unattached command.
@@ -249,12 +267,15 @@ declare namespace commander {
      *
      * @returns `this` command for chaining
      */
-    addHelpCommand(enableOrNameAndArgs?: string | boolean, description?: string): this;
+    addHelpCommand(
+      enableOrNameAndArgs?: string | boolean,
+      description?: string,
+    ): this;
 
     /**
      * Register callback to use as replacement for calling process.exit.
      */
-    exitOverride(callback?: (err: CommanderError) => never|void): this;
+    exitOverride(callback?: (err: CommanderError) => never | void): this;
 
     /**
      * You can customise the help with a subclass of Help by overriding createHelp,
@@ -346,10 +367,24 @@ declare namespace commander {
      *
      * @returns `this` command for chaining
      */
-    option(flags: string, description?: string, defaultValue?: string | boolean): this;
-    option<T>(flags: string, description: string, fn: (value: string, previous: T) => T, defaultValue?: T): this;
+    option(
+      flags: string,
+      description?: string,
+      defaultValue?: string | boolean,
+    ): this;
+    option<T>(
+      flags: string,
+      description: string,
+      fn: (value: string, previous: T) => T,
+      defaultValue?: T,
+    ): this;
     /** @deprecated since v7, instead use choices or a custom function */
-    option(flags: string, description: string, regexp: RegExp, defaultValue?: string | boolean): this;
+    option(
+      flags: string,
+      description: string,
+      regexp: RegExp,
+      defaultValue?: string | boolean,
+    ): this;
 
     /**
      * Define a required option, which must have a value after parsing. This usually means
@@ -357,10 +392,24 @@ declare namespace commander {
      *
      * The `flags` string contains the short and/or long flags, separated by comma, a pipe or space.
      */
-    requiredOption(flags: string, description?: string, defaultValue?: string | boolean): this;
-    requiredOption<T>(flags: string, description: string, fn: (value: string, previous: T) => T, defaultValue?: T): this;
+    requiredOption(
+      flags: string,
+      description?: string,
+      defaultValue?: string | boolean,
+    ): this;
+    requiredOption<T>(
+      flags: string,
+      description: string,
+      fn: (value: string, previous: T) => T,
+      defaultValue?: T,
+    ): this;
     /** @deprecated since v7, instead use choices or a custom function */
-    requiredOption(flags: string, description: string, regexp: RegExp, defaultValue?: string | boolean): this;
+    requiredOption(
+      flags: string,
+      description: string,
+      regexp: RegExp,
+      defaultValue?: string | boolean,
+    ): this;
 
     /**
      * Factory routine to create a new unattached option.
@@ -492,7 +541,10 @@ declare namespace commander {
      *
      * @returns `this` command for chaining
      */
-    description(str: string, argsDescription?: {[argName: string]: string}): this;
+    description(
+      str: string,
+      argsDescription?: { [argName: string]: string },
+    ): this;
     /**
      * Get the description.
      */
@@ -550,7 +602,6 @@ declare namespace commander {
      * Output help information for this command.
      *
      * Outputs built-in help, and custom text added using `.addHelpText()`.
-     *
      */
     outputHelp(context?: HelpContext): void;
     /** @deprecated since v7 */
@@ -584,7 +635,10 @@ declare namespace commander {
      * and 'beforeAll' or 'afterAll' to affect this command and all its subcommands.
      */
     addHelpText(position: AddHelpTextPosition, text: string): this;
-    addHelpText(position: AddHelpTextPosition, text: (context: AddHelpTextContext) => string | undefined): this;
+    addHelpText(
+      position: AddHelpTextPosition,
+      text: (context: AddHelpTextContext) => string | undefined,
+    ): this;
 
     /**
      * Add a listener (callback) for when events occur. (Implemented using EventEmitter.)
@@ -618,7 +672,6 @@ declare namespace commander {
     InvalidOptionArgumentError: InvalidOptionArgumentErrorConstructor;
     Help: HelpConstructor;
   }
-
 }
 
 // Declaring namespace AND global

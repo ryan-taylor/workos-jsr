@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-const { pathElems, referencesProps } = require('./_collections.js');
-const { includesUrlReference } = require('../lib/svgo/tools.js');
+const { pathElems, referencesProps } = require("./_collections.js");
+const { includesUrlReference } = require("../lib/svgo/tools.js");
 
-exports.name = 'moveGroupAttrsToElems';
-exports.description = 'moves some group attributes to the content elements';
+exports.name = "moveGroupAttrsToElems";
+exports.description = "moves some group attributes to the content elements";
 
-const pathElemsWithGroupsAndText = [...pathElems, 'g', 'text'];
+const pathElemsWithGroupsAndText = [...pathElems, "g", "text"];
 
 /**
  * Move group attrs to the content elements.
@@ -32,25 +32,26 @@ exports.fn = () => {
       enter: (node) => {
         // move group transform attr to content's pathElems
         if (
-          node.name === 'g' &&
+          node.name === "g" &&
           node.children.length !== 0 &&
           node.attributes.transform != null &&
           Object.entries(node.attributes).some(
-            ([name, value]) =>
-              referencesProps.has(name) && includesUrlReference(value),
-          ) === false &&
+              ([name, value]) =>
+                referencesProps.has(name) && includesUrlReference(value),
+            ) === false &&
           node.children.every(
             (child) =>
-              child.type === 'element' &&
+              child.type === "element" &&
               pathElemsWithGroupsAndText.includes(child.name) &&
               child.attributes.id == null,
           )
         ) {
           for (const child of node.children) {
             const value = node.attributes.transform;
-            if (child.type === 'element') {
+            if (child.type === "element") {
               if (child.attributes.transform != null) {
-                child.attributes.transform = `${value} ${child.attributes.transform}`;
+                child.attributes.transform =
+                  `${value} ${child.attributes.transform}`;
               } else {
                 child.attributes.transform = value;
               }

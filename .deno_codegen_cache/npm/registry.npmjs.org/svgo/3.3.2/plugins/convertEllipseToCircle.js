@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-exports.name = 'convertEllipseToCircle';
-exports.description = 'converts non-eccentric <ellipse>s to <circle>s';
+exports.name = "convertEllipseToCircle";
+exports.description = "converts non-eccentric <ellipse>s to <circle>s";
 
 /**
  * Converts non-eccentric <ellipse>s to <circle>s.
@@ -16,16 +16,16 @@ exports.fn = () => {
   return {
     element: {
       enter: (node) => {
-        if (node.name === 'ellipse') {
-          const rx = node.attributes.rx || '0';
-          const ry = node.attributes.ry || '0';
+        if (node.name === "ellipse") {
+          const rx = node.attributes.rx || "0";
+          const ry = node.attributes.ry || "0";
           if (
             rx === ry ||
-            rx === 'auto' ||
-            ry === 'auto' // SVG2
+            rx === "auto" ||
+            ry === "auto" // SVG2
           ) {
-            node.name = 'circle';
-            const radius = rx === 'auto' ? ry : rx;
+            node.name = "circle";
+            const radius = rx === "auto" ? ry : rx;
             delete node.attributes.rx;
             delete node.attributes.ry;
             node.attributes.r = radius;

@@ -6,10 +6,10 @@ const WHITESPACE_ENCODINGS = {
   "\u000B": "%0B",
   "\u000C": "%0C",
   "\u000D": "%0D",
-  "\u0020": "%20"
+  "\u0020": "%20",
 };
 export function encodeWhitespace(string) {
-  return string.replaceAll(/[\s]/g, (c)=>{
+  return string.replaceAll(/[\s]/g, (c) => {
     return WHITESPACE_ENCODINGS[c] ?? c;
   });
 }

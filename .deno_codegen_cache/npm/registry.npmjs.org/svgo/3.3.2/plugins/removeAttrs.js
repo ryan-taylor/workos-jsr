@@ -1,10 +1,11 @@
-'use strict';
+"use strict";
 
-exports.name = 'removeAttrs';
-exports.description = 'removes specified attributes';
+exports.name = "removeAttrs";
+exports.description = "removes specified attributes";
 
-const DEFAULT_SEPARATOR = ':';
-const ENOATTRS = `Warning: The plugin "removeAttrs" requires the "attrs" parameter.
+const DEFAULT_SEPARATOR = ":";
+const ENOATTRS =
+  `Warning: The plugin "removeAttrs" requires the "attrs" parameter.
 It should have a pattern to remove, otherwise the plugin is a noop.
 Config example:
 
@@ -50,7 +51,6 @@ plugins: [
  *     ---
  *       attrs: 'path:fill:none'
  *
- *
  *     > remove all fill and stroke attribute
  *     ---
  *       attrs:
@@ -73,30 +73,26 @@ plugins: [
  *
  *       attrs: '.*:(fill|stroke):.*'
  *
- *
  *     > remove all stroke related attributes
  *     ----
  *     attrs: 'stroke.*'
- *
  *
  * @author Benny Schudel
  *
  * @type {import('./plugins-types').Plugin<'removeAttrs'>}
  */
 exports.fn = (root, params) => {
-  if (typeof params.attrs == 'undefined') {
+  if (typeof params.attrs == "undefined") {
     console.warn(ENOATTRS);
     return null;
   }
 
-  const elemSeparator =
-    typeof params.elemSeparator == 'string'
-      ? params.elemSeparator
-      : DEFAULT_SEPARATOR;
-  const preserveCurrentColor =
-    typeof params.preserveCurrentColor == 'boolean'
-      ? params.preserveCurrentColor
-      : false;
+  const elemSeparator = typeof params.elemSeparator == "string"
+    ? params.elemSeparator
+    : DEFAULT_SEPARATOR;
+  const preserveCurrentColor = typeof params.preserveCurrentColor == "boolean"
+    ? params.preserveCurrentColor
+    : false;
   const attrs = Array.isArray(params.attrs) ? params.attrs : [params.attrs];
 
   return {
@@ -105,33 +101,31 @@ exports.fn = (root, params) => {
         for (let pattern of attrs) {
           // if no element separators (:), assume it's attribute name, and apply to all elements *regardless of value*
           if (!pattern.includes(elemSeparator)) {
-            pattern = ['.*', pattern, '.*'].join(elemSeparator);
+            pattern = [".*", pattern, ".*"].join(elemSeparator);
             // if only 1 separator, assume it's element and attribute name, and apply regardless of attribute value
           } else if (pattern.split(elemSeparator).length < 3) {
-            pattern = [pattern, '.*'].join(elemSeparator);
+            pattern = [pattern, ".*"].join(elemSeparator);
           }
 
           // create regexps for element, attribute name, and attribute value
           const list = pattern.split(elemSeparator).map((value) => {
             // adjust single * to match anything
-            if (value === '*') {
-              value = '.*';
+            if (value === "*") {
+              value = ".*";
             }
-            return new RegExp(['^', value, '$'].join(''), 'i');
+            return new RegExp(["^", value, "$"].join(""), "i");
           });
 
           // matches element
           if (list[0].test(node.name)) {
             // loop attributes
             for (const [name, value] of Object.entries(node.attributes)) {
-              const isFillCurrentColor =
-                preserveCurrentColor &&
-                name == 'fill' &&
-                value == 'currentColor';
-              const isStrokeCurrentColor =
-                preserveCurrentColor &&
-                name == 'stroke' &&
-                value == 'currentColor';
+              const isFillCurrentColor = preserveCurrentColor &&
+                name == "fill" &&
+                value == "currentColor";
+              const isStrokeCurrentColor = preserveCurrentColor &&
+                name == "stroke" &&
+                value == "currentColor";
               if (
                 !isFillCurrentColor &&
                 !isStrokeCurrentColor &&

@@ -12,16 +12,16 @@ export interface SessionAuth {
     updated_at: string;
     [key: string]: unknown;
   };
-  
+
   /** The JWT access token for the session */
   accessToken: string;
-  
+
   /** The refresh token for the session */
   refreshToken: string;
-  
+
   /** The ID of the session */
   sessionId: string;
-  
+
   /** Additional properties that may be returned */
   [key: string]: unknown;
 }

@@ -1,3 +1,3 @@
-'use strict';
+"use strict";
 
-module.exports = require('./async').concatSeries;
+module.exports = require("./async").concatSeries;

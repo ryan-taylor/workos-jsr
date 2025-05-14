@@ -1,6 +1,6 @@
 /**
  * Options for creating a new user in WorkOS.
- * 
+ *
  * @example
  * ```ts
  * const options: CreateUserOptions = {

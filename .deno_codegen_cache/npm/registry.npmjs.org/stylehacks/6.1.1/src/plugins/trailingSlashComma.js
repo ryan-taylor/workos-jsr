@@ -1,9 +1,9 @@
-'use strict';
-const BasePlugin = require('../plugin');
-const isMixin = require('../isMixin');
-const { IE_5_5, IE_6, IE_7 } = require('../dictionary/browsers');
-const { SELECTOR } = require('../dictionary/identifiers');
-const { RULE } = require('../dictionary/postcss');
+"use strict";
+const BasePlugin = require("../plugin");
+const isMixin = require("../isMixin");
+const { IE_5_5, IE_6, IE_7 } = require("../dictionary/browsers");
+const { SELECTOR } = require("../dictionary/identifiers");
+const { RULE } = require("../dictionary/postcss");
 
 module.exports = class TrailingSlashComma extends BasePlugin {
   /** @param {import('postcss').Result=} result */
@@ -24,8 +24,8 @@ module.exports = class TrailingSlashComma extends BasePlugin {
     const trim = selector.trim();
 
     if (
-      trim.lastIndexOf(',') === selector.length - 1 ||
-      trim.lastIndexOf('\\') === selector.length - 1
+      trim.lastIndexOf(",") === selector.length - 1 ||
+      trim.lastIndexOf("\\") === selector.length - 1
     ) {
       this.push(rule, {
         identifier: SELECTOR,

@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * @typedef {import('../lib/types').XastChild} XastChild
@@ -6,22 +6,22 @@
  * @typedef {import('../lib/types').XastParent} XastParent
  */
 
-const { elemsGroups } = require('./_collections.js');
+const { elemsGroups } = require("./_collections.js");
 const {
   visit,
   visitSkip,
   querySelector,
   detachNodeFromParent,
-} = require('../lib/xast.js');
-const { collectStylesheet, computeStyle } = require('../lib/style.js');
-const { parsePathData } = require('../lib/path.js');
-const { hasScripts, findReferences } = require('../lib/svgo/tools.js');
+} = require("../lib/xast.js");
+const { collectStylesheet, computeStyle } = require("../lib/style.js");
+const { parsePathData } = require("../lib/path.js");
+const { hasScripts, findReferences } = require("../lib/svgo/tools.js");
 
 const nonRendering = elemsGroups.nonRendering;
 
-exports.name = 'removeHiddenElems';
+exports.name = "removeHiddenElems";
 exports.description =
-  'removes hidden elements (zero sized, with absent attributes)';
+  "removes hidden elements (zero sized, with absent attributes)";
 
 /**
  * Remove hidden elements with disabled rendering:
@@ -99,10 +99,10 @@ exports.fn = (root, params) => {
    */
   function removeElement(node, parentNode) {
     if (
-      node.type === 'element' &&
+      node.type === "element" &&
       node.attributes.id != null &&
-      parentNode.type === 'element' &&
-      parentNode.name === 'defs'
+      parentNode.type === "element" &&
+      parentNode.name === "defs"
     ) {
       removedDefIds.add(node.attributes.id);
     }
@@ -130,8 +130,8 @@ exports.fn = (root, params) => {
         if (
           opacity0 &&
           computedStyle.opacity &&
-          computedStyle.opacity.type === 'static' &&
-          computedStyle.opacity.value === '0'
+          computedStyle.opacity.type === "static" &&
+          computedStyle.opacity.value === "0"
         ) {
           removeElement(node, parentNode);
         }
@@ -143,20 +143,20 @@ exports.fn = (root, params) => {
     element: {
       enter: (node, parentNode) => {
         if (
-          (node.name === 'style' && node.children.length !== 0) ||
+          (node.name === "style" && node.children.length !== 0) ||
           hasScripts(node)
         ) {
           deoptimized = true;
           return;
         }
 
-        if (node.name === 'defs') {
+        if (node.name === "defs") {
           allDefs.set(node, parentNode);
         }
 
-        if (node.name === 'use') {
+        if (node.name === "use") {
           for (const attr of Object.keys(node.attributes)) {
-            if (attr !== 'href' && !attr.endsWith(':href')) continue;
+            if (attr !== "href" && !attr.endsWith(":href")) continue;
             const value = node.attributes[attr];
             const id = value.slice(1);
 
@@ -175,10 +175,10 @@ exports.fn = (root, params) => {
         if (
           isHidden &&
           computedStyle.visibility &&
-          computedStyle.visibility.type === 'static' &&
-          computedStyle.visibility.value === 'hidden' &&
+          computedStyle.visibility.type === "static" &&
+          computedStyle.visibility.value === "hidden" &&
           // keep if any descendant enables visibility
-          querySelector(node, '[visibility=visible]') == null
+          querySelector(node, "[visibility=visible]") == null
         ) {
           removeElement(node, parentNode);
           return;
@@ -192,10 +192,10 @@ exports.fn = (root, params) => {
         if (
           displayNone &&
           computedStyle.display &&
-          computedStyle.display.type === 'static' &&
-          computedStyle.display.value === 'none' &&
+          computedStyle.display.type === "static" &&
+          computedStyle.display.value === "none" &&
           // markers with display: none still rendered
-          node.name !== 'marker'
+          node.name !== "marker"
         ) {
           removeElement(node, parentNode);
           return;
@@ -209,9 +209,9 @@ exports.fn = (root, params) => {
         // <circle r="0">
         if (
           circleR0 &&
-          node.name === 'circle' &&
+          node.name === "circle" &&
           node.children.length === 0 &&
-          node.attributes.r === '0'
+          node.attributes.r === "0"
         ) {
           removeElement(node, parentNode);
           return;
@@ -225,9 +225,9 @@ exports.fn = (root, params) => {
         // <ellipse rx="0">
         if (
           ellipseRX0 &&
-          node.name === 'ellipse' &&
+          node.name === "ellipse" &&
           node.children.length === 0 &&
-          node.attributes.rx === '0'
+          node.attributes.rx === "0"
         ) {
           removeElement(node, parentNode);
           return;
@@ -241,9 +241,9 @@ exports.fn = (root, params) => {
         // <ellipse ry="0">
         if (
           ellipseRY0 &&
-          node.name === 'ellipse' &&
+          node.name === "ellipse" &&
           node.children.length === 0 &&
-          node.attributes.ry === '0'
+          node.attributes.ry === "0"
         ) {
           removeElement(node, parentNode);
           return;
@@ -257,9 +257,9 @@ exports.fn = (root, params) => {
         // <rect width="0">
         if (
           rectWidth0 &&
-          node.name === 'rect' &&
+          node.name === "rect" &&
           node.children.length === 0 &&
-          node.attributes.width === '0'
+          node.attributes.width === "0"
         ) {
           removeElement(node, parentNode);
           return;
@@ -274,9 +274,9 @@ exports.fn = (root, params) => {
         if (
           rectHeight0 &&
           rectWidth0 &&
-          node.name === 'rect' &&
+          node.name === "rect" &&
           node.children.length === 0 &&
-          node.attributes.height === '0'
+          node.attributes.height === "0"
         ) {
           removeElement(node, parentNode);
           return;
@@ -290,8 +290,8 @@ exports.fn = (root, params) => {
         // <pattern width="0">
         if (
           patternWidth0 &&
-          node.name === 'pattern' &&
-          node.attributes.width === '0'
+          node.name === "pattern" &&
+          node.attributes.width === "0"
         ) {
           removeElement(node, parentNode);
           return;
@@ -305,8 +305,8 @@ exports.fn = (root, params) => {
         // <pattern height="0">
         if (
           patternHeight0 &&
-          node.name === 'pattern' &&
-          node.attributes.height === '0'
+          node.name === "pattern" &&
+          node.attributes.height === "0"
         ) {
           removeElement(node, parentNode);
           return;
@@ -320,8 +320,8 @@ exports.fn = (root, params) => {
         // <image width="0">
         if (
           imageWidth0 &&
-          node.name === 'image' &&
-          node.attributes.width === '0'
+          node.name === "image" &&
+          node.attributes.width === "0"
         ) {
           removeElement(node, parentNode);
           return;
@@ -335,8 +335,8 @@ exports.fn = (root, params) => {
         // <image height="0">
         if (
           imageHeight0 &&
-          node.name === 'image' &&
-          node.attributes.height === '0'
+          node.name === "image" &&
+          node.attributes.height === "0"
         ) {
           removeElement(node, parentNode);
           return;
@@ -347,7 +347,7 @@ exports.fn = (root, params) => {
         // https://www.w3.org/TR/SVG11/paths.html#DAttribute
         //
         // <path d=""/>
-        if (pathEmptyD && node.name === 'path') {
+        if (pathEmptyD && node.name === "path") {
           if (node.attributes.d == null) {
             removeElement(node, parentNode);
             return;
@@ -360,8 +360,8 @@ exports.fn = (root, params) => {
           // keep single point paths for markers
           if (
             pathData.length === 1 &&
-            computedStyle['marker-start'] == null &&
-            computedStyle['marker-end'] == null
+            computedStyle["marker-start"] == null &&
+            computedStyle["marker-end"] == null
           ) {
             removeElement(node, parentNode);
             return;
@@ -375,7 +375,7 @@ exports.fn = (root, params) => {
         // <polyline points="">
         if (
           polylineEmptyPoints &&
-          node.name === 'polyline' &&
+          node.name === "polyline" &&
           node.attributes.points == null
         ) {
           removeElement(node, parentNode);
@@ -389,7 +389,7 @@ exports.fn = (root, params) => {
         // <polygon points="">
         if (
           polygonEmptyPoints &&
-          node.name === 'polygon' &&
+          node.name === "polygon" &&
           node.attributes.points == null
         ) {
           removeElement(node, parentNode);
@@ -417,10 +417,12 @@ exports.fn = (root, params) => {
         }
 
         if (!deoptimized) {
-          for (const [
-            nonRenderedNode,
-            nonRenderedParent,
-          ] of nonRenderedNodes.entries()) {
+          for (
+            const [
+              nonRenderedNode,
+              nonRenderedParent,
+            ] of nonRenderedNodes.entries()
+          ) {
             const id = nonRenderedNode.attributes.id;
 
             if (!allReferences.has(id)) {

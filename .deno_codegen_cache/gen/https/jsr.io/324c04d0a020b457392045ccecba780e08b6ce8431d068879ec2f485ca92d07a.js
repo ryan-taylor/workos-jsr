@@ -29,7 +29,11 @@ import { toPathString } from "./_to_path_string.ts";
     // if file exists
     const stat = await Deno.lstat(filePath);
     if (!stat.isFile) {
-      throw new Error(`Failed to ensure file exists: expected 'file', got '${getFileInfoType(stat)}'`);
+      throw new Error(
+        `Failed to ensure file exists: expected 'file', got '${
+          getFileInfoType(stat)
+        }'`,
+      );
     }
   } catch (err) {
     // if file not exists
@@ -69,7 +73,11 @@ import { toPathString } from "./_to_path_string.ts";
     // if file exists
     const stat = Deno.lstatSync(filePath);
     if (!stat.isFile) {
-      throw new Error(`Failed to ensure file exists: expected 'file', got '${getFileInfoType(stat)}'`);
+      throw new Error(
+        `Failed to ensure file exists: expected 'file', got '${
+          getFileInfoType(stat)
+        }'`,
+      );
     }
   } catch (err) {
     // if file not exists

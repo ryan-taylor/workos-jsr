@@ -1,25 +1,25 @@
-'use strict';
-const valueParser = require('postcss-value-parser');
+"use strict";
+const valueParser = require("postcss-value-parser");
 
-const directionKeywords = new Set(['top', 'right', 'bottom', 'left', 'center']);
+const directionKeywords = new Set(["top", "right", "bottom", "left", "center"]);
 
-const center = '50%';
+const center = "50%";
 const horizontal = new Map([
-  ['right', '100%'],
-  ['left', '0'],
+  ["right", "100%"],
+  ["left", "0"],
 ]);
 const verticalValue = new Map([
-  ['bottom', '100%'],
-  ['top', '0'],
+  ["bottom", "100%"],
+  ["top", "0"],
 ]);
-const mathFunctions = new Set(['calc', 'min', 'max', 'clamp']);
-const variableFunctions = new Set(['var', 'env', 'constant']);
+const mathFunctions = new Set(["calc", "min", "max", "clamp"]);
+const variableFunctions = new Set(["var", "env", "constant"]);
 /**
  * @param {valueParser.Node} node
  * @return {boolean}
  */
 function isCommaNode(node) {
-  return node.type === 'div' && node.value === ',';
+  return node.type === "div" && node.value === ",";
 }
 
 /**
@@ -27,7 +27,7 @@ function isCommaNode(node) {
  * @return {boolean}
  */
 function isVariableFunctionNode(node) {
-  if (node.type !== 'function') {
+  if (node.type !== "function") {
     return false;
   }
 
@@ -39,7 +39,7 @@ function isVariableFunctionNode(node) {
  * @return {boolean}
  */
 function isMathFunctionNode(node) {
-  if (node.type !== 'function') {
+  if (node.type !== "function") {
     return false;
   }
   return mathFunctions.has(node.value.toLowerCase());
@@ -50,7 +50,7 @@ function isMathFunctionNode(node) {
  * @return {boolean}
  */
 function isNumberNode(node) {
-  if (node.type !== 'word') {
+  if (node.type !== "word") {
     return false;
   }
 
@@ -64,7 +64,7 @@ function isNumberNode(node) {
  * @return {boolean}
  */
 function isDimensionNode(node) {
-  if (node.type !== 'word') {
+  if (node.type !== "word") {
     return false;
   }
 
@@ -74,7 +74,7 @@ function isDimensionNode(node) {
     return false;
   }
 
-  return parsed.unit !== '';
+  return parsed.unit !== "";
 }
 
 /**
@@ -103,7 +103,7 @@ function transform(value) {
 
     // After separator (`/`) follows `background-size` values
     // Avoid them
-    if (node.type === 'div' && node.value === '/') {
+    if (node.type === "div" && node.value === "/") {
       shouldContinue = false;
 
       return;
@@ -125,9 +125,8 @@ function transform(value) {
       return;
     }
 
-    const isPositionKeyword =
-      (node.type === 'word' &&
-        directionKeywords.has(node.value.toLowerCase())) ||
+    const isPositionKeyword = (node.type === "word" &&
+      directionKeywords.has(node.value.toLowerCase())) ||
       isDimensionNode(node) ||
       isNumberNode(node) ||
       isMathFunctionNode(node);
@@ -140,7 +139,7 @@ function transform(value) {
     }
 
     if (ranges[rangeIndex].start !== null) {
-      if (node.type === 'space') {
+      if (node.type === "space") {
         return;
       } else if (isPositionKeyword) {
         ranges[rangeIndex].end = index;
@@ -164,15 +163,16 @@ function transform(value) {
     }
 
     const firstNode = nodes[0].value.toLowerCase();
-    const secondNode =
-      nodes[2] && nodes[2].value ? nodes[2].value.toLowerCase() : null;
+    const secondNode = nodes[2] && nodes[2].value
+      ? nodes[2].value.toLowerCase()
+      : null;
 
-    if (nodes.length === 1 || secondNode === 'center') {
+    if (nodes.length === 1 || secondNode === "center") {
       if (secondNode) {
-        nodes[2].value = nodes[1].value = '';
+        nodes[2].value = nodes[1].value = "";
       }
 
-      const map = new Map([...horizontal, ['center', center]]);
+      const map = new Map([...horizontal, ["center", center]]);
 
       if (map.has(firstNode)) {
         nodes[0].value = /** @type {string}*/ (map.get(firstNode));
@@ -182,8 +182,8 @@ function transform(value) {
     }
 
     if (secondNode !== null) {
-      if (firstNode === 'center' && directionKeywords.has(secondNode)) {
-        nodes[0].value = nodes[1].value = '';
+      if (firstNode === "center" && directionKeywords.has(secondNode)) {
+        nodes[0].value = nodes[1].value = "";
 
         if (horizontal.has(secondNode)) {
           nodes[2].value = /** @type {string} */ (horizontal.get(secondNode));
@@ -214,7 +214,7 @@ function transform(value) {
  */
 function pluginCreator() {
   return {
-    postcssPlugin: 'postcss-normalize-positions',
+    postcssPlugin: "postcss-normalize-positions",
 
     OnceExit(css) {
       const cache = new Map();
@@ -238,7 +238,7 @@ function pluginCreator() {
 
           decl.value = result;
           cache.set(value, result);
-        }
+        },
       );
     },
   };

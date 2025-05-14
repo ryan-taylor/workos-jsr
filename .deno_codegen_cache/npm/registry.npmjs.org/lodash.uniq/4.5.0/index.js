@@ -11,14 +11,14 @@
 var LARGE_ARRAY_SIZE = 200;
 
 /** Used to stand-in for `undefined` hash values. */
-var HASH_UNDEFINED = '__lodash_hash_undefined__';
+var HASH_UNDEFINED = "__lodash_hash_undefined__";
 
 /** Used as references for various `Number` constants. */
 var INFINITY = 1 / 0;
 
 /** `Object#toString` result references. */
-var funcTag = '[object Function]',
-    genTag = '[object GeneratorFunction]';
+var funcTag = "[object Function]",
+  genTag = "[object GeneratorFunction]";
 
 /**
  * Used to match `RegExp`
@@ -30,13 +30,15 @@ var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
 var reIsHostCtor = /^\[object .+?Constructor\]$/;
 
 /** Detect free variable `global` from Node.js. */
-var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+var freeGlobal = typeof global == "object" && global &&
+  global.Object === Object && global;
 
 /** Detect free variable `self`. */
-var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+var freeSelf = typeof self == "object" && self && self.Object === Object &&
+  self;
 
 /** Used as a reference to the global object. */
-var root = freeGlobal || freeSelf || Function('return this')();
+var root = freeGlobal || freeSelf || Function("return this")();
 
 /**
  * A specialized version of `_.includes` for arrays without support for
@@ -63,7 +65,7 @@ function arrayIncludes(array, value) {
  */
 function arrayIncludesWith(array, value, comparator) {
   var index = -1,
-      length = array ? array.length : 0;
+    length = array ? array.length : 0;
 
   while (++index < length) {
     if (comparator(value, array[index])) {
@@ -86,7 +88,7 @@ function arrayIncludesWith(array, value, comparator) {
  */
 function baseFindIndex(array, predicate, fromIndex, fromRight) {
   var length = array.length,
-      index = fromIndex + (fromRight ? 1 : -1);
+    index = fromIndex + (fromRight ? 1 : -1);
 
   while ((fromRight ? index-- : ++index < length)) {
     if (predicate(array[index], index, array)) {
@@ -110,7 +112,7 @@ function baseIndexOf(array, value, fromIndex) {
     return baseFindIndex(array, baseIsNaN, fromIndex);
   }
   var index = fromIndex - 1,
-      length = array.length;
+    length = array.length;
 
   while (++index < length) {
     if (array[index] === value) {
@@ -166,9 +168,9 @@ function isHostObject(value) {
   // Many host objects are `Object` objects that can coerce to strings
   // despite having improperly defined `toString` methods.
   var result = false;
-  if (value != null && typeof value.toString != 'function') {
+  if (value != null && typeof value.toString != "function") {
     try {
-      result = !!(value + '');
+      result = !!(value + "");
     } catch (e) {}
   }
   return result;
@@ -183,9 +185,9 @@ function isHostObject(value) {
  */
 function setToArray(set) {
   var index = -1,
-      result = Array(set.size);
+    result = Array(set.size);
 
-  set.forEach(function(value) {
+  set.forEach(function (value) {
     result[++index] = value;
   });
   return result;
@@ -193,17 +195,19 @@ function setToArray(set) {
 
 /** Used for built-in method references. */
 var arrayProto = Array.prototype,
-    funcProto = Function.prototype,
-    objectProto = Object.prototype;
+  funcProto = Function.prototype,
+  objectProto = Object.prototype;
 
 /** Used to detect overreaching core-js shims. */
-var coreJsData = root['__core-js_shared__'];
+var coreJsData = root["__core-js_shared__"];
 
 /** Used to detect methods masquerading as native. */
-var maskSrcKey = (function() {
-  var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');
-  return uid ? ('Symbol(src)_1.' + uid) : '';
-}());
+var maskSrcKey = function () {
+  var uid = /[^.]+$/.exec(
+    coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || "",
+  );
+  return uid ? ("Symbol(src)_1." + uid) : "";
+}();
 
 /** Used to resolve the decompiled source of functions. */
 var funcToString = funcProto.toString;
@@ -219,18 +223,23 @@ var hasOwnProperty = objectProto.hasOwnProperty;
 var objectToString = objectProto.toString;
 
 /** Used to detect if a method is native. */
-var reIsNative = RegExp('^' +
-  funcToString.call(hasOwnProperty).replace(reRegExpChar, '\\$&')
-  .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
+var reIsNative = RegExp(
+  "^" +
+    funcToString.call(hasOwnProperty).replace(reRegExpChar, "\\$&")
+      .replace(
+        /hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g,
+        "$1.*?",
+      ) +
+    "$",
 );
 
 /** Built-in value references. */
 var splice = arrayProto.splice;
 
 /* Built-in method references that are verified to be native. */
-var Map = getNative(root, 'Map'),
-    Set = getNative(root, 'Set'),
-    nativeCreate = getNative(Object, 'create');
+var Map = getNative(root, "Map"),
+  Set = getNative(root, "Set"),
+  nativeCreate = getNative(Object, "create");
 
 /**
  * Creates a hash object.
@@ -241,7 +250,7 @@ var Map = getNative(root, 'Map'),
  */
 function Hash(entries) {
   var index = -1,
-      length = entries ? entries.length : 0;
+    length = entries ? entries.length : 0;
 
   this.clear();
   while (++index < length) {
@@ -304,7 +313,9 @@ function hashGet(key) {
  */
 function hashHas(key) {
   var data = this.__data__;
-  return nativeCreate ? data[key] !== undefined : hasOwnProperty.call(data, key);
+  return nativeCreate
+    ? data[key] !== undefined
+    : hasOwnProperty.call(data, key);
 }
 
 /**
@@ -325,7 +336,7 @@ function hashSet(key, value) {
 
 // Add methods to `Hash`.
 Hash.prototype.clear = hashClear;
-Hash.prototype['delete'] = hashDelete;
+Hash.prototype["delete"] = hashDelete;
 Hash.prototype.get = hashGet;
 Hash.prototype.has = hashHas;
 Hash.prototype.set = hashSet;
@@ -339,7 +350,7 @@ Hash.prototype.set = hashSet;
  */
 function ListCache(entries) {
   var index = -1,
-      length = entries ? entries.length : 0;
+    length = entries ? entries.length : 0;
 
   this.clear();
   while (++index < length) {
@@ -370,7 +381,7 @@ function listCacheClear() {
  */
 function listCacheDelete(key) {
   var data = this.__data__,
-      index = assocIndexOf(data, key);
+    index = assocIndexOf(data, key);
 
   if (index < 0) {
     return false;
@@ -395,7 +406,7 @@ function listCacheDelete(key) {
  */
 function listCacheGet(key) {
   var data = this.__data__,
-      index = assocIndexOf(data, key);
+    index = assocIndexOf(data, key);
 
   return index < 0 ? undefined : data[index][1];
 }
@@ -425,7 +436,7 @@ function listCacheHas(key) {
  */
 function listCacheSet(key, value) {
   var data = this.__data__,
-      index = assocIndexOf(data, key);
+    index = assocIndexOf(data, key);
 
   if (index < 0) {
     data.push([key, value]);
@@ -437,7 +448,7 @@ function listCacheSet(key, value) {
 
 // Add methods to `ListCache`.
 ListCache.prototype.clear = listCacheClear;
-ListCache.prototype['delete'] = listCacheDelete;
+ListCache.prototype["delete"] = listCacheDelete;
 ListCache.prototype.get = listCacheGet;
 ListCache.prototype.has = listCacheHas;
 ListCache.prototype.set = listCacheSet;
@@ -451,7 +462,7 @@ ListCache.prototype.set = listCacheSet;
  */
 function MapCache(entries) {
   var index = -1,
-      length = entries ? entries.length : 0;
+    length = entries ? entries.length : 0;
 
   this.clear();
   while (++index < length) {
@@ -469,9 +480,9 @@ function MapCache(entries) {
  */
 function mapCacheClear() {
   this.__data__ = {
-    'hash': new Hash,
-    'map': new (Map || ListCache),
-    'string': new Hash
+    "hash": new Hash(),
+    "map": new (Map || ListCache)(),
+    "string": new Hash(),
   };
 }
 
@@ -485,7 +496,7 @@ function mapCacheClear() {
  * @returns {boolean} Returns `true` if the entry was removed, else `false`.
  */
 function mapCacheDelete(key) {
-  return getMapData(this, key)['delete'](key);
+  return getMapData(this, key)["delete"](key);
 }
 
 /**
@@ -531,13 +542,12 @@ function mapCacheSet(key, value) {
 
 // Add methods to `MapCache`.
 MapCache.prototype.clear = mapCacheClear;
-MapCache.prototype['delete'] = mapCacheDelete;
+MapCache.prototype["delete"] = mapCacheDelete;
 MapCache.prototype.get = mapCacheGet;
 MapCache.prototype.has = mapCacheHas;
 MapCache.prototype.set = mapCacheSet;
 
 /**
- *
  * Creates an array cache object to store unique values.
  *
  * @private
@@ -546,9 +556,9 @@ MapCache.prototype.set = mapCacheSet;
  */
 function SetCache(values) {
   var index = -1,
-      length = values ? values.length : 0;
+    length = values ? values.length : 0;
 
-  this.__data__ = new MapCache;
+  this.__data__ = new MapCache();
   while (++index < length) {
     this.add(values[index]);
   }
@@ -616,7 +626,9 @@ function baseIsNative(value) {
   if (!isObject(value) || isMasked(value)) {
     return false;
   }
-  var pattern = (isFunction(value) || isHostObject(value)) ? reIsNative : reIsHostCtor;
+  var pattern = (isFunction(value) || isHostObject(value))
+    ? reIsNative
+    : reIsHostCtor;
   return pattern.test(toSource(value));
 }
 
@@ -631,32 +643,30 @@ function baseIsNative(value) {
  */
 function baseUniq(array, iteratee, comparator) {
   var index = -1,
-      includes = arrayIncludes,
-      length = array.length,
-      isCommon = true,
-      result = [],
-      seen = result;
+    includes = arrayIncludes,
+    length = array.length,
+    isCommon = true,
+    result = [],
+    seen = result;
 
   if (comparator) {
     isCommon = false;
     includes = arrayIncludesWith;
-  }
-  else if (length >= LARGE_ARRAY_SIZE) {
+  } else if (length >= LARGE_ARRAY_SIZE) {
     var set = iteratee ? null : createSet(array);
     if (set) {
       return setToArray(set);
     }
     isCommon = false;
     includes = cacheHas;
-    seen = new SetCache;
-  }
-  else {
+    seen = new SetCache();
+  } else {
     seen = iteratee ? [] : result;
   }
   outer:
   while (++index < length) {
     var value = array[index],
-        computed = iteratee ? iteratee(value) : value;
+      computed = iteratee ? iteratee(value) : value;
 
     value = (comparator || value !== 0) ? value : 0;
     if (isCommon && computed === computed) {
@@ -670,8 +680,7 @@ function baseUniq(array, iteratee, comparator) {
         seen.push(computed);
       }
       result.push(value);
-    }
-    else if (!includes(seen, computed, comparator)) {
+    } else if (!includes(seen, computed, comparator)) {
       if (seen !== result) {
         seen.push(computed);
       }
@@ -688,9 +697,11 @@ function baseUniq(array, iteratee, comparator) {
  * @param {Array} values The values to add to the set.
  * @returns {Object} Returns the new set.
  */
-var createSet = !(Set && (1 / setToArray(new Set([,-0]))[1]) == INFINITY) ? noop : function(values) {
-  return new Set(values);
-};
+var createSet = !(Set && (1 / setToArray(new Set([, -0]))[1]) == INFINITY)
+  ? noop
+  : function (values) {
+    return new Set(values);
+  };
 
 /**
  * Gets the data for `map`.
@@ -703,7 +714,7 @@ var createSet = !(Set && (1 / setToArray(new Set([,-0]))[1]) == INFINITY) ? noop
 function getMapData(map, key) {
   var data = map.__data__;
   return isKeyable(key)
-    ? data[typeof key == 'string' ? 'string' : 'hash']
+    ? data[typeof key == "string" ? "string" : "hash"]
     : data.map;
 }
 
@@ -729,8 +740,9 @@ function getNative(object, key) {
  */
 function isKeyable(value) {
   var type = typeof value;
-  return (type == 'string' || type == 'number' || type == 'symbol' || type == 'boolean')
-    ? (value !== '__proto__')
+  return (type == "string" || type == "number" || type == "symbol" ||
+      type == "boolean")
+    ? (value !== "__proto__")
     : (value === null);
 }
 
@@ -758,10 +770,10 @@ function toSource(func) {
       return funcToString.call(func);
     } catch (e) {}
     try {
-      return (func + '');
+      return (func + "");
     } catch (e) {}
   }
-  return '';
+  return "";
 }
 
 /**
@@ -782,9 +794,7 @@ function toSource(func) {
  * // => [2, 1]
  */
 function uniq(array) {
-  return (array && array.length)
-    ? baseUniq(array)
-    : [];
+  return (array && array.length) ? baseUniq(array) : [];
 }
 
 /**
@@ -843,7 +853,7 @@ function eq(value, other) {
 function isFunction(value) {
   // The use of `Object#toString` avoids issues with the `typeof` operator
   // in Safari 8-9 which returns 'object' for typed array and other constructors.
-  var tag = isObject(value) ? objectToString.call(value) : '';
+  var tag = isObject(value) ? objectToString.call(value) : "";
   return tag == funcTag || tag == genTag;
 }
 
@@ -874,7 +884,7 @@ function isFunction(value) {
  */
 function isObject(value) {
   var type = typeof value;
-  return !!value && (type == 'object' || type == 'function');
+  return !!value && (type == "object" || type == "function");
 }
 
 /**

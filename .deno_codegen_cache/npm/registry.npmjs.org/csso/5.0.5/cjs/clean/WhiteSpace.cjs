@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
 function cleanWhitespace(node, item, list) {
-    list.remove(item);
+  list.remove(item);
 }
 
 module.exports = cleanWhitespace;

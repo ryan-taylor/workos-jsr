@@ -1,7 +1,7 @@
 // Session handling utilities
 
-import { FreshSessionProvider } from 'workos/common/iron-session/fresh-session-provider.ts';
-import { SESSION_OPTIONS, type SessionData } from './user-management.ts';
+import { FreshSessionProvider } from "workos/common/iron-session/fresh-session-provider.ts";
+import { SESSION_OPTIONS, type SessionData } from "./user-management.ts";
 
 /**
  * Get the current session
@@ -10,7 +10,10 @@ import { SESSION_OPTIONS, type SessionData } from './user-management.ts';
  */
 export async function getSession(req: Request) {
   const sessionProvider = new FreshSessionProvider();
-  const session = await sessionProvider.getSession<SessionData>(req, SESSION_OPTIONS);
+  const session = await sessionProvider.getSession<SessionData>(
+    req,
+    SESSION_OPTIONS,
+  );
 
   return session || null;
 }
@@ -54,7 +57,10 @@ export async function destroySession(
   response: Response,
 ): Promise<Response> {
   const sessionProvider = new FreshSessionProvider();
-  const session = await sessionProvider.getSession<SessionData>(req, SESSION_OPTIONS);
+  const session = await sessionProvider.getSession<SessionData>(
+    req,
+    SESSION_OPTIONS,
+  );
 
   if (session) {
     // Handle session destruction - just create an empty session for now

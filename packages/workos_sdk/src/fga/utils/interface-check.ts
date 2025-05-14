@@ -1,4 +1,4 @@
-import type { ResourceInterface } from "workos/fga/interfaces/resource.interface.ts";
+import type { ResourceInterface } from "../interfaces/resource.interface.ts";
 
 /**
  * Type guard to check if an object implements the ResourceInterface

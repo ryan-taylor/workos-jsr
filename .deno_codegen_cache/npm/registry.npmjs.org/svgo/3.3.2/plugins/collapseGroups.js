@@ -1,19 +1,19 @@
-'use strict';
+"use strict";
 
 /**
  * @typedef {import('../lib/types').XastNode} XastNode
  */
 
-const { inheritableAttrs, elemsGroups } = require('./_collections.js');
+const { inheritableAttrs, elemsGroups } = require("./_collections.js");
 
-exports.name = 'collapseGroups';
-exports.description = 'collapses useless groups';
+exports.name = "collapseGroups";
+exports.description = "collapses useless groups";
 
 /**
  * @type {(node: XastNode, name: string) => boolean}
  */
 const hasAnimatedAttr = (node, name) => {
-  if (node.type === 'element') {
+  if (node.type === "element") {
     if (
       elemsGroups.animation.has(node.name) &&
       node.attributes.attributeName === name
@@ -55,11 +55,11 @@ exports.fn = () => {
   return {
     element: {
       exit: (node, parentNode) => {
-        if (parentNode.type === 'root' || parentNode.name === 'switch') {
+        if (parentNode.type === "root" || parentNode.name === "switch") {
           return;
         }
         // non-empty groups
-        if (node.name !== 'g' || node.children.length === 0) {
+        if (node.name !== "g" || node.children.length === 0) {
           return;
         }
 
@@ -71,14 +71,14 @@ exports.fn = () => {
           const firstChild = node.children[0];
           // TODO untangle this mess
           if (
-            firstChild.type === 'element' &&
+            firstChild.type === "element" &&
             firstChild.attributes.id == null &&
             node.attributes.filter == null &&
             (node.attributes.class == null ||
               firstChild.attributes.class == null) &&
-            ((node.attributes['clip-path'] == null &&
+            ((node.attributes["clip-path"] == null &&
               node.attributes.mask == null) ||
-              (firstChild.name === 'g' &&
+              (firstChild.name === "g" &&
                 node.attributes.transform == null &&
                 firstChild.attributes.transform == null))
           ) {
@@ -89,10 +89,10 @@ exports.fn = () => {
               }
               if (firstChild.attributes[name] == null) {
                 firstChild.attributes[name] = value;
-              } else if (name === 'transform') {
-                firstChild.attributes[name] =
-                  value + ' ' + firstChild.attributes[name];
-              } else if (firstChild.attributes[name] === 'inherit') {
+              } else if (name === "transform") {
+                firstChild.attributes[name] = value + " " +
+                  firstChild.attributes[name];
+              } else if (firstChild.attributes[name] === "inherit") {
                 firstChild.attributes[name] = value;
               } else if (
                 inheritableAttrs.has(name) === false &&
@@ -111,7 +111,7 @@ exports.fn = () => {
           // group should be preserved
           for (const child of node.children) {
             if (
-              child.type === 'element' &&
+              child.type === "element" &&
               elemsGroups.animation.has(child.name)
             ) {
               return;
@@ -122,7 +122,7 @@ exports.fn = () => {
           parentNode.children.splice(index, 1, ...node.children);
           // TODO remove legacy parentNode in v4
           for (const child of node.children) {
-            Object.defineProperty(child, 'parentNode', {
+            Object.defineProperty(child, "parentNode", {
               writable: true,
               value: parentNode,
             });

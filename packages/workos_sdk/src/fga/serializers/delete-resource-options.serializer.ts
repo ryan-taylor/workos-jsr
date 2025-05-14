@@ -1,8 +1,8 @@
 import type {
   DeleteResourceOptions,
   SerializedDeleteResourceOptions,
-} from "workos/fga/interfaces/index.ts";
-import { isResourceInterface } from "workos/fga/utils/interface-check.ts";
+} from "../interfaces/index.ts";
+import { isResourceInterface } from "../utils/interface-check.ts";
 
 /**
  * Serializes delete resource options for the API
@@ -15,7 +15,7 @@ export const serializeDeleteResourceOptions = (
   const resourceType = isResourceInterface(options)
     ? options.getResourceType()
     : options.resourceType;
-  
+
   let resourceId = isResourceInterface(options)
     ? options.getResourceId()
     : options.resourceId;

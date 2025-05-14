@@ -1,4 +1,4 @@
-import type { GetAuthorizationUrlOptions } from "workos/sso/interfaces/index.ts";
+import type { GetAuthorizationUrlOptions } from "../interfaces/index.ts";
 
 export function serializeGetAuthorizationUrlOptions(
   options: GetAuthorizationUrlOptions,

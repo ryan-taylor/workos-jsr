@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const { detachNodeFromParent } = require('../lib/xast.js');
+const { detachNodeFromParent } = require("../lib/xast.js");
 
-exports.name = 'removeDesc';
-exports.description = 'removes <desc>';
+exports.name = "removeDesc";
+exports.description = "removes <desc>";
 
 const standardDescs = /^(Created with|Created using)/;
 
@@ -23,11 +23,11 @@ exports.fn = (root, params) => {
   return {
     element: {
       enter: (node, parentNode) => {
-        if (node.name === 'desc') {
+        if (node.name === "desc") {
           if (
             removeAny ||
             node.children.length === 0 ||
-            (node.children[0].type === 'text' &&
+            (node.children[0].type === "text" &&
               standardDescs.test(node.children[0].value))
           ) {
             detachNodeFromParent(node, parentNode);

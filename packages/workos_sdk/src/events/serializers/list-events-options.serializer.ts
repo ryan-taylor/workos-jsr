@@ -1,4 +1,4 @@
-import type { EventsListOptions } from "workos/events/interfaces.ts";
+import type { EventsListOptions } from "../interfaces.ts";
 
 export function serializeListEventsOptions(
   options: EventsListOptions,

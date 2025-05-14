@@ -1,5 +1,5 @@
-import type { Handlers } from '$fresh/server.ts';
-import type { workos } from '../../../utils/workos.ts';
+import type { Handlers } from "$fresh/server.ts";
+import type { workos } from "../../../utils/workos.ts";
 
 // For this demo, we'll use an in-memory store for actions
 // In a real application, you would use a database
@@ -21,15 +21,19 @@ export const handler: Handlers = {
       const body = await req.json();
 
       // Validate the request body (simplified for this demo)
-      if (!body.type || !body.user?.email || !body.user?.firstName || !body.user?.lastName) {
+      if (
+        !body.type || !body.user?.email || !body.user?.firstName ||
+        !body.user?.lastName
+      ) {
         return new Response(
           JSON.stringify({
-            status: 'error',
-            message: 'Invalid request data - type and user details are required',
+            status: "error",
+            message:
+              "Invalid request data - type and user details are required",
           }),
           {
             status: 400,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { "Content-Type": "application/json" },
           },
         );
       }
@@ -44,7 +48,7 @@ export const handler: Handlers = {
       const action = {
         id,
         type: body.type,
-        status: 'pending',
+        status: "pending",
         createdAt: new Date(),
         user: {
           id: crypto.randomUUID(),
@@ -59,8 +63,8 @@ export const handler: Handlers = {
               name: body.organization.name,
             }
             : undefined,
-          ipAddress: req.headers.get('x-forwarded-for') || '127.0.0.1',
-          userAgent: req.headers.get('user-agent'),
+          ipAddress: req.headers.get("x-forwarded-for") || "127.0.0.1",
+          userAgent: req.headers.get("user-agent"),
           deviceFingerprint: crypto.randomUUID().substring(0, 16),
         },
         metadata: body.metadata,
@@ -71,26 +75,28 @@ export const handler: Handlers = {
 
       return new Response(
         JSON.stringify({
-          status: 'success',
-          message: 'Action created successfully',
+          status: "success",
+          message: "Action created successfully",
           data: action,
         }),
         {
           status: 201,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         },
       );
     } catch (error) {
-      console.error('Error creating action:', error);
+      console.error("Error creating action:", error);
 
       return new Response(
         JSON.stringify({
-          status: 'error',
-          message: error instanceof Error ? error.message : 'An unknown error occurred',
+          status: "error",
+          message: error instanceof Error
+            ? error.message
+            : "An unknown error occurred",
         }),
         {
           status: 500,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         },
       );
     }

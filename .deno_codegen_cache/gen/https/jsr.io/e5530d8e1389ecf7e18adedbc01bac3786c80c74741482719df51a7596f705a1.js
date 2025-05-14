@@ -30,7 +30,7 @@ import { isPathSeparator, isWindowsDeviceRoot } from "./_util.ts";
     dir: "",
     base: "",
     ext: "",
-    name: ""
+    name: "",
   };
   const len = path.length;
   if (len === 0) return ret;
@@ -46,21 +46,21 @@ import { isPathSeparator, isWindowsDeviceRoot } from "./_util.ts";
         let j = 2;
         let last = j;
         // Match 1 or more non-path separators
-        for(; j < len; ++j){
+        for (; j < len; ++j) {
           if (isPathSeparator(path.charCodeAt(j))) break;
         }
         if (j < len && j !== last) {
           // Matched!
           last = j;
           // Match 1 or more path separators
-          for(; j < len; ++j){
+          for (; j < len; ++j) {
             if (!isPathSeparator(path.charCodeAt(j))) break;
           }
           if (j < len && j !== last) {
             // Matched!
             last = j;
             // Match 1 or more non-path separators
-            for(; j < len; ++j){
+            for (; j < len; ++j) {
               if (isPathSeparator(path.charCodeAt(j))) break;
             }
             if (j === len) {
@@ -113,7 +113,7 @@ import { isPathSeparator, isWindowsDeviceRoot } from "./_util.ts";
   // after any path separator we find
   let preDotState = 0;
   // Get non-dir info
-  for(; i >= rootEnd; --i){
+  for (; i >= rootEnd; --i) {
     code = path.charCodeAt(i);
     if (isPathSeparator(code)) {
       // If we reached a path separator that was not part of a set of path
@@ -140,9 +140,11 @@ import { isPathSeparator, isWindowsDeviceRoot } from "./_util.ts";
       preDotState = -1;
     }
   }
-  if (startDot === -1 || end === -1 || // We saw a non-dot character immediately before the dot
-  preDotState === 0 || // The (right-most) trimmed path component is exactly '..'
-  preDotState === 1 && startDot === end - 1 && startDot === startPart + 1) {
+  if (
+    startDot === -1 || end === -1 || // We saw a non-dot character immediately before the dot
+    preDotState === 0 || // The (right-most) trimmed path component is exactly '..'
+    preDotState === 1 && startDot === end - 1 && startDot === startPart + 1
+  ) {
     if (end !== -1) {
       ret.base = ret.name = path.slice(startPart, end);
     }

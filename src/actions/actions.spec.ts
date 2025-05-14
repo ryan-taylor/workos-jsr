@@ -2,8 +2,8 @@
 import { assertEquals } from "jsr:@std/assert@1";
 
 import { crypto } from "jsr:@std/crypto@1";
-import { WorkOS } from "../workos.ts.ts";
-import { SubtleCryptoProvider } from "../common/crypto/subtle-crypto-provider.ts.ts";
+import { WorkOS } from "../workos.ts";
+import { SubtleCryptoProvider } from "../common/crypto/subtle-crypto-provider.ts";
 
 // Import JSON fixtures directly
 const mockAuthActionContext = JSON.parse(

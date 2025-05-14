@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
-const { visit } = require('../lib/xast.js');
-const { inheritableAttrs, pathElems } = require('./_collections.js');
+const { visit } = require("../lib/xast.js");
+const { inheritableAttrs, pathElems } = require("./_collections.js");
 
-exports.name = 'moveElemsAttrsToGroup';
-exports.description = 'Move common attributes of group children to the group';
+exports.name = "moveElemsAttrsToGroup";
+exports.description = "Move common attributes of group children to the group";
 
 /**
  * Move common attributes of group children to the group
@@ -34,7 +34,7 @@ exports.fn = (root) => {
   visit(root, {
     element: {
       enter: (node) => {
-        if (node.name === 'style') {
+        if (node.name === "style") {
           deoptimizedWithStyles = true;
         }
       },
@@ -45,7 +45,7 @@ exports.fn = (root) => {
     element: {
       exit: (node) => {
         // process only groups with more than 1 children
-        if (node.name !== 'g' || node.children.length <= 1) {
+        if (node.name !== "g" || node.children.length <= 1) {
           return;
         }
 
@@ -63,7 +63,7 @@ exports.fn = (root) => {
         let initial = true;
         let everyChildIsPath = true;
         for (const child of node.children) {
-          if (child.type === 'element') {
+          if (child.type === "element") {
             if (!pathElems.has(child.name)) {
               everyChildIsPath = false;
             }
@@ -89,23 +89,24 @@ exports.fn = (root) => {
 
         // preserve transform on children when group has clip-path or mask
         if (
-          node.attributes['clip-path'] != null ||
+          node.attributes["clip-path"] != null ||
           node.attributes.mask != null
         ) {
-          commonAttributes.delete('transform');
+          commonAttributes.delete("transform");
         }
 
         // preserve transform when all children are paths
         // so the transform could be applied to path data by other plugins
         if (everyChildIsPath) {
-          commonAttributes.delete('transform');
+          commonAttributes.delete("transform");
         }
 
         // add common children attributes to group
         for (const [name, value] of commonAttributes) {
-          if (name === 'transform') {
+          if (name === "transform") {
             if (node.attributes.transform != null) {
-              node.attributes.transform = `${node.attributes.transform} ${value}`;
+              node.attributes.transform =
+                `${node.attributes.transform} ${value}`;
             } else {
               node.attributes.transform = value;
             }
@@ -116,7 +117,7 @@ exports.fn = (root) => {
 
         // delete common attributes from children
         for (const child of node.children) {
-          if (child.type === 'element') {
+          if (child.type === "element") {
             for (const [name] of commonAttributes) {
               delete child.attributes[name];
             }

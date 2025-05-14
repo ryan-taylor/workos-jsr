@@ -1,4 +1,4 @@
-let random = async bytes => crypto.getRandomValues(new Uint8Array(bytes))
+let random = async (bytes) => crypto.getRandomValues(new Uint8Array(bytes));
 
 let customAlphabet = (alphabet, defaultSize = 21) => {
   // First, a bitmask is necessary to generate the ID. The bitmask makes bytes
@@ -6,7 +6,7 @@ let customAlphabet = (alphabet, defaultSize = 21) => {
   // `2^31 - 1` number, which exceeds the alphabet size.
   // For example, the bitmask for the alphabet size 30 is 31 (00011111).
   // `Math.clz32` is not used, because it is not available in browsers.
-  let mask = (2 << (Math.log(alphabet.length - 1) / Math.LN2)) - 1
+  let mask = (2 << (Math.log(alphabet.length - 1) / Math.LN2)) - 1;
   // Though, the bitmask solution is not perfect since the bytes exceeding
   // the alphabet size are refused. Therefore, to reliably generate the ID,
   // the random bytes redundancy has to be satisfied.
@@ -22,26 +22,26 @@ let customAlphabet = (alphabet, defaultSize = 21) => {
 
   // `-~f => Math.ceil(f)` if f is a float
   // `-~i => i + 1` if i is an integer
-  let step = -~((1.6 * mask * defaultSize) / alphabet.length)
+  let step = -~((1.6 * mask * defaultSize) / alphabet.length);
 
   return async (size = defaultSize) => {
-    let id = ''
+    let id = "";
     while (true) {
-      let bytes = crypto.getRandomValues(new Uint8Array(step))
+      let bytes = crypto.getRandomValues(new Uint8Array(step));
       // A compact alternative for `for (var i = 0; i < step; i++)`.
-      let i = step | 0
+      let i = step | 0;
       while (i--) {
         // Adding `|| ''` refuses a random byte that exceeds the alphabet size.
-        id += alphabet[bytes[i] & mask] || ''
-        if (id.length === size) return id
+        id += alphabet[bytes[i] & mask] || "";
+        if (id.length === size) return id;
       }
     }
-  }
-}
+  };
+};
 
 let nanoid = async (size = 21) => {
-  let id = ''
-  let bytes = crypto.getRandomValues(new Uint8Array((size |= 0)))
+  let id = "";
+  let bytes = crypto.getRandomValues(new Uint8Array(size |= 0));
 
   // A compact alternative for `for (var i = 0; i < step; i++)`.
   while (size--) {
@@ -50,20 +50,20 @@ let nanoid = async (size = 21) => {
     // range to the 0-63 value range. Therefore, adding hacks, such
     // as empty string fallback or magic numbers, is unneccessary because
     // the bitmask trims bytes down to the alphabet size.
-    let byte = bytes[size] & 63
+    let byte = bytes[size] & 63;
     if (byte < 36) {
       // `0-9a-z`
-      id += byte.toString(36)
+      id += byte.toString(36);
     } else if (byte < 62) {
       // `A-Z`
-      id += (byte - 26).toString(36).toUpperCase()
+      id += (byte - 26).toString(36).toUpperCase();
     } else if (byte < 63) {
-      id += '_'
+      id += "_";
     } else {
-      id += '-'
+      id += "-";
     }
   }
-  return id
-}
+  return id;
+};
 
-module.exports = { nanoid, customAlphabet, random }
+module.exports = { nanoid, customAlphabet, random };

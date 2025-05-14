@@ -1,6 +1,6 @@
-'use strict';
-const valueParser = require('postcss-value-parser');
-const mappings = require('./lib/map');
+"use strict";
+const valueParser = require("postcss-value-parser");
+const mappings = require("./lib/map");
 
 /**
  * @param {unknown} item
@@ -18,16 +18,16 @@ const repeatKeywords = new Set(mappings.values());
  * @return {boolean}
  */
 function isCommaNode(node) {
-  return node.type === 'div' && node.value === ',';
+  return node.type === "div" && node.value === ",";
 }
 
-const variableFunctions = new Set(['var', 'env', 'constant']);
+const variableFunctions = new Set(["var", "env", "constant"]);
 /**
  * @param {valueParser.Node} node
  * @return {boolean}
  */
 function isVariableFunctionNode(node) {
-  if (node.type !== 'function') {
+  if (node.type !== "function") {
     return false;
   }
 
@@ -64,7 +64,7 @@ function transform(value) {
 
     // After separator (`/`) follows `background-size` values
     // Avoid them
-    if (node.type === 'div' && node.value === '/') {
+    if (node.type === "div" && node.value === "/") {
       shouldContinue = false;
 
       return;
@@ -86,8 +86,8 @@ function transform(value) {
       return;
     }
 
-    const isRepeatKeyword =
-      node.type === 'word' && repeatKeywords.has(node.value.toLowerCase());
+    const isRepeatKeyword = node.type === "word" &&
+      repeatKeywords.has(node.value.toLowerCase());
 
     if (ranges[rangeIndex].start === null && isRepeatKeyword) {
       ranges[rangeIndex].start = index;
@@ -97,7 +97,7 @@ function transform(value) {
     }
 
     if (ranges[rangeIndex].start !== null) {
-      if (node.type === 'space') {
+      if (node.type === "space") {
         return;
       } else if (isRepeatKeyword) {
         ranges[rangeIndex].end = index;
@@ -116,7 +116,7 @@ function transform(value) {
 
     const nodes = parsed.nodes.slice(
       range.start,
-      /** @type {number} */ (range.end) + 1
+      /** @type {number} */ (range.end) + 1,
     );
 
     if (nodes.length !== 3) {
@@ -131,7 +131,7 @@ function transform(value) {
 
     if (match) {
       nodes[0].value = match;
-      nodes[1].value = nodes[2].value = '';
+      nodes[1].value = nodes[2].value = "";
     }
   });
 
@@ -144,7 +144,7 @@ function transform(value) {
  */
 function pluginCreator() {
   return {
-    postcssPlugin: 'postcss-normalize-repeat-style',
+    postcssPlugin: "postcss-normalize-repeat-style",
     prepare() {
       const cache = new Map();
       return {
@@ -168,7 +168,7 @@ function pluginCreator() {
 
               decl.value = result;
               cache.set(value, result);
-            }
+            },
           );
         },
       };

@@ -9,7 +9,8 @@ export default function StylingPage(_props: PageProps) {
       <Head>
         <title>Styling in Fresh - WorkOS Fresh Example</title>
         <link rel="stylesheet" href="/styles.css" />
-        <style>{`
+        <style>
+          {`
           /* Page-specific styles */
           .styling-section {
             margin-bottom: 30px;
@@ -132,57 +133,71 @@ export default function StylingPage(_props: PageProps) {
             padding: 8px 16px;
             border-radius: 4px;
           }
-        `}</style>
+        `}
+        </style>
       </Head>
-      
+
       <div className="container">
         <h1>Styling Approaches in Fresh</h1>
         <p>
-          Implementing effective styling strategies with Fresh's islands architecture requires 
-          understanding how styles work across server-side rendering and client-side hydration.
+          Implementing effective styling strategies with Fresh's islands
+          architecture requires understanding how styles work across server-side
+          rendering and client-side hydration.
         </p>
-        
+
         <section className="styling-section">
           <h2>Current Styling Approach</h2>
           <p>
-            This Fresh example currently uses a combination of styling approaches to create a 
-            consistent and maintainable UI while ensuring compatibility with Fresh's islands architecture.
+            This Fresh example currently uses a combination of styling
+            approaches to create a consistent and maintainable UI while ensuring
+            compatibility with Fresh's islands architecture.
           </p>
-          
+
           <div className="method-comparison">
             <div className="approach-card">
               <h4>1. Global CSS Stylesheet</h4>
               <p>
-                Base styles and common components are defined in a global stylesheet at 
-                <code>/static/styles.css</code> using CSS variables for theming and consistency.
+                Base styles and common components are defined in a global
+                stylesheet at
+                <code>/static/styles.css</code>{" "}
+                using CSS variables for theming and consistency.
               </p>
               <ul className="advantages-list">
-                <li>Provides consistent styling across the entire application</li>
+                <li>
+                  Provides consistent styling across the entire application
+                </li>
                 <li>Leverages CSS variables for easy theming</li>
-                <li>Works well with both static routes and interactive islands</li>
+                <li>
+                  Works well with both static routes and interactive islands
+                </li>
               </ul>
             </div>
-            
+
             <div className="approach-card">
               <h4>2. Component-Scoped CSS</h4>
               <p>
-                Route-specific and component-specific styles are defined using the <code>&lt;style&gt;</code> tag 
-                in the route or component file, scoped to specific class names.
+                Route-specific and component-specific styles are defined using
+                the <code>&lt;style&gt;</code>{" "}
+                tag in the route or component file, scoped to specific class
+                names.
               </p>
               <ul className="advantages-list">
-                <li>Keeps component-specific styles close to the component code</li>
+                <li>
+                  Keeps component-specific styles close to the component code
+                </li>
                 <li>Prevents style leaking and naming conflicts</li>
                 <li>Makes components more maintainable and self-contained</li>
               </ul>
             </div>
           </div>
-          
+
           <div className="method-comparison">
             <div className="approach-card">
               <h4>3. Inline Styles</h4>
               <p>
-                Dynamic styles that change based on component state or props can be applied 
-                using inline style objects, especially useful for interactive island components.
+                Dynamic styles that change based on component state or props can
+                be applied using inline style objects, especially useful for
+                interactive island components.
               </p>
               <ul className="advantages-list">
                 <li>Allows for dynamic styling based on component state</li>
@@ -190,12 +205,12 @@ export default function StylingPage(_props: PageProps) {
                 <li>Simplifies complex conditional styling logic</li>
               </ul>
             </div>
-            
+
             <div className="approach-card">
               <h4>4. CSS Variables</h4>
               <p>
-                CSS variables defined in the root selector provide consistent theming across 
-                both global styles and component-specific styles.
+                CSS variables defined in the root selector provide consistent
+                theming across both global styles and component-specific styles.
               </p>
               <ul className="advantages-list">
                 <li>Single source of truth for design tokens</li>
@@ -205,61 +220,75 @@ export default function StylingPage(_props: PageProps) {
             </div>
           </div>
         </section>
-        
+
         <section className="styling-section">
           <h2>Why Not Tailwind CSS?</h2>
           <p>
-            While Tailwind CSS is a popular choice for many projects, our current approach was chosen to:
+            While Tailwind CSS is a popular choice for many projects, our
+            current approach was chosen to:
           </p>
           <ul>
             <li>Keep the dependency footprint minimal</li>
             <li>Maintain full control over the styling approach</li>
             <li>Avoid additional build steps in the development workflow</li>
-            <li>Make it easier to understand how styles are applied without learning Tailwind's utility classes</li>
+            <li>
+              Make it easier to understand how styles are applied without
+              learning Tailwind's utility classes
+            </li>
           </ul>
           <p>
-            However, Fresh does support Tailwind CSS via the Tailwind plugin if that's preferred for your project.
+            However, Fresh does support Tailwind CSS via the Tailwind plugin if
+            that's preferred for your project.
           </p>
         </section>
-        
+
         <section className="styling-section">
           <h2>Best Practices for Styling in Fresh</h2>
           <ul className="best-practices">
             <li>
-              <strong>Avoid direct styling of islands components in global CSS</strong> - 
-              This can lead to hydration mismatches if the styles affect layout.
+              <strong>
+                Avoid direct styling of islands components in global CSS
+              </strong>{" "}
+              - This can lead to hydration mismatches if the styles affect
+              layout.
             </li>
             <li>
-              <strong>Use CSS variables for theming</strong> - 
-              Define colors, spacing, and other design tokens as CSS variables for consistency.
+              <strong>Use CSS variables for theming</strong>{" "}
+              - Define colors, spacing, and other design tokens as CSS variables
+              for consistency.
             </li>
             <li>
-              <strong>Apply dynamic styles with inline style objects</strong> - 
-              For styles that change based on state, inline style objects work best in islands.
+              <strong>Apply dynamic styles with inline style objects</strong>
+              {" "}
+              - For styles that change based on state, inline style objects work
+              best in islands.
             </li>
             <li>
-              <strong>Keep component-specific styles scoped</strong> - 
-              Use unique class names or component-scoped CSS to prevent style leaking.
+              <strong>Keep component-specific styles scoped</strong>{" "}
+              - Use unique class names or component-scoped CSS to prevent style
+              leaking.
             </li>
             <li>
-              <strong>Consider the non-hydrated state</strong> - 
-              Make sure components look good before hydration completes, avoiding layout shifts.
+              <strong>Consider the non-hydrated state</strong>{" "}
+              - Make sure components look good before hydration completes,
+              avoiding layout shifts.
             </li>
           </ul>
         </section>
-        
+
         <section className="styling-section">
           <h2>Styling Demo</h2>
           <p>
-            The demo below illustrates different styling approaches and how they work with Fresh's islands architecture:
+            The demo below illustrates different styling approaches and how they
+            work with Fresh's islands architecture:
           </p>
-          
+
           <StylesDemo initialColor="#635bff" />
         </section>
-        
+
         <section className="styling-section">
           <h2>Implementation Examples</h2>
-          
+
           <h3>1. Global CSS Variables</h3>
           <div className="code-block">
             <pre>{`/* In static/styles.css */
@@ -271,7 +300,7 @@ export default function StylingPage(_props: PageProps) {
   --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }`}</pre>
           </div>
-          
+
           <h3>2. Component-Scoped CSS</h3>
           <div className="code-block">
             <pre>{`/* In route file */
@@ -283,7 +312,7 @@ export default function StylingPage(_props: PageProps) {
   }</style>
 </Head>`}</pre>
           </div>
-          
+
           <h3>3. Inline Styles for Dynamic Styling</h3>
           <div className="code-block">
             <pre>{`// In island component
@@ -302,7 +331,7 @@ const buttonStyle = {
   Change Color
 </button>`}</pre>
           </div>
-          
+
           <h3>4. CSS Variables in Component Styles</h3>
           <div className="code-block">
             <pre>{`/* In component-scoped CSS */

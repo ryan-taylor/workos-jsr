@@ -1,4 +1,4 @@
-import type { List } from "workos/common/interfaces.ts";
+import type { List } from "../common/interfaces.ts";
 
 /**
  * Raw API response for a Vault object digest.
@@ -177,4 +177,4 @@ export interface DecryptDataKeyResponse {
     id: string;
     key: string;
   };
-} 
+}

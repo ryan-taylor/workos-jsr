@@ -12,24 +12,27 @@ import { processSpec } from "./postprocess/dereference-spec.ts";
   try {
     const specDir = "./vendor/openapi";
     const entries = [
-      ...Deno.readDirSync(specDir)
+      ...Deno.readDirSync(specDir),
     ];
     // Filter for proper spec files and extract date information
-    const specFiles = entries.filter((entry)=>entry.isFile && entry.name.startsWith("workos-") && entry.name.endsWith(".json") && // Match the expected format with regex
-      /workos-\d{4}-\d{2}-\d{2}(-[a-f0-9]+)?(-\w+)?\.json/.test(entry.name)).map((entry)=>{
+    const specFiles = entries.filter((entry) =>
+      entry.isFile && entry.name.startsWith("workos-") &&
+      entry.name.endsWith(".json") && // Match the expected format with regex
+      /workos-\d{4}-\d{2}-\d{2}(-[a-f0-9]+)?(-\w+)?\.json/.test(entry.name)
+    ).map((entry) => {
       const match = entry.name.match(/workos-(\d{4}-\d{2}-\d{2})/);
       const dateStr = match ? match[1] : "0000-00-00";
       return {
         path: join(specDir, entry.name),
         name: entry.name,
-        date: dateStr
+        date: dateStr,
       };
     });
     if (specFiles.length === 0) {
       throw new Error("No OpenAPI spec files found in vendor/openapi");
     }
     // Sort by date (newest first)
-    specFiles.sort((a, b)=>b.date.localeCompare(a.date));
+    specFiles.sort((a, b) => b.date.localeCompare(a.date));
     const latestSpec = specFiles[0];
     console.log(`Found latest spec: ${latestSpec.name}`);
     // Detect the OpenAPI version from the spec file
@@ -38,7 +41,7 @@ import { processSpec } from "./postprocess/dereference-spec.ts";
     return {
       filePath: latestSpec.path,
       specVersion: latestSpec.date,
-      apiVersion: version
+      apiVersion: version,
     };
   } catch (error) {
     console.error("Error finding latest spec file:", error);
@@ -64,10 +67,10 @@ import { processSpec } from "./postprocess/dereference-spec.ts";
     const command = new Deno.Command("deno", {
       args: [
         "check",
-        `${outputDir}/**/*.ts`
+        `${outputDir}/**/*.ts`,
       ],
       stdout: "piped",
-      stderr: "piped"
+      stderr: "piped",
     });
     const { code, stdout, stderr } = await command.output();
     const outText = new TextDecoder().decode(stdout);
@@ -91,7 +94,9 @@ import { processSpec } from "./postprocess/dereference-spec.ts";
     // Find the latest spec file
     const { filePath, specVersion, apiVersion } = await findLatestSpecFile();
     // Process the spec file to normalize and generate post-processed checksum
-    console.log("Processing OpenAPI spec to generate post-processed checksum...");
+    console.log(
+      "Processing OpenAPI spec to generate post-processed checksum...",
+    );
     const { rawChecksum, processedChecksum } = await processSpec(filePath);
     console.log(`Raw checksum: ${rawChecksum}`);
     console.log(`Post-processed checksum: ${processedChecksum}`);
@@ -107,12 +112,18 @@ import { processSpec } from "./postprocess/dereference-spec.ts";
     const validationResult = await validateTemplates(templatesDir);
     if (!validationResult.valid) {
       console.warn("Template validation failed: missing required templates");
-      console.warn(`Missing templates: ${validationResult.missingTemplates.join(", ")}`);
+      console.warn(
+        `Missing templates: ${validationResult.missingTemplates.join(", ")}`,
+      );
       if (!Deno.args.includes("--force")) {
-        console.error("Template validation failed. Use --force to generate anyway.");
+        console.error(
+          "Template validation failed. Use --force to generate anyway.",
+        );
         Deno.exit(1);
       }
-      console.warn("Continuing with code generation despite missing templates (--force)");
+      console.warn(
+        "Continuing with code generation despite missing templates (--force)",
+      );
     }
     // Get appropriate generator for the OpenAPI version
     const { adapter: generator } = await detectAdapter(filePath);
@@ -120,7 +131,7 @@ import { processSpec } from "./postprocess/dereference-spec.ts";
     await generator.generate(filePath, outputDir, {
       useOptions: true,
       useUnionTypes: true,
-      templates: templatesDir
+      templates: templatesDir,
     });
     console.log("Code generation complete!");
     // Apply post-processing transforms
@@ -128,7 +139,9 @@ import { processSpec } from "./postprocess/dereference-spec.ts";
     await postProcess(outputDir);
     // Run type check on the generated code
     await typeCheckGeneratedCode(outputDir);
-    console.log(`Successfully generated and validated OpenAPI code for version ${specVersion}`);
+    console.log(
+      `Successfully generated and validated OpenAPI code for version ${specVersion}`,
+    );
   } catch (error) {
     console.error("Error generating code:", error);
     Deno.exit(1);

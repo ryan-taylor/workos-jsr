@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-exports.name = 'addAttributesToSVGElement';
-exports.description = 'adds attributes to an outer <svg> element';
+exports.name = "addAttributesToSVGElement";
+exports.description = "adds attributes to an outer <svg> element";
 
 var ENOCLS = `Error in plugin "addAttributesToSVGElement": absent parameters.
 It should have a list of "attributes" or one "attribute".
@@ -58,15 +58,15 @@ exports.fn = (root, params) => {
   return {
     element: {
       enter: (node, parentNode) => {
-        if (node.name === 'svg' && parentNode.type === 'root') {
+        if (node.name === "svg" && parentNode.type === "root") {
           for (const attribute of attributes) {
-            if (typeof attribute === 'string') {
+            if (typeof attribute === "string") {
               if (node.attributes[attribute] == null) {
                 // @ts-ignore disallow explicit nullable attribute value
                 node.attributes[attribute] = undefined;
               }
             }
-            if (typeof attribute === 'object') {
+            if (typeof attribute === "object") {
               for (const key of Object.keys(attribute)) {
                 if (node.attributes[key] == null) {
                   // @ts-ignore disallow explicit nullable attribute value

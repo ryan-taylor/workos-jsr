@@ -1,14 +1,14 @@
-'use strict';
+"use strict";
 
 /**
  * @typedef {import('../lib/types').PathDataItem} PathDataItem
  */
 
-const { stringifyPathData } = require('../lib/path.js');
-const { detachNodeFromParent } = require('../lib/xast.js');
+const { stringifyPathData } = require("../lib/path.js");
+const { detachNodeFromParent } = require("../lib/xast.js");
 
-exports.name = 'convertShapeToPath';
-exports.description = 'converts basic shapes to more compact path form';
+exports.name = "convertShapeToPath";
+exports.description = "converts basic shapes to more compact path form";
 
 const regNumber = /[-+]?(?:\d*\.\d+|\d+\.?)(?:[eE][-+]?\d+)?/g;
 
@@ -31,14 +31,14 @@ exports.fn = (root, params) => {
       enter: (node, parentNode) => {
         // convert rect to path
         if (
-          node.name === 'rect' &&
+          node.name === "rect" &&
           node.attributes.width != null &&
           node.attributes.height != null &&
           node.attributes.rx == null &&
           node.attributes.ry == null
         ) {
-          const x = Number(node.attributes.x || '0');
-          const y = Number(node.attributes.y || '0');
+          const x = Number(node.attributes.x || "0");
+          const y = Number(node.attributes.y || "0");
           const width = Number(node.attributes.width);
           const height = Number(node.attributes.height);
           // Values like '100%' compute to NaN, thus running after
@@ -49,13 +49,13 @@ exports.fn = (root, params) => {
            * @type {PathDataItem[]}
            */
           const pathData = [
-            { command: 'M', args: [x, y] },
-            { command: 'H', args: [x + width] },
-            { command: 'V', args: [y + height] },
-            { command: 'H', args: [x] },
-            { command: 'z', args: [] },
+            { command: "M", args: [x, y] },
+            { command: "H", args: [x + width] },
+            { command: "V", args: [y + height] },
+            { command: "H", args: [x] },
+            { command: "z", args: [] },
           ];
-          node.name = 'path';
+          node.name = "path";
           node.attributes.d = stringifyPathData({ pathData, precision });
           delete node.attributes.x;
           delete node.attributes.y;
@@ -64,20 +64,20 @@ exports.fn = (root, params) => {
         }
 
         // convert line to path
-        if (node.name === 'line') {
-          const x1 = Number(node.attributes.x1 || '0');
-          const y1 = Number(node.attributes.y1 || '0');
-          const x2 = Number(node.attributes.x2 || '0');
-          const y2 = Number(node.attributes.y2 || '0');
+        if (node.name === "line") {
+          const x1 = Number(node.attributes.x1 || "0");
+          const y1 = Number(node.attributes.y1 || "0");
+          const x2 = Number(node.attributes.x2 || "0");
+          const y2 = Number(node.attributes.y2 || "0");
           if (Number.isNaN(x1 - y1 + x2 - y2)) return;
           /**
            * @type {PathDataItem[]}
            */
           const pathData = [
-            { command: 'M', args: [x1, y1] },
-            { command: 'L', args: [x2, y2] },
+            { command: "M", args: [x1, y1] },
+            { command: "L", args: [x2, y2] },
           ];
-          node.name = 'path';
+          node.name = "path";
           node.attributes.d = stringifyPathData({ pathData, precision });
           delete node.attributes.x1;
           delete node.attributes.y1;
@@ -87,7 +87,7 @@ exports.fn = (root, params) => {
 
         // convert polyline and polygon to path
         if (
-          (node.name === 'polyline' || node.name === 'polygon') &&
+          (node.name === "polyline" || node.name === "polygon") &&
           node.attributes.points != null
         ) {
           const coords = (node.attributes.points.match(regNumber) || []).map(
@@ -103,23 +103,23 @@ exports.fn = (root, params) => {
           const pathData = [];
           for (let i = 0; i < coords.length; i += 2) {
             pathData.push({
-              command: i === 0 ? 'M' : 'L',
+              command: i === 0 ? "M" : "L",
               args: coords.slice(i, i + 2),
             });
           }
-          if (node.name === 'polygon') {
-            pathData.push({ command: 'z', args: [] });
+          if (node.name === "polygon") {
+            pathData.push({ command: "z", args: [] });
           }
-          node.name = 'path';
+          node.name = "path";
           node.attributes.d = stringifyPathData({ pathData, precision });
           delete node.attributes.points;
         }
 
         //  optionally convert circle
-        if (node.name === 'circle' && convertArcs) {
-          const cx = Number(node.attributes.cx || '0');
-          const cy = Number(node.attributes.cy || '0');
-          const r = Number(node.attributes.r || '0');
+        if (node.name === "circle" && convertArcs) {
+          const cx = Number(node.attributes.cx || "0");
+          const cy = Number(node.attributes.cy || "0");
+          const r = Number(node.attributes.r || "0");
           if (Number.isNaN(cx - cy + r)) {
             return;
           }
@@ -127,12 +127,12 @@ exports.fn = (root, params) => {
            * @type {PathDataItem[]}
            */
           const pathData = [
-            { command: 'M', args: [cx, cy - r] },
-            { command: 'A', args: [r, r, 0, 1, 0, cx, cy + r] },
-            { command: 'A', args: [r, r, 0, 1, 0, cx, cy - r] },
-            { command: 'z', args: [] },
+            { command: "M", args: [cx, cy - r] },
+            { command: "A", args: [r, r, 0, 1, 0, cx, cy + r] },
+            { command: "A", args: [r, r, 0, 1, 0, cx, cy - r] },
+            { command: "z", args: [] },
           ];
-          node.name = 'path';
+          node.name = "path";
           node.attributes.d = stringifyPathData({ pathData, precision });
           delete node.attributes.cx;
           delete node.attributes.cy;
@@ -140,11 +140,11 @@ exports.fn = (root, params) => {
         }
 
         // optionally convert ellipse
-        if (node.name === 'ellipse' && convertArcs) {
-          const ecx = Number(node.attributes.cx || '0');
-          const ecy = Number(node.attributes.cy || '0');
-          const rx = Number(node.attributes.rx || '0');
-          const ry = Number(node.attributes.ry || '0');
+        if (node.name === "ellipse" && convertArcs) {
+          const ecx = Number(node.attributes.cx || "0");
+          const ecy = Number(node.attributes.cy || "0");
+          const rx = Number(node.attributes.rx || "0");
+          const ry = Number(node.attributes.ry || "0");
           if (Number.isNaN(ecx - ecy + rx - ry)) {
             return;
           }
@@ -152,12 +152,12 @@ exports.fn = (root, params) => {
            * @type {PathDataItem[]}
            */
           const pathData = [
-            { command: 'M', args: [ecx, ecy - ry] },
-            { command: 'A', args: [rx, ry, 0, 1, 0, ecx, ecy + ry] },
-            { command: 'A', args: [rx, ry, 0, 1, 0, ecx, ecy - ry] },
-            { command: 'z', args: [] },
+            { command: "M", args: [ecx, ecy - ry] },
+            { command: "A", args: [rx, ry, 0, 1, 0, ecx, ecy + ry] },
+            { command: "A", args: [rx, ry, 0, 1, 0, ecx, ecy - ry] },
+            { command: "z", args: [] },
           ];
-          node.name = 'path';
+          node.name = "path";
           node.attributes.d = stringifyPathData({ pathData, precision });
           delete node.attributes.cx;
           delete node.attributes.cy;

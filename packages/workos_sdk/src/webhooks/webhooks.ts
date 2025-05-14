@@ -1,6 +1,9 @@
-import { deserializeWebhookEvent } from "workos/webhooks/serializers/webhook-event.serializer.ts";
-import type { VerifyOptions, WebhookEvent } from "workos/webhooks/interfaces/index.ts";
-import { SignatureVerificationException } from "workos/common/exceptions/signature-verification.exception.ts";
+import { deserializeWebhookEvent } from "./serializers/webhook-event.serializer.ts";
+import type {
+  VerifyOptions,
+  WebhookEvent,
+} from "./interfaces/index.ts";
+import { SignatureVerificationException } from "../common/exceptions/signature-verification.exception.ts";
 
 export class Webhooks {
   static constructEvent(

@@ -1,0 +1,33 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+
+/**
+ * Error thrown when an assertion fails.
+ *
+ * @example Usage
+ * ```ts ignore
+ * import { AssertionError } from "@std/assert";
+ *
+ * try {
+ *   throw new AssertionError("foo", { cause: "bar" });
+ * } catch (error) {
+ *   if (error instanceof AssertionError) {
+ *     error.message === "foo"; // true
+ *     error.cause === "bar"; // true
+ *   }
+ * }
+ * ```
+ */
+export class AssertionError extends Error {
+  /** Constructs a new instance.
+   *
+   * @param message The error message.
+   * @param options Additional options. This argument is still unstable. It may change in the future release.
+   */
+  constructor(message: string, options?: ErrorOptions) {
+    super(message, options);
+    this.name = "AssertionError";
+  }
+}
+
+// denoCacheMetadata={"headers":{"cross-origin-resource-policy":"cross-origin","last-modified":"Thu, 24 Apr 2025 06:23:27 GMT","access-control-expose-headers":"*","x-goog-stored-content-length":"821","x-goog-metageneration":"1","x-goog-stored-content-encoding":"identity","x-goog-storage-class":"STANDARD","x-guploader-uploadid":"AAO2VwpfRGlZbJFgXV3LMNW4EGl-jqQtnNZLwnHm7rV_jU83PiAE63vF5QjT0AyP7K45-Q4p","via":"1.1 google","expires":"Wed, 13 May 2026 23:23:02 GMT","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","x-jsr-cache-id":"YYZ","x-goog-hash":"crc32c=k27b7A==,md5=TNAJPC+o+Ahn39CUPb6WjA==","x-goog-generation":"1745475807294548","x-jsr-cache-status":"hit","x-robots-tag":"noindex","server":"UploadServer","accept-ranges":"bytes","access-control-allow-origin":"*","age":"1950","cache-control":"public, max-age=31536000, immutable","content-type":"text/typescript","date":"Tue, 13 May 2025 23:23:02 GMT","etag":"\"4cd0093c2fa8f80867dfd0943dbe968c\"","content-length":"821","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';"},"url":"https://jsr.io/@std/assert/1.0.13/assertion_error.ts","time":1747180532}

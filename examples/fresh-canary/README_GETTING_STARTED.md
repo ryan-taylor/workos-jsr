@@ -1,6 +1,8 @@
 # Getting Started with WorkOS SDK and Fresh
 
-This guide walks you through setting up a Fresh application with WorkOS SDK integration, focusing on authentication, directory synchronization, and telemetry.
+This guide walks you through setting up a Fresh application with WorkOS SDK
+integration, focusing on authentication, directory synchronization, and
+telemetry.
 
 ## Prerequisites
 
@@ -30,7 +32,8 @@ SESSION_SECRET=a_strong_random_string_for_cookie_encryption
 WORKOS_WEBHOOK_SECRET=your_workos_webhook_signing_secret
 ```
 
-For security in production, use a tool like [Doppler](https://www.doppler.com/) for secrets management.
+For security in production, use a tool like [Doppler](https://www.doppler.com/)
+for secrets management.
 
 ## Running the Application
 
@@ -46,7 +49,8 @@ This will launch the application at http://localhost:8000.
 
 ### 1. Single Sign-On (SSO)
 
-Navigate to the homepage and click "Try SSO Login" to start the authentication flow. The implementation is in:
+Navigate to the homepage and click "Try SSO Login" to start the authentication
+flow. The implementation is in:
 
 - `routes/login.tsx`: Initiates the SSO flow
 - `routes/callback.tsx`: Handles the OAuth callback
@@ -69,13 +73,15 @@ Check `routes/account.tsx` for profile management implementation.
 
 ### 3. Directory Sync
 
-Directory Sync allows you to synchronize users and groups from identity providers:
+Directory Sync allows you to synchronize users and groups from identity
+providers:
 
 - View directories at `/directory-sync`
 - Browse users at `/directory-sync/users`
 - View groups at `/directory-sync/groups`
 
-The webhook implementation at `/api/webhooks/directory-sync` handles real-time updates.
+The webhook implementation at `/api/webhooks/directory-sync` handles real-time
+updates.
 
 ### 4. Telemetry Dashboard
 
@@ -93,18 +99,18 @@ To enable OpenTelemetry monitoring in your application, use this configuration:
 
 ```typescript
 // utils/workos.ts
-import { WorkOS } from '@workos/sdk';
-import { FreshSessionProvider } from '@workos/sdk/common/iron-session/fresh-session-provider';
+import { WorkOS } from "@workos/sdk";
+import { FreshSessionProvider } from "@workos/sdk/common/iron-session/fresh-session-provider";
 
 export function initWorkOS() {
   const workos = new WorkOS(
-    Deno.env.get('WORKOS_API_KEY') || '',
+    Deno.env.get("WORKOS_API_KEY") || "",
     {
-      clientId: Deno.env.get('WORKOS_CLIENT_ID'),
+      clientId: Deno.env.get("WORKOS_CLIENT_ID"),
       telemetry: {
         enabled: true,
-        endpoint: 'http://localhost:4318', // OTLP endpoint
-        serviceName: 'my-fresh-app',
+        endpoint: "http://localhost:4318", // OTLP endpoint
+        serviceName: "my-fresh-app",
       },
     },
   );
@@ -156,4 +162,5 @@ Common issues:
 - **Session issues**: Verify session secret and cookie settings
 - **Webhook failures**: Confirm signing secret matches WorkOS dashboard
 
-For more help, check the [WorkOS documentation](https://workos.com/docs) or open an issue on GitHub.
+For more help, check the [WorkOS documentation](https://workos.com/docs) or open
+an issue on GitHub.

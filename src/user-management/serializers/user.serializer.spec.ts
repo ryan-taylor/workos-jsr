@@ -1,4 +1,4 @@
-import { deserializeUser } from "./user.serializer.ts.ts";
+import { deserializeUser } from "./user.serializer.ts";
 import userFixture from "../fixtures/user.json.ts";
 
 describe("deserializeUser", () => {

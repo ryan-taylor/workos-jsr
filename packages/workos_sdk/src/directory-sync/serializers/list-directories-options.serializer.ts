@@ -1,7 +1,7 @@
 import type {
   ListDirectoriesOptions,
   SerializedListDirectoriesOptions,
-} from "workos/directory-sync/interfaces/index.ts";
+} from "../interfaces/index.ts";
 
 export const serializeListDirectoriesOptions = (
   options: ListDirectoriesOptions,

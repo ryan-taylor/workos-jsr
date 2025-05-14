@@ -128,8 +128,15 @@ export function createSecurityMiddleware(
         for (const [directive, sources] of Object.entries(mergedOptions.csp)) {
           if (sources && sources.length > 0) {
             // Convert camelCase to kebab-case
-            const formattedDirective = directive.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
-            cspDirectives.push(`${formattedDirective} ${Array.isArray(sources) ? sources.join(" ") : sources}`);
+            const formattedDirective = directive.replace(
+              /([a-z])([A-Z])/g,
+              "$1-$2",
+            ).toLowerCase();
+            cspDirectives.push(
+              `${formattedDirective} ${
+                Array.isArray(sources) ? sources.join(" ") : sources
+              }`,
+            );
           }
         }
 
@@ -184,8 +191,16 @@ export function createSecurityMiddleware(
       // Add Permissions-Policy header
       if (mergedOptions.permissionsPolicy) {
         const directives: string[] = [];
-        for (const [feature, allowlist] of Object.entries(mergedOptions.permissionsPolicy)) {
-          directives.push(`${feature}=(${Array.isArray(allowlist) ? allowlist.join(" ") : allowlist})`);
+        for (
+          const [feature, allowlist] of Object.entries(
+            mergedOptions.permissionsPolicy,
+          )
+        ) {
+          directives.push(
+            `${feature}=(${
+              Array.isArray(allowlist) ? allowlist.join(" ") : allowlist
+            })`,
+          );
         }
         if (directives.length > 0) {
           headers.set("Permissions-Policy", directives.join(", "));

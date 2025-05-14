@@ -16,7 +16,7 @@ npm install postcss-normalize-display-values --save
 
 ```css
 div {
-    display: inline flow-root
+  display: inline flow-root;
 }
 ```
 
@@ -24,9 +24,9 @@ div {
 
 ```css
 div {
-    display: inline-block
+  display: inline-block;
 }
-``` 
+```
 
 ## Usage
 
@@ -35,7 +35,8 @@ examples for your environment.
 
 ## Contributors
 
-See [CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
+See
+[CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
 
 ## License
 

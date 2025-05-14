@@ -1,7 +1,7 @@
-import { assertEquals, assertRejects } from '@std/assert';
-import { describe, it } from '@std/testing/bdd';
-import { WorkOS } from "../workos.ts.ts";
-import { fetchOnce, fetchURL } from '../../tests_deno/utils/test-utils.ts.ts';
+import { assertEquals, assertRejects } from "@std/assert";
+import { describe, it } from "@std/testing/bdd";
+import { WorkOS } from "../workos.ts";
+import { fetchOnce, fetchURL } from "../../tests_deno/utils/test-utils.ts";
 import tokenFixture from "./fixtures/token.json.ts" with { type: "json" };
 import getTokenErrorFixture from "./fixtures/get-token-error.json.ts" with {
   type: "json",

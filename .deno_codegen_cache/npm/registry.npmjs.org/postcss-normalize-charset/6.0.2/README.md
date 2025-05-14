@@ -3,14 +3,14 @@
 Add necessary or remove extra charset with PostCSS
 
 ```css
-a{
+a {
   content: "©";
 }
 ```
 
 ```css
 @charset "utf-8";
-a{
+a {
   content: "©";
 }
 ```
@@ -23,7 +23,7 @@ a{
 
 ##### add
 
-Type: `boolean`  
+Type: `boolean`\
 Default: `true`
 
 Pass `false` to stop the module from adding a `@charset` declaration if it was
@@ -36,7 +36,8 @@ examples for your environment.
 
 ## Contributors
 
-See [CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
+See
+[CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
 
 ## License
 

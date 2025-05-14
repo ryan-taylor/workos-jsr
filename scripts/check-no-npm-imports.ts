@@ -22,7 +22,9 @@ import { dirname, join } from "https://deno.land/std/path/mod.ts";
 
 // Parse arguments
 const checkStagedOnly = Deno.args.includes("--staged");
-const specificFiles = Deno.args.filter(arg => !arg.startsWith("--") && (arg.endsWith(".ts") || arg.endsWith(".js")));
+const specificFiles = Deno.args.filter((arg) =>
+  !arg.startsWith("--") && (arg.endsWith(".ts") || arg.endsWith(".js"))
+);
 const checkSpecificFiles = specificFiles.length > 0;
 
 async function getStagedFiles(): Promise<string[]> {
@@ -31,65 +33,71 @@ async function getStagedFiles(): Promise<string[]> {
     args: ["diff", "--cached", "--name-only", "--diff-filter=ACM"],
     stdout: "piped",
   });
-  
+
   const { stdout } = await command.output();
   const output = new TextDecoder().decode(stdout);
-  return output.split("\n").filter(file => file.endsWith(".ts") || file.endsWith(".js"));
+  return output.split("\n").filter((file) =>
+    file.endsWith(".ts") || file.endsWith(".js")
+  );
 }
 
 async function getAllTsJsFiles(): Promise<string[]> {
   const files: string[] = [];
-  
-  for await (const entry of walk(".", {
-    includeFiles: true,
-    includeDirs: false,
-    exts: [".ts", ".js"],
-    skip: [
-      /node_modules/,
-      /^npm\//,
-      /npm\//,
-      /\.git\//,
-      /\.sailplane\//,
-      /^\.git\//,
-      /cov_profile\//,
-      /coverage\//,
-      /coverage_html\//,
-    ],
-  })) {
+
+  for await (
+    const entry of walk(".", {
+      includeFiles: true,
+      includeDirs: false,
+      exts: [".ts", ".js"],
+      skip: [
+        /node_modules/,
+        /^npm\//,
+        /npm\//,
+        /\.git\//,
+        /\.sailplane\//,
+        /^\.git\//,
+        /cov_profile\//,
+        /coverage\//,
+        /coverage_html\//,
+      ],
+    })
+  ) {
     files.push(entry.path);
   }
-  
+
   return files;
 }
 
-async function checkForNpmImports(files: string[]): Promise<{ hasViolations: boolean; violations: Map<string, string[]> }> {
+async function checkForNpmImports(
+  files: string[],
+): Promise<{ hasViolations: boolean; violations: Map<string, string[]> }> {
   const violations = new Map<string, string[]>();
-  
+
   for (const file of files) {
     // Skip explicitly npm-related files
     if (file.startsWith("npm/") || file.includes("/npm/")) {
       continue;
     }
-    
+
     try {
       const content = await Deno.readTextFile(file);
       const lines = content.split("\n");
       const violatingLines: string[] = [];
-      
+
       // Check each line for npm: imports
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
         const lineNumber = i + 1;
-        
+
         // Simple regex check for npm: imports
         const npmImportRegex = /(?:from|import)\s+["']npm:/;
         const dynamicImportRegex = /import\(\s*["']npm:/;
-        
+
         if (npmImportRegex.test(line) || dynamicImportRegex.test(line)) {
           violatingLines.push(`Line ${lineNumber}: ${line.trim()}`);
         }
       }
-      
+
       if (violatingLines.length > 0) {
         violations.set(file, violatingLines);
       }
@@ -97,22 +105,24 @@ async function checkForNpmImports(files: string[]): Promise<{ hasViolations: boo
       console.error(`Error reading file ${file}:`, error);
     }
   }
-  
+
   return {
     hasViolations: violations.size > 0,
-    violations
+    violations,
   };
 }
 
 async function main() {
   console.log("🔍 Checking for npm: imports...");
-  
+
   // Get files to check
   let files: string[];
-  
+
   if (checkSpecificFiles) {
     files = specificFiles;
-    console.log(`Checking ${files.length} specific file(s): ${files.join(", ")}`);
+    console.log(
+      `Checking ${files.length} specific file(s): ${files.join(", ")}`,
+    );
   } else if (checkStagedOnly) {
     files = await getStagedFiles();
     console.log(`Checking ${files.length} staged files`);
@@ -120,23 +130,29 @@ async function main() {
     files = await getAllTsJsFiles();
     console.log(`Checking ${files.length} files`);
   }
-  
+
   // Check files for npm imports
   const { hasViolations, violations } = await checkForNpmImports(files);
-  
+
   if (hasViolations) {
     console.error("❌ npm: imports found in the following files:");
-    
+
     for (const [file, lines] of violations.entries()) {
       console.error(`\n  📄 ${file}:`);
       for (const line of lines) {
         console.error(`      ${line}`);
       }
     }
-    
-    console.error("\nError: npm: imports are forbidden as part of our Deno 2.x migration.");
-    console.error("Please remove or replace these imports with Deno-compatible alternatives.");
-    console.error("Note: imports in the npm/ directory are allowed as that's specifically for npm distribution.");
+
+    console.error(
+      "\nError: npm: imports are forbidden as part of our Deno 2.x migration.",
+    );
+    console.error(
+      "Please remove or replace these imports with Deno-compatible alternatives.",
+    );
+    console.error(
+      "Note: imports in the npm/ directory are allowed as that's specifically for npm distribution.",
+    );
     Deno.exit(1);
   } else {
     console.log("✅ No npm: imports found");
@@ -144,7 +160,7 @@ async function main() {
 }
 
 if (import.meta.main) {
-  main().catch(err => {
+  main().catch((err) => {
     console.error("Error:", err);
     Deno.exit(1);
   });

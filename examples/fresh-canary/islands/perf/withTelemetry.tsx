@@ -1,16 +1,30 @@
 // Island component performance monitoring HOC
 /** @jsx h */
-import { h } from 'preact';
-import { type ComponentChildren, type ComponentType, createContext, type VNode } from 'preact';
-import { useEffect, useErrorBoundary, useLayoutEffect, useRef, useState } from 'preact/hooks';
-import { recordMetric } from '../../utils/telemetry.ts';
+import { h } from "preact";
+import {
+  type ComponentChildren,
+  type ComponentType,
+  createContext,
+  type VNode,
+} from "preact";
+import {
+  useEffect,
+  useErrorBoundary,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "preact/hooks";
+import { recordMetric } from "../../utils/telemetry.ts";
 
 // Context for telemetry data
 const TelemetryContext = createContext<{
   componentName: string;
-  recordInteraction: (eventName: string, detail?: Record<string, unknown>) => void;
+  recordInteraction: (
+    eventName: string,
+    detail?: Record<string, unknown>,
+  ) => void;
 }>({
-  componentName: 'unknown',
+  componentName: "unknown",
   recordInteraction: () => {},
 });
 
@@ -20,20 +34,25 @@ const TelemetryContext = createContext<{
 function ErrorBoundary(props: {
   componentName: string;
   children: ComponentChildren;
-  fallback: ((props: { error: Error; reset: () => void }) => VNode) | ((error: Error, reset: () => void) => VNode);
+  fallback:
+    | ((props: { error: Error; reset: () => void }) => VNode)
+    | ((error: Error, reset: () => void) => VNode);
 }) {
   const [error, reset] = useErrorBoundary();
 
   useEffect(() => {
     if (error) {
       // Record error metric
-      recordMetric('island_render_error', 1, {
+      recordMetric("island_render_error", 1, {
         componentName: props.componentName,
         errorMessage: error.message,
         errorName: error.name,
       });
 
-      console.error(`[Telemetry] Render error in ${props.componentName}:`, error);
+      console.error(
+        `[Telemetry] Render error in ${props.componentName}:`,
+        error,
+      );
     }
   }, [error, props.componentName]);
 
@@ -42,10 +61,15 @@ function ErrorBoundary(props: {
     // This handles both function signatures
     if (props.fallback.length === 1) {
       // Object parameter style: fallback({ error, reset })
-      return (props.fallback as (props: { error: Error; reset: () => void }) => VNode)({ error, reset });
+      return (props.fallback as (
+        props: { error: Error; reset: () => void },
+      ) => VNode)({ error, reset });
     } else {
       // Separate parameters style: fallback(error, reset)
-      return (props.fallback as (error: Error, reset: () => void) => VNode)(error, reset);
+      return (props.fallback as (error: Error, reset: () => void) => VNode)(
+        error,
+        reset,
+      );
     }
   }
 
@@ -53,9 +77,11 @@ function ErrorBoundary(props: {
 }
 
 // Default error fallback UI
-function DefaultErrorFallback({ error, reset }: { error: Error; reset: () => void }) {
+function DefaultErrorFallback(
+  { error, reset }: { error: Error; reset: () => void },
+) {
   return (
-    <div class='island-error'>
+    <div class="island-error">
       <h3>Something went wrong</h3>
       <p>{error.message}</p>
       <button onClick={reset}>Try again</button>
@@ -74,7 +100,8 @@ export function withTelemetry<P extends object>(
     errorFallback?: (error: Error, reset: () => void) => VNode;
   } = {},
 ) {
-  const componentName = options.componentName || WrappedComponent.displayName || WrappedComponent.name || 'UnknownComponent';
+  const componentName = options.componentName || WrappedComponent.displayName ||
+    WrappedComponent.name || "UnknownComponent";
   const trackInteractions = options.trackInteractions !== false; // Default to true
   const errorFallback = options.errorFallback || DefaultErrorFallback;
 
@@ -91,9 +118,9 @@ export function withTelemetry<P extends object>(
       const renderTime = now - startTime.current;
       mountTime.current = now;
 
-      recordMetric('island_render_time', renderTime, {
+      recordMetric("island_render_time", renderTime, {
         componentName,
-        isHydration: 'false',
+        isHydration: "false",
       });
 
       // Check if this is a hydration or a client-side render
@@ -101,11 +128,12 @@ export function withTelemetry<P extends object>(
         hydrated.current = true;
 
         // We consider this a hydration if it happens within 1s of page load
-        const timeSincePageLoad = now - (globalThis.performance?.timing?.domContentLoadedEventEnd || 0);
+        const timeSincePageLoad = now -
+          (globalThis.performance?.timing?.domContentLoadedEventEnd || 0);
         const isHydration = timeSincePageLoad < 1000;
 
         if (isHydration) {
-          recordMetric('island_hydration_time', renderTime, {
+          recordMetric("island_hydration_time", renderTime, {
             componentName,
           });
         }
@@ -113,9 +141,11 @@ export function withTelemetry<P extends object>(
 
       return () => {
         // Record unmount event
-        recordMetric('island_unmount', 1, {
+        recordMetric("island_unmount", 1, {
           componentName,
-          visibleDuration: mountTime.current ? (performance.now() - mountTime.current).toString() : 'unknown',
+          visibleDuration: mountTime.current
+            ? (performance.now() - mountTime.current).toString()
+            : "unknown",
           interactionCount: interactionCount.toString(),
         });
       };
@@ -127,12 +157,12 @@ export function withTelemetry<P extends object>(
       detail: Record<string, unknown> = {},
     ) => {
       setInteractionCount((prev) => prev + 1);
-      recordMetric('island_interaction', 1, {
+      recordMetric("island_interaction", 1, {
         componentName,
         eventName,
         ...Object.fromEntries(
           Object.entries(detail)
-            .filter(([_, v]) => typeof v === 'string')
+            .filter(([_, v]) => typeof v === "string")
             .map(([k, v]) => [k, v as string]),
         ),
       });
@@ -144,20 +174,23 @@ export function withTelemetry<P extends object>(
 
       // Find the DOM element for this component
       // This is a simplified approach; in a real app we would use refs
-      const componentElement = document.querySelector(`[data-island="${componentName}"]`);
+      const componentElement = document.querySelector(
+        `[data-island="${componentName}"]`,
+      );
       if (!componentElement) return;
 
       // Track interactions on this element
       const handleEvent = (event: Event) => {
         recordInteraction(event.type, {
-          targetTag: (event.target as HTMLElement)?.tagName?.toLowerCase() || 'unknown',
-          targetId: (event.target as HTMLElement)?.id || 'none',
-          targetClass: (event.target as HTMLElement)?.className || 'none',
+          targetTag: (event.target as HTMLElement)?.tagName?.toLowerCase() ||
+            "unknown",
+          targetId: (event.target as HTMLElement)?.id || "none",
+          targetClass: (event.target as HTMLElement)?.className || "none",
         });
       };
 
       // Track common interaction events
-      const eventsToTrack = ['click', 'submit', 'change', 'keydown'];
+      const eventsToTrack = ["click", "submit", "change", "keydown"];
 
       eventsToTrack.forEach((eventType) => {
         componentElement.addEventListener(eventType, handleEvent);

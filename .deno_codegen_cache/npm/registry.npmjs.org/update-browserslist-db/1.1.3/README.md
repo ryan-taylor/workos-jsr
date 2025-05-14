@@ -3,11 +3,11 @@
 <img width="120" height="120" alt="Browserslist logo by Anton Popov"
      src="https://browsersl.ist/logo.svg" align="right">
 
-CLI tool to update `caniuse-lite` with browsers DB
-from [Browserslist](https://github.com/browserslist/browserslist/) config.
+CLI tool to update `caniuse-lite` with browsers DB from
+[Browserslist](https://github.com/browserslist/browserslist/) config.
 
-Some queries like `last 2 versions` or `>1%` depend on actual data
-from `caniuse-lite`.
+Some queries like `last 2 versions` or `>1%` depend on actual data from
+`caniuse-lite`.
 
 ```sh
 npx update-browserslist-db@latest
@@ -19,4 +19,5 @@ npx update-browserslist-db@latest
 </a>
 
 ## Docs
+
 Read full docs **[here](https://github.com/browserslist/update-db#readme)**.

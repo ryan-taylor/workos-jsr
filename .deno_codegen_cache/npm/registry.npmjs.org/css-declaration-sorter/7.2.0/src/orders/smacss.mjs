@@ -26,7 +26,6 @@ export const properties = [
   "offset-position",
   "offset-rotate",
 
-
   "grid",
   "grid-template-rows",
   "grid-template-columns",
@@ -409,5 +408,5 @@ export const properties = [
   "unicode-range",
   "user-select",
   "widows",
-  "writing-mode"
-]
+  "writing-mode",
+];

@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * @param {import('postcss-selector-parser').Selector} selector

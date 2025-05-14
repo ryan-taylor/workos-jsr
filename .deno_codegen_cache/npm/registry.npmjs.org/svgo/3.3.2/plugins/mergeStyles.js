@@ -1,14 +1,14 @@
-'use strict';
+"use strict";
 
 /**
  * @typedef {import('../lib/types').XastElement} XastElement
  * @typedef {import('../lib/types').XastChild} XastChild
  */
 
-const { visitSkip, detachNodeFromParent } = require('../lib/xast.js');
+const { visitSkip, detachNodeFromParent } = require("../lib/xast.js");
 
-exports.name = 'mergeStyles';
-exports.description = 'merge multiple style elements into one';
+exports.name = "mergeStyles";
+exports.description = "merge multiple style elements into one";
 
 /**
  * Merge multiple style elements into one.
@@ -22,42 +22,42 @@ exports.fn = () => {
    * @type {?XastElement}
    */
   let firstStyleElement = null;
-  let collectedStyles = '';
+  let collectedStyles = "";
   /**
    * @type {'text' | 'cdata'}
    */
-  let styleContentType = 'text';
+  let styleContentType = "text";
 
   return {
     element: {
       enter: (node, parentNode) => {
         // skip <foreignObject> content
-        if (node.name === 'foreignObject') {
+        if (node.name === "foreignObject") {
           return visitSkip;
         }
 
         // collect style elements
-        if (node.name !== 'style') {
+        if (node.name !== "style") {
           return;
         }
 
         // skip <style> with invalid type attribute
         if (
           node.attributes.type != null &&
-          node.attributes.type !== '' &&
-          node.attributes.type !== 'text/css'
+          node.attributes.type !== "" &&
+          node.attributes.type !== "text/css"
         ) {
           return;
         }
 
         // extract style element content
-        let css = '';
+        let css = "";
         for (const child of node.children) {
-          if (child.type === 'text') {
+          if (child.type === "text") {
             css += child.value;
           }
-          if (child.type === 'cdata') {
-            styleContentType = 'cdata';
+          if (child.type === "cdata") {
+            styleContentType = "cdata";
             css += child.value;
           }
         }
@@ -86,7 +86,7 @@ exports.fn = () => {
            */
           const child = { type: styleContentType, value: collectedStyles };
           // TODO remove legacy parentNode in v4
-          Object.defineProperty(child, 'parentNode', {
+          Object.defineProperty(child, "parentNode", {
             writable: true,
             value: firstStyleElement,
           });

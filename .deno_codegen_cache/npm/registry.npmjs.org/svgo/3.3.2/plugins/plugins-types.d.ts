@@ -2,7 +2,7 @@ import type {
   Plugin as PluginDef,
   PluginInfo,
   XastElement,
-} from '../lib/types';
+} from "../lib/types";
 
 type DefaultPlugins = {
   cleanupAttrs: {
@@ -131,11 +131,11 @@ type DefaultPlugins = {
     usage?:
       | boolean
       | {
-          force?: boolean;
-          ids?: boolean;
-          classes?: boolean;
-          tags?: boolean;
-        };
+        force?: boolean;
+        ids?: boolean;
+        classes?: boolean;
+        tags?: boolean;
+      };
   };
 
   moveElemsAttrsToGroup: void;
@@ -203,7 +203,7 @@ type DefaultPlugins = {
   removeXMLProcInst: void;
   sortAttrs: {
     order?: string[];
-    xmlnsOrder?: 'front' | 'alphabetical';
+    xmlnsOrder?: "front" | "alphabetical";
   };
   sortDefsChildren: void;
 };
@@ -213,7 +213,7 @@ type PresetDefaultOverrides = {
 };
 
 export type BuiltinsWithOptionalParams = DefaultPlugins & {
-  'preset-default': {
+  "preset-default": {
     floatPrecision?: number;
     /**
      * All default plugins can be customized or disabled here

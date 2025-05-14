@@ -1,26 +1,26 @@
-'use strict';
+"use strict";
 
 function compressFontWeight(node) {
-    const value = node.children.head.data;
+  const value = node.children.head.data;
 
-    if (value.type === 'Identifier') {
-        switch (value.name) {
-            case 'normal':
-                node.children.head.data = {
-                    type: 'Number',
-                    loc: value.loc,
-                    value: '400'
-                };
-                break;
-            case 'bold':
-                node.children.head.data = {
-                    type: 'Number',
-                    loc: value.loc,
-                    value: '700'
-                };
-                break;
-        }
+  if (value.type === "Identifier") {
+    switch (value.name) {
+      case "normal":
+        node.children.head.data = {
+          type: "Number",
+          loc: value.loc,
+          value: "400",
+        };
+        break;
+      case "bold":
+        node.children.head.data = {
+          type: "Number",
+          loc: value.loc,
+          value: "700",
+        };
+        break;
     }
+  }
 }
 
 module.exports = compressFontWeight;

@@ -1,13 +1,14 @@
 # OpenAPI Typescript Codegen
 
-[![NPM][npm-image]][npm-url]
-[![License][license-image]][license-url]
+[![NPM][npm-image]][npm-url] [![License][license-image]][license-url]
 [![Downloads][downloads-image]][downloads-url]
 [![Build][build-image]][build-url]
 
-> Node.js library that generates Typescript clients based on the OpenAPI specification.
+> Node.js library that generates Typescript clients based on the OpenAPI
+> specification.
 
 ## Why?
+
 - Frontend ❤️ OpenAPI, but we do not want to use JAVA codegen in our builds
 - Quick, lightweight, robust and framework-agnostic 🚀
 - Supports generation of TypeScript clients
@@ -17,7 +18,8 @@
 - Supports generation through CLI, Node.js and NPX
 - Supports tsc and @babel/plugin-transform-typescript
 - Supports aborting of requests (cancelable promise pattern)
-- Supports external references using [json-schema-ref-parser](https://github.com/APIDevTools/json-schema-ref-parser/)
+- Supports external references using
+  [json-schema-ref-parser](https://github.com/APIDevTools/json-schema-ref-parser/)
 
 ## Install
 
@@ -55,17 +57,19 @@ $ openapi --help
     $ openapi --input ./spec.json --output ./generated --client xhr
 ```
 
-Documentation
-===
+# Documentation
 
-The main documentation can be found in the [openapi-typescript-codegen/wiki](https://github.com/ferdikoomen/openapi-typescript-codegen/wiki)
+The main documentation can be found in the
+[openapi-typescript-codegen/wiki](https://github.com/ferdikoomen/openapi-typescript-codegen/wiki)
 
-Sponsors
-===
+# Sponsors
 
-If you or your company use the OpenAPI Typescript Codegen, please consider supporting me. By sponsoring I can free up time to give this project some love! Details can be found here: https://github.com/sponsors/ferdikoomen
+If you or your company use the OpenAPI Typescript Codegen, please consider
+supporting me. By sponsoring I can free up time to give this project some love!
+Details can be found here: https://github.com/sponsors/ferdikoomen
 
-If you're from an enterprise looking for a fully managed SDK generation, please consider our sponsor:
+If you're from an enterprise looking for a fully managed SDK generation, please
+consider our sponsor:
 
 <a href="https://speakeasyapi.dev/?utm_source=ferdi+repo&utm_medium=github+sponsorship">
     <img alt="speakeasy" src="https://storage.googleapis.com/speakeasy-design-assets/ferdi-sponsorship.png" width="640"/>

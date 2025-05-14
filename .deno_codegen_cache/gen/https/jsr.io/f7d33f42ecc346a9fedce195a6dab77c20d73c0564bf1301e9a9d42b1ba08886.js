@@ -1,6 +1,11 @@
 // Copyright 2018-2025 the Deno authors. MIT license.
 // This module is browser compatible.
-import { CHAR_BACKWARD_SLASH, CHAR_COLON, CHAR_DOT, CHAR_QUESTION_MARK } from "../_common/constants.ts";
+import {
+  CHAR_BACKWARD_SLASH,
+  CHAR_COLON,
+  CHAR_DOT,
+  CHAR_QUESTION_MARK,
+} from "../_common/constants.ts";
 import { isWindowsDeviceRoot } from "./_util.ts";
 import { resolve } from "./resolve.ts";
 /**
@@ -34,7 +39,10 @@ import { resolve } from "./resolve.ts";
       }
     } else if (isWindowsDeviceRoot(resolvedPath.charCodeAt(0))) {
       // Possible device root
-      if (resolvedPath.charCodeAt(1) === CHAR_COLON && resolvedPath.charCodeAt(2) === CHAR_BACKWARD_SLASH) {
+      if (
+        resolvedPath.charCodeAt(1) === CHAR_COLON &&
+        resolvedPath.charCodeAt(2) === CHAR_BACKWARD_SLASH
+      ) {
         // Matched device root, convert the path to a long UNC path
         return `\\\\?\\${resolvedPath}`;
       }

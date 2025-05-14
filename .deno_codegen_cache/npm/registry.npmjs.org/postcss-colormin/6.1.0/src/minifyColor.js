@@ -1,7 +1,7 @@
-'use strict';
-const { colord, extend } = require('colord');
-const namesPlugin = require('colord/plugins/names');
-const minifierPlugin = require('colord/plugins/minify');
+"use strict";
+const { colord, extend } = require("colord");
+const namesPlugin = require("colord/plugins/names");
+const minifierPlugin = require("colord/plugins/minify");
 
 extend(/** @type {any[]} */ ([namesPlugin, minifierPlugin]));
 

@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-exports.name = 'removeXMLNS';
+exports.name = "removeXMLNS";
 exports.description =
-  'removes xmlns attribute (for inline svg, disabled by default)';
+  "removes xmlns attribute (for inline svg, disabled by default)";
 
 /**
  * Remove the xmlns attribute when present.
@@ -20,7 +20,7 @@ exports.fn = () => {
   return {
     element: {
       enter: (node) => {
-        if (node.name === 'svg') {
+        if (node.name === "svg") {
           delete node.attributes.xmlns;
         }
       },

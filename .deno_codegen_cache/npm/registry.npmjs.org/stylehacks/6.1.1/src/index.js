@@ -1,7 +1,7 @@
-'use strict';
-const { dirname } = require('path');
-const browserslist = require('browserslist');
-const plugins = require('./plugins');
+"use strict";
+const { dirname } = require("path");
+const browserslist = require("browserslist");
+const plugins = require("./plugins");
 
 /**
  * @typedef {{ overrideBrowserslist?: string | string[] }} AutoprefixerOptions
@@ -16,7 +16,7 @@ const plugins = require('./plugins');
  */
 function pluginCreator(opts = {}) {
   return {
-    postcssPlugin: 'stylehacks',
+    postcssPlugin: "stylehacks",
 
     /**
      * @param {import('postcss').Result & {opts: BrowserslistOptions & {file?: string}}} result

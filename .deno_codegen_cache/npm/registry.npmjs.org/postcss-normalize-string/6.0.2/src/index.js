@@ -1,5 +1,5 @@
-'use strict';
-const valueParser = require('postcss-value-parser');
+"use strict";
+const valueParser = require("postcss-value-parser");
 
 /*
  * Constants (parser usage)
@@ -7,12 +7,12 @@ const valueParser = require('postcss-value-parser');
 
 const SINGLE_QUOTE = "'".charCodeAt(0);
 const DOUBLE_QUOTE = '"'.charCodeAt(0);
-const BACKSLASH = '\\'.charCodeAt(0);
-const NEWLINE = '\n'.charCodeAt(0);
-const SPACE = ' '.charCodeAt(0);
-const FEED = '\f'.charCodeAt(0);
-const TAB = '\t'.charCodeAt(0);
-const CR = '\r'.charCodeAt(0);
+const BACKSLASH = "\\".charCodeAt(0);
+const NEWLINE = "\n".charCodeAt(0);
+const SPACE = " ".charCodeAt(0);
+const FEED = "\f".charCodeAt(0);
+const TAB = "\t".charCodeAt(0);
+const CR = "\r".charCodeAt(0);
 
 const WORD_END = /[ \n\t\r\f'"\\]/g;
 
@@ -20,13 +20,13 @@ const WORD_END = /[ \n\t\r\f'"\\]/g;
  * Constants (node type strings)
  */
 
-const C_STRING = 'string';
-const C_ESCAPED_SINGLE_QUOTE = 'escapedSingleQuote';
-const C_ESCAPED_DOUBLE_QUOTE = 'escapedDoubleQuote';
-const C_SINGLE_QUOTE = 'singleQuote';
-const C_DOUBLE_QUOTE = 'doubleQuote';
-const C_NEWLINE = 'newline';
-const C_SINGLE = 'single';
+const C_STRING = "string";
+const C_ESCAPED_SINGLE_QUOTE = "escapedSingleQuote";
+const C_ESCAPED_DOUBLE_QUOTE = "escapedDoubleQuote";
+const C_SINGLE_QUOTE = "singleQuote";
+const C_DOUBLE_QUOTE = "doubleQuote";
+const C_NEWLINE = "newline";
+const C_SINGLE = "single";
 
 /*
  * Literals
@@ -65,7 +65,7 @@ function stringify(ast) {
     }
 
     return str + value;
-  }, '');
+  }, "");
 }
 
 /**
@@ -111,7 +111,7 @@ function parse(str) {
         );
 
         ast.nodes.push({
-          type: 'space',
+          type: "space",
           value: str.slice(pos, next),
         });
         pos = next - 1;
@@ -268,7 +268,7 @@ function normalize(value, preferredQuote) {
  * @return {string}
  */
 function minify(original, cache, preferredQuote) {
-  const key = original + '|' + preferredQuote;
+  const key = original + "|" + preferredQuote;
   if (cache.has(key)) {
     return /** @type {string} */ (cache.get(key));
   }
@@ -287,26 +287,26 @@ function pluginCreator(opts) {
   const { preferredQuote } = Object.assign(
     {},
     {
-      preferredQuote: 'double',
+      preferredQuote: "double",
     },
-    opts
+    opts,
   );
 
   return {
-    postcssPlugin: 'postcss-normalize-string',
+    postcssPlugin: "postcss-normalize-string",
 
     OnceExit(css) {
       const cache = new Map();
 
       css.walk((node) => {
         switch (node.type) {
-          case 'rule':
+          case "rule":
             node.selector = minify(node.selector, cache, preferredQuote);
             break;
-          case 'decl':
+          case "decl":
             node.value = minify(node.value, cache, preferredQuote);
             break;
-          case 'atrule':
+          case "atrule":
             node.params = minify(node.params, cache, preferredQuote);
             break;
         }

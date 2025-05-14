@@ -1,5 +1,15 @@
-import type { CreateObjectOptions, ObjectDigest, ObjectDigestResponse, ObjectMetadata, ObjectVersion, ReadObjectMetadataResponse, ReadObjectResponse, UpdateObjectOptions, VaultObject } from "workos/vault/interfaces.ts";
-import type { List, ListResponse } from "workos/common/interfaces.ts";
+import type {
+  CreateObjectOptions,
+  ObjectDigest,
+  ObjectDigestResponse,
+  ObjectMetadata,
+  ObjectVersion,
+  ReadObjectMetadataResponse,
+  ReadObjectResponse,
+  UpdateObjectOptions,
+  VaultObject,
+} from "../interfaces.ts";
+import type { List, ListResponse } from "../../common/interfaces.ts";
 
 export const serializeCreateObjectEntity = (
   options: CreateObjectOptions,
@@ -67,4 +77,4 @@ export const desrializeListObjectVersions = (
     version: version.version,
     createdAt: version.created_at,
   }));
-}; 
+};

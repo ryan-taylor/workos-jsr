@@ -33,10 +33,13 @@ import { isPathSeparator, isWindowsDeviceRoot } from "./_util.ts";
   // Check for a drive letter prefix so as not to mistake the following
   // path separator as an extra separator at the end of the path that can be
   // disregarded
-  if (path.length >= 2 && path.charCodeAt(1) === CHAR_COLON && isWindowsDeviceRoot(path.charCodeAt(0))) {
+  if (
+    path.length >= 2 && path.charCodeAt(1) === CHAR_COLON &&
+    isWindowsDeviceRoot(path.charCodeAt(0))
+  ) {
     start = startPart = 2;
   }
-  for(let i = path.length - 1; i >= start; --i){
+  for (let i = path.length - 1; i >= start; --i) {
     const code = path.charCodeAt(i);
     if (isPathSeparator(code)) {
       // If we reached a path separator that was not part of a set of path
@@ -63,9 +66,11 @@ import { isPathSeparator, isWindowsDeviceRoot } from "./_util.ts";
       preDotState = -1;
     }
   }
-  if (startDot === -1 || end === -1 || // We saw a non-dot character immediately before the dot
-  preDotState === 0 || // The (right-most) trimmed path component is exactly '..'
-  preDotState === 1 && startDot === end - 1 && startDot === startPart + 1) {
+  if (
+    startDot === -1 || end === -1 || // We saw a non-dot character immediately before the dot
+    preDotState === 0 || // The (right-most) trimmed path component is exactly '..'
+    preDotState === 1 && startDot === end - 1 && startDot === startPart + 1
+  ) {
     return "";
   }
   return path.slice(startDot, end);

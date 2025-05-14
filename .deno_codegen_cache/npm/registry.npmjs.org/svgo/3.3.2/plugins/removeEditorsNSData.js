@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
-const { detachNodeFromParent } = require('../lib/xast.js');
-const { editorNamespaces } = require('./_collections.js');
+const { detachNodeFromParent } = require("../lib/xast.js");
+const { editorNamespaces } = require("./_collections.js");
 
-exports.name = 'removeEditorsNSData';
-exports.description = 'removes editors namespaces, elements and attributes';
+exports.name = "removeEditorsNSData";
+exports.description = "removes editors namespaces, elements and attributes";
 
 /**
  * Remove editors namespaces, elements and attributes.
@@ -31,10 +31,10 @@ exports.fn = (_root, params) => {
     element: {
       enter: (node, parentNode) => {
         // collect namespace prefixes from svg element
-        if (node.name === 'svg') {
+        if (node.name === "svg") {
           for (const [name, value] of Object.entries(node.attributes)) {
-            if (name.startsWith('xmlns:') && namespaces.includes(value)) {
-              prefixes.push(name.slice('xmlns:'.length));
+            if (name.startsWith("xmlns:") && namespaces.includes(value)) {
+              prefixes.push(name.slice("xmlns:".length));
               // <svg xmlns:sodipodi="">
               delete node.attributes[name];
             }
@@ -43,8 +43,8 @@ exports.fn = (_root, params) => {
         // remove editor attributes, for example
         // <* sodipodi:*="">
         for (const name of Object.keys(node.attributes)) {
-          if (name.includes(':')) {
-            const [prefix] = name.split(':');
+          if (name.includes(":")) {
+            const [prefix] = name.split(":");
             if (prefixes.includes(prefix)) {
               delete node.attributes[name];
             }
@@ -52,8 +52,8 @@ exports.fn = (_root, params) => {
         }
         // remove editor elements, for example
         // <sodipodi:*>
-        if (node.name.includes(':')) {
-          const [prefix] = node.name.split(':');
+        if (node.name.includes(":")) {
+          const [prefix] = node.name.split(":");
           if (prefixes.includes(prefix)) {
             detachNodeFromParent(node, parentNode);
           }

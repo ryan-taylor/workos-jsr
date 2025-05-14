@@ -1,13 +1,13 @@
-'use strict';
-const OVERRIDABLE_RULES = new Set(['keyframes', 'counter-style']);
-const SCOPE_RULES = new Set(['media', 'supports']);
+"use strict";
+const OVERRIDABLE_RULES = new Set(["keyframes", "counter-style"]);
+const SCOPE_RULES = new Set(["media", "supports"]);
 
 /**
  * @param {string} prop
  * @return {string}
  */
 function vendorUnprefixed(prop) {
-  return prop.replace(/^-\w+-/, '');
+  return prop.replace(/^-\w+-/, "");
 }
 
 /**
@@ -38,19 +38,19 @@ function getScope(node) {
 
   while (current) {
     if (
-      current.type === 'atrule' &&
+      current.type === "atrule" &&
       isScope(/** @type import('postcss').AtRule */ (current).name)
     ) {
       chain.unshift(
         /** @type import('postcss').AtRule */ (current).name +
-          ' ' +
-          /** @type import('postcss').AtRule */ (current).params
+          " " +
+          /** @type import('postcss').AtRule */ (current).params,
       );
     }
     current = current.parent;
   }
 
-  return chain.join('|');
+  return chain.join("|");
 }
 
 /**
@@ -59,7 +59,7 @@ function getScope(node) {
  */
 function pluginCreator() {
   return {
-    postcssPlugin: 'postcss-discard-overridden',
+    postcssPlugin: "postcss-discard-overridden",
     prepare() {
       const cache = new Map();
       /** @type {{node: import('postcss').AtRule, scope: string}[]} */

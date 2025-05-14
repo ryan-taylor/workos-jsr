@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * @typedef {import('../lib/types').XastChild} XastChild
@@ -6,15 +6,15 @@
  * @typedef {import('../lib/types').XastParent} XastParent
  */
 
-const { cleanupOutData, toFixed } = require('../lib/svgo/tools.js');
+const { cleanupOutData, toFixed } = require("../lib/svgo/tools.js");
 const {
   transform2js,
   transformsMultiply,
   matrixToTransform,
-} = require('./_transforms.js');
+} = require("./_transforms.js");
 
-exports.name = 'convertTransform';
-exports.description = 'collapses multiple transformations and optimizes it';
+exports.name = "convertTransform";
+exports.description = "collapses multiple transformations and optimizes it";
 
 /**
  * Convert matrices to the short aliases,
@@ -62,15 +62,15 @@ exports.fn = (_root, params) => {
     element: {
       enter: (node) => {
         if (node.attributes.transform != null) {
-          convertTransform(node, 'transform', newParams);
+          convertTransform(node, "transform", newParams);
         }
 
         if (node.attributes.gradientTransform != null) {
-          convertTransform(node, 'gradientTransform', newParams);
+          convertTransform(node, "gradientTransform", newParams);
         }
 
         if (node.attributes.patternTransform != null) {
-          convertTransform(node, 'patternTransform', newParams);
+          convertTransform(node, "patternTransform", newParams);
         }
       },
     },
@@ -142,7 +142,7 @@ const convertTransform = (item, attrName, params) => {
 const definePrecision = (data, { ...newParams }) => {
   const matrixData = [];
   for (const item of data) {
-    if (item.name == 'matrix') {
+    if (item.name == "matrix") {
       matrixData.push(...item.data.slice(0, 4));
     }
   }
@@ -157,7 +157,7 @@ const definePrecision = (data, { ...newParams }) => {
     numberOfDigits = Math.max.apply(
       Math,
       matrixData.map(
-        (n) => n.toString().replace(/\D+/g, '').length, // Number of digits in a number. 123.45 → 5
+        (n) => n.toString().replace(/\D+/g, "").length, // Number of digits in a number. 123.45 → 5
       ),
     );
   }
@@ -214,7 +214,7 @@ const transformRound = (data, params) => {
  */
 const floatDigits = (n) => {
   const str = n.toString();
-  return str.slice(str.indexOf('.')).length - 1;
+  return str.slice(str.indexOf(".")).length - 1;
 };
 
 /**
@@ -229,11 +229,11 @@ const convertToShorts = (transforms, params) => {
     let transform = transforms[i];
 
     // convert matrix to the short aliases
-    if (params.matrixToTransform && transform.name === 'matrix') {
+    if (params.matrixToTransform && transform.name === "matrix") {
       var decomposed = matrixToTransform(transform, params);
       if (
         js2transform(decomposed, params).length <=
-        js2transform([transform], params).length
+          js2transform([transform], params).length
       ) {
         transforms.splice(i, 1, ...decomposed);
       }
@@ -248,7 +248,7 @@ const convertToShorts = (transforms, params) => {
     // translate(10 0) → translate(10)
     if (
       params.shortTranslate &&
-      transform.name === 'translate' &&
+      transform.name === "translate" &&
       transform.data.length === 2 &&
       !transform.data[1]
     ) {
@@ -259,7 +259,7 @@ const convertToShorts = (transforms, params) => {
     // scale(2 2) → scale(2)
     if (
       params.shortScale &&
-      transform.name === 'scale' &&
+      transform.name === "scale" &&
       transform.data.length === 2 &&
       transform.data[0] === transform.data[1]
     ) {
@@ -270,14 +270,14 @@ const convertToShorts = (transforms, params) => {
     // translate(cx cy) rotate(a) translate(-cx -cy) → rotate(a cx cy)
     if (
       params.shortRotate &&
-      transforms[i - 2]?.name === 'translate' &&
-      transforms[i - 1].name === 'rotate' &&
-      transforms[i].name === 'translate' &&
+      transforms[i - 2]?.name === "translate" &&
+      transforms[i - 1].name === "rotate" &&
+      transforms[i].name === "translate" &&
       transforms[i - 2].data[0] === -transforms[i].data[0] &&
       transforms[i - 2].data[1] === -transforms[i].data[1]
     ) {
       transforms.splice(i - 2, 3, {
-        name: 'rotate',
+        name: "rotate",
         data: [
           transforms[i - 1].data[0],
           transforms[i - 2].data[0],
@@ -302,19 +302,19 @@ const removeUseless = (transforms) => {
   return transforms.filter((transform) => {
     // translate(0), rotate(0[, cx, cy]), skewX(0), skewY(0)
     if (
-      (['translate', 'rotate', 'skewX', 'skewY'].indexOf(transform.name) > -1 &&
-        (transform.data.length == 1 || transform.name == 'rotate') &&
+      (["translate", "rotate", "skewX", "skewY"].indexOf(transform.name) > -1 &&
+        (transform.data.length == 1 || transform.name == "rotate") &&
         !transform.data[0]) ||
       // translate(0, 0)
-      (transform.name == 'translate' &&
+      (transform.name == "translate" &&
         !transform.data[0] &&
         !transform.data[1]) ||
       // scale(1)
-      (transform.name == 'scale' &&
+      (transform.name == "scale" &&
         transform.data[0] == 1 &&
         (transform.data.length < 2 || transform.data[1] == 1)) ||
       // matrix(1 0 0 1 0 0)
-      (transform.name == 'matrix' &&
+      (transform.name == "matrix" &&
         transform.data[0] == 1 &&
         transform.data[3] == 1 &&
         !(
@@ -344,7 +344,7 @@ const js2transform = (transformJS, params) => {
       roundTransform(transform, params);
       return `${transform.name}(${cleanupOutData(transform.data, params)})`;
     })
-    .join('');
+    .join("");
 
   return transformString;
 };
@@ -354,23 +354,23 @@ const js2transform = (transformJS, params) => {
  */
 const roundTransform = (transform, params) => {
   switch (transform.name) {
-    case 'translate':
+    case "translate":
       transform.data = floatRound(transform.data, params);
       break;
-    case 'rotate':
+    case "rotate":
       transform.data = [
         ...degRound(transform.data.slice(0, 1), params),
         ...floatRound(transform.data.slice(1), params),
       ];
       break;
-    case 'skewX':
-    case 'skewY':
+    case "skewX":
+    case "skewY":
       transform.data = degRound(transform.data, params);
       break;
-    case 'scale':
+    case "scale":
       transform.data = transformRound(transform.data, params);
       break;
-    case 'matrix':
+    case "matrix":
       transform.data = [
         ...transformRound(transform.data.slice(0, 4), params),
         ...floatRound(transform.data.slice(4), params),
@@ -403,14 +403,12 @@ const smartRound = (precision, data) => {
     var i = data.length,
       tolerance = +Math.pow(0.1, precision).toFixed(precision);
     i--;
-
   ) {
     if (toFixed(data[i], precision) !== data[i]) {
       var rounded = +data[i].toFixed(precision - 1);
-      data[i] =
-        +Math.abs(rounded - data[i]).toFixed(precision + 1) >= tolerance
-          ? +data[i].toFixed(precision)
-          : rounded;
+      data[i] = +Math.abs(rounded - data[i]).toFixed(precision + 1) >= tolerance
+        ? +data[i].toFixed(precision)
+        : rounded;
     }
   }
 

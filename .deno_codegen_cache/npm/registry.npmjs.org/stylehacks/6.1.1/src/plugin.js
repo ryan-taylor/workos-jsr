@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 /**
  * @typedef {object} Plugin
  * @prop {Set<string>} targets
@@ -7,11 +7,11 @@
  * @prop {(node: import('postcss').Node) => void} detectAndWarn
  */
 
-/** 
+/**
  * @typedef {import('postcss').Node & {_stylehacks: {
-                                          message: string, 
-                                          browsers: Set<string>, 
-                                          identifier: string, 
+                                          message: string,
+                                          browsers: Set<string>,
+                                          identifier: string,
                                           hack: string }}} NodeWithInfo
  */
 
@@ -41,7 +41,7 @@ module.exports = class BasePlugin {
       {
         message: `Bad ${metadata.identifier}: ${metadata.hack}`,
         browsers: this.targets,
-      }
+      },
     );
 
     this.nodes.push(/** @type {NodeWithInfo} */ (node));
@@ -87,7 +87,7 @@ module.exports = class BasePlugin {
   /** @param {import('postcss').Node} node */
   // eslint-disable-next-line no-unused-vars
   detect(node) {
-    throw new Error('You need to implement this method in a subclass.');
+    throw new Error("You need to implement this method in a subclass.");
   }
 
   /** @return {void} */
@@ -101,7 +101,7 @@ module.exports = class BasePlugin {
 
       return node.warn(
         /** @type {import('postcss').Result} */ (this.result),
-        message + JSON.stringify({ browsers, identifier, hack })
+        message + JSON.stringify({ browsers, identifier, hack }),
       );
     });
   }

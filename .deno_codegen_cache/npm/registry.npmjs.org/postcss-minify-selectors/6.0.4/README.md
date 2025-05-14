@@ -15,13 +15,17 @@ npm install postcss-minify-selectors --save
 ### Input
 
 ```css
-h1 + p, h2, h3, h2{color:blue}
+h1 + p, h2, h3, h2 {
+  color: blue;
+}
 ```
 
 ### Output
 
 ```css
-h1+p,h2,h3{color:blue}
+h1 + p, h2, h3 {
+  color: blue;
+}
 ```
 
 For more examples see the [tests](test/index.js).
@@ -33,7 +37,8 @@ examples for your environment.
 
 ## Contributors
 
-See [CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
+See
+[CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
 
 ## License
 

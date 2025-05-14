@@ -1,4 +1,4 @@
-import { Pattern } from '../types';
+import { Pattern } from "../types";
 /**
  * Designed to work only with simple paths: `dir\\file`.
  */

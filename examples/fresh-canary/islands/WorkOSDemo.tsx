@@ -5,19 +5,19 @@
  * featuring signal-based state management and Suspense for loading states.
  */
 /** @jsx h */
-import { h, Component } from "preact";
-import type { useState } from 'preact/hooks';
-import { batch, signal, useComputed, useSignal } from '@preact/signals';
-import { useWorkOS } from '../hooks/use-workos.ts';
-import type { DirectoryUserWithGroups } from '../utils/directory-sync.ts';
-import type { AuditLogEvent } from '../utils/audit-logs.ts';
-import type { WorkOSUser } from '../utils/user-management.ts';
+import { Component, h } from "preact";
+import type { useState } from "preact/hooks";
+import { batch, signal, useComputed, useSignal } from "@preact/signals";
+import { useWorkOS } from "../hooks/use-workos.ts";
+import type { DirectoryUserWithGroups } from "../utils/directory-sync.ts";
+import type { AuditLogEvent } from "../utils/audit-logs.ts";
+import type { WorkOSUser } from "../utils/user-management.ts";
 
 // Import WorkOS components
-import AuditLogStream from './AuditLogStream.tsx';
-import DirectoryUserList from './DirectoryUserList.tsx';
-import ProfileForm from './ProfileForm.tsx';
-import PasswordChangeForm from './PasswordChangeForm.tsx';
+import AuditLogStream from "./AuditLogStream.tsx";
+import DirectoryUserList from "./DirectoryUserList.tsx";
+import ProfileForm from "./ProfileForm.tsx";
+import PasswordChangeForm from "./PasswordChangeForm.tsx";
 
 // Simple Suspense implementation since preact/compat might not be available
 function Suspense(props: { fallback: any; children: any }) {
@@ -28,18 +28,18 @@ function Suspense(props: { fallback: any; children: any }) {
  * Tab identifiers for the demo sections
  */
 enum DemoTab {
-  Overview = 'overview',
-  DirectorySync = 'directory-sync',
-  AuditLogs = 'audit-logs',
-  UserManagement = 'user-management',
+  Overview = "overview",
+  DirectorySync = "directory-sync",
+  AuditLogs = "audit-logs",
+  UserManagement = "user-management",
 }
 
 // Current selected tab - shared across component instances
 const activeTab = signal<DemoTab>(DemoTab.Overview);
 
 // Selected directory and organization IDs for demo purposes
-const selectedDirectoryId = signal<string>('dir_123');
-const selectedOrganizationId = signal<string>('org_123');
+const selectedDirectoryId = signal<string>("dir_123");
+const selectedOrganizationId = signal<string>("org_123");
 
 // Signal to track selected items for cross-component communication
 const selectedUser = signal<DirectoryUserWithGroups | null>(null);
@@ -50,8 +50,8 @@ const selectedAuditLog = signal<AuditLogEvent | null>(null);
  */
 function LoadingFallback() {
   return (
-    <div class='loading-fallback'>
-      <div class='spinner'></div>
+    <div class="loading-fallback">
+      <div class="spinner"></div>
       <p>Loading component...</p>
     </div>
   );
@@ -68,16 +68,18 @@ class ErrorBoundary extends Component {
   }
 
   override componentDidCatch(error: Error, errorInfo: any) {
-    console.error('Component Error:', error, errorInfo);
+    console.error("Component Error:", error, errorInfo);
   }
 
   override render() {
     if (this.state.hasError) {
       return (
-        <div class='error-boundary'>
+        <div class="error-boundary">
           <h3>Something went wrong</h3>
-          <p>{this.state.error?.message || 'Unknown error'}</p>
-          <button onClick={() => this.setState({ hasError: false, error: null })}>
+          <p>{this.state.error?.message || "Unknown error"}</p>
+          <button
+            onClick={() => this.setState({ hasError: false, error: null })}
+          >
             Try Again
           </button>
         </div>
@@ -121,7 +123,9 @@ export default function WorkOSDemo({
   // Computed properties
   const demoReady = useComputed(() => !isLoading.value && !error.value);
   const hasSelectedUser = useComputed(() => selectedUser.value !== null);
-  const hasSelectedAuditLog = useComputed(() => selectedAuditLog.value !== null);
+  const hasSelectedAuditLog = useComputed(() =>
+    selectedAuditLog.value !== null
+  );
 
   /**
    * Change the active tab
@@ -181,8 +185,8 @@ export default function WorkOSDemo({
     const formData = new FormData(form);
 
     batch(() => {
-      const directoryId = formData.get('directoryId') as string;
-      const organizationId = formData.get('organizationId') as string;
+      const directoryId = formData.get("directoryId") as string;
+      const organizationId = formData.get("organizationId") as string;
 
       if (directoryId) {
         selectedDirectoryId.value = directoryId;
@@ -194,7 +198,7 @@ export default function WorkOSDemo({
     });
 
     isSettingsOpen.value = false;
-    infoMessage.value = 'Settings updated';
+    infoMessage.value = "Settings updated";
 
     // Auto-dismiss the message after 3 seconds
     setTimeout(() => {
@@ -205,7 +209,7 @@ export default function WorkOSDemo({
   // If WorkOS is loading, show a loading indicator
   if (isLoading.value) {
     return (
-      <div class='workos-demo-loading'>
+      <div class="workos-demo-loading">
         <LoadingFallback />
       </div>
     );
@@ -214,7 +218,7 @@ export default function WorkOSDemo({
   // If there's an error initializing WorkOS, show an error message
   if (error.value) {
     return (
-      <div class='workos-demo-error'>
+      <div class="workos-demo-error">
         <h2>Error Initializing WorkOS</h2>
         <p>{error.value.message}</p>
         <p>Please check your API key and configuration.</p>
@@ -223,13 +227,13 @@ export default function WorkOSDemo({
   }
 
   return (
-    <div class='workos-demo'>
-      <div class='demo-header'>
+    <div class="workos-demo">
+      <div class="demo-header">
         <h1>WorkOS SDK Demo</h1>
-        <div class='demo-controls'>
+        <div class="demo-controls">
           <button
             onClick={toggleSettings}
-            class='settings-button'
+            class="settings-button"
           >
             ⚙️ Settings
           </button>
@@ -237,11 +241,11 @@ export default function WorkOSDemo({
       </div>
 
       {infoMessage.value && (
-        <div class='info-message'>
+        <div class="info-message">
           {infoMessage.value}
           <button
             onClick={() => infoMessage.value = null}
-            class='dismiss-button'
+            class="dismiss-button"
           >
             ×
           </button>
@@ -249,31 +253,31 @@ export default function WorkOSDemo({
       )}
 
       {isSettingsOpen.value && (
-        <div class='settings-panel'>
+        <div class="settings-panel">
           <h3>Demo Settings</h3>
           <form onSubmit={updateSettings}>
-            <div class='form-group'>
-              <label for='directoryId'>Directory ID</label>
+            <div class="form-group">
+              <label for="directoryId">Directory ID</label>
               <input
-                type='text'
-                id='directoryId'
-                name='directoryId'
+                type="text"
+                id="directoryId"
+                name="directoryId"
                 value={selectedDirectoryId.value}
               />
             </div>
-            <div class='form-group'>
-              <label for='organizationId'>Organization ID</label>
+            <div class="form-group">
+              <label for="organizationId">Organization ID</label>
               <input
-                type='text'
-                id='organizationId'
-                name='organizationId'
+                type="text"
+                id="organizationId"
+                name="organizationId"
                 value={selectedOrganizationId.value}
               />
             </div>
-            <div class='form-actions'>
-              <button type='submit'>Save</button>
+            <div class="form-actions">
+              <button type="submit">Save</button>
               <button
-                type='button'
+                type="button"
                 onClick={() => isSettingsOpen.value = false}
               >
                 Cancel
@@ -283,50 +287,61 @@ export default function WorkOSDemo({
         </div>
       )}
 
-      <div class='demo-tabs'>
+      <div class="demo-tabs">
         <button
           onClick={() => changeTab(DemoTab.Overview)}
-          class={`tab-button ${activeTab.value === DemoTab.Overview ? 'active' : ''}`}
+          class={`tab-button ${
+            activeTab.value === DemoTab.Overview ? "active" : ""
+          }`}
         >
           Overview
         </button>
         <button
           onClick={() => changeTab(DemoTab.DirectorySync)}
-          class={`tab-button ${activeTab.value === DemoTab.DirectorySync ? 'active' : ''}`}
+          class={`tab-button ${
+            activeTab.value === DemoTab.DirectorySync ? "active" : ""
+          }`}
         >
           Directory Sync
         </button>
         <button
           onClick={() => changeTab(DemoTab.AuditLogs)}
-          class={`tab-button ${activeTab.value === DemoTab.AuditLogs ? 'active' : ''}`}
+          class={`tab-button ${
+            activeTab.value === DemoTab.AuditLogs ? "active" : ""
+          }`}
         >
           Audit Logs
         </button>
         <button
           onClick={() => changeTab(DemoTab.UserManagement)}
-          class={`tab-button ${activeTab.value === DemoTab.UserManagement ? 'active' : ''}`}
+          class={`tab-button ${
+            activeTab.value === DemoTab.UserManagement ? "active" : ""
+          }`}
         >
           User Management
         </button>
       </div>
 
-      <div class='demo-content'>
+      <div class="demo-content">
         {/* Overview Tab */}
         {activeTab.value === DemoTab.Overview && (
-          <div class='overview-tab'>
+          <div class="overview-tab">
             <h2>WorkOS + Fresh + Preact Integration</h2>
             <p>
-              This demo showcases the integration between WorkOS, Fresh, and Preact, featuring signal-based state management and Suspense for handling
-              loading states.
+              This demo showcases the integration between WorkOS, Fresh, and
+              Preact, featuring signal-based state management and Suspense for
+              handling loading states.
             </p>
 
             <h3>Features Demonstrated</h3>
             <ul>
               <li>
-                <strong>Signal-based State Management</strong> - Using Preact signals for reactive state
+                <strong>Signal-based State Management</strong>{" "}
+                - Using Preact signals for reactive state
               </li>
               <li>
-                <strong>Suspense Integration</strong> - Leveraging Suspense for loading states
+                <strong>Suspense Integration</strong>{" "}
+                - Leveraging Suspense for loading states
               </li>
               <li>
                 <strong>Error Boundaries</strong> - Graceful error handling
@@ -338,7 +353,8 @@ export default function WorkOSDemo({
                 <strong>Audit Logs</strong> - Real-time event monitoring
               </li>
               <li>
-                <strong>User Management</strong> - Profile and password management
+                <strong>User Management</strong>{" "}
+                - Profile and password management
               </li>
             </ul>
 
@@ -348,13 +364,15 @@ export default function WorkOSDemo({
             </p>
             <ul>
               <li>
-                <code>@preact/signals</code> for reactive state management across components
+                <code>@preact/signals</code>{" "}
+                for reactive state management across components
               </li>
               <li>
                 <code>preact/compat</code> for Suspense and React compatibility
               </li>
               <li>
-                Custom hooks like <code>useWorkOS</code> for WorkOS SDK integration
+                Custom hooks like <code>useWorkOS</code>{" "}
+                for WorkOS SDK integration
               </li>
               <li>
                 Shared state through global signals
@@ -372,10 +390,11 @@ export default function WorkOSDemo({
         {activeTab.value === DemoTab.DirectorySync && (
           <ErrorBoundary>
             <Suspense fallback={<LoadingFallback />}>
-              <div class='directory-sync-tab'>
+              <div class="directory-sync-tab">
                 <h2>Directory Sync</h2>
                 <p>
-                  View and manage users and groups synchronized from external directories.
+                  View and manage users and groups synchronized from external
+                  directories.
                 </p>
 
                 <DirectoryUserList
@@ -384,7 +403,8 @@ export default function WorkOSDemo({
                   enableDetailView
                   enableManagement
                   onUserAction={(action, user) => {
-                    infoMessage.value = `Action ${action} performed on user ${user.firstName} ${user.lastName}`;
+                    infoMessage.value =
+                      `Action ${action} performed on user ${user.firstName} ${user.lastName}`;
                     setTimeout(() => {
                       infoMessage.value = null;
                     }, 3000);
@@ -399,7 +419,7 @@ export default function WorkOSDemo({
         {activeTab.value === DemoTab.AuditLogs && (
           <ErrorBoundary>
             <Suspense fallback={<LoadingFallback />}>
-              <div class='audit-logs-tab'>
+              <div class="audit-logs-tab">
                 <h2>Audit Logs</h2>
                 <p>
                   Real-time monitoring of events across your organization.
@@ -421,33 +441,33 @@ export default function WorkOSDemo({
         {activeTab.value === DemoTab.UserManagement && (
           <ErrorBoundary>
             <Suspense fallback={<LoadingFallback />}>
-              <div class='user-management-tab'>
+              <div class="user-management-tab">
                 <h2>User Management</h2>
                 <p>
                   Manage user profiles and passwords.
                 </p>
 
-                <div class='user-management-forms'>
-                  <div class='form-container'>
+                <div class="user-management-forms">
+                  <div class="form-container">
                     <h3>Profile Management</h3>
                     <ProfileForm
                       user={{
-                        id: 'user_123',
-                        email: 'demo@example.com',
-                        firstName: 'Demo',
-                        lastName: 'User',
+                        id: "user_123",
+                        email: "demo@example.com",
+                        firstName: "Demo",
+                        lastName: "User",
                       }}
                     />
                   </div>
 
-                  <div class='form-container'>
+                  <div class="form-container">
                     <h3>Password Management</h3>
                     <PasswordChangeForm
                       user={{
-                        id: 'user_123',
-                        email: 'demo@example.com',
-                        firstName: 'Demo',
-                        lastName: 'User',
+                        id: "user_123",
+                        email: "demo@example.com",
+                        firstName: "Demo",
+                        lastName: "User",
                       }}
                     />
                   </div>

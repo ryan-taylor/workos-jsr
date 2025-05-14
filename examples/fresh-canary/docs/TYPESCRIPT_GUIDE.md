@@ -1,10 +1,12 @@
 # TypeScript Guide for Fresh 2.x Canary
 
-This guide provides best practices for using TypeScript with Fresh 2.x Canary and optimizing for Deno Deploy.
+This guide provides best practices for using TypeScript with Fresh 2.x Canary
+and optimizing for Deno Deploy.
 
 ## TypeScript Configuration
 
-Fresh 2.x Canary uses TypeScript for type safety and better developer experience. The TypeScript configuration is defined in the `deno.json` file:
+Fresh 2.x Canary uses TypeScript for type safety and better developer
+experience. The TypeScript configuration is defined in the `deno.json` file:
 
 ```json
 {
@@ -19,10 +21,12 @@ Fresh 2.x Canary uses TypeScript for type safety and better developer experience
 
 ### Key Configuration Options
 
-- **jsx**: Set to `react-jsx` to use the automatic JSX runtime, which eliminates the need to import `h` from Preact in every file.
+- **jsx**: Set to `react-jsx` to use the automatic JSX runtime, which eliminates
+  the need to import `h` from Preact in every file.
 - **jsxImportSource**: Set to `preact` to use Preact as the JSX runtime.
 - **strict**: Enables strict type checking for better code quality.
-- **lib**: Includes necessary type definitions for DOM, async operations, and Deno-specific APIs.
+- **lib**: Includes necessary type definitions for DOM, async operations, and
+  Deno-specific APIs.
 
 ## Component Typing Best Practices
 
@@ -54,7 +58,9 @@ interface MyComponentProps {
   onChange?: (value: number) => void;
 }
 
-export default function MyComponent({ initialValue, label, onChange }: MyComponentProps) {
+export default function MyComponent(
+  { initialValue, label, onChange }: MyComponentProps,
+) {
   // Component implementation
 }
 ```
@@ -78,7 +84,7 @@ export const handler: Handlers<HandlerData> = {
   async POST(req, ctx) {
     // Handler implementation
     return new Response(null, { status: 303, headers: { Location: "/" } });
-  }
+  },
 };
 ```
 
@@ -109,7 +115,7 @@ const handleInputChange = (setter: (value: string) => void) => (e: Event) => {
 };
 
 // Usage
-<input onInput={handleInputChange(setName)} />
+<input onInput={handleInputChange(setName)} />;
 ```
 
 ## Deno Deploy Optimization
@@ -143,7 +149,7 @@ export default defineConfig({
   },
   router: {
     trailingSlash: false,
-  }
+  },
 });
 ```
 
@@ -196,8 +202,8 @@ const isDev = Deno.env.get("ENVIRONMENT") === "development";
    type RequestState =
      | { status: "idle" }
      | { status: "loading" }
-     | { status: "success", data: ResponseData }
-     | { status: "error", error: Error };
+     | { status: "success"; data: ResponseData }
+     | { status: "error"; error: Error };
    ```
 
 5. **Use readonly for immutable data**:
@@ -265,4 +271,7 @@ if (event.target instanceof HTMLInputElement) {
 
 ## Conclusion
 
-Following these TypeScript best practices will help ensure your Fresh 2.x Canary application is type-safe, maintainable, and optimized for Deno Deploy. TypeScript provides valuable tooling and developer experience improvements that make your code more robust and easier to refactor.
+Following these TypeScript best practices will help ensure your Fresh 2.x Canary
+application is type-safe, maintainable, and optimized for Deno Deploy.
+TypeScript provides valuable tooling and developer experience improvements that
+make your code more robust and easier to refactor.

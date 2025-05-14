@@ -1,7 +1,7 @@
-import { WorkOS as BaseWorkOS } from "./workos.ts.ts";
-import { FetchHttpClient } from "./common/net/fetch-client.ts.ts";
-import type { HttpClient } from "./common/net/http-client.ts.ts";
-import type { WorkOSOptions } from "./common/interfaces/workos-options.interface.ts.ts";
+import { WorkOS as BaseWorkOS } from "./workos.ts";
+import { FetchHttpClient } from "./common/net/fetch-client.ts";
+import type { HttpClient } from "./common/net/http-client.ts";
+import type { WorkOSOptions } from "./common/interfaces/workos-options.interface.ts";
 
 // Define an interface for the expected properties
 interface WorkOSWithProperties {
@@ -16,7 +16,7 @@ export class WorkOS extends BaseWorkOS {
   ): HttpClient {
     // Cast this to the interface with the required properties
     const self = this as unknown as WorkOSWithProperties;
-    
+
     const headers = {
       ...options.config?.headers,
       Authorization: `Bearer ${self.key}`,

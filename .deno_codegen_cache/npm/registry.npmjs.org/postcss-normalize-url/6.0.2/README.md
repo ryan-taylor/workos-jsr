@@ -16,7 +16,7 @@ npm install postcss-normalize-url --save
 
 ```css
 h1 {
-    background: url("http://site.com:80/image.jpg")
+  background: url("http://site.com:80/image.jpg");
 }
 ```
 
@@ -24,12 +24,13 @@ h1 {
 
 ```css
 h1 {
-    background: url(http://site.com/image.jpg)
+  background: url(http://site.com/image.jpg);
 }
 ```
 
 Note that this module will also try to normalize relative URLs, and is capable
-of stripping unnecessary quotes. For more examples, see the [tests](test/index.js).
+of stripping unnecessary quotes. For more examples, see the
+[tests](test/index.js).
 
 ## Usage
 
@@ -38,7 +39,8 @@ examples for your environment.
 
 ## Contributors
 
-See [CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
+See
+[CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
 
 ## License
 

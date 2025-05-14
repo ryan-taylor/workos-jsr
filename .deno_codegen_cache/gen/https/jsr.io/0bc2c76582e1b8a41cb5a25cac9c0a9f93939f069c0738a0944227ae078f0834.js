@@ -42,13 +42,15 @@ const EXISTS_ERROR = new Deno.errors.AlreadyExists("dest already exists.");
   const { overwrite = false } = options ?? {};
   const srcStat = await Deno.stat(src);
   if (srcStat.isDirectory && (isSubdir(src, dest) || isSamePath(src, dest))) {
-    throw new Deno.errors.NotSupported(`Cannot move '${src}' to a subdirectory of itself, '${dest}'.`);
+    throw new Deno.errors.NotSupported(
+      `Cannot move '${src}' to a subdirectory of itself, '${dest}'.`,
+    );
   }
   if (overwrite) {
     if (isSamePath(src, dest)) return;
     try {
       await Deno.remove(dest, {
-        recursive: true
+        recursive: true,
       });
     } catch (error) {
       if (!(error instanceof Deno.errors.NotFound)) {
@@ -59,8 +61,8 @@ const EXISTS_ERROR = new Deno.errors.AlreadyExists("dest already exists.");
     try {
       await Deno.lstat(dest);
       return Promise.reject(EXISTS_ERROR);
-    } catch  {
-    // Do nothing...
+    } catch {
+      // Do nothing...
     }
   }
   await Deno.rename(src, dest);
@@ -105,13 +107,15 @@ const EXISTS_ERROR = new Deno.errors.AlreadyExists("dest already exists.");
   const { overwrite = false } = options ?? {};
   const srcStat = Deno.statSync(src);
   if (srcStat.isDirectory && (isSubdir(src, dest) || isSamePath(src, dest))) {
-    throw new Deno.errors.NotSupported(`Cannot move '${src}' to a subdirectory of itself, '${dest}'.`);
+    throw new Deno.errors.NotSupported(
+      `Cannot move '${src}' to a subdirectory of itself, '${dest}'.`,
+    );
   }
   if (overwrite) {
     if (isSamePath(src, dest)) return;
     try {
       Deno.removeSync(dest, {
-        recursive: true
+        recursive: true,
       });
     } catch (error) {
       if (!(error instanceof Deno.errors.NotFound)) {

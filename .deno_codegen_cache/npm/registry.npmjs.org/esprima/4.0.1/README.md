@@ -3,24 +3,34 @@
 [![Build Status](https://img.shields.io/travis/jquery/esprima/master.svg)](https://travis-ci.org/jquery/esprima)
 [![Coverage Status](https://img.shields.io/codecov/c/github/jquery/esprima/master.svg)](https://codecov.io/github/jquery/esprima)
 
-**Esprima** ([esprima.org](http://esprima.org), BSD license) is a high performance,
-standard-compliant [ECMAScript](http://www.ecma-international.org/publications/standards/Ecma-262.htm)
+**Esprima** ([esprima.org](http://esprima.org), BSD license) is a high
+performance, standard-compliant
+[ECMAScript](http://www.ecma-international.org/publications/standards/Ecma-262.htm)
 parser written in ECMAScript (also popularly known as
-[JavaScript](https://en.wikipedia.org/wiki/JavaScript)).
-Esprima is created and maintained by [Ariya Hidayat](https://twitter.com/ariyahidayat),
-with the help of [many contributors](https://github.com/jquery/esprima/contributors).
+[JavaScript](https://en.wikipedia.org/wiki/JavaScript)). Esprima is created and
+maintained by [Ariya Hidayat](https://twitter.com/ariyahidayat), with the help
+of [many contributors](https://github.com/jquery/esprima/contributors).
 
 ### Features
 
-- Full support for ECMAScript 2017 ([ECMA-262 8th Edition](http://www.ecma-international.org/publications/standards/Ecma-262.htm))
-- Sensible [syntax tree format](https://github.com/estree/estree/blob/master/es5.md) as standardized by [ESTree project](https://github.com/estree/estree)
-- Experimental support for [JSX](https://facebook.github.io/jsx/), a syntax extension for [React](https://facebook.github.io/react/)
+- Full support for ECMAScript 2017
+  ([ECMA-262 8th Edition](http://www.ecma-international.org/publications/standards/Ecma-262.htm))
+- Sensible
+  [syntax tree format](https://github.com/estree/estree/blob/master/es5.md) as
+  standardized by [ESTree project](https://github.com/estree/estree)
+- Experimental support for [JSX](https://facebook.github.io/jsx/), a syntax
+  extension for [React](https://facebook.github.io/react/)
 - Optional tracking of syntax node location (index-based and line-column)
-- [Heavily tested](http://esprima.org/test/ci.html) (~1500 [unit tests](https://github.com/jquery/esprima/tree/master/test/fixtures) with [full code coverage](https://codecov.io/github/jquery/esprima))
+- [Heavily tested](http://esprima.org/test/ci.html) (~1500
+  [unit tests](https://github.com/jquery/esprima/tree/master/test/fixtures) with
+  [full code coverage](https://codecov.io/github/jquery/esprima))
 
 ### API
 
-Esprima can be used to perform [lexical analysis](https://en.wikipedia.org/wiki/Lexical_analysis) (tokenization) or [syntactic analysis](https://en.wikipedia.org/wiki/Parsing) (parsing) of a JavaScript program.
+Esprima can be used to perform
+[lexical analysis](https://en.wikipedia.org/wiki/Lexical_analysis)
+(tokenization) or [syntactic analysis](https://en.wikipedia.org/wiki/Parsing)
+(parsing) of a JavaScript program.
 
 A simple example on Node.js REPL:
 
@@ -43,4 +53,5 @@ A simple example on Node.js REPL:
   sourceType: 'script' }
 ```
 
-For more information, please read the [complete documentation](http://esprima.org/doc).
+For more information, please read the
+[complete documentation](http://esprima.org/doc).

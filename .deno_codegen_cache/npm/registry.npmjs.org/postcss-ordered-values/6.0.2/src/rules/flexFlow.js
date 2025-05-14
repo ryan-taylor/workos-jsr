@@ -1,14 +1,14 @@
-'use strict';
+"use strict";
 // flex-flow: <flex-direction> || <flex-wrap>
 
 const flexDirection = new Set([
-  'row',
-  'row-reverse',
-  'column',
-  'column-reverse',
+  "row",
+  "row-reverse",
+  "column",
+  "column-reverse",
 ]);
 
-const flexWrap = new Set(['nowrap', 'wrap', 'wrap-reverse']);
+const flexWrap = new Set(["nowrap", "wrap", "wrap-reverse"]);
 
 /**
  * @param {import('postcss-value-parser').ParsedValue} flexFlow
@@ -16,8 +16,8 @@ const flexWrap = new Set(['nowrap', 'wrap', 'wrap-reverse']);
  */
 module.exports = function normalizeFlexFlow(flexFlow) {
   let order = {
-    direction: '',
-    wrap: '',
+    direction: "",
+    wrap: "",
   };
 
   flexFlow.walk(({ value }) => {

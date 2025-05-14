@@ -6,4 +6,8 @@ import { ErrorLike, OnoError } from "./types";
  * @param originalError - The original error object, if any
  * @param props - Additional properties to add, if any
  */
-export declare function extendError<T extends ErrorLike, E extends ErrorLike, P extends object>(error: T, originalError?: E, props?: P): T & E & P & OnoError<T & E & P>;
+export declare function extendError<
+  T extends ErrorLike,
+  E extends ErrorLike,
+  P extends object,
+>(error: T, originalError?: E, props?: P): T & E & P & OnoError<T & E & P>;

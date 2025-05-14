@@ -1,2 +1,2 @@
-export * from "workos/portal/interfaces/generate-link-options.interface.ts";
-export * from "workos/portal/interfaces/portal-link.interface.ts";
+export * from "./generate-link-options.interface.ts";
+export * from "./portal-link.interface.ts";

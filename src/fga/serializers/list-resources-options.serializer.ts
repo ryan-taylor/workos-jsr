@@ -1,7 +1,7 @@
 import type {
   ListResourcesOptions,
   SerializedListResourcesOptions,
-} from "../interfaces.ts.ts";
+} from "../interfaces.ts";
 
 export const serializeListResourceOptions = (
   options: ListResourcesOptions,

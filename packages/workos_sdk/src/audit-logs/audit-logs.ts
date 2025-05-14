@@ -1,20 +1,20 @@
-import { deserializeAuditLogEvent } from "workos/audit-logs/serializers/audit-log-event.serializer.ts";
-import { serializeListEventsOptions } from "workos/audit-logs/serializers/list-events-options.serializer.ts";
+import { deserializeAuditLogEvent } from "./serializers/audit-log-event.serializer.ts";
+import { serializeListEventsOptions } from "./serializers/list-events-options.serializer.ts";
 import type {
   AuditLogEvent,
-  CreateEventOptions,
   AuditLogListEventsOptions,
-} from "workos/audit-logs/interfaces/index.ts";
-import { fetchAndDeserialize } from "workos/common/utils/fetch-and-deserialize.ts";
-import type { WorkOS } from "workos/workos.ts";
-import type { List } from "workos/common/interfaces.ts";
+  CreateEventOptions,
+} from "./interfaces/index.ts";
+import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
+import type { WorkOS } from "../workos.ts";
+import type { List } from "../common/interfaces.ts";
 
 /**
  * Service for working with WorkOS Audit Logs.
- * 
+ *
  * The Audit Logs API allows you to create and retrieve audit log events for your organization.
  * Audit logs capture key actions performed by users within your application.
- * 
+ *
  * @example
  * ```ts
  * // Create a new audit log event
@@ -40,10 +40,10 @@ export class AuditLogs {
 
   /**
    * Creates a new audit log event.
-   * 
+   *
    * @param options - Configuration options for creating an audit log event
    * @returns Promise resolving to the created audit log event
-   * 
+   *
    * @example
    * ```ts
    * const event = await workos.auditLogs.createEvent({
@@ -71,10 +71,10 @@ export class AuditLogs {
 
   /**
    * Lists audit log events with optional filtering.
-   * 
+   *
    * @param options - Configuration options for listing audit log events
    * @returns Promise resolving to a paginated list of audit log events
-   * 
+   *
    * @example
    * ```ts
    * const events = await workos.auditLogs.listEvents({
@@ -82,15 +82,20 @@ export class AuditLogs {
    *   limit: 10,
    *   action: 'document.view'
    * });
-   * 
+   *
    * // Iterate through events
    * for (const event of events.data) {
    *   console.log(`${event.actor.name} ${event.action} at ${event.occurred_at}`);
    * }
    * ```
    */
-  async listEvents(options: AuditLogListEventsOptions): Promise<List<AuditLogEvent>> {
-    const result = await fetchAndDeserialize<Record<string, unknown>, AuditLogEvent>(
+  async listEvents(
+    options: AuditLogListEventsOptions,
+  ): Promise<List<AuditLogEvent>> {
+    const result = await fetchAndDeserialize<
+      Record<string, unknown>,
+      AuditLogEvent
+    >(
       this.workos,
       "/audit_logs",
       deserializeAuditLogEvent,

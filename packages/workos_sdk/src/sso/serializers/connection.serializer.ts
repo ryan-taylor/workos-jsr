@@ -1,4 +1,4 @@
-import type { Connection } from "workos/sso/interfaces/index.ts";
+import type { Connection } from "../interfaces/index.ts";
 
 export function deserializeConnection(data: unknown): Connection {
   const record = data as Record<string, unknown>;

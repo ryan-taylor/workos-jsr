@@ -2,18 +2,18 @@
  * Integration of telemetry with the WorkOS class
  */
 
-import type { WorkOS } from "../workos.ts.ts";
+import type { WorkOS } from "../workos.ts";
 import {
   defaultTelemetryConfig,
   type TelemetryConfig,
-} from "./telemetry-config.ts.ts";
-import { telemetry, TelemetryManager } from "./telemetry-manager.ts.ts";
+} from "./telemetry-config.ts";
+import { telemetry, TelemetryManager } from "./telemetry-manager.ts";
 import {
   instrumentDirectorySync,
   instrumentSSO,
   instrumentUserManagement,
   instrumentWorkOSCore,
-} from "./instrumentation.ts.ts";
+} from "./instrumentation.ts";
 
 /**
  * Initializes telemetry for a WorkOS instance

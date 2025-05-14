@@ -1,7 +1,7 @@
 import type {
   CreateOrganizationDomainOptions,
   SerializedCreateOrganizationDomainOptions,
-} from "workos/organization-domains/interfaces/index.ts";
+} from "../interfaces/index.ts";
 
 export const serializeCreateOrganizationDomainOptions = (
   options: CreateOrganizationDomainOptions,

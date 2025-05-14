@@ -1,6 +1,6 @@
 /**
  * Options for creating a new organization domain.
- * 
+ *
  * @example
  * ```ts
  * const options: CreateOrganizationDomainOptions = {

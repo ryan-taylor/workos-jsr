@@ -1,4 +1,4 @@
-import type { Factor } from "workos/mfa/interfaces/index.ts";
+import type { Factor } from "../interfaces/index.ts";
 
 export function deserializeFactor(item: unknown): Factor {
   const data = item as Record<string, unknown>;

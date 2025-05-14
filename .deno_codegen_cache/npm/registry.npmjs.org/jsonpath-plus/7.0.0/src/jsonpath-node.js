@@ -1,6 +1,6 @@
-import vm from 'vm';
-import {JSONPath} from './jsonpath.js';
+import vm from "vm";
+import { JSONPath } from "./jsonpath.js";
 
 JSONPath.prototype.vm = vm;
 
-export {JSONPath};
+export { JSONPath };

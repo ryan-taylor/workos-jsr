@@ -1,2 +1,2 @@
-export * from "workos/common/serializers/event.serializer.ts";
-export * from "workos/common/serializers/list.serializer.ts";
+export * from "./event.serializer.ts";
+export * from "./list.serializer.ts";

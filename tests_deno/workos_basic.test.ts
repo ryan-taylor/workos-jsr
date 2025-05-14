@@ -10,7 +10,7 @@ const API_KEY = Deno.env.get("WORKOS_API_KEY");
 Deno.test("WorkOS SDK - throws when no API key is provided", () => {
   // Clear environment variables for testing
   if (API_KEY) Deno.env.delete("WORKOS_API_KEY");
-  
+
   try {
     // Correct way to assert that a function throws an error
     try {
@@ -34,7 +34,7 @@ Deno.test("WorkOS SDK - throws when no API key is provided", () => {
 Deno.test("WorkOS SDK - initializes with environment variable API key", () => {
   // Clear environment variables for testing
   if (API_KEY) Deno.env.delete("WORKOS_API_KEY");
-  
+
   try {
     // Set environment variable
     Deno.env.set("WORKOS_API_KEY", "sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU");
@@ -75,11 +75,11 @@ Deno.test("WorkOS SDK - sets baseURL with port option", () => {
 
 Deno.test("WorkOS SDK - sends empty string body when entity is null", async () => {
   const { workos, client } = createMockWorkOS({ success: true });
-  
+
   // Use a direct method call on the mock client since WorkOS might not expose post() directly
   if (client) {
     await client.post("/somewhere", null, {});
-    
+
     const requestDetails = client.getRequestDetails();
     assertEquals(requestDetails.body, "");
   }

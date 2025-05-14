@@ -15,18 +15,18 @@ npm install postcss-normalize-whitespace --save
 ### Input
 
 ```css
-h1{
-    width: calc(10px - ( 100px / var(--test) )) 
+h1 {
+  width: calc(10px - 100px / var(--test));
 }
 ```
 
 ### Output
 
 ```css
-h1{
-    width: calc(10px - 100px / var(--test))
+h1 {
+  width: calc(10px - 100px / var(--test));
 }
-``` 
+```
 
 ## Usage
 
@@ -35,7 +35,8 @@ examples for your environment.
 
 ## Contributors
 
-See [CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
+See
+[CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
 
 ## License
 

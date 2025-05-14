@@ -46,7 +46,7 @@ import { isPosixPathSeparator } from "./_util.ts";
   // Track the state of characters (if any) we see before our first dot and
   // after any path separator we find
   let preDotState = 0;
-  for(let i = path.length - 1; i >= 0; --i){
+  for (let i = path.length - 1; i >= 0; --i) {
     const code = path.charCodeAt(i);
     if (isPosixPathSeparator(code)) {
       // If we reached a path separator that was not part of a set of path
@@ -73,9 +73,11 @@ import { isPosixPathSeparator } from "./_util.ts";
       preDotState = -1;
     }
   }
-  if (startDot === -1 || end === -1 || // We saw a non-dot character immediately before the dot
-  preDotState === 0 || // The (right-most) trimmed path component is exactly '..'
-  preDotState === 1 && startDot === end - 1 && startDot === startPart + 1) {
+  if (
+    startDot === -1 || end === -1 || // We saw a non-dot character immediately before the dot
+    preDotState === 0 || // The (right-most) trimmed path component is exactly '..'
+    preDotState === 1 && startDot === end - 1 && startDot === startPart + 1
+  ) {
     return "";
   }
   return path.slice(startDot, end);

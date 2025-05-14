@@ -407,5 +407,5 @@ export const properties = [
   "word-spacing",
   "overflow-wrap",
   "tab-size",
-  "widows"
-]
+  "widows",
+];

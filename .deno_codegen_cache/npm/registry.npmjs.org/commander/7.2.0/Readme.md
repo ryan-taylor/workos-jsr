@@ -47,7 +47,8 @@ Read this in other languages: English | [简体中文](./Readme_zh-CN.md)
   - [Support](#support)
     - [Commander for enterprise](#commander-for-enterprise)
 
-For information about terms used in this document see: [terminology](./docs/terminology.md)
+For information about terms used in this document see:
+[terminology](./docs/terminology.md)
 
 ## Installation
 
@@ -57,27 +58,28 @@ npm install commander
 
 ## Declaring _program_ variable
 
-Commander exports a global object which is convenient for quick programs.
-This is used in the examples in this README for brevity.
+Commander exports a global object which is convenient for quick programs. This
+is used in the examples in this README for brevity.
 
 ```js
-const { program } = require('commander');
-program.version('0.0.1');
+const { program } = require("commander");
+program.version("0.0.1");
 ```
 
-For larger programs which may use commander in multiple ways, including unit testing, it is better to create a local Command object to use.
+For larger programs which may use commander in multiple ways, including unit
+testing, it is better to create a local Command object to use.
 
 ```js
-const { Command } = require('commander');
+const { Command } = require("commander");
 const program = new Command();
-program.version('0.0.1');
+program.version("0.0.1");
 ```
 
 For named imports in ECMAScript modules, import from `commander/esm.mjs`.
 
 ```js
 // index.mjs
-import { Command } from 'commander/esm.mjs';
+import { Command } from "commander/esm.mjs";
 const program = new Command();
 ```
 
@@ -85,43 +87,52 @@ And in TypeScript:
 
 ```ts
 // index.ts
-import { Command } from 'commander';
+import { Command } from "commander";
 const program = new Command();
 ```
 
-
 ## Options
 
-Options are defined with the `.option()` method, also serving as documentation for the options. Each option can have a short flag (single character) and a long name, separated by a comma or space or vertical bar ('|').
+Options are defined with the `.option()` method, also serving as documentation
+for the options. Each option can have a short flag (single character) and a long
+name, separated by a comma or space or vertical bar ('|').
 
-The parsed options can be accessed by calling `.opts()` on a `Command` object, and are passed to the action handler. Multi-word options such as "--template-engine" are camel-cased, becoming `program.opts().templateEngine` etc.
+The parsed options can be accessed by calling `.opts()` on a `Command` object,
+and are passed to the action handler. Multi-word options such as
+"--template-engine" are camel-cased, becoming `program.opts().templateEngine`
+etc.
 
-Multiple short flags may optionally be combined in a single argument following the dash: boolean flags, followed by a single option taking a value (possibly followed by the value).
-For example `-a -b -p 80` may be written as `-ab -p80` or even `-abp80`.
+Multiple short flags may optionally be combined in a single argument following
+the dash: boolean flags, followed by a single option taking a value (possibly
+followed by the value). For example `-a -b -p 80` may be written as `-ab -p80`
+or even `-abp80`.
 
-You can use `--` to indicate the end of the options, and any remaining arguments will be used without being interpreted.
+You can use `--` to indicate the end of the options, and any remaining arguments
+will be used without being interpreted.
 
-By default options on the command line are not positional, and can be specified before or after other arguments.
+By default options on the command line are not positional, and can be specified
+before or after other arguments.
 
 ### Common option types, boolean and value
 
-The two most used option types are a boolean option, and an option which takes its value
-from the following argument (declared with angle brackets like `--expect <value>`). Both are `undefined` unless specified on command line.  
+The two most used option types are a boolean option, and an option which takes
+its value from the following argument (declared with angle brackets like
+`--expect <value>`). Both are `undefined` unless specified on command line.
 
 Example file: [options-common.js](./examples/options-common.js)
 
 ```js
 program
-  .option('-d, --debug', 'output extra debugging')
-  .option('-s, --small', 'small pizza size')
-  .option('-p, --pizza-type <type>', 'flavour of pizza');
+  .option("-d, --debug", "output extra debugging")
+  .option("-s, --small", "small pizza size")
+  .option("-p, --pizza-type <type>", "flavour of pizza");
 
 program.parse(process.argv);
 
 const options = program.opts();
 if (options.debug) console.log(options);
-console.log('pizza details:');
-if (options.small) console.log('- small pizza size');
+console.log("pizza details:");
+if (options.small) console.log("- small pizza size");
 if (options.pizzaType) console.log(`- ${options.pizzaType}`);
 ```
 
@@ -141,7 +152,9 @@ pizza details:
 - cheese
 ```
 
-`program.parse(arguments)` processes the arguments, leaving any args not consumed by the program options in the `program.args` array. The parameter is optional and defaults to `process.argv`.
+`program.parse(arguments)` processes the arguments, leaving any args not
+consumed by the program options in the `program.args` array. The parameter is
+optional and defaults to `process.argv`.
 
 ### Default option value
 
@@ -151,7 +164,7 @@ Example file: [options-defaults.js](./examples/options-defaults.js)
 
 ```js
 program
-  .option('-c, --cheese <type>', 'add the specified type of cheese', 'blue');
+  .option("-c, --cheese <type>", "add the specified type of cheese", "blue");
 
 program.parse();
 
@@ -167,24 +180,28 @@ cheese: stilton
 
 ### Other option types, negatable boolean and boolean|value
 
-You can define a boolean option long name with a leading `no-` to set the option value to false when used.
-Defined alone this also makes the option true by default.
+You can define a boolean option long name with a leading `no-` to set the option
+value to false when used. Defined alone this also makes the option true by
+default.
 
-If you define `--foo` first, adding `--no-foo` does not change the default value from what it would
-otherwise be. You can specify a default boolean value for a boolean option and it can be overridden on command line.
+If you define `--foo` first, adding `--no-foo` does not change the default value
+from what it would otherwise be. You can specify a default boolean value for a
+boolean option and it can be overridden on command line.
 
 Example file: [options-negatable.js](./examples/options-negatable.js)
 
 ```js
 program
-  .option('--no-sauce', 'Remove sauce')
-  .option('--cheese <flavour>', 'cheese flavour', 'mozzarella')
-  .option('--no-cheese', 'plain with no cheese')
+  .option("--no-sauce", "Remove sauce")
+  .option("--cheese <flavour>", "cheese flavour", "mozzarella")
+  .option("--no-cheese", "plain with no cheese")
   .parse();
 
 const options = program.opts();
-const sauceStr = options.sauce ? 'sauce' : 'no sauce';
-const cheeseStr = (options.cheese === false) ? 'no cheese' : `${options.cheese} cheese`;
+const sauceStr = options.sauce ? "sauce" : "no sauce";
+const cheeseStr = (options.cheese === false)
+  ? "no cheese"
+  : `${options.cheese} cheese`;
 console.log(`You ordered a pizza with ${sauceStr} and ${cheeseStr}`);
 ```
 
@@ -199,20 +216,22 @@ $ pizza-options --no-sauce --no-cheese
 You ordered a pizza with no sauce and no cheese
 ```
 
-You can specify an option which may be used as a boolean option but may optionally take an option-argument
-(declared with square brackets like `--optional [value]`).
+You can specify an option which may be used as a boolean option but may
+optionally take an option-argument (declared with square brackets like
+`--optional [value]`).
 
-Example file: [options-boolean-or-value.js](./examples/options-boolean-or-value.js)
+Example file:
+[options-boolean-or-value.js](./examples/options-boolean-or-value.js)
 
 ```js
 program
-  .option('-c, --cheese [type]', 'Add cheese with optional type');
+  .option("-c, --cheese [type]", "Add cheese with optional type");
 
 program.parse(process.argv);
 
 const options = program.opts();
-if (options.cheese === undefined) console.log('no cheese');
-else if (options.cheese === true) console.log('add cheese');
+if (options.cheese === undefined) console.log("no cheese");
+else if (options.cheese === true) console.log("add cheese");
 else console.log(`add cheese type ${options.cheese}`);
 ```
 
@@ -225,17 +244,22 @@ $ pizza-options --cheese mozzarella
 add cheese type mozzarella
 ```
 
-For information about possible ambiguous cases, see [options taking varying arguments](./docs/options-taking-varying-arguments.md).
+For information about possible ambiguous cases, see
+[options taking varying arguments](./docs/options-taking-varying-arguments.md).
 
 ### Required option
 
-You may specify a required (mandatory) option using `.requiredOption`. The option must have a value after parsing, usually specified on the command line, or perhaps from a default value (say from environment). The method is otherwise the same as `.option` in format, taking flags and description, and optional default value or custom processing.
+You may specify a required (mandatory) option using `.requiredOption`. The
+option must have a value after parsing, usually specified on the command line,
+or perhaps from a default value (say from environment). The method is otherwise
+the same as `.option` in format, taking flags and description, and optional
+default value or custom processing.
 
 Example file: [options-required.js](./examples/options-required.js)
 
 ```js
 program
-  .requiredOption('-c, --cheese <type>', 'pizza must have cheese');
+  .requiredOption("-c, --cheese <type>", "pizza must have cheese");
 
 program.parse();
 ```
@@ -247,22 +271,24 @@ error: required option '-c, --cheese <type>' not specified
 
 ### Variadic option
 
-You may make an option variadic by appending `...` to the value placeholder when declaring the option. On the command line you
-can then specify multiple option-arguments, and the parsed option value will be an array. The extra arguments
-are read until the first argument starting with a dash. The special argument `--` stops option processing entirely. If a value
-is specified in the same argument as the option then no further values are read.
+You may make an option variadic by appending `...` to the value placeholder when
+declaring the option. On the command line you can then specify multiple
+option-arguments, and the parsed option value will be an array. The extra
+arguments are read until the first argument starting with a dash. The special
+argument `--` stops option processing entirely. If a value is specified in the
+same argument as the option then no further values are read.
 
 Example file: [options-variadic.js](./examples/options-variadic.js)
 
 ```js
 program
-  .option('-n, --number <numbers...>', 'specify numbers')
-  .option('-l, --letter [letters...]', 'specify letters');
+  .option("-n, --number <numbers...>", "specify numbers")
+  .option("-l, --letter [letters...]", "specify letters");
 
 program.parse();
 
-console.log('Options: ', program.opts());
-console.log('Remaining arguments: ', program.args);
+console.log("Options: ", program.opts());
+console.log("Remaining arguments: ", program.args);
 ```
 
 ```bash
@@ -277,14 +303,17 @@ Options:  { number: [ '1', '2', '3' ], letter: true }
 Remaining arguments:  [ 'operand' ]
 ```
 
-For information about possible ambiguous cases, see [options taking varying arguments](./docs/options-taking-varying-arguments.md).
+For information about possible ambiguous cases, see
+[options taking varying arguments](./docs/options-taking-varying-arguments.md).
 
 ### Version option
 
-The optional `version` method adds handling for displaying the command version. The default option flags are `-V` and `--version`, and when present the command prints the version number and exits.
+The optional `version` method adds handling for displaying the command version.
+The default option flags are `-V` and `--version`, and when present the command
+prints the version number and exits.
 
 ```js
-program.version('0.0.1');
+program.version("0.0.1");
 ```
 
 ```bash
@@ -292,25 +321,37 @@ $ ./examples/pizza -V
 0.0.1
 ```
 
-You may change the flags and description by passing additional parameters to the `version` method, using
-the same syntax for flags as the `option` method.
+You may change the flags and description by passing additional parameters to the
+`version` method, using the same syntax for flags as the `option` method.
 
 ```js
-program.version('0.0.1', '-v, --vers', 'output the current version');
+program.version("0.0.1", "-v, --vers", "output the current version");
 ```
 
 ### More configuration
 
-You can add most options using the `.option()` method, but there are some additional features available
-by constructing an `Option` explicitly for less common cases.
+You can add most options using the `.option()` method, but there are some
+additional features available by constructing an `Option` explicitly for less
+common cases.
 
 Example file: [options-extra.js](./examples/options-extra.js)
 
 ```js
 program
-  .addOption(new Option('-s, --secret').hideHelp())
-  .addOption(new Option('-t, --timeout <delay>', 'timeout in seconds').default(60, 'one minute'))
-  .addOption(new Option('-d, --drink <size>', 'drink size').choices(['small', 'medium', 'large']));
+  .addOption(new Option("-s, --secret").hideHelp())
+  .addOption(
+    new Option("-t, --timeout <delay>", "timeout in seconds").default(
+      60,
+      "one minute",
+    ),
+  )
+  .addOption(
+    new Option("-d, --drink <size>", "drink size").choices([
+      "small",
+      "medium",
+      "large",
+    ]),
+  );
 ```
 
 ```bash
@@ -328,21 +369,25 @@ error: option '-d, --drink <size>' argument 'huge' is invalid. Allowed choices a
 
 ### Custom option processing
 
-You may specify a function to do custom processing of option-arguments. The callback function receives two parameters,
-the user specified option-argument and the previous value for the option. It returns the new value for the option.
+You may specify a function to do custom processing of option-arguments. The
+callback function receives two parameters, the user specified option-argument
+and the previous value for the option. It returns the new value for the option.
 
-This allows you to coerce the option-argument to the desired type, or accumulate values, or do entirely custom processing.
+This allows you to coerce the option-argument to the desired type, or accumulate
+values, or do entirely custom processing.
 
-You can optionally specify the default/starting value for the option after the function parameter.
+You can optionally specify the default/starting value for the option after the
+function parameter.
 
-Example file: [options-custom-processing.js](./examples/options-custom-processing.js)
+Example file:
+[options-custom-processing.js](./examples/options-custom-processing.js)
 
 ```js
 function myParseInt(value, dummyPrevious) {
   // parseInt takes a string and a radix
   const parsedValue = parseInt(value, 10);
   if (isNaN(parsedValue)) {
-    throw new commander.InvalidOptionArgumentError('Not a number.');
+    throw new commander.InvalidOptionArgumentError("Not a number.");
   }
   return parsedValue;
 }
@@ -356,16 +401,20 @@ function collect(value, previous) {
 }
 
 function commaSeparatedList(value, dummyPrevious) {
-  return value.split(',');
+  return value.split(",");
 }
 
 program
-  .option('-f, --float <number>', 'float argument', parseFloat)
-  .option('-i, --integer <number>', 'integer argument', myParseInt)
-  .option('-v, --verbose', 'verbosity that can be increased', increaseVerbosity, 0)
-  .option('-c, --collect <value>', 'repeatable value', collect, [])
-  .option('-l, --list <items>', 'comma separated list', commaSeparatedList)
-;
+  .option("-f, --float <number>", "float argument", parseFloat)
+  .option("-i, --integer <number>", "integer argument", myParseInt)
+  .option(
+    "-v, --verbose",
+    "verbosity that can be increased",
+    increaseVerbosity,
+    0,
+  )
+  .option("-c, --collect <value>", "repeatable value", collect, [])
+  .option("-l, --list <items>", "comma separated list", commaSeparatedList);
 
 program.parse();
 
@@ -392,11 +441,17 @@ $ custom --list x,y,z
 
 ## Commands
 
-You can specify (sub)commands using `.command()` or `.addCommand()`. There are two ways these can be implemented: using an action handler attached to the command, or as a stand-alone executable file (described in more detail later). The subcommands may be nested ([example](./examples/nestedCommands.js)).
+You can specify (sub)commands using `.command()` or `.addCommand()`. There are
+two ways these can be implemented: using an action handler attached to the
+command, or as a stand-alone executable file (described in more detail later).
+The subcommands may be nested ([example](./examples/nestedCommands.js)).
 
-In the first parameter to `.command()` you specify the command name and any command-arguments. The arguments may be `<required>` or `[optional]`, and the last argument may also be `variadic...`.
+In the first parameter to `.command()` you specify the command name and any
+command-arguments. The arguments may be `<required>` or `[optional]`, and the
+last argument may also be `variadic...`.
 
-You can use `.addCommand()` to add an already configured subcommand to the program.
+You can use `.addCommand()` to add an already configured subcommand to the
+program.
 
 For example:
 
@@ -404,17 +459,17 @@ For example:
 // Command implemented using action handler (description is supplied separately to `.command`)
 // Returns new command for configuring.
 program
-  .command('clone <source> [destination]')
-  .description('clone a repository into a newly created directory')
+  .command("clone <source> [destination]")
+  .description("clone a repository into a newly created directory")
   .action((source, destination) => {
-    console.log('clone command called');
+    console.log("clone command called");
   });
 
 // Command implemented using stand-alone executable file (description is second parameter to `.command`)
 // Returns `this` for adding more commands.
 program
-  .command('start <service>', 'start named service')
-  .command('stop [service]', 'stop named service, or all if no name supplied');
+  .command("start <service>", "start named service")
+  .command("stop [service]", "stop named service, or all if no name supplied");
 
 // Command prepared separately.
 // Returns `this` for adding more commands.
@@ -422,43 +477,46 @@ program
   .addCommand(build.makeBuildCommand());
 ```
 
-Configuration options can be passed with the call to `.command()` and `.addCommand()`. Specifying `hidden: true` will 
-remove the command from the generated help output. Specifying `isDefault: true` will run the subcommand if no other
-subcommand is specified ([example](./examples/defaultCommand.js)).
+Configuration options can be passed with the call to `.command()` and
+`.addCommand()`. Specifying `hidden: true` will remove the command from the
+generated help output. Specifying `isDefault: true` will run the subcommand if
+no other subcommand is specified ([example](./examples/defaultCommand.js)).
 
 ### Specify the argument syntax
 
-You use `.arguments` to specify the expected command-arguments for the top-level command, and for subcommands they are usually
-included in the `.command` call. Angled brackets (e.g. `<required>`) indicate required command-arguments.
-Square brackets (e.g. `[optional]`) indicate optional command-arguments.
-You can optionally describe the arguments in the help by supplying a hash as second parameter to `.description()`.
+You use `.arguments` to specify the expected command-arguments for the top-level
+command, and for subcommands they are usually included in the `.command` call.
+Angled brackets (e.g. `<required>`) indicate required command-arguments. Square
+brackets (e.g. `[optional]`) indicate optional command-arguments. You can
+optionally describe the arguments in the help by supplying a hash as second
+parameter to `.description()`.
 
 Example file: [arguments.js](./examples/arguments.js)
 
 ```js
 program
-  .version('0.1.0')
-  .arguments('<username> [password]')
-  .description('test command', {
-    username: 'user to login',
-    password: 'password for user, if required'
+  .version("0.1.0")
+  .arguments("<username> [password]")
+  .description("test command", {
+    username: "user to login",
+    password: "password for user, if required",
   })
   .action((username, password) => {
-    console.log('username:', username);
-    console.log('environment:', password || 'no password given');
+    console.log("username:", username);
+    console.log("environment:", password || "no password given");
   });
 ```
 
- The last argument of a command can be variadic, and only the last argument.  To make an argument variadic you
- append `...` to the argument name. For example:
+The last argument of a command can be variadic, and only the last argument. To
+make an argument variadic you append `...` to the argument name. For example:
 
 ```js
 program
-  .version('0.1.0')
-  .command('rmdir <dirs...>')
+  .version("0.1.0")
+  .command("rmdir <dirs...>")
   .action(function (dirs) {
     dirs.forEach((dir) => {
-      console.log('rmdir %s', dir);
+      console.log("rmdir %s", dir);
     });
   });
 ```
@@ -467,68 +525,80 @@ The variadic argument is passed to the action handler as an array.
 
 ### Action handler
 
-The action handler gets passed a parameter for each command-argument you declared, and two additional parameters
-which are the parsed options and the command object itself. 
+The action handler gets passed a parameter for each command-argument you
+declared, and two additional parameters which are the parsed options and the
+command object itself.
 
 Example file: [thank.js](./examples/thank.js)
 
 ```js
 program
-  .arguments('<name>')
-  .option('-t, --title <honorific>', 'title to use before name')
-  .option('-d, --debug', 'display some debugging')
+  .arguments("<name>")
+  .option("-t, --title <honorific>", "title to use before name")
+  .option("-d, --debug", "display some debugging")
   .action((name, options, command) => {
     if (options.debug) {
-      console.error('Called %s with options %o', command.name(), options);
+      console.error("Called %s with options %o", command.name(), options);
     }
-    const title = options.title ? `${options.title} ` : '';
+    const title = options.title ? `${options.title} ` : "";
     console.log(`Thank-you ${title}${name}`);
   });
 ```
 
-You may supply an `async` action handler, in which case you call `.parseAsync` rather than `.parse`.
+You may supply an `async` action handler, in which case you call `.parseAsync`
+rather than `.parse`.
 
 ```js
-async function run() { /* code goes here */ }
+async function run() {/* code goes here */}
 
 async function main() {
   program
-    .command('run')
+    .command("run")
     .action(run);
   await program.parseAsync(process.argv);
 }
 ```
 
-A command's options and arguments on the command line are validated when the command is used. Any unknown options or missing arguments will be reported as an error. You can suppress the unknown option checks with `.allowUnknownOption()`. By default it is not an error to
-pass more arguments than declared, but you can make this an error with `.allowExcessArguments(false)`.
+A command's options and arguments on the command line are validated when the
+command is used. Any unknown options or missing arguments will be reported as an
+error. You can suppress the unknown option checks with `.allowUnknownOption()`.
+By default it is not an error to pass more arguments than declared, but you can
+make this an error with `.allowExcessArguments(false)`.
 
 ### Stand-alone executable (sub)commands
 
-When `.command()` is invoked with a description argument, this tells Commander that you're going to use stand-alone executables for subcommands.
-Commander will search the executables in the directory of the entry script (like `./examples/pm`) with the name `program-subcommand`, like `pm-install`, `pm-search`.
-You can specify a custom name with the `executableFile` configuration option.
+When `.command()` is invoked with a description argument, this tells Commander
+that you're going to use stand-alone executables for subcommands. Commander will
+search the executables in the directory of the entry script (like
+`./examples/pm`) with the name `program-subcommand`, like `pm-install`,
+`pm-search`. You can specify a custom name with the `executableFile`
+configuration option.
 
-You handle the options for an executable (sub)command in the executable, and don't declare them at the top-level.
+You handle the options for an executable (sub)command in the executable, and
+don't declare them at the top-level.
 
 Example file: [pm](./examples/pm)
 
 ```js
 program
-  .version('0.1.0')
-  .command('install [name]', 'install one or more packages')
-  .command('search [query]', 'search with optional query')
-  .command('update', 'update installed packages', { executableFile: 'myUpdateSubCommand' })
-  .command('list', 'list packages installed', { isDefault: true });
+  .version("0.1.0")
+  .command("install [name]", "install one or more packages")
+  .command("search [query]", "search with optional query")
+  .command("update", "update installed packages", {
+    executableFile: "myUpdateSubCommand",
+  })
+  .command("list", "list packages installed", { isDefault: true });
 
 program.parse(process.argv);
 ```
 
-If the program is designed to be installed globally, make sure the executables have proper modes, like `755`.
+If the program is designed to be installed globally, make sure the executables
+have proper modes, like `755`.
 
 ## Automated help
 
-The help information is auto-generated based on the information commander already knows about your program. The default
-help option is `-h,--help`.
+The help information is auto-generated based on the information commander
+already knows about your program. The default help option is `-h,--help`.
 
 Example file: [pizza](./examples/pizza)
 
@@ -545,8 +615,9 @@ Options:
   -h, --help           display help for command
 ```
 
-A `help` command is added by default if your command has subcommands. It can be used alone, or with a subcommand name to show
-further help for the subcommand. These are effectively the same if the `shell` program has implicit help:
+A `help` command is added by default if your command has subcommands. It can be
+used alone, or with a subcommand name to show further help for the subcommand.
+These are effectively the same if the `shell` program has implicit help:
 
 ```bash
 shell help
@@ -558,18 +629,21 @@ shell spawn --help
 
 ### Custom help
 
-You can add extra text to be displayed along with the built-in help. 
+You can add extra text to be displayed along with the built-in help.
 
 Example file: [custom-help](./examples/custom-help)
 
 ```js
 program
-  .option('-f, --foo', 'enable some foo');
+  .option("-f, --foo", "enable some foo");
 
-program.addHelpText('after', `
+program.addHelpText(
+  "after",
+  `
 
 Example call:
-  $ custom-help --help`);
+  $ custom-help --help`,
+);
 ```
 
 Yields the following help output:
@@ -592,30 +666,35 @@ The positions in order displayed are:
 - `after`: display extra information after built-in help
 - `afterAll`: add to the program for a global footer (epilog)
 
-The positions "beforeAll" and "afterAll" apply to the command and all its subcommands. 
+The positions "beforeAll" and "afterAll" apply to the command and all its
+subcommands.
 
-The second parameter can be a string, or a function returning a string. The function is passed a context object for your convenience. The properties are:
+The second parameter can be a string, or a function returning a string. The
+function is passed a context object for your convenience. The properties are:
 
 - error: a boolean for whether the help is being displayed due to a usage error
 - command: the Command which is displaying the help
 
 ### Display help from code
 
-`.help()`: display help information and exit immediately. You can optionally pass `{ error: true }` to display on stderr and exit with an error status.
+`.help()`: display help information and exit immediately. You can optionally
+pass `{ error: true }` to display on stderr and exit with an error status.
 
-`.outputHelp()`: output help information without exiting. You can optionally pass `{ error: true }` to display on stderr.
+`.outputHelp()`: output help information without exiting. You can optionally
+pass `{ error: true }` to display on stderr.
 
-`.helpInformation()`: get the built-in command help information as a string for processing or displaying yourself.
+`.helpInformation()`: get the built-in command help information as a string for
+processing or displaying yourself.
 
 ### .usage and .name
 
-These allow you to customise the usage description in the first line of the help. The name is otherwise
-deduced from the (full) program arguments. Given:
+These allow you to customise the usage description in the first line of the
+help. The name is otherwise deduced from the (full) program arguments. Given:
 
 ```js
 program
   .name("my-command")
-  .usage("[global options] command")
+  .usage("[global options] command");
 ```
 
 The help will start with:
@@ -626,27 +705,32 @@ Usage: my-command [global options] command
 
 ### .helpOption(flags, description)
 
-By default every command has a help option. Override the default help flags and description. Pass false to disable the built-in help option.
+By default every command has a help option. Override the default help flags and
+description. Pass false to disable the built-in help option.
 
 ```js
 program
-  .helpOption('-e, --HELP', 'read more information');
+  .helpOption("-e, --HELP", "read more information");
 ```
 
 ### .addHelpCommand()
 
-A help command is added by default if your command has subcommands. You can explicitly turn on or off the implicit help command with `.addHelpCommand()` and `.addHelpCommand(false)`.
+A help command is added by default if your command has subcommands. You can
+explicitly turn on or off the implicit help command with `.addHelpCommand()` and
+`.addHelpCommand(false)`.
 
-You can both turn on and customise the help command by supplying the name and description:
+You can both turn on and customise the help command by supplying the name and
+description:
 
 ```js
-program.addHelpCommand('assist [command]', 'show assistance');
+program.addHelpCommand("assist [command]", "show assistance");
 ```
 
 ### More configuration
 
-The built-in help is formatted using the Help class.
-You can configure the Help behaviour by modifying data properties and methods using `.configureHelp()`, or by subclassing using `.createHelp()` if you prefer.
+The built-in help is formatted using the Help class. You can configure the Help
+behaviour by modifying data properties and methods using `.configureHelp()`, or
+by subclassing using `.createHelp()` if you prefer.
 
 The data properties are:
 
@@ -654,7 +738,10 @@ The data properties are:
 - `sortSubcommands`: sort the subcommands alphabetically
 - `sortOptions`: sort the options alphabetically
 
-There are methods getting the visible lists of arguments, options, and subcommands. There are methods for formatting the items in the lists, with each item having a _term_ and _description_. Take a look at `.formatHelp()` to see how they are used.
+There are methods getting the visible lists of arguments, options, and
+subcommands. There are methods for formatting the items in the lists, with each
+item having a _term_ and _description_. Take a look at `.formatHelp()` to see
+how they are used.
 
 Example file: [configure-help.js](./examples/configure-help.js)
 
@@ -670,13 +757,13 @@ program.configureHelp({
 You can execute custom actions by listening to command and option events.
 
 ```js
-program.on('option:verbose', function () {
+program.on("option:verbose", function () {
   process.env.VERBOSE = this.opts().verbose;
 });
 
-program.on('command:*', function (operands) {
+program.on("command:*", function (operands) {
   console.error(`error: unknown command '${operands[0]}'`);
-  const availableCommands = program.commands.map(cmd => cmd.name());
+  const availableCommands = program.commands.map((cmd) => cmd.name());
   mySuggestBestMatch(operands[0], availableCommands);
   process.exitCode = 1;
 });
@@ -686,12 +773,16 @@ program.on('command:*', function (operands) {
 
 ### .parse() and .parseAsync()
 
-The first argument to `.parse` is the array of strings to parse. You may omit the parameter to implicitly use `process.argv`.
+The first argument to `.parse` is the array of strings to parse. You may omit
+the parameter to implicitly use `process.argv`.
 
-If the arguments follow different conventions than node you can pass a `from` option in the second parameter:
+If the arguments follow different conventions than node you can pass a `from`
+option in the second parameter:
 
-- 'node': default, `argv[0]` is the application and `argv[1]` is the script being run, with user parameters after that
-- 'electron': `argv[1]` varies depending on whether the electron application is packaged
+- 'node': default, `argv[0]` is the application and `argv[1]` is the script
+  being run, with user parameters after that
+- 'electron': `argv[1]` varies depending on whether the electron application is
+  packaged
 - 'user': all of the arguments from the user
 
 For example:
@@ -699,54 +790,65 @@ For example:
 ```js
 program.parse(process.argv); // Explicit, node conventions
 program.parse(); // Implicit, and auto-detect electron
-program.parse(['-f', 'filename'], { from: 'user' });
+program.parse(["-f", "filename"], { from: "user" });
 ```
 
 ### Parsing Configuration
 
-If the default parsing does not suit your needs, there are some behaviours to support other usage patterns.
+If the default parsing does not suit your needs, there are some behaviours to
+support other usage patterns.
 
-By default program options are recognised before and after subcommands. To only look for program options before subcommands, use `.enablePositionalOptions()`. This lets you use
-an option for a different purpose in subcommands.
+By default program options are recognised before and after subcommands. To only
+look for program options before subcommands, use `.enablePositionalOptions()`.
+This lets you use an option for a different purpose in subcommands.
 
 Example file: [positional-options.js](./examples/positional-options.js)
 
-With positional options, the `-b` is a program option in the first line and a subcommand option in the second line:
+With positional options, the `-b` is a program option in the first line and a
+subcommand option in the second line:
 
 ```sh
 program -b subcommand
 program subcommand -b
 ```
 
-By default options are recognised before and after command-arguments. To only process options that come
-before the command-arguments, use `.passThroughOptions()`. This lets you pass the  arguments and following options through to another program
-without needing to use `--` to end the option processing. 
-To use pass through options in a subcommand, the program needs to enable positional options.
+By default options are recognised before and after command-arguments. To only
+process options that come before the command-arguments, use
+`.passThroughOptions()`. This lets you pass the arguments and following options
+through to another program without needing to use `--` to end the option
+processing. To use pass through options in a subcommand, the program needs to
+enable positional options.
 
 Example file: [pass-through-options.js](./examples/pass-through-options.js)
 
-With pass through options, the `--port=80` is a program option in the first line and passed through as a command-argument in the second line:
+With pass through options, the `--port=80` is a program option in the first line
+and passed through as a command-argument in the second line:
 
 ```sh
 program --port=80 arg
 program arg --port=80
 ```
 
-By default the option processing shows an error for an unknown option. To have an unknown option treated as an ordinary command-argument and continue looking for options, use `.allowUnknownOption()`. This lets you mix known and unknown options.
+By default the option processing shows an error for an unknown option. To have
+an unknown option treated as an ordinary command-argument and continue looking
+for options, use `.allowUnknownOption()`. This lets you mix known and unknown
+options.
 
-By default the argument processing does not display an error for more command-arguments than expected.
-To display an error for excess arguments, use`.allowExcessArguments(false)`.
+By default the argument processing does not display an error for more
+command-arguments than expected. To display an error for excess arguments,
+use`.allowExcessArguments(false)`.
 
-### Legacy options as properties 
+### Legacy options as properties
 
 Before Commander 7, the option values were stored as properties on the command.
-This was convenient to code but the downside was possible clashes with
-existing properties of `Command`. You can revert to the old behaviour to run unmodified legacy code by using `.storeOptionsAsProperties()`.
+This was convenient to code but the downside was possible clashes with existing
+properties of `Command`. You can revert to the old behaviour to run unmodified
+legacy code by using `.storeOptionsAsProperties()`.
 
 ```js
 program
   .storeOptionsAsProperties()
-  .option('-d, --debug')
+  .option("-d, --debug")
   .action((commandAndOptions) => {
     if (commandAndOptions.debug) {
       console.error(`Called ${commandAndOptions.name()}`);
@@ -756,7 +858,9 @@ program
 
 ### TypeScript
 
-If you use `ts-node` and  stand-alone executable subcommands written as `.ts` files, you need to call your program through node to get the subcommands called correctly. e.g.
+If you use `ts-node` and stand-alone executable subcommands written as `.ts`
+files, you need to call your program through node to get the subcommands called
+correctly. e.g.
 
 ```bash
 node -r ts-node/register pm.ts
@@ -764,40 +868,53 @@ node -r ts-node/register pm.ts
 
 ### createCommand()
 
-This factory function creates a new command. It is exported and may be used instead of using `new`, like:
+This factory function creates a new command. It is exported and may be used
+instead of using `new`, like:
 
 ```js
-const { createCommand } = require('commander');
+const { createCommand } = require("commander");
 const program = createCommand();
 ```
 
-`createCommand` is also a method of the Command object, and creates a new command rather than a subcommand. This gets used internally
-when creating subcommands using `.command()`, and you may override it to
-customise the new subcommand (example file [custom-command-class.js](./examples/custom-command-class.js)).
+`createCommand` is also a method of the Command object, and creates a new
+command rather than a subcommand. This gets used internally when creating
+subcommands using `.command()`, and you may override it to customise the new
+subcommand (example file
+[custom-command-class.js](./examples/custom-command-class.js)).
 
 ### Node options such as `--harmony`
 
 You can enable `--harmony` option in two ways:
 
-- Use `#! /usr/bin/env node --harmony` in the subcommands scripts. (Note Windows does not support this pattern.)
-- Use the `--harmony` option when call the command, like `node --harmony examples/pm publish`. The `--harmony` option will be preserved when spawning subcommand process.
+- Use `#! /usr/bin/env node --harmony` in the subcommands scripts. (Note Windows
+  does not support this pattern.)
+- Use the `--harmony` option when call the command, like
+  `node --harmony examples/pm publish`. The `--harmony` option will be preserved
+  when spawning subcommand process.
 
 ### Debugging stand-alone executable subcommands
 
 An executable subcommand is launched as a separate child process.
 
-If you are using the node inspector for [debugging](https://nodejs.org/en/docs/guides/debugging-getting-started/) executable subcommands using `node --inspect` et al,
-the inspector port is incremented by 1 for the spawned subcommand.
+If you are using the node inspector for
+[debugging](https://nodejs.org/en/docs/guides/debugging-getting-started/)
+executable subcommands using `node --inspect` et al, the inspector port is
+incremented by 1 for the spawned subcommand.
 
-If you are using VSCode to debug executable subcommands you need to set the `"autoAttachChildProcesses": true` flag in your launch.json configuration.
+If you are using VSCode to debug executable subcommands you need to set the
+`"autoAttachChildProcesses": true` flag in your launch.json configuration.
 
 ### Override exit and output handling
 
-By default Commander calls `process.exit` when it detects errors, or after displaying the help or version. You can override
-this behaviour and optionally supply a callback. The default override throws a `CommanderError`.
+By default Commander calls `process.exit` when it detects errors, or after
+displaying the help or version. You can override this behaviour and optionally
+supply a callback. The default override throws a `CommanderError`.
 
-The override callback is passed a `CommanderError` with properties `exitCode` number, `code` string, and `message`. The default override behaviour is to throw the error, except for async handling of executable subcommand completion which carries on. The normal display of error messages or version or help
-is not affected by the override which is called after the display.
+The override callback is passed a `CommanderError` with properties `exitCode`
+number, `code` string, and `message`. The default override behaviour is to throw
+the error, except for async handling of executable subcommand completion which
+carries on. The normal display of error messages or version or help is not
+affected by the override which is called after the display.
 
 ```js
 program.exitOverride();
@@ -809,11 +926,11 @@ try {
 }
 ```
 
-By default Commander is configured for a command-line application and writes to stdout and stderr.
-You can modify this behaviour for custom applications. In addition, you can modify the display of error messages.
+By default Commander is configured for a command-line application and writes to
+stdout and stderr. You can modify this behaviour for custom applications. In
+addition, you can modify the display of error messages.
 
 Example file: [configure-output.js](./examples/configure-output.js)
-
 
 ```js
 function errorColor(str) {
@@ -827,7 +944,7 @@ program
     writeOut: (str) => process.stdout.write(`[OUT] ${str}`),
     writeErr: (str) => process.stdout.write(`[ERR] ${str}`),
     // Highlight errors in color.
-    outputError: (str, write) => write(errorColor(str))
+    outputError: (str, write) => write(errorColor(str)),
   });
 ```
 
@@ -835,7 +952,8 @@ program
 
 There is more information available about:
 
-- [deprecated](./docs/deprecated.md) features still supported for backwards compatibility
+- [deprecated](./docs/deprecated.md) features still supported for backwards
+  compatibility
 - [options taking varying arguments](./docs/options-taking-varying-arguments.md)
 
 ## Examples
@@ -845,73 +963,90 @@ In a single command program, you might not need an action handler.
 Example file: [pizza](./examples/pizza)
 
 ```js
-const { program } = require('commander');
+const { program } = require("commander");
 
 program
-  .description('An application for pizza ordering')
-  .option('-p, --peppers', 'Add peppers')
-  .option('-c, --cheese <type>', 'Add the specified type of cheese', 'marble')
-  .option('-C, --no-cheese', 'You do not want any cheese');
+  .description("An application for pizza ordering")
+  .option("-p, --peppers", "Add peppers")
+  .option("-c, --cheese <type>", "Add the specified type of cheese", "marble")
+  .option("-C, --no-cheese", "You do not want any cheese");
 
 program.parse();
 
 const options = program.opts();
-console.log('you ordered a pizza with:');
-if (options.peppers) console.log('  - peppers');
-const cheese = !options.cheese ? 'no' : options.cheese;
-console.log('  - %s cheese', cheese);
+console.log("you ordered a pizza with:");
+if (options.peppers) console.log("  - peppers");
+const cheese = !options.cheese ? "no" : options.cheese;
+console.log("  - %s cheese", cheese);
 ```
 
-In a multi-command program, you will have action handlers for each command (or stand-alone executables for the commands).
+In a multi-command program, you will have action handlers for each command (or
+stand-alone executables for the commands).
 
 Example file: [deploy](./examples/deploy)
 
 ```js
-const { Command } = require('commander');
+const { Command } = require("commander");
 const program = new Command();
 
 program
-  .version('0.0.1')
-  .option('-c, --config <path>', 'set config path', './deploy.conf');
+  .version("0.0.1")
+  .option("-c, --config <path>", "set config path", "./deploy.conf");
 
 program
-  .command('setup [env]')
-  .description('run setup commands for all envs')
-  .option('-s, --setup_mode <mode>', 'Which setup mode to use', 'normal')
+  .command("setup [env]")
+  .description("run setup commands for all envs")
+  .option("-s, --setup_mode <mode>", "Which setup mode to use", "normal")
   .action((env, options) => {
-    env = env || 'all';
-    console.log('read config from %s', program.opts().config);
-    console.log('setup for %s env(s) with %s mode', env, options.setup_mode);
+    env = env || "all";
+    console.log("read config from %s", program.opts().config);
+    console.log("setup for %s env(s) with %s mode", env, options.setup_mode);
   });
 
 program
-  .command('exec <script>')
-  .alias('ex')
-  .description('execute the given remote cmd')
-  .option('-e, --exec_mode <mode>', 'Which exec mode to use', 'fast')
+  .command("exec <script>")
+  .alias("ex")
+  .description("execute the given remote cmd")
+  .option("-e, --exec_mode <mode>", "Which exec mode to use", "fast")
   .action((script, options) => {
-    console.log('read config from %s', program.opts().config);
-    console.log('exec "%s" using %s mode and config %s', script, options.exec_mode, program.opts().config);
-  }).addHelpText('after', `
+    console.log("read config from %s", program.opts().config);
+    console.log(
+      'exec "%s" using %s mode and config %s',
+      script,
+      options.exec_mode,
+      program.opts().config,
+    );
+  }).addHelpText(
+    "after",
+    `
 Examples:
   $ deploy exec sequential
-  $ deploy exec async`
+  $ deploy exec async`,
   );
-  
+
 program.parse(process.argv);
 ```
 
-More samples can be found in the [examples](https://github.com/tj/commander.js/tree/master/examples) directory.
+More samples can be found in the
+[examples](https://github.com/tj/commander.js/tree/master/examples) directory.
 
 ## Support
 
-The current version of Commander is fully supported on Long Term Support versions of node, and requires at least node v10.
-(For older versions of node, use an older version of Commander. Commander version 2.x has the widest support.)
+The current version of Commander is fully supported on Long Term Support
+versions of node, and requires at least node v10. (For older versions of node,
+use an older version of Commander. Commander version 2.x has the widest
+support.)
 
-The main forum for free and community support is the project [Issues](https://github.com/tj/commander.js/issues) on GitHub.
+The main forum for free and community support is the project
+[Issues](https://github.com/tj/commander.js/issues) on GitHub.
 
 ### Commander for enterprise
 
 Available as part of the Tidelift Subscription
 
-The maintainers of Commander and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open source dependencies you use to build your applications. Save time, reduce risk, and improve code health, while paying the maintainers of the exact dependencies you use. [Learn more.](https://tidelift.com/subscription/pkg/npm-commander?utm_source=npm-commander&utm_medium=referral&utm_campaign=enterprise&utm_term=repo)
+The maintainers of Commander and thousands of other packages are working with
+Tidelift to deliver commercial support and maintenance for the open source
+dependencies you use to build your applications. Save time, reduce risk, and
+improve code health, while paying the maintainers of the exact dependencies you
+use.
+[Learn more.](https://tidelift.com/subscription/pkg/npm-commander?utm_source=npm-commander&utm_medium=referral&utm_campaign=enterprise&utm_term=repo)

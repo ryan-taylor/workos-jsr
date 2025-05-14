@@ -6,7 +6,7 @@
  */
 
 module.exports = function isExtglob(str) {
-  if (typeof str !== 'string' || str === '') {
+  if (typeof str !== "string" || str === "") {
     return false;
   }
 

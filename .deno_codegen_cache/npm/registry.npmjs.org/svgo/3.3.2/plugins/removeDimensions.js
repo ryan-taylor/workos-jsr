@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-exports.name = 'removeDimensions';
+exports.name = "removeDimensions";
 exports.description =
-  'removes width and height in presence of viewBox (opposite to removeViewBox, disable it first)';
+  "removes width and height in presence of viewBox (opposite to removeViewBox, disable it first)";
 
 /**
  * Remove width/height attributes and add the viewBox attribute if it's missing
@@ -20,7 +20,7 @@ exports.fn = () => {
   return {
     element: {
       enter: (node) => {
-        if (node.name === 'svg') {
+        if (node.name === "svg") {
           if (node.attributes.viewBox != null) {
             delete node.attributes.width;
             delete node.attributes.height;

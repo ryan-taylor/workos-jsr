@@ -2,7 +2,6 @@
 
 > Discard comments in your CSS files with PostCSS.
 
-
 ## Install
 
 With [npm](https://npmjs.org/package/postcss-discard-comments) do:
@@ -11,14 +10,13 @@ With [npm](https://npmjs.org/package/postcss-discard-comments) do:
 npm install postcss-discard-comments --save
 ```
 
-
 ## Example
 
 ### Input
 
 ```css
-h1/* heading */{
-    margin: 0 auto
+h1 /* heading */ {
+  margin: 0 auto;
 }
 ```
 
@@ -26,7 +24,7 @@ h1/* heading */{
 
 ```css
 h1 {
-    margin: 0 auto
+  margin: 0 auto;
 }
 ```
 
@@ -40,7 +38,6 @@ you will have to [configure source maps in PostCSS][maps].
 
 [maps]: https://github.com/postcss/postcss/blob/master/docs/source-maps.md
 
-
 ## API
 
 ### comments([options])
@@ -49,9 +46,8 @@ you will have to [configure source maps in PostCSS][maps].
 
 ##### remove(function)
 
-Type: `function`
-Return: `boolean`
-Variable: `comment` contains a comment without `/**/`
+Type: `function` Return: `boolean` Variable: `comment` contains a comment
+without `/**/`
 
 For each comment, return true to remove, or false to keep the comment.
 
@@ -60,55 +56,55 @@ function(comment) {}
 ```
 
 ```js
-var css = '/* headings *//*@ h1 */h1{margin:0 auto}/*@ h2 */h2{color:red}';
-console.log(postcss(comments({
-    remove: function(comment) { return comment[0] == "@"; }
-})).process(css).css);
+var css = "/* headings *//*@ h1 */h1{margin:0 auto}/*@ h2 */h2{color:red}";
+console.log(
+  postcss(comments({
+    remove: function (comment) {
+      return comment[0] == "@";
+    },
+  })).process(css).css,
+);
 //=> /* headings */h1{margin:0 auto}h2{color:red}
 ```
+
 **NOTE:** If you use the `remove` function other options will not be available.
 
 ##### removeAll
 
-Type: `boolean`
-Default: `false`
+Type: `boolean` Default: `false`
 
 Remove all comments marked as important.
 
 ```js
-var css = '/*! heading */h1{margin:0 auto}/*! heading 2 */h2{color:red}';
-console.log(postcss(comments({removeAll: true})).process(css).css);
+var css = "/*! heading */h1{margin:0 auto}/*! heading 2 */h2{color:red}";
+console.log(postcss(comments({ removeAll: true })).process(css).css);
 //=> h1{margin:0 auto}h2{color:red}
 ```
 
 ##### removeAllButFirst
 
-Type: `boolean`
-Default: `false`
+Type: `boolean` Default: `false`
 
 Remove all comments marked as important, but the first one.
 
 ```js
-var css = '/*! heading */h1{margin:0 auto}/*! heading 2 */h2{color:red}';
-console.log(postcss(comments({removeAllButFirst: true})).process(css).css);
+var css = "/*! heading */h1{margin:0 auto}/*! heading 2 */h2{color:red}";
+console.log(postcss(comments({ removeAllButFirst: true })).process(css).css);
 //=> /*! heading */h1{margin:0 auto}h2{color:red}
 ```
-
 
 ## Usage
 
 See the [PostCSS documentation](https://github.com/postcss/postcss#usage) for
 examples for your environment.
 
-
 ## Contributors
 
-See [CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
-
+See
+[CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
 
 ## License
 
 MIT © [Ben Briggs](http://beneb.info)
-
 
 [postcss]: https://github.com/postcss/postcss

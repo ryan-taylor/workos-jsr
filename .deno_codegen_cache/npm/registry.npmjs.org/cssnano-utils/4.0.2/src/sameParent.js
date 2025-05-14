@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * @param {import('postcss').AnyNode} nodeA
@@ -6,7 +6,7 @@
  * @return {boolean}
  */
 function checkMatch(nodeA, nodeB) {
-  if (nodeA.type === 'atrule' && nodeB.type === 'atrule') {
+  if (nodeA.type === "atrule" && nodeB.type === "atrule") {
     return (
       nodeA.params === nodeB.params &&
       nodeA.name.toLowerCase() === nodeB.name.toLowerCase()

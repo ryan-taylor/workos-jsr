@@ -1,4 +1,4 @@
-import type { Handlers } from '$fresh/server.ts';
+import type { Handlers } from "$fresh/server.ts";
 
 // For this demo, we'll use the in-memory store for actions
 declare global {
@@ -11,28 +11,28 @@ declare global {
 function filterActions(actions: any[], filters: Record<string, string>) {
   return actions.filter((action) => {
     // Filter by status
-    if (filters.status && filters.status !== '') {
-      const statusArray = filters.status.split(',');
+    if (filters.status && filters.status !== "") {
+      const statusArray = filters.status.split(",");
       if (!statusArray.includes(action.status)) {
         return false;
       }
     }
 
     // Filter by type
-    if (filters.type && filters.type !== '') {
-      const typeArray = filters.type.split(',');
+    if (filters.type && filters.type !== "") {
+      const typeArray = filters.type.split(",");
       if (!typeArray.includes(action.type)) {
         return false;
       }
     }
 
     // Search by email, name, etc.
-    if (filters.search && filters.search !== '') {
+    if (filters.search && filters.search !== "") {
       const searchLower = filters.search.toLowerCase();
-      const userEmail = action.user.email?.toLowerCase() || '';
-      const userFirstName = action.user.firstName?.toLowerCase() || '';
-      const userLastName = action.user.lastName?.toLowerCase() || '';
-      const orgName = action.context.organization?.name?.toLowerCase() || '';
+      const userEmail = action.user.email?.toLowerCase() || "";
+      const userFirstName = action.user.firstName?.toLowerCase() || "";
+      const userLastName = action.user.lastName?.toLowerCase() || "";
+      const orgName = action.context.organization?.name?.toLowerCase() || "";
 
       if (
         !userEmail.includes(searchLower) &&
@@ -45,14 +45,14 @@ function filterActions(actions: any[], filters: Record<string, string>) {
     }
 
     // Filter by date range
-    if (filters.rangeStart && filters.rangeStart !== '') {
+    if (filters.rangeStart && filters.rangeStart !== "") {
       const rangeStart = new Date(filters.rangeStart);
       if (action.createdAt < rangeStart) {
         return false;
       }
     }
 
-    if (filters.rangeEnd && filters.rangeEnd !== '') {
+    if (filters.rangeEnd && filters.rangeEnd !== "") {
       const rangeEnd = new Date(filters.rangeEnd);
       if (action.createdAt > rangeEnd) {
         return false;
@@ -77,23 +77,24 @@ export const handler: Handlers = {
 
       // Extract filter parameters
       const filters = {
-        status: params.get('status') || '',
-        type: params.get('type') || '',
-        search: params.get('search') || '',
-        rangeStart: params.get('rangeStart') || '',
-        rangeEnd: params.get('rangeEnd') || '',
+        status: params.get("status") || "",
+        type: params.get("type") || "",
+        search: params.get("search") || "",
+        rangeStart: params.get("rangeStart") || "",
+        rangeEnd: params.get("rangeEnd") || "",
       };
 
       // Extract pagination parameters
-      const page = parseInt(params.get('page') || '1', 10);
-      const limit = parseInt(params.get('limit') || '10', 10);
+      const page = parseInt(params.get("page") || "1", 10);
+      const limit = parseInt(params.get("limit") || "10", 10);
 
       // Get all actions from the store
       const allActions = Array.from(globalThis.__ACTIONS_STORE__.values());
 
       // Sort actions by createdAt (newest first)
       allActions.sort((a, b) => {
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        return new Date(b.createdAt).getTime() -
+          new Date(a.createdAt).getTime();
       });
 
       // Apply filters
@@ -109,7 +110,7 @@ export const handler: Handlers = {
 
       return new Response(
         JSON.stringify({
-          status: 'success',
+          status: "success",
           data: paginatedActions,
           pagination: {
             page,
@@ -120,20 +121,22 @@ export const handler: Handlers = {
         }),
         {
           status: 200,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         },
       );
     } catch (error) {
-      console.error('Error listing actions:', error);
+      console.error("Error listing actions:", error);
 
       return new Response(
         JSON.stringify({
-          status: 'error',
-          message: error instanceof Error ? error.message : 'An unknown error occurred',
+          status: "error",
+          message: error instanceof Error
+            ? error.message
+            : "An unknown error occurred",
         }),
         {
           status: 500,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         },
       );
     }

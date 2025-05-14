@@ -19,10 +19,10 @@ Merge longhand properties into shorthand; works with `margin`, `padding` &
 
 ```css
 h1 {
-    margin-top: 10px;
-    margin-right: 20px;
-    margin-bottom: 10px;
-    margin-left: 20px;
+  margin-top: 10px;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  margin-left: 20px;
 }
 ```
 
@@ -30,7 +30,7 @@ h1 {
 
 ```css
 h1 {
-    margin: 10px 20px;
+  margin: 10px 20px;
 }
 ```
 
@@ -41,7 +41,8 @@ examples for your environment.
 
 ## Contributors
 
-See [CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
+See
+[CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
 
 ## License
 

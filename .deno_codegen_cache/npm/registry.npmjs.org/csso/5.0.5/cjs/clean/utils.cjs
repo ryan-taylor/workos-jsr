@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
 function hasNoChildren(node) {
-    return !node || !node.children || node.children.isEmpty;
+  return !node || !node.children || node.children.isEmpty;
 }
 
 function isNodeChildrenList(node, list) {
-    return node !== null && node.children === list;
+  return node !== null && node.children === list;
 }
 
 exports.hasNoChildren = hasNoChildren;

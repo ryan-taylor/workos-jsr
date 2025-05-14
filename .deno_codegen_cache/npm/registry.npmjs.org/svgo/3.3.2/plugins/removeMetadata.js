@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const { detachNodeFromParent } = require('../lib/xast.js');
+const { detachNodeFromParent } = require("../lib/xast.js");
 
-exports.name = 'removeMetadata';
-exports.description = 'removes <metadata>';
+exports.name = "removeMetadata";
+exports.description = "removes <metadata>";
 
 /**
  * Remove <metadata>.
@@ -18,7 +18,7 @@ exports.fn = () => {
   return {
     element: {
       enter: (node, parentNode) => {
-        if (node.name === 'metadata') {
+        if (node.name === "metadata") {
           detachNodeFromParent(node, parentNode);
         }
       },

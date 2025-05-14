@@ -1,2 +1,2 @@
-export * from "workos/webhooks/interfaces/webhook-event.interface.ts";
-export * from "workos/webhooks/interfaces/verify-options.interface.ts";
+export * from "./webhook-event.interface.ts";
+export * from "./verify-options.interface.ts";

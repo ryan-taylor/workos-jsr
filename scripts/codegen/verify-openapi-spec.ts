@@ -2,13 +2,13 @@
 
 /**
  * OpenAPI Specification Verification Tool
- * 
+ *
  * This script verifies OpenAPI specifications against their stored checksums
  * to detect potential drift between the specification and generated code.
- * 
+ *
  * Usage:
  *   deno run -A scripts/codegen/verify-openapi-spec.ts <path-to-spec-file> [options]
- * 
+ *
  * Options:
  *   --update        Update checksums if they don't match (default: false)
  *   --no-fail       Don't exit with error code when checksums don't match (default: false)
@@ -16,9 +16,9 @@
  *   --processed-only Only verify the processed checksum (default: false)
  */
 
-import { verifySpec, VerificationOptions } from "./postprocess/verify-spec.ts";
+import { VerificationOptions, verifySpec } from "./postprocess/verify-spec.ts";
 import { parse } from "https://deno.land/std/flags/mod.ts"; // Keep this import since flags might not be available in JSR
-import { join, resolve, basename } from "@std/path";
+import { basename, join, resolve } from "@std/path";
 
 /**
  * Parse command line arguments
@@ -31,14 +31,14 @@ function parseArgs() {
       u: "update",
       n: "no-fail",
       r: "raw-only",
-      p: "processed-only"
+      p: "processed-only",
     },
     default: {
       update: false,
       "no-fail": false,
       "raw-only": false,
       "processed-only": false,
-      help: false
+      help: false,
     },
   });
 
@@ -119,17 +119,28 @@ async function main() {
     // Print verification results
     console.log(`
 Spec file: ${basename(result.specPath)}
-Raw checksum check: ${result.rawChecksumMatches === null ? 'Not performed' : 
-  result.rawChecksumMatches ? 'PASSED ✅' : 'FAILED ❌'}
-Processed checksum check: ${result.processedChecksumMatches === null ? 'Not performed' : 
-  result.processedChecksumMatches ? 'PASSED ✅' : 'FAILED ❌'}
+Raw checksum check: ${
+      result.rawChecksumMatches === null
+        ? "Not performed"
+        : result.rawChecksumMatches
+        ? "PASSED ✅"
+        : "FAILED ❌"
+    }
+Processed checksum check: ${
+      result.processedChecksumMatches === null
+        ? "Not performed"
+        : result.processedChecksumMatches
+        ? "PASSED ✅"
+        : "FAILED ❌"
+    }
 
 Messages:
-${result.messages.join('\n')}
+${result.messages.join("\n")}
     `);
 
     // Determine exit code
-    const hasFailure = result.rawChecksumMatches === false || result.processedChecksumMatches === false;
+    const hasFailure = result.rawChecksumMatches === false ||
+      result.processedChecksumMatches === false;
     if (hasFailure && options.failOnMismatch) {
       console.error("Verification failed. Exiting with error code.");
       Deno.exit(1);

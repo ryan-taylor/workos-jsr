@@ -1,3 +1,3 @@
-'use strict';
+"use strict";
 
-module.exports = require('./async').groupBy;
+module.exports = require("./async").groupBy;

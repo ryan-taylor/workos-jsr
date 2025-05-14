@@ -1,8 +1,8 @@
-'use strict';
-const BasePlugin = require('../plugin');
-const { IE_6 } = require('../dictionary/browsers');
-const { PROPERTY } = require('../dictionary/identifiers');
-const { DECL } = require('../dictionary/postcss');
+"use strict";
+const BasePlugin = require("../plugin");
+const { IE_6 } = require("../dictionary/browsers");
+const { PROPERTY } = require("../dictionary/identifiers");
+const { DECL } = require("../dictionary/postcss");
 
 /**
  * @param {string} prop
@@ -14,7 +14,7 @@ function vendorPrefix(prop) {
     return match[0];
   }
 
-  return '';
+  return "";
 }
 
 module.exports = class LeadingUnderscore extends BasePlugin {
@@ -30,7 +30,7 @@ module.exports = class LeadingUnderscore extends BasePlugin {
   detect(decl) {
     const { before } = decl.raws;
 
-    if (before && before.includes('_')) {
+    if (before && before.includes("_")) {
       this.push(decl, {
         identifier: PROPERTY,
         hack: `${before.trim()}${decl.prop}`,
@@ -38,9 +38,9 @@ module.exports = class LeadingUnderscore extends BasePlugin {
     }
 
     if (
-      decl.prop[0] === '-' &&
-      decl.prop[1] !== '-' &&
-      vendorPrefix(decl.prop) === ''
+      decl.prop[0] === "-" &&
+      decl.prop[1] !== "-" &&
+      vendorPrefix(decl.prop) === ""
     ) {
       this.push(decl, {
         identifier: PROPERTY,

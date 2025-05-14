@@ -15,9 +15,9 @@ export enum CheckOp {
 
 // Export other types that might be needed by tests
 export type {
-  Warrant,
-  Subject,
-  WriteWarrantOptions,
   ListWarrantsOptions,
   PolicyContext,
+  Subject,
+  Warrant,
+  WriteWarrantOptions,
 } from "../../../packages/workos_sdk/src/fga/interfaces/warrant.interface.ts";

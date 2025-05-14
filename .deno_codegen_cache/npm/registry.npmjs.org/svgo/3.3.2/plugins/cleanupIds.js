@@ -1,68 +1,68 @@
-'use strict';
+"use strict";
 
 /**
  * @typedef {import('../lib/types').XastElement} XastElement
  */
 
-const { visitSkip } = require('../lib/xast.js');
-const { hasScripts, findReferences } = require('../lib/svgo/tools');
+const { visitSkip } = require("../lib/xast.js");
+const { hasScripts, findReferences } = require("../lib/svgo/tools");
 
-exports.name = 'cleanupIds';
-exports.description = 'removes unused IDs and minifies used';
+exports.name = "cleanupIds";
+exports.description = "removes unused IDs and minifies used";
 
 const generateIdChars = [
-  'a',
-  'b',
-  'c',
-  'd',
-  'e',
-  'f',
-  'g',
-  'h',
-  'i',
-  'j',
-  'k',
-  'l',
-  'm',
-  'n',
-  'o',
-  'p',
-  'q',
-  'r',
-  's',
-  't',
-  'u',
-  'v',
-  'w',
-  'x',
-  'y',
-  'z',
-  'A',
-  'B',
-  'C',
-  'D',
-  'E',
-  'F',
-  'G',
-  'H',
-  'I',
-  'J',
-  'K',
-  'L',
-  'M',
-  'N',
-  'O',
-  'P',
-  'Q',
-  'R',
-  'S',
-  'T',
-  'U',
-  'V',
-  'W',
-  'X',
-  'Y',
-  'Z',
+  "a",
+  "b",
+  "c",
+  "d",
+  "e",
+  "f",
+  "g",
+  "h",
+  "i",
+  "j",
+  "k",
+  "l",
+  "m",
+  "n",
+  "o",
+  "p",
+  "q",
+  "r",
+  "s",
+  "t",
+  "u",
+  "v",
+  "w",
+  "x",
+  "y",
+  "z",
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "I",
+  "J",
+  "K",
+  "L",
+  "M",
+  "N",
+  "O",
+  "P",
+  "Q",
+  "R",
+  "S",
+  "T",
+  "U",
+  "V",
+  "W",
+  "X",
+  "Y",
+  "Z",
 ];
 const maxIdIndex = generateIdChars.length - 1;
 
@@ -112,7 +112,7 @@ const generateId = (currentId) => {
  * @type {(arr: number[]) => string}
  */
 const getIdString = (arr) => {
-  return arr.map((i) => generateIdChars[i]).join('');
+  return arr.map((i) => generateIdChars[i]).join("");
 };
 
 /**
@@ -137,8 +137,8 @@ exports.fn = (_root, params) => {
   const preserveIdPrefixes = Array.isArray(preservePrefixes)
     ? preservePrefixes
     : preservePrefixes
-      ? [preservePrefixes]
-      : [];
+    ? [preservePrefixes]
+    : [];
   /**
    * @type {Map<string, XastElement>}
    */
@@ -155,7 +155,7 @@ exports.fn = (_root, params) => {
         if (!force) {
           // deoptimize if style or scripts are present
           if (
-            (node.name === 'style' && node.children.length !== 0) ||
+            (node.name === "style" && node.children.length !== 0) ||
             hasScripts(node)
           ) {
             deoptimized = true;
@@ -163,10 +163,10 @@ exports.fn = (_root, params) => {
           }
 
           // avoid removing IDs if the whole SVG consists only of defs
-          if (node.name === 'svg') {
+          if (node.name === "svg") {
             let hasDefsOnly = true;
             for (const child of node.children) {
-              if (child.type !== 'element' || child.name !== 'defs') {
+              if (child.type !== "element" || child.name !== "defs") {
                 hasDefsOnly = false;
                 break;
               }
@@ -178,7 +178,7 @@ exports.fn = (_root, params) => {
         }
 
         for (const [name, value] of Object.entries(node.attributes)) {
-          if (name === 'id') {
+          if (name === "id") {
             // collect all ids
             const id = value;
             if (nodeById.has(id)) {
@@ -232,7 +232,7 @@ exports.fn = (_root, params) => {
               node.attributes.id = currentIdString;
               for (const { element, name } of refs) {
                 const value = element.attributes[name];
-                if (value.includes('#')) {
+                if (value.includes("#")) {
                   // replace id in href and url()
                   element.attributes[name] = value.replace(
                     `#${encodeURI(id)}`,

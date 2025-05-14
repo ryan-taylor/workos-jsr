@@ -1,8 +1,8 @@
-'use strict';
-const valueParser = require('postcss-value-parser');
-const minifyWeight = require('./lib/minify-weight');
-const minifyFamily = require('./lib/minify-family');
-const minifyFont = require('./lib/minify-font');
+"use strict";
+const valueParser = require("postcss-value-parser");
+const minifyWeight = require("./lib/minify-weight");
+const minifyFamily = require("./lib/minify-family");
+const minifyFont = require("./lib/minify-font");
 
 /**
  * @param {string} value
@@ -11,7 +11,7 @@ const minifyFont = require('./lib/minify-font');
 function hasVariableFunction(value) {
   const lowerCasedValue = value.toLowerCase();
 
-  return lowerCasedValue.includes('var(') || lowerCasedValue.includes('env(');
+  return lowerCasedValue.includes("var(") || lowerCasedValue.includes("env(");
 }
 
 /**
@@ -22,21 +22,27 @@ function hasVariableFunction(value) {
  */
 function transform(prop, value, opts) {
   let lowerCasedProp = prop.toLowerCase();
-  let variableType = '';
+  let variableType = "";
 
-  if (typeof opts.removeQuotes === 'function') {
+  if (typeof opts.removeQuotes === "function") {
     variableType = opts.removeQuotes(prop);
     opts.removeQuotes = true;
   }
-  if ((lowerCasedProp === 'font-weight' || variableType === 'font-weight') && !hasVariableFunction(value)) {
+  if (
+    (lowerCasedProp === "font-weight" || variableType === "font-weight") &&
+    !hasVariableFunction(value)
+  ) {
     return minifyWeight(value);
-  } else if ((lowerCasedProp === 'font-family'  || variableType === 'font-family') && !hasVariableFunction(value)) {
+  } else if (
+    (lowerCasedProp === "font-family" || variableType === "font-family") &&
+    !hasVariableFunction(value)
+  ) {
     const tree = valueParser(value);
 
     tree.nodes = minifyFamily(tree.nodes, opts);
 
     return tree.toString();
-  } else if (lowerCasedProp === 'font' || variableType === 'font') {
+  } else if (lowerCasedProp === "font" || variableType === "font") {
     return minifyFont(value, opts);
   }
 
@@ -58,11 +64,11 @@ function pluginCreator(opts) {
       removeDuplicates: true,
       removeQuotes: true,
     },
-    opts
+    opts,
   );
 
   return {
-    postcssPlugin: 'postcss-minify-font-values',
+    postcssPlugin: "postcss-minify-font-values",
     prepare() {
       const cache = new Map();
       return {

@@ -1,7 +1,7 @@
 /** @jsx h */
 import { h } from "preact";
-import { useState } from 'preact/hooks';
-import { Button } from '../components/Button.tsx';
+import { useState } from "preact/hooks";
+import { Button } from "../components/Button.tsx";
 
 interface ApiResponse {
   error?: string;
@@ -10,12 +10,12 @@ interface ApiResponse {
 }
 
 export default function VaultCryptoDemo() {
-  const [inputText, setInputText] = useState('');
-  const [encryptedText, setEncryptedText] = useState('');
-  const [decryptedText, setDecryptedText] = useState('');
+  const [inputText, setInputText] = useState("");
+  const [encryptedText, setEncryptedText] = useState("");
+  const [decryptedText, setDecryptedText] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [mode, setMode] = useState<'encrypt' | 'decrypt'>('encrypt');
+  const [mode, setMode] = useState<"encrypt" | "decrypt">("encrypt");
   const [copySuccess, setCopySuccess] = useState<string | null>(null);
 
   const handleInputChange = (e: Event) => {
@@ -24,7 +24,7 @@ export default function VaultCryptoDemo() {
     setError(null);
   };
 
-  const handleModeChange = (newMode: 'encrypt' | 'decrypt') => {
+  const handleModeChange = (newMode: "encrypt" | "decrypt") => {
     setMode(newMode);
     setError(null);
     setCopySuccess(null);
@@ -32,7 +32,7 @@ export default function VaultCryptoDemo() {
 
   const handleEncrypt = async () => {
     if (!inputText.trim()) {
-      setError('Please enter text to encrypt');
+      setError("Please enter text to encrypt");
       return;
     }
 
@@ -41,10 +41,10 @@ export default function VaultCryptoDemo() {
     setCopySuccess(null);
 
     try {
-      const response = await fetch('/api/vault/encrypt', {
-        method: 'POST',
+      const response = await fetch("/api/vault/encrypt", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ data: inputText }),
       });
@@ -55,10 +55,10 @@ export default function VaultCryptoDemo() {
         setError(result.error);
       } else if (result.encryptedData) {
         setEncryptedText(result.encryptedData);
-        setDecryptedText('');
+        setDecryptedText("");
       }
     } catch (err) {
-      setError('Failed to encrypt: Network error');
+      setError("Failed to encrypt: Network error");
       console.error(err);
     } finally {
       setLoading(false);
@@ -67,7 +67,7 @@ export default function VaultCryptoDemo() {
 
   const handleDecrypt = async () => {
     if (!inputText.trim()) {
-      setError('Please enter encrypted text to decrypt');
+      setError("Please enter encrypted text to decrypt");
       return;
     }
 
@@ -76,10 +76,10 @@ export default function VaultCryptoDemo() {
     setCopySuccess(null);
 
     try {
-      const response = await fetch('/api/vault/decrypt', {
-        method: 'POST',
+      const response = await fetch("/api/vault/decrypt", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ encryptedData: inputText }),
       });
@@ -90,10 +90,10 @@ export default function VaultCryptoDemo() {
         setError(result.error);
       } else if (result.decryptedData) {
         setDecryptedText(result.decryptedData);
-        setEncryptedText('');
+        setEncryptedText("");
       }
     } catch (err) {
-      setError('Failed to decrypt: Network error');
+      setError("Failed to decrypt: Network error");
       console.error(err);
     } finally {
       setLoading(false);
@@ -103,65 +103,71 @@ export default function VaultCryptoDemo() {
   const handleCopy = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      setCopySuccess('Copied to clipboard!');
+      setCopySuccess("Copied to clipboard!");
       setTimeout(() => setCopySuccess(null), 2000);
     } catch (err) {
-      console.error('Copy failed:', err);
-      setError('Failed to copy to clipboard');
+      console.error("Copy failed:", err);
+      setError("Failed to copy to clipboard");
     }
   };
 
   return (
-    <div class='vault-demo'>
-      <div class='mode-selector'>
+    <div class="vault-demo">
+      <div class="mode-selector">
         <button
-          class={`mode-btn ${mode === 'encrypt' ? 'active' : ''}`}
-          onClick={() => handleModeChange('encrypt')}
+          class={`mode-btn ${mode === "encrypt" ? "active" : ""}`}
+          onClick={() => handleModeChange("encrypt")}
         >
           Encrypt
         </button>
         <button
-          class={`mode-btn ${mode === 'decrypt' ? 'active' : ''}`}
-          onClick={() => handleModeChange('decrypt')}
+          class={`mode-btn ${mode === "decrypt" ? "active" : ""}`}
+          onClick={() => handleModeChange("decrypt")}
         >
           Decrypt
         </button>
       </div>
 
-      <div class='input-section'>
-        <label htmlFor='input-text'>
-          {mode === 'encrypt' ? 'Text to Encrypt' : 'Encrypted Text to Decrypt'}
+      <div class="input-section">
+        <label htmlFor="input-text">
+          {mode === "encrypt" ? "Text to Encrypt" : "Encrypted Text to Decrypt"}
         </label>
         <textarea
-          id='input-text'
+          id="input-text"
           value={inputText}
           onInput={handleInputChange}
           rows={4}
-          placeholder={mode === 'encrypt' ? 'Enter text to encrypt...' : 'Enter encrypted text to decrypt...'}
+          placeholder={mode === "encrypt"
+            ? "Enter text to encrypt..."
+            : "Enter encrypted text to decrypt..."}
         />
       </div>
 
-      <div class='button-section'>
+      <div class="button-section">
         <Button
-          onClick={mode === 'encrypt' ? handleEncrypt : handleDecrypt}
+          onClick={mode === "encrypt" ? handleEncrypt : handleDecrypt}
           disabled={loading || !inputText.trim()}
         >
-          {loading ? 'Processing...' : mode === 'encrypt' ? 'Encrypt' : 'Decrypt'}
+          {loading
+            ? "Processing..."
+            : mode === "encrypt"
+            ? "Encrypt"
+            : "Decrypt"}
         </Button>
       </div>
 
-      {error && <div class='error-message'>{error}</div>}
-      {copySuccess && <div class='success-message'>{copySuccess}</div>}
+      {error && <div class="error-message">{error}</div>}
+      {copySuccess && <div class="success-message">{copySuccess}</div>}
 
       {encryptedText && (
-        <div class='result-section'>
+        <div class="result-section">
           <h3>Encrypted Result:</h3>
-          <div class='result-container'>
-            <pre class='result-content'>{encryptedText}</pre>
+          <div class="result-container">
+            <pre class="result-content">{encryptedText}</pre>
             <button
-              class='copy-btn'
+              class="copy-btn"
               onClick={() => handleCopy(encryptedText)}
-              title='Copy to clipboard'
+              title="Copy to clipboard"
             >
               Copy
             </button>
@@ -170,14 +176,14 @@ export default function VaultCryptoDemo() {
       )}
 
       {decryptedText && (
-        <div class='result-section'>
+        <div class="result-section">
           <h3>Decrypted Result:</h3>
-          <div class='result-container'>
-            <pre class='result-content'>{decryptedText}</pre>
+          <div class="result-container">
+            <pre class="result-content">{decryptedText}</pre>
             <button
-              class='copy-btn'
+              class="copy-btn"
               onClick={() => handleCopy(decryptedText)}
-              title='Copy to clipboard'
+              title="Copy to clipboard"
             >
               Copy
             </button>

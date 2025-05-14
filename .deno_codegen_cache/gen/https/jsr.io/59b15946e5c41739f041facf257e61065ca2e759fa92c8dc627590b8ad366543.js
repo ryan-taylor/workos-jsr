@@ -3,7 +3,11 @@
 import { assertArg } from "../_common/dirname.ts";
 import { CHAR_COLON } from "../_common/constants.ts";
 import { stripTrailingSeparators } from "../_common/strip_trailing_separators.ts";
-import { isPathSeparator, isPosixPathSeparator, isWindowsDeviceRoot } from "./_util.ts";
+import {
+  isPathSeparator,
+  isPosixPathSeparator,
+  isWindowsDeviceRoot,
+} from "./_util.ts";
 /**
  * Return the directory path of a `path`.
  *
@@ -39,21 +43,21 @@ import { isPathSeparator, isPosixPathSeparator, isWindowsDeviceRoot } from "./_u
         let j = 2;
         let last = j;
         // Match 1 or more non-path separators
-        for(; j < len; ++j){
+        for (; j < len; ++j) {
           if (isPathSeparator(path.charCodeAt(j))) break;
         }
         if (j < len && j !== last) {
           // Matched!
           last = j;
           // Match 1 or more path separators
-          for(; j < len; ++j){
+          for (; j < len; ++j) {
             if (!isPathSeparator(path.charCodeAt(j))) break;
           }
           if (j < len && j !== last) {
             // Matched!
             last = j;
             // Match 1 or more non-path separators
-            for(; j < len; ++j){
+            for (; j < len; ++j) {
               if (isPathSeparator(path.charCodeAt(j))) break;
             }
             if (j === len) {
@@ -83,7 +87,7 @@ import { isPathSeparator, isPosixPathSeparator, isWindowsDeviceRoot } from "./_u
     // unnecessary work
     return path;
   }
-  for(let i = len - 1; i >= offset; --i){
+  for (let i = len - 1; i >= offset; --i) {
     if (isPathSeparator(path.charCodeAt(i))) {
       if (!matchedSlash) {
         end = i;

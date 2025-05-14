@@ -28,7 +28,8 @@
 
 ## Features
 
-- 📦 **Small**: Just **1.7 KB** gzipped ([3x+ lighter](#benchmarks) than **color** and **tinycolor2**)
+- 📦 **Small**: Just **1.7 KB** gzipped ([3x+ lighter](#benchmarks) than
+  **color** and **tinycolor2**)
 - 🚀 **Fast**: [3x+ faster](#benchmarks) than **color** and **tinycolor2**
 - 😍 **Simple**: Chainable API and familiar patterns
 - 💪 **Immutable**: No need to worry about data mutations
@@ -51,7 +52,9 @@
 | ac-colors                     | 660,722                       | [![](https://badgen.net/bundlephobia/min/ac-colors?color=e6591d&label=)](https://bundlephobia.com/result?p=ac-colors) | [![](https://badgen.net/bundlephobia/minzip/ac-colors?color=e6591d&label=)](https://bundlephobia.com/result?p=ac-colors) | [![](https://badgen.net/bundlephobia/dependency-count/ac-colors?color=6ead0a&label=)](https://bundlephobia.com/result?p=ac-colors)   | [![](https://badgen.net/npm/types/ac-colors?color=red&label=)](https://bundlephobia.com/result?p=ac-colors)      |
 | chroma-js                     | 962,967                       | [![](https://badgen.net/bundlephobia/min/chroma-js?color=red&label=)](https://bundlephobia.com/result?p=chroma-js)    | [![](https://badgen.net/bundlephobia/minzip/chroma-js?color=red&label=)](https://bundlephobia.com/result?p=chroma-js)    | [![](https://badgen.net/bundlephobia/dependency-count/chroma-js?color=red&label=)](https://bundlephobia.com/result?p=chroma-js)      | [![](https://badgen.net/npm/types/chroma-js?color=e6591d&label=)](https://bundlephobia.com/result?p=chroma-js)   |
 
-The performance results were generated on a MBP 2019, 2,6 GHz Intel Core i7 by running `npm run benchmark` in the library folder. See [tests/benchmark.ts](https://github.com/omgovich/colord/blob/master/tests/benchmark.ts).
+The performance results were generated on a MBP 2019, 2,6 GHz Intel Core i7 by
+running `npm run benchmark` in the library folder. See
+[tests/benchmark.ts](https://github.com/omgovich/colord/blob/master/tests/benchmark.ts).
 
 <div><img src="assets/divider.png" width="838" alt="---" /></div>
 
@@ -93,7 +96,9 @@ colord("hsl(0, 50%, 50%)").darken(0.25).toHex(); // "#602020"
 <details>
   <summary><b><code>colord(input)</code></b></summary>
 
-Parses the given input and creates a new Colord instance. String parsing strictly conforms to [CSS Color Level Specifications](https://www.w3.org/TR/css-color-4/#color-type).
+Parses the given input and creates a new Colord instance. String parsing
+strictly conforms to
+[CSS Color Level Specifications](https://www.w3.org/TR/css-color-4/#color-type).
 
 ```js
 import { colord } from "colord";
@@ -126,7 +131,8 @@ Check out the ["Plugins"](#plugins) section for more input format examples.
 <details>
   <summary><b><code>getFormat(input)</code></b></summary>
 
-Returns a color model name for the input passed to the function. Uses the same parsing system as `colord` function.
+Returns a color model name for the input passed to the function. Uses the same
+parsing system as `colord` function.
 
 ```js
 import { getFormat } from "colord";
@@ -144,7 +150,10 @@ getFormat("WUT?"); // undefined
 <details>
   <summary><b><code>.toHex()</code></b></summary>
 
-Returns the [hexadecimal representation](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#rgb_colors) of a color. When the alpha channel value of the color is less than 1, it outputs `#rrggbbaa` format instead of `#rrggbb`.
+Returns the
+[hexadecimal representation](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#rgb_colors)
+of a color. When the alpha channel value of the color is less than 1, it outputs
+`#rrggbbaa` format instead of `#rrggbb`.
 
 ```js
 colord("rgb(0, 255, 0)").toHex(); // "#00ff00"
@@ -177,7 +186,8 @@ colord({ h: 180, s: 100, l: 50, a: 0.5 }).toRgbString(); // "rgba(0, 255, 255, 0
 <details>
   <summary><b><code>.toHsl()</code></b></summary>
 
-Converts a color to [HSL color space](https://en.wikipedia.org/wiki/HSL_and_HSV) and returns an object.
+Converts a color to [HSL color space](https://en.wikipedia.org/wiki/HSL_and_HSV)
+and returns an object.
 
 ```js
 colord("#ffff00").toHsl(); // { h: 60, s: 100, l: 50, a: 1 }
@@ -189,7 +199,9 @@ colord("rgba(0, 0, 255, 0.5) ").toHsl(); // { h: 240, s: 100, l: 50, a: 0.5 }
 <details>
   <summary><b><code>.toHslString()</code></b></summary>
 
-Converts a color to [HSL color space](https://en.wikipedia.org/wiki/HSL_and_HSV) and expresses it through the [functional notation](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#hsl_colors).
+Converts a color to [HSL color space](https://en.wikipedia.org/wiki/HSL_and_HSV)
+and expresses it through the
+[functional notation](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#hsl_colors).
 
 ```js
 colord("#ffff00").toHslString(); // "hsl(60, 100%, 50%)"
@@ -201,7 +213,8 @@ colord("rgba(0, 0, 255, 0.5)").toHslString(); // "hsla(240, 100%, 50%, 0.5)"
 <details>
   <summary><b><code>.toHsv()</code></b></summary>
 
-Converts a color to [HSV color space](https://en.wikipedia.org/wiki/HSL_and_HSV) and returns an object.
+Converts a color to [HSV color space](https://en.wikipedia.org/wiki/HSL_and_HSV)
+and returns an object.
 
 ```js
 colord("#ffff00").toHsv(); // { h: 60, s: 100, v: 100, a: 1 }
@@ -213,7 +226,9 @@ colord("rgba(0, 255, 255, 0.5) ").toHsv(); // { h: 180, s: 100, v: 100, a: 1 }
 <details>
   <summary><b><code>.toName(options?)</code></b> (<b>names</b> plugin)</summary>
 
-Converts a color to a [CSS keyword](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#color_keywords). Returns `undefined` if the color is not specified in the specs.
+Converts a color to a
+[CSS keyword](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#color_keywords).
+Returns `undefined` if the color is not specified in the specs.
 
 ```js
 import { colord, extend } from "colord";
@@ -234,7 +249,8 @@ colord("#fe0000").toName({ closest: true }); // "red" (closest color available)
 <details>
   <summary><b><code>.toCmyk()</code></b> (<b>cmyk</b> plugin)</summary>
 
-Converts a color to [CMYK](https://en.wikipedia.org/wiki/CMYK_color_model) color space.
+Converts a color to [CMYK](https://en.wikipedia.org/wiki/CMYK_color_model) color
+space.
 
 ```js
 import { colord, extend } from "colord";
@@ -253,7 +269,9 @@ colord("#555aaa").toCmyk(); // { c: 50, m: 47, y: 0, k: 33, a: 1 }
 
 Converts a color to color space.
 
-Converts a color to [CMYK](https://en.wikipedia.org/wiki/CMYK_color_model) color space and expresses it through the [functional notation](https://www.w3.org/TR/css-color-4/#device-cmyk)
+Converts a color to [CMYK](https://en.wikipedia.org/wiki/CMYK_color_model) color
+space and expresses it through the
+[functional notation](https://www.w3.org/TR/css-color-4/#device-cmyk)
 
 ```js
 import { colord, extend } from "colord";
@@ -270,7 +288,9 @@ colord("#00336680").toCmykString(); // "device-cmyk(100% 50% 0% 60% / 0.5)"
 <details>
   <summary><b><code>.toHwb()</code></b> (<b>hwb</b> plugin)</summary>
 
-Converts a color to [HWB (Hue-Whiteness-Blackness)](https://en.wikipedia.org/wiki/HWB_color_model) color space.
+Converts a color to
+[HWB (Hue-Whiteness-Blackness)](https://en.wikipedia.org/wiki/HWB_color_model)
+color space.
 
 ```js
 import { colord, extend } from "colord";
@@ -287,7 +307,10 @@ colord("#555aaa").toHwb(); // { h: 236, w: 33, b: 33, a: 1 }
 <details>
   <summary><b><code>.toHwbString()</code></b> (<b>hwb</b> plugin)</summary>
 
-Converts a color to [HWB (Hue-Whiteness-Blackness)](https://en.wikipedia.org/wiki/HWB_color_model) color space and expresses it through the [functional notation](https://www.w3.org/TR/css-color-4/#the-hwb-notation).
+Converts a color to
+[HWB (Hue-Whiteness-Blackness)](https://en.wikipedia.org/wiki/HWB_color_model)
+color space and expresses it through the
+[functional notation](https://www.w3.org/TR/css-color-4/#the-hwb-notation).
 
 ```js
 import { colord, extend } from "colord";
@@ -305,7 +328,9 @@ colord("#003366").alpha(0.5).toHwbString(); // "hwb(210 0% 60% / 0.5)"
 <details>
   <summary><b><code>.toLab()</code></b> (<b>lab</b> plugin)</summary>
 
-Converts a color to [CIE LAB](https://en.wikipedia.org/wiki/CIELAB_color_space) color space. The conversion logic is ported from [CSS Color Module Level 4 Specification](https://www.w3.org/TR/css-color-4/#color-conversion-code).
+Converts a color to [CIE LAB](https://en.wikipedia.org/wiki/CIELAB_color_space)
+color space. The conversion logic is ported from
+[CSS Color Module Level 4 Specification](https://www.w3.org/TR/css-color-4/#color-conversion-code).
 
 ```js
 import { colord, extend } from "colord";
@@ -322,7 +347,10 @@ colord("#33221180").toLab(); // { l: 14.89, a: 5.77, b: 14.41, alpha: 0.5 }
 <details>
   <summary><b><code>.toLch()</code></b> (<b>lch</b> plugin)</summary>
 
-Converts a color to [CIE LCH](https://lea.verou.me/2020/04/lch-colors-in-css-what-why-and-how/) color space. The conversion logic is ported from [CSS Color Module Level 4 Specification](https://www.w3.org/TR/css-color-4/#color-conversion-code).
+Converts a color to
+[CIE LCH](https://lea.verou.me/2020/04/lch-colors-in-css-what-why-and-how/)
+color space. The conversion logic is ported from
+[CSS Color Module Level 4 Specification](https://www.w3.org/TR/css-color-4/#color-conversion-code).
 
 ```js
 import { colord, extend } from "colord";
@@ -339,7 +367,10 @@ colord("#213b0b").toLch(); // { l: 21.85, c: 31.95, h: 127.77, a: 1 }
 <details>
   <summary><b><code>.toLchString()</code></b> (<b>lch</b> plugin)</summary>
 
-Converts a color to [CIE LCH](https://lea.verou.me/2020/04/lch-colors-in-css-what-why-and-how/) color space and expresses it through the [functional notation](https://www.w3.org/TR/css-color-4/#specifying-lab-lch).
+Converts a color to
+[CIE LCH](https://lea.verou.me/2020/04/lch-colors-in-css-what-why-and-how/)
+color space and expresses it through the
+[functional notation](https://www.w3.org/TR/css-color-4/#specifying-lab-lch).
 
 ```js
 import { colord, extend } from "colord";
@@ -356,7 +387,9 @@ colord("#213b0b").alpha(0.5).toLchString(); // "lch(21.85% 31.95 127.77 / 0.5)"
 <details>
   <summary><b><code>.toXyz()</code></b> (<b>xyz</b> plugin)</summary>
 
-Converts a color to [CIE XYZ](https://www.sttmedia.com/colormodel-xyz) color space. The conversion logic is ported from [CSS Color Module Level 4 Specification](https://www.w3.org/TR/css-color-4/#color-conversion-code).
+Converts a color to [CIE XYZ](https://www.sttmedia.com/colormodel-xyz) color
+space. The conversion logic is ported from
+[CSS Color Module Level 4 Specification](https://www.w3.org/TR/css-color-4/#color-conversion-code).
 
 ```js
 import { colord, extend } from "colord";
@@ -385,7 +418,8 @@ colord("rgb(0, 0, 0)").alpha(0.5).toRgbString(); // "rgba(0, 0, 0, 0.5)"
 <details>
   <summary><b><code>.invert()</code></b></summary>
 
-Creates a new `Colord` instance containing an inverted (opposite) version of the color.
+Creates a new `Colord` instance containing an inverted (opposite) version of the
+color.
 
 ```js
 colord("#ffffff").invert().toHex(); // "#000000"
@@ -397,7 +431,8 @@ colord("#aabbcc").invert().toHex(); // "#554433"
 <details>
   <summary><b><code>.saturate(amount = 0.1)</code></b></summary>
 
-Increases the [HSL saturation](https://en.wikipedia.org/wiki/HSL_and_HSV) of a color by the given amount.
+Increases the [HSL saturation](https://en.wikipedia.org/wiki/HSL_and_HSV) of a
+color by the given amount.
 
 ```js
 colord("#bf4040").saturate(0.25).toHex(); // "#df2020"
@@ -409,7 +444,8 @@ colord("hsl(0, 50%, 50%)").saturate(0.5).toHslString(); // "hsl(0, 100%, 50%)"
 <details>
   <summary><b><code>.desaturate(amount = 0.1)</code></b></summary>
 
-Decreases the [HSL saturation](https://en.wikipedia.org/wiki/HSL_and_HSV) of a color by the given amount.
+Decreases the [HSL saturation](https://en.wikipedia.org/wiki/HSL_and_HSV) of a
+color by the given amount.
 
 ```js
 colord("#df2020").saturate(0.25).toHex(); // "#bf4040"
@@ -421,7 +457,8 @@ colord("hsl(0, 100%, 50%)").saturate(0.5).toHslString(); // "hsl(0, 50%, 50%)"
 <details>
   <summary><b><code>.grayscale()</code></b></summary>
 
-Makes a gray color with the same lightness as a source color. Same as calling `desaturate(1)`.
+Makes a gray color with the same lightness as a source color. Same as calling
+`desaturate(1)`.
 
 ```js
 colord("#bf4040").grayscale().toHex(); // "#808080"
@@ -433,7 +470,8 @@ colord("hsl(0, 100%, 50%)").grayscale().toHslString(); // "hsl(0, 0%, 50%)"
 <details>
   <summary><b><code>.lighten(amount = 0.1)</code></b></summary>
 
-Increases the [HSL lightness](https://en.wikipedia.org/wiki/HSL_and_HSV) of a color by the given amount.
+Increases the [HSL lightness](https://en.wikipedia.org/wiki/HSL_and_HSV) of a
+color by the given amount.
 
 ```js
 colord("#000000").lighten(0.5).toHex(); // "#808080"
@@ -446,7 +484,8 @@ colord("hsl(0, 50%, 50%)").lighten(0.5).toHslString(); // "hsl(0, 50%, 100%)"
 <details>
   <summary><b><code>.darken(amount = 0.1)</code></b></summary>
 
-Decreases the [HSL lightness](https://en.wikipedia.org/wiki/HSL_and_HSV) of a color by the given amount.
+Decreases the [HSL lightness](https://en.wikipedia.org/wiki/HSL_and_HSV) of a
+color by the given amount.
 
 ```js
 colord("#ffffff").darken(0.5).toHex(); // "#808080"
@@ -471,7 +510,8 @@ colord("hsl(90, 50%, 50%)").hue(370).toHslString(); // "hsl(10, 50%, 50%)"
 <details>
   <summary><b><code>.rotate(amount = 15)</code></b></summary>
 
-Increases the [HSL](https://en.wikipedia.org/wiki/HSL_and_HSV) hue value of a color by the given amount.
+Increases the [HSL](https://en.wikipedia.org/wiki/HSL_and_HSV) hue value of a
+color by the given amount.
 
 ```js
 colord("hsl(90, 50%, 50%)").rotate(90).toHslString(); // "hsl(180, 50%, 50%)"
@@ -483,9 +523,14 @@ colord("hsl(90, 50%, 50%)").rotate(-180).toHslString(); // "hsl(270, 50%, 50%)"
 <details>
   <summary><b><code>.mix(color2, ratio = 0.5)</code></b> (<b>mix</b> plugin)</summary>
 
-Produces a mixture of two colors and returns the result of mixing them (new Colord instance).
+Produces a mixture of two colors and returns the result of mixing them (new
+Colord instance).
 
-In contrast to other libraries that perform RGB values mixing, Colord mixes colors through [LAB color space](https://en.wikipedia.org/wiki/CIELAB_color_space). This approach produces better results and doesn't have the drawbacks the legacy way has.
+In contrast to other libraries that perform RGB values mixing, Colord mixes
+colors through
+[LAB color space](https://en.wikipedia.org/wiki/CIELAB_color_space). This
+approach produces better results and doesn't have the drawbacks the legacy way
+has.
 
 → [Online demo](https://3cg7o.csb.app/)
 
@@ -506,7 +551,9 @@ colord("#008080").mix("#808000", 0.35).toHex(); // "#50805d"
 <details>
   <summary><b><code>.tints(count = 5)</code></b> (<b>mix</b> plugin)</summary>
 
-Provides functionality to generate [tints](https://en.wikipedia.org/wiki/Tints_and_shades) of a color. Returns an array of `Colord` instances, including the original color.
+Provides functionality to generate
+[tints](https://en.wikipedia.org/wiki/Tints_and_shades) of a color. Returns an
+array of `Colord` instances, including the original color.
 
 ```js
 import { colord, extend } from "colord";
@@ -523,7 +570,9 @@ color.tints(3).map((c) => c.toHex()); // ["#ff0000", "#ff9f80", "#ffffff"];
 <details>
   <summary><b><code>.shades(count = 5)</code></b> (<b>mix</b> plugin)</summary>
 
-Provides functionality to generate [shades](https://en.wikipedia.org/wiki/Tints_and_shades) of a color. Returns an array of `Colord` instances, including the original color.
+Provides functionality to generate
+[shades](https://en.wikipedia.org/wiki/Tints_and_shades) of a color. Returns an
+array of `Colord` instances, including the original color.
 
 ```js
 import { colord, extend } from "colord";
@@ -540,7 +589,9 @@ color.shades(3).map((c) => c.toHex()); // ["#ff0000", "#7a1b0b", "#000000"];
 <details>
   <summary><b><code>.tones(count = 5)</code></b> (<b>mix</b> plugin)</summary>
 
-Provides functionality to generate [tones](https://en.wikipedia.org/wiki/Tints_and_shades) of a color. Returns an array of `Colord` instances, including the original color.
+Provides functionality to generate
+[tones](https://en.wikipedia.org/wiki/Tints_and_shades) of a color. Returns an
+array of `Colord` instances, including the original color.
 
 ```js
 import { colord, extend } from "colord";
@@ -557,7 +608,9 @@ color.tones(3).map((c) => c.toHex()); // ["#ff0000", "#c86147", "#808080"];
 <details>
   <summary><b><code>.harmonies(type = "complementary")</code></b> (<b>harmonies</b> plugin)</summary>
 
-Provides functionality to generate [harmony colors](<https://en.wikipedia.org/wiki/Harmony_(color)>). Returns an array of `Colord` instances.
+Provides functionality to generate
+[harmony colors](https://en.wikipedia.org/wiki/Harmony_(color)). Returns an
+array of `Colord` instances.
 
 ```js
 import { colord, extend } from "colord";
@@ -582,8 +635,9 @@ color.harmonies("triadic").map((c) => c.toHex()); // ["#ff0000", "#00ff00", "#00
 <details>
   <summary><b><code>.isValid()</code></b></summary>
 
-Returns a boolean indicating whether or not an input has been parsed successfully.
-Note: If parsing is unsuccessful, Colord defaults to black (does not throws an error).
+Returns a boolean indicating whether or not an input has been parsed
+successfully. Note: If parsing is unsuccessful, Colord defaults to black (does
+not throws an error).
 
 ```js
 colord("#ffffff").isValid(); // true
@@ -630,7 +684,9 @@ colord("hsl(-10, 50%, 50%)").hue(); // 350
 <details>
   <summary><b><code>.brightness()</code></b></summary>
 
-Returns the brightness of a color (from 0 to 1). The calculation logic is modified from [Web Content Accessibility Guidelines](https://www.w3.org/TR/AERT/#color-contrast).
+Returns the brightness of a color (from 0 to 1). The calculation logic is
+modified from
+[Web Content Accessibility Guidelines](https://www.w3.org/TR/AERT/#color-contrast).
 
 ```js
 colord("#000000").brightness(); // 0
@@ -669,7 +725,9 @@ colord("#ffffff").isDark(); // false
 <details>
   <summary><b><code>.luminance()</code></b> (<b>a11y</b> plugin)</summary>
 
-Returns the relative luminance of a color, normalized to 0 for darkest black and 1 for lightest white as defined by [WCAG 2.0](https://www.w3.org/TR/WCAG20/#relativeluminancedef).
+Returns the relative luminance of a color, normalized to 0 for darkest black and
+1 for lightest white as defined by
+[WCAG 2.0](https://www.w3.org/TR/WCAG20/#relativeluminancedef).
 
 ```js
 colord("#000000").luminance(); // 0
@@ -683,7 +741,11 @@ colord("#ffffff").luminance(); // 1
 <details>
   <summary><b><code>.contrast(color2 = "#FFF")</code></b> (<b>a11y</b> plugin)</summary>
 
-Calculates a contrast ratio for a color pair. This luminance difference is expressed as a ratio ranging from 1 (e.g. white on white) to 21 (e.g., black on a white). [WCAG Accessibility Level AA requires](https://webaim.org/articles/contrast/) a ratio of at least 4.5 for normal text and 3 for large text.
+Calculates a contrast ratio for a color pair. This luminance difference is
+expressed as a ratio ranging from 1 (e.g. white on white) to 21 (e.g., black on
+a white).
+[WCAG Accessibility Level AA requires](https://webaim.org/articles/contrast/) a
+ratio of at least 4.5 for normal text and 3 for large text.
 
 ```js
 colord("#000000").contrast(); // 21 (black on white)
@@ -698,7 +760,8 @@ colord("#0000ff").contrast("#ff000"); // 2.14 (blue on red)
 <details>
   <summary><b><code>.isReadable(color2 = "#FFF", options?)</code></b> (<b>a11y</b> plugin)</summary>
 
-Checks that a background and text color pair is readable according to [WCAG 2.0 Contrast and Color Requirements](https://webaim.org/articles/contrast/).
+Checks that a background and text color pair is readable according to
+[WCAG 2.0 Contrast and Color Requirements](https://webaim.org/articles/contrast/).
 
 ```js
 colord("#000000").isReadable(); // true (normal black text on white bg conforms to WCAG AA)
@@ -714,9 +777,10 @@ colord("#e60000").isReadable("#ffff47", { level: "AAA", size: "large" }); // tru
 <details>
   <summary><b><code>.delta(color2 = "#FFF")</code></b> (<b>lab</b> plugin)</summary>
 
-Calculates the perceived color difference between two colors.
-The difference calculated according to [Delta E2000](https://en.wikipedia.org/wiki/Color_difference#CIEDE2000).
-The return value is `0` if the colors are equal, `1` if they are entirely different.
+Calculates the perceived color difference between two colors. The difference
+calculated according to
+[Delta E2000](https://en.wikipedia.org/wiki/Color_difference#CIEDE2000). The
+return value is `0` if the colors are equal, `1` if they are entirely different.
 
 ```js
 colord("#3296fa").delta("#197dc8"); // 0.099
@@ -776,12 +840,14 @@ colord("rgba(170,170,170,0.4)").minify({ alphaHex: true }); // "#aaa6"
 
 ## Plugins
 
-**Colord** has a built-in plugin system that allows new features and functionality to be easily added.
+**Colord** has a built-in plugin system that allows new features and
+functionality to be easily added.
 
 <details>
   <summary><b><code>a11y</code> (Accessibility)</b> <i>0.38 KB</i></summary>
 
-Adds accessibility and color contrast utilities working according to [Web Content Accessibility Guidelines 2.0](https://www.w3.org/TR/WCAG20/).
+Adds accessibility and color contrast utilities working according to
+[Web Content Accessibility Guidelines 2.0](https://www.w3.org/TR/WCAG20/).
 
 ```js
 import { colord, extend } from "colord";
@@ -829,7 +895,8 @@ colord("device-cmyk(0% 61% 72% 0% / 50%)").toHex(); // "#ff634780"
 <details>
   <summary><b><code>harmonies</code> (Color harmonies)</b> <i>0.15 KB</i></summary>
 
-Provides functionality to generate [harmony colors](<https://en.wikipedia.org/wiki/Harmony_(color)>).
+Provides functionality to generate
+[harmony colors](https://en.wikipedia.org/wiki/Harmony_(color)).
 
 ```js
 import { colord, extend } from "colord";
@@ -852,7 +919,9 @@ color.harmonies("triadic").map((c) => c.toHex()); // ["#ff0000", "#00ff00", "#00
 <details>
   <summary><b><code>hwb</code> (HWB color model)</b> <i>0.8 KB</i></summary>
 
-Adds support of [Hue-Whiteness-Blackness](https://en.wikipedia.org/wiki/HWB_color_model) color model.
+Adds support of
+[Hue-Whiteness-Blackness](https://en.wikipedia.org/wiki/HWB_color_model) color
+model.
 
 ```js
 import { colord, extend } from "colord";
@@ -872,9 +941,12 @@ colord("hwb(210 0% 60% / 50%)").toHex(); // "#00336680"
 <details>
   <summary><b><code>lab</code> (CIE LAB color space)</b> <i>1.4 KB</i></summary>
 
-Adds support of [CIE LAB](https://en.wikipedia.org/wiki/CIELAB_color_space) color model. The conversion logic is ported from [CSS Color Module Level 4 Specification](https://www.w3.org/TR/css-color-4/#color-conversion-code).
+Adds support of [CIE LAB](https://en.wikipedia.org/wiki/CIELAB_color_space)
+color model. The conversion logic is ported from
+[CSS Color Module Level 4 Specification](https://www.w3.org/TR/css-color-4/#color-conversion-code).
 
-Also plugin provides `.delta` method for [perceived color difference calculations](https://en.wikipedia.org/wiki/Color_difference#CIEDE2000).
+Also plugin provides `.delta` method for
+[perceived color difference calculations](https://en.wikipedia.org/wiki/Color_difference#CIEDE2000).
 
 ```js
 import { colord, extend } from "colord";
@@ -894,7 +966,10 @@ colord("#000000").delta("#ffffff"); // 1
 <details>
   <summary><b><code>lch</code> (CIE LCH color space)</b> <i>1.3 KB</i></summary>
 
-Adds support of [CIE LCH](https://lea.verou.me/2020/04/lch-colors-in-css-what-why-and-how/) color space. The conversion logic is ported from [CSS Color Module Level 4 Specification](https://www.w3.org/TR/css-color-4/#color-conversion-code).
+Adds support of
+[CIE LCH](https://lea.verou.me/2020/04/lch-colors-in-css-what-why-and-how/)
+color space. The conversion logic is ported from
+[CSS Color Module Level 4 Specification](https://www.w3.org/TR/css-color-4/#color-conversion-code).
 
 ```js
 import { colord, extend } from "colord";
@@ -936,7 +1011,11 @@ colord("rgba(170,170,170,0.4)").minify({ alphaHex: true }); // "#aaa6"
 
 A plugin adding color mixing utilities.
 
-In contrast to other libraries that perform RGB values mixing, Colord mixes colors through [LAB color space](https://en.wikipedia.org/wiki/CIELAB_color_space). This approach produces better results and doesn't have the drawbacks the legacy way has.
+In contrast to other libraries that perform RGB values mixing, Colord mixes
+colors through
+[LAB color space](https://en.wikipedia.org/wiki/CIELAB_color_space). This
+approach produces better results and doesn't have the drawbacks the legacy way
+has.
 
 → [Online demo](https://3cg7o.csb.app/)
 
@@ -952,7 +1031,8 @@ colord("#cd853f").mix("#eee8aa", 0.6).toHex(); // "#e3c07e"
 colord("#008080").mix("#808000", 0.35).toHex(); // "#50805d"
 ```
 
-Also, the plugin provides special mixtures such as [tints, shades, and tones](https://en.wikipedia.org/wiki/Tints_and_shades):
+Also, the plugin provides special mixtures such as
+[tints, shades, and tones](https://en.wikipedia.org/wiki/Tints_and_shades):
 
 <div align="center">
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Tint-tone-shade.svg/320px-Tint-tone-shade.svg.png" alt="tints, shades, and tones mixtures" />
@@ -970,7 +1050,9 @@ color.tones(3).map((c) => c.toHex()); // ["#ff0000", "#c86147", "#808080"];
 <details>
   <summary><b><code>names</code> (CSS color keywords)</b> <i>1.45 KB</i></summary>
 
-Provides options to convert a color into a [CSS color keyword](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#color_keywords) and vice versa.
+Provides options to convert a color into a
+[CSS color keyword](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#color_keywords)
+and vice versa.
 
 ```js
 import { colord, extend } from "colord";
@@ -990,7 +1072,9 @@ colord("#fe0000").toName({ closest: true }); // "red" (closest color)
 <details>
   <summary><b><code>xyz</code> (CIE XYZ color space)</b> <i>0.7 KB</i></summary>
 
-Adds support of [CIE XYZ](https://www.sttmedia.com/colormodel-xyz) color model. The conversion logic is ported from [CSS Color Module Level 4 Specification](https://www.w3.org/TR/css-color-4/#color-conversion-code).
+Adds support of [CIE XYZ](https://www.sttmedia.com/colormodel-xyz) color model.
+The conversion logic is ported from
+[CSS Color Module Level 4 Specification](https://www.w3.org/TR/css-color-4/#color-conversion-code).
 
 ```js
 import { colord, extend } from "colord";
@@ -1008,12 +1092,23 @@ colord({ x: 0, y: 0, z: 0 }).toHex(); // "#000000"
 
 ## Types
 
-**Colord** is written in strict TypeScript and ships with types in the library itself — no need for any other install. We provide everything you need in one tiny package.
+**Colord** is written in strict TypeScript and ships with types in the library
+itself — no need for any other install. We provide everything you need in one
+tiny package.
 
-While not only typing its own functions and variables, **Colord** can also help you type yours. Depending on the color space you are using, you can also import and use the type that is associated with it.
+While not only typing its own functions and variables, **Colord** can also help
+you type yours. Depending on the color space you are using, you can also import
+and use the type that is associated with it.
 
 ```ts
-import { RgbColor, RgbaColor, HslColor, HslaColor, HsvColor, HsvaColor } from "colord";
+import {
+  HslaColor,
+  HslColor,
+  HsvaColor,
+  HsvColor,
+  RgbaColor,
+  RgbColor,
+} from "colord";
 
 const foo: HslColor = { h: 0, s: 0, l: 0 };
 const bar: RgbColor = { r: 0, g: 0, v: 0 }; // ERROR
@@ -1023,10 +1118,14 @@ const bar: RgbColor = { r: 0, g: 0, v: 0 }; // ERROR
 
 ## Projects using Colord
 
-- [cssnano](https://github.com/cssnano/cssnano) — the most popular CSS minification tool
-- [Resume.io](https://resume.io/) — online resume builder with over 12,000,000 users worldwide
-- [Leva](https://github.com/pmndrs/leva) — open source extensible GUI panel made for React
-- [Qui Max](https://github.com/Qvant-lab/qui-max) — Vue.js design system and component library
+- [cssnano](https://github.com/cssnano/cssnano) — the most popular CSS
+  minification tool
+- [Resume.io](https://resume.io/) — online resume builder with over 12,000,000
+  users worldwide
+- [Leva](https://github.com/pmndrs/leva) — open source extensible GUI panel made
+  for React
+- [Qui Max](https://github.com/Qvant-lab/qui-max) — Vue.js design system and
+  component library
 - and [thousands more](https://github.com/omgovich/colord/network/dependents)...
 
 <div><img src="assets/divider.png" width="838" alt="---" /></div>
@@ -1046,8 +1145,11 @@ const bar: RgbColor = { r: 0, g: 0, v: 0 }; // ERROR
 - [x] CSS color names (via plugin)
 - [x] A11y and contrast utils (via plugin)
 - [x] XYZ color space (via plugin)
-- [x] [HWB](https://drafts.csswg.org/css-color/#the-hwb-notation) color space (via plugin)
-- [x] [LAB](https://www.w3.org/TR/css-color-4/#resolving-lab-lch-values) color space (via plugin)
-- [x] [LCH](https://lea.verou.me/2020/04/lch-colors-in-css-what-why-and-how/) color space (via plugin)
+- [x] [HWB](https://drafts.csswg.org/css-color/#the-hwb-notation) color space
+      (via plugin)
+- [x] [LAB](https://www.w3.org/TR/css-color-4/#resolving-lab-lch-values) color
+      space (via plugin)
+- [x] [LCH](https://lea.verou.me/2020/04/lch-colors-in-css-what-why-and-how/)
+      color space (via plugin)
 - [x] Mix colors (via plugin)
 - [x] CMYK color space (via plugin)

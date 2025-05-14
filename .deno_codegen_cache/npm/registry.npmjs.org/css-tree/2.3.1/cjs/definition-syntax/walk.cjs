@@ -1,56 +1,58 @@
-'use strict';
+"use strict";
 
-const noop = function() {};
+const noop = function () {};
 
 function ensureFunction(value) {
-    return typeof value === 'function' ? value : noop;
+  return typeof value === "function" ? value : noop;
 }
 
 function walk(node, options, context) {
-    function walk(node) {
-        enter.call(context, node);
+  function walk(node) {
+    enter.call(context, node);
 
-        switch (node.type) {
-            case 'Group':
-                node.terms.forEach(walk);
-                break;
+    switch (node.type) {
+      case "Group":
+        node.terms.forEach(walk);
+        break;
 
-            case 'Multiplier':
-                walk(node.term);
-                break;
+      case "Multiplier":
+        walk(node.term);
+        break;
 
-            case 'Type':
-            case 'Property':
-            case 'Keyword':
-            case 'AtKeyword':
-            case 'Function':
-            case 'String':
-            case 'Token':
-            case 'Comma':
-                break;
+      case "Type":
+      case "Property":
+      case "Keyword":
+      case "AtKeyword":
+      case "Function":
+      case "String":
+      case "Token":
+      case "Comma":
+        break;
 
-            default:
-                throw new Error('Unknown type: ' + node.type);
-        }
-
-        leave.call(context, node);
+      default:
+        throw new Error("Unknown type: " + node.type);
     }
 
-    let enter = noop;
-    let leave = noop;
+    leave.call(context, node);
+  }
 
-    if (typeof options === 'function') {
-        enter = options;
-    } else if (options) {
-        enter = ensureFunction(options.enter);
-        leave = ensureFunction(options.leave);
-    }
+  let enter = noop;
+  let leave = noop;
 
-    if (enter === noop && leave === noop) {
-        throw new Error('Neither `enter` nor `leave` walker handler is set or both aren\'t a function');
-    }
+  if (typeof options === "function") {
+    enter = options;
+  } else if (options) {
+    enter = ensureFunction(options.enter);
+    leave = ensureFunction(options.leave);
+  }
 
-    walk(node);
+  if (enter === noop && leave === noop) {
+    throw new Error(
+      "Neither `enter` nor `leave` walker handler is set or both aren't a function",
+    );
+  }
+
+  walk(node);
 }
 
 exports.walk = walk;

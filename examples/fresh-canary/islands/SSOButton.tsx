@@ -6,29 +6,29 @@
  */
 /** @jsx h */
 import { h } from "preact";
-import { useState } from 'preact/hooks';
-import { useWorkOS } from '../hooks/use-workos.ts';
+import { useState } from "preact/hooks";
+import { useWorkOS } from "../hooks/use-workos.ts";
 
 // Supported SSO providers
 export type SSOProvider =
-  | 'google-oauth'
-  | 'github-oauth'
-  | 'microsoft-oauth'
-  | 'okta'
-  | 'auth0'
-  | 'onelogin'
-  | 'azure-saml'
-  | 'azure-oidc'
-  | 'jumpcloud'
-  | 'ping-federate'
-  | 'ping-one'
-  | 'generic-saml'
-  | 'generic-oidc'
+  | "google-oauth"
+  | "github-oauth"
+  | "microsoft-oauth"
+  | "okta"
+  | "auth0"
+  | "onelogin"
+  | "azure-saml"
+  | "azure-oidc"
+  | "jumpcloud"
+  | "ping-federate"
+  | "ping-one"
+  | "generic-saml"
+  | "generic-oidc"
   | string; // For custom provider IDs
 
 // Button style options
-export type ButtonStyle = 'primary' | 'secondary' | 'outline' | 'minimal';
-export type ButtonSize = 'small' | 'medium' | 'large';
+export type ButtonStyle = "primary" | "secondary" | "outline" | "minimal";
+export type ButtonSize = "small" | "medium" | "large";
 
 export interface SSOButtonProps {
   /**
@@ -111,19 +111,19 @@ export interface SSOButtonProps {
  * Map of provider types to display names
  */
 const PROVIDER_NAMES: Record<string, string> = {
-  'google-oauth': 'Google',
-  'github-oauth': 'GitHub',
-  'microsoft-oauth': 'Microsoft',
-  'okta': 'Okta',
-  'auth0': 'Auth0',
-  'onelogin': 'OneLogin',
-  'azure-saml': 'Azure AD',
-  'azure-oidc': 'Microsoft',
-  'jumpcloud': 'JumpCloud',
-  'ping-federate': 'PingFederate',
-  'ping-one': 'PingOne',
-  'generic-saml': 'SAML',
-  'generic-oidc': 'OIDC',
+  "google-oauth": "Google",
+  "github-oauth": "GitHub",
+  "microsoft-oauth": "Microsoft",
+  "okta": "Okta",
+  "auth0": "Auth0",
+  "onelogin": "OneLogin",
+  "azure-saml": "Azure AD",
+  "azure-oidc": "Microsoft",
+  "jumpcloud": "JumpCloud",
+  "ping-federate": "PingFederate",
+  "ping-one": "PingOne",
+  "generic-saml": "SAML",
+  "generic-oidc": "OIDC",
 };
 
 /**
@@ -151,9 +151,9 @@ export default function SSOButton({
   providerName,
   redirectURI,
   buttonText,
-  className = '',
-  variant = 'primary',
-  size = 'medium',
+  className = "",
+  variant = "primary",
+  size = "medium",
   iconUrl,
   showIcon = true,
   onAuthInitiated,
@@ -166,33 +166,38 @@ export default function SSOButton({
 
   // Determine the provider display name
   const displayName = providerName ||
-    (provider in PROVIDER_NAMES ? PROVIDER_NAMES[provider] : 'SSO');
+    (provider in PROVIDER_NAMES ? PROVIDER_NAMES[provider] : "SSO");
 
   // Generate button text if not provided
   const displayText = buttonText || `Sign in with ${displayName}`;
 
   // Build CSS classes for the button
   const sizeClass = {
-    small: 'py-1 px-3 text-sm',
-    medium: 'py-2 px-4 text-base',
-    large: 'py-3 px-6 text-lg',
+    small: "py-1 px-3 text-sm",
+    medium: "py-2 px-4 text-base",
+    large: "py-3 px-6 text-lg",
   }[size];
 
   const variantClass = {
-    primary: 'bg-blue-600 hover:bg-blue-700 text-white',
-    secondary: 'bg-gray-600 hover:bg-gray-700 text-white',
-    outline: 'bg-transparent border border-blue-600 text-blue-600 hover:bg-blue-50',
-    minimal: 'bg-transparent text-blue-600 hover:underline hover:bg-blue-50',
+    primary: "bg-blue-600 hover:bg-blue-700 text-white",
+    secondary: "bg-gray-600 hover:bg-gray-700 text-white",
+    outline:
+      "bg-transparent border border-blue-600 text-blue-600 hover:bg-blue-50",
+    minimal: "bg-transparent text-blue-600 hover:underline hover:bg-blue-50",
   }[variant];
 
-  const widthClass = fullWidth ? 'w-full' : '';
+  const widthClass = fullWidth ? "w-full" : "";
 
   const buttonClasses = `
     flex items-center justify-center gap-2 rounded
     ${sizeClass}
     ${variantClass}
     ${widthClass}
-    ${disabled || isLoading.value || isAuthenticating ? 'opacity-70 cursor-not-allowed' : ''}
+    ${
+    disabled || isLoading.value || isAuthenticating
+      ? "opacity-70 cursor-not-allowed"
+      : ""
+  }
     transition-colors duration-200
     ${className}
   `.trim();
@@ -210,7 +215,7 @@ export default function SSOButton({
       const authorizationURL = await getAuthorizationURL(provider, redirectURI);
       globalThis.location.href = authorizationURL;
     } catch (err) {
-      console.error('SSO authentication error:', err);
+      console.error("SSO authentication error:", err);
       const errorObj = err instanceof Error ? err : new Error(String(err));
       onError?.(errorObj);
       setIsAuthenticating(false);
@@ -224,7 +229,7 @@ export default function SSOButton({
 
   return (
     <button
-      type='button'
+      type="button"
       onClick={handleSignIn}
       disabled={disabled || isLoading.value || isAuthenticating}
       class={buttonClasses}
@@ -232,16 +237,16 @@ export default function SSOButton({
     >
       {showIcon && (
         iconUrl
-          ? <img src={iconUrl} alt={`${displayName} icon`} class='w-5 h-5' />
+          ? <img src={iconUrl} alt={`${displayName} icon`} class="w-5 h-5" />
           : (
-            <span class='flex items-center justify-center w-5 h-5 bg-white rounded-full text-blue-600 font-bold text-xs'>
+            <span class="flex items-center justify-center w-5 h-5 bg-white rounded-full text-blue-600 font-bold text-xs">
               {displayName.charAt(0)}
             </span>
           )
       )}
 
       <span>
-        {isAuthenticating ? 'Redirecting...' : displayText}
+        {isAuthenticating ? "Redirecting..." : displayText}
       </span>
     </button>
   );

@@ -25,11 +25,11 @@ import { toPathString } from "./_to_path_string.ts";
  */ export async function emptyDir(dir) {
   try {
     const items = await Array.fromAsync(Deno.readDir(dir));
-    await Promise.all(items.map((item)=>{
+    await Promise.all(items.map((item) => {
       if (item && item.name) {
         const filepath = join(toPathString(dir), item.name);
         return Deno.remove(filepath, {
-          recursive: true
+          recursive: true,
         });
       }
     }));
@@ -39,7 +39,7 @@ import { toPathString } from "./_to_path_string.ts";
     }
     // if not exist. then create it
     await Deno.mkdir(dir, {
-      recursive: true
+      recursive: true,
     });
   }
 }
@@ -68,15 +68,15 @@ import { toPathString } from "./_to_path_string.ts";
  */ export function emptyDirSync(dir) {
   try {
     const items = [
-      ...Deno.readDirSync(dir)
+      ...Deno.readDirSync(dir),
     ];
     // If the directory exists, remove all entries inside it.
-    while(items.length){
+    while (items.length) {
       const item = items.shift();
       if (item && item.name) {
         const filepath = join(toPathString(dir), item.name);
         Deno.removeSync(filepath, {
-          recursive: true
+          recursive: true,
         });
       }
     }
@@ -86,7 +86,7 @@ import { toPathString } from "./_to_path_string.ts";
     }
     // if not exist. then create it
     Deno.mkdirSync(dir, {
-      recursive: true
+      recursive: true,
     });
   }
 }

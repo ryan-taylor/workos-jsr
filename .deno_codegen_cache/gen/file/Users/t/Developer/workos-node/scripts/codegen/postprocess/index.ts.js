@@ -9,7 +9,7 @@ async function getDenoAst() {
     denoAst = await import("https://deno.land/x/deno_ast@0.46.7/mod.ts");
   }
   if (denoAst === null) {
-    throw new Error('Failed to load deno_ast module');
+    throw new Error("Failed to load deno_ast module");
   }
   return denoAst;
 }
@@ -24,7 +24,7 @@ import { largeBrandedEnumTransform } from "./enums.ts";
     const { parse } = await getDenoAst();
     return parse(sourceText, {
       syntax: "typescript",
-      tsx: false
+      tsx: false,
     });
   } catch (error) {
     console.error("Error parsing TypeScript:", error);
@@ -36,20 +36,25 @@ import { largeBrandedEnumTransform } from "./enums.ts";
  * @param inputDir Directory containing the generated code
  * @param options Configuration options
  */ export async function postProcess(inputDir, options = {}) {
-  const { transforms = [
-    enumUnionTransform,
-    largeBrandedEnumTransform
-  ], formatCode = true } = options;
+  const {
+    transforms = [
+      enumUnionTransform,
+      largeBrandedEnumTransform,
+    ],
+    formatCode = true,
+  } = options;
   console.log(`Post-processing generated code in ${inputDir}...`);
   // Add all TypeScript files in the input directory
   const files = [];
-  for await (const entry of walk(inputDir, {
-    includeDirs: false,
-    exts: [
-      ".ts"
-    ],
-    followSymlinks: false
-  })){
+  for await (
+    const entry of walk(inputDir, {
+      includeDirs: false,
+      exts: [
+        ".ts",
+      ],
+      followSymlinks: false,
+    })
+  ) {
     files.push(entry.path);
   }
   if (files.length === 0) {
@@ -59,13 +64,13 @@ import { largeBrandedEnumTransform } from "./enums.ts";
   console.log(`Found ${files.length} TypeScript files to process`);
   // Process files one by one
   let changesMade = false;
-  for (const file of files){
+  for (const file of files) {
     try {
       const sourceText = await Deno.readTextFile(file);
       let modifiedSource = sourceText;
       let fileChanged = false;
       // Apply transforms sequentially
-      for (const transform of transforms){
+      for (const transform of transforms) {
         const result = await transform.process(modifiedSource, file);
         if (result !== null) {
           modifiedSource = result;
@@ -100,10 +105,10 @@ import { largeBrandedEnumTransform } from "./enums.ts";
     const command = new Deno.Command("deno", {
       args: [
         "fmt",
-        inputDir
+        inputDir,
       ],
       stdout: "piped",
-      stderr: "piped"
+      stderr: "piped",
     });
     const { code, stdout, stderr } = await command.output();
     if (code !== 0) {

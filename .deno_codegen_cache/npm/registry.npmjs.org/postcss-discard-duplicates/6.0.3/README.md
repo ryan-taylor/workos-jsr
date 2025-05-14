@@ -19,11 +19,11 @@ considers these two rules to be different:
 
 ```css
 h1, h2 {
-    color: blue;
+  color: blue;
 }
 
 h2, h1 {
-    color: blue;
+  color: blue;
 }
 ```
 
@@ -34,12 +34,12 @@ processor, otherwise it would be responsible for too many things.
 
 ```css
 h1 {
-    margin: 0 auto;
-    margin: 0 auto
+  margin: 0 auto;
+  margin: 0 auto;
 }
 
 h1 {
-    margin: 0 auto
+  margin: 0 auto;
 }
 ```
 
@@ -47,7 +47,7 @@ h1 {
 
 ```css
 h1 {
-    margin: 0 auto
+  margin: 0 auto;
 }
 ```
 
@@ -56,15 +56,13 @@ h1 {
 See the [PostCSS documentation](https://github.com/postcss/postcss#usage) for
 examples for your environment.
 
-
 ## Contributors
 
-See [CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
-
+See
+[CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
 
 ## License
 
 MIT © [Ben Briggs](http://beneb.info)
-
 
 [postcss]: https://github.com/postcss/postcss

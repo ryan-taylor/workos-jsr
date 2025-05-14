@@ -5,22 +5,26 @@
  * users from a WorkOS Directory, with support for basic management operations.
  */
 
-import { useEffect, useState } from 'preact/hooks';
-import { type signal, useComputed, useSignal } from '@preact/signals';
-import { useWorkOS } from '../hooks/use-workos.ts';
-import type { DirectoryGroup, DirectoryUser, DirectoryUserWithGroups } from '../utils/directory-sync.ts';
+import { useEffect, useState } from "preact/hooks";
+import { type signal, useComputed, useSignal } from "@preact/signals";
+import { useWorkOS } from "../hooks/use-workos.ts";
+import type {
+  DirectoryGroup,
+  DirectoryUser,
+  DirectoryUserWithGroups,
+} from "../utils/directory-sync.ts";
 
 // Enumeration for view states
 enum ViewState {
-  LIST = 'list',
-  DETAIL = 'detail',
+  LIST = "list",
+  DETAIL = "detail",
 }
 
 // Filter options for directory users
 interface FilterOptions {
   search: string;
   group?: string;
-  status?: 'active' | 'suspended' | 'all';
+  status?: "active" | "suspended" | "all";
 }
 
 export interface DirectoryUserListProps {
@@ -107,7 +111,7 @@ export default function DirectoryUserList({
   pageSize = 10,
   enableDetailView = true,
   enableManagement = false,
-  className = '',
+  className = "",
   renderUserDetail,
   renderUserListItem,
   onUserAction,
@@ -128,9 +132,9 @@ export default function DirectoryUserList({
 
   // Filter signals
   const filters = useSignal<FilterOptions>({
-    search: '',
+    search: "",
     group: initialGroupId,
-    status: 'all',
+    status: "all",
   });
 
   // Available groups
@@ -155,9 +159,13 @@ export default function DirectoryUserList({
   });
 
   // Local state for search input
-  const [searchInput, setSearchInput] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState<'active' | 'suspended' | 'all'>('all');
-  const [selectedGroup, setSelectedGroup] = useState<string | undefined>(initialGroupId);
+  const [searchInput, setSearchInput] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState<
+    "active" | "suspended" | "all"
+  >("all");
+  const [selectedGroup, setSelectedGroup] = useState<string | undefined>(
+    initialGroupId,
+  );
   const [isLoadingAction, setIsLoadingAction] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
   const [actionSuccess, setActionSuccess] = useState<string | null>(null);
@@ -216,17 +224,23 @@ export default function DirectoryUserList({
       let filteredUsers = [...result.data];
 
       // Apply status filter
-      if (filters.value.status && filters.value.status !== 'all') {
-        filteredUsers = filteredUsers.filter((user) => user.state === filters.value.status);
+      if (filters.value.status && filters.value.status !== "all") {
+        filteredUsers = filteredUsers.filter((user) =>
+          user.state === filters.value.status
+        );
       }
 
       // Apply search filter
       if (filters.value.search) {
         const searchLower = filters.value.search.toLowerCase();
         filteredUsers = filteredUsers.filter((user) =>
-          user.emails.some((email) => email.value.toLowerCase().includes(searchLower)) ||
-          (user.firstName && user.firstName.toLowerCase().includes(searchLower)) ||
-          (user.lastName && user.lastName.toLowerCase().includes(searchLower)) ||
+          user.emails.some((email) =>
+            email.value.toLowerCase().includes(searchLower)
+          ) ||
+          (user.firstName &&
+            user.firstName.toLowerCase().includes(searchLower)) ||
+          (user.lastName &&
+            user.lastName.toLowerCase().includes(searchLower)) ||
           (user.username && user.username.toLowerCase().includes(searchLower))
         );
       }
@@ -239,14 +253,15 @@ export default function DirectoryUserList({
       // Estimate total count based on cursors
       // This is a rough approximation since the API doesn't provide exact counts
       if (result.data.length < pageSize) {
-        totalCount.value = (currentPage.value - 1) * pageSize + result.data.length;
+        totalCount.value = (currentPage.value - 1) * pageSize +
+          result.data.length;
       } else if (!result.listMetadata?.after) {
         totalCount.value = currentPage.value * pageSize;
       } else {
         totalCount.value = currentPage.value * pageSize + pageSize;
       }
     } catch (err) {
-      console.error('Failed to fetch directory users:', err);
+      console.error("Failed to fetch directory users:", err);
       error.value = err instanceof Error ? err : new Error(String(err));
     } finally {
       isLoading.value = false;
@@ -267,7 +282,7 @@ export default function DirectoryUserList({
 
       groups.value = result.data;
     } catch (err) {
-      console.error('Failed to fetch directory groups:', err);
+      console.error("Failed to fetch directory groups:", err);
     }
   };
 
@@ -319,14 +334,14 @@ export default function DirectoryUserList({
    * Reset all filters to default values
    */
   const resetFilters = () => {
-    setSearchInput('');
-    setSelectedStatus('all');
+    setSearchInput("");
+    setSelectedStatus("all");
     setSelectedGroup(undefined);
 
     filters.value = {
-      search: '',
+      search: "",
       group: undefined,
-      status: 'all',
+      status: "all",
     };
 
     // Reset to first page
@@ -354,7 +369,10 @@ export default function DirectoryUserList({
   /**
    * Perform a user management action
    */
-  const performUserAction = async (action: string, user: DirectoryUserWithGroups) => {
+  const performUserAction = async (
+    action: string,
+    user: DirectoryUserWithGroups,
+  ) => {
     if (!workos || !enableManagement) return;
 
     setIsLoadingAction(true);
@@ -364,12 +382,12 @@ export default function DirectoryUserList({
     try {
       // Implement directory sync management actions as needed
       switch (action) {
-        case 'suspend':
+        case "suspend":
           // This is a placeholder - the actual implementation would depend on the WorkOS API
           console.log(`Suspend user: ${user.id}`);
           setActionSuccess(`User ${user.id} has been suspended`);
           break;
-        case 'activate':
+        case "activate":
           // This is a placeholder - the actual implementation would depend on the WorkOS API
           console.log(`Activate user: ${user.id}`);
           setActionSuccess(`User ${user.id} has been activated`);
@@ -385,7 +403,11 @@ export default function DirectoryUserList({
       fetchUsers();
     } catch (err) {
       console.error(`Failed to perform user action "${action}":`, err);
-      setActionError(`Failed to perform action: ${err instanceof Error ? err.message : String(err)}`);
+      setActionError(
+        `Failed to perform action: ${
+          err instanceof Error ? err.message : String(err)
+        }`,
+      );
     } finally {
       setIsLoadingAction(false);
     }
@@ -395,7 +417,7 @@ export default function DirectoryUserList({
   if (isLoading.value && users.value.length === 0) {
     return (
       <div class={`directory-user-list-loading ${className}`}>
-        <div class='loading-spinner'>Loading directory users...</div>
+        <div class="loading-spinner">Loading directory users...</div>
       </div>
     );
   }
@@ -404,12 +426,12 @@ export default function DirectoryUserList({
   if (error.value && users.value.length === 0) {
     return (
       <div class={`directory-user-list-error ${className}`}>
-        <div class='error-message'>
+        <div class="error-message">
           <h3>Error loading directory users</h3>
           <p>{error.value.message}</p>
           <button
             onClick={() => fetchUsers()}
-            class='retry-button'
+            class="retry-button"
           >
             Retry
           </button>
@@ -422,10 +444,10 @@ export default function DirectoryUserList({
   if (viewState.value === ViewState.DETAIL && selectedUser.value) {
     return (
       <div class={`directory-user-detail ${className}`}>
-        <div class='detail-header'>
+        <div class="detail-header">
           <button
             onClick={backToList}
-            class='back-button'
+            class="back-button"
           >
             ← Back to List
           </button>
@@ -433,11 +455,11 @@ export default function DirectoryUserList({
         </div>
 
         {actionError && (
-          <div class='action-error'>
+          <div class="action-error">
             {actionError}
             <button
               onClick={() => setActionError(null)}
-              class='dismiss-button'
+              class="dismiss-button"
             >
               Dismiss
             </button>
@@ -445,11 +467,11 @@ export default function DirectoryUserList({
         )}
 
         {actionSuccess && (
-          <div class='action-success'>
+          <div class="action-success">
             {actionSuccess}
             <button
               onClick={() => setActionSuccess(null)}
-              class='dismiss-button'
+              class="dismiss-button"
             >
               Dismiss
             </button>
@@ -462,66 +484,83 @@ export default function DirectoryUserList({
             renderUserDetail(selectedUser.value)
           )
           : (
-            <div class='user-detail-content'>
-              <div class='user-profile'>
-                <div class='user-avatar'>
-                  {selectedUser.value.firstName?.[0] || selectedUser.value.lastName?.[0] || selectedUser.value.emails[0].value[0]}
+            <div class="user-detail-content">
+              <div class="user-profile">
+                <div class="user-avatar">
+                  {selectedUser.value.firstName?.[0] ||
+                    selectedUser.value.lastName?.[0] ||
+                    selectedUser.value.emails[0].value[0]}
                 </div>
 
-                <div class='user-info'>
+                <div class="user-info">
                   <h3>
                     {selectedUser.value.firstName} {selectedUser.value.lastName}
-                    <span class={`user-status user-status-${selectedUser.value.state}`}>
+                    <span
+                      class={`user-status user-status-${selectedUser.value.state}`}
+                    >
                       {selectedUser.value.state}
                     </span>
                   </h3>
 
-                  <div class='user-emails'>
+                  <div class="user-emails">
                     {selectedUser.value.emails.map((email) => (
-                      <div key={email.value} class={`email ${email.primary ? 'primary' : 'secondary'}`}>
-                        {email.value} {email.primary && <span class='primary-badge'>Primary</span>}
+                      <div
+                        key={email.value}
+                        class={`email ${
+                          email.primary ? "primary" : "secondary"
+                        }`}
+                      >
+                        {email.value}{" "}
+                        {email.primary && (
+                          <span class="primary-badge">Primary</span>
+                        )}
                       </div>
                     ))}
                   </div>
 
                   {selectedUser.value.username && (
-                    <div class='user-username'>
+                    <div class="user-username">
                       <strong>Username:</strong> {selectedUser.value.username}
                     </div>
                   )}
                 </div>
               </div>
 
-              {selectedUser.value.groups && selectedUser.value.groups.length > 0 && (
-                <div class='user-groups'>
+              {selectedUser.value.groups &&
+                selectedUser.value.groups.length > 0 && (
+                <div class="user-groups">
                   <h4>Groups</h4>
                   <ul>
-                    {selectedUser.value.groups.map((group) => <li key={group.id}>{group.name}</li>)}
+                    {selectedUser.value.groups.map((group) => (
+                      <li key={group.id}>{group.name}</li>
+                    ))}
                   </ul>
                 </div>
               )}
 
               {enableManagement && (
-                <div class='user-actions'>
+                <div class="user-actions">
                   <h4>User Management</h4>
-                  <div class='action-buttons'>
-                    {selectedUser.value.state === 'active'
+                  <div class="action-buttons">
+                    {selectedUser.value.state === "active"
                       ? (
                         <button
-                          onClick={() => performUserAction('suspend', selectedUser.value!)}
+                          onClick={() =>
+                            performUserAction("suspend", selectedUser.value!)}
                           disabled={isLoadingAction}
-                          class='suspend-button'
+                          class="suspend-button"
                         >
-                          {isLoadingAction ? 'Processing...' : 'Suspend User'}
+                          {isLoadingAction ? "Processing..." : "Suspend User"}
                         </button>
                       )
                       : (
                         <button
-                          onClick={() => performUserAction('activate', selectedUser.value!)}
+                          onClick={() =>
+                            performUserAction("activate", selectedUser.value!)}
                           disabled={isLoadingAction}
-                          class='activate-button'
+                          class="activate-button"
                         >
-                          {isLoadingAction ? 'Processing...' : 'Activate User'}
+                          {isLoadingAction ? "Processing..." : "Activate User"}
                         </button>
                       )}
                   </div>
@@ -529,7 +568,7 @@ export default function DirectoryUserList({
               )}
 
               {selectedUser.value.rawAttributes && (
-                <div class='user-raw-attributes'>
+                <div class="user-raw-attributes">
                   <h4>Raw Attributes</h4>
                   <pre>
                   {JSON.stringify(selectedUser.value.rawAttributes, null, 2)}
@@ -545,22 +584,26 @@ export default function DirectoryUserList({
   // Render list view (default)
   return (
     <div class={`directory-user-list ${className}`}>
-      <div class='filters-section'>
-        <div class='search-filter'>
+      <div class="filters-section">
+        <div class="search-filter">
           <input
-            type='text'
-            placeholder='Search users...'
+            type="text"
+            placeholder="Search users..."
             value={searchInput}
-            onInput={(e) => setSearchInput((e.target as HTMLInputElement).value)}
+            onInput={(e) =>
+              setSearchInput((e.target as HTMLInputElement).value)}
           />
         </div>
 
-        <div class='group-filter'>
+        <div class="group-filter">
           <select
             value={selectedGroup}
-            onChange={(e) => setSelectedGroup((e.target as HTMLSelectElement).value || undefined)}
+            onChange={(e) =>
+              setSelectedGroup(
+                (e.target as HTMLSelectElement).value || undefined,
+              )}
           >
-            <option value=''>All Groups</option>
+            <option value="">All Groups</option>
             {groups.value.map((group) => (
               <option key={group.id} value={group.id}>
                 {group.name}
@@ -569,27 +612,33 @@ export default function DirectoryUserList({
           </select>
         </div>
 
-        <div class='status-filter'>
+        <div class="status-filter">
           <select
             value={selectedStatus}
-            onChange={(e) => setSelectedStatus((e.target as HTMLSelectElement).value as 'active' | 'suspended' | 'all')}
+            onChange={(e) =>
+              setSelectedStatus(
+                (e.target as HTMLSelectElement).value as
+                  | "active"
+                  | "suspended"
+                  | "all",
+              )}
           >
-            <option value='all'>All Statuses</option>
-            <option value='active'>Active</option>
-            <option value='suspended'>Suspended</option>
+            <option value="all">All Statuses</option>
+            <option value="active">Active</option>
+            <option value="suspended">Suspended</option>
           </select>
         </div>
 
-        <div class='filter-actions'>
+        <div class="filter-actions">
           <button
             onClick={applyFilters}
-            class='apply-filters-button'
+            class="apply-filters-button"
           >
             Apply Filters
           </button>
           <button
             onClick={resetFilters}
-            class='reset-filters-button'
+            class="reset-filters-button"
           >
             Reset
           </button>
@@ -598,17 +647,17 @@ export default function DirectoryUserList({
 
       {users.value.length === 0
         ? (
-          <div class='no-users-found'>
+          <div class="no-users-found">
             <p>No users found matching the current filters.</p>
           </div>
         )
         : (
           <>
-            <div class='users-list'>
+            <div class="users-list">
               {users.value.map((user) => (
                 <div
                   key={user.id}
-                  class='user-item'
+                  class="user-item"
                   onClick={() => viewUserDetail(user)}
                 >
                   {renderUserListItem
@@ -616,28 +665,36 @@ export default function DirectoryUserList({
                       renderUserListItem(user)
                     )
                     : (
-                      <div class='user-list-content'>
-                        <div class='user-list-avatar'>
-                          {user.firstName?.[0] || user.lastName?.[0] || user.emails[0].value[0]}
+                      <div class="user-list-content">
+                        <div class="user-list-avatar">
+                          {user.firstName?.[0] || user.lastName?.[0] ||
+                            user.emails[0].value[0]}
                         </div>
-                        <div class='user-list-info'>
-                          <div class='user-list-name'>
+                        <div class="user-list-info">
+                          <div class="user-list-name">
                             {user.firstName} {user.lastName}
-                            <span class={`user-list-status status-${user.state}`}>
+                            <span
+                              class={`user-list-status status-${user.state}`}
+                            >
                               {user.state}
                             </span>
                           </div>
-                          <div class='user-list-email'>
-                            {user.emails.find((e) => e.primary)?.value || user.emails[0]?.value}
+                          <div class="user-list-email">
+                            {user.emails.find((e) => e.primary)?.value ||
+                              user.emails[0]?.value}
                           </div>
                         </div>
-                        <div class='user-list-groups'>
+                        <div class="user-list-groups">
                           {user.groups.slice(0, 2).map((group) => (
-                            <span key={group.id} class='user-group-tag'>
+                            <span key={group.id} class="user-group-tag">
                               {group.name}
                             </span>
                           ))}
-                          {user.groups.length > 2 && <span class='more-groups'>+{user.groups.length - 2}</span>}
+                          {user.groups.length > 2 && (
+                            <span class="more-groups">
+                              +{user.groups.length - 2}
+                            </span>
+                          )}
                         </div>
                       </div>
                     )}
@@ -645,16 +702,16 @@ export default function DirectoryUserList({
               ))}
             </div>
 
-            <div class='pagination'>
-              <div class='pagination-info'>
+            <div class="pagination">
+              <div class="pagination-info">
                 {currentPageDisplay}
               </div>
 
-              <div class='pagination-controls'>
+              <div class="pagination-controls">
                 <button
                   onClick={() => goToPreviousPage()}
                   disabled={!hasPreviousPage.value || isLoading.value}
-                  class='pagination-prev'
+                  class="pagination-prev"
                 >
                   Previous
                 </button>
@@ -662,7 +719,7 @@ export default function DirectoryUserList({
                 <button
                   onClick={() => goToNextPage()}
                   disabled={!hasNextPage.value || isLoading.value}
-                  class='pagination-next'
+                  class="pagination-next"
                 >
                   Next
                 </button>

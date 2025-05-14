@@ -2,7 +2,9 @@
 
 > Returns true if the value is a finite number.
 
-Please consider following this project's author, [Jon Schlinkert](https://github.com/jonschlinkert), and consider starring the project to show your :heart: and support.
+Please consider following this project's author,
+[Jon Schlinkert](https://github.com/jonschlinkert), and consider starring the
+project to show your :heart: and support.
 
 ## Install
 
@@ -14,12 +16,16 @@ $ npm install --save is-number
 
 ## Why is this needed?
 
-In JavaScript, it's not always as straightforward as it should be to reliably check if a value is a number. It's common for devs to use `+`, `-`, or `Number()` to cast a string value to a number (for example, when values are returned from user input, regex matches, parsers, etc). But there are many non-intuitive edge cases that yield unexpected results:
+In JavaScript, it's not always as straightforward as it should be to reliably
+check if a value is a number. It's common for devs to use `+`, `-`, or
+`Number()` to cast a string value to a number (for example, when values are
+returned from user input, regex matches, parsers, etc). But there are many
+non-intuitive edge cases that yield unexpected results:
 
 ```js
 console.log(+[]); //=> 0
-console.log(+''); //=> 0
-console.log(+'   '); //=> 0
+console.log(+""); //=> 0
+console.log(+"   "); //=> 0
 console.log(typeof NaN); //=> 'number'
 ```
 
@@ -28,7 +34,7 @@ This library offers a performant way to smooth out edge cases like these.
 ## Usage
 
 ```js
-const isNumber = require('is-number');
+const isNumber = require("is-number");
 ```
 
 See the [tests](./test.js) for more examples.
@@ -36,27 +42,27 @@ See the [tests](./test.js) for more examples.
 ### true
 
 ```js
-isNumber(5e3);               // true
-isNumber(0xff);              // true
-isNumber(-1.1);              // true
-isNumber(0);                 // true
-isNumber(1);                 // true
-isNumber(1.1);               // true
-isNumber(10);                // true
-isNumber(10.10);             // true
-isNumber(100);               // true
-isNumber('-1.1');            // true
-isNumber('0');               // true
-isNumber('012');             // true
-isNumber('0xff');            // true
-isNumber('1');               // true
-isNumber('1.1');             // true
-isNumber('10');              // true
-isNumber('10.10');           // true
-isNumber('100');             // true
-isNumber('5e3');             // true
-isNumber(parseInt('012'));   // true
-isNumber(parseFloat('012')); // true
+isNumber(5e3); // true
+isNumber(0xff); // true
+isNumber(-1.1); // true
+isNumber(0); // true
+isNumber(1); // true
+isNumber(1.1); // true
+isNumber(10); // true
+isNumber(10.10); // true
+isNumber(100); // true
+isNumber("-1.1"); // true
+isNumber("0"); // true
+isNumber("012"); // true
+isNumber("0xff"); // true
+isNumber("1"); // true
+isNumber("1.1"); // true
+isNumber("10"); // true
+isNumber("10.10"); // true
+isNumber("100"); // true
+isNumber("5e3"); // true
+isNumber(parseInt("012")); // true
+isNumber(parseFloat("012")); // true
 ```
 
 ### False
@@ -64,39 +70,41 @@ isNumber(parseFloat('012')); // true
 Everything else is false, as you would expect:
 
 ```js
-isNumber(Infinity);          // false
-isNumber(NaN);               // false
-isNumber(null);              // false
-isNumber(undefined);         // false
-isNumber('');                // false
-isNumber('   ');             // false
-isNumber('foo');             // false
-isNumber([1]);               // false
-isNumber([]);                // false
-isNumber(function () {});    // false
-isNumber({});                // false
+isNumber(Infinity); // false
+isNumber(NaN); // false
+isNumber(null); // false
+isNumber(undefined); // false
+isNumber(""); // false
+isNumber("   "); // false
+isNumber("foo"); // false
+isNumber([1]); // false
+isNumber([]); // false
+isNumber(function () {}); // false
+isNumber({}); // false
 ```
 
 ## Release history
 
 ### 7.0.0
 
-* Refactor. Now uses `.isFinite` if it exists.
-* Performance is about the same as v6.0 when the value is a string or number. But it's now 3x-4x faster when the value is not a string or number.
+- Refactor. Now uses `.isFinite` if it exists.
+- Performance is about the same as v6.0 when the value is a string or number.
+  But it's now 3x-4x faster when the value is not a string or number.
 
 ### 6.0.0
 
-* Optimizations, thanks to @benaadams.
+- Optimizations, thanks to @benaadams.
 
 ### 5.0.0
 
 **Breaking changes**
 
-* removed support for `instanceof Number` and `instanceof String`
+- removed support for `instanceof Number` and `instanceof String`
 
 ## Benchmarks
 
-As with all benchmarks, take these with a grain of salt. See the [benchmarks](./benchmark/index.js) for more detail.
+As with all benchmarks, take these with a grain of salt. See the
+[benchmarks](./benchmark/index.js) for more detail.
 
 ```
 # all
@@ -123,14 +131,17 @@ fastest is 'v6.0'
 <details>
 <summary><strong>Contributing</strong></summary>
 
-Pull requests and stars are always welcome. For bugs and feature requests, [please create an issue](../../issues/new).
+Pull requests and stars are always welcome. For bugs and feature requests,
+[please create an issue](../../issues/new).
 
 </details>
 
 <details>
 <summary><strong>Running Tests</strong></summary>
 
-Running and reviewing unit tests is a great way to get familiarized with a library and its API. You can install dependencies and run tests with the following command:
+Running and reviewing unit tests is a great way to get familiarized with a
+library and its API. You can install dependencies and run tests with the
+following command:
 
 ```sh
 $ npm install && npm test
@@ -141,7 +152,10 @@ $ npm install && npm test
 <details>
 <summary><strong>Building docs</strong></summary>
 
-_(This project's readme.md is generated by [verb](https://github.com/verbose/verb-generate-readme), please don't edit the readme directly. Any changes to the readme must be made in the [.verb.md](.verb.md) readme template.)_
+_(This project's readme.md is generated by
+[verb](https://github.com/verbose/verb-generate-readme), please don't edit the
+readme directly. Any changes to the readme must be made in the
+[.verb.md](.verb.md) readme template.)_
 
 To generate the readme, run the following command:
 
@@ -155,33 +169,43 @@ $ npm install -g verbose/verb#dev verb-generate-readme && verb
 
 You might also be interested in these projects:
 
-* [is-plain-object](https://www.npmjs.com/package/is-plain-object): Returns true if an object was created by the `Object` constructor. | [homepage](https://github.com/jonschlinkert/is-plain-object "Returns true if an object was created by the `Object` constructor.")
-* [is-primitive](https://www.npmjs.com/package/is-primitive): Returns `true` if the value is a primitive.  | [homepage](https://github.com/jonschlinkert/is-primitive "Returns `true` if the value is a primitive. ")
-* [isobject](https://www.npmjs.com/package/isobject): Returns true if the value is an object and not an array or null. | [homepage](https://github.com/jonschlinkert/isobject "Returns true if the value is an object and not an array or null.")
-* [kind-of](https://www.npmjs.com/package/kind-of): Get the native type of a value. | [homepage](https://github.com/jonschlinkert/kind-of "Get the native type of a value.")
+- [is-plain-object](https://www.npmjs.com/package/is-plain-object): Returns true
+  if an object was created by the `Object` constructor. |
+  [homepage](https://github.com/jonschlinkert/is-plain-object "Returns true if an object was created by the `Object` constructor.")
+- [is-primitive](https://www.npmjs.com/package/is-primitive): Returns `true` if
+  the value is a primitive. |
+  [homepage](https://github.com/jonschlinkert/is-primitive "Returns `true` if the value is a primitive.")
+- [isobject](https://www.npmjs.com/package/isobject): Returns true if the value
+  is an object and not an array or null. |
+  [homepage](https://github.com/jonschlinkert/isobject "Returns true if the value is an object and not an array or null.")
+- [kind-of](https://www.npmjs.com/package/kind-of): Get the native type of a
+  value. |
+  [homepage](https://github.com/jonschlinkert/kind-of "Get the native type of a value.")
 
 ### Contributors
 
-| **Commits** | **Contributor** | 
-| --- | --- |
-| 49 | [jonschlinkert](https://github.com/jonschlinkert) |
-| 5 | [charlike-old](https://github.com/charlike-old) |
-| 1 | [benaadams](https://github.com/benaadams) |
-| 1 | [realityking](https://github.com/realityking) |
+| **Commits** | **Contributor**                                   |
+| ----------- | ------------------------------------------------- |
+| 49          | [jonschlinkert](https://github.com/jonschlinkert) |
+| 5           | [charlike-old](https://github.com/charlike-old)   |
+| 1           | [benaadams](https://github.com/benaadams)         |
+| 1           | [realityking](https://github.com/realityking)     |
 
 ### Author
 
 **Jon Schlinkert**
 
-* [LinkedIn Profile](https://linkedin.com/in/jonschlinkert)
-* [GitHub Profile](https://github.com/jonschlinkert)
-* [Twitter Profile](https://twitter.com/jonschlinkert)
+- [LinkedIn Profile](https://linkedin.com/in/jonschlinkert)
+- [GitHub Profile](https://github.com/jonschlinkert)
+- [Twitter Profile](https://twitter.com/jonschlinkert)
 
 ### License
 
-Copyright © 2018, [Jon Schlinkert](https://github.com/jonschlinkert).
-Released under the [MIT License](LICENSE).
+Copyright © 2018, [Jon Schlinkert](https://github.com/jonschlinkert). Released
+under the [MIT License](LICENSE).
 
-***
+---
 
-_This file was generated by [verb-generate-readme](https://github.com/verbose/verb-generate-readme), v0.6.0, on June 15, 2018._
+_This file was generated by
+[verb-generate-readme](https://github.com/verbose/verb-generate-readme), v0.6.0,
+on June 15, 2018._

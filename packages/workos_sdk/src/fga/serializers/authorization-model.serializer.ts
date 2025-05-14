@@ -1,4 +1,4 @@
-import type { AuthorizationModel } from "workos/fga/interfaces/index.ts";
+import type { AuthorizationModel } from "../interfaces/index.ts";
 
 export function deserializeAuthorizationModel(
   data: Record<string, unknown>,

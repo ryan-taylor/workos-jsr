@@ -5,17 +5,22 @@
  * visually distinct event types, and pagination for historical logs.
  */
 
-import { useEffect, useState } from 'preact/hooks';
-import { type signal, useComputed, useSignal } from '@preact/signals';
-import { useWorkOS } from '../hooks/use-workos.ts';
-import { type AuditLogEvent, getMockAuditLogs, getUniqueActionTypes, getUniqueActorNames } from '../utils/audit-logs.ts';
+import { useEffect, useState } from "preact/hooks";
+import { type signal, useComputed, useSignal } from "@preact/signals";
+import { useWorkOS } from "../hooks/use-workos.ts";
+import {
+  type AuditLogEvent,
+  getMockAuditLogs,
+  getUniqueActionTypes,
+  getUniqueActorNames,
+} from "../utils/audit-logs.ts";
 
 // Filter options for audit logs
 interface FilterOptions {
   search: string;
   actions: string[];
   actorNames: string[];
-  timeRange: 'today' | 'yesterday' | 'week' | 'month' | 'custom';
+  timeRange: "today" | "yesterday" | "week" | "month" | "custom";
   customRangeStart?: Date;
   customRangeEnd?: Date;
 }
@@ -96,7 +101,7 @@ export default function AuditLogStream({
   refreshInterval = 30000,
   enableRealtime = true,
   showDetailedMetadata = false,
-  className = '',
+  className = "",
   onLogSelect,
 }: AuditLogStreamProps) {
   // Fetch WorkOS integration
@@ -116,21 +121,23 @@ export default function AuditLogStream({
 
   // Filter signals
   const filters = useSignal<FilterOptions>({
-    search: '',
+    search: "",
     actions: [],
     actorNames: [],
-    timeRange: 'week',
+    timeRange: "week",
     customRangeStart: undefined,
     customRangeEnd: undefined,
   });
 
   // Local state for filter inputs
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState("");
   const [selectedActions, setSelectedActions] = useState<string[]>([]);
   const [selectedActors, setSelectedActors] = useState<string[]>([]);
-  const [selectedTimeRange, setSelectedTimeRange] = useState<FilterOptions['timeRange']>('week');
-  const [customStartDate, setCustomStartDate] = useState<string>('');
-  const [customEndDate, setCustomEndDate] = useState<string>('');
+  const [selectedTimeRange, setSelectedTimeRange] = useState<
+    FilterOptions["timeRange"]
+  >("week");
+  const [customStartDate, setCustomStartDate] = useState<string>("");
+  const [customEndDate, setCustomEndDate] = useState<string>("");
 
   // Computed properties
   const totalPages = useComputed(() => {
@@ -182,11 +189,11 @@ export default function AuditLogStream({
     let end: Date | undefined;
 
     switch (filters.value.timeRange) {
-      case 'today':
+      case "today":
         start = new Date(now.setHours(0, 0, 0, 0));
         end = new Date();
         break;
-      case 'yesterday':
+      case "yesterday":
         start = new Date(now);
         start.setDate(start.getDate() - 1);
         start.setHours(0, 0, 0, 0);
@@ -195,17 +202,17 @@ export default function AuditLogStream({
         end.setDate(end.getDate() - 1);
         end.setHours(23, 59, 59, 999);
         break;
-      case 'week':
+      case "week":
         start = new Date(now);
         start.setDate(start.getDate() - 7);
         end = new Date();
         break;
-      case 'month':
+      case "month":
         start = new Date(now);
         start.setMonth(start.getMonth() - 1);
         end = new Date();
         break;
-      case 'custom':
+      case "custom":
         start = filters.value.customRangeStart;
         end = filters.value.customRangeEnd;
         break;
@@ -230,8 +237,12 @@ export default function AuditLogStream({
       // Fetch logs using mock function (would be replaced with real API in production)
       const result = await getMockAuditLogs({
         organizationId: organizationId,
-        actions: filters.value.actions.length > 0 ? filters.value.actions : undefined,
-        actorNames: filters.value.actorNames.length > 0 ? filters.value.actorNames : undefined,
+        actions: filters.value.actions.length > 0
+          ? filters.value.actions
+          : undefined,
+        actorNames: filters.value.actorNames.length > 0
+          ? filters.value.actorNames
+          : undefined,
         rangeStart: start,
         rangeEnd: end,
         page: currentPage.value,
@@ -251,7 +262,7 @@ export default function AuditLogStream({
         availableActorNames.value = getUniqueActorNames(result.data);
       }
     } catch (err) {
-      console.error('Failed to fetch audit logs:', err);
+      console.error("Failed to fetch audit logs:", err);
       streamError.value = err instanceof Error ? err : new Error(String(err));
     } finally {
       isStreamLoading.value = false;
@@ -266,7 +277,7 @@ export default function AuditLogStream({
     let customRangeStart: Date | undefined;
     let customRangeEnd: Date | undefined;
 
-    if (selectedTimeRange === 'custom') {
+    if (selectedTimeRange === "custom") {
       if (customStartDate) {
         customRangeStart = new Date(customStartDate);
       }
@@ -295,18 +306,18 @@ export default function AuditLogStream({
    * Reset all filters to default values
    */
   const resetFilters = () => {
-    setSearchInput('');
+    setSearchInput("");
     setSelectedActions([]);
     setSelectedActors([]);
-    setSelectedTimeRange('week');
-    setCustomStartDate('');
-    setCustomEndDate('');
+    setSelectedTimeRange("week");
+    setCustomStartDate("");
+    setCustomEndDate("");
 
     filters.value = {
-      search: '',
+      search: "",
       actions: [],
       actorNames: [],
-      timeRange: 'week',
+      timeRange: "week",
       customRangeStart: undefined,
       customRangeEnd: undefined,
     };
@@ -364,20 +375,20 @@ export default function AuditLogStream({
    * Get badge class for action type
    */
   const getActionTypeClass = (action: string): string => {
-    if (action.startsWith('user.login') || action.startsWith('user.logout')) {
-      return 'action-auth';
-    } else if (action.startsWith('user.')) {
-      return 'action-user';
-    } else if (action.startsWith('organization.')) {
-      return 'action-org';
-    } else if (action.startsWith('api_key.')) {
-      return 'action-api';
-    } else if (action.startsWith('document.')) {
-      return 'action-document';
-    } else if (action.startsWith('settings.')) {
-      return 'action-settings';
+    if (action.startsWith("user.login") || action.startsWith("user.logout")) {
+      return "action-auth";
+    } else if (action.startsWith("user.")) {
+      return "action-user";
+    } else if (action.startsWith("organization.")) {
+      return "action-org";
+    } else if (action.startsWith("api_key.")) {
+      return "action-api";
+    } else if (action.startsWith("document.")) {
+      return "action-document";
+    } else if (action.startsWith("settings.")) {
+      return "action-settings";
     } else {
-      return 'action-other';
+      return "action-other";
     }
   };
 
@@ -414,7 +425,7 @@ export default function AuditLogStream({
   if (isStreamLoading.value && auditLogs.value.length === 0) {
     return (
       <div class={`audit-log-stream-loading ${className}`}>
-        <div class='loading-spinner'>Loading audit logs...</div>
+        <div class="loading-spinner">Loading audit logs...</div>
       </div>
     );
   }
@@ -423,12 +434,12 @@ export default function AuditLogStream({
   if (streamError.value && auditLogs.value.length === 0) {
     return (
       <div class={`audit-log-stream-error ${className}`}>
-        <div class='error-message'>
+        <div class="error-message">
           <h3>Error loading audit logs</h3>
           <p>{streamError.value.message}</p>
           <button
             onClick={() => fetchAuditLogs()}
-            class='retry-button'
+            class="retry-button"
           >
             Retry
           </button>
@@ -441,28 +452,34 @@ export default function AuditLogStream({
   if (selectedLog.value) {
     return (
       <div class={`audit-log-detail ${className}`}>
-        <div class='detail-header'>
+        <div class="detail-header">
           <button
             onClick={closeDetails}
-            class='back-button'
+            class="back-button"
           >
             ← Back to Log Stream
           </button>
           <h2>Audit Log Details</h2>
         </div>
 
-        <div class='log-detail-content'>
-          <div class='log-badge'>
-            <span class={`action-badge ${getActionTypeClass(selectedLog.value.action)}`}>
+        <div class="log-detail-content">
+          <div class="log-badge">
+            <span
+              class={`action-badge ${
+                getActionTypeClass(selectedLog.value.action)
+              }`}
+            >
               {selectedLog.value.action}
             </span>
-            <span class='log-time'>{formatDate(selectedLog.value.occurredAt)}</span>
+            <span class="log-time">
+              {formatDate(selectedLog.value.occurredAt)}
+            </span>
           </div>
 
-          <div class='log-sections'>
-            <div class='actor-section'>
+          <div class="log-sections">
+            <div class="actor-section">
               <h3>Actor</h3>
-              <div class='actor-details'>
+              <div class="actor-details">
                 <div>
                   <strong>Name:</strong> {selectedLog.value.actor.name}
                 </div>
@@ -475,10 +492,10 @@ export default function AuditLogStream({
               </div>
             </div>
 
-            <div class='targets-section'>
+            <div class="targets-section">
               <h3>Targets</h3>
               {selectedLog.value.targets.map((target, index) => (
-                <div key={index} class='target-item'>
+                <div key={index} class="target-item">
                   <div>
                     <strong>Name:</strong> {target.name}
                   </div>
@@ -492,20 +509,21 @@ export default function AuditLogStream({
               ))}
             </div>
 
-            <div class='context-section'>
+            <div class="context-section">
               <h3>Context</h3>
               <div>
                 <strong>Location:</strong> {selectedLog.value.context.location}
               </div>
               {selectedLog.value.context.userAgent && (
                 <div>
-                  <strong>User Agent:</strong> {selectedLog.value.context.userAgent}
+                  <strong>User Agent:</strong>{" "}
+                  {selectedLog.value.context.userAgent}
                 </div>
               )}
             </div>
 
             {selectedLog.value.metadata && (
-              <div class='metadata-section'>
+              <div class="metadata-section">
                 <h3>Metadata</h3>
                 <pre>
                   {JSON.stringify(selectedLog.value.metadata, null, 2)}
@@ -521,64 +539,71 @@ export default function AuditLogStream({
   // Render main log stream view
   return (
     <div class={`audit-log-stream ${className}`}>
-      <div class='stream-header'>
+      <div class="stream-header">
         <h2>Audit Log Stream</h2>
         {enableRealtime && (
-          <div class='realtime-indicator'>
-            <span class='indicator-dot'></span>
+          <div class="realtime-indicator">
+            <span class="indicator-dot"></span>
             Real-time updates enabled
           </div>
         )}
       </div>
 
-      <div class='filters-section'>
-        <div class='filter-row'>
-          <div class='search-filter'>
+      <div class="filters-section">
+        <div class="filter-row">
+          <div class="search-filter">
             <input
-              type='text'
-              placeholder='Search logs...'
+              type="text"
+              placeholder="Search logs..."
               value={searchInput}
-              onInput={(e) => setSearchInput((e.target as HTMLInputElement).value)}
+              onInput={(e) =>
+                setSearchInput((e.target as HTMLInputElement).value)}
             />
           </div>
 
-          <div class='time-range-filter'>
+          <div class="time-range-filter">
             <select
               value={selectedTimeRange}
-              onChange={(e) => setSelectedTimeRange((e.target as HTMLSelectElement).value as FilterOptions['timeRange'])}
+              onChange={(e) =>
+                setSelectedTimeRange(
+                  (e.target as HTMLSelectElement)
+                    .value as FilterOptions["timeRange"],
+                )}
             >
-              <option value='today'>Today</option>
-              <option value='yesterday'>Yesterday</option>
-              <option value='week'>Last 7 days</option>
-              <option value='month'>Last 30 days</option>
-              <option value='custom'>Custom range</option>
+              <option value="today">Today</option>
+              <option value="yesterday">Yesterday</option>
+              <option value="week">Last 7 days</option>
+              <option value="month">Last 30 days</option>
+              <option value="custom">Custom range</option>
             </select>
           </div>
         </div>
 
-        {selectedTimeRange === 'custom' && (
-          <div class='custom-date-range'>
-            <div class='date-input'>
+        {selectedTimeRange === "custom" && (
+          <div class="custom-date-range">
+            <div class="date-input">
               <label>Start Date:</label>
               <input
-                type='date'
+                type="date"
                 value={customStartDate}
-                onChange={(e) => setCustomStartDate((e.target as HTMLInputElement).value)}
+                onChange={(e) =>
+                  setCustomStartDate((e.target as HTMLInputElement).value)}
               />
             </div>
-            <div class='date-input'>
+            <div class="date-input">
               <label>End Date:</label>
               <input
-                type='date'
+                type="date"
                 value={customEndDate}
-                onChange={(e) => setCustomEndDate((e.target as HTMLInputElement).value)}
+                onChange={(e) =>
+                  setCustomEndDate((e.target as HTMLInputElement).value)}
               />
             </div>
           </div>
         )}
 
-        <div class='filter-row'>
-          <div class='action-filter'>
+        <div class="filter-row">
+          <div class="action-filter">
             <select
               multiple
               value={selectedActions}
@@ -594,10 +619,10 @@ export default function AuditLogStream({
                 </option>
               ))}
             </select>
-            <div class='select-label'>Action Types</div>
+            <div class="select-label">Action Types</div>
           </div>
 
-          <div class='actor-filter'>
+          <div class="actor-filter">
             <select
               multiple
               value={selectedActors}
@@ -613,20 +638,20 @@ export default function AuditLogStream({
                 </option>
               ))}
             </select>
-            <div class='select-label'>Actors</div>
+            <div class="select-label">Actors</div>
           </div>
         </div>
 
-        <div class='filter-actions'>
+        <div class="filter-actions">
           <button
             onClick={applyFilters}
-            class='apply-filters-button'
+            class="apply-filters-button"
           >
             Apply Filters
           </button>
           <button
             onClick={resetFilters}
-            class='reset-filters-button'
+            class="reset-filters-button"
           >
             Reset
           </button>
@@ -635,69 +660,73 @@ export default function AuditLogStream({
 
       {auditLogs.value.length === 0
         ? (
-          <div class='no-logs-found'>
+          <div class="no-logs-found">
             <p>No audit logs found matching the current filters.</p>
           </div>
         )
         : (
           <>
-            <div class='logs-list'>
+            <div class="logs-list">
               {auditLogs.value.map((log) => (
                 <div
                   key={log.id}
-                  class='log-item'
+                  class="log-item"
                   onClick={() => viewLogDetails(log)}
                 >
-                  <div class='log-header'>
-                    <span class={`action-badge ${getActionTypeClass(log.action)}`}>
+                  <div class="log-header">
+                    <span
+                      class={`action-badge ${getActionTypeClass(log.action)}`}
+                    >
                       {log.action}
                     </span>
-                    <span class='log-time'>{formatRelativeTime(log.occurredAt)}</span>
+                    <span class="log-time">
+                      {formatRelativeTime(log.occurredAt)}
+                    </span>
                   </div>
 
-                  <div class='log-content'>
-                    <div class='log-actor'>
+                  <div class="log-content">
+                    <div class="log-actor">
                       {log.actor.name} ({log.actor.type})
                     </div>
 
-                    <div class='log-targets'>
+                    <div class="log-targets">
                       {log.targets.map((target, index) => (
-                        <span key={index} class='target-badge'>
+                        <span key={index} class="target-badge">
                           {target.name}
                         </span>
                       ))}
                     </div>
 
                     {showDetailedMetadata && log.metadata && (
-                      <div class='log-metadata'>
+                      <div class="log-metadata">
                         {Object.entries(log.metadata).map(([key, value]) => (
-                          <div key={key} class='metadata-item'>
-                            <span class='metadata-key'>{key}:</span>
-                            <span class='metadata-value'>{String(value)}</span>
+                          <div key={key} class="metadata-item">
+                            <span class="metadata-key">{key}:</span>
+                            <span class="metadata-value">{String(value)}</span>
                           </div>
                         ))}
                       </div>
                     )}
                   </div>
 
-                  <div class='log-location'>
-                    <span class='location-icon'>📍</span>
+                  <div class="log-location">
+                    <span class="location-icon">📍</span>
                     {log.context.location}
                   </div>
                 </div>
               ))}
             </div>
 
-            <div class='pagination'>
-              <div class='pagination-info'>
+            <div class="pagination">
+              <div class="pagination-info">
                 {currentPageDisplay}
               </div>
 
-              <div class='pagination-controls'>
+              <div class="pagination-controls">
                 <button
                   onClick={() => goToPreviousPage()}
                   disabled={!hasPreviousPage.value || isStreamLoading.value}
-                  class='pagination-prev'
+                  class="pagination-prev"
                 >
                   Previous
                 </button>
@@ -705,7 +734,7 @@ export default function AuditLogStream({
                 <button
                   onClick={() => goToNextPage()}
                   disabled={!hasNextPage.value || isStreamLoading.value}
-                  class='pagination-next'
+                  class="pagination-next"
                 >
                   Next
                 </button>

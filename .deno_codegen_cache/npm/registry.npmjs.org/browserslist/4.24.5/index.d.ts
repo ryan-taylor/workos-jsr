@@ -11,71 +11,71 @@
  */
 declare function browserslist(
   queries?: string | readonly string[] | null,
-  opts?: browserslist.Options
-): string[]
+  opts?: browserslist.Options,
+): string[];
 
 declare namespace browserslist {
   interface Query {
-    compose: 'or' | 'and'
-    type: string
-    query: string
-    not?: true
+    compose: "or" | "and";
+    type: string;
+    query: string;
+    not?: true;
   }
 
   interface Options {
     /**
      * Path to processed file. It will be used to find config files.
      */
-    path?: string | false
+    path?: string | false;
     /**
      * Processing environment. It will be used to take right queries
      * from config file.
      */
-    env?: string
+    env?: string;
     /**
      * Custom browser usage statistics for "> 1% in my stats" query.
      */
-    stats?: Stats | string
+    stats?: Stats | string;
     /**
      * Path to config file with queries.
      */
-    config?: string
+    config?: string;
     /**
      * Do not throw on unknown version in direct query.
      */
-    ignoreUnknownVersions?: boolean
+    ignoreUnknownVersions?: boolean;
     /**
      * Throw an error if env is not found.
      */
-    throwOnMissing?: boolean
+    throwOnMissing?: boolean;
     /**
      * Disable security checks for extend query.
      */
-    dangerousExtend?: boolean
+    dangerousExtend?: boolean;
     /**
      * Alias mobile browsers to the desktop version when Can I Use
      * doesn’t have data about the specified version.
      */
-    mobileToDesktop?: boolean
+    mobileToDesktop?: boolean;
   }
 
   type Config = {
-    defaults: string[]
-    [section: string]: string[] | undefined
-  }
+    defaults: string[];
+    [section: string]: string[] | undefined;
+  };
 
   interface Stats {
     [browser: string]: {
-      [version: string]: number
-    }
+      [version: string]: number;
+    };
   }
 
   /**
    * Browser names aliases.
    */
   let aliases: {
-    [alias: string]: string | undefined
-  }
+    [alias: string]: string | undefined;
+  };
 
   /**
    * Aliases to work with joined versions like `ios_saf 7.0-7.1`.
@@ -83,10 +83,10 @@ declare namespace browserslist {
   let versionAliases: {
     [browser: string]:
       | {
-          [version: string]: string | undefined
-        }
-      | undefined
-  }
+        [version: string]: string | undefined;
+      }
+      | undefined;
+  };
 
   /**
    * Can I Use only provides a few versions for some browsers (e.g. `and_chr`).
@@ -94,52 +94,52 @@ declare namespace browserslist {
    * Fallback to a similar browser for unknown versions.
    */
   let desktopNames: {
-    [browser: string]: string | undefined
-  }
+    [browser: string]: string | undefined;
+  };
 
   let data: {
     [browser: string]:
       | {
-          name: string
-          versions: string[]
-          released: string[]
-          releaseDate: {
-            [version: string]: number | undefined | null
-          }
-        }
-      | undefined
-  }
+        name: string;
+        versions: string[];
+        released: string[];
+        releaseDate: {
+          [version: string]: number | undefined | null;
+        };
+      }
+      | undefined;
+  };
 
-  let nodeVersions: string[]
+  let nodeVersions: string[];
 
   interface Usage {
-    [version: string]: number
+    [version: string]: number;
   }
 
   let usage: {
-    global?: Usage
-    custom?: Usage | null
-    [country: string]: Usage | undefined | null
-  }
+    global?: Usage;
+    custom?: Usage | null;
+    [country: string]: Usage | undefined | null;
+  };
 
   let cache: {
     [feature: string]: {
       [name: string]: {
-        [version: string]: string
-      }
-    }
-  }
+        [version: string]: string;
+      };
+    };
+  };
 
   /**
    * Default browsers query
    */
-  let defaults: readonly string[]
+  let defaults: readonly string[];
 
   /**
    * Which statistics should be used. Country code or custom statistics.
    * Pass `"my stats"` to load statistics from `Browserslist` files.
    */
-  type StatsOptions = string | 'my stats' | Stats | { dataByBrowser: Stats }
+  type StatsOptions = string | "my stats" | Stats | { dataByBrowser: Stats };
 
   /**
    * Return browsers market coverage.
@@ -152,7 +152,7 @@ declare namespace browserslist {
    * @param stats Which statistics should be used.
    * @returns Total market coverage for all selected browsers.
    */
-  function coverage(browsers: readonly string[], stats?: StatsOptions): number
+  function coverage(browsers: readonly string[], stats?: StatsOptions): number;
 
   /**
    * Get queries AST to analyze the config content.
@@ -163,8 +163,8 @@ declare namespace browserslist {
    */
   function parse(
     queries?: string | readonly string[] | null,
-    opts?: browserslist.Options
-  ): Query[]
+    opts?: browserslist.Options,
+  ): Query[];
 
   /**
    * Return queries for specific file inside the project.
@@ -175,50 +175,50 @@ declare namespace browserslist {
    * }) ?? browserslist.defaults
    * ```
    */
-  function loadConfig(options: LoadConfigOptions): string[] | undefined
+  function loadConfig(options: LoadConfigOptions): string[] | undefined;
 
-  function clearCaches(): void
+  function clearCaches(): void;
 
-  function parseConfig(string: string): Config
+  function parseConfig(string: string): Config;
 
-  function readConfig(file: string): Config
+  function readConfig(file: string): Config;
 
-  function findConfig(...pathSegments: string[]): Config | undefined
+  function findConfig(...pathSegments: string[]): Config | undefined;
 
-  function findConfigFile(...pathSegments: string[]): string | undefined
+  function findConfigFile(...pathSegments: string[]): string | undefined;
 
   interface LoadConfigOptions {
     /**
      * Path to config file
-     * */
-    config?: string
+     */
+    config?: string;
 
     /**
      * Path to file inside the project to find Browserslist config
      * in closest folder
      */
-    path?: string
+    path?: string;
 
     /**
      * Environment to choose part of config.
      */
-    env?: string
+    env?: string;
   }
 }
 
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      BROWSERSLIST?: string
-      BROWSERSLIST_CONFIG?: string
-      BROWSERSLIST_DANGEROUS_EXTEND?: string
-      BROWSERSLIST_DISABLE_CACHE?: string
-      BROWSERSLIST_ENV?: string
-      BROWSERSLIST_IGNORE_OLD_DATA?: string
-      BROWSERSLIST_STATS?: string
-      BROWSERSLIST_ROOT_PATH?: string
+      BROWSERSLIST?: string;
+      BROWSERSLIST_CONFIG?: string;
+      BROWSERSLIST_DANGEROUS_EXTEND?: string;
+      BROWSERSLIST_DISABLE_CACHE?: string;
+      BROWSERSLIST_ENV?: string;
+      BROWSERSLIST_IGNORE_OLD_DATA?: string;
+      BROWSERSLIST_STATS?: string;
+      BROWSERSLIST_ROOT_PATH?: string;
     }
   }
 }
 
-export = browserslist
+export = browserslist;

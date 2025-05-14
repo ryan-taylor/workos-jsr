@@ -1,47 +1,47 @@
-'use strict';
+"use strict";
 
-const types = require('../../tokenizer/types.cjs');
+const types = require("../../tokenizer/types.cjs");
 
 function consumeRaw(startToken) {
-    return this.Raw(startToken, this.consumeUntilSemicolonIncluded, true);
+  return this.Raw(startToken, this.consumeUntilSemicolonIncluded, true);
 }
 
-const name = 'DeclarationList';
+const name = "DeclarationList";
 const structure = {
-    children: [[
-        'Declaration'
-    ]]
+  children: [[
+    "Declaration",
+  ]],
 };
 
 function parse() {
-    const children = this.createList();
+  const children = this.createList();
 
-    while (!this.eof) {
-        switch (this.tokenType) {
-            case types.WhiteSpace:
-            case types.Comment:
-            case types.Semicolon:
-                this.next();
-                break;
+  while (!this.eof) {
+    switch (this.tokenType) {
+      case types.WhiteSpace:
+      case types.Comment:
+      case types.Semicolon:
+        this.next();
+        break;
 
-            default:
-                children.push(this.parseWithFallback(this.Declaration, consumeRaw));
-        }
+      default:
+        children.push(this.parseWithFallback(this.Declaration, consumeRaw));
     }
+  }
 
-    return {
-        type: 'DeclarationList',
-        loc: this.getLocationFromList(children),
-        children
-    };
+  return {
+    type: "DeclarationList",
+    loc: this.getLocationFromList(children),
+    children,
+  };
 }
 
 function generate(node) {
-    this.children(node, prev => {
-        if (prev.type === 'Declaration') {
-            this.token(types.Semicolon, ';');
-        }
-    });
+  this.children(node, (prev) => {
+    if (prev.type === "Declaration") {
+      this.token(types.Semicolon, ";");
+    }
+  });
 }
 
 exports.generate = generate;

@@ -3,8 +3,8 @@
  * This file provides functions to initialize and manage telemetry for the WorkOS SDK
  */
 
-import type { WorkOS } from "workos/workos.ts";
-import type { TelemetryConfig } from "workos/telemetry/telemetry-config.ts";
+import type { WorkOS } from "../workos.ts";
+import type { TelemetryConfig } from "./telemetry-config.ts";
 
 /**
  * Initializes telemetry for the WorkOS SDK

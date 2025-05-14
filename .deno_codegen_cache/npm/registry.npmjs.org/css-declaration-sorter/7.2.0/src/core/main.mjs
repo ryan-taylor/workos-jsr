@@ -1,37 +1,42 @@
-import { shorthandData } from './shorthand-data.mjs';
-import { bubbleSort } from './bubble-sort.mjs';
+import { shorthandData } from "./shorthand-data.mjs";
+import { bubbleSort } from "./bubble-sort.mjs";
 
 const builtInOrders = [
-  'alphabetical',
-  'concentric-css',
-  'smacss',
+  "alphabetical",
+  "concentric-css",
+  "smacss",
 ];
 
-export const cssDeclarationSorter = ({ order = 'alphabetical', keepOverrides = false } = {}) => ({
-  postcssPlugin: 'css-declaration-sorter',
-  OnceExit (css) {
-    let withKeepOverrides = comparator => comparator;
+export const cssDeclarationSorter = (
+  { order = "alphabetical", keepOverrides = false } = {},
+) => ({
+  postcssPlugin: "css-declaration-sorter",
+  OnceExit(css) {
+    let withKeepOverrides = (comparator) => comparator;
     if (keepOverrides) {
       withKeepOverrides = withOverridesComparator(shorthandData);
     }
 
-    if (typeof order === 'function') {
+    if (typeof order === "function") {
       return processCss({ css, comparator: withKeepOverrides(order) });
     }
 
-    if (!builtInOrders.includes(order))
+    if (!builtInOrders.includes(order)) {
       return Promise.reject(
         Error([
           `Invalid built-in order '${order}' provided.`,
           `Available built-in orders are: ${builtInOrders}`,
-        ].join('\n'))
+        ].join("\n")),
       );
+    }
 
     return import(`../orders/${order}.mjs`)
-      .then(({ properties }) => processCss({
-        css,
-        comparator: withKeepOverrides(orderComparator(properties)),
-      }));
+      .then(({ properties }) =>
+        processCss({
+          css,
+          comparator: withKeepOverrides(orderComparator(properties)),
+        })
+      );
   },
 });
 
@@ -40,21 +45,21 @@ cssDeclarationSorter.postcss = true;
 // Kept for backward compatibility
 export default cssDeclarationSorter;
 
-function processCss ({ css, comparator }) {
+function processCss({ css, comparator }) {
   const comments = [];
   const rulesCache = [];
 
-  css.walk(node => {
+  css.walk((node) => {
     const nodes = node.nodes;
     const type = node.type;
 
-    if (type === 'comment') {
+    if (type === "comment") {
       // Don't do anything to root comments or the last newline comment
-      const isNewlineNode = node.raws.before && node.raws.before.includes('\n');
+      const isNewlineNode = node.raws.before && node.raws.before.includes("\n");
       const lastNewlineNode = isNewlineNode && !node.next();
       const onlyNode = !node.prev() && !node.next() || !node.parent;
 
-      if (lastNewlineNode || onlyNode || node.parent.type === 'root') {
+      if (lastNewlineNode || onlyNode || node.parent.type === "root") {
         return;
       }
 
@@ -62,9 +67,9 @@ function processCss ({ css, comparator }) {
         const pairedNode = node.next() || node.prev();
         if (pairedNode) {
           comments.unshift({
-            'comment': node,
-            'pairedNode': pairedNode,
-            'insertPosition': node.next() ? 'Before' : 'After',
+            "comment": node,
+            "pairedNode": pairedNode,
+            "insertPosition": node.next() ? "Before" : "After",
           });
           node.remove();
         }
@@ -72,9 +77,9 @@ function processCss ({ css, comparator }) {
         const pairedNode = node.prev() || node.next();
         if (pairedNode) {
           comments.push({
-            'comment': node,
-            'pairedNode': pairedNode,
-            'insertPosition': 'After',
+            "comment": node,
+            "pairedNode": pairedNode,
+            "insertPosition": "After",
           });
           node.remove();
         }
@@ -84,28 +89,32 @@ function processCss ({ css, comparator }) {
 
     // Add rule-like nodes to a cache so that we can remove all
     // comment nodes before we start sorting.
-    const isRule = type === 'rule' || type === 'atrule';
+    const isRule = type === "rule" || type === "atrule";
     if (isRule && nodes && nodes.length > 1) {
       rulesCache.push(nodes);
     }
   });
 
   // Perform a sort once all comment nodes are removed
-  rulesCache.forEach(nodes => {
+  rulesCache.forEach((nodes) => {
     sortCssDeclarations({ nodes, comparator });
   });
 
   // Add comments back to the nodes they are paired with
-  comments.forEach(node => {
+  comments.forEach((node) => {
     const pairedNode = node.pairedNode;
     node.comment.remove();
-    pairedNode.parent && pairedNode.parent['insert' + node.insertPosition](pairedNode, node.comment);
+    pairedNode.parent &&
+      pairedNode.parent["insert" + node.insertPosition](
+        pairedNode,
+        node.comment,
+      );
   });
 }
 
-function sortCssDeclarations ({ nodes, comparator }) {
+function sortCssDeclarations({ nodes, comparator }) {
   bubbleSort(nodes, (a, b) => {
-    if (a.type === 'decl' && b.type === 'decl') {
+    if (a.type === "decl" && b.type === "decl") {
       return comparator(a.prop, b.prop);
     } else {
       return compareDifferentType(a, b);
@@ -113,7 +122,7 @@ function sortCssDeclarations ({ nodes, comparator }) {
   });
 }
 
-function withOverridesComparator (shorthandData) {
+function withOverridesComparator(shorthandData) {
   return function (comparator) {
     return function (a, b) {
       a = removeVendorPrefix(a);
@@ -127,7 +136,7 @@ function withOverridesComparator (shorthandData) {
   };
 }
 
-function orderComparator (order) {
+function orderComparator(order) {
   return function (a, b) {
     const bIndex = order.indexOf(b);
 
@@ -139,14 +148,14 @@ function orderComparator (order) {
   };
 }
 
-function compareDifferentType (a, b) {
-  if (b.type === 'atrule' || a.type === 'atrule') {
+function compareDifferentType(a, b) {
+  if (b.type === "atrule" || a.type === "atrule") {
     return 0;
   }
 
-  return a.type === 'decl' ? -1 : b.type === 'decl' ? 1 : 0;
+  return a.type === "decl" ? -1 : b.type === "decl" ? 1 : 0;
 }
 
-function removeVendorPrefix (property) {
-  return property.replace(/^-\w+-/, '');
+function removeVendorPrefix(property) {
+  return property.replace(/^-\w+-/, "");
 }

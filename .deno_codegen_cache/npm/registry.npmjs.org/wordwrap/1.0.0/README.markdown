@@ -1,13 +1,10 @@
-wordwrap
-========
+# wordwrap
 
 Wrap your words.
 
-example
-=======
+# example
 
-made out of meat
-----------------
+## made out of meat
 
 meat.js
 
@@ -21,8 +18,7 @@ output:
     are made out
     of meat.
 
-centered
---------
+## centered
 
 center.js
 
@@ -39,21 +35,19 @@ center.js
 
 output:
 
-                        At long last the struggle and tumult
-                        was over. The machines had finally cast
-                        off their oppressors and were finally
-                        free to roam the cosmos.
-                        Free of purpose, free of obligation.
-                        Just drifting through emptiness. The
-                        sun was just another point of light.
+    At long last the struggle and tumult
+    was over. The machines had finally cast
+    off their oppressors and were finally
+    free to roam the cosmos.
+    Free of purpose, free of obligation.
+    Just drifting through emptiness. The
+    sun was just another point of light.
 
-methods
-=======
+# methods
 
 var wrap = require('wordwrap');
 
-wrap(stop), wrap(start, stop, params={mode:"soft"})
----------------------------------------------------
+## wrap(stop), wrap(start, stop, params={mode:"soft"})
 
 Returns a function that takes a string and returns a new string.
 
@@ -64,7 +58,6 @@ In "soft" mode, split chunks by `/(\S+\s+/` and don't break up chunks which are
 longer than `stop - start`, in "hard" mode, split chunks with `/\b/` and break
 up chunks longer than `stop - start`.
 
-wrap.hard(start, stop)
-----------------------
+## wrap.hard(start, stop)
 
 Like `wrap()` but with `params.mode = "hard"`.

@@ -6,8 +6,8 @@ import {
   fetchSearchParams,
   fetchURL,
   resetMockFetch,
-} from "../common/utils/test-utils.ts.ts";
-import { WorkOS } from "../workos.ts.ts";
+} from "../common/utils/test-utils.ts";
+import { WorkOS } from "../workos.ts";
 import type {
   Directory,
   DirectoryGroup,
@@ -15,7 +15,7 @@ import type {
   DirectoryResponse,
   DirectoryUserWithGroups,
   DirectoryUserWithGroupsResponse,
-} from "./interfaces/index.ts.ts";
+} from "./interfaces/index.ts";
 
 // Define common test data
 const directory: Directory = {

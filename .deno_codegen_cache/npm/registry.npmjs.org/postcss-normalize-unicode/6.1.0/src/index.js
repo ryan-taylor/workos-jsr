@@ -1,7 +1,7 @@
-'use strict';
-const { dirname } = require('path');
-const browserslist = require('browserslist');
-const valueParser = require('postcss-value-parser');
+"use strict";
+const { dirname } = require("path");
+const browserslist = require("browserslist");
+const valueParser = require("postcss-value-parser");
 
 const regexLowerCaseUPrefix = /^u(?=\+)/;
 
@@ -10,14 +10,14 @@ const regexLowerCaseUPrefix = /^u(?=\+)/;
  * @return {string}
  */
 function unicode(range) {
-  const values = range.slice(2).split('-');
+  const values = range.slice(2).split("-");
 
   if (values.length < 2) {
     return range;
   }
 
-  const left = values[0].split('');
-  const right = values[1].split('');
+  const left = values[0].split("");
+  const right = values[1].split("");
 
   if (left.length !== right.length) {
     return range;
@@ -38,13 +38,13 @@ function unicode(range) {
  */
 function mergeRangeBounds(left, right) {
   let questionCounter = 0;
-  let group = 'u+';
+  let group = "u+";
   for (const [index, value] of left.entries()) {
     if (value === right[index] && questionCounter === 0) {
       group = group + value;
-    } else if (value === '0' && right[index] === 'f') {
+    } else if (value === "0" && right[index] === "f") {
       questionCounter++;
-      group = group + '?';
+      group = group + "?";
     } else {
       return false;
     }
@@ -66,7 +66,7 @@ function mergeRangeBounds(left, right) {
  * @return {boolean}
  */
 function hasLowerCaseUPrefixBug(browser) {
-  return browserslist('ie <=11, edge <= 15').includes(browser);
+  return browserslist("ie <=11, edge <= 15").includes(browser);
 }
 
 /**
@@ -76,11 +76,11 @@ function hasLowerCaseUPrefixBug(browser) {
 function transform(value, isLegacy = false) {
   return valueParser(value)
     .walk((child) => {
-      if (child.type === 'unicode-range') {
+      if (child.type === "unicode-range") {
         const transformed = unicode(child.value.toLowerCase());
 
         child.value = isLegacy
-          ? transformed.replace(regexLowerCaseUPrefix, 'U')
+          ? transformed.replace(regexLowerCaseUPrefix, "U")
           : transformed;
       }
 
@@ -102,7 +102,7 @@ function transform(value, isLegacy = false) {
  */
 function pluginCreator(opts = {}) {
   return {
-    postcssPlugin: 'postcss-normalize-unicode',
+    postcssPlugin: "postcss-normalize-unicode",
 
     /**
      * @param {import('postcss').Result & {opts: BrowserslistOptions & {file?: string}}} result

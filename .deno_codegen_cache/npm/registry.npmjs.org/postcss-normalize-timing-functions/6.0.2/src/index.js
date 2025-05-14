@@ -1,5 +1,5 @@
-'use strict';
-const valueParser = require('postcss-value-parser');
+"use strict";
+const valueParser = require("postcss-value-parser");
 
 /** @type {(node: valueParser.Node) => number} */
 const getValue = (node) => parseFloat(node.value);
@@ -7,18 +7,18 @@ const getValue = (node) => parseFloat(node.value);
 /* Works because toString() normalizes the formatting,
    so comparing the string forms behaves the same as number equality*/
 const conversions = new Map([
-  [[0.25, 0.1, 0.25, 1].toString(), 'ease'],
-  [[0, 0, 1, 1].toString(), 'linear'],
-  [[0.42, 0, 1, 1].toString(), 'ease-in'],
-  [[0, 0, 0.58, 1].toString(), 'ease-out'],
-  [[0.42, 0, 0.58, 1].toString(), 'ease-in-out'],
+  [[0.25, 0.1, 0.25, 1].toString(), "ease"],
+  [[0, 0, 1, 1].toString(), "linear"],
+  [[0.42, 0, 1, 1].toString(), "ease-in"],
+  [[0, 0, 0.58, 1].toString(), "ease-out"],
+  [[0.42, 0, 0.58, 1].toString(), "ease-in-out"],
 ]);
 /**
  * @param {valueParser.Node} node
  * @return {void | false}
  */
 function reduce(node) {
-  if (node.type !== 'function') {
+  if (node.type !== "function") {
     return false;
   }
 
@@ -28,19 +28,19 @@ function reduce(node) {
 
   const lowerCasedValue = node.value.toLowerCase();
 
-  if (lowerCasedValue === 'steps') {
+  if (lowerCasedValue === "steps") {
     // Don't bother checking the step-end case as it has the same length
     // as steps(1)
     if (
-      node.nodes[0].type === 'word' &&
+      node.nodes[0].type === "word" &&
       getValue(node.nodes[0]) === 1 &&
       node.nodes[2] &&
-      node.nodes[2].type === 'word' &&
-      (node.nodes[2].value.toLowerCase() === 'start' ||
-        node.nodes[2].value.toLowerCase() === 'jump-start')
+      node.nodes[2].type === "word" &&
+      (node.nodes[2].value.toLowerCase() === "start" ||
+        node.nodes[2].value.toLowerCase() === "jump-start")
     ) {
-      /** @type string */ (node.type) = 'word';
-      node.value = 'step-start';
+      /** @type string */ (node.type) = "word";
+      node.value = "step-start";
 
       delete (/** @type Partial<valueParser.FunctionNode> */ (node).nodes);
 
@@ -48,15 +48,15 @@ function reduce(node) {
     }
 
     if (
-      node.nodes[0].type === 'word' &&
+      node.nodes[0].type === "word" &&
       getValue(node.nodes[0]) === 1 &&
       node.nodes[2] &&
-      node.nodes[2].type === 'word' &&
-      (node.nodes[2].value.toLowerCase() === 'end' ||
-        node.nodes[2].value.toLowerCase() === 'jump-end')
+      node.nodes[2].type === "word" &&
+      (node.nodes[2].value.toLowerCase() === "end" ||
+        node.nodes[2].value.toLowerCase() === "jump-end")
     ) {
-      /** @type string */ (node.type) = 'word';
-      node.value = 'step-end';
+      /** @type string */ (node.type) = "word";
+      node.value = "step-end";
 
       delete (/** @type Partial<valueParser.FunctionNode> */ (node).nodes);
 
@@ -66,9 +66,9 @@ function reduce(node) {
     // The end case is actually the browser default, so it isn't required.
     if (
       node.nodes[2] &&
-      node.nodes[2].type === 'word' &&
-      (node.nodes[2].value.toLowerCase() === 'end' ||
-        node.nodes[2].value.toLowerCase() === 'jump-end')
+      node.nodes[2].type === "word" &&
+      (node.nodes[2].value.toLowerCase() === "end" ||
+        node.nodes[2].value.toLowerCase() === "jump-end")
     ) {
       node.nodes = [node.nodes[0]];
 
@@ -78,7 +78,7 @@ function reduce(node) {
     return false;
   }
 
-  if (lowerCasedValue === 'cubic-bezier') {
+  if (lowerCasedValue === "cubic-bezier") {
     const values = node.nodes
       .filter((list, index) => {
         return index % 2 === 0;
@@ -92,7 +92,7 @@ function reduce(node) {
     const match = conversions.get(values.toString());
 
     if (match) {
-      /** @type string */ (node.type) = 'word';
+      /** @type string */ (node.type) = "word";
       node.value = match;
 
       delete (/** @type Partial<valueParser.FunctionNode> */ (node).nodes);
@@ -116,7 +116,7 @@ function transform(value) {
  */
 function pluginCreator() {
   return {
-    postcssPlugin: 'postcss-normalize-timing-functions',
+    postcssPlugin: "postcss-normalize-timing-functions",
 
     OnceExit(css) {
       const cache = new Map();
@@ -136,7 +136,7 @@ function pluginCreator() {
 
           decl.value = result;
           cache.set(value, result);
-        }
+        },
       );
     },
   };

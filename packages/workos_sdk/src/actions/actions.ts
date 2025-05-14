@@ -1,11 +1,11 @@
-import { SubtleCryptoProvider } from "workos/common/crypto/subtle-crypto-provider.ts";
+import { SubtleCryptoProvider } from "../common/crypto/subtle-crypto-provider.ts";
 
 /**
  * Service for generating and verifying WorkOS CSRF tokens and actions.
- * 
+ *
  * The Actions API is used to create secure, one-time-use tokens for user actions,
  * providing protection against CSRF and replay attacks.
- * 
+ *
  * @example
  * ```ts
  * // Create a new Actions client

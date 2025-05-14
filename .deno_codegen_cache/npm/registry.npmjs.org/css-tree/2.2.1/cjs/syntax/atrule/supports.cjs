@@ -1,77 +1,79 @@
-'use strict';
+"use strict";
 
-const types = require('../../tokenizer/types.cjs');
+const types = require("../../tokenizer/types.cjs");
 
 function consumeRaw() {
-    return this.createSingleNodeList(
-        this.Raw(this.tokenIndex, null, false)
-    );
+  return this.createSingleNodeList(
+    this.Raw(this.tokenIndex, null, false),
+  );
 }
 
 function parentheses() {
-    this.skipSC();
+  this.skipSC();
 
-    if (this.tokenType === types.Ident &&
-        this.lookupNonWSType(1) === types.Colon) {
-        return this.createSingleNodeList(
-            this.Declaration()
-        );
-    }
+  if (
+    this.tokenType === types.Ident &&
+    this.lookupNonWSType(1) === types.Colon
+  ) {
+    return this.createSingleNodeList(
+      this.Declaration(),
+    );
+  }
 
-    return readSequence.call(this);
+  return readSequence.call(this);
 }
 
 function readSequence() {
-    const children = this.createList();
-    let child;
+  const children = this.createList();
+  let child;
 
-    this.skipSC();
+  this.skipSC();
 
-    scan:
-    while (!this.eof) {
-        switch (this.tokenType) {
-            case types.Comment:
-            case types.WhiteSpace:
-                this.next();
-                continue;
+  scan:
+  while (!this.eof) {
+    switch (this.tokenType) {
+      case types.Comment:
+      case types.WhiteSpace:
+        this.next();
+        continue;
 
-            case types.Function:
-                child = this.Function(consumeRaw, this.scope.AtrulePrelude);
-                break;
+      case types.Function:
+        child = this.Function(consumeRaw, this.scope.AtrulePrelude);
+        break;
 
-            case types.Ident:
-                child = this.Identifier();
-                break;
+      case types.Ident:
+        child = this.Identifier();
+        break;
 
-            case types.LeftParenthesis:
-                child = this.Parentheses(parentheses, this.scope.AtrulePrelude);
-                break;
+      case types.LeftParenthesis:
+        child = this.Parentheses(parentheses, this.scope.AtrulePrelude);
+        break;
 
-            default:
-                break scan;
-        }
-
-        children.push(child);
+      default:
+        break scan;
     }
 
-    return children;
+    children.push(child);
+  }
+
+  return children;
 }
 
 const supports = {
-    parse: {
-        prelude() {
-            const children = readSequence.call(this);
+  parse: {
+    prelude() {
+      const children = readSequence.call(this);
 
-            if (this.getFirstListNode(children) === null) {
-                this.error('Condition is expected');
-            }
+      if (this.getFirstListNode(children) === null) {
+        this.error("Condition is expected");
+      }
 
-            return children;
-        },
-        block() {
-            return this.Block(false);
-        }
-    }
+      return children;
+    },
+    block() {
+      return this.Block(false);
+    },
+  },
 };
 
 module.exports = supports;

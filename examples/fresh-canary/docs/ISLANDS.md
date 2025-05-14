@@ -1,24 +1,34 @@
 # Islands Architecture in Fresh + Preact
 
-The Islands Architecture is a modern approach to web development that combines the best of both server-rendered static content and client-side interactivity. This document explains the concept and provides details on the islands implemented in this example application.
+The Islands Architecture is a modern approach to web development that combines
+the best of both server-rendered static content and client-side interactivity.
+This document explains the concept and provides details on the islands
+implemented in this example application.
 
 ## What is Islands Architecture?
 
-Islands Architecture is a term coined by Jason Miller (creator of Preact) that describes a web page as a static, server-rendered HTML document with "islands" of interactivity that are selectively hydrated on the client.
+Islands Architecture is a term coined by Jason Miller (creator of Preact) that
+describes a web page as a static, server-rendered HTML document with "islands"
+of interactivity that are selectively hydrated on the client.
 
 ### Key Concepts
 
-1. **Server-Side Rendering (SSR)**: The entire page is initially rendered on the server as HTML
-2. **Selective Hydration**: Only interactive components ("islands") are hydrated with JavaScript on the client
-3. **Minimal JavaScript**: Most of the page remains as static HTML, reducing JavaScript payload
-4. **Progressive Enhancement**: The page works without JavaScript, with interactivity added as an enhancement
+1. **Server-Side Rendering (SSR)**: The entire page is initially rendered on the
+   server as HTML
+2. **Selective Hydration**: Only interactive components ("islands") are hydrated
+   with JavaScript on the client
+3. **Minimal JavaScript**: Most of the page remains as static HTML, reducing
+   JavaScript payload
+4. **Progressive Enhancement**: The page works without JavaScript, with
+   interactivity added as an enhancement
 
 ### Benefits
 
 - **Performance**: Faster page loads with minimal JavaScript
 - **SEO**: Better search engine optimization due to server rendering
 - **Accessibility**: Core functionality works without JavaScript
-- **Developer Experience**: Clear separation between static and interactive components
+- **Developer Experience**: Clear separation between static and interactive
+  components
 
 ## Islands vs. Traditional React Applications
 
@@ -33,14 +43,16 @@ Islands Architecture is a term coined by Jason Miller (creator of Preact) that d
 
 ## Islands in Fresh
 
-In Fresh, islands are defined as separate Preact components in the `islands/` directory. These components:
+In Fresh, islands are defined as separate Preact components in the `islands/`
+directory. These components:
 
 1. Are automatically detected by Fresh
 2. Receive props from the server during initial render
 3. Are hydrated on the client, making them interactive
 4. Can maintain their own state independent of other islands
 
-The rest of your application (routes, components outside the `islands/` directory) is rendered on the server and sent as static HTML to the client.
+The rest of your application (routes, components outside the `islands/`
+directory) is rendered on the server and sent as static HTML to the client.
 
 ## Islands in this Project
 
@@ -127,9 +139,12 @@ The rest of your application (routes, components outside the `islands/` director
 
 1. **Keep Islands Small**: Each island adds to the JavaScript payload
 2. **Limit State Sharing**: Islands should be self-contained when possible
-3. **Progressive Enhancement**: Ensure basic functionality works without JavaScript
-4. **Lazy Loading**: Consider lazy-loading islands that aren't immediately visible
-5. **Hydration Timing**: Use appropriate hydration timing (immediate vs. idle vs. visible)
+3. **Progressive Enhancement**: Ensure basic functionality works without
+   JavaScript
+4. **Lazy Loading**: Consider lazy-loading islands that aren't immediately
+   visible
+5. **Hydration Timing**: Use appropriate hydration timing (immediate vs. idle
+   vs. visible)
 
 ## Example Usage
 
@@ -137,17 +152,17 @@ Here's how to use an island in a route file:
 
 ```tsx
 // routes/profile.tsx
-import { Handlers, PageProps } from '$fresh/server.ts';
-import UserProfile from '../islands/UserProfile.tsx';
-import { getCurrentUser } from '../utils/user-management.ts';
+import { Handlers, PageProps } from "$fresh/server.ts";
+import UserProfile from "../islands/UserProfile.tsx";
+import { getCurrentUser } from "../utils/user-management.ts";
 
 export const handler: Handlers = {
   async GET(req, ctx) {
     const user = await getCurrentUser(req);
     if (!user) {
-      return new Response('', {
+      return new Response("", {
         status: 302,
-        headers: { Location: '/login' },
+        headers: { Location: "/login" },
       });
     }
 
@@ -165,14 +180,14 @@ export default function ProfilePage({ data }: PageProps) {
       <UserProfile user={user} />
 
       {/* This content remains static */}
-      <div class='static-content'>
+      <div class="static-content">
         <h2>Account Options</h2>
         <ul>
           <li>
-            <a href='/settings'>Settings</a>
+            <a href="/settings">Settings</a>
           </li>
           <li>
-            <a href='/logout'>Logout</a>
+            <a href="/logout">Logout</a>
           </li>
         </ul>
       </div>

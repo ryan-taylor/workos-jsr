@@ -42,11 +42,13 @@ export class DirectorySyncService {
 
   /**
    * Lists directories with optional pagination and filtering options.
-   * 
+   *
    * @param options - Optional query parameters for filtering
    * @returns Promise resolving to a paginated List of Directory objects
    */
-  async listDirectories(options: ListDirectoriesOptions = {}): Promise<List<Directory>> {
+  async listDirectories(
+    options: ListDirectoriesOptions = {},
+  ): Promise<List<Directory>> {
     const response = await request<{
       data: Record<string, unknown>[];
       list_metadata: {
@@ -71,7 +73,7 @@ export class DirectorySyncService {
 
   /**
    * Lists groups for a directory.
-   * 
+   *
    * @param options - Optional query parameters for filtering
    * @returns Promise resolving to a paginated List of DirectoryGroup objects
    */
@@ -81,14 +83,14 @@ export class DirectorySyncService {
       url: "/directory_groups",
       query: options,
     });
-    
+
     // This would be implemented similar to listDirectories but with group serializers
     return response;
   }
 
   /**
    * Lists users for a directory.
-   * 
+   *
    * @param options - Optional query parameters for filtering
    * @returns Promise resolving to a paginated List of DirectoryUser objects
    */
@@ -98,7 +100,7 @@ export class DirectorySyncService {
       url: "/directory_users",
       query: options,
     });
-    
+
     // This would be implemented similar to listDirectories but with user serializers
     return response;
   }

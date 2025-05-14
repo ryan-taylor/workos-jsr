@@ -1,5 +1,5 @@
-'use strict';
-const charset = 'charset';
+"use strict";
+const charset = "charset";
 // eslint-disable-next-line no-control-regex
 const nonAscii = /[^\x00-\x7F]/;
 
@@ -13,7 +13,7 @@ const nonAscii = /[^\x00-\x7F]/;
  */
 function pluginCreator(opts = {}) {
   return {
-    postcssPlugin: 'postcss-normalize-' + charset,
+    postcssPlugin: "postcss-normalize-" + charset,
 
     OnceExit(css, { AtRule }) {
       /** @type {import('postcss').AtRule | undefined} */
@@ -22,7 +22,7 @@ function pluginCreator(opts = {}) {
       let nonAsciiNode;
 
       css.walk((node) => {
-        if (node.type === 'atrule' && node.name === charset) {
+        if (node.type === "atrule" && node.name === charset) {
           if (!charsetRule) {
             charsetRule = node;
           }

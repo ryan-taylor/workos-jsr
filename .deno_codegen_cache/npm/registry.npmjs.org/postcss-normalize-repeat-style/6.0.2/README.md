@@ -16,7 +16,7 @@ npm install postcss-normalize-repeat-style --save
 
 ```css
 h1 {
-    background: url(image.jpg) repeat no-repeat
+  background: url(image.jpg) repeat no-repeat;
 }
 ```
 
@@ -24,7 +24,7 @@ h1 {
 
 ```css
 h1 {
-    background: url(image.jpg) repeat-x
+  background: url(image.jpg) repeat-x;
 }
 ```
 
@@ -35,7 +35,8 @@ examples for your environment.
 
 ## Contributors
 
-See [CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
+See
+[CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
 
 ## License
 

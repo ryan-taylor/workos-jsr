@@ -2,7 +2,7 @@ import type {
   BatchWriteResourcesResponse,
   Resource,
   ResourceResponse,
-} from "workos/fga/interfaces/index.ts";
+} from "../interfaces/index.ts";
 
 /**
  * Deserializes a resource response from the API to a Resource object

@@ -1,1 +1,1 @@
-declare var URL: typeof import('url').URL;
+declare var URL: typeof import("url").URL;

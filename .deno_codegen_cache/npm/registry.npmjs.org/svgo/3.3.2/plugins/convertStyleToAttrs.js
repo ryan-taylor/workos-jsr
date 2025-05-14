@@ -1,53 +1,52 @@
-'use strict';
+"use strict";
 
-const { attrsGroups } = require('./_collections');
+const { attrsGroups } = require("./_collections");
 
-exports.name = 'convertStyleToAttrs';
-exports.description = 'converts style to attributes';
+exports.name = "convertStyleToAttrs";
+exports.description = "converts style to attributes";
 
 /**
  * @type {(...args: string[]) => string}
  */
 const g = (...args) => {
-  return '(?:' + args.join('|') + ')';
+  return "(?:" + args.join("|") + ")";
 };
 
 const stylingProps = attrsGroups.presentation;
-const rEscape = '\\\\(?:[0-9a-f]{1,6}\\s?|\\r\\n|.)'; // Like \" or \2051. Code points consume one space.
-const rAttr = '\\s*(' + g('[^:;\\\\]', rEscape) + '*?)\\s*'; // attribute name like ‘fill’
+const rEscape = "\\\\(?:[0-9a-f]{1,6}\\s?|\\r\\n|.)"; // Like \" or \2051. Code points consume one space.
+const rAttr = "\\s*(" + g("[^:;\\\\]", rEscape) + "*?)\\s*"; // attribute name like ‘fill’
 const rSingleQuotes = "'(?:[^'\\n\\r\\\\]|" + rEscape + ")*?(?:'|$)"; // string in single quotes: 'smth'
 const rQuotes = '"(?:[^"\\n\\r\\\\]|' + rEscape + ')*?(?:"|$)'; // string in double quotes: "smth"
-const rQuotedString = new RegExp('^' + g(rSingleQuotes, rQuotes) + '$');
+const rQuotedString = new RegExp("^" + g(rSingleQuotes, rQuotes) + "$");
 // Parentheses, E.g.: url(data:image/png;base64,iVBO...).
 // ':' and ';' inside of it should be treated as is. (Just like in strings.)
-const rParenthesis =
-  '\\(' + g('[^\'"()\\\\]+', rEscape, rSingleQuotes, rQuotes) + '*?' + '\\)';
+const rParenthesis = "\\(" +
+  g("[^'\"()\\\\]+", rEscape, rSingleQuotes, rQuotes) + "*?" + "\\)";
 // The value. It can have strings and parentheses (see above). Fallbacks to anything in case of unexpected input.
-const rValue =
-  '\\s*(' +
+const rValue = "\\s*(" +
   g(
-    '[^!\'"();\\\\]+?',
+    "[^!'\"();\\\\]+?",
     rEscape,
     rSingleQuotes,
     rQuotes,
     rParenthesis,
-    '[^;]*?',
+    "[^;]*?",
   ) +
-  '*?' +
-  ')';
+  "*?" +
+  ")";
 // End of declaration. Spaces outside of capturing groups help to do natural trimming.
-const rDeclEnd = '\\s*(?:;\\s*|$)';
+const rDeclEnd = "\\s*(?:;\\s*|$)";
 // Important rule
-const rImportant = '(\\s*!important(?![-(\\w]))?';
+const rImportant = "(\\s*!important(?![-(\\w]))?";
 // Final RegExp to parse CSS declarations.
 const regDeclarationBlock = new RegExp(
-  rAttr + ':' + rValue + rImportant + rDeclEnd,
-  'ig',
+  rAttr + ":" + rValue + rImportant + rDeclEnd,
+  "ig",
 );
 // Comments expression. Honors escape sequences and strings.
 const regStripComments = new RegExp(
-  g(rEscape, rSingleQuotes, rQuotes, '/\\*[^]*?\\*/'),
-  'ig',
+  g(rEscape, rSingleQuotes, rQuotes, "/\\*[^]*?\\*/"),
+  "ig",
 );
 
 /**
@@ -84,16 +83,16 @@ exports.fn = (_root, params) => {
           const styleValue = node.attributes.style.replace(
             regStripComments,
             (match) => {
-              return match[0] == '/'
-                ? ''
-                : match[0] == '\\' && /[-g-z]/i.test(match[1])
-                  ? match[1]
-                  : match;
+              return match[0] == "/"
+                ? ""
+                : match[0] == "\\" && /[-g-z]/i.test(match[1])
+                ? match[1]
+                : match;
             },
           );
 
           regDeclarationBlock.lastIndex = 0;
-          for (var rule; (rule = regDeclarationBlock.exec(styleValue)); ) {
+          for (var rule; (rule = regDeclarationBlock.exec(styleValue));) {
             if (!keepImportant || !rule[3]) {
               styles.push([rule[1], rule[2]]);
             }
@@ -123,8 +122,8 @@ exports.fn = (_root, params) => {
 
             if (styles.length) {
               node.attributes.style = styles
-                .map((declaration) => declaration.join(':'))
-                .join(';');
+                .map((declaration) => declaration.join(":"))
+                .join(";");
             } else {
               delete node.attributes.style;
             }

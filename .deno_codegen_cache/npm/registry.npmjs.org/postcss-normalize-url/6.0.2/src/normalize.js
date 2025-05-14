@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 /* Derived from normalize-url https://github.com/sindresorhus/normalize-url/main/index.js by Sindre Sorhus */
 
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs
-const DATA_URL_DEFAULT_MIME_TYPE = 'text/plain';
-const DATA_URL_DEFAULT_CHARSET = 'us-ascii';
+const DATA_URL_DEFAULT_MIME_TYPE = "text/plain";
+const DATA_URL_DEFAULT_CHARSET = "us-ascii";
 
-const supportedProtocols = new Set(['https:', 'http:', 'file:']);
+const supportedProtocols = new Set(["https:", "http:", "file:"]);
 
 /**
  * @param {string} urlString
@@ -13,7 +13,7 @@ const supportedProtocols = new Set(['https:', 'http:', 'file:']);
 function hasCustomProtocol(urlString) {
   try {
     const { protocol } = new URL(urlString);
-    return protocol.endsWith(':') && !supportedProtocols.has(protocol);
+    return protocol.endsWith(":") && !supportedProtocols.has(protocol);
   } catch {
     return false;
   }
@@ -24,7 +24,7 @@ function hasCustomProtocol(urlString) {
  * @return {string} */
 function normalizeDataURL(urlString) {
   const match = /^data:(?<type>[^,]*?),(?<data>[^#]*?)(?:#(?<hash>.*))?$/.exec(
-    urlString
+    urlString,
   );
 
   if (!match) {
@@ -33,43 +33,43 @@ function normalizeDataURL(urlString) {
 
   let { type, data, hash } =
     /** @type {{type: string, data: string, hash: string}} */ (match.groups);
-  const mediaType = type.split(';');
+  const mediaType = type.split(";");
 
   let isBase64 = false;
-  if (mediaType[mediaType.length - 1] === 'base64') {
+  if (mediaType[mediaType.length - 1] === "base64") {
     mediaType.pop();
     isBase64 = true;
   }
 
   // Lowercase MIME type
-  const mimeType = mediaType.shift()?.toLowerCase() ?? '';
+  const mimeType = mediaType.shift()?.toLowerCase() ?? "";
   const attributes = mediaType
     .map(
       /** @type {(string: string) => string} */ (attribute) => {
-        let [key, value = ''] = attribute
-          .split('=')
+        let [key, value = ""] = attribute
+          .split("=")
           .map(
-            /** @type {(string: string) => string} */ (string) => string.trim()
+            /** @type {(string: string) => string} */ (string) => string.trim(),
           );
 
         // Lowercase `charset`
-        if (key === 'charset') {
+        if (key === "charset") {
           value = value.toLowerCase();
 
           if (value === DATA_URL_DEFAULT_CHARSET) {
-            return '';
+            return "";
           }
         }
 
-        return `${key}${value ? `=${value}` : ''}`;
-      }
+        return `${key}${value ? `=${value}` : ""}`;
+      },
     )
     .filter(Boolean);
 
   const normalizedMediaType = [...attributes];
 
   if (isBase64) {
-    normalizedMediaType.push('base64');
+    normalizedMediaType.push("base64");
   }
 
   if (
@@ -79,9 +79,9 @@ function normalizeDataURL(urlString) {
     normalizedMediaType.unshift(mimeType);
   }
 
-  return `data:${normalizedMediaType.join(';')},${
+  return `data:${normalizedMediaType.join(";")},${
     isBase64 ? data.trim() : data
-  }${hash ? `#${hash}` : ''}`;
+  }${hash ? `#${hash}` : ""}`;
 }
 
 /**
@@ -100,12 +100,12 @@ function normalizeUrl(urlString) {
     return urlString;
   }
 
-  const hasRelativeProtocol = urlString.startsWith('//');
+  const hasRelativeProtocol = urlString.startsWith("//");
   const isRelativeUrl = !hasRelativeProtocol && /^\.*\//.test(urlString);
 
   // Prepend protocol
   if (!isRelativeUrl) {
-    urlString = urlString.replace(/^(?!(?:\w+:)?\/\/)|^\/\//, 'http:');
+    urlString = urlString.replace(/^(?!(?:\w+:)?\/\/)|^\/\//, "http:");
   }
 
   const urlObject = new URL(urlString);
@@ -114,7 +114,7 @@ function normalizeUrl(urlString) {
   if (urlObject.pathname) {
     urlObject.pathname = urlObject.pathname.replace(
       /(?<!\b[a-z][a-z\d+\-.]{1,50}:)\/{2,}/g,
-      '/'
+      "/",
     );
   }
 
@@ -129,22 +129,22 @@ function normalizeUrl(urlString) {
 
   if (urlObject.hostname) {
     // Remove trailing dot
-    urlObject.hostname = urlObject.hostname.replace(/\.$/, '');
+    urlObject.hostname = urlObject.hostname.replace(/\.$/, "");
   }
 
-  urlObject.pathname = urlObject.pathname.replace(/\/$/, '');
+  urlObject.pathname = urlObject.pathname.replace(/\/$/, "");
 
   // Take advantage of many of the Node `url` normalizations
   urlString = urlObject.toString();
 
   // Remove ending `/`
-  if (urlObject.pathname === '/' && urlObject.hash === '') {
-    urlString = urlString.replace(/\/$/, '');
+  if (urlObject.pathname === "/" && urlObject.hash === "") {
+    urlString = urlString.replace(/\/$/, "");
   }
 
   // Restore relative protocol
   if (hasRelativeProtocol) {
-    urlString = urlString.replace(/^http:\/\//, '//');
+    urlString = urlString.replace(/^http:\/\//, "//");
   }
 
   return urlString;

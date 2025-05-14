@@ -1,5 +1,5 @@
-import type { Handlers } from '$fresh/server.ts';
-import { workos } from '../../../utils/workos.ts';
+import type { Handlers } from "$fresh/server.ts";
+import { workos } from "../../../utils/workos.ts";
 
 export const handler: Handlers = {
   async DELETE(req) {
@@ -12,7 +12,7 @@ export const handler: Handlers = {
 
       // First check query param
       const url = new URL(req.url);
-      organizationId = url.searchParams.get('id');
+      organizationId = url.searchParams.get("id");
 
       // If not in query param, try to get from body
       if (!organizationId) {
@@ -27,11 +27,11 @@ export const handler: Handlers = {
       // Validate required fields
       if (!organizationId) {
         return new Response(
-          JSON.stringify({ error: 'Organization ID is required' }),
+          JSON.stringify({ error: "Organization ID is required" }),
           {
             status: 400,
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
           },
         );
@@ -44,23 +44,25 @@ export const handler: Handlers = {
         JSON.stringify({ success: true }),
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         },
       );
     } catch (error) {
-      console.error('Error deleting organization:', error);
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error("Error deleting organization:", error);
+      const errorMessage = error instanceof Error
+        ? error.message
+        : String(error);
 
       return new Response(
         JSON.stringify({
-          error: 'Failed to delete organization',
+          error: "Failed to delete organization",
           details: errorMessage,
         }),
         {
           status: 500,
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         },
       );

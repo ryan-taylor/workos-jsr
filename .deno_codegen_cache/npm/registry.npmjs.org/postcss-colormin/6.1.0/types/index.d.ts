@@ -18,23 +18,29 @@ export = pluginCreator;
  * @param {Options} config
  * @return {import('postcss').Plugin}
  */
-declare function pluginCreator(config?: Options): import('postcss').Plugin;
+declare function pluginCreator(config?: Options): import("postcss").Plugin;
 declare namespace pluginCreator {
-    export { postcss, MinifyColorOptions, AutoprefixerOptions, BrowserslistOptions, Options };
+  export {
+    AutoprefixerOptions,
+    BrowserslistOptions,
+    MinifyColorOptions,
+    Options,
+    postcss,
+  };
 }
 type Options = MinifyColorOptions & AutoprefixerOptions & BrowserslistOptions;
 declare var postcss: true;
 type MinifyColorOptions = {
-    hex?: boolean | undefined;
-    alphaHex?: boolean | undefined;
-    rgb?: boolean | undefined;
-    hsl?: boolean | undefined;
-    name?: boolean | undefined;
-    transparent?: boolean | undefined;
+  hex?: boolean | undefined;
+  alphaHex?: boolean | undefined;
+  rgb?: boolean | undefined;
+  hsl?: boolean | undefined;
+  name?: boolean | undefined;
+  transparent?: boolean | undefined;
 };
 type AutoprefixerOptions = {
-    overrideBrowserslist?: string | string[];
+  overrideBrowserslist?: string | string[];
 };
-type BrowserslistOptions = Pick<browserslist.Options, 'stats' | 'path' | 'env'>;
+type BrowserslistOptions = Pick<browserslist.Options, "stats" | "path" | "env">;
 import browserslist = require("browserslist");
 //# sourceMappingURL=index.d.ts.map

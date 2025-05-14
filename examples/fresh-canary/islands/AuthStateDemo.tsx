@@ -1,8 +1,8 @@
 // AuthStateDemo component demonstrates using custom auth hooks with Preact signals
 /** @jsx h */
-import { h, Fragment } from "preact";
-import { useAuthFunctions, useUserData } from '../utils/auth-hooks.ts';
-import type { WorkOSUser } from '../utils/user-management.ts';
+import { Fragment, h } from "preact";
+import { useAuthFunctions, useUserData } from "../utils/auth-hooks.ts";
+import type { WorkOSUser } from "../utils/user-management.ts";
 
 interface AuthStateDemoProps {
   initialUser?: WorkOSUser | null;
@@ -43,45 +43,57 @@ export default function AuthStateDemo({ initialUser }: AuthStateDemoProps) {
   };
 
   // Determine if any operation is in progress
-  const isOperationInProgress = isLoading || isRefreshing || isLoggingIn || isLoggingOut;
+  const isOperationInProgress = isLoading || isRefreshing || isLoggingIn ||
+    isLoggingOut;
 
   // Combine all errors
-  const hasError = loginError.value || logoutError.value || userData.error.value;
+  const hasError = loginError.value || logoutError.value ||
+    userData.error.value;
 
   return (
-    <div className='auth-demo'>
+    <div className="auth-demo">
       <h2>Auth Hooks Demo</h2>
-      <p>This component demonstrates the use of custom auth hooks with Preact Signals</p>
+      <p>
+        This component demonstrates the use of custom auth hooks with Preact
+        Signals
+      </p>
 
-      <div className='auth-status'>
+      <div className="auth-status">
         <h3>Authentication Status</h3>
 
         {/* Displaying the loading state */}
         {isOperationInProgress && (
-          <div className='loading-state'>
+          <div className="loading-state">
             <p>
-              {isLoading && 'Loading authentication status...'}
-              {isRefreshing && 'Refreshing user data...'}
-              {isLoggingIn && 'Logging in...'}
-              {isLoggingOut && 'Logging out...'}
+              {isLoading && "Loading authentication status..."}
+              {isRefreshing && "Refreshing user data..."}
+              {isLoggingIn && "Logging in..."}
+              {isLoggingOut && "Logging out..."}
             </p>
           </div>
         )}
 
         {/* Display any error that occurred */}
         {hasError && (
-          <div className='error-message'>
-            <p>Error: {loginError.value || logoutError.value || userData.error.value}</p>
+          <div className="error-message">
+            <p>
+              Error:{" "}
+              {loginError.value || logoutError.value || userData.error.value}
+            </p>
           </div>
         )}
 
         {/* Display authentication state */}
         {!isLoading && (
-          <div className='auth-info'>
+          <div className="auth-info">
             <p>
-              <strong>Authenticated:</strong>{' '}
-              <span className={isAuthenticated.value ? 'authenticated' : 'unauthenticated'}>
-                {isAuthenticated.value ? 'Yes' : 'No'}
+              <strong>Authenticated:</strong>{" "}
+              <span
+                className={isAuthenticated.value
+                  ? "authenticated"
+                  : "unauthenticated"}
+              >
+                {isAuthenticated.value ? "Yes" : "No"}
               </span>
             </p>
           </div>
@@ -89,7 +101,7 @@ export default function AuthStateDemo({ initialUser }: AuthStateDemoProps) {
 
         {/* If authenticated, show the user info */}
         {isAuthenticated.value && user.value && (
-          <div className='user-info'>
+          <div className="user-info">
             <h3>User Information</h3>
             <p>
               <strong>ID:</strong> {user.value.id}
@@ -108,58 +120,67 @@ export default function AuthStateDemo({ initialUser }: AuthStateDemoProps) {
               </p>
             )}
             {user.value.profilePictureUrl && (
-              <div className='profile-picture'>
-                <img src={user.value.profilePictureUrl} alt='Profile' width='50' height='50' />
+              <div className="profile-picture">
+                <img
+                  src={user.value.profilePictureUrl}
+                  alt="Profile"
+                  width="50"
+                  height="50"
+                />
               </div>
             )}
           </div>
         )}
       </div>
 
-      <div className='auth-actions'>
+      <div className="auth-actions">
         {/* Conditionally render login/logout buttons */}
         {!isAuthenticated.value
           ? (
             <button
               onClick={handleLogin}
-              className='login-button'
+              className="login-button"
               disabled={isOperationInProgress}
             >
-              {isLoggingIn.value ? 'Logging in...' : 'Log In'}
+              {isLoggingIn.value ? "Logging in..." : "Log In"}
             </button>
           )
           : (
             <Fragment>
               <button
                 onClick={handleRefresh}
-                className='refresh-button'
+                className="refresh-button"
                 disabled={isOperationInProgress}
               >
-                {isRefreshing.value ? 'Refreshing...' : 'Refresh User'}
+                {isRefreshing.value ? "Refreshing..." : "Refresh User"}
               </button>
               <button
                 onClick={handleLogout}
-                className='logout-button'
+                className="logout-button"
                 disabled={isOperationInProgress}
               >
-                {isLoggingOut.value ? 'Logging out...' : 'Log Out'}
+                {isLoggingOut.value ? "Logging out..." : "Log Out"}
               </button>
             </Fragment>
           )}
       </div>
 
-      <div className='tech-explanation'>
+      <div className="tech-explanation">
         <h3>How It Works</h3>
         <ul>
-          <li>Custom hooks abstract authentication logic into reusable units</li>
+          <li>
+            Custom hooks abstract authentication logic into reusable units
+          </li>
           <li>Preact Signals provide reactive state management</li>
           <li>
-            The <code>useAuthFunctions()</code> hook combines login, logout and user data operations
+            The <code>useAuthFunctions()</code>{" "}
+            hook combines login, logout and user data operations
           </li>
           <li>Each hook manages its own loading and error states</li>
           <li>Components automatically re-render when signals change</li>
           <li>
-            More specialized hooks like <code>useRegister()</code> and <code>usePasswordReset()</code> available
+            More specialized hooks like <code>useRegister()</code> and{" "}
+            <code>usePasswordReset()</code> available
           </li>
         </ul>
       </div>

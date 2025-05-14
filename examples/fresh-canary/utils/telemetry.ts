@@ -1,9 +1,9 @@
 // Simplified telemetry implementation for Fresh application
 
 // Service information
-export const SERVICE_NAME = 'fresh-canary';
-export const SERVICE_VERSION = '1.0.0';
-export const ENVIRONMENT = Deno.env.get('DENO_ENV') ?? 'development';
+export const SERVICE_NAME = "fresh-canary";
+export const SERVICE_VERSION = "1.0.0";
+export const ENVIRONMENT = Deno.env.get("DENO_ENV") ?? "development";
 
 // Storage for metrics and spans
 type MetricValue = {
@@ -17,7 +17,7 @@ type Span = {
   startTime: number;
   endTime?: number;
   attributes: Record<string, string>;
-  status: 'OK' | 'ERROR';
+  status: "OK" | "ERROR";
   events: Array<{
     name: string;
     timestamp: number;
@@ -42,18 +42,18 @@ export async function createSpan<T>(
     name,
     startTime: performance.now(),
     attributes,
-    status: 'OK',
+    status: "OK",
     events: [],
   };
 
   try {
     // Execute the operation
     const result = await fn(span);
-    span.status = 'OK';
+    span.status = "OK";
     return result;
   } catch (error) {
     // Record error information
-    span.status = 'ERROR';
+    span.status = "ERROR";
     span.error = error instanceof Error ? error : new Error(String(error));
     throw error;
   } finally {
@@ -86,7 +86,7 @@ export function recordMetric(
   });
 
   // Debug logging in development
-  if (ENVIRONMENT === 'development') {
+  if (ENVIRONMENT === "development") {
     console.log(`METRIC [${name}]: ${value}`, attributes);
   }
 }
@@ -101,9 +101,9 @@ export function formatMetricsAsPrometheus(): string {
     if (values.length === 0) continue;
 
     // Add metric type header (counters or histograms)
-    const isHistogram = name.includes('_duration') || name.includes('_time');
-    lines.push(`# TYPE ${name} ${isHistogram ? 'histogram' : 'counter'}`);
-    lines.push(`# HELP ${name} ${name.replace(/_/g, ' ')}`);
+    const isHistogram = name.includes("_duration") || name.includes("_time");
+    lines.push(`# TYPE ${name} ${isHistogram ? "histogram" : "counter"}`);
+    lines.push(`# HELP ${name} ${name.replace(/_/g, " ")}`);
 
     if (isHistogram) {
       // Group metrics by attribute sets
@@ -135,16 +135,29 @@ export function formatMetricsAsPrometheus(): string {
         const buckets = [10, 50, 100, 200, 500, 1000];
 
         for (const bucketLimit of buckets) {
-          const bucketCount = metricValues.filter((v) => v <= bucketLimit).length;
-          lines.push(`${name}_bucket${formatLabels({ ...attributes, le: bucketLimit.toString() })} ${bucketCount}`);
+          const bucketCount = metricValues.filter((v) =>
+            v <= bucketLimit
+          ).length;
+          lines.push(
+            `${name}_bucket${
+              formatLabels({ ...attributes, le: bucketLimit.toString() })
+            } ${bucketCount}`,
+          );
         }
 
         // Add infinity bucket (all values)
-        lines.push(`${name}_bucket${formatLabels({ ...attributes, le: '+Inf' })} ${count}`);
+        lines.push(
+          `${name}_bucket${
+            formatLabels({ ...attributes, le: "+Inf" })
+          } ${count}`,
+        );
       }
     } else {
       // Handle counters - sum by attribute sets
-      const sums: Record<string, { sum: number; attrs: Record<string, string> }> = {};
+      const sums: Record<
+        string,
+        { sum: number; attrs: Record<string, string> }
+      > = {};
 
       for (const metricValue of values) {
         const attrKey = JSON.stringify(metricValue.attributes);
@@ -161,7 +174,7 @@ export function formatMetricsAsPrometheus(): string {
     }
   }
 
-  return lines.join('\n');
+  return lines.join("\n");
 }
 
 /**
@@ -169,12 +182,12 @@ export function formatMetricsAsPrometheus(): string {
  */
 function formatLabels(labels: Record<string, string>): string {
   if (Object.keys(labels).length === 0) {
-    return '';
+    return "";
   }
 
   const labelPairs = Object.entries(labels)
     .map(([key, value]) => `${key}="${escapeValue(value)}"`)
-    .join(',');
+    .join(",");
 
   return `{${labelPairs}}`;
 }
@@ -184,8 +197,8 @@ function formatLabels(labels: Record<string, string>): string {
  */
 function escapeValue(value: string): string {
   return value
-    .replace(/\\/g, '\\\\')
-    .replace(/\n/g, '\\n')
+    .replace(/\\/g, "\\\\")
+    .replace(/\n/g, "\\n")
     .replace(/"/g, '\\"');
 }
 

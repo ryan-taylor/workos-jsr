@@ -1,6 +1,7 @@
 // Copyright 2018-2025 the Deno authors. MIT license.
 // This module is browser compatible.
-/** End-of-line character for POSIX platforms such as macOS and Linux. */ export const LF = "\n";
+/** End-of-line character for POSIX platforms such as macOS and Linux. */ export const LF =
+  "\n";
 /** End-of-line character for Windows platforms. */ export const CRLF = "\r\n";
 /**
  * End-of-line character evaluated for the current platform.
@@ -12,7 +13,7 @@
  * EOL; // "\n" on POSIX platforms and "\r\n" on Windows
  * ```
  */ export const EOL = // deno-lint-ignore no-explicit-any
-globalThis.Deno?.build.os === "windows" ? CRLF : LF;
+  globalThis.Deno?.build.os === "windows" ? CRLF : LF;
 const regDetect = /(?:\r?\n)/g;
 /**
  * Returns the detected EOL character(s) detected in the input string. If no EOL
@@ -36,7 +37,7 @@ const regDetect = /(?:\r?\n)/g;
   if (!d || d.length === 0) {
     return null;
   }
-  const hasCRLF = d.some((x)=>x === CRLF);
+  const hasCRLF = d.some((x) => x === CRLF);
   return hasCRLF ? CRLF : LF;
 }
 /**

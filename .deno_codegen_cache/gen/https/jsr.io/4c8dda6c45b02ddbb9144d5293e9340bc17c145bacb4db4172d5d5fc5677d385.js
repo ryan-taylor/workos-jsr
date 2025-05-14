@@ -6,13 +6,13 @@ import { join } from "jsr:@std/path@^1.0.9/join";
 import { toPathString } from "./_to_path_string.ts";
 import { createWalkEntry, createWalkEntrySync } from "./_create_walk_entry.ts";
 function include(path, exts, match, skip) {
-  if (exts && !exts.some((ext)=>path.endsWith(ext))) {
+  if (exts && !exts.some((ext) => path.endsWith(ext))) {
     return false;
   }
-  if (match && !match.some((pattern)=>!!path.match(pattern))) {
+  if (match && !match.some((pattern) => !!path.match(pattern))) {
     return false;
   }
-  if (skip && skip.some((pattern)=>!!path.match(pattern))) {
+  if (skip && skip.some((pattern) => !!path.match(pattern))) {
     return false;
   }
   return true;
@@ -372,13 +372,23 @@ function include(path, exts, match, skip) {
  * // ]
  * ```
  */ export async function* walk(root, options) {
-  let { maxDepth = Infinity, includeFiles = true, includeDirs = true, includeSymlinks = true, followSymlinks = false, canonicalize = true, exts = undefined, match = undefined, skip = undefined } = options ?? {};
+  let {
+    maxDepth = Infinity,
+    includeFiles = true,
+    includeDirs = true,
+    includeSymlinks = true,
+    followSymlinks = false,
+    canonicalize = true,
+    exts = undefined,
+    match = undefined,
+    skip = undefined,
+  } = options ?? {};
   if (maxDepth < 0) {
     return;
   }
   root = toPathString(root);
   if (exts) {
-    exts = exts.map((ext)=>ext.startsWith(".") ? ext : `.${ext}`);
+    exts = exts.map((ext) => ext.startsWith(".") ? ext : `.${ext}`);
   }
   if (includeDirs && include(root, exts, match, skip)) {
     yield await createWalkEntry(root);
@@ -386,7 +396,7 @@ function include(path, exts, match, skip) {
   if (maxDepth < 1 || !include(root, undefined, undefined, skip)) {
     return;
   }
-  for await (const entry of Deno.readDir(root)){
+  for await (const entry of Deno.readDir(root)) {
     let path = join(root, entry.name);
     let { isSymlink, isDirectory } = entry;
     if (isSymlink) {
@@ -394,7 +404,7 @@ function include(path, exts, match, skip) {
         if (includeSymlinks && include(path, exts, match, skip)) {
           yield {
             path,
-            ...entry
+            ...entry,
           };
         }
         continue;
@@ -414,7 +424,7 @@ function include(path, exts, match, skip) {
         includeFiles,
         includeDirs,
         includeSymlinks,
-        followSymlinks
+        followSymlinks,
       };
       if (exts !== undefined) {
         opts.exts = exts;
@@ -429,7 +439,7 @@ function include(path, exts, match, skip) {
     } else if (includeFiles && include(path, exts, match, skip)) {
       yield {
         path,
-        ...entry
+        ...entry,
       };
     }
   }
@@ -788,10 +798,20 @@ function include(path, exts, match, skip) {
  * // ]
  * ```
  */ export function* walkSync(root, options) {
-  let { maxDepth = Infinity, includeFiles = true, includeDirs = true, includeSymlinks = true, followSymlinks = false, canonicalize = true, exts = undefined, match = undefined, skip = undefined } = options ?? {};
+  let {
+    maxDepth = Infinity,
+    includeFiles = true,
+    includeDirs = true,
+    includeSymlinks = true,
+    followSymlinks = false,
+    canonicalize = true,
+    exts = undefined,
+    match = undefined,
+    skip = undefined,
+  } = options ?? {};
   root = toPathString(root);
   if (exts) {
-    exts = exts.map((ext)=>ext.startsWith(".") ? ext : `.${ext}`);
+    exts = exts.map((ext) => ext.startsWith(".") ? ext : `.${ext}`);
   }
   if (maxDepth < 0) {
     return;
@@ -803,7 +823,7 @@ function include(path, exts, match, skip) {
     return;
   }
   const entries = Deno.readDirSync(root);
-  for (const entry of entries){
+  for (const entry of entries) {
     let path = join(root, entry.name);
     let { isSymlink, isDirectory } = entry;
     if (isSymlink) {
@@ -811,7 +831,7 @@ function include(path, exts, match, skip) {
         if (includeSymlinks && include(path, exts, match, skip)) {
           yield {
             path,
-            ...entry
+            ...entry,
           };
         }
         continue;
@@ -831,7 +851,7 @@ function include(path, exts, match, skip) {
         includeFiles,
         includeDirs,
         includeSymlinks,
-        followSymlinks
+        followSymlinks,
       };
       if (exts !== undefined) {
         opts.exts = exts;
@@ -846,7 +866,7 @@ function include(path, exts, match, skip) {
     } else if (includeFiles && include(path, exts, match, skip)) {
       yield {
         path,
-        ...entry
+        ...entry,
       };
     }
   }

@@ -1,12 +1,8 @@
-import type { WorkOS } from "workos/workos.ts";
+import type { WorkOS } from "../workos.ts";
 import {
   type BatchWriteResourcesOptions,
   type BatchWriteResourcesResponse,
-  type V2CheckBatchOptions,
   type CheckOptions,
-  type V2CheckRequestOptions,
-  V2CheckResult as CheckResult,
-  type V2CheckResultResponse as CheckResultResponse,
   type CreateResourceOptions,
   type DeleteResourceOptions,
   type ListResourcesOptions,
@@ -21,12 +17,16 @@ import {
   type ResourceOptions,
   type ResourceResponse,
   type UpdateResourceOptions,
+  type V2CheckBatchOptions,
+  type V2CheckRequestOptions,
+  V2CheckResult as CheckResult,
+  type V2CheckResultResponse as CheckResultResponse,
   type Warrant,
   type WarrantResponse,
   type WarrantToken,
   type WarrantTokenResponse,
   type WriteWarrantOptions,
-} from "workos/fga/interfaces/index.ts";
+} from "./interfaces/index.ts";
 import {
   deserializeBatchWriteResourcesResponse,
   deserializeQueryResult,
@@ -41,15 +41,15 @@ import {
   serializeListWarrantsOptions,
   serializeQueryOptions,
   serializeWriteWarrantOptions,
-} from "workos/fga/serializers/index.ts";
-import { isResourceInterface } from "workos/fga/utils/interface-check.ts";
-import { AutoPaginatable } from "workos/common/utils/pagination.ts";
-import { fetchAndDeserialize } from "workos/common/utils/fetch-and-deserialize.ts";
-import type { List, PaginationOptions } from "workos/common/interfaces.ts";
+} from "./serializers/index.ts";
+import { isResourceInterface } from "./utils/interface-check.ts";
+import { AutoPaginatable } from "../common/utils/pagination.ts";
+import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
+import type { List, PaginationOptions } from "../common/interfaces.ts";
 
 /**
  * Service for Fine-Grained Authorization (FGA) in WorkOS.
- * 
+ *
  * FGA provides a flexible, scalable authorization system that lets you model complex
  * access control scenarios and perform authorization checks at runtime.
  */
@@ -58,7 +58,7 @@ export class FGA {
 
   /**
    * Performs an authorization check.
-   * 
+   *
    * @param checkOptions - The check options
    * @param options - Additional request options
    * @returns Promise resolving to a CheckResult
@@ -77,7 +77,7 @@ export class FGA {
 
   /**
    * Performs batch authorization checks.
-   * 
+   *
    * @param checkOptions - The batch check options
    * @param options - Additional request options
    * @returns Promise resolving to an array of CheckResults
@@ -98,7 +98,7 @@ export class FGA {
 
   /**
    * Creates a new resource.
-   * 
+   *
    * @param resource - The resource creation options
    * @returns Promise resolving to the created Resource
    */
@@ -113,7 +113,7 @@ export class FGA {
 
   /**
    * Retrieves a resource by type and ID.
-   * 
+   *
    * @param resource - The resource to retrieve
    * @returns Promise resolving to the Resource
    */
@@ -136,15 +136,16 @@ export class FGA {
 
   /**
    * Lists resources with optional filtering.
-   * 
+   *
    * @param options - Optional listing options
    * @returns Promise resolving to a paginated list of Resources
    */
   async listResources(
     options?: ListResourcesOptions,
   ): Promise<AutoPaginatable<Resource>> {
-    const deserializer = (item: unknown) => deserializeResource(item as ResourceResponse);
-    
+    const deserializer = (item: unknown) =>
+      deserializeResource(item as ResourceResponse);
+
     // Get the initial page of resources
     const result = await fetchAndDeserialize<ResourceResponse, Resource>(
       this.workos,
@@ -152,7 +153,7 @@ export class FGA {
       deserializer,
       options ? serializeListResourceOptions(options) : undefined,
     );
-    
+
     // Create an AutoPaginatable instance with the initial page data and a fetch function for loading more pages
     return new AutoPaginatable(
       result as unknown as List<Resource>,
@@ -171,7 +172,7 @@ export class FGA {
 
   /**
    * Updates a resource.
-   * 
+   *
    * @param options - The update options
    * @returns Promise resolving to the updated Resource
    */
@@ -195,7 +196,7 @@ export class FGA {
 
   /**
    * Deletes a resource.
-   * 
+   *
    * @param resource - The resource to delete
    * @returns Promise that resolves when the resource is deleted
    */
@@ -212,7 +213,7 @@ export class FGA {
 
   /**
    * Performs batch operations on resources.
-   * 
+   *
    * @param options - The batch options
    * @returns Promise resolving to an array of affected Resources
    */
@@ -228,7 +229,7 @@ export class FGA {
 
   /**
    * Creates or deletes a warrant.
-   * 
+   *
    * @param options - The warrant options
    * @returns Promise resolving to a WarrantToken
    */
@@ -243,7 +244,7 @@ export class FGA {
 
   /**
    * Performs batch operations on warrants.
-   * 
+   *
    * @param options - Array of warrant options
    * @returns Promise resolving to a WarrantToken
    */
@@ -260,7 +261,7 @@ export class FGA {
 
   /**
    * Lists warrants with optional filtering.
-   * 
+   *
    * @param options - Optional listing options
    * @param requestOptions - Additional request options
    * @returns Promise resolving to a paginated list of Warrants
@@ -269,8 +270,9 @@ export class FGA {
     options?: ListWarrantsOptions,
     requestOptions?: ListWarrantsRequestOptions,
   ): Promise<AutoPaginatable<Warrant>> {
-    const deserializer = (item: unknown) => deserializeWarrant(item as WarrantResponse);
-    
+    const deserializer = (item: unknown) =>
+      deserializeWarrant(item as WarrantResponse);
+
     // Get the initial page of warrants
     const result = await fetchAndDeserialize<WarrantResponse, Warrant>(
       this.workos,
@@ -279,7 +281,7 @@ export class FGA {
       options ? serializeListWarrantsOptions(options) : undefined,
       requestOptions as any,
     );
-    
+
     // Create an AutoPaginatable instance with the initial page data and a fetch function for loading more pages
     return new AutoPaginatable(
       result as unknown as List<Warrant>,
@@ -299,7 +301,7 @@ export class FGA {
 
   /**
    * Executes authorization queries.
-   * 
+   *
    * @param options - The query options
    * @param requestOptions - Additional request options
    * @returns Promise resolving to a paginated list of QueryResults
@@ -308,8 +310,9 @@ export class FGA {
     options: QueryOptions,
     requestOptions: QueryRequestOptions = {},
   ): Promise<AutoPaginatable<QueryResult>> {
-    const deserializer = (item: unknown) => deserializeQueryResult(item as QueryResultResponse);
-    
+    const deserializer = (item: unknown) =>
+      deserializeQueryResult(item as QueryResultResponse);
+
     // Get the initial page of query results
     const result = await fetchAndDeserialize<QueryResultResponse, QueryResult>(
       this.workos,
@@ -318,12 +321,15 @@ export class FGA {
       serializeQueryOptions(options),
       requestOptions as any,
     );
-    
+
     // Create an AutoPaginatable instance with the initial page data and a fetch function for loading more pages
     return new AutoPaginatable(
       result as unknown as List<QueryResult>,
       async (params: PaginationOptions) => {
-        const nextPage = await fetchAndDeserialize<QueryResultResponse, QueryResult>(
+        const nextPage = await fetchAndDeserialize<
+          QueryResultResponse,
+          QueryResult
+        >(
           this.workos,
           "/fga/v1/query",
           deserializer,

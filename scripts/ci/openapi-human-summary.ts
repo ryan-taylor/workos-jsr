@@ -2,15 +2,15 @@
 
 /**
  * OpenAPI Human-Readable Summary Generator
- * 
+ *
  * This script generates a human-readable summary of differences between OpenAPI
  * specifications, focusing on added, removed, and changed paths and operations.
  * It builds on the existing oasdiff integration to provide clear, actionable summaries
  * for API consumers.
- * 
+ *
  * Usage:
  *   deno run -A scripts/ci/openapi-human-summary.ts [options]
- * 
+ *
  * Options:
  *   --base=<file>        Base (old) OpenAPI spec file
  *   --revision=<file>    Revision (new) OpenAPI spec file
@@ -23,18 +23,11 @@
  */
 
 import { parse } from "https://deno.land/std/flags/mod.ts"; // Keep this import since flags might not be available in JSR
-import { join, basename, dirname } from "jsr:@std/path@^1";
-import { exists, ensureDir, expandGlob } from "jsr:@std/fs@^1";
-import {
-  ensureOasdiffInstalled,
-  runOasdiff
-} from "./openapi-diff.ts";
-import {
-  generateSummary
-} from "./fixed-summary-generator.ts";
-import {
-  generatePRCommentJSON
-} from "./openapi-json-pr.ts";
+import { basename, dirname, join } from "jsr:@std/path@^1";
+import { ensureDir, exists, expandGlob } from "jsr:@std/fs@^1";
+import { ensureOasdiffInstalled, runOasdiff } from "./openapi-diff.ts";
+import { generateSummary } from "./fixed-summary-generator.ts";
+import { generatePRCommentJSON } from "./openapi-json-pr.ts";
 
 /**
  * Parse command line arguments
@@ -42,7 +35,15 @@ import {
 function parseArgs() {
   const flags = parse(Deno.args, {
     boolean: ["help", "post-comment"],
-    string: ["base", "revision", "spec-dir", "pattern", "output-file", "format", "pr-json"],
+    string: [
+      "base",
+      "revision",
+      "spec-dir",
+      "pattern",
+      "output-file",
+      "format",
+      "pr-json",
+    ],
     alias: {
       h: "help",
       b: "base",
@@ -51,7 +52,7 @@ function parseArgs() {
       p: "pattern",
       o: "output-file",
       f: "format",
-      j: "pr-json"
+      j: "pr-json",
     },
     default: {
       help: false,
@@ -59,7 +60,7 @@ function parseArgs() {
       "spec-dir": "vendor/openapi",
       "pattern": "workos-*.json",
       "format": "md",
-      "pr-json": ""
+      "pr-json": "",
     },
   });
 
@@ -76,7 +77,7 @@ function parseArgs() {
     outputFile: flags["output-file"],
     format: flags.format,
     postComment: flags["post-comment"],
-    prJsonFile: flags["pr-json"]
+    prJsonFile: flags["pr-json"],
   };
 }
 
@@ -123,27 +124,29 @@ Examples:
  */
 async function findRecentSpecFiles(
   specDir: string,
-  pattern: string
+  pattern: string,
 ): Promise<{ latest: string; previous: string } | null> {
   const files: string[] = [];
-  
+
   // Find all matching files
   const globPattern = join(specDir, pattern);
   for await (const file of expandGlob(globPattern)) {
     files.push(file.path);
   }
-  
+
   // Sort files by name (assuming naming convention includes date/version)
   files.sort().reverse();
-  
+
   if (files.length < 2) {
-    console.warn(`Warning: Need at least two spec files for comparison. Found: ${files.length}`);
+    console.warn(
+      `Warning: Need at least two spec files for comparison. Found: ${files.length}`,
+    );
     return null;
   }
-  
+
   return {
     latest: files[0],
-    previous: files[1]
+    previous: files[1],
   };
 }
 
@@ -153,11 +156,15 @@ async function findRecentSpecFiles(
 function createGitHubSummary(content: string) {
   const summaryPath = Deno.env.get("GITHUB_STEP_SUMMARY");
   if (!summaryPath) return;
-  
+
   try {
     Deno.writeTextFileSync(summaryPath, content + "\n", { append: true });
   } catch (error) {
-    console.error(`Error writing to GitHub step summary: ${error instanceof Error ? error.message : String(error)}`);
+    console.error(
+      `Error writing to GitHub step summary: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+    );
   }
 }
 
@@ -166,24 +173,24 @@ function createGitHubSummary(content: string) {
  */
 async function main() {
   try {
-    const { 
+    const {
       baseFile,
       revisionFile,
-      specDir, 
+      specDir,
       pattern,
       outputFile,
       format,
       postComment,
-      prJsonFile
+      prJsonFile,
     } = parseArgs();
-    
+
     // Ensure oasdiff binary is installed
     await ensureOasdiffInstalled();
-    
+
     // Determine which files to compare
     let baseSpec: string;
     let revisionSpec: string;
-    
+
     if (baseFile && revisionFile) {
       // Use explicitly provided files
       baseSpec = baseFile;
@@ -191,72 +198,80 @@ async function main() {
     } else {
       // Find the two most recent spec files
       const specFiles = await findRecentSpecFiles(specDir, pattern);
-      
+
       if (!specFiles) {
-        console.error(`Error: Could not find two spec files to compare in ${specDir}`);
+        console.error(
+          `Error: Could not find two spec files to compare in ${specDir}`,
+        );
         Deno.exit(1);
       }
-      
+
       baseSpec = specFiles.previous;
       revisionSpec = specFiles.latest;
     }
-    
+
     // Check if files exist
     if (!(await exists(baseSpec))) {
       throw new Error(`Base spec file not found: ${baseSpec}`);
     }
-    
+
     if (!(await exists(revisionSpec))) {
       throw new Error(`Revision spec file not found: ${revisionSpec}`);
     }
-    
+
     console.log(`Comparing OpenAPI specifications:`);
     console.log(`  Base:     ${basename(baseSpec)}`);
     console.log(`  Revision: ${basename(revisionSpec)}`);
-    
+
     // Create temporary directory for diff results
     const tmpDir = ".tmp/openapi-diffs";
     await ensureDir(tmpDir);
-    
+
     // Run oasdiff to get detailed diff
     console.log(`\nGenerating detailed diff...`);
     const diffResult = await runOasdiff(
       baseSpec,
       revisionSpec,
       "json",
-      undefined,  // No filter, we want all diff types
-      true        // Flatten to get endpoints view
+      undefined, // No filter, we want all diff types
+      true, // Flatten to get endpoints view
     );
-    
+
     // Save JSON output to temp file
     const jsonOutputPath = join(tmpDir, `diff-${Date.now()}.json`);
-    await Deno.writeTextFile(jsonOutputPath, JSON.stringify(diffResult, null, 2));
+    await Deno.writeTextFile(
+      jsonOutputPath,
+      JSON.stringify(diffResult, null, 2),
+    );
     console.log(`Raw diff output saved to: ${jsonOutputPath}`);
-    
+
     // Generate human-readable summary
     console.log(`\nGenerating human-readable summary...`);
-    const summaryOutput = await generateSummary(jsonOutputPath, outputFile, format);
-    
+    const summaryOutput = await generateSummary(
+      jsonOutputPath,
+      outputFile,
+      format,
+    );
+
     // Generate PR JSON output if requested
     if (prJsonFile) {
       console.log(`\nGenerating PR comment JSON format...`);
       await generatePRCommentJSON(jsonOutputPath, prJsonFile);
       console.log(`PR comment JSON has been saved to: ${prJsonFile}`);
     }
-    
+
     // Post summary to GitHub if requested
     if (postComment && Deno.env.get("GITHUB_ACTIONS") === "true") {
       createGitHubSummary(summaryOutput);
       console.log(`Posted API diff summary to GitHub step summary`);
     }
-    
+
     if (!outputFile) {
       // If no output file was specified, just print the summary
       console.log(`\n${summaryOutput}`);
     } else {
       console.log(`\nSummary has been saved to: ${outputFile}`);
     }
-    
   } catch (error) {
     console.error(error instanceof Error ? error.message : String(error));
     Deno.exit(1);

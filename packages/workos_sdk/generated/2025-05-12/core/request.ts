@@ -52,7 +52,16 @@ export const getWorkOSInstance = (): WorkOS => {
  */
 export const request = async <T>(options: RequestOptions): Promise<T> => {
   const workos = getWorkOSInstance();
-  const { method, url, query, body, headers, idempotencyKey, warrantToken, accessToken } = options;
+  const {
+    method,
+    url,
+    query,
+    body,
+    headers,
+    idempotencyKey,
+    warrantToken,
+    accessToken,
+  } = options;
 
   // Strip the leading slash if present
   const path = url.startsWith("/") ? url.substring(1) : url;

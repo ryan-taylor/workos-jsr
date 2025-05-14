@@ -15,20 +15,20 @@ npm install postcss-normalize-unicode --save
 ### Input
 
 ```css
-@font-face{
-    font-family: test;
-    unicode-range: u+2b00-2bff
+@font-face {
+  font-family: test;
+  unicode-range: U+2B00-2BFF;
 }
 ```
 
 ### Output
 
 ```css
-@font-face{
-    font-family: test;
-    unicode-range: u+2b??
+@font-face {
+  font-family: test;
+  unicode-range: U+2B??;
 }
-``` 
+```
 
 ## Usage
 
@@ -37,7 +37,8 @@ examples for your environment.
 
 ## Contributors
 
-See [CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
+See
+[CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
 
 ## License
 

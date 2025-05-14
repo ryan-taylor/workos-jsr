@@ -1,15 +1,15 @@
-import { deserializeOrganization } from "../../organizations/serializers/organization.serializer.ts.ts";
+import { deserializeOrganization } from "../../organizations/serializers/organization.serializer.ts";
 import {
   deserializeInvitation,
   deserializeUser,
-} from "../../user-management/serializers.ts.ts";
-import { deserializeOrganizationMembership } from "../../user-management/serializers/organization-membership.serializer.ts.ts";
+} from "../../user-management/serializers.ts";
+import { deserializeOrganizationMembership } from "../../user-management/serializers/organization-membership.serializer.ts";
 import type {
   ActionContext,
   ActionPayload,
   UserData,
   UserDataPayload,
-} from "../interfaces/action.interface.ts.ts";
+} from "../interfaces/action.interface.ts";
 
 const deserializeUserData = (userData: UserDataPayload): UserData => {
   return {

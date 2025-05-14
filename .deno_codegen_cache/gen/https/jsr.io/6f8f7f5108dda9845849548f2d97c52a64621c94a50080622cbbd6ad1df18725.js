@@ -7,7 +7,7 @@ export function stripTrailingSeparators(segment, isSep) {
     return segment;
   }
   let end = segment.length;
-  for(let i = segment.length - 1; i > 0; i--){
+  for (let i = segment.length - 1; i > 0; i--) {
     if (isSep(segment.charCodeAt(i))) {
       end = i;
     } else {

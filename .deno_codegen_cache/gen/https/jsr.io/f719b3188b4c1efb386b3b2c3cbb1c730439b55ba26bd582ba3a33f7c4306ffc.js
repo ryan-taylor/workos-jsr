@@ -15,7 +15,8 @@
  * ```
  *
  * @module
- */ export * from "./empty_dir.ts";
+ */
+export * from "./empty_dir.ts";
 export * from "./ensure_dir.ts";
 export * from "./ensure_file.ts";
 export * from "./ensure_link.ts";

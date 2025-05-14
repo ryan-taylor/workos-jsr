@@ -10,22 +10,32 @@ export = pluginCreator;
  * @param {Options} opts
  * @return {import('postcss').Plugin}
  */
-declare function pluginCreator(opts?: Options): import('postcss').Plugin;
+declare function pluginCreator(opts?: Options): import("postcss").Plugin;
 declare namespace pluginCreator {
-    export { postcss, ConvertOptions, AutoprefixerOptions, BrowserslistOptions, Options };
+  export {
+    AutoprefixerOptions,
+    BrowserslistOptions,
+    ConvertOptions,
+    Options,
+    postcss,
+  };
 }
-type Options = {
+type Options =
+  & {
     precision?: false | number;
-} & ConvertOptions & AutoprefixerOptions & BrowserslistOptions;
+  }
+  & ConvertOptions
+  & AutoprefixerOptions
+  & BrowserslistOptions;
 declare var postcss: true;
 type ConvertOptions = [number: number, unit: string, {
-    time?: boolean | undefined;
-    length?: boolean | undefined;
-    angle?: boolean | undefined;
+  time?: boolean | undefined;
+  length?: boolean | undefined;
+  angle?: boolean | undefined;
 }][2];
 type AutoprefixerOptions = {
-    overrideBrowserslist?: string | string[];
+  overrideBrowserslist?: string | string[];
 };
-type BrowserslistOptions = Pick<browserslist.Options, 'stats' | 'path' | 'env'>;
+type BrowserslistOptions = Pick<browserslist.Options, "stats" | "path" | "env">;
 import browserslist = require("browserslist");
 //# sourceMappingURL=index.d.ts.map

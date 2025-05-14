@@ -12,18 +12,18 @@ async function testRouter() {
 
   // Create a test request
   const req = new Request("http://localhost:8000/");
-  
+
   try {
     // Handle the request with our router
     const response = await router(req);
-    
+
     // Get the response text
     const text = await response.text();
-    
+
     // Log the result
     console.log(`Status: ${response.status}`);
     console.log(`Response: ${text}`);
-    
+
     return text === "🏃 Fresh-canary alive";
   } catch (error) {
     console.error("Error testing router:", error);
@@ -33,6 +33,6 @@ async function testRouter() {
 
 // Run the test
 console.log("Testing router implementation...");
-testRouter().then(success => {
+testRouter().then((success) => {
   console.log(`Router test ${success ? "PASSED" : "FAILED"}`);
 });

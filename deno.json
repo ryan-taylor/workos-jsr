@@ -23,7 +23,9 @@
     "rewrite-imports": "deno run -A scripts/rewrite-imports.ts",
     "fetch:spec": "deno run --allow-net --allow-read --allow-write scripts/codegen/fetch_spec.ts",
     "prebuild:api": "deno run -A scripts/codegen/prebuild.ts $(find ./vendor/openapi -name 'workos-*.json' -type f | sort -r | head -n 1 || echo './scripts/codegen/detect_adapter.ts')",
-    "generate:api": "deno task prebuild:api && DENO_DIR=.deno_codegen_cache deno run -A scripts/codegen/build.ts && deno fmt packages/workos_sdk/generated && deno check packages/workos_sdk/generated/**/*.ts",
+    "generate:api": "deno task prebuild:api && DENO_DIR=.deno_codegen_cache deno run -A scripts/codegen/build.ts && deno fmt packages/workos_sdk/generated && deno run --allow-read --allow-write --allow-run scripts/patch-openapi-runtime-cached.ts && deno check packages/workos_sdk/generated/**/*.ts tests_deno/codegen/_runtime_output/**/*.ts",
+    "generate:api:strict": "deno task prebuild:api && DENO_DIR=.deno_codegen_cache deno run -A scripts/codegen/build.ts && deno fmt packages/workos_sdk/generated && deno run --allow-read --allow-write --allow-run scripts/patch-openapi-runtime-cached.ts --strict-types && deno check packages/workos_sdk/generated/**/*.ts tests_deno/codegen/_runtime_strict_output/**/*.ts",
+    "generate:api:force": "deno task prebuild:api && DENO_DIR=.deno_codegen_cache deno run -A scripts/codegen/build.ts && deno fmt packages/workos_sdk/generated && deno run --allow-read --allow-write --allow-run scripts/patch-openapi-runtime-cached.ts --force && deno check packages/workos_sdk/generated/**/*.ts tests_deno/codegen/_runtime_output/**/*.ts",
     "codegen:upgrade": "deno run -A scripts/codegen/upgrade.ts",
     "ci:dialect-check": "deno run -A scripts/ci/dialect-check.ts",
     "precommit:check-adapter": "deno task prebuild:api"
@@ -37,7 +39,13 @@
         "no-npm-imports/no-sloppy-node"
       ]
     },
-    "exclude": [".deno_codegen_cache/"],
+    "exclude": [
+        ".deno_codegen_cache/",
+        ".cache/",
+        "tests_deno/codegen/_runtime_test_output/**",
+        "tests_deno/codegen/_runtime_output/**",
+        "tests_deno/codegen/_runtime_strict_output/**"
+    ],
     "plugins": []
   },
   "dependencies": {

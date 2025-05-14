@@ -1,23 +1,23 @@
 /**
  * WorkOS SDK for Deno
- * 
+ *
  * This module provides a clean, modern Deno implementation of the WorkOS API,
  * allowing Deno applications to use WorkOS features such as SSO, Directory Sync,
  * Audit Logs, User Management, and more.
- * 
+ *
  * @example
  * ```ts
  * import { WorkOS } from "@ryantaylor/workos";
- * 
+ *
  * // Initialize the WorkOS client
  * const workos = new WorkOS(Deno.env.get("WORKOS_API_KEY"), {
  *   clientId: Deno.env.get("WORKOS_CLIENT_ID")
  * });
- * 
+ *
  * // Use any of the WorkOS features
  * const profile = await workos.sso.getProfile(code);
  * ```
- * 
+ *
  * @module
  */
 
@@ -31,14 +31,14 @@ export { WorkOS } from "./src/workos.ts";
 export type {
   ApiResponse,
   CommonGetOptions,
-  CommonPostOptions, 
+  CommonPostOptions,
   CommonPutOptions,
-  PaginationOptions,
+  EventName,
+  GetOptions,
   List,
   ListResponse,
-  EventName,
+  PaginationOptions,
   SerializedListEventOptions,
-  GetOptions,
 } from "./src/common/interfaces.ts";
 
 // Enums are values not types
@@ -53,8 +53,9 @@ export type { WorkOSResponseError } from "./src/common/interfaces/workos-respons
 
 // Common exceptions
 export {
-  GenericServerException,
   BadRequestException,
+  ConflictException,
+  GenericServerException,
   NoApiKeyProvidedException,
   NotFoundException,
   OauthException,
@@ -62,26 +63,25 @@ export {
   SignatureVerificationException,
   UnauthorizedException,
   UnprocessableEntityException,
-  ConflictException,
 } from "./src/common/exceptions/index.ts";
 
 // Common serializers
 export {
-  serialize,
   adaptListMetadata,
-  serializeList,
-  deserializeList,
-  serializeEvent,
   deserializeEvent,
-  serializeDate,
+  deserializeList,
+  serialize,
   serializeBoolean,
+  serializeDate,
+  serializeEvent,
+  serializeList,
 } from "./src/common/serializers.ts";
 
 // HTTP client
 export {
   HttpClient,
-  HttpClientResponse,
   HttpClientError,
+  HttpClientResponse,
 } from "./src/common/net/http-client.ts";
 
 // HTTP client implementations

@@ -1,3 +1,3 @@
-export * from "./challenge.serializer.ts.ts";
-export * from "./factor.serializer.ts.ts";
-export * from "./verify-response.serializer.ts.ts";
+export * from "./challenge.serializer.ts";
+export * from "./factor.serializer.ts";
+export * from "./verify-response.serializer.ts";

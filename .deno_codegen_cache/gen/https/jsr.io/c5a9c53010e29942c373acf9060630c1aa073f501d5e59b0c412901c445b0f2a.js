@@ -42,7 +42,7 @@ import { isPathSeparator, isWindowsDeviceRoot } from "./_util.ts";
         let j = 2;
         let last = j;
         // Match 1 or more non-path separators
-        for(; j < len; ++j){
+        for (; j < len; ++j) {
           if (isPathSeparator(path.charCodeAt(j))) break;
         }
         if (j < len && j !== last) {
@@ -50,14 +50,14 @@ import { isPathSeparator, isWindowsDeviceRoot } from "./_util.ts";
           // Matched!
           last = j;
           // Match 1 or more path separators
-          for(; j < len; ++j){
+          for (; j < len; ++j) {
             if (!isPathSeparator(path.charCodeAt(j))) break;
           }
           if (j < len && j !== last) {
             // Matched!
             last = j;
             // Match 1 or more non-path separators
-            for(; j < len; ++j){
+            for (; j < len; ++j) {
               if (isPathSeparator(path.charCodeAt(j))) break;
             }
             if (j === len) {
@@ -97,7 +97,12 @@ import { isPathSeparator, isWindowsDeviceRoot } from "./_util.ts";
   }
   let tail;
   if (rootEnd < len) {
-    tail = normalizeString(path.slice(rootEnd), !isAbsolute, "\\", isPathSeparator);
+    tail = normalizeString(
+      path.slice(rootEnd),
+      !isAbsolute,
+      "\\",
+      isPathSeparator,
+    );
   } else {
     tail = "";
   }

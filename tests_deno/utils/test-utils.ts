@@ -1,6 +1,6 @@
 /**
  * test-utils.ts - Deno-native test utilities
- * 
+ *
  * This module provides testing utilities for Deno tests, including:
  *  - Mock fetch functionality for testing HTTP requests
  *  - Spy utilities for mocking and tracking function calls
@@ -31,17 +31,29 @@ type AnyFunction = (...args: any[]) => any;
 /** Global state for the mock fetch implementation */
 const mockFetchState = {
   calls: [] as Array<[string, RequestInit | undefined]>,
-  implementations: [] as Array<(input: string | URL | Request, init?: RequestInit) => Promise<Response>>,
+  implementations: [] as Array<
+    (input: string | URL | Request, init?: RequestInit) => Promise<Response>
+  >,
   defaultImplementation: ((): Promise<Response> => {
     throw new Error("Mock fetch called without implementation");
-  }) as (input: string | URL | Request, init?: RequestInit) => Promise<Response>,
+  }) as (
+    input: string | URL | Request,
+    init?: RequestInit,
+  ) => Promise<Response>,
 };
 
 /**
  * Creates a mockable fetch function that can be used to test HTTP requests
  */
-export function mockFetch(input: string | URL | Request, init?: RequestInit): Promise<Response> {
-  const url = typeof input === "string" ? input : input instanceof URL ? input.toString() : input.url;
+export function mockFetch(
+  input: string | URL | Request,
+  init?: RequestInit,
+): Promise<Response> {
+  const url = typeof input === "string"
+    ? input
+    : input instanceof URL
+    ? input.toString()
+    : input.url;
   mockFetchState.calls.push([url, init]);
 
   if (mockFetchState.implementations.length > 0) {
@@ -55,9 +67,13 @@ export function mockFetch(input: string | URL | Request, init?: RequestInit): Pr
 /**
  * Configures mockFetch to return a successful response with the provided body
  */
-export function mockResponse(body: string | object, init: ResponseInit = {}): typeof mockFetch {
+export function mockResponse(
+  body: string | object,
+  init: ResponseInit = {},
+): typeof mockFetch {
   const bodyStr = typeof body === "string" ? body : JSON.stringify(body);
-  mockFetchState.defaultImplementation = () => Promise.resolve(new Response(bodyStr, init));
+  mockFetchState.defaultImplementation = () =>
+    Promise.resolve(new Response(bodyStr, init));
   return mockFetch;
 }
 
@@ -72,9 +88,14 @@ export function mockReject(error: Error): typeof mockFetch {
 /**
  * Configures mockFetch to return a successful response once with the provided body
  */
-export function mockResponseOnce(body: string | object, init: ResponseInit = {}): typeof mockFetch {
+export function mockResponseOnce(
+  body: string | object,
+  init: ResponseInit = {},
+): typeof mockFetch {
   const bodyStr = typeof body === "string" ? body : JSON.stringify(body);
-  mockFetchState.implementations.push(() => Promise.resolve(new Response(bodyStr, init)));
+  mockFetchState.implementations.push(() =>
+    Promise.resolve(new Response(bodyStr, init))
+  );
   return mockFetch;
 }
 
@@ -114,7 +135,9 @@ export const fetchUtils = {
 
   /** Get headers from the last fetch call */
   headers(): Record<string, string> | undefined {
-    return mockFetchState.calls[0]?.[1]?.headers as Record<string, string> | undefined;
+    return mockFetchState.calls[0]?.[1]?.headers as
+      | Record<string, string>
+      | undefined;
   },
 
   /** Get method from the last fetch call */
@@ -131,7 +154,7 @@ export const fetchUtils = {
     if (raw) {
       return body;
     }
-    if (typeof body === 'string') {
+    if (typeof body === "string") {
       try {
         return JSON.parse(body);
       } catch {
@@ -167,7 +190,7 @@ export function installMockFetch(): () => void {
 export function spy<T extends AnyFunction = AnyFunction>(implementation?: T) {
   const calls: Array<Parameters<T>> = [];
 
-  const spyFn = function(this: unknown, ...args: any[]): any {
+  const spyFn = function (this: unknown, ...args: any[]): any {
     calls.push(args as Parameters<T>);
     return implementation?.apply(this, args);
   };
@@ -201,7 +224,7 @@ export function spy<T extends AnyFunction = AnyFunction>(implementation?: T) {
           return currentImpl?.(...args);
         }) as T;
         return spyFn;
-      }
+      },
     },
     mockReturnValue: {
       value: (returnValue: ReturnType<T>) => {
@@ -221,7 +244,7 @@ export function spy<T extends AnyFunction = AnyFunction>(implementation?: T) {
           return current?.(...args);
         }) as T;
         return spyFn;
-      }
+      },
     },
     mockReset: {
       value: () => {
@@ -240,7 +263,7 @@ export function spy<T extends AnyFunction = AnyFunction>(implementation?: T) {
 
   return spyFn as T & {
     calls: Array<Parameters<T>>;
-    mock: { 
+    mock: {
       calls: Array<Parameters<T>>;
       results: Array<{ type: string; value: unknown }>;
     };
@@ -259,7 +282,7 @@ export function spy<T extends AnyFunction = AnyFunction>(implementation?: T) {
 export function stub<T extends object, K extends keyof T>(
   obj: T,
   method: K,
-  implementation?: T[K] extends AnyFunction ? T[K] : never
+  implementation?: T[K] extends AnyFunction ? T[K] : never,
 ): T[K] extends AnyFunction ? ReturnType<T[K]> : never {
   const original = obj[method];
   const spyFn = spy(implementation as T[K] extends AnyFunction ? T[K] : never);
@@ -268,13 +291,14 @@ export function stub<T extends object, K extends keyof T>(
   obj[method] = spyFn as unknown as T[K];
 
   // Add restore functionality
-  Object.defineProperty(spyFn, 'restore', {
+  Object.defineProperty(spyFn, "restore", {
     value: () => {
       obj[method] = original;
     },
   });
 
-  return spyFn as unknown as T[K] extends AnyFunction ? ReturnType<T[K]> : never;
+  return spyFn as unknown as T[K] extends AnyFunction ? ReturnType<T[K]>
+    : never;
 }
 
 // ---- Mock Reset Helpers ----
@@ -313,16 +337,16 @@ type TeardownFn = () => void | Promise<void>;
  * Helper for Deno.test that provides setup and teardown functionality
  */
 export function testWithContext(
-  name: string, 
+  name: string,
   fn: () => void | Promise<void>,
-  options: { setup?: SetupFn; teardown?: TeardownFn } = {}
+  options: { setup?: SetupFn; teardown?: TeardownFn } = {},
 ): void {
   Deno.test(name, async () => {
     try {
       if (options.setup) {
         await options.setup();
       }
-      
+
       await fn();
     } finally {
       if (options.teardown) {
@@ -350,6 +374,6 @@ export function createTestGroup(options: TestGroupOptions = {}) {
         setup: options.beforeEach,
         teardown: options.afterEach,
       });
-    }
+    },
   };
 }

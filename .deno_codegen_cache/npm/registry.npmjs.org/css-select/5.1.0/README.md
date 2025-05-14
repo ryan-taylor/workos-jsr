@@ -18,15 +18,15 @@ below.
 
 **Features:**
 
--   🔬 Full implementation of CSS3 selectors, as well as most CSS4 selectors
--   🧪 Partial implementation of jQuery/Sizzle extensions (see
-    [cheerio-select](https://github.com/cheeriojs/cheerio-select) for the
-    remaining selectors)
--   🧑‍🔬 High test coverage, including the full test suites from
-    [`Sizzle`](https://github.com/jquery/sizzle),
-    [`Qwery`](https://github.com/ded/qwery) and
-    [`NWMatcher`](https://github.com/dperini/nwmatcher/) and .
--   🥼 Reliably great performance
+- 🔬 Full implementation of CSS3 selectors, as well as most CSS4 selectors
+- 🧪 Partial implementation of jQuery/Sizzle extensions (see
+  [cheerio-select](https://github.com/cheeriojs/cheerio-select) for the
+  remaining selectors)
+- 🧑‍🔬 High test coverage, including the full test suites from
+  [`Sizzle`](https://github.com/jquery/sizzle),
+  [`Qwery`](https://github.com/ded/qwery) and
+  [`NWMatcher`](https://github.com/dperini/nwmatcher/) and .
+- 🥼 Reliably great performance
 
 ## Why?
 
@@ -67,9 +67,9 @@ Anyway, after parsing, we end up with an array like this one:
 
 ```js
 [
-    { type: "tag", name: "a" },
-    { type: "descendant" },
-    { type: "tag", name: "b" },
+  { type: "tag", name: "a" },
+  { type: "descendant" },
+  { type: "tag", name: "b" },
 ];
 ```
 
@@ -110,10 +110,10 @@ arbitrary strings.
 
 Queries `elems`, returns an array containing all matches.
 
--   `query` can be either a CSS selector or a function.
--   `elems` can be either an array of elements, or a single element. If it is an
-    element, its children will be queried.
--   `options` is described below.
+- `query` can be either a CSS selector or a function.
+- `elems` can be either an array of elements, or a single element. If it is an
+  element, its children will be queried.
+- `options` is described below.
 
 Aliases: `default` export, `CSSselect.iterate(query, elems)`.
 
@@ -135,24 +135,24 @@ the first match, or `null` if there was no match.
 
 All options are optional.
 
--   `xmlMode`: When enabled, tag names will be case-sensitive. Default: `false`.
--   `rootFunc`: The last function in the stack, will be called with the last
-    element that's looked at.
--   `adapter`: The adapter to use when interacting with the backing DOM
-    structure. By default it uses the `domutils` module.
--   `context`: The context of the current query. Used to limit the scope of
-    searches. Can be matched directly using the `:scope` pseudo-class.
--   `relativeSelector`: By default, selectors are relative to the `context`,
-    which means that no parent elements of the context will be matched. (Eg.
-    `a b c` with context `b` will never give any results.) If `relativeSelector`
-    is set to `false`, selectors won't be
-    [absolutized](http://www.w3.org/TR/selectors4/#absolutizing) and selectors
-    can test for parent elements outside of the `context`.
--   `cacheResults`: Allow css-select to cache results for some selectors,
-    sometimes greatly improving querying performance. Disable this if your
-    document can change in between queries with the same compiled selector.
-    Default: `true`.
--   `pseudos`: A map of pseudo-class names to functions or strings.
+- `xmlMode`: When enabled, tag names will be case-sensitive. Default: `false`.
+- `rootFunc`: The last function in the stack, will be called with the last
+  element that's looked at.
+- `adapter`: The adapter to use when interacting with the backing DOM structure.
+  By default it uses the `domutils` module.
+- `context`: The context of the current query. Used to limit the scope of
+  searches. Can be matched directly using the `:scope` pseudo-class.
+- `relativeSelector`: By default, selectors are relative to the `context`, which
+  means that no parent elements of the context will be matched. (Eg. `a b c`
+  with context `b` will never give any results.) If `relativeSelector` is set to
+  `false`, selectors won't be
+  [absolutized](http://www.w3.org/TR/selectors4/#absolutizing) and selectors can
+  test for parent elements outside of the `context`.
+- `cacheResults`: Allow css-select to cache results for some selectors,
+  sometimes greatly improving querying performance. Disable this if your
+  document can change in between queries with the same compiled selector.
+  Default: `true`.
+- `pseudos`: A map of pseudo-class names to functions or strings.
 
 #### Custom Adapters
 
@@ -168,79 +168,79 @@ for an implementation backed by the DOM.
 
 _As defined by CSS 4 and / or jQuery._
 
--   [Selector lists](https://developer.mozilla.org/en-US/docs/Web/CSS/Selector_list)
-    (`,`)
--   [Universal](https://developer.mozilla.org/en-US/docs/Web/CSS/Universal_selectors)
-    (`*`)
--   [Type](https://developer.mozilla.org/en-US/docs/Web/CSS/Type_selectors)
-    (`<tagname>`)
--   [Descendant](https://developer.mozilla.org/en-US/docs/Web/CSS/Descendant_combinator)
-    (` `)
--   [Child](https://developer.mozilla.org/en-US/docs/Web/CSS/Child_combinator)
-    (`>`)
--   Parent (`<`)
--   [Adjacent sibling](https://developer.mozilla.org/en-US/docs/Web/CSS/Adjacent_sibling_combinator)
-    (`+`)
--   [General sibling](https://developer.mozilla.org/en-US/docs/Web/CSS/General_sibling_combinator)
-    (`~`)
--   [Attribute](https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors)
-    (`[attr=foo]`), with supported comparisons:
-    -   `[attr]` (existential)
-    -   `=`
-    -   `~=`
-    -   `|=`
-    -   `*=`
-    -   `^=`
-    -   `$=`
-    -   `!=`
-    -   `i` and `s` can be added after the comparison to make the comparison
-        case-insensitive or case-sensitive (eg. `[attr=foo i]`). If neither is
-        supplied, css-select will follow the HTML spec's
-        [case-sensitivity rules](https://html.spec.whatwg.org/multipage/semantics-other.html#case-sensitivity-of-selectors).
--   Pseudos:
-    -   [`:not`](https://developer.mozilla.org/en-US/docs/Web/CSS/:not)
-    -   [`:contains`](https://api.jquery.com/contains-selector)
-    -   `:icontains` (case-insensitive version of `:contains`)
-    -   [`:has`](https://developer.mozilla.org/en-US/docs/Web/CSS/:has)
-    -   [`:root`](https://developer.mozilla.org/en-US/docs/Web/CSS/:root)
-    -   [`:empty`](https://developer.mozilla.org/en-US/docs/Web/CSS/:empty)
-    -   [`:parent`](https://api.jquery.com/parent-selector)
-    -   [`:first-child`](https://developer.mozilla.org/en-US/docs/Web/CSS/:first-child),
-        [`:last-child`](https://developer.mozilla.org/en-US/docs/Web/CSS/:last-child),
-        [`:first-of-type`](https://developer.mozilla.org/en-US/docs/Web/CSS/:first-of-type),
-        [`:last-of-type`](https://developer.mozilla.org/en-US/docs/Web/CSS/:last-of-type)
-    -   [`:only-of-type`](https://developer.mozilla.org/en-US/docs/Web/CSS/:only-of-type),
-        [`:only-child`](https://developer.mozilla.org/en-US/docs/Web/CSS/:only-child)
-    -   [`:nth-child`](https://developer.mozilla.org/en-US/docs/Web/CSS/:nth-child),
-        [`:nth-last-child`](https://developer.mozilla.org/en-US/docs/Web/CSS/:nth-last-child),
-        [`:nth-of-type`](https://developer.mozilla.org/en-US/docs/Web/CSS/:nth-of-type),
-        [`:nth-last-of-type`](https://developer.mozilla.org/en-US/docs/Web/CSS/:nth-last-of-type),
-    -   [`:link`](https://developer.mozilla.org/en-US/docs/Web/CSS/:link),
-        [`:any-link`](https://developer.mozilla.org/en-US/docs/Web/CSS/:any-link)
-    -   [`:visited`](https://developer.mozilla.org/en-US/docs/Web/CSS/:visited),
-        [`:hover`](https://developer.mozilla.org/en-US/docs/Web/CSS/:hover),
-        [`:active`](https://developer.mozilla.org/en-US/docs/Web/CSS/:active)
-        (these depend on optional `Adapter` methods, so these will only match
-        elements if implemented in `Adapter`)
-    -   [`:selected`](https://api.jquery.com/selected-selector),
-        [`:checked`](https://developer.mozilla.org/en-US/docs/Web/CSS/:checked)
-    -   [`:enabled`](https://developer.mozilla.org/en-US/docs/Web/CSS/:enabled),
-        [`:disabled`](https://developer.mozilla.org/en-US/docs/Web/CSS/:disabled)
-    -   [`:required`](https://developer.mozilla.org/en-US/docs/Web/CSS/:required),
-        [`:optional`](https://developer.mozilla.org/en-US/docs/Web/CSS/:optional)
-    -   [`:header`](https://api.jquery.com/header-selector),
-        [`:button`](https://api.jquery.com/button-selector),
-        [`:input`](https://api.jquery.com/input-selector),
-        [`:text`](https://api.jquery.com/text-selector),
-        [`:checkbox`](https://api.jquery.com/checkbox-selector),
-        [`:file`](https://api.jquery.com/file-selector),
-        [`:password`](https://api.jquery.com/password-selector),
-        [`:reset`](https://api.jquery.com/reset-selector),
-        [`:radio`](https://api.jquery.com/radio-selector) etc.
-    -   [`:is`](https://developer.mozilla.org/en-US/docs/Web/CSS/:is), plus its
-        legacy alias `:matches`
-    -   [`:scope`](https://developer.mozilla.org/en-US/docs/Web/CSS/:scope)
-        (uses the context from the passed options)
+- [Selector lists](https://developer.mozilla.org/en-US/docs/Web/CSS/Selector_list)
+  (`,`)
+- [Universal](https://developer.mozilla.org/en-US/docs/Web/CSS/Universal_selectors)
+  (`*`)
+- [Type](https://developer.mozilla.org/en-US/docs/Web/CSS/Type_selectors)
+  (`<tagname>`)
+- [Descendant](https://developer.mozilla.org/en-US/docs/Web/CSS/Descendant_combinator)
+  (``)
+- [Child](https://developer.mozilla.org/en-US/docs/Web/CSS/Child_combinator)
+  (`>`)
+- Parent (`<`)
+- [Adjacent sibling](https://developer.mozilla.org/en-US/docs/Web/CSS/Adjacent_sibling_combinator)
+  (`+`)
+- [General sibling](https://developer.mozilla.org/en-US/docs/Web/CSS/General_sibling_combinator)
+  (`~`)
+- [Attribute](https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors)
+  (`[attr=foo]`), with supported comparisons:
+  - `[attr]` (existential)
+  - `=`
+  - `~=`
+  - `|=`
+  - `*=`
+  - `^=`
+  - `$=`
+  - `!=`
+  - `i` and `s` can be added after the comparison to make the comparison
+    case-insensitive or case-sensitive (eg. `[attr=foo i]`). If neither is
+    supplied, css-select will follow the HTML spec's
+    [case-sensitivity rules](https://html.spec.whatwg.org/multipage/semantics-other.html#case-sensitivity-of-selectors).
+- Pseudos:
+  - [`:not`](https://developer.mozilla.org/en-US/docs/Web/CSS/:not)
+  - [`:contains`](https://api.jquery.com/contains-selector)
+  - `:icontains` (case-insensitive version of `:contains`)
+  - [`:has`](https://developer.mozilla.org/en-US/docs/Web/CSS/:has)
+  - [`:root`](https://developer.mozilla.org/en-US/docs/Web/CSS/:root)
+  - [`:empty`](https://developer.mozilla.org/en-US/docs/Web/CSS/:empty)
+  - [`:parent`](https://api.jquery.com/parent-selector)
+  - [`:first-child`](https://developer.mozilla.org/en-US/docs/Web/CSS/:first-child),
+    [`:last-child`](https://developer.mozilla.org/en-US/docs/Web/CSS/:last-child),
+    [`:first-of-type`](https://developer.mozilla.org/en-US/docs/Web/CSS/:first-of-type),
+    [`:last-of-type`](https://developer.mozilla.org/en-US/docs/Web/CSS/:last-of-type)
+  - [`:only-of-type`](https://developer.mozilla.org/en-US/docs/Web/CSS/:only-of-type),
+    [`:only-child`](https://developer.mozilla.org/en-US/docs/Web/CSS/:only-child)
+  - [`:nth-child`](https://developer.mozilla.org/en-US/docs/Web/CSS/:nth-child),
+    [`:nth-last-child`](https://developer.mozilla.org/en-US/docs/Web/CSS/:nth-last-child),
+    [`:nth-of-type`](https://developer.mozilla.org/en-US/docs/Web/CSS/:nth-of-type),
+    [`:nth-last-of-type`](https://developer.mozilla.org/en-US/docs/Web/CSS/:nth-last-of-type),
+  - [`:link`](https://developer.mozilla.org/en-US/docs/Web/CSS/:link),
+    [`:any-link`](https://developer.mozilla.org/en-US/docs/Web/CSS/:any-link)
+  - [`:visited`](https://developer.mozilla.org/en-US/docs/Web/CSS/:visited),
+    [`:hover`](https://developer.mozilla.org/en-US/docs/Web/CSS/:hover),
+    [`:active`](https://developer.mozilla.org/en-US/docs/Web/CSS/:active) (these
+    depend on optional `Adapter` methods, so these will only match elements if
+    implemented in `Adapter`)
+  - [`:selected`](https://api.jquery.com/selected-selector),
+    [`:checked`](https://developer.mozilla.org/en-US/docs/Web/CSS/:checked)
+  - [`:enabled`](https://developer.mozilla.org/en-US/docs/Web/CSS/:enabled),
+    [`:disabled`](https://developer.mozilla.org/en-US/docs/Web/CSS/:disabled)
+  - [`:required`](https://developer.mozilla.org/en-US/docs/Web/CSS/:required),
+    [`:optional`](https://developer.mozilla.org/en-US/docs/Web/CSS/:optional)
+  - [`:header`](https://api.jquery.com/header-selector),
+    [`:button`](https://api.jquery.com/button-selector),
+    [`:input`](https://api.jquery.com/input-selector),
+    [`:text`](https://api.jquery.com/text-selector),
+    [`:checkbox`](https://api.jquery.com/checkbox-selector),
+    [`:file`](https://api.jquery.com/file-selector),
+    [`:password`](https://api.jquery.com/password-selector),
+    [`:reset`](https://api.jquery.com/reset-selector),
+    [`:radio`](https://api.jquery.com/radio-selector) etc.
+  - [`:is`](https://developer.mozilla.org/en-US/docs/Web/CSS/:is), plus its
+    legacy alias `:matches`
+  - [`:scope`](https://developer.mozilla.org/en-US/docs/Web/CSS/:scope) (uses
+    the context from the passed options)
 
 ---
 

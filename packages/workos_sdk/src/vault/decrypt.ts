@@ -1,5 +1,5 @@
 import { crypto } from "jsr:@std/crypto@1";
-import { decodeUInt32 } from "workos/common/utils/leb128.ts";
+import { decodeUInt32 } from "../common/utils/leb128.ts";
 
 /**
  * Decoded structure for encrypted payloads.
@@ -13,7 +13,7 @@ export interface Decoded {
 
 /**
  * Decrypts an encrypted payload or Decoded object using AES-GCM.
- * 
+ *
  * @param payload - Base64 string or Decoded payload object
  * @param dataKey - Base64-encoded data key for decryption
  * @param aad - Associated additional data for AEAD
@@ -65,7 +65,7 @@ export const decrypt = async (
 
 /**
  * Decodes a base64-encoded encrypted payload into its components.
- * 
+ *
  * @param payload - Base64-encoded string containing IV, tag, key length, keys, and ciphertext
  * @returns Decoded object with iv, tag, keys, and ciphertext
  */

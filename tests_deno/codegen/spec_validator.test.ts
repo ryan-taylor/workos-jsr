@@ -37,19 +37,28 @@ async function validateOpenAPISpec(path: string): Promise<OpenAPIDocument> {
   // Check if the file exists
   const fileExists = await exists(path);
   assert(fileExists, `OpenAPI spec file ${path} does not exist`);
-  
+
   // Read the file content
   const fileContent = await Deno.readTextFile(path);
-  
+
   // Basic validation by checking required patterns
-  assert(fileContent.includes("openapi:"), "OpenAPI spec must contain 'openapi:' version field");
-  assert(fileContent.includes("info:"), "OpenAPI spec must contain 'info:' section");
-  assert(fileContent.includes("paths:"), "OpenAPI spec must contain 'paths:' section");
-  
+  assert(
+    fileContent.includes("openapi:"),
+    "OpenAPI spec must contain 'openapi:' version field",
+  );
+  assert(
+    fileContent.includes("info:"),
+    "OpenAPI spec must contain 'info:' section",
+  );
+  assert(
+    fileContent.includes("paths:"),
+    "OpenAPI spec must contain 'paths:' section",
+  );
+
   // Determine OAS version by regex pattern
   const versionMatch = fileContent.match(/openapi:\s*["']?([0-9]+\.[0-9]+)/);
   const version = versionMatch ? versionMatch[1] : "unknown";
-  
+
   // Create a mock document for testing
   const mockDocument: OpenAPIDocument = {
     openapi: version,
@@ -59,33 +68,36 @@ async function validateOpenAPISpec(path: string): Promise<OpenAPIDocument> {
     },
     paths: {},
   };
-  
+
   // Check for components
   if (fileContent.includes("components:")) {
     mockDocument.components = { schemas: {} };
-    
+
     // Check for TestResponse schema
     if (fileContent.includes("TestResponse:")) {
       mockDocument.components.schemas = { TestResponse: {} };
     }
   }
-  
+
   // Check for test path
   if (fileContent.includes("/test:")) {
     mockDocument.paths = { "/test": {} };
   }
-  
+
   return mockDocument;
 }
 
 Deno.test("OpenAPI spec validation smoke test", async () => {
   // Validate should succeed for a valid OpenAPI 3.0 spec
   const api = await validateOpenAPISpec(TEST_SPEC_PATH);
-  
+
   // Basic assertions to verify the parsed content
   assert(api.openapi.startsWith("3."), "Should be an OpenAPI 3.x spec");
   assert(api.paths["/test"], "Should have '/test' path");
-  assert(api.components?.schemas?.TestResponse, "Should have TestResponse schema");
+  assert(
+    api.components?.schemas?.TestResponse,
+    "Should have TestResponse schema",
+  );
 });
 
 Deno.test("OpenAPI spec should handle future OAS 4.0", async () => {
@@ -121,11 +133,14 @@ components:
   try {
     // Write the mock 4.0 spec to disk
     await Deno.writeTextFile(mock40SpecPath, mock40SpecContent);
-    
+
     // Test our validator with the 4.0 spec
     const parsedSpec = await validateOpenAPISpec(mock40SpecPath);
-    assert(parsedSpec.openapi.startsWith("4."), "Should be an OpenAPI 4.x spec");
-    
+    assert(
+      parsedSpec.openapi.startsWith("4."),
+      "Should be an OpenAPI 4.x spec",
+    );
+
     // Clean up
     await Deno.remove(mock40SpecPath);
   } catch (error) {

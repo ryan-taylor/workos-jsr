@@ -6,11 +6,11 @@ const constants = {
   sepMaybe: "(?:\\\\|/)*",
   seps: [
     "\\",
-    "/"
+    "/",
   ],
   globstar: "(?:[^\\\\/]*(?:\\\\|/|$)+)*",
   wildcard: "[^\\\\/]*",
-  escapePrefix: "`"
+  escapePrefix: "`",
 };
 /** Convert a glob string to a regular expression.
  *

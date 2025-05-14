@@ -732,7 +732,11 @@
             "type": "array",
             "items": {
               "type": "string",
-              "enum": ["resource.created", "resource.updated", "resource.deleted"]
+              "enum": [
+                "resource.created",
+                "resource.updated",
+                "resource.deleted"
+              ]
             }
           },
           "secret": {
@@ -781,7 +785,7 @@
             "enum": ["resource.created", "resource.updated", "resource.deleted"]
           },
           "resource": {
-            "$ref": "#/components/schemas/Resource" 
+            "$ref": "#/components/schemas/Resource"
           },
           "timestamp": {
             "type": "string",
@@ -910,7 +914,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/CreateResourceRequest" 
+              "$ref": "#/components/schemas/CreateResourceRequest"
             }
           }
         }

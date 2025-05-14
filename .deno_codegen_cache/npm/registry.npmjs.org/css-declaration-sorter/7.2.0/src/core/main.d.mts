@@ -1,4 +1,4 @@
-import type { PluginCreator } from 'postcss';
+import type { PluginCreator } from "postcss";
 
 export const cssDeclarationSorter: PluginCreator<{
   /**
@@ -18,10 +18,13 @@ export const cssDeclarationSorter: PluginCreator<{
 
 export default cssDeclarationSorter;
 
-type SortOrder = 'alphabetical' | 'concentric-css' | 'smacss';
+type SortOrder = "alphabetical" | "concentric-css" | "smacss";
 
 /**
  * This function receives two declaration property names and is expected
  * to return -1, 0 or 1 depending on the wanted order.
  */
-type SortFunction = (propertyNameA: string, propertyNameB: string) => -1 | 0 | 1;
+type SortFunction = (
+  propertyNameA: string,
+  propertyNameB: string,
+) => -1 | 0 | 1;

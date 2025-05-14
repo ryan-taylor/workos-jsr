@@ -1,6 +1,6 @@
 // Test file for lcov coverage demonstration
 import { assertEquals, assertThrows } from "@std/assert";
-import { add, multiply, divide } from "./lcov_utils.ts";
+import { add, divide, multiply } from "./lcov_utils.ts";
 
 Deno.test("add function correctly adds two numbers", () => {
   assertEquals(add(2, 3), 5);

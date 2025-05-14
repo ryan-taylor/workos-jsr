@@ -1,6 +1,6 @@
 /**
  * Options for authenticating a user in WorkOS.
- * 
+ *
  * @example
  * ```ts
  * const options: AuthenticateOptions = {

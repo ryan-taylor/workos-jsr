@@ -1,4 +1,4 @@
-import type { Event } from "workos/events/interfaces.ts";
+import type { Event } from "../interfaces.ts";
 
 export function deserializeEvent(data: unknown): Event {
   const record = data as Record<string, unknown>;

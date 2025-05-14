@@ -4,13 +4,13 @@ import type {
   RequestHeaders,
   RequestOptions,
   ResponseHeaders,
-} from "workos/common/interfaces/http-client.interface.ts";
+} from "../interfaces/http-client.interface.ts";
 
 /**
  * Abstract base class for HTTP clients that communicate with the WorkOS API.
  * This class provides common functionality for making HTTP requests with retry logic,
  * request formatting, and URL generation.
- * 
+ *
  * Specific implementations (like FetchHttpClient) extend this class to provide
  * platform-specific HTTP client implementations.
  */
@@ -22,7 +22,7 @@ export abstract class HttpClient implements HttpClientInterface {
 
   constructor(readonly baseURL: string, readonly options?: RequestInit) {}
 
-  /** 
+  /**
    * Returns the HTTP client name used for diagnostics and logging
    * Must be implemented by specific client implementations
    */
@@ -226,7 +226,7 @@ export abstract class HttpClientResponse
 /**
  * Error class for HTTP client errors.
  * Provides access to status code, headers, and error response data.
- * 
+ *
  * @template T The type of the error response data
  */
 export class HttpClientError<T> extends Error {

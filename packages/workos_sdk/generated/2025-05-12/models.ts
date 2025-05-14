@@ -8,8 +8,8 @@ export interface DirectoriesResponse {
 export interface Directory {
   id: string;
   name: string;
-  type: 'okta' | 'azure_scim' | 'google_workspace' | 'generic_scim';
-  state: 'active' | 'inactive' | 'validating' | 'error';
+  type: "okta" | "azure_scim" | "google_workspace" | "generic_scim";
+  state: "active" | "inactive" | "validating" | "error";
   domain?: string;
   organization_id: string;
   created_at: string;
@@ -25,4 +25,3 @@ export interface Error {
   code: string;
   message: string;
 }
-

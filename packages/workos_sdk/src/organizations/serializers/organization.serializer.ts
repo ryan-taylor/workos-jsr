@@ -1,4 +1,4 @@
-import type { Organization } from "workos/organizations/interfaces.ts";
+import type { Organization } from "../interfaces.ts";
 
 export function deserializeOrganization(data: unknown): Organization {
   const record = data as Record<string, unknown>;

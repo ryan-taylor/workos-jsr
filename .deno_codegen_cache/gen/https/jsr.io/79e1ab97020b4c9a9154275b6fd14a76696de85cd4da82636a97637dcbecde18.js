@@ -193,7 +193,8 @@
  * {@link ./doc/posix/~ | @std/path/posix}.
  *
  * @module
- */ export * from "./basename.ts";
+ */
+export * from "./basename.ts";
 export * from "./constants.ts";
 export * from "./dirname.ts";
 export * from "./extname.ts";

@@ -1,5 +1,5 @@
-'use strict';
-const { unit } = require('postcss-value-parser');
+"use strict";
+const { unit } = require("postcss-value-parser");
 
 /**
  * @param {string} value
@@ -7,7 +7,7 @@ const { unit } = require('postcss-value-parser');
  */
 function hasUnit(value) {
   const parsedVal = unit(value);
-  return parsedVal && parsedVal.unit !== '';
+  return parsedVal && parsedVal.unit !== "";
 }
 
 /**
@@ -21,7 +21,7 @@ module.exports = (columns) => {
   const other = [];
   columns.walk((node) => {
     const { type, value } = node;
-    if (type === 'word') {
+    if (type === "word") {
       if (hasUnit(value)) {
         widths.push(value);
       } else {

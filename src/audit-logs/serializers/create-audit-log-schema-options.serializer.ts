@@ -2,7 +2,7 @@ import type {
   AuditLogSchemaMetadata,
   CreateAuditLogSchemaOptions,
   SerializedCreateAuditLogSchemaOptions,
-} from "../interfaces.ts.ts";
+} from "../interfaces.ts";
 
 function serializeMetadata(
   metadata: Record<string, string | number | boolean> | undefined,

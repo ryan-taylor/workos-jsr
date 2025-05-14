@@ -34,22 +34,22 @@ import { assertArgs } from "../_common/relative.ts";
   // Trim any leading backslashes
   let fromStart = 0;
   let fromEnd = from.length;
-  for(; fromStart < fromEnd; ++fromStart){
+  for (; fromStart < fromEnd; ++fromStart) {
     if (from.charCodeAt(fromStart) !== CHAR_BACKWARD_SLASH) break;
   }
   // Trim trailing backslashes (applicable to UNC paths only)
-  for(; fromEnd - 1 > fromStart; --fromEnd){
+  for (; fromEnd - 1 > fromStart; --fromEnd) {
     if (from.charCodeAt(fromEnd - 1) !== CHAR_BACKWARD_SLASH) break;
   }
   const fromLen = fromEnd - fromStart;
   // Trim any leading backslashes
   let toStart = 0;
   let toEnd = to.length;
-  for(; toStart < toEnd; ++toStart){
+  for (; toStart < toEnd; ++toStart) {
     if (to.charCodeAt(toStart) !== CHAR_BACKWARD_SLASH) break;
   }
   // Trim trailing backslashes (applicable to UNC paths only)
-  for(; toEnd - 1 > toStart; --toEnd){
+  for (; toEnd - 1 > toStart; --toEnd) {
     if (to.charCodeAt(toEnd - 1) !== CHAR_BACKWARD_SLASH) break;
   }
   const toLen = toEnd - toStart;
@@ -57,7 +57,7 @@ import { assertArgs } from "../_common/relative.ts";
   const length = fromLen < toLen ? fromLen : toLen;
   let lastCommonSep = -1;
   let i = 0;
-  for(; i <= length; ++i){
+  for (; i <= length; ++i) {
     if (i === length) {
       if (toLen > length) {
         if (to.charCodeAt(toStart + i) === CHAR_BACKWARD_SLASH) {
@@ -97,7 +97,7 @@ import { assertArgs } from "../_common/relative.ts";
   if (lastCommonSep === -1) lastCommonSep = 0;
   // Generate the relative path based on the path difference between `to` and
   // `from`
-  for(i = fromStart + lastCommonSep + 1; i <= fromEnd; ++i){
+  for (i = fromStart + lastCommonSep + 1; i <= fromEnd; ++i) {
     if (i === fromEnd || from.charCodeAt(i) === CHAR_BACKWARD_SLASH) {
       if (out.length === 0) out += "..";
       else out += "\\..";

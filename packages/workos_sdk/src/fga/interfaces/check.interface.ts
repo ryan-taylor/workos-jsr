@@ -1,5 +1,8 @@
-import type { Subject } from "workos/fga/interfaces/warrant.interface.ts";
-import type { ResourceOptions, ResourceInterface } from "workos/fga/interfaces/resource.interface.ts";
+import type { Subject } from "./warrant.interface.ts";
+import type {
+  ResourceInterface,
+  ResourceOptions,
+} from "./resource.interface.ts";
 
 export interface CheckItem {
   resource: ResourceInterface | ResourceOptions;

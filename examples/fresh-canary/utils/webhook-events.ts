@@ -1,9 +1,9 @@
 // Utility functions for processing and storing webhook events
 
-import { WorkOS } from '../../../src/workos.ts';
-import { DenoCryptoProvider } from '../../../src/common/crypto/deno-crypto-provider.ts';
-import type { Event } from '../../../src/common/interfaces/event.interface.ts';
-import type { WebhookEvent } from './webhook-types.ts';
+import { WorkOS } from "../../../src/workos.ts";
+import { DenoCryptoProvider } from "../../../src/common/crypto/deno-crypto-provider.ts";
+import type { Event } from "../../../src/common/interfaces/event.interface.ts";
+import type { WebhookEvent } from "./webhook-types.ts";
 
 // Global events store (in-memory for the demo)
 // In a production environment, you would use a database
@@ -27,7 +27,11 @@ export function initWebhooks() {
  * @param rawPayload The raw payload string
  * @param verified Whether the event signature was verified
  */
-export function storeWebhookEvent(event: Event, rawPayload: string, verified: boolean) {
+export function storeWebhookEvent(
+  event: Event,
+  rawPayload: string,
+  verified: boolean,
+) {
   webhookEvents.unshift({
     id: event.id,
     event: event.event,

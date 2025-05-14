@@ -21,8 +21,9 @@ bun add @apidevtools/json-schema-ref-parser
 
 ## The Problem:
 
-You've got a JSON Schema with `$ref` pointers to other files and/or URLs. Maybe you know all the referenced files ahead
-of time. Maybe you don't. Maybe some are local files, and others are remote URLs. Maybe they are a mix of JSON and YAML
+You've got a JSON Schema with `$ref` pointers to other files and/or URLs. Maybe
+you know all the referenced files ahead of time. Maybe you don't. Maybe some are
+local files, and others are remote URLs. Maybe they are a mix of JSON and YAML
 format. Maybe some of the files contain cross-references to each other.
 
 ```json
@@ -50,23 +51,30 @@ format. Maybe some of the files contain cross-references to each other.
 
 ## The Solution:
 
-JSON Schema $Ref Parser is a full [JSON Reference](https://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03)
-and [JSON Pointer](https://tools.ietf.org/html/rfc6901) implementation that crawls even the most
-complex [JSON Schemas](http://json-schema.org/latest/json-schema-core.html) and gives you simple, straightforward
-JavaScript objects.
+JSON Schema $Ref Parser is a full
+[JSON Reference](https://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03) and
+[JSON Pointer](https://tools.ietf.org/html/rfc6901) implementation that crawls
+even the most complex
+[JSON Schemas](http://json-schema.org/latest/json-schema-core.html) and gives
+you simple, straightforward JavaScript objects.
 
 - Use **JSON** or **YAML** schemas &mdash; or even a mix of both!
-- Supports `$ref` pointers to external files and URLs, as well
-  as [custom sources](https://apitools.dev/json-schema-ref-parser/docs/plugins/resolvers.html) such as databases
-- Can [bundle](https://apitools.dev/json-schema-ref-parser/docs/ref-parser.html#bundlepath-options-callback) multiple
-  files into a single schema that only has _internal_ `$ref` pointers
-- Can [dereference](https://apitools.dev/json-schema-ref-parser/docs/ref-parser.html#dereferencepath-options-callback)
+- Supports `$ref` pointers to external files and URLs, as well as
+  [custom sources](https://apitools.dev/json-schema-ref-parser/docs/plugins/resolvers.html)
+  such as databases
+- Can
+  [bundle](https://apitools.dev/json-schema-ref-parser/docs/ref-parser.html#bundlepath-options-callback)
+  multiple files into a single schema that only has _internal_ `$ref` pointers
+- Can
+  [dereference](https://apitools.dev/json-schema-ref-parser/docs/ref-parser.html#dereferencepath-options-callback)
   your schema, producing a plain-old JavaScript object that's easy to work with
-- Supports [circular references](https://apitools.dev/json-schema-ref-parser/docs/#circular-refs), nested references,
-  back-references, and cross-references between files
-- Maintains object reference equality &mdash; `$ref` pointers to the same value always resolve to the same object
-  instance
-- Compatible with Node LTS and beyond, and all major web browsers on Windows, Mac, and Linux
+- Supports
+  [circular references](https://apitools.dev/json-schema-ref-parser/docs/#circular-refs),
+  nested references, back-references, and cross-references between files
+- Maintains object reference equality &mdash; `$ref` pointers to the same value
+  always resolve to the same object instance
+- Compatible with Node LTS and beyond, and all major web browsers on Windows,
+  Mac, and Linux
 
 ## Example
 
@@ -79,19 +87,22 @@ try {
   console.log(mySchema.definitions.person.properties.firstName);
 
   // if you want to avoid modifying the original schema, you can disable the `mutateInputSchema` option
-  let clonedSchema = await $RefParser.dereference(mySchema, { mutateInputSchema: false });
+  let clonedSchema = await $RefParser.dereference(mySchema, {
+    mutateInputSchema: false,
+  });
   console.log(clonedSchema.definitions.person.properties.firstName);
 } catch (err) {
   console.error(err);
 }
 ```
 
-For more detailed examples, please see the [API Documentation](https://apitools.dev/json-schema-ref-parser/docs/)
+For more detailed examples, please see the
+[API Documentation](https://apitools.dev/json-schema-ref-parser/docs/)
 
 ## Polyfills
 
-If you are using Node.js < 18, you'll need a polyfill for `fetch`,
-like [node-fetch](https://github.com/node-fetch/node-fetch):
+If you are using Node.js < 18, you'll need a polyfill for `fetch`, like
+[node-fetch](https://github.com/node-fetch/node-fetch):
 
 ```javascript
 import fetch from "node-fetch";
@@ -101,18 +112,20 @@ globalThis.fetch = fetch;
 
 ## Browser support
 
-JSON Schema $Ref Parser supports recent versions of every major web browser. Older browsers may
-require [Babel](https://babeljs.io/) and/or [polyfills](https://babeljs.io/docs/en/next/babel-polyfill).
+JSON Schema $Ref Parser supports recent versions of every major web browser.
+Older browsers may require [Babel](https://babeljs.io/) and/or
+[polyfills](https://babeljs.io/docs/en/next/babel-polyfill).
 
-To use JSON Schema $Ref Parser in a browser, you'll need to use a bundling tool such
-as [Webpack](https://webpack.js.org/), [Rollup](https://rollupjs.org/), [Parcel](https://parceljs.org/),
-or [Browserify](http://browserify.org/). Some bundlers may require a bit of configuration, such as
-setting `browser: true` in [rollup-plugin-resolve](https://github.com/rollup/rollup-plugin-node-resolve).
+To use JSON Schema $Ref Parser in a browser, you'll need to use a bundling tool
+such as [Webpack](https://webpack.js.org/), [Rollup](https://rollupjs.org/),
+[Parcel](https://parceljs.org/), or [Browserify](http://browserify.org/). Some
+bundlers may require a bit of configuration, such as setting `browser: true` in
+[rollup-plugin-resolve](https://github.com/rollup/rollup-plugin-node-resolve).
 
 #### Webpack 5
 
-Webpack 5 has dropped the default export of node core modules in favour of polyfills, you'll need to set them up
-yourself ( after npm-installing them )
+Webpack 5 has dropped the default export of node core modules in favour of
+polyfills, you'll need to set them up yourself ( after npm-installing them )
 Edit your `webpack.config.js` :
 
 ```js
@@ -130,13 +143,15 @@ config.plugins.push(
 
 ## API Documentation
 
-Full API documentation is available [right here](https://apitools.dev/json-schema-ref-parser/docs/)
+Full API documentation is available
+[right here](https://apitools.dev/json-schema-ref-parser/docs/)
 
 ## Contributing
 
-I welcome any contributions, enhancements, and
-bug-fixes. [Open an issue](https://github.com/APIDevTools/json-schema-ref-parser/issues) on GitHub
-and [submit a pull request](https://github.com/APIDevTools/json-schema-ref-parser/pulls).
+I welcome any contributions, enhancements, and bug-fixes.
+[Open an issue](https://github.com/APIDevTools/json-schema-ref-parser/issues) on
+GitHub and
+[submit a pull request](https://github.com/APIDevTools/json-schema-ref-parser/pulls).
 
 #### Building/Testing
 
@@ -145,19 +160,19 @@ To build/test the project locally on your computer:
 1. **Clone this repo**<br>
    `git clone https://github.com/APIDevTools/json-schema-ref-parser.git`
 
-2. **Install dependencies**<br>
-   `yarn install`
+2. **Install dependencies**<br> `yarn install`
 
-3. **Run the tests**<br>
-   `yarn test`
+3. **Run the tests**<br> `yarn test`
 
 ## License
 
-JSON Schema $Ref Parser is 100% free and open-source, under the [MIT license](LICENSE). Use it however you want.
+JSON Schema $Ref Parser is 100% free and open-source, under the
+[MIT license](LICENSE). Use it however you want.
 
 ## Thanks
 
-Thanks to these awesome contributors for their major support of this open-source project.
+Thanks to these awesome contributors for their major support of this open-source
+project.
 
 - [JonLuca De Caro](https://jonlu.ca)
 - [Phil Sturgeon](https://philsturgeon.com)

@@ -1,99 +1,105 @@
-'use strict';
+"use strict";
 
-const dataPatch = require('./data-patch.cjs');
+const dataPatch = require("./data-patch.cjs");
 
-const mdnAtrules = require('mdn-data/css/at-rules.json');
-const mdnProperties = require('mdn-data/css/properties.json');
-const mdnSyntaxes = require('mdn-data/css/syntaxes.json');
+const mdnAtrules = require("mdn-data/css/at-rules.json");
+const mdnProperties = require("mdn-data/css/properties.json");
+const mdnSyntaxes = require("mdn-data/css/syntaxes.json");
 
 const extendSyntax = /^\s*\|\s*/;
 
 function preprocessAtrules(dict) {
-    const result = Object.create(null);
+  const result = Object.create(null);
 
-    for (const atruleName in dict) {
-        const atrule = dict[atruleName];
-        let descriptors = null;
+  for (const atruleName in dict) {
+    const atrule = dict[atruleName];
+    let descriptors = null;
 
-        if (atrule.descriptors) {
-            descriptors = Object.create(null);
+    if (atrule.descriptors) {
+      descriptors = Object.create(null);
 
-            for (const descriptor in atrule.descriptors) {
-                descriptors[descriptor] = atrule.descriptors[descriptor].syntax;
-            }
-        }
-
-        result[atruleName.substr(1)] = {
-            prelude: atrule.syntax.trim().replace(/\{(.|\s)+\}/, '').match(/^@\S+\s+([^;\{]*)/)[1].trim() || null,
-            descriptors
-        };
+      for (const descriptor in atrule.descriptors) {
+        descriptors[descriptor] = atrule.descriptors[descriptor].syntax;
+      }
     }
 
-    return result;
+    result[atruleName.substr(1)] = {
+      prelude: atrule.syntax.trim().replace(/\{(.|\s)+\}/, "").match(
+        /^@\S+\s+([^;\{]*)/,
+      )[1].trim() || null,
+      descriptors,
+    };
+  }
+
+  return result;
 }
 
 function patchDictionary(dict, patchDict) {
-    const result = {};
+  const result = {};
 
-    // copy all syntaxes for an original dict
-    for (const key in dict) {
-        result[key] = dict[key].syntax || dict[key];
+  // copy all syntaxes for an original dict
+  for (const key in dict) {
+    result[key] = dict[key].syntax || dict[key];
+  }
+
+  // apply a patch
+  for (const key in patchDict) {
+    if (key in dict) {
+      if (patchDict[key].syntax) {
+        result[key] = extendSyntax.test(patchDict[key].syntax)
+          ? result[key] + " " + patchDict[key].syntax.trim()
+          : patchDict[key].syntax;
+      } else {
+        delete result[key];
+      }
+    } else {
+      if (patchDict[key].syntax) {
+        result[key] = patchDict[key].syntax.replace(extendSyntax, "");
+      }
     }
+  }
 
-    // apply a patch
-    for (const key in patchDict) {
-        if (key in dict) {
-            if (patchDict[key].syntax) {
-                result[key] = extendSyntax.test(patchDict[key].syntax)
-                    ? result[key] + ' ' + patchDict[key].syntax.trim()
-                    : patchDict[key].syntax;
-            } else {
-                delete result[key];
-            }
-        } else {
-            if (patchDict[key].syntax) {
-                result[key] = patchDict[key].syntax.replace(extendSyntax, '');
-            }
-        }
-    }
-
-    return result;
+  return result;
 }
 
 function patchAtrules(dict, patchDict) {
-    const result = {};
+  const result = {};
 
-    // copy all syntaxes for an original dict
-    for (const key in dict) {
-        const atrulePatch = patchDict[key] || {};
+  // copy all syntaxes for an original dict
+  for (const key in dict) {
+    const atrulePatch = patchDict[key] || {};
 
-        result[key] = {
-            prelude: key in patchDict && 'prelude' in atrulePatch
-                ? atrulePatch.prelude
-                : dict[key].prelude || null,
-            descriptors: patchDictionary(dict[key].descriptors || {}, atrulePatch.descriptors || {})
-        };
+    result[key] = {
+      prelude: key in patchDict && "prelude" in atrulePatch
+        ? atrulePatch.prelude
+        : dict[key].prelude || null,
+      descriptors: patchDictionary(
+        dict[key].descriptors || {},
+        atrulePatch.descriptors || {},
+      ),
+    };
+  }
+
+  // apply a patch
+  for (const key in patchDict) {
+    if (!hasOwnProperty.call(dict, key)) {
+      const atrulePatch = patchDict[key] || {};
+
+      result[key] = {
+        prelude: atrulePatch.prelude || null,
+        descriptors: atrulePatch.descriptors &&
+          patchDictionary({}, atrulePatch.descriptors),
+      };
     }
+  }
 
-    // apply a patch
-    for (const key in patchDict) {
-        if (!hasOwnProperty.call(dict, key)) {
-            const atrulePatch = patchDict[key] || {};
-
-            result[key] = {
-                prelude: atrulePatch.prelude || null,
-                descriptors: atrulePatch.descriptors && patchDictionary({}, atrulePatch.descriptors)
-            };
-        }
-    }
-
-    return result;
+  return result;
 }
 
 const definitions = {
-    types: patchDictionary(mdnSyntaxes, dataPatch.types),
-    atrules: patchAtrules(preprocessAtrules(mdnAtrules), dataPatch.atrules),
-    properties: patchDictionary(mdnProperties, dataPatch.properties)
+  types: patchDictionary(mdnSyntaxes, dataPatch.types),
+  atrules: patchAtrules(preprocessAtrules(mdnAtrules), dataPatch.atrules),
+  properties: patchDictionary(mdnProperties, dataPatch.properties),
 };
 
 module.exports = definitions;

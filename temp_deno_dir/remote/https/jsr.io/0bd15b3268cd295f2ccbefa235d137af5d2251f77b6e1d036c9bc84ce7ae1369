@@ -1,0 +1,39 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+
+/**
+ * Converts the input into a string. Objects, Sets and Maps are sorted so as to
+ * make tests less flaky.
+ *
+ * @param v Value to be formatted
+ *
+ * @returns The formatted string
+ *
+ * @example Usage
+ * ```ts
+ * import { format } from "@std/internal/format";
+ * import { assertEquals } from "@std/assert";
+ *
+ * assertEquals(format({ a: 1, b: 2 }), "{\n  a: 1,\n  b: 2,\n}");
+ * assertEquals(format(new Set([1, 2])), "Set(2) {\n  1,\n  2,\n}");
+ * assertEquals(format(new Map([[1, 2]])), "Map(1) {\n  1 => 2,\n}");
+ * ```
+ */
+export function format(v: unknown): string {
+  // deno-lint-ignore no-explicit-any
+  const { Deno } = globalThis as any;
+  return typeof Deno?.inspect === "function"
+    ? Deno.inspect(v, {
+      depth: Infinity,
+      sorted: true,
+      trailingComma: true,
+      compact: false,
+      iterableLimit: Infinity,
+      // getters should be true in assertEquals.
+      getters: true,
+      strAbbreviateSize: Infinity,
+    })
+    : `"${String(v).replace(/(?=["\\])/g, "\\")}"`;
+}
+
+// denoCacheMetadata={"headers":{"access-control-allow-origin":"*","x-jsr-cache-id":"YYZ","via":"1.1 google","content-type":"text/typescript","x-content-type-options":"nosniff","content-length":"1102","access-control-expose-headers":"*","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","x-guploader-uploadid":"AAO2VwqzZUpInaVPnmcmdOXS1qoQMDwKm4BIevGuORILxeUm_lxOHZAHN1SoOvoCVMsyLdWqU50DW8c","cross-origin-resource-policy":"cross-origin","x-goog-stored-content-encoding":"identity","x-goog-hash":"crc32c=E+ozaA==,md5=jnKG0B5oIIM3t2ygFZUj0A==","x-goog-storage-class":"STANDARD","x-goog-generation":"1742887026640685","server":"UploadServer","accept-ranges":"bytes","x-goog-stored-content-length":"1102","x-goog-metageneration":"1","date":"Tue, 13 May 2025 22:56:06 GMT","expires":"Wed, 13 May 2026 22:56:06 GMT","cache-control":"public, max-age=31536000, immutable","etag":"\"8e7286d01e68208337b76ca0159523d0\"","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","last-modified":"Tue, 25 Mar 2025 07:17:06 GMT","x-jsr-cache-status":"hit","age":"3566","x-robots-tag":"noindex"},"url":"https://jsr.io/@std/internal/1.0.6/format.ts","time":1747180532}

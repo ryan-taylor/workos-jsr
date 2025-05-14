@@ -36,7 +36,7 @@ import { isPosixPathSeparator } from "./_util.ts";
   assertArg(path);
   let end = -1;
   let matchedNonSeparator = false;
-  for(let i = path.length - 1; i >= 1; --i){
+  for (let i = path.length - 1; i >= 1; --i) {
     if (isPosixPathSeparator(path.charCodeAt(i))) {
       if (matchedNonSeparator) {
         end = i;

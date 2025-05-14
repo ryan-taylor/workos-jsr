@@ -1,0 +1,21 @@
+// Copyright 2018-2025 the Deno authors. MIT license.
+// This module is browser compatible.
+
+/** Ways that lines in a diff can be different. */
+export type DiffType = "removed" | "common" | "added";
+
+/**
+ * Represents the result of a diff operation.
+ *
+ * @typeParam T The type of the value in the diff result.
+ */
+export interface DiffResult<T> {
+  /** The type of the diff. */
+  type: DiffType;
+  /** The value of the diff. */
+  value: T;
+  /** The details of the diff. */
+  details?: DiffResult<T>[];
+}
+
+// denoCacheMetadata={"headers":{"cross-origin-resource-policy":"cross-origin","x-content-type-options":"nosniff","x-jsr-cache-id":"YYZ","x-robots-tag":"noindex","access-control-expose-headers":"*","x-goog-hash":"crc32c=dxuWhw==,md5=dSZb/Z1/sNhRAJpdYPPEog==","accept-ranges":"bytes","content-type":"text/typescript","access-control-allow-origin":"*","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","x-goog-storage-class":"STANDARD","x-goog-stored-content-length":"506","via":"1.1 google","date":"Tue, 13 May 2025 22:56:06 GMT","cache-control":"public, max-age=31536000, immutable","x-guploader-uploadid":"AAO2Vwpov2U7FXURcGx182YaPvZpnlNbvfZwvCS35TsiR7hhGasvkzTNRUMleLUuws1DoSuNq-owTDI","x-goog-stored-content-encoding":"identity","x-goog-metageneration":"1","expires":"Wed, 13 May 2026 22:56:06 GMT","last-modified":"Tue, 25 Mar 2025 07:17:06 GMT","content-length":"506","etag":"\"75265bfd9d7fb0d851009a5d60f3c4a2\"","content-security-policy":"default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; sandbox; form-action 'none';","age":"3566","x-jsr-cache-status":"hit","x-goog-generation":"1742887026640476","server":"UploadServer"},"url":"https://jsr.io/@std/internal/1.0.6/types.ts","time":1747180532}

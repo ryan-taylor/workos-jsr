@@ -403,5 +403,5 @@ export const properties = [
   "word-break",
   "word-spacing",
   "writing-mode",
-  "z-index"
-]
+  "z-index",
+];

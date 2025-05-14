@@ -1,7 +1,7 @@
 import type {
   QueryOptions,
   SerializedQueryOptions,
-} from "workos/fga/interfaces/index.ts";
+} from "../interfaces/index.ts";
 
 /**
  * Serializes query options for the API

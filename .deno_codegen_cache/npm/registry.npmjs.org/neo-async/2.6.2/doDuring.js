@@ -1,3 +1,3 @@
-'use strict';
+"use strict";
 
-module.exports = require('./async').doDuring;
+module.exports = require("./async").doDuring;

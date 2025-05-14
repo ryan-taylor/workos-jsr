@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-exports.name = 'cleanupAttrs';
+exports.name = "cleanupAttrs";
 exports.description =
-  'cleanups attributes from newlines, trailing and repeating spaces';
+  "cleanups attributes from newlines, trailing and repeating spaces";
 
 const regNewlinesNeedSpace = /(\S)\r?\n(\S)/g;
 const regNewlines = /\r?\n/g;
@@ -25,12 +25,12 @@ exports.fn = (root, params) => {
             // new line which requires a space instead of themself
             node.attributes[name] = node.attributes[name].replace(
               regNewlinesNeedSpace,
-              (match, p1, p2) => p1 + ' ' + p2,
+              (match, p1, p2) => p1 + " " + p2,
             );
             // simple new line
             node.attributes[name] = node.attributes[name].replace(
               regNewlines,
-              '',
+              "",
             );
           }
           if (trim) {
@@ -39,7 +39,7 @@ exports.fn = (root, params) => {
           if (spaces) {
             node.attributes[name] = node.attributes[name].replace(
               regSpaces,
-              ' ',
+              " ",
             );
           }
         }

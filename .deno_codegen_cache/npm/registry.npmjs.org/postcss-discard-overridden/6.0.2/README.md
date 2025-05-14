@@ -2,7 +2,12 @@
 
 [PostCSS] plugin to discard overridden `@keyframes` or `@counter-style`.
 
-`@keyframes` or `@counter-style` will be overridden by those who share the same identifiers and appear later in stylesheets. So we can discard all of them except the last one. When defined inside a `@media` or `@supports` rule, `@keyframes` and `@counter-style` rules only override global rules in some of the client browsers so they need handled separately. This plugin has taken care of this and transforms the PostCss AST **safely**.
+`@keyframes` or `@counter-style` will be overridden by those who share the same
+identifiers and appear later in stylesheets. So we can discard all of them
+except the last one. When defined inside a `@media` or `@supports` rule,
+`@keyframes` and `@counter-style` rules only override global rules in some of
+the client browsers so they need handled separately. This plugin has taken care
+of this and transforms the PostCss AST **safely**.
 
 [PostCSS]: https://github.com/postcss/postcss
 
@@ -155,4 +160,5 @@ examples for your environment.
 
 ## Contributors
 
-See [CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
+See
+[CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).

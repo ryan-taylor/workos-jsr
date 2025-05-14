@@ -1,15 +1,21 @@
 import type { FreshContext } from "../common/iron-session/fresh-session-provider.ts";
-import type { FreshSessionProvider, SessionOptions } from "../common/iron-session/fresh-session-provider.ts";
+import type {
+  FreshSessionProvider,
+  SessionOptions,
+} from "../common/iron-session/fresh-session-provider.ts";
 
 // Type for Fresh middleware handler
-export type MiddlewareHandler = (req: Request, ctx: FreshContext) => Promise<Response | undefined | null> | Response | undefined | null;
+export type MiddlewareHandler = (
+  req: Request,
+  ctx: FreshContext,
+) => Promise<Response | undefined | null> | Response | undefined | null;
 
 /**
  * Creates a Fresh middleware that works with both Fresh 1.x and 2.x
- * 
+ *
  * Fresh 1.x expects: (req, ctx) => Response
  * Fresh 2.x expects: { handler: (req, ctx) => Response }
- * 
+ *
  * @param provider The session provider
  * @param opts Session options
  * @returns A middleware compatible with both Fresh 1.x and 2.x

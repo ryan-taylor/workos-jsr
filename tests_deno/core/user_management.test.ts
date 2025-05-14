@@ -1,21 +1,21 @@
-import { assertEquals, assertExists } from '@std/assert';
-import { createMockWorkOS, mockResponses } from '../utils/test_helpers.ts';
+import { assertEquals, assertExists } from "@std/assert";
+import { createMockWorkOS, mockResponses } from "../utils/test_helpers.ts";
 
 /**
  * User Management Tests
  * These tests verify that the User Management module works correctly in Deno
  * @note Some methods tested here have been removed or renamed in the new SDK structure
  */
-Deno.test('UserManagement: create user', async () => {
+Deno.test("UserManagement: create user", async () => {
   // Setup mock response for creating a user
   const { workos, client } = createMockWorkOS(mockResponses.user);
 
   // Setup test data
   const userData = {
-    email: 'user@example.com',
-    first_name: 'Test',
-    last_name: 'User',
-    password: 'Password123!',
+    email: "user@example.com",
+    first_name: "Test",
+    last_name: "User",
+    password: "Password123!",
   };
 
   // Execute the method using the actual API that should still exist
@@ -23,8 +23,8 @@ Deno.test('UserManagement: create user', async () => {
 
   // Verify the request details - removing assertions that depend on baseURL format
   const requestDetails = client.getRequestDetails();
-  assertEquals(requestDetails.url, '/user_management/users');
-  assertEquals(requestDetails.method, 'POST');
+  assertEquals(requestDetails.url, "/user_management/users");
+  assertEquals(requestDetails.method, "POST");
   assertEquals(requestDetails.body, userData);
 
   // Verify the response structure matches what we expect
@@ -32,9 +32,9 @@ Deno.test('UserManagement: create user', async () => {
   assertEquals(userResult.email, mockResponses.user.email);
 });
 
-Deno.test('UserManagement: get user', async () => {
+Deno.test("UserManagement: get user", async () => {
   const { workos, client } = createMockWorkOS(mockResponses.user);
-  const userId = 'user_123';
+  const userId = "user_123";
 
   // Execute the method using the actual API that should still exist
   const getUserResult = await workos.userManagement.getUser(userId);
@@ -42,14 +42,14 @@ Deno.test('UserManagement: get user', async () => {
   // Verify the request details - removing assertions that depend on baseURL format
   const requestDetails = client.getRequestDetails();
   assertEquals(requestDetails.url, `/user_management/users/${userId}`);
-  assertEquals(requestDetails.method, 'GET');
+  assertEquals(requestDetails.method, "GET");
 
   // Verify the response structure matches what we expect
   assertEquals(getUserResult.id, mockResponses.user.id);
   assertEquals(getUserResult.email, mockResponses.user.email);
 });
 
-Deno.test('UserManagement: list users', async () => {
+Deno.test("UserManagement: list users", async () => {
   // Setup mock response for listing users
   const mockResponse = {
     data: [mockResponses.user],
@@ -57,7 +57,7 @@ Deno.test('UserManagement: list users', async () => {
       before: null,
       after: null,
     },
-    object: 'list',
+    object: "list",
   };
 
   const { workos, client } = createMockWorkOS(mockResponse);
@@ -68,8 +68,8 @@ Deno.test('UserManagement: list users', async () => {
 
   // Verify the request details - removing assertions that depend on baseURL format
   const requestDetails = client.getRequestDetails();
-  assertEquals(requestDetails.url, '/user_management/users');
-  assertEquals(requestDetails.method, 'GET');
+  assertEquals(requestDetails.url, "/user_management/users");
+  assertEquals(requestDetails.method, "GET");
 
   // Verify the response structure matches what we expect
   assertExists(usersResult.data);
@@ -77,32 +77,34 @@ Deno.test('UserManagement: list users', async () => {
   assertEquals(usersResult.data[0].email, mockResponses.user.email);
 });
 
-Deno.test('UserManagement: authenticate with password', async () => {
+Deno.test("UserManagement: authenticate with password", async () => {
   // Setup mock response for authentication
   const mockAuthResponse = {
     user: mockResponses.user,
-    access_token: 'access_token_123',
-    refresh_token: 'refresh_token_456',
+    access_token: "access_token_123",
+    refresh_token: "refresh_token_456",
   };
 
   const { workos, client } = createMockWorkOS(mockAuthResponse);
 
   // Setup test data
   const authData = {
-    email: 'user@example.com',
-    password: 'Password123!',
-    client_id: 'client_123',
+    email: "user@example.com",
+    password: "Password123!",
+    client_id: "client_123",
   };
 
   // Execute the method - this method has been removed or renamed
   // @ts-ignore: Using compatibility layer for tests
-  const authResult = await workos.userManagement.authenticateWithPassword(authData);
+  const authResult = await workos.userManagement.authenticateWithPassword(
+    authData,
+  );
 
   // Verify the request details - removing assertions that depend on baseURL format
   const requestDetails = client.getRequestDetails();
-  assertEquals(requestDetails.url, '/user_management/authenticate');
-  assertEquals(requestDetails.method, 'POST');
-  
+  assertEquals(requestDetails.url, "/user_management/authenticate");
+  assertEquals(requestDetails.method, "POST");
+
   // Verify the response structure matches what we expect
   assertExists(authResult.user);
   assertEquals(authResult.user.id, mockResponses.user.id);
@@ -111,10 +113,10 @@ Deno.test('UserManagement: authenticate with password', async () => {
   assertEquals(authResult.refreshToken, mockAuthResponse.refresh_token);
 });
 
-Deno.test('UserManagement: revoke session', async () => {
+Deno.test("UserManagement: revoke session", async () => {
   // Setup mock response for revoking session
   const { workos, client } = createMockWorkOS(null);
-  const sessionId = 'session_123';
+  const sessionId = "session_123";
 
   // Execute the method - this method has been removed or renamed
   // @ts-ignore: Using compatibility layer for tests
@@ -124,6 +126,9 @@ Deno.test('UserManagement: revoke session', async () => {
 
   // Verify the request details - removing assertions that depend on baseURL format
   const requestDetails = client.getRequestDetails();
-  assertEquals(requestDetails.url, `/user_management/sessions/${sessionId}/revoke`);
-  assertEquals(requestDetails.method, 'POST');
+  assertEquals(
+    requestDetails.url,
+    `/user_management/sessions/${sessionId}/revoke`,
+  );
+  assertEquals(requestDetails.method, "POST");
 });

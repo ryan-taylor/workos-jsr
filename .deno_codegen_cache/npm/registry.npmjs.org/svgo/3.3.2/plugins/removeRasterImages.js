@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const { detachNodeFromParent } = require('../lib/xast.js');
+const { detachNodeFromParent } = require("../lib/xast.js");
 
-exports.name = 'removeRasterImages';
-exports.description = 'removes raster images (disabled by default)';
+exports.name = "removeRasterImages";
+exports.description = "removes raster images (disabled by default)";
 
 /**
  * Remove raster images references in <image>.
@@ -19,9 +19,9 @@ exports.fn = () => {
     element: {
       enter: (node, parentNode) => {
         if (
-          node.name === 'image' &&
-          node.attributes['xlink:href'] != null &&
-          /(\.|image\/)(jpe?g|png|gif)/.test(node.attributes['xlink:href'])
+          node.name === "image" &&
+          node.attributes["xlink:href"] != null &&
+          /(\.|image\/)(jpe?g|png|gif)/.test(node.attributes["xlink:href"])
         ) {
           detachNodeFromParent(node, parentNode);
         }

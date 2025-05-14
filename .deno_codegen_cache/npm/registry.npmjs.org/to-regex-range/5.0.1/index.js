@@ -5,13 +5,15 @@
  * Released under the MIT License.
  */
 
-'use strict';
+"use strict";
 
-const isNumber = require('is-number');
+const isNumber = require("is-number");
 
 const toRegexRange = (min, max, options) => {
   if (isNumber(min) === false) {
-    throw new TypeError('toRegexRange: expected the first argument to be a number');
+    throw new TypeError(
+      "toRegexRange: expected the first argument to be a number",
+    );
   }
 
   if (max === void 0 || min === max) {
@@ -19,11 +21,13 @@ const toRegexRange = (min, max, options) => {
   }
 
   if (isNumber(max) === false) {
-    throw new TypeError('toRegexRange: expected the second argument to be a number.');
+    throw new TypeError(
+      "toRegexRange: expected the second argument to be a number.",
+    );
   }
 
   let opts = { relaxZeros: true, ...options };
-  if (typeof opts.strictZeros === 'boolean') {
+  if (typeof opts.strictZeros === "boolean") {
     opts.relaxZeros = opts.strictZeros === false;
   }
 
@@ -31,7 +35,7 @@ const toRegexRange = (min, max, options) => {
   let shorthand = String(opts.shorthand);
   let capture = String(opts.capture);
   let wrap = String(opts.wrap);
-  let cacheKey = min + ':' + max + '=' + relax + shorthand + capture + wrap;
+  let cacheKey = min + ":" + max + "=" + relax + shorthand + capture + wrap;
 
   if (toRegexRange.cache.hasOwnProperty(cacheKey)) {
     return toRegexRange.cache[cacheKey].result;
@@ -41,7 +45,7 @@ const toRegexRange = (min, max, options) => {
   let b = Math.max(min, max);
 
   if (Math.abs(a - b) === 1) {
-    let result = min + '|' + max;
+    let result = min + "|" + max;
     if (opts.capture) {
       return `(${result})`;
     }
@@ -86,11 +90,11 @@ const toRegexRange = (min, max, options) => {
 };
 
 function collatePatterns(neg, pos, options) {
-  let onlyNegative = filterPatterns(neg, pos, '-', false, options) || [];
-  let onlyPositive = filterPatterns(pos, neg, '', false, options) || [];
-  let intersected = filterPatterns(neg, pos, '-?', true, options) || [];
+  let onlyNegative = filterPatterns(neg, pos, "-", false, options) || [];
+  let onlyPositive = filterPatterns(pos, neg, "", false, options) || [];
+  let intersected = filterPatterns(neg, pos, "-?", true, options) || [];
   let subpatterns = onlyNegative.concat(intersected).concat(onlyPositive);
-  return subpatterns.join('|');
+  return subpatterns.join("|");
 }
 
 function splitToRanges(min, max) {
@@ -133,7 +137,7 @@ function rangeToPattern(start, stop, options) {
 
   let zipped = zip(start, stop);
   let digits = zipped.length;
-  let pattern = '';
+  let pattern = "";
   let count = 0;
 
   for (let i = 0; i < digits; i++) {
@@ -141,17 +145,15 @@ function rangeToPattern(start, stop, options) {
 
     if (startDigit === stopDigit) {
       pattern += startDigit;
-
-    } else if (startDigit !== '0' || stopDigit !== '9') {
+    } else if (startDigit !== "0" || stopDigit !== "9") {
       pattern += toCharacterClass(startDigit, stopDigit, options);
-
     } else {
       count++;
     }
   }
 
   if (count) {
-    pattern += options.shorthand === true ? '\\d' : '[0-9]';
+    pattern += options.shorthand === true ? "\\d" : "[0-9]";
   }
 
   return { pattern, count: [count], digits };
@@ -166,7 +168,7 @@ function splitToPatterns(min, max, tok, options) {
   for (let i = 0; i < ranges.length; i++) {
     let max = ranges[i];
     let obj = rangeToPattern(String(start), String(max), options);
-    let zeros = '';
+    let zeros = "";
 
     if (!tok.isPadded && prev && prev.pattern === obj.pattern) {
       if (prev.count.length > 1) {
@@ -199,12 +201,12 @@ function filterPatterns(arr, comparison, prefix, intersection, options) {
     let { string } = ele;
 
     // only push if _both_ are negative...
-    if (!intersection && !contains(comparison, 'string', string)) {
+    if (!intersection && !contains(comparison, "string", string)) {
       result.push(prefix + string);
     }
 
     // or _both_ are positive
-    if (intersection && contains(comparison, 'string', string)) {
+    if (intersection && contains(comparison, "string", string)) {
       result.push(prefix + string);
     }
   }
@@ -226,11 +228,11 @@ function compare(a, b) {
 }
 
 function contains(arr, key, val) {
-  return arr.some(ele => ele[key] === val);
+  return arr.some((ele) => ele[key] === val);
 }
 
 function countNines(min, len) {
-  return Number(String(min).slice(0, -len) + '9'.repeat(len));
+  return Number(String(min).slice(0, -len) + "9".repeat(len));
 }
 
 function countZeros(integer, zeros) {
@@ -238,15 +240,15 @@ function countZeros(integer, zeros) {
 }
 
 function toQuantifier(digits) {
-  let [start = 0, stop = ''] = digits;
+  let [start = 0, stop = ""] = digits;
   if (stop || start > 1) {
-    return `{${start + (stop ? ',' + stop : '')}}`;
+    return `{${start + (stop ? "," + stop : "")}}`;
   }
-  return '';
+  return "";
 }
 
 function toCharacterClass(a, b, options) {
-  return `[${a}${(b - a === 1) ? '' : '-'}${b}]`;
+  return `[${a}${(b - a === 1) ? "" : "-"}${b}]`;
 }
 
 function hasPadding(str) {
@@ -263,11 +265,11 @@ function padZeros(value, tok, options) {
 
   switch (diff) {
     case 0:
-      return '';
+      return "";
     case 1:
-      return relax ? '0?' : '0';
+      return relax ? "0?" : "0";
     case 2:
-      return relax ? '0{0,2}' : '00';
+      return relax ? "0{0,2}" : "00";
     default: {
       return relax ? `0{0,${diff}}` : `0{${diff}}`;
     }

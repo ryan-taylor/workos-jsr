@@ -4,5 +4,5 @@
  */
 export enum CheckOp {
   AnyOf = "anyOf",
-  AllOf = "allOf"
+  AllOf = "allOf",
 }

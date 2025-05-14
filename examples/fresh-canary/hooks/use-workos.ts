@@ -5,12 +5,17 @@
  * management, authentication state, and common WorkOS operations.
  */
 
-import { useEffect, useState } from 'preact/hooks';
-import { type Signal, signal } from '@preact/signals';
-import { initUserManagement, SESSION_OPTIONS, type SessionData, type WorkOSUser } from '../utils/user-management.ts';
-import type { WorkOS } from '../../../packages/workos_sdk/src/workos.ts';
-import type { UserManagement } from '../../../packages/workos_sdk/src/user-management/user-management.ts';
-import type { FreshSessionProvider } from '../../../packages/workos_sdk/src/common/iron-session/fresh-session-provider.ts';
+import { useEffect, useState } from "preact/hooks";
+import { type Signal, signal } from "@preact/signals";
+import {
+  initUserManagement,
+  SESSION_OPTIONS,
+  type SessionData,
+  type WorkOSUser,
+} from "../utils/user-management.ts";
+import type { WorkOS } from "../../../packages/workos_sdk/src/workos.ts";
+import type { UserManagement } from "../../../packages/workos_sdk/src/user-management/user-management.ts";
+import type { FreshSessionProvider } from "../../../packages/workos_sdk/src/common/iron-session/fresh-session-provider.ts";
 
 // State interface for the hook
 export interface WorkOSState {
@@ -33,7 +38,10 @@ export interface WorkOSState {
  */
 export function useWorkOS(): WorkOSState & {
   // SSO methods
-  getAuthorizationURL: (provider: string, redirectURI?: string) => Promise<string>;
+  getAuthorizationURL: (
+    provider: string,
+    redirectURI?: string,
+  ) => Promise<string>;
 
   // User management methods
   loginUser: (email: string, password: string) => Promise<WorkOSUser>;
@@ -47,7 +55,12 @@ export function useWorkOS(): WorkOSState & {
     before?: string;
     after?: string;
     group?: string;
-  }) => Promise<{ data: any[]; listMetadata?: { before: string | null; after: string | null } }>;
+  }) => Promise<
+    {
+      data: any[];
+      listMetadata?: { before: string | null; after: string | null };
+    }
+  >;
 } {
   // Create signals for state management
   const user = signal<WorkOSUser | null>(null);
@@ -57,8 +70,12 @@ export function useWorkOS(): WorkOSState & {
 
   // Store WorkOS instances
   const [workos, setWorkos] = useState<WorkOS | null>(null);
-  const [userManagement, setUserManagement] = useState<UserManagement | null>(null);
-  const [sessionProvider, setSessionProvider] = useState<FreshSessionProvider | null>(null);
+  const [userManagement, setUserManagement] = useState<UserManagement | null>(
+    null,
+  );
+  const [sessionProvider, setSessionProvider] = useState<
+    FreshSessionProvider | null
+  >(null);
 
   // Initialize WorkOS integration on component mount
   useEffect(() => {
@@ -68,7 +85,11 @@ export function useWorkOS(): WorkOSState & {
         error.value = null;
 
         // Initialize WorkOS services
-        const { workos: workosInstance, userManagement: userManagementInstance, sessionProvider: sessionProviderInstance } = initUserManagement();
+        const {
+          workos: workosInstance,
+          userManagement: userManagementInstance,
+          sessionProvider: sessionProviderInstance,
+        } = initUserManagement();
 
         setWorkos(workosInstance);
         setUserManagement(userManagementInstance);
@@ -78,7 +99,10 @@ export function useWorkOS(): WorkOSState & {
         // Attempt to get current user from session
         if (sessionProviderInstance) {
           const req = new Request(globalThis.location.href);
-          const session = await sessionProviderInstance.getSession<SessionData>(req, SESSION_OPTIONS);
+          const session = await sessionProviderInstance.getSession<SessionData>(
+            req,
+            SESSION_OPTIONS,
+          );
 
           if (session?.user) {
             user.value = session.user;
@@ -86,7 +110,7 @@ export function useWorkOS(): WorkOSState & {
           }
         }
       } catch (err) {
-        console.error('Failed to initialize WorkOS:', err);
+        console.error("Failed to initialize WorkOS:", err);
         error.value = err instanceof Error ? err : new Error(String(err));
       } finally {
         isLoading.value = false;
@@ -102,9 +126,12 @@ export function useWorkOS(): WorkOSState & {
    * @param redirectURI Optional redirect URI (defaults to configured callback URL)
    * @returns The authorization URL
    */
-  const getAuthorizationURL = async (provider: string, redirectURI?: string): Promise<string> => {
+  const getAuthorizationURL = async (
+    provider: string,
+    redirectURI?: string,
+  ): Promise<string> => {
     if (!workos) {
-      throw new Error('WorkOS not initialized');
+      throw new Error("WorkOS not initialized");
     }
 
     try {
@@ -119,7 +146,7 @@ export function useWorkOS(): WorkOSState & {
 
       return authorizationURL;
     } catch (err) {
-      console.error('Failed to get authorization URL:', err);
+      console.error("Failed to get authorization URL:", err);
       error.value = err instanceof Error ? err : new Error(String(err));
       throw err;
     } finally {
@@ -133,9 +160,12 @@ export function useWorkOS(): WorkOSState & {
    * @param password User's password
    * @returns The authenticated user data
    */
-  const loginUser = async (email: string, password: string): Promise<WorkOSUser> => {
+  const loginUser = async (
+    email: string,
+    password: string,
+  ): Promise<WorkOSUser> => {
     if (!userManagement) {
-      throw new Error('User Management not initialized');
+      throw new Error("User Management not initialized");
     }
 
     try {
@@ -147,16 +177,22 @@ export function useWorkOS(): WorkOSState & {
         password,
         // client_id removed as it's not in the AuthenticateOptions interface
         ip_address: `${globalThis.location.origin}`,
-        user_agent: globalThis.navigator?.userAgent
+        user_agent: globalThis.navigator?.userAgent,
       });
 
       // Update state with authenticated user
       const newUser: WorkOSUser = {
         id: authenticatedUser.user.id,
         email: authenticatedUser.user.email,
-        firstName: authenticatedUser.user.first_name as string | null | undefined,
+        firstName: authenticatedUser.user.first_name as
+          | string
+          | null
+          | undefined,
         lastName: authenticatedUser.user.last_name as string | null | undefined,
-        profilePictureUrl: authenticatedUser.user.profile_picture_url as string | null | undefined,
+        profilePictureUrl: authenticatedUser.user.profile_picture_url as
+          | string
+          | null
+          | undefined,
       };
 
       user.value = newUser;
@@ -164,7 +200,7 @@ export function useWorkOS(): WorkOSState & {
 
       return newUser;
     } catch (err) {
-      console.error('Login failed:', err);
+      console.error("Login failed:", err);
       error.value = err instanceof Error ? err : new Error(String(err));
       throw err;
     } finally {
@@ -185,9 +221,9 @@ export function useWorkOS(): WorkOSState & {
       isAuthenticated.value = false;
 
       // Redirect to logout route to clear session
-      globalThis.location.href = '/logout';
+      globalThis.location.href = "/logout";
     } catch (err) {
-      console.error('Logout failed:', err);
+      console.error("Logout failed:", err);
       error.value = err instanceof Error ? err : new Error(String(err));
       throw err;
     } finally {
@@ -200,9 +236,11 @@ export function useWorkOS(): WorkOSState & {
    * @param userData Partial user data to update
    * @returns The updated user data
    */
-  const updateUser = async (userData: Partial<WorkOSUser>): Promise<WorkOSUser> => {
+  const updateUser = async (
+    userData: Partial<WorkOSUser>,
+  ): Promise<WorkOSUser> => {
     if (!userManagement || !user.value) {
-      throw new Error('User Management not initialized or no user logged in');
+      throw new Error("User Management not initialized or no user logged in");
     }
 
     try {
@@ -219,7 +257,9 @@ export function useWorkOS(): WorkOSState & {
 
       // In Deno 2.x, there's no direct updateUser method in UserManagement
       // We'd need to implement this using lower-level API calls if needed
-      console.warn("User update functionality not available in current SDK version");
+      console.warn(
+        "User update functionality not available in current SDK version",
+      );
       const updatedUser = { ...user.value, ...userData };
 
       // Create a new user object with the updated data
@@ -232,10 +272,10 @@ export function useWorkOS(): WorkOSState & {
         user.value = newUserData;
         return newUserData;
       } else {
-        throw new Error('User not authenticated');
+        throw new Error("User not authenticated");
       }
     } catch (err) {
-      console.error('Failed to update user:', err);
+      console.error("Failed to update user:", err);
       error.value = err instanceof Error ? err : new Error(String(err));
       throw err;
     } finally {
@@ -249,7 +289,7 @@ export function useWorkOS(): WorkOSState & {
    */
   const sendPasswordResetEmail = async (email: string): Promise<void> => {
     if (!userManagement) {
-      throw new Error('User Management not initialized');
+      throw new Error("User Management not initialized");
     }
 
     try {
@@ -258,10 +298,12 @@ export function useWorkOS(): WorkOSState & {
 
       // In Deno 2.x, there's no direct sendPasswordResetEmail method in UserManagement
       // We'd need to implement this using lower-level API calls if needed
-      console.warn("Password reset email functionality not available in current SDK version");
+      console.warn(
+        "Password reset email functionality not available in current SDK version",
+      );
       // For now, we'll just log the attempt but the actual implementation would need to be added
     } catch (err) {
-      console.error('Failed to send password reset email:', err);
+      console.error("Failed to send password reset email:", err);
       error.value = err instanceof Error ? err : new Error(String(err));
       throw err;
     } finally {
@@ -282,7 +324,7 @@ export function useWorkOS(): WorkOSState & {
     group?: string;
   }) => {
     if (!workos) {
-      throw new Error('WorkOS not initialized');
+      throw new Error("WorkOS not initialized");
     }
 
     try {
@@ -296,7 +338,7 @@ export function useWorkOS(): WorkOSState & {
 
       return result;
     } catch (err) {
-      console.error('Failed to list directory users:', err);
+      console.error("Failed to list directory users:", err);
       error.value = err instanceof Error ? err : new Error(String(err));
       throw err;
     } finally {

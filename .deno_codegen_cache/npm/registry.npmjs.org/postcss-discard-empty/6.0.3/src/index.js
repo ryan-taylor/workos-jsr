@@ -1,5 +1,5 @@
-'use strict';
-const plugin = 'postcss-discard-empty';
+"use strict";
+const plugin = "postcss-discard-empty";
 /**
  * @param {import('postcss').Root} css
  * @param {import('postcss').Result} result
@@ -19,10 +19,10 @@ function discardAndReport(css, result) {
     }
 
     if (
-      (type === 'decl' && !node.value && !node.prop.startsWith('--')) ||
-      (type === 'rule' && !node.selector) ||
-      (sub && !sub.length && !(type === 'atrule' && node.name === 'layer')) ||
-      (type === 'atrule' &&
+      (type === "decl" && !node.value && !node.prop.startsWith("--")) ||
+      (type === "rule" && !node.selector) ||
+      (sub && !sub.length && !(type === "atrule" && node.name === "layer")) ||
+      (type === "atrule" &&
         ((!sub && !node.params) ||
           (!node.params &&
             !(/** @type {import('postcss').ChildNode[]}*/ (sub).length))))
@@ -30,7 +30,7 @@ function discardAndReport(css, result) {
       node.remove();
 
       result.messages.push({
-        type: 'removal',
+        type: "removal",
         plugin,
         node,
       });

@@ -42,12 +42,11 @@
   - **Responses**:
     - ➕ Status `409`: added
   - **Request Body**:
-    - ✏️ Content Type `application/json` ⚠️: modified - added required properties
+    - ✏️ Content Type `application/json` ⚠️: modified - added required
+      properties
 
 ### `/users/{id}`
 
 - 🟢 **PUT** - Added
 
-
-
-*This summary was generated automatically using the OpenAPI Summary Generator.*
+_This summary was generated automatically using the OpenAPI Summary Generator._

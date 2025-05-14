@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const { detachNodeFromParent } = require('../lib/xast.js');
+const { detachNodeFromParent } = require("../lib/xast.js");
 
-exports.name = 'removeStyleElement';
-exports.description = 'removes <style> element (disabled by default)';
+exports.name = "removeStyleElement";
+exports.description = "removes <style> element (disabled by default)";
 
 /**
  * Remove <style>.
@@ -18,7 +18,7 @@ exports.fn = () => {
   return {
     element: {
       enter: (node, parentNode) => {
-        if (node.name === 'style') {
+        if (node.name === "style") {
           detachNodeFromParent(node, parentNode);
         }
       },

@@ -2,16 +2,16 @@
 
 /**
  * Coverage threshold checker script
- * 
+ *
  * This script parses the coverage.lcov file, calculates the overall coverage percentage,
  * and compares it to the provided threshold.
- * 
+ *
  * Usage:
  *   deno run -A scripts/coverage-threshold.ts [threshold]
- * 
+ *
  * Arguments:
  *   threshold - Coverage threshold percentage (default: 80)
- * 
+ *
  * Exit codes:
  *   0 - Coverage meets or exceeds the threshold
  *   1 - Coverage is below the threshold
@@ -70,9 +70,11 @@ for (const line of lines) {
   if (line.startsWith("SF:")) {
     // Start of a new file record
     currentFile = line.substring(3).trim();
-    
+
     // Check if the file should be excluded
-    shouldIncludeCurrentFile = !excludePatterns.some(pattern => pattern.test(currentFile));
+    shouldIncludeCurrentFile = !excludePatterns.some((pattern) =>
+      pattern.test(currentFile)
+    );
   } else if (line.startsWith("LF:") && shouldIncludeCurrentFile) {
     // Lines found in current file
     const linesFound = parseInt(line.substring(3));
@@ -101,9 +103,17 @@ console.log(`Threshold: ${threshold}%`);
 
 // Check if coverage meets the threshold
 if (coveragePercentage < threshold) {
-  console.error(`❌ Coverage (${coveragePercentage.toFixed(2)}%) is below the threshold (${threshold}%)`);
+  console.error(
+    `❌ Coverage (${
+      coveragePercentage.toFixed(2)
+    }%) is below the threshold (${threshold}%)`,
+  );
   Deno.exit(1);
 } else {
-  console.log(`✅ Coverage (${coveragePercentage.toFixed(2)}%) meets or exceeds the threshold (${threshold}%)`);
+  console.log(
+    `✅ Coverage (${
+      coveragePercentage.toFixed(2)
+    }%) meets or exceeds the threshold (${threshold}%)`,
+  );
   Deno.exit(0);
 }

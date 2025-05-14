@@ -1,6 +1,6 @@
 // Using a version known to be in the Deno registry
-import { superdeno } from 'https://deno.land/x/superdeno@4.7.2/mod.ts';
-import { WorkOS } from '../../../mod.ts';
+import { superdeno } from "https://deno.land/x/superdeno@4.7.2/mod.ts";
+import { WorkOS } from "../../../mod.ts";
 
 /**
  * Creates a mock session for testing Fresh routes
@@ -10,10 +10,10 @@ import { WorkOS } from '../../../mod.ts';
 export function createMockSession(props: Record<string, unknown> = {}) {
   return {
     user: {
-      id: 'user_123',
-      email: 'user@example.com',
-      firstName: 'Test',
-      lastName: 'User',
+      id: "user_123",
+      email: "user@example.com",
+      firstName: "Test",
+      lastName: "User",
       emailVerified: true,
       ...props,
     },
@@ -27,12 +27,12 @@ export function createMockSession(props: Record<string, unknown> = {}) {
  */
 export function createMockContext(overrides: Record<string, unknown> = {}) {
   return {
-    url: new URL('http://localhost:8000'),
+    url: new URL("http://localhost:8000"),
     params: {},
     data: {},
     state: {
       session: createMockSession(),
-      workos: new WorkOS('sk_test_123456789'),
+      workos: new WorkOS("sk_test_123456789"),
     },
     ...overrides,
   };
@@ -64,7 +64,7 @@ export function createTestHandler(
         {
           status: mockResponse.status || 200,
           headers: mockResponse.headers || new Headers({
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           }),
         },
       );
@@ -74,12 +74,14 @@ export function createTestHandler(
       const context = createMockContext();
       return await handler(req, context);
     } catch (error: unknown) {
-      console.error('Handler error:', error);
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error("Handler error:", error);
+      const errorMessage = error instanceof Error
+        ? error.message
+        : String(error);
       return new Response(JSON.stringify({ error: errorMessage }), {
         status: 500,
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
     }

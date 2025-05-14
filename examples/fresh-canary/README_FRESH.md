@@ -1,10 +1,12 @@
 # WorkOS Integration with Fresh 1.x and 2.x
 
-This document outlines how to integrate WorkOS with both Fresh 1.x and 2.x applications.
+This document outlines how to integrate WorkOS with both Fresh 1.x and 2.x
+applications.
 
 ## Overview
 
-The WorkOS SDK for Deno provides seamless integration with Fresh applications, supporting both Fresh 1.x and 2.x versions. The SDK includes:
+The WorkOS SDK for Deno provides seamless integration with Fresh applications,
+supporting both Fresh 1.x and 2.x versions. The SDK includes:
 
 - Session management with encrypted cookies
 - Authentication with WorkOS SSO
@@ -68,13 +70,13 @@ WORKOS_FRESH_V2=true  # Set to true for Fresh 2.x, false for Fresh 1.x
 
 ```typescript
 // routes/_middleware.ts
-import { createSessionMiddleware } from 'workos_internal/mod.ts';
-import { SESSION_OPTIONS } from '../utils/user-management.ts';
+import { createSessionMiddleware } from "workos_internal/mod.ts";
+import { SESSION_OPTIONS } from "../utils/user-management.ts";
 
 // Create session middleware compatible with both Fresh 1.x and 2.x
 const sessionMiddlewareObj = createSessionMiddleware(SESSION_OPTIONS);
-const sessionMiddleware = 'handler' in sessionMiddlewareObj 
-  ? sessionMiddlewareObj.handler 
+const sessionMiddleware = "handler" in sessionMiddlewareObj
+  ? sessionMiddlewareObj.handler
   : sessionMiddlewareObj;
 
 export const handler = {
@@ -90,21 +92,21 @@ export const handler = {
 ```typescript
 // utils/user-management.ts
 import {
-  FreshSessionProvider,
   buildSessionOptions,
-  initUserManagement as initWorkOSUserManagement
+  FreshSessionProvider,
+  initUserManagement as initWorkOSUserManagement,
 } from "workos_internal/mod.ts";
 
 // Session configuration using the factory function
 export const SESSION_OPTIONS = buildSessionOptions(Deno.env);
 
 export function initUserManagement() {
-  const apiKey = Deno.env.get('WORKOS_API_KEY');
+  const apiKey = Deno.env.get("WORKOS_API_KEY");
   if (apiKey === null) {
     throw new Error("Environment variable WORKOS_API_KEY is required");
   }
-  const clientId = Deno.env.get('WORKOS_CLIENT_ID');
-  
+  const clientId = Deno.env.get("WORKOS_CLIENT_ID");
+
   return initWorkOSUserManagement(apiKey, clientId);
 }
 ```
@@ -113,33 +115,34 @@ export function initUserManagement() {
 
 ```typescript
 // routes/login.tsx
-import { initUserManagement } from '../utils/user-management.ts';
+import { initUserManagement } from "../utils/user-management.ts";
 
 export const handler = {
   async GET(req, ctx) {
     const { workos } = initUserManagement();
-    
+
     const authorizationURL = await workos.sso.getAuthorizationUrl({
       // Configure SSO options
       redirectURI: `${new URL(req.url).origin}/callback`,
-      clientID: Deno.env.get('WORKOS_CLIENT_ID') ?? '',
+      clientID: Deno.env.get("WORKOS_CLIENT_ID") ?? "",
     });
-    
+
     return new Response(null, {
       status: 302,
       headers: { Location: authorizationURL },
     });
-  }
+  },
 };
 ```
 
 ## Overriding the Session Provider
 
-You can create a custom session provider by extending the `FreshSessionProvider` class:
+You can create a custom session provider by extending the `FreshSessionProvider`
+class:
 
 ```typescript
 // custom-session-provider.ts
-import { FreshSessionProvider } from 'workos_internal/mod.ts';
+import { FreshSessionProvider } from "workos_internal/mod.ts";
 
 export class CustomSessionProvider extends FreshSessionProvider {
   // Override methods as needed
@@ -148,7 +151,8 @@ export class CustomSessionProvider extends FreshSessionProvider {
 
 ## Fresh Version Compatibility
 
-The SDK automatically detects the Fresh version and adapts accordingly. You can force a specific version using the `WORKOS_FRESH_V2` environment variable.
+The SDK automatically detects the Fresh version and adapts accordingly. You can
+force a specific version using the `WORKOS_FRESH_V2` environment variable.
 
 ### Fresh 1.x Middleware
 
@@ -168,7 +172,7 @@ const middleware = {
   handler: (req, ctx) => {
     // Middleware logic
     return ctx.next();
-  }
+  },
 };
 ```
 
@@ -186,7 +190,8 @@ For optimal performance on Deno Deploy:
 
 ### Common Issues
 
-1. **Session not persisting**: Ensure the SESSION_SECRET is consistent across deployments
+1. **Session not persisting**: Ensure the SESSION_SECRET is consistent across
+   deployments
 2. **Fresh version detection issues**: Set WORKOS_FRESH_V2 explicitly
 3. **Import errors**: Check your import map configuration
 

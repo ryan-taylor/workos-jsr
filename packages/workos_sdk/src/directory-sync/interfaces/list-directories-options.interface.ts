@@ -1,4 +1,4 @@
-import type { PaginationOptions } from "workos/common/interfaces.ts";
+import type { PaginationOptions } from "../../common/interfaces.ts";
 
 export interface ListDirectoriesOptions extends PaginationOptions {
   organizationId?: string;

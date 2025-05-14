@@ -7,9 +7,9 @@ export = sameParent;
  */
 declare function sameParent(nodeA: Child, nodeB: Child): boolean;
 declare namespace sameParent {
-    export { Child };
+  export { Child };
 }
-type Child = import('postcss').AnyNode & {
-    parent?: Child;
+type Child = import("postcss").AnyNode & {
+  parent?: Child;
 };
 //# sourceMappingURL=sameParent.d.ts.map

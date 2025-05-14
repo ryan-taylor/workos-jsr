@@ -1,2 +1,2 @@
-declare const queueMicrotask: (cb: () => void) => void
-export = queueMicrotask
+declare const queueMicrotask: (cb: () => void) => void;
+export = queueMicrotask;

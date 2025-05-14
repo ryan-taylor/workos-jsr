@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-exports.name = 'addClassesToSVGElement';
-exports.description = 'adds classnames to an outer <svg> element';
+exports.name = "addClassesToSVGElement";
+exports.description = "adds classnames to an outer <svg> element";
 
 var ENOCLS = `Error in plugin "addClassesToSVGElement": absent parameters.
 It should have a list of classes in "classNames" or one "className".
@@ -63,18 +63,18 @@ exports.fn = (root, params) => {
   return {
     element: {
       enter: (node, parentNode) => {
-        if (node.name === 'svg' && parentNode.type === 'root') {
+        if (node.name === "svg" && parentNode.type === "root") {
           const classList = new Set(
             node.attributes.class == null
               ? null
-              : node.attributes.class.split(' '),
+              : node.attributes.class.split(" "),
           );
           for (const className of classNames) {
             if (className != null) {
               classList.add(className);
             }
           }
-          node.attributes.class = Array.from(classList).join(' ');
+          node.attributes.class = Array.from(classList).join(" ");
         }
       },
     },

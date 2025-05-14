@@ -3,8 +3,8 @@
  * Common types used for API requests
  */
 import type { SupportedAuthScheme } from "./auth-schemes.ts";
-import { SecurityScheme, RequestLike } from "./security.ts";
-import { RequestOptions, applySecurityToRequest } from "./request-options.ts";
+import { RequestLike, SecurityScheme } from "./security.ts";
+import { applySecurityToRequest, RequestOptions } from "./request-options.ts";
 
 /**
  * Basic HTTP methods supported by the API
@@ -16,7 +16,7 @@ export enum HttpMethod {
   DELETE = "DELETE",
   PATCH = "PATCH",
   OPTIONS = "OPTIONS",
-  HEAD = "HEAD"
+  HEAD = "HEAD",
 }
 
 /**
@@ -25,19 +25,19 @@ export enum HttpMethod {
 export interface RequestParameters extends RequestLike {
   /** Path to the API endpoint */
   path: string;
-  
+
   /** HTTP method */
   method: HttpMethod;
-  
+
   /** Query parameters */
   query?: Record<string, unknown>;
-  
+
   /** Headers to include with the request */
   headers?: Record<string, string>;
-  
+
   /** Request body */
   body?: unknown;
-  
+
   /** Response type to expect */
   responseType?: "json" | "text" | "blob" | "arraybuffer";
 }
@@ -48,27 +48,27 @@ export interface RequestParameters extends RequestLike {
 export interface ApiRequestConfig {
   /** Base URL for API requests */
   basePath: string;
-  
+
   /** Default headers to include with every request */
   headers?: Record<string, string>;
-  
+
   /** Default security scheme to use */
   defaultSecurityScheme?: SupportedAuthScheme;
-  
+
   /** Timeout in milliseconds */
   timeout?: number;
 }
 
 /**
  * Apply request options to request parameters
- * 
+ *
  * @param params The request parameters to modify
  * @param options The request options to apply
  * @returns The modified request parameters
  */
 export function applyRequestOptions<S extends SupportedAuthScheme>(
   params: RequestParameters,
-  options?: RequestOptions<S>
+  options?: RequestOptions<S>,
 ): RequestParameters {
   if (!options) {
     return params;
@@ -81,12 +81,12 @@ export function applyRequestOptions<S extends SupportedAuthScheme>(
   if (options.headers) {
     result.headers = {
       ...(result.headers || {}),
-      ...options.headers
+      ...options.headers,
     };
   }
 
   // Apply security
   const securedRequest = applySecurityToRequest(result, options);
-  
+
   return securedRequest as RequestParameters;
 }

@@ -1,4 +1,4 @@
-import type { OauthTokens, OauthTokensResponse } from "../interfaces.ts.ts";
+import type { OauthTokens, OauthTokensResponse } from "../interfaces.ts";
 
 export const deserializeOauthTokens = (
   oauthTokens?: OauthTokensResponse,

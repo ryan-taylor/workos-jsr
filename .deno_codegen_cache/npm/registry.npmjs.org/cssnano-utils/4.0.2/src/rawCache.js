@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * @type {import('postcss').PluginCreator<void>}
@@ -6,24 +6,24 @@
  */
 function pluginCreator() {
   return {
-    postcssPlugin: 'cssnano-util-raw-cache',
+    postcssPlugin: "cssnano-util-raw-cache",
     /**
      * @param {import('postcss').Root} css
      * @param {{result: import('postcss').Result & {root: {rawCache?: any}}}} arg
      */
     OnceExit(css, { result }) {
       result.root.rawCache = {
-        colon: ':',
-        indent: '',
-        beforeDecl: '',
-        beforeRule: '',
-        beforeOpen: '',
-        beforeClose: '',
-        beforeComment: '',
-        after: '',
-        emptyBody: '',
-        commentLeft: '',
-        commentRight: '',
+        colon: ":",
+        indent: "",
+        beforeDecl: "",
+        beforeRule: "",
+        beforeOpen: "",
+        beforeClose: "",
+        beforeComment: "",
+        after: "",
+        emptyBody: "",
+        commentLeft: "",
+        commentRight: "",
       };
     },
   };

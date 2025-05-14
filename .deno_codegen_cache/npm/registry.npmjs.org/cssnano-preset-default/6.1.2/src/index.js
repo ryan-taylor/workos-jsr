@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 /**
  * @author Ben Briggs
  * @license MIT
@@ -13,35 +13,39 @@
  * this preset require only minimal configuration.
  */
 
-const cssDeclarationSorter = require('css-declaration-sorter');
-const postcssDiscardComments = require('postcss-discard-comments');
-const postcssReduceInitial = require('postcss-reduce-initial');
-const postcssMinifyGradients = require('postcss-minify-gradients');
-const postcssSvgo = require('postcss-svgo');
-const postcssReduceTransforms = require('postcss-reduce-transforms');
-const postcssConvertValues = require('postcss-convert-values');
-const postcssCalc = require('postcss-calc');
-const postcssColormin = require('postcss-colormin');
-const postcssOrderedValues = require('postcss-ordered-values');
-const postcssMinifySelectors = require('postcss-minify-selectors');
-const postcssMinifyParams = require('postcss-minify-params');
-const postcssNormalizeCharset = require('postcss-normalize-charset');
-const postcssMinifyFontValues = require('postcss-minify-font-values');
-const postcssNormalizeUrl = require('postcss-normalize-url');
-const postcssMergeLonghand = require('postcss-merge-longhand');
-const postcssDiscardDuplicates = require('postcss-discard-duplicates');
-const postcssDiscardOverridden = require('postcss-discard-overridden');
-const postcssNormalizeRepeatStyle = require('postcss-normalize-repeat-style');
-const postcssMergeRules = require('postcss-merge-rules');
-const postcssDiscardEmpty = require('postcss-discard-empty');
-const postcssUniqueSelectors = require('postcss-unique-selectors');
-const postcssNormalizeString = require('postcss-normalize-string');
-const postcssNormalizePositions = require('postcss-normalize-positions');
-const postcssNormalizeWhitespace = require('postcss-normalize-whitespace');
-const postcssNormalizeUnicode = require('postcss-normalize-unicode');
-const postcssNormalizeDisplayValues = require('postcss-normalize-display-values');
-const postcssNormalizeTimingFunctions = require('postcss-normalize-timing-functions');
-const { rawCache } = require('cssnano-utils');
+const cssDeclarationSorter = require("css-declaration-sorter");
+const postcssDiscardComments = require("postcss-discard-comments");
+const postcssReduceInitial = require("postcss-reduce-initial");
+const postcssMinifyGradients = require("postcss-minify-gradients");
+const postcssSvgo = require("postcss-svgo");
+const postcssReduceTransforms = require("postcss-reduce-transforms");
+const postcssConvertValues = require("postcss-convert-values");
+const postcssCalc = require("postcss-calc");
+const postcssColormin = require("postcss-colormin");
+const postcssOrderedValues = require("postcss-ordered-values");
+const postcssMinifySelectors = require("postcss-minify-selectors");
+const postcssMinifyParams = require("postcss-minify-params");
+const postcssNormalizeCharset = require("postcss-normalize-charset");
+const postcssMinifyFontValues = require("postcss-minify-font-values");
+const postcssNormalizeUrl = require("postcss-normalize-url");
+const postcssMergeLonghand = require("postcss-merge-longhand");
+const postcssDiscardDuplicates = require("postcss-discard-duplicates");
+const postcssDiscardOverridden = require("postcss-discard-overridden");
+const postcssNormalizeRepeatStyle = require("postcss-normalize-repeat-style");
+const postcssMergeRules = require("postcss-merge-rules");
+const postcssDiscardEmpty = require("postcss-discard-empty");
+const postcssUniqueSelectors = require("postcss-unique-selectors");
+const postcssNormalizeString = require("postcss-normalize-string");
+const postcssNormalizePositions = require("postcss-normalize-positions");
+const postcssNormalizeWhitespace = require("postcss-normalize-whitespace");
+const postcssNormalizeUnicode = require("postcss-normalize-unicode");
+const postcssNormalizeDisplayValues = require(
+  "postcss-normalize-display-values",
+);
+const postcssNormalizeTimingFunctions = require(
+  "postcss-normalize-timing-functions",
+);
+const { rawCache } = require("cssnano-utils");
 
 /**
  * @template {object | void} [OptionsExtends=void]
@@ -157,37 +161,37 @@ function defaultPreset(opts = {}) {
   return {
     plugins: configurePlugins(
       [
-        [postcssDiscardComments, 'discardComments'],
-        [postcssMinifyGradients, 'minifyGradients'],
-        [postcssReduceInitial, 'reduceInitial'],
-        [postcssSvgo, 'svgo'],
-        [postcssNormalizeDisplayValues, 'normalizeDisplayValues'],
-        [postcssReduceTransforms, 'reduceTransforms'],
-        [postcssColormin, 'colormin'],
-        [postcssNormalizeTimingFunctions, 'normalizeTimingFunctions'],
-        [postcssCalc, 'calc'],
-        [postcssConvertValues, 'convertValues'],
-        [postcssOrderedValues, 'orderedValues'],
-        [postcssMinifySelectors, 'minifySelectors'],
-        [postcssMinifyParams, 'minifyParams'],
-        [postcssNormalizeCharset, 'normalizeCharset'],
-        [postcssDiscardOverridden, 'discardOverridden'],
-        [postcssNormalizeString, 'normalizeString'],
-        [postcssNormalizeUnicode, 'normalizeUnicode'],
-        [postcssMinifyFontValues, 'minifyFontValues'],
-        [postcssNormalizeUrl, 'normalizeUrl'],
-        [postcssNormalizeRepeatStyle, 'normalizeRepeatStyle'],
-        [postcssNormalizePositions, 'normalizePositions'],
-        [postcssNormalizeWhitespace, 'normalizeWhitespace'],
-        [postcssMergeLonghand, 'mergeLonghand'],
-        [postcssDiscardDuplicates, 'discardDuplicates'],
-        [postcssMergeRules, 'mergeRules'],
-        [postcssDiscardEmpty, 'discardEmpty'],
-        [postcssUniqueSelectors, 'uniqueSelectors'],
-        [cssDeclarationSorter, 'cssDeclarationSorter'],
-        [rawCache, 'rawCache'],
+        [postcssDiscardComments, "discardComments"],
+        [postcssMinifyGradients, "minifyGradients"],
+        [postcssReduceInitial, "reduceInitial"],
+        [postcssSvgo, "svgo"],
+        [postcssNormalizeDisplayValues, "normalizeDisplayValues"],
+        [postcssReduceTransforms, "reduceTransforms"],
+        [postcssColormin, "colormin"],
+        [postcssNormalizeTimingFunctions, "normalizeTimingFunctions"],
+        [postcssCalc, "calc"],
+        [postcssConvertValues, "convertValues"],
+        [postcssOrderedValues, "orderedValues"],
+        [postcssMinifySelectors, "minifySelectors"],
+        [postcssMinifyParams, "minifyParams"],
+        [postcssNormalizeCharset, "normalizeCharset"],
+        [postcssDiscardOverridden, "discardOverridden"],
+        [postcssNormalizeString, "normalizeString"],
+        [postcssNormalizeUnicode, "normalizeUnicode"],
+        [postcssMinifyFontValues, "minifyFontValues"],
+        [postcssNormalizeUrl, "normalizeUrl"],
+        [postcssNormalizeRepeatStyle, "normalizeRepeatStyle"],
+        [postcssNormalizePositions, "normalizePositions"],
+        [postcssNormalizeWhitespace, "normalizeWhitespace"],
+        [postcssMergeLonghand, "mergeLonghand"],
+        [postcssDiscardDuplicates, "discardDuplicates"],
+        [postcssMergeRules, "mergeRules"],
+        [postcssDiscardEmpty, "discardEmpty"],
+        [postcssUniqueSelectors, "uniqueSelectors"],
+        [cssDeclarationSorter, "cssDeclarationSorter"],
+        [rawCache, "rawCache"],
       ],
-      opts
+      opts,
     ),
   };
 }

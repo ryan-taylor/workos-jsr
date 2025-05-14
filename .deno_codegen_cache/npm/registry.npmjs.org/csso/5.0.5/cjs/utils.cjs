@@ -1,9 +1,7 @@
-'use strict';
+"use strict";
 
-const processSelector = require('./restructure/prepare/processSelector.cjs');
-const utils$1 = require('./restructure/utils.cjs');
-
-
+const processSelector = require("./restructure/prepare/processSelector.cjs");
+const utils$1 = require("./restructure/utils.cjs");
 
 exports.processSelector = processSelector;
 exports.addSelectors = utils$1.addSelectors;

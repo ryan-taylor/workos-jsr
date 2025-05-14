@@ -15,13 +15,17 @@ npm install postcss-normalize-string --save
 ### Input
 
 ```css
-p:after{ content: '\\'string\\' is intact' }
+p:after {
+  content: "\\" string\\ " is intact";
+}
 ```
 
 ### Output
 
 ```css
-p:after{ content:"'string' is intact" }
+p:after {
+  content: "'string' is intact";
+}
 ```
 
 ## Usage
@@ -37,20 +41,20 @@ examples for your environment.
 
 ##### preferredQuote
 
-Type: `string`
-Default: `double`
+Type: `string` Default: `double`
 
 Sets what type of quote to prefer. Possible values are `single` and `double`.
 
 ```js
 var css = 'p:after{content:""}';
-console.log(postcss(normalize({preferredQuote: 'single'})).process(css).css);
+console.log(postcss(normalize({ preferredQuote: "single" })).process(css).css);
 //=> p:after{content:''}
 ```
 
 ## Contributors
 
-See [CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
+See
+[CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
 
 ## License
 

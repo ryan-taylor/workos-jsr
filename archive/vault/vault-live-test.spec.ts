@@ -1,17 +1,19 @@
 /**
  * ARCHIVED FILE - DO NOT USE
- * 
+ *
  * This file was archived for the following reasons:
  * - Uses a hardcoded API_KEY (violating secrets management guidelines)
  * - Has incorrect import paths with duplicate `.ts.ts` extensions
  * - Requires live network dependency
  * - Is superseded by mocked tests
+ *
+ * @ts-nocheck - This file is archived and should be excluded from type checking
  */
 
-import { WorkOS } from "../workos.ts.ts";
+import { WorkOS } from "../../src/workos.ts";
 import { crypto } from "@std/crypto";
-import { NotFoundException } from "../index.worker.ts.ts";
-import { ConflictException } from "../common/exceptions/conflict.exception.ts.ts";
+import { NotFoundException } from "../../src/index.worker.ts";
+import { ConflictException } from "../../src/common/exceptions/conflict.exception.ts";
 import { assertEquals, assertRejects, assertThrows } from "@std/assert";
 
 Deno.test({

@@ -6,11 +6,11 @@ type FreshContext = {
   next: () => Promise<Response>;
   state: Record<string, unknown>;
 };
-import { FreshSessionProvider } from './fresh-session-provider.ts';
+import { FreshSessionProvider } from "./fresh-session-provider.ts";
 import type {
   SessionOptions,
   UnsealedDataType,
-} from './fresh-session-provider.ts';
+} from "./fresh-session-provider.ts";
 
 /**
  * KVSessionProvider extends FreshSessionProvider to store session data in Deno KV

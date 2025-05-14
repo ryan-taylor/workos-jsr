@@ -1,4 +1,4 @@
-declare module 'Fraction';
+declare module "Fraction";
 
 export interface NumeratorDenominator {
   n: number;
@@ -11,16 +11,32 @@ type FractionConstructor = {
   (numerator: number, denominator: number): Fraction;
   (numbers: [number | string, number | string]): Fraction;
   (fraction: NumeratorDenominator): Fraction;
-  (firstValue: Fraction | number | string | [number | string, number | string] | NumeratorDenominator, secondValue?: number): Fraction;
+  (
+    firstValue:
+      | Fraction
+      | number
+      | string
+      | [number | string, number | string]
+      | NumeratorDenominator,
+    secondValue?: number,
+  ): Fraction;
 };
 
 export default class Fraction {
-  constructor (fraction: Fraction);
-  constructor (num: number | string);
-  constructor (numerator: number, denominator: number);
-  constructor (numbers: [number | string, number | string]);
-  constructor (fraction: NumeratorDenominator);
-  constructor (firstValue: Fraction | number | string | [number | string, number | string] | NumeratorDenominator, secondValue?: number);
+  constructor(fraction: Fraction);
+  constructor(num: number | string);
+  constructor(numerator: number, denominator: number);
+  constructor(numbers: [number | string, number | string]);
+  constructor(fraction: NumeratorDenominator);
+  constructor(
+    firstValue:
+      | Fraction
+      | number
+      | string
+      | [number | string, number | string]
+      | NumeratorDenominator,
+    secondValue?: number,
+  );
 
   s: number;
   n: number;
@@ -36,7 +52,7 @@ export default class Fraction {
   pow: FractionConstructor;
   gcd: FractionConstructor;
   lcm: FractionConstructor;
-  
+
   mod(n?: number | string | Fraction): Fraction;
 
   ceil(places?: number): Fraction;
@@ -44,13 +60,13 @@ export default class Fraction {
   round(places?: number): Fraction;
 
   inverse(): Fraction;
-  
+
   simplify(eps?: number): Fraction;
-  
+
   equals(n: number | string | Fraction): boolean;
   compare(n: number | string | Fraction): number;
   divisible(n: number | string | Fraction): boolean;
-  
+
   valueOf(): number;
   toString(decimalPlaces?: number): string;
   toLatex(excludeWhole?: boolean): string;

@@ -10,7 +10,6 @@ With [npm](https://npmjs.org/package/postcss-minify-gradients) do:
 npm install postcss-minify-gradients
 ```
 
-
 ## Example
 
 Where possible, this module will minify gradient parameters. It can convert
@@ -22,7 +21,13 @@ values (the browser will adjust the value automatically).
 
 ```css
 h1 {
-    background: linear-gradient(to bottom, #ffe500 0%, #ffe500 50%, #121 50%, #121 100%)
+  background: linear-gradient(
+    to bottom,
+    #ffe500 0%,
+    #ffe500 50%,
+    #121 50%,
+    #121 100%
+  );
 }
 ```
 
@@ -30,21 +35,19 @@ h1 {
 
 ```css
 h1 {
-    background: linear-gradient(180deg, #ffe500, #ffe500 50%, #121 0, #121)
+  background: linear-gradient(180deg, #ffe500, #ffe500 50%, #121 0, #121);
 }
 ```
-
 
 ## Usage
 
 See the [PostCSS documentation](https://github.com/postcss/postcss#usage) for
 examples for your environment.
 
-
 ## Contributors
 
-See [CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
-
+See
+[CONTRIBUTORS.md](https://github.com/cssnano/cssnano/blob/master/CONTRIBUTORS.md).
 
 ## License
 

@@ -6,13 +6,13 @@ import {
   RateLimitExceededException,
   UnauthorizedException,
   UnprocessableEntityException,
-} from './common/exceptions/index.ts';
-import type { GetOptions } from './common/interfaces/get-options.interface.ts';
-import type { PostOptions } from './common/interfaces/post-options.interface.ts';
-import type { PutOptions } from './common/interfaces/put-options.interface.ts';
-import type { WorkOSOptions } from './common/interfaces/workos-options.interface.ts';
-import type { WorkOSResponseError } from './common/interfaces/workos-response-error.interface.ts';
-import type { DeleteOptions } from './common/interfaces/delete-options.interface.ts';
+} from "./common/exceptions/index.ts";
+import type { GetOptions } from "./common/interfaces/get-options.interface.ts";
+import type { PostOptions } from "./common/interfaces/post-options.interface.ts";
+import type { PutOptions } from "./common/interfaces/put-options.interface.ts";
+import type { WorkOSOptions } from "./common/interfaces/workos-options.interface.ts";
+import type { WorkOSResponseError } from "./common/interfaces/workos-response-error.interface.ts";
+import type { DeleteOptions } from "./common/interfaces/delete-options.interface.ts";
 
 // Re-export for usage outside of the package
 export type {
@@ -22,31 +22,31 @@ export type {
   WorkOSOptions,
   WorkOSResponseError,
 };
-import { DirectorySync } from './directory-sync/directory-sync.ts';
-import { Events } from './events/events.ts';
-import { Organizations } from './organizations/organizations.ts';
-import { OrganizationDomains } from './organization-domains/organization-domains.ts';
-import { Passwordless } from './passwordless/passwordless.ts';
-import { Portal } from './portal/portal.ts';
-import { SSO } from './sso/sso.ts';
-import { Webhooks } from './webhooks/webhooks.ts';
-import { Mfa } from './mfa/mfa.ts';
-import { AuditLogs } from './audit-logs/audit-logs.ts';
-import { UserManagement } from './user-management/user-management.ts';
-import { FGA } from './fga/fga.ts';
-import { Roles } from './roles/roles.ts';
-import { BadRequestException } from './common/exceptions/bad-request.exception.ts';
+import { DirectorySync } from "./directory-sync/directory-sync.ts";
+import { Events } from "./events/events.ts";
+import { Organizations } from "./organizations/organizations.ts";
+import { OrganizationDomains } from "./organization-domains/organization-domains.ts";
+import { Passwordless } from "./passwordless/passwordless.ts";
+import { Portal } from "./portal/portal.ts";
+import { SSO } from "./sso/sso.ts";
+import { Webhooks } from "./webhooks/webhooks.ts";
+import { Mfa } from "./mfa/mfa.ts";
+import { AuditLogs } from "./audit-logs/audit-logs.ts";
+import { UserManagement } from "./user-management/user-management.ts";
+import { FGA } from "./fga/fga.ts";
+import { Roles } from "./roles/roles.ts";
+import { BadRequestException } from "./common/exceptions/bad-request.exception.ts";
 
-import { type HttpClient, HttpClientError } from './common/net/http-client.ts';
-import { SubtleCryptoProvider } from './common/crypto/subtle-crypto-provider.ts';
-import { FetchHttpClient } from './common/net/fetch-client.ts';
-import { DenoHttpClient } from './common/net/deno-client.ts';
-import { FreshSessionProvider } from './common/iron-session/fresh-session-provider.ts';
-import { Widgets } from './widgets/widgets.ts';
-import { Actions } from './actions/actions.ts';
-import { Vault } from './vault/vault.ts';
-import { ConflictException } from './common/exceptions/conflict.exception.ts';
-import { initTelemetry } from './telemetry/workos-integration.ts';
+import { type HttpClient, HttpClientError } from "./common/net/http-client.ts";
+import { SubtleCryptoProvider } from "./common/crypto/subtle-crypto-provider.ts";
+import { FetchHttpClient } from "./common/net/fetch-client.ts";
+import { DenoHttpClient } from "./common/net/deno-client.ts";
+import { FreshSessionProvider } from "./common/iron-session/fresh-session-provider.ts";
+import { Widgets } from "./widgets/widgets.ts";
+import { Actions } from "./actions/actions.ts";
+import { Vault } from "./vault/vault.ts";
+import { ConflictException } from "./common/exceptions/conflict.exception.ts";
+import { initTelemetry } from "./telemetry/workos-integration.ts";
 
 const VERSION = "7.50.0";
 
@@ -97,7 +97,9 @@ export class WorkOS {
   readonly organizations: Organizations = new Organizations(this);
 
   /** Organization Domains module for managing domains */
-  readonly organizationDomains: OrganizationDomains = new OrganizationDomains(this);
+  readonly organizationDomains: OrganizationDomains = new OrganizationDomains(
+    this,
+  );
 
   /** Passwordless module for magic link and OTP authentication */
   readonly passwordless: Passwordless = new Passwordless(this);
@@ -171,7 +173,8 @@ export class WorkOS {
     }
 
     // Use options.clientId or get from environment variable
-    this.clientId = this.options.clientId ?? Deno.env.get("WORKOS_CLIENT_ID") ?? undefined;
+    this.clientId = this.options.clientId ?? Deno.env.get("WORKOS_CLIENT_ID") ??
+      undefined;
 
     const protocol: string = this.options.https ? "https" : "http";
     const apiHostname: string = this.options.apiHostname || DEFAULT_HOSTNAME;
@@ -495,7 +498,9 @@ export class WorkOS {
         case 422: {
           throw new UnprocessableEntityException({
             code,
-            errors: errors?.map(({ attribute, code }: { attribute: string; code: string }) => ({
+            errors: errors?.map((
+              { attribute, code }: { attribute: string; code: string },
+            ) => ({
               field: attribute,
               code,
             })),

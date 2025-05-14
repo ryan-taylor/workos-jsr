@@ -1,10 +1,10 @@
-'use strict';
-const { unit } = require('postcss-value-parser');
-const { getArguments } = require('cssnano-utils');
-const addSpace = require('../lib/addSpace');
-const getValue = require('../lib/getValue');
-const mathFunctions = require('../lib/mathfunctions.js');
-const vendorUnprefixed = require('../lib/vendorUnprefixed.js');
+"use strict";
+const { unit } = require("postcss-value-parser");
+const { getArguments } = require("cssnano-utils");
+const addSpace = require("../lib/addSpace");
+const getValue = require("../lib/getValue");
+const mathFunctions = require("../lib/mathfunctions.js");
+const vendorUnprefixed = require("../lib/vendorUnprefixed.js");
 
 // box-shadow: inset? && <length>{2,4} && <color>?
 
@@ -43,20 +43,20 @@ function normalize(args) {
       const { type, value } = node;
 
       if (
-        type === 'function' &&
+        type === "function" &&
         mathFunctions.has(vendorUnprefixed(value.toLowerCase()))
       ) {
         abort = true;
         return;
       }
 
-      if (type === 'space') {
+      if (type === "space") {
         return;
       }
 
       if (unit(value)) {
         val = [...val, node, addSpace()];
-      } else if (value.toLowerCase() === 'inset') {
+      } else if (value.toLowerCase() === "inset") {
         state.inset = [...state.inset, node, addSpace()];
       } else {
         state.color = [...state.color, node, addSpace()];

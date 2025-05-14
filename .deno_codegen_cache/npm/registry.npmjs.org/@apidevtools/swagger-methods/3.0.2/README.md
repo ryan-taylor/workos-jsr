@@ -1,5 +1,5 @@
-Swagger Methods
-============================
+# Swagger Methods
+
 #### HTTP methods that are supported by Swagger 2.0
 
 [![Cross-Platform Compatibility](https://apitools.dev/img/badges/os-badges.svg)](https://github.com/APIDevTools/swagger-methods/actions)
@@ -12,28 +12,26 @@ Swagger Methods
 [![License](https://img.shields.io/npm/l/@apidevtools/swagger-methods.svg)](LICENSE)
 [![Buy us a tree](https://img.shields.io/badge/Treeware-%F0%9F%8C%B3-lightgreen)](https://plant.treeware.earth/APIDevTools/swagger-methods)
 
-This is an array of lower-case HTTP method names that are supported by the [Swagger 2.0 spec](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md).
+This is an array of lower-case HTTP method names that are supported by the
+[Swagger 2.0 spec](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md).
 
-This module is [tested](test/index.spec.js) against the [Swagger 2.0 schema](https://www.npmjs.com/package/swagger-schema-official)
+This module is [tested](test/index.spec.js) against the
+[Swagger 2.0 schema](https://www.npmjs.com/package/swagger-schema-official)
 
+## Installation
 
-Installation
---------------------------
 Install using [npm](https://docs.npmjs.com/about-npm/):
 
 ```bash
 npm install @apidevtools/swagger-methods
 ```
 
-
-
-Usage
---------------------------
+## Usage
 
 ```javascript
-var methods = require('@apidevtools/swagger-methods');
+var methods = require("@apidevtools/swagger-methods");
 
-methods.forEach(function(method) {
+methods.forEach(function (method) {
   console.log(method);
 });
 
@@ -46,36 +44,36 @@ methods.forEach(function(method) {
 // patch
 ```
 
+## Contributing
 
-
-Contributing
---------------------------
-I welcome any contributions, enhancements, and bug-fixes.  [Open an issue](https://github.com/APIDevTools/swagger-methods/issues) on GitHub and [submit a pull request](https://github.com/APIDevTools/swagger-methods/pulls).
+I welcome any contributions, enhancements, and bug-fixes.
+[Open an issue](https://github.com/APIDevTools/swagger-methods/issues) on GitHub
+and
+[submit a pull request](https://github.com/APIDevTools/swagger-methods/pulls).
 
 #### Building/Testing
+
 To build/test the project locally on your computer:
 
 1. **Clone this repo**<br>
-`git clone https://github.com/APIDevTools/swagger-methods.git`
+   `git clone https://github.com/APIDevTools/swagger-methods.git`
 
-2. **Install dev dependencies**<br>
-`npm install`
+2. **Install dev dependencies**<br> `npm install`
 
-3. **Run the unit tests**<br>
-`npm test`
+3. **Run the unit tests**<br> `npm test`
 
+## License
 
-
-License
---------------------------
 [MIT license](LICENSE). Use it however you want.
 
-This package is [Treeware](http://treeware.earth). If you use it in production, then we ask that you [**buy the world a tree**](https://plant.treeware.earth/APIDevTools/swagger-methods) to thank us for our work. By contributing to the Treeware forest you’ll be creating employment for local families and restoring wildlife habitats.
+This package is [Treeware](http://treeware.earth). If you use it in production,
+then we ask that you
+[**buy the world a tree**](https://plant.treeware.earth/APIDevTools/swagger-methods)
+to thank us for our work. By contributing to the Treeware forest you’ll be
+creating employment for local families and restoring wildlife habitats.
 
+## Big Thanks To
 
-
-Big Thanks To
---------------------------
 Thanks to these awesome companies for their support of Open Source developers ❤
 
 [![Travis CI](https://jstools.dev/img/badges/travis-ci.svg)](https://travis-ci.com)

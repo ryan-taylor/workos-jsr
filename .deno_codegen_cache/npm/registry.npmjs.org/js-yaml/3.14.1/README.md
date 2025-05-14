@@ -1,26 +1,21 @@
-JS-YAML - YAML 1.2 parser / writer for JavaScript
-=================================================
+# JS-YAML - YAML 1.2 parser / writer for JavaScript
 
 [![Build Status](https://travis-ci.org/nodeca/js-yaml.svg?branch=master)](https://travis-ci.org/nodeca/js-yaml)
 [![NPM version](https://img.shields.io/npm/v/js-yaml.svg)](https://www.npmjs.org/package/js-yaml)
 
-__[Online Demo](http://nodeca.github.com/js-yaml/)__
-
+**[Online Demo](http://nodeca.github.com/js-yaml/)**
 
 This is an implementation of [YAML](http://yaml.org/), a human-friendly data
 serialization language. Started as [PyYAML](http://pyyaml.org/) port, it was
 completely rewritten from scratch. Now it's very fast, and supports 1.2 spec.
 
-
-Installation
-------------
+## Installation
 
 ### YAML module for node.js
 
 ```
 npm install js-yaml
 ```
-
 
 ### CLI executable
 
@@ -45,66 +40,63 @@ Optional arguments:
   -t, --trace    Show stack trace on error
 ```
 
-
 ### Bundled YAML library for browsers
 
-``` html
+```html
 <!-- esprima required only for !!js/function -->
 <script src="esprima.js"></script>
 <script src="js-yaml.min.js"></script>
 <script type="text/javascript">
-var doc = jsyaml.load('greeting: hello\nname: world');
+  var doc = jsyaml.load("greeting: hello\nname: world");
 </script>
 ```
 
-Browser support was done mostly for the online demo. If you find any errors - feel
-free to send pull requests with fixes. Also note, that IE and other old browsers
-needs [es5-shims](https://github.com/kriskowal/es5-shim) to operate.
+Browser support was done mostly for the online demo. If you find any errors -
+feel free to send pull requests with fixes. Also note, that IE and other old
+browsers needs [es5-shims](https://github.com/kriskowal/es5-shim) to operate.
 
 Notes:
 
 1. We have no resources to support browserified version. Don't expect it to be
    well tested. Don't expect fast fixes if something goes wrong there.
-2. `!!js/function` in browser bundle will not work by default. If you really need
-   it - load `esprima` parser first (via amd or directly).
+2. `!!js/function` in browser bundle will not work by default. If you really
+   need it - load `esprima` parser first (via amd or directly).
 3. `!!bin` in browser will return `Array`, because browsers do not support
    node.js `Buffer` and adding Buffer shims is completely useless on practice.
 
-
-API
----
+## API
 
 Here we cover the most 'useful' methods. If you need advanced details (creating
 your own tags), see [wiki](https://github.com/nodeca/js-yaml/wiki) and
 [examples](https://github.com/nodeca/js-yaml/tree/master/examples) for more
 info.
 
-``` javascript
-const yaml = require('js-yaml');
-const fs   = require('fs');
+```javascript
+const yaml = require("js-yaml");
+const fs = require("fs");
 
 // Get document, or throw exception on error
 try {
-  const doc = yaml.safeLoad(fs.readFileSync('/home/ixti/example.yml', 'utf8'));
+  const doc = yaml.safeLoad(fs.readFileSync("/home/ixti/example.yml", "utf8"));
   console.log(doc);
 } catch (e) {
   console.log(e);
 }
 ```
 
-
 ### safeLoad (string [ , options ])
 
-**Recommended loading way.** Parses `string` as single YAML document. Returns either a
-plain object, a string or `undefined`, or throws `YAMLException` on error. By default, does
-not support regexps, functions and undefined. This method is safe for untrusted data.
+**Recommended loading way.** Parses `string` as single YAML document. Returns
+either a plain object, a string or `undefined`, or throws `YAMLException` on
+error. By default, does not support regexps, functions and undefined. This
+method is safe for untrusted data.
 
 options:
 
 - `filename` _(default: null)_ - string to be used as a file path in
   error/warning messages.
-- `onWarning` _(default: null)_ - function to call on warning messages.
-  Loader will call this function with an instance of `YAMLException` for each warning.
+- `onWarning` _(default: null)_ - function to call on warning messages. Loader
+  will call this function with an instance of `YAMLException` for each warning.
 - `schema` _(default: `DEFAULT_SAFE_SCHEMA`)_ - specifies a schema to use.
   - `FAILSAFE_SCHEMA` - only strings, arrays and plain objects:
     http://www.yaml.org/spec/1.2/spec.html#id2802346
@@ -113,19 +105,19 @@ options:
   - `CORE_SCHEMA` - same as `JSON_SCHEMA`:
     http://www.yaml.org/spec/1.2/spec.html#id2804923
   - `DEFAULT_SAFE_SCHEMA` - all supported YAML types, without unsafe ones
-    (`!!js/undefined`, `!!js/regexp` and `!!js/function`):
-    http://yaml.org/type/
+    (`!!js/undefined`, `!!js/regexp` and `!!js/function`): http://yaml.org/type/
   - `DEFAULT_FULL_SCHEMA` - all supported YAML types.
-- `json` _(default: false)_ - compatibility with JSON.parse behaviour. If true, then duplicate keys in a mapping will override values rather than throwing an error.
+- `json` _(default: false)_ - compatibility with JSON.parse behaviour. If true,
+  then duplicate keys in a mapping will override values rather than throwing an
+  error.
 
 NOTE: This function **does not** understand multi-document sources, it throws
 exception on those.
 
 NOTE: JS-YAML **does not** support schema-specific tag resolution restrictions.
-So, the JSON schema is not as strictly defined in the YAML specification.
-It allows numbers in any notation, use `Null` and `NULL` as `null`, etc.
-The core schema also has no such restrictions. It allows binary notation for integers.
-
+So, the JSON schema is not as strictly defined in the YAML specification. It
+allows numbers in any notation, use `Null` and `NULL` as `null`, etc. The core
+schema also has no such restrictions. It allows binary notation for integers.
 
 ### load (string [ , options ])
 
@@ -134,32 +126,30 @@ The core schema also has no such restrictions. It allows binary notation for int
 `!!js/function`, `!!js/regexp` and `!!js/undefined`. For untrusted sources, you
 must additionally validate object structure to avoid injections:
 
-``` javascript
-const untrusted_code = '"toString": !<tag:yaml.org,2002:js/function> "function (){very_evil_thing();}"';
+```javascript
+const untrusted_code =
+  '"toString": !<tag:yaml.org,2002:js/function> "function (){very_evil_thing();}"';
 
 // I'm just converting that string, what could possibly go wrong?
-require('js-yaml').load(untrusted_code) + ''
+require("js-yaml").load(untrusted_code) + "";
 ```
-
 
 ### safeLoadAll (string [, iterator] [, options ])
 
-Same as `safeLoad()`, but understands multi-document sources. Applies
-`iterator` to each document if specified, or returns array of documents.
+Same as `safeLoad()`, but understands multi-document sources. Applies `iterator`
+to each document if specified, or returns array of documents.
 
-``` javascript
-const yaml = require('js-yaml');
+```javascript
+const yaml = require("js-yaml");
 
 yaml.safeLoadAll(data, function (doc) {
   console.log(doc);
 });
 ```
 
-
 ### loadAll (string [, iterator] [ , options ])
 
 Same as `safeLoadAll()` but uses `DEFAULT_FULL_SCHEMA` by default.
-
 
 ### safeDump (object [ , options ])
 
@@ -170,9 +160,10 @@ disable exceptions by setting the `skipInvalid` option to `true`.
 options:
 
 - `indent` _(default: 2)_ - indentation width to use (in spaces).
-- `noArrayIndent` _(default: false)_ - when true, will not add an indentation level to array elements
-- `skipInvalid` _(default: false)_ - do not throw on invalid types (like function
-  in the safe schema) and skip pairs and single values with such types.
+- `noArrayIndent` _(default: false)_ - when true, will not add an indentation
+  level to array elements
+- `skipInvalid` _(default: false)_ - do not throw on invalid types (like
+  function in the safe schema) and skip pairs and single values with such types.
 - `flowLevel` (default: -1) - specifies level of nesting, when to switch from
   block to flow style for collections. -1 means block style everwhere
 - `styles` - "tag" => "style" map. Each tag may have own set of styles.
@@ -180,16 +171,21 @@ options:
 - `sortKeys` _(default: `false`)_ - if `true`, sort keys when dumping YAML. If a
   function, use the function to sort the keys.
 - `lineWidth` _(default: `80`)_ - set max line width.
-- `noRefs` _(default: `false`)_ - if `true`, don't convert duplicate objects into references
-- `noCompatMode` _(default: `false`)_ - if `true` don't try to be compatible with older
-  yaml versions. Currently: don't quote "yes", "no" and so on, as required for YAML 1.1
-- `condenseFlow` _(default: `false`)_ - if `true` flow sequences will be condensed, omitting the space between `a, b`. Eg. `'[a,b]'`, and omitting the space between `key: value` and quoting the key. Eg. `'{"a":b}'` Can be useful when using yaml for pretty URL query params as spaces are %-encoded.
+- `noRefs` _(default: `false`)_ - if `true`, don't convert duplicate objects
+  into references
+- `noCompatMode` _(default: `false`)_ - if `true` don't try to be compatible
+  with older yaml versions. Currently: don't quote "yes", "no" and so on, as
+  required for YAML 1.1
+- `condenseFlow` _(default: `false`)_ - if `true` flow sequences will be
+  condensed, omitting the space between `a, b`. Eg. `'[a,b]'`, and omitting the
+  space between `key: value` and quoting the key. Eg. `'{"a":b}'` Can be useful
+  when using yaml for pretty URL query params as spaces are %-encoded.
 
-The following table show availlable styles (e.g. "canonical",
-"binary"...) available for each tag (.e.g. !!null, !!int ...). Yaml
-output is shown on the right side after `=>` (default setting) or `->`:
+The following table show availlable styles (e.g. "canonical", "binary"...)
+available for each tag (.e.g. !!null, !!int ...). Yaml output is shown on the
+right side after `=>` (default setting) or `->`:
 
-``` none
+```none
 !!null
   "canonical"   -> "~"
   "lowercase"   => "null"
@@ -215,12 +211,12 @@ output is shown on the right side after `=>` (default setting) or `->`:
 
 Example:
 
-``` javascript
-safeDump (object, {
-  'styles': {
-    '!!null': 'canonical' // dump null as ~
+```javascript
+safeDump(object, {
+  "styles": {
+    "!!null": "canonical", // dump null as ~
   },
-  'sortKeys': true        // sort object keys
+  "sortKeys": true, // sort object keys
 });
 ```
 
@@ -228,9 +224,7 @@ safeDump (object, {
 
 Same as `safeDump()` but without limits (uses `DEFAULT_FULL_SCHEMA` by default).
 
-
-Supported YAML types
---------------------
+## Supported YAML types
 
 The list of standard YAML tags and corresponding JavaScipt types. See also
 [YAML tag discussion](http://pyyaml.org/wiki/YAMLTagDiscussion) and
@@ -259,30 +253,29 @@ The list of standard YAML tags and corresponding JavaScipt types. See also
 !!js/function 'function () {...}'   # Function
 ```
 
-Caveats
--------
+## Caveats
 
-Note, that you use arrays or objects as key in JS-YAML. JS does not allow objects
-or arrays as keys, and stringifies (by calling `toString()` method) them at the
-moment of adding them.
+Note, that you use arrays or objects as key in JS-YAML. JS does not allow
+objects or arrays as keys, and stringifies (by calling `toString()` method) them
+at the moment of adding them.
 
-``` yaml
+```yaml
 ---
-? [ foo, bar ]
+? [foo, bar]
 : - baz
 ? { foo: bar }
 : - baz
   - baz
 ```
 
-``` javascript
+```javascript
 { "foo,bar": ["baz"], "[object Object]": ["baz", "baz"] }
 ```
 
 Also, reading of properties on implicit block mapping keys is not supported yet.
 So, the following YAML document cannot be loaded.
 
-``` yaml
+```yaml
 &anchor foo:
   foo: bar
   *anchor: duplicate key
@@ -290,10 +283,13 @@ So, the following YAML document cannot be loaded.
   *anchor: duplicate key
 ```
 
-
-js-yaml for enterprise
-----------------------
+## js-yaml for enterprise
 
 Available as part of the Tidelift Subscription
 
-The maintainers of js-yaml and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open source dependencies you use to build your applications. Save time, reduce risk, and improve code health, while paying the maintainers of the exact dependencies you use. [Learn more.](https://tidelift.com/subscription/pkg/npm-js-yaml?utm_source=npm-js-yaml&utm_medium=referral&utm_campaign=enterprise&utm_term=repo)
+The maintainers of js-yaml and thousands of other packages are working with
+Tidelift to deliver commercial support and maintenance for the open source
+dependencies you use to build your applications. Save time, reduce risk, and
+improve code health, while paying the maintainers of the exact dependencies you
+use.
+[Learn more.](https://tidelift.com/subscription/pkg/npm-js-yaml?utm_source=npm-js-yaml&utm_medium=referral&utm_campaign=enterprise&utm_term=repo)

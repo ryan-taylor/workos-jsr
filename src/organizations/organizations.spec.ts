@@ -8,8 +8,8 @@ import {
   fetchSearchParams,
   fetchURL,
   resetMockFetch,
-} from "../common/utils/test-utils.ts.ts";
-import { WorkOS } from "../workos.ts.ts";
+} from "../common/utils/test-utils.ts";
+import { WorkOS } from "../workos.ts";
 import clearStripeCustomerId from "./fixtures/clear-stripe-customer-id.json.ts" with {
   type: "json",
 };
@@ -37,7 +37,7 @@ import setStripeCustomerId from "./fixtures/set-stripe-customer-id.json.ts" with
 import setStripeCustomerIdDisabled from "./fixtures/set-stripe-customer-id-disabled.json.ts" with {
   type: "json",
 };
-import { DomainDataState } from "./interfaces/index.ts.ts";
+import { DomainDataState } from "./interfaces/index.ts";
 
 const workos = new WorkOS("sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU");
 

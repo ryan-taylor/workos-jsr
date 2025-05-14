@@ -1,12 +1,12 @@
-'use strict';
-const parser = require('postcss-selector-parser');
-const canUnquote = require('./lib/canUnquote.js');
+"use strict";
+const parser = require("postcss-selector-parser");
+const canUnquote = require("./lib/canUnquote.js");
 
 const pseudoElements = new Set([
-  '::before',
-  '::after',
-  '::first-letter',
-  '::first-line',
+  "::before",
+  "::after",
+  "::first-letter",
+  "::first-line",
 ]);
 
 /**
@@ -17,7 +17,7 @@ function attribute(selector) {
   if (selector.value) {
     if (selector.raws.value) {
       // Join selectors that are split over new lines
-      selector.raws.value = selector.raws.value.replace(/\\\n/g, '').trim();
+      selector.raws.value = selector.raws.value.replace(/\\\n/g, "").trim();
     }
     if (canUnquote(selector.value)) {
       selector.quoteMark = null;
@@ -30,35 +30,35 @@ function attribute(selector) {
     }
   }
 
-  selector.rawSpaceBefore = '';
-  selector.rawSpaceAfter = '';
-  selector.spaces.attribute = { before: '', after: '' };
-  selector.spaces.operator = { before: '', after: '' };
+  selector.rawSpaceBefore = "";
+  selector.rawSpaceAfter = "";
+  selector.spaces.attribute = { before: "", after: "" };
+  selector.spaces.operator = { before: "", after: "" };
   selector.spaces.value = {
-    before: '',
-    after: selector.insensitive ? ' ' : '',
+    before: "",
+    after: selector.insensitive ? " " : "",
   };
 
   if (selector.raws.spaces) {
     selector.raws.spaces.attribute = {
-      before: '',
-      after: '',
+      before: "",
+      after: "",
     };
 
     selector.raws.spaces.operator = {
-      before: '',
-      after: '',
+      before: "",
+      after: "",
     };
 
     selector.raws.spaces.value = {
-      before: '',
-      after: selector.insensitive ? ' ' : '',
+      before: "",
+      after: selector.insensitive ? " " : "",
     };
 
     if (selector.insensitive) {
       selector.raws.spaces.insensitive = {
-        before: '',
-        after: '',
+        before: "",
+        after: "",
       };
     }
   }
@@ -72,18 +72,18 @@ function attribute(selector) {
  */
 function combinator(selector) {
   const value = selector.value.trim();
-  selector.spaces.before = '';
-  selector.spaces.after = '';
-  selector.rawSpaceBefore = '';
-  selector.rawSpaceAfter = '';
-  selector.value = value.length ? value : ' ';
+  selector.spaces.before = "";
+  selector.spaces.after = "";
+  selector.rawSpaceBefore = "";
+  selector.rawSpaceAfter = "";
+  selector.value = value.length ? value : " ";
 }
 
 const pseudoReplacements = new Map([
-  [':nth-child', ':first-child'],
-  [':nth-of-type', ':first-of-type'],
-  [':nth-last-child', ':last-child'],
-  [':nth-last-of-type', ':last-of-type'],
+  [":nth-child", ":first-child"],
+  [":nth-of-type", ":first-of-type"],
+  [":nth-last-child", ":last-child"],
+  [":nth-last-of-type", ":last-of-type"],
 ]);
 
 /**
@@ -98,16 +98,16 @@ function pseudo(selector) {
     const one = first.at(0);
 
     if (first.length === 1) {
-      if (one.value === '1') {
+      if (one.value === "1") {
         selector.replaceWith(
           parser.pseudo({
             value: /** @type {string} */ (pseudoReplacements.get(value)),
-          })
+          }),
         );
       }
 
-      if (one.value && one.value.toLowerCase() === 'even') {
-        one.value = '2n';
+      if (one.value && one.value.toLowerCase() === "even") {
+        one.value = "2n";
       }
     }
 
@@ -117,11 +117,11 @@ function pseudo(selector) {
 
       if (
         one.value &&
-        one.value.toLowerCase() === '2n' &&
-        two.value === '+' &&
-        three.value === '1'
+        one.value.toLowerCase() === "2n" &&
+        two.value === "+" &&
+        three.value === "1"
       ) {
-        one.value = 'odd';
+        one.value = "odd";
 
         two.remove();
         three.remove();
@@ -132,7 +132,7 @@ function pseudo(selector) {
   }
 
   selector.walk((child) => {
-    if (child.type === 'selector' && child.parent) {
+    if (child.type === "selector" && child.parent) {
       const uniques = new Set();
       child.parent.each((sibling) => {
         const siblingStr = String(sibling);
@@ -152,8 +152,8 @@ function pseudo(selector) {
 }
 
 const tagReplacements = new Map([
-  ['from', '0%'],
-  ['100%', 'to'],
+  ["from", "0%"],
+  ["100%", "to"],
 ]);
 
 /**
@@ -182,19 +182,19 @@ function tag(selector) {
 function universal(selector) {
   const next = selector.next();
 
-  if (next && next.type !== 'combinator') {
+  if (next && next.type !== "combinator") {
     selector.remove();
   }
 }
 
 const reducers = new Map(
   /** @type {[string, ((selector: parser.Node) => void)][]}*/ ([
-    ['attribute', attribute],
-    ['combinator', combinator],
-    ['pseudo', pseudo],
-    ['tag', tag],
-    ['universal', universal],
-  ])
+    ["attribute", attribute],
+    ["combinator", combinator],
+    ["pseudo", pseudo],
+    ["tag", tag],
+    ["universal", universal],
+  ]),
 );
 
 /**
@@ -203,7 +203,7 @@ const reducers = new Map(
  */
 function pluginCreator() {
   return {
-    postcssPlugin: 'postcss-minify-selectors',
+    postcssPlugin: "postcss-minify-selectors",
 
     OnceExit(css) {
       const cache = new Map();
@@ -212,7 +212,7 @@ function pluginCreator() {
 
         selectors.walk((sel) => {
           // Trim whitespace around the value
-          sel.spaces.before = sel.spaces.after = '';
+          sel.spaces.before = sel.spaces.after = "";
           const reducer = reducers.get(sel.type);
           if (reducer !== undefined) {
             reducer(sel);
@@ -222,9 +222,9 @@ function pluginCreator() {
           const toString = String(sel);
 
           if (
-            sel.type === 'selector' &&
+            sel.type === "selector" &&
             sel.parent &&
-            sel.parent.type !== 'pseudo'
+            sel.parent.type !== "pseudo"
           ) {
             if (!uniqueSelectors.has(toString)) {
               uniqueSelectors.add(toString);
@@ -244,7 +244,7 @@ function pluginCreator() {
 
         // If the selector ends with a ':' it is likely a part of a custom mixin,
         // so just pass through.
-        if (selector[selector.length - 1] === ':') {
+        if (selector[selector.length - 1] === ":") {
           return;
         }
 

@@ -1,12 +1,12 @@
-'use strict';
-const parser = require('postcss-selector-parser');
-const exists = require('../exists');
-const isMixin = require('../isMixin');
-const BasePlugin = require('../plugin');
-const { IE_5_5, IE_6 } = require('../dictionary/browsers');
-const { SELECTOR } = require('../dictionary/identifiers');
-const { RULE } = require('../dictionary/postcss');
-const { HTML } = require('../dictionary/tags');
+"use strict";
+const parser = require("postcss-selector-parser");
+const exists = require("../exists");
+const isMixin = require("../isMixin");
+const BasePlugin = require("../plugin");
+const { IE_5_5, IE_6 } = require("../dictionary/browsers");
+const { SELECTOR } = require("../dictionary/identifiers");
+const { RULE } = require("../dictionary/postcss");
+const { HTML } = require("../dictionary/tags");
 
 module.exports = class StarHtml extends BasePlugin {
   /** @param {import('postcss').Result=} result */
@@ -33,10 +33,10 @@ module.exports = class StarHtml extends BasePlugin {
     return (selectors) => {
       selectors.each((selector) => {
         if (
-          exists(selector, 0, '*') &&
-          exists(selector, 1, ' ') &&
+          exists(selector, 0, "*") &&
+          exists(selector, 1, " ") &&
           exists(selector, 2, HTML) &&
-          exists(selector, 3, ' ') &&
+          exists(selector, 3, " ") &&
           selector.at(4)
         ) {
           this.push(rule, {

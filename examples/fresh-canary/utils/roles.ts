@@ -1,5 +1,5 @@
 // Roles utility functions for interacting with WorkOS roles API
-import { workos } from './workos.ts';
+import { workos } from "./workos.ts";
 
 export interface Role {
   id: string;
@@ -7,13 +7,13 @@ export interface Role {
   slug: string;
   description: string | null;
   permissions: string[];
-  type: 'EnvironmentRole' | 'OrganizationRole';
+  type: "EnvironmentRole" | "OrganizationRole";
   createdAt: string;
   updatedAt: string;
 }
 
 export interface RoleList {
-  object: 'list';
+  object: "list";
   data: Role[];
 }
 
@@ -52,7 +52,7 @@ export function initRoles() {
     listRoles: async () => {
       return await workos.roles.list();
     },
-    
+
     /**
      * Create a new role
      *
@@ -62,7 +62,7 @@ export function initRoles() {
     createRole: async (params: RoleCreateParams) => {
       return await workos.roles.create(params);
     },
-    
+
     /**
      * Get a role by ID
      *
@@ -72,7 +72,7 @@ export function initRoles() {
     getRole: async (id: string) => {
       return await workos.roles.get(id);
     },
-    
+
     /**
      * Update a role
      *
@@ -83,7 +83,7 @@ export function initRoles() {
     updateRole: async (id: string, params: RoleUpdateParams) => {
       return await workos.roles.update(id, params);
     },
-    
+
     /**
      * Assign a role to a user
      *
@@ -92,6 +92,6 @@ export function initRoles() {
      */
     assignRole: async (params: RoleAssignmentParams) => {
       return await workos.roles.assign(params);
-    }
+    },
   };
 }

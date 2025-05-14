@@ -5,7 +5,7 @@ on:
   pull_request: {}
   # scheduled workflow trigger for canary specs
   schedule:
-    - cron: '0 2 * * 0'  # Run at 02:00 UTC every Sunday
+    - cron: "0 2 * * 0" # Run at 02:00 UTC every Sunday
 
 jobs:
   coverage:
@@ -15,13 +15,13 @@ jobs:
       - uses: actions/checkout@v4.2.2
       - uses: denoland/setup-deno@v1
         with: { deno-version: "2.x" }
-      
+
       - name: Run Tests with Coverage
         run: deno task coverage
-      
+
       - name: Check Coverage Threshold (80%)
         run: deno run -A scripts/coverage-threshold.ts 80
-      
+
       - name: Upload Coverage Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -67,11 +67,15 @@ jobs:
         run: deno task generate:api
         env:
           CANARY_SPECS: ${{ github.event_name == 'schedule' && 'true' || 'false' }}
+          
+      # Run Deno check on runtime test output files
+      - name: Check runtime test output files
+        run: deno check tests_deno/codegen/_runtime_test_output/**/*.ts
 
       # Validate OpenAPI Spec Checksums
       - name: Validate OpenAPI Spec Checksums
         run: deno run -A scripts/ci/validate-spec-checksums.ts
-        
+
       # Upload generated files as an artifact for other jobs
       - name: Upload generated code as artifact
         uses: actions/upload-artifact@v4
@@ -79,7 +83,7 @@ jobs:
           name: generated-code
           path: packages/workos_sdk/generated
           retention-days: 1
- 
+
   lint_unit:
     name: Lint 🧹 & Test 🧪
     needs: codegen
@@ -88,20 +92,20 @@ jobs:
       - uses: actions/checkout@v4.2.2
       - uses: denoland/setup-deno@v1
         with: { deno-version: "2.x" }
-      
+
       # Download generated code from previous job
       - name: Download generated code
         uses: actions/download-artifact@v4
         with:
           name: generated-code
           path: packages/workos_sdk/generated
-      
+
       - name: Deno Lint
         run: deno lint
-      
+
       - name: Detect npm imports
         run: deno run -A scripts/check-no-npm-imports.ts
-      
+
       - name: Check for npm dependencies
         run: |
           if deno info --json | jq -e '.modules[] | select(.specifier | startswith("npm:"))' > /dev/null; then
@@ -109,7 +113,7 @@ jobs:
             deno info --json | jq '.modules[] | select(.specifier | startswith("npm:")) | .specifier'
             exit 1
           fi
-      
+
       - name: Unit & Integration Tests
         run: deno test -A
 
@@ -121,13 +125,13 @@ jobs:
       - uses: actions/checkout@v4.2.2
       - uses: denoland/setup-deno@v1
         with: { deno-version: "2.x" }
-      
+
       # Download generated code from previous job
       - name: Download generated code
         uses: actions/download-artifact@v4
         with:
           name: generated-code
           path: packages/workos_sdk/generated
-      
+
       - name: Deno Type-Check
         run: deno check $(git ls-files '*.ts')

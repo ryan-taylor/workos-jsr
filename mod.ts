@@ -156,40 +156,110 @@ export type {
 } from "./packages/workos_sdk/src/common/interfaces.ts";
 export type { SessionOptions } from "./packages/workos_sdk/src/common/iron-session/fresh-session-provider.ts";
 
-// Additional exports from individual modules - comment out for now since these interfaces don't exist
-// export * from "./packages/workos_sdk/src/actions/interfaces/index.ts";
-
-// Replace wildcard with explicit exports for audit-logs
+// Explicit exports for audit-logs
 export type {
   AuditLogEvent,
   AuditLogListEventsOptions,
   CreateEventOptions,
 } from "./packages/workos_sdk/src/audit-logs/interfaces/index.ts";
 
-export * from "./packages/workos_sdk/src/directory-sync/interfaces/index.ts";
+// Explicit exports for directory-sync
+export type {
+  Directory,
+  DirectoryGroup,
+  DirectoryUser,
+  ListDirectoriesOptions,
+  ListDirectoryGroupsOptions,
+  ListDirectoryUsersOptions,
+} from "./packages/workos_sdk/src/directory-sync/interfaces/index.ts";
 
-// Replace wildcard with explicit exports for events
+// Explicit exports for events
 export type {
   Event,
   EventsListOptions,
 } from "./packages/workos_sdk/src/events/interfaces/index.ts";
 
+// Explicitly re-export all interfaces from FGA module
 export * from "./packages/workos_sdk/src/fga/interfaces/index.ts";
+
+// Explicitly re-export all interfaces from organization-domains module
 export * from "./packages/workos_sdk/src/organization-domains/interfaces/index.ts";
-export * from "./packages/workos_sdk/src/organizations/interfaces/index.ts";
+
+// Explicit exports for organizations
+export type {
+  CreateOrganizationOptions,
+  ListOrganizationsOptions,
+  Organization,
+  UpdateOrganizationOptions,
+} from "./packages/workos_sdk/src/organizations/interfaces/index.ts";
+
+// Explicitly re-export all interfaces from passwordless module
 export * from "./packages/workos_sdk/src/passwordless/interfaces/index.ts";
-export * from "./packages/workos_sdk/src/portal/interfaces/index.ts";
-export * from "./packages/workos_sdk/src/sso/interfaces/index.ts";
+
+// Explicit exports for portal
+export type {
+  GenerateLinkOptions,
+} from "./packages/workos_sdk/src/portal/interfaces/index.ts";
+
+// Explicit exports for SSO
+export type {
+  Connection,
+  GetAuthorizationUrlOptions,
+  Profile,
+} from "./packages/workos_sdk/src/sso/interfaces/index.ts";
+
+// Explicitly re-export all interfaces from user-management module
 export * from "./packages/workos_sdk/src/user-management/interfaces/index.ts";
-// Remove vault interfaces since they don't exist
-// export * from "./packages/workos_sdk/src/vault/interfaces/index.ts";
+
+// Explicit exports for vault
+export type {
+  CreateDataKeyOptions,
+  CreateObjectOptions,
+  DataKey,
+  DataKeyPair,
+  DecryptDataKeyOptions,
+  DeleteObjectOptions,
+  KeyContext,
+  ObjectDigest,
+  ObjectMetadata,
+  ObjectVersion,
+  ReadObjectOptions,
+  UpdateObjectOptions,
+  VaultObject,
+} from "./packages/workos_sdk/src/vault/interfaces.ts";
+
+// Explicit exports for webhooks
+export type {
+  VerifyOptions,
+  WebhookEvent,
+} from "./packages/workos_sdk/src/webhooks/interfaces/index.ts";
 
 // Export serializers that might be useful for consumers
+// Directory Sync
 export {
   deserializeDirectory,
+  deserializeDirectoryGroup,
+  deserializeDirectoryUser,
 } from "./packages/workos_sdk/src/directory-sync/serializers/index.ts";
 
+// SSO
 export {
   deserializeConnection,
   deserializeProfile,
 } from "./packages/workos_sdk/src/sso/serializers/index.ts";
+
+// MFA
+export {
+  deserializeChallenge,
+  deserializeFactor,
+} from "./packages/workos_sdk/src/mfa/serializers/index.ts";
+
+// Webhooks
+export {
+  deserializeWebhookEvent,
+} from "./packages/workos_sdk/src/webhooks/serializers/webhook-event.serializer.ts";
+
+// Vault
+export {
+  deserializeObject,
+} from "./packages/workos_sdk/src/vault/serializers/vault-object.serializer.ts";

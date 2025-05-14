@@ -1,0 +1,29 @@
+name: Upstream Sync
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Weekly on Sunday at 00:00 UTC
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4.2.2
+        with:
+          ref: main
+          persist-credentials: true
+
+      - name: Add upstream remote
+        run: git remote add upstream https://github.com/workos-inc/workos-node.git || true
+
+      - name: Fetch upstream
+        run: git fetch upstream
+
+      - name: Merge upstream/main
+        run: |
+          git checkout main
+          git merge --ff-only upstream/main
+
+      - name: Push changes
+        run: git push origin main 

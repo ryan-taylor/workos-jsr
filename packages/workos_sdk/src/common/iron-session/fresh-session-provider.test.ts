@@ -1,4 +1,4 @@
-import { assertEquals, assertExists, assertNotEquals } from "@std/assert";
+import { assertEquals, assertExists, assertNotEquals } from "jsr:@std/assert@^1";
 import {
   FreshSessionProvider,
   type SessionOptions,

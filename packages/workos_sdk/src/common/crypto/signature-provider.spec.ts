@@ -6,7 +6,7 @@ import {
   it,
 } from "../../../tests/deno-test-setup.ts";
 
-import { crypto } from "@std/crypto";
+import { crypto } from "jsr:@std/crypto@^1";
 import { SubtleCryptoProvider } from "./subtle-crypto-provider.ts";
 import { SignatureProvider } from "./signature-provider.ts";
 

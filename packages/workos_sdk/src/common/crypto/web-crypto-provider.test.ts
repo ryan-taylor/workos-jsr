@@ -1,4 +1,4 @@
-import { assertEquals, assertThrows } from "@std/assert";
+import { assertEquals, assertThrows } from "jsr:@std/assert@^1";
 import { WebCryptoProvider } from "./web-crypto-provider.ts";
 
 Deno.test("WebCryptoProvider", async (t) => {

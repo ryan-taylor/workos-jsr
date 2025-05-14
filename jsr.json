@@ -26,7 +26,16 @@
     "test": "deno test -A"
   },
   "dependencies": {
+    "@panva/jose": "^4.0.0",
     "@stackql/deno-openapi-dereferencer": "^0.1.0",
+    "@std/assert": "^1.0.0",
+    "@std/cli": "^1.0.0",
+    "@std/crypto": "^1.0.5",
+    "@std/flags": "^1.0.0",
+    "@std/fs": "^1.0.0",
+    "@std/http": "^1.0.16",
+    "@std/path": "^1.0.0",
+    "@std/testing": "^1.0.12",
     "deno_ast": "^1.0.0"
   }
 }

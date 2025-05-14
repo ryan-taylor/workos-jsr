@@ -96,7 +96,7 @@ async function findTestFiles(directory: string): Promise<string[]> {
         }
       } else if (
         entry.isFile &&
-        (path.endsWith(".test.ts") || path.endsWith(".spec.ts"))
+        path.endsWith(".test.ts")
       ) {
         testFiles.push(path);
       }
@@ -213,7 +213,7 @@ async function runTestFile(
   const command = new Deno.Command("deno", {
     args: [
       "test",
-      "--allow-all",
+      "-A", // Full permissions (same as --allow-all)
       "--no-check",
       testFile,
     ],

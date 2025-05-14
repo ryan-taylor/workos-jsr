@@ -17,7 +17,7 @@ jobs:
         with: { deno-version: "2.x" }
 
       - name: Run Tests with Coverage
-        run: deno task coverage
+        run: deno test -A tests_deno/**/*.test.ts --coverage=cov_profile && deno coverage cov_profile --lcov > coverage.lcov
 
       - name: Check Coverage Threshold (80%)
         run: deno run -A scripts/coverage-threshold.ts 80
@@ -110,7 +110,7 @@ jobs:
         run: deno cache mod.ts
 
       - name: Unit & Integration Tests
-        run: deno task test
+        run: deno test -A tests_deno/**/*.test.ts
 
   type_check:
     name: Type Check 🔍

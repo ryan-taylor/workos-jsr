@@ -26,7 +26,9 @@ export function deserializeEventDirectory(data: unknown): EventDirectory {
   };
 }
 
-export function deserializeDeletedEventDirectory(data: unknown): Omit<EventDirectory, "domains" | "externalKey"> {
+export function deserializeDeletedEventDirectory(
+  data: unknown,
+): Omit<EventDirectory, "domains" | "externalKey"> {
   const record = data as Record<string, unknown>;
   return {
     id: record.id as string,

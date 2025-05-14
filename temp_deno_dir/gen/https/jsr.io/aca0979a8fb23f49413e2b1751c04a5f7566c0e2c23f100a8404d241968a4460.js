@@ -11,11 +11,13 @@ function code(open, close) {
   return {
     open: `\x1b[${open.join(";")}m`,
     close: `\x1b[${close}m`,
-    regexp: new RegExp(`\\x1b\\[${close}m`, "g")
+    regexp: new RegExp(`\\x1b\\[${close}m`, "g"),
   };
 }
 function run(str, code) {
-  return enabled ? `${code.open}${str.replace(code.regexp, code.open)}${code.close}` : str;
+  return enabled
+    ? `${code.open}${str.replace(code.regexp, code.open)}${code.close}`
+    : str;
 }
 /**
  * Sets the style of text to be printed to bold.
@@ -33,9 +35,12 @@ function run(str, code) {
  * console.log(bold("Hello, world!")); // Prints "Hello, world!" in bold
  * ```
  */ export function bold(str) {
-  return run(str, code([
-    1
-  ], 22));
+  return run(
+    str,
+    code([
+      1,
+    ], 22),
+  );
 }
 /**
  * Sets the color of text to be printed to red.
@@ -53,9 +58,12 @@ function run(str, code) {
  * console.log(red("Hello, world!")); // Prints "Hello, world!" in red
  * ```
  */ export function red(str) {
-  return run(str, code([
-    31
-  ], 39));
+  return run(
+    str,
+    code([
+      31,
+    ], 39),
+  );
 }
 /**
  * Sets the color of text to be printed to green.
@@ -73,9 +81,12 @@ function run(str, code) {
  * console.log(green("Hello, world!")); // Prints "Hello, world!" in green
  * ```
  */ export function green(str) {
-  return run(str, code([
-    32
-  ], 39));
+  return run(
+    str,
+    code([
+      32,
+    ], 39),
+  );
 }
 /**
  * Sets the color of text to be printed to yellow.
@@ -93,9 +104,12 @@ function run(str, code) {
  * console.log(yellow("Hello, world!")); // Prints "Hello, world!" in yellow
  * ```
  */ export function yellow(str) {
-  return run(str, code([
-    33
-  ], 39));
+  return run(
+    str,
+    code([
+      33,
+    ], 39),
+  );
 }
 /**
  * Sets the color of text to be printed to white.
@@ -111,9 +125,12 @@ function run(str, code) {
  * console.log(white("Hello, world!")); // Prints "Hello, world!" in white
  * ```
  */ export function white(str) {
-  return run(str, code([
-    37
-  ], 39));
+  return run(
+    str,
+    code([
+      37,
+    ], 39),
+  );
 }
 /**
  * Sets the color of text to be printed to gray.
@@ -145,9 +162,12 @@ function run(str, code) {
  * console.log(brightBlack("Hello, world!")); // Prints "Hello, world!" in bright-black
  * ```
  */ export function brightBlack(str) {
-  return run(str, code([
-    90
-  ], 39));
+  return run(
+    str,
+    code([
+      90,
+    ], 39),
+  );
 }
 /**
  * Sets the background color of text to be printed to red.
@@ -163,9 +183,12 @@ function run(str, code) {
  * console.log(bgRed("Hello, world!")); // Prints "Hello, world!" with red background
  * ```
  */ export function bgRed(str) {
-  return run(str, code([
-    41
-  ], 49));
+  return run(
+    str,
+    code([
+      41,
+    ], 49),
+  );
 }
 /**
  * Sets the background color of text to be printed to green.
@@ -181,15 +204,21 @@ function run(str, code) {
  * console.log(bgGreen("Hello, world!")); // Prints "Hello, world!" with green background
  * ```
  */ export function bgGreen(str) {
-  return run(str, code([
-    42
-  ], 49));
+  return run(
+    str,
+    code([
+      42,
+    ], 49),
+  );
 }
 // https://github.com/chalk/ansi-regex/blob/02fa893d619d3da85411acc8fd4e2eea0e95a9d9/index.js
-const ANSI_PATTERN = new RegExp([
-  "[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)",
-  "(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TXZcf-nq-uy=><~]))"
-].join("|"), "g");
+const ANSI_PATTERN = new RegExp(
+  [
+    "[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)",
+    "(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TXZcf-nq-uy=><~]))",
+  ].join("|"),
+  "g",
+);
 /**
  * Remove ANSI escape codes from the string.
  *

@@ -9,7 +9,7 @@ export function createThing(id: string, type: string): Thing {
   return {
     id,
     type,
-    attributes: {}
+    attributes: {},
   };
 }
 
@@ -18,7 +18,7 @@ export function addAttribute(thing: Thing, key: string, value: unknown): Thing {
     ...thing,
     attributes: {
       ...thing.attributes,
-      [key]: value
-    }
+      [key]: value,
+    },
   };
 }

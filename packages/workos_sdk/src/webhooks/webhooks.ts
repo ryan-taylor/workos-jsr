@@ -1,8 +1,5 @@
 import { deserializeWebhookEvent } from "./serializers/webhook-event.serializer.ts";
-import type {
-  VerifyOptions,
-  WebhookEvent,
-} from "./interfaces/index.ts";
+import type { VerifyOptions, WebhookEvent } from "./interfaces/index.ts";
 import { SignatureVerificationException } from "../common/exceptions/signature-verification.exception.ts";
 
 export class Webhooks {

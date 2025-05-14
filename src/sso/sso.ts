@@ -19,10 +19,7 @@ import {
   serializeListConnectionsOptions,
 } from "./serializers.ts";
 import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
-import type {
-  PaginationOptions,
-  UnknownRecord,
-} from "../common/interfaces.ts";
+import type { PaginationOptions, UnknownRecord } from "../common/interfaces.ts";
 
 const toQueryString = (options: Record<string, string | undefined>): string => {
   const searchParams = new URLSearchParams();

@@ -32,11 +32,14 @@ import { AssertionError } from "./assertion_error.ts";
     actualTypeStr = typeof actual;
   }
   if (expectedTypeStr === actualTypeStr) {
-    msg = `Expected object to be an instance of "${expectedTypeStr}"${msgSuffix}`;
+    msg =
+      `Expected object to be an instance of "${expectedTypeStr}"${msgSuffix}`;
   } else if (actualTypeStr === "function") {
-    msg = `Expected object to be an instance of "${expectedTypeStr}" but was not an instanced object${msgSuffix}`;
+    msg =
+      `Expected object to be an instance of "${expectedTypeStr}" but was not an instanced object${msgSuffix}`;
   } else {
-    msg = `Expected object to be an instance of "${expectedTypeStr}" but was "${actualTypeStr}"${msgSuffix}`;
+    msg =
+      `Expected object to be an instance of "${expectedTypeStr}" but was "${actualTypeStr}"${msgSuffix}`;
   }
   throw new AssertionError(msg);
 }

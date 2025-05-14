@@ -9,6 +9,6 @@ export function doSomething(): YetAnotherThing {
   return {
     id: "123",
     name: "Example",
-    value: 42
+    value: 42,
   };
 }

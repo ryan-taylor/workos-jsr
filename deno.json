@@ -40,11 +40,11 @@
       ]
     },
     "exclude": [
-        ".deno_codegen_cache/",
-        ".cache/",
-        "tests_deno/codegen/_runtime_test_output/**",
-        "tests_deno/codegen/_runtime_output/**",
-        "tests_deno/codegen/_runtime_strict_output/**"
+      ".deno_codegen_cache/",
+      ".cache/",
+      "tests_deno/codegen/_runtime_test_output/**",
+      "tests_deno/codegen/_runtime_output/**",
+      "tests_deno/codegen/_runtime_strict_output/**"
     ],
     "plugins": []
   },

@@ -1,7 +1,4 @@
-import type {
-  QueryResult,
-  QueryResultResponse,
-} from "../interfaces/index.ts";
+import type { QueryResult, QueryResultResponse } from "../interfaces/index.ts";
 import { deserializeWarrant } from "./warrant.serializer.ts";
 
 /**

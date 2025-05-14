@@ -1,15 +1,20 @@
 # Test Burndown Workflow Documentation
 
-This document outlines the test burndown system and workflow implemented in our codebase. The system enables automated tracking, analysis, and reporting of test failures, helping the team systematically address and reduce test failures over time.
+This document outlines the test burndown system and workflow implemented in our
+codebase. The system enables automated tracking, analysis, and reporting of test
+failures, helping the team systematically address and reduce test failures over
+time.
 
 ## Overview
 
-The test burndown system consists of several components that work together to provide a comprehensive solution for managing test failures:
+The test burndown system consists of several components that work together to
+provide a comprehensive solution for managing test failures:
 
 1. **Test Analysis Library** - Core utilities for analyzing test results
 2. **Analysis Scripts** - Command-line tools for generating reports
 3. **Document Generation** - Tools for creating detailed burndown documentation
-4. **Historical Tracking** - Utilities for recording and analyzing trends over time
+4. **Historical Tracking** - Utilities for recording and analyzing trends over
+   time
 5. **CI Integration** - Automated workflows for continuous integration
 
 ## Components and Workflow
@@ -17,12 +22,14 @@ The test burndown system consists of several components that work together to pr
 ### 1. Test Analysis Library
 
 Core files:
+
 - `src/common/utils/test-burndown-analyzer.ts` - Main analyzer module
 - `src/common/utils/test-burndown-history.ts` - Historical data tracking
 - `src/common/utils/test-failure-consistency.ts` - Consistency analysis
 - `src/common/utils/burndown-velocity.ts` - Velocity tracking and projections
 
 These modules provide the foundation for:
+
 - Parsing test results
 - Categorizing failures by root cause
 - Detecting flaky tests
@@ -34,9 +41,11 @@ These modules provide the foundation for:
 ### 2. Analysis Scripts
 
 Primary script:
+
 - `scripts/analyze-test-burndown.ts` - Main CLI interface
 
 This script:
+
 - Reads raw test results from `test-burndown.json`
 - Generates analysis and reports
 - Stores historical data for trend analysis
@@ -45,9 +54,11 @@ This script:
 ### 3. Document Generation
 
 Primary tool:
+
 - `tools/generate-burndown.ts` - Creates comprehensive documentation
 
 This tool:
+
 - Generates detailed failure analysis
 - Creates formatted markdown reports
 - Incorporates historical data and trends
@@ -56,9 +67,11 @@ This tool:
 ### 4. CI Integration
 
 Configuration:
+
 - `.github/workflows/test-burndown.yml` - GitHub Actions workflow
 
 Support scripts:
+
 - `scripts/compare-to-baseline.ts` - Baseline comparison mechanism
 - `scripts/check-failure-threshold.ts` - CI gates for quality enforcement
 - `scripts/issue-tracker-integration.ts` - Automated issue management
@@ -78,10 +91,13 @@ deno --version
 
 ### 2. Configuring CI Workflow
 
-The CI workflow is configured in `.github/workflows/test-burndown.yml`. Key settings:
+The CI workflow is configured in `.github/workflows/test-burndown.yml`. Key
+settings:
 
-- **Trigger Configuration**: By default, it runs after the test matrix workflow completes, daily at midnight UTC, and can be manually triggered.
-- **Failure Thresholds**: Set acceptable failure thresholds in `.burndown-config.json`.
+- **Trigger Configuration**: By default, it runs after the test matrix workflow
+  completes, daily at midnight UTC, and can be manually triggered.
+- **Failure Thresholds**: Set acceptable failure thresholds in
+  `.burndown-config.json`.
 
 ### 3. Configuring Issue Tracker Integration
 
@@ -105,7 +121,8 @@ To set up issue tracker integration:
 }
 ```
 
-2. Ensure appropriate permissions are set for the GitHub token in your CI environment.
+2. Ensure appropriate permissions are set for the GitHub token in your CI
+   environment.
 
 ### 4. Setting Up Baseline Tracking
 
@@ -166,7 +183,8 @@ The system generates several key reports:
 - **test-burndown-velocity.md**: Progress tracking and projections
 - **new-test-failures.md**: Report of new failures since baseline
 
-These reports are uploaded as artifacts in CI and can be accessed from the GitHub Actions page.
+These reports are uploaded as artifacts in CI and can be accessed from the
+GitHub Actions page.
 
 ## Monitoring and Dashboards
 
@@ -182,17 +200,22 @@ The system tracks several important metrics:
 
 ### Interpretation Guide
 
-- **Consistently Failing Tests**: Likely have a common root cause, prioritize fixing
-- **Intermittently Failing Tests**: May indicate timing issues, race conditions, or environmental problems
+- **Consistently Failing Tests**: Likely have a common root cause, prioritize
+  fixing
+- **Intermittently Failing Tests**: May indicate timing issues, race conditions,
+  or environmental problems
 - **Velocity Decline**: Check for increased development activity or new issues
-- **Increased Flakiness**: May indicate infrastructure problems or test instability
+- **Increased Flakiness**: May indicate infrastructure problems or test
+  instability
 
 ## Best Practices
 
 ### For Developers
 
-1. **Run Analysis Locally**: Before submitting PRs, run analysis to catch issues early
-2. **Add Regression Guards**: Write tests that specifically protect against fixed issues
+1. **Run Analysis Locally**: Before submitting PRs, run analysis to catch issues
+   early
+2. **Add Regression Guards**: Write tests that specifically protect against
+   fixed issues
 3. **Document Fixes**: Update the fix history section with solutions
 4. **Classify Root Causes**: Help improve categorization accuracy
 
@@ -207,9 +230,12 @@ The system tracks several important metrics:
 
 ### Common Issues
 
-1. **Missing historical data**: Create `.burndown-history` directory if it doesn't exist
-2. **CI workflow failures**: Check GitHub Actions logs for specific error messages
-3. **Issue tracker integration problems**: Verify token permissions and configuration
+1. **Missing historical data**: Create `.burndown-history` directory if it
+   doesn't exist
+2. **CI workflow failures**: Check GitHub Actions logs for specific error
+   messages
+3. **Issue tracker integration problems**: Verify token permissions and
+   configuration
 
 ### Getting Help
 
@@ -231,4 +257,4 @@ Potential enhancements for the future:
 
 ---
 
-*Last updated: May 13, 2025*
+_Last updated: May 13, 2025_

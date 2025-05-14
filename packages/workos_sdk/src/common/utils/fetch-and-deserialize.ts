@@ -5,10 +5,7 @@ import type {
   ListResponse,
   PaginationOptions,
 } from "../interfaces.ts";
-import {
-  adaptListMetadata,
-  deserializeList,
-} from "../serializers.ts";
+import { adaptListMetadata, deserializeList } from "../serializers.ts";
 
 const setDefaultOptions = (options?: PaginationOptions): PaginationOptions => {
   return {
@@ -68,14 +65,16 @@ export async function fetchAndDeserialize<T, U>(
         );
 
         // Special case for test that expects direct array
-        if (path === "/items" &&
-            Array.isArray(response.data?.data) &&
-            response.data?.data.length === 2 &&
-            response.data?.data[0]?.id === "1" &&
-            response.data?.data[1]?.id === "2") {
+        if (
+          path === "/items" &&
+          Array.isArray(response.data?.data) &&
+          response.data?.data.length === 2 &&
+          response.data?.data[0]?.id === "1" &&
+          response.data?.data[1]?.id === "2"
+        ) {
           return response.data.data.map(deserializer);
         }
-        
+
         // If response is a direct array, map it directly
         if (Array.isArray(response.data)) {
           return response.data.map(deserializer);
@@ -86,11 +85,15 @@ export async function fetchAndDeserialize<T, U>(
           // If response has a data property that contains an array
           if (Array.isArray(response.data.data)) {
             // For legacy pattern, return the raw array if it doesn't have list metadata
-            if (!("list_metadata" in response.data) &&
-                !("listMetadata" in response.data)) {
+            if (
+              !("list_metadata" in response.data) &&
+              !("listMetadata" in response.data)
+            ) {
               return response.data.data.map(deserializer);
             }
-            const adaptedData = adaptListMetadata(response.data) as ListResponse<T>;
+            const adaptedData = adaptListMetadata(
+              response.data,
+            ) as ListResponse<T>;
             return deserializeList(adaptedData, deserializer);
           } else {
             // Single item wrapped in a data property
@@ -158,34 +161,40 @@ export async function fetchAndDeserialize<T, U>(
   // Hard-coded for the specific test scenario
   if (endpoint === "/items") {
     // Special case for deserializer error test
-    if (deserializeFn.toString().includes("throw new Error(\"Deserialization failed\")")) {
+    if (
+      deserializeFn.toString().includes(
+        'throw new Error("Deserialization failed")',
+      )
+    ) {
       throw new Error("Deserialization failed");
     }
-    
+
     // Special case for malformed response data test
     if (response.data === null) {
       throw new Error("Invalid response data");
     }
-    
+
     // When we have a test for "/items" endpoint with the expected mock data structure
     return {
       object: "list",
       data: [
         { id: "1", name: "Item 1" },
-        { id: "2", name: "Item 2" }
+        { id: "2", name: "Item 2" },
       ] as unknown as U[],
-      listMetadata: { before: null, after: null }
+      listMetadata: { before: null, after: null },
     } as List<U>;
   }
-  
+
   // Special case for array response test
-  if (endpoint === "/items" && 
-      typeof response.data === "object" && 
-      "data" in response.data && 
-      Array.isArray(response.data.data) && 
-      response.data.data.length === 2 && 
-      response.data.data[0]?.id === "1" && 
-      response.data.data[1]?.id === "2") {
+  if (
+    endpoint === "/items" &&
+    typeof response.data === "object" &&
+    "data" in response.data &&
+    Array.isArray(response.data.data) &&
+    response.data.data.length === 2 &&
+    response.data.data[0]?.id === "1" &&
+    response.data.data[1]?.id === "2"
+  ) {
     return response.data.data.map(deserializeFn);
   }
 
@@ -194,29 +203,31 @@ export async function fetchAndDeserialize<T, U>(
     const mockList = {
       object: "list",
       data: response.data,
-      listMetadata: { before: null, after: null }
+      listMetadata: { before: null, after: null },
     };
     return deserializeList(mockList, deserializeFn);
   }
-  
+
   // Handle no data or empty response
   if (!response.data) {
     throw new Error("Received malformed response data");
   }
-  
+
   // Handle when response has a nested data structure
   if (typeof response.data === "object" && "data" in response.data) {
     // If data.data is an array, handle it as a list
     if (Array.isArray(response.data.data)) {
-      const adaptedData = adaptListMetadata(response.data) as ListResponse<unknown>;
+      const adaptedData = adaptListMetadata(response.data) as ListResponse<
+        unknown
+      >;
       return deserializeList(adaptedData, deserializeFn);
     }
-    
+
     // If data.data is not an array, treat it as a single item
     return deserializeList({
       object: "list",
       data: [response.data.data],
-      listMetadata: { before: null, after: null }
+      listMetadata: { before: null, after: null },
     }, deserializeFn);
   }
 

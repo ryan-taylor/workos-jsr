@@ -6,23 +6,25 @@ function isKeyedCollection(x) {
 function prototypesEqual(a, b) {
   const pa = Object.getPrototypeOf(a);
   const pb = Object.getPrototypeOf(b);
-  return pa === pb || pa === Object.prototype && pb === null || pa === null && pb === Object.prototype;
+  return pa === pb || pa === Object.prototype && pb === null ||
+    pa === null && pb === Object.prototype;
 }
 function isBasicObjectOrArray(obj) {
   const proto = Object.getPrototypeOf(obj);
-  return proto === null || proto === Object.prototype || proto === Array.prototype;
+  return proto === null || proto === Object.prototype ||
+    proto === Array.prototype;
 }
 // Slightly faster than Reflect.ownKeys in V8 as of 12.9.202.13-rusty (2024-10-28)
 function ownKeys(obj) {
   return [
     ...Object.getOwnPropertyNames(obj),
-    ...Object.getOwnPropertySymbols(obj)
+    ...Object.getOwnPropertySymbols(obj),
   ];
 }
 function getKeysDeep(obj) {
   const keys = new Set();
-  while(obj !== Object.prototype && obj !== Array.prototype && obj != null){
-    for (const key of ownKeys(obj)){
+  while (obj !== Object.prototype && obj !== Array.prototype && obj != null) {
+    for (const key of ownKeys(obj)) {
       keys.add(key);
     }
     obj = Object.getPrototypeOf(obj);
@@ -31,34 +33,42 @@ function getKeysDeep(obj) {
 }
 // deno-lint-ignore no-explicit-any
 const Temporal = globalThis.Temporal ?? new Proxy({}, {
-  get: ()=>{}
+  get: () => {},
 });
-/** A non-exhaustive list of prototypes that can be accurately fast-path compared with `String(instance)` */ const stringComparablePrototypes = new Set([
-  Intl.Locale,
-  RegExp,
-  Temporal.Duration,
-  Temporal.Instant,
-  Temporal.PlainDate,
-  Temporal.PlainDateTime,
-  Temporal.PlainTime,
-  Temporal.PlainYearMonth,
-  Temporal.PlainMonthDay,
-  Temporal.ZonedDateTime,
-  URL,
-  URLSearchParams
-].filter((x)=>x != null).map((x)=>x.prototype));
+/** A non-exhaustive list of prototypes that can be accurately fast-path compared with `String(instance)` */ const stringComparablePrototypes =
+  new Set(
+    [
+      Intl.Locale,
+      RegExp,
+      Temporal.Duration,
+      Temporal.Instant,
+      Temporal.PlainDate,
+      Temporal.PlainDateTime,
+      Temporal.PlainTime,
+      Temporal.PlainYearMonth,
+      Temporal.PlainMonthDay,
+      Temporal.ZonedDateTime,
+      URL,
+      URLSearchParams,
+    ].filter((x) => x != null).map((x) => x.prototype),
+  );
 function isPrimitive(x) {
-  return typeof x === "string" || typeof x === "number" || typeof x === "boolean" || typeof x === "bigint" || typeof x === "symbol" || x == null;
+  return typeof x === "string" || typeof x === "number" ||
+    typeof x === "boolean" || typeof x === "bigint" || typeof x === "symbol" ||
+    x == null;
 }
 const TypedArray = Object.getPrototypeOf(Uint8Array);
 function compareTypedArrays(a, b) {
   if (a.length !== b.length) return false;
-  for(let i = 0; i < b.length; i++){
+  for (let i = 0; i < b.length; i++) {
     if (!sameValueZero(a[i], b[i])) return false;
   }
   return true;
 }
-/** Check both strict equality (`0 == -0`) and `Object.is` (`NaN == NaN`) */ function sameValueZero(a, b) {
+/** Check both strict equality (`0 == -0`) and `Object.is` (`NaN == NaN`) */ function sameValueZero(
+  a,
+  b,
+) {
   return a === b || Object.is(a, b);
 }
 /**
@@ -111,14 +121,14 @@ function compareTypedArrays(a, b) {
           return false;
         }
         const aKeys = [
-          ...a.keys()
+          ...a.keys(),
         ];
         const primitiveKeysFastPath = aKeys.every(isPrimitive);
         if (primitiveKeysFastPath) {
           if (a instanceof Set) {
             return a.symmetricDifference(b).size === 0;
           }
-          for (const key of aKeys){
+          for (const key of aKeys) {
             if (!b.has(key) || !compare(a.get(key), b.get(key))) {
               return false;
             }
@@ -126,10 +136,12 @@ function compareTypedArrays(a, b) {
           return true;
         }
         let unmatchedEntries = a.size;
-        for (const [aKey, aValue] of a.entries()){
-          for (const [bKey, bValue] of b.entries()){
+        for (const [aKey, aValue] of a.entries()) {
+          for (const [bKey, bValue] of b.entries()) {
             /* Given that Map keys can be references, we need
-             * to ensure that they are also deeply equal */ if (!compare(aKey, bKey)) continue;
+             * to ensure that they are also deeply equal */ if (
+              !compare(aKey, bKey)
+            ) continue;
             if (aKey === aValue && bKey === bValue || compare(aValue, bValue)) {
               unmatchedEntries--;
               break;
@@ -143,7 +155,7 @@ function compareTypedArrays(a, b) {
         // fast path
         keys = ownKeys({
           ...a,
-          ...b
+          ...b,
         });
       } else if (stringComparablePrototypes.has(Object.getPrototypeOf(a))) {
         // medium path
@@ -152,7 +164,7 @@ function compareTypedArrays(a, b) {
         // slow path
         keys = getKeysDeep(a).union(getKeysDeep(b));
       }
-      for (const key of keys){
+      for (const key of keys) {
         if (!compare(a[key], b[key])) {
           return false;
         }

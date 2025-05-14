@@ -50,18 +50,21 @@ function addTsExtensions(content: string): string {
     /(from\s+['"])(\.\.?\/[^'"]*?)(['"])/g,
     (match, prefix, path, suffix) => {
       // Skip barrel imports (./ or ../)
-      if (path === "./" || path === "../" || path === "./index" || path === "../index") {
+      if (
+        path === "./" || path === "../" || path === "./index" ||
+        path === "../index"
+      ) {
         return match;
       }
-      
+
       // Check if the path already has an extension
-      if (path.endsWith('.ts') || path.endsWith('.js')) {
+      if (path.endsWith(".ts") || path.endsWith(".js")) {
         return match;
       }
-      
+
       // Add .ts extension
       return `${prefix}${path}.ts${suffix}`;
-    }
+    },
   );
 }
 
@@ -82,10 +85,10 @@ async function setupGeneratedCode(): Promise<void> {
       useUnionTypes: true,
     });
     console.log("Code generation completed");
-    
+
     // Patch the generated code to fix imports with .ts extensions
     console.log("Patching generated code to add .ts extensions to imports");
-    
+
     // Walk through all TypeScript files in the directory and add .ts extensions
     for await (const entry of Deno.readDir(TEST_OUTPUT_DIR)) {
       if (entry.isFile && entry.name.endsWith(".ts")) {
@@ -95,7 +98,9 @@ async function setupGeneratedCode(): Promise<void> {
         await Deno.writeTextFile(filePath, newContent);
         console.log(`Patched file: ${filePath}`);
       } else if (entry.isDirectory) {
-        for await (const subEntry of Deno.readDir(join(TEST_OUTPUT_DIR, entry.name))) {
+        for await (
+          const subEntry of Deno.readDir(join(TEST_OUTPUT_DIR, entry.name))
+        ) {
           if (subEntry.isFile && subEntry.name.endsWith(".ts")) {
             const filePath = join(TEST_OUTPUT_DIR, entry.name, subEntry.name);
             const content = await Deno.readTextFile(filePath);
@@ -146,13 +151,13 @@ Deno.test({
   fn: async () => {
     // Run deno check on the test import file
     const checkResult = await runDenoCheck(TEST_IMPORT_FILE);
-  
+
     // Assert that type checking succeeded
     assert(
       checkResult.success,
       `TypeScript compilation failed: ${checkResult.output}`,
     );
-  }
+  },
 });
 
 Deno.test({
@@ -170,7 +175,9 @@ Deno.test({
           const subEntry of Deno.readDir(join(TEST_OUTPUT_DIR, entry.name))
         ) {
           if (subEntry.isFile && subEntry.name.endsWith(".ts")) {
-            generatedFiles.push(join(TEST_OUTPUT_DIR, entry.name, subEntry.name));
+            generatedFiles.push(
+              join(TEST_OUTPUT_DIR, entry.name, subEntry.name),
+            );
           }
         }
       }
@@ -196,7 +203,7 @@ Deno.test({
         );
       }
     }
-  }
+  },
 });
 
 // Clean up after tests
@@ -213,7 +220,7 @@ Deno.test("Cleanup generated test code", async () => {
         throw err;
       }
     }
-    
+
     // Check if file exists before removing
     try {
       await Deno.stat(TEST_IMPORT_FILE);

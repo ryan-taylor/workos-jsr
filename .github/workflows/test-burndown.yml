@@ -8,7 +8,7 @@ on:
       - completed
   # Also run on schedule to track progress over time
   schedule:
-    - cron: '0 0 * * *'  # Run daily at midnight UTC
+    - cron: "0 0 * * *" # Run daily at midnight UTC
   # Allow manual triggering
   workflow_dispatch:
 
@@ -94,7 +94,7 @@ jobs:
           script: |
             const fs = require('fs');
             const report = fs.readFileSync('test-burndown-report.md', 'utf8');
-            
+
             // Create an issue with the burndown report
             const issue = await github.rest.issues.create({
               owner: context.repo.owner,
@@ -103,7 +103,7 @@ jobs:
               body: report,
               labels: ['test-failure', 'burndown']
             });
-            
+
             console.log(`Created issue #${issue.data.number}`);
 
       - name: Fail if burndown threshold exceeded

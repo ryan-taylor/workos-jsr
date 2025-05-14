@@ -21,7 +21,7 @@
    *
    * @param message The error message.
    * @param options Additional options. This argument is still unstable. It may change in the future release.
-   */ constructor(message, options){
+   */ constructor(message, options) {
     super(message, options);
     this.name = "AssertionError";
   }

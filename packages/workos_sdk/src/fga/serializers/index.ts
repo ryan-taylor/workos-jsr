@@ -28,21 +28,13 @@ export {
   serializeListWarrantsOptions,
 } from "./list-warrants-options.serializer.ts";
 
-export {
-  serializeQueryOptions,
-} from "./query-options.serializer.ts";
+export { serializeQueryOptions } from "./query-options.serializer.ts";
 
-export {
-  deserializeQueryResult,
-} from "./query-result.serializer.ts";
+export { deserializeQueryResult } from "./query-result.serializer.ts";
 
-export {
-  deserializeWarrant,
-} from "./warrant.serializer.ts";
+export { deserializeWarrant } from "./warrant.serializer.ts";
 
-export {
-  deserializeWarrantToken,
-} from "./warrant-token.serializer.ts";
+export { deserializeWarrantToken } from "./warrant-token.serializer.ts";
 
 export {
   serializeWriteWarrantOptions,

@@ -9,8 +9,8 @@ const otherThing: OtherThing = { id: "123", name: "test" };
 const thing: Thing = {
   id: "456",
   type: "test",
-  attributes: { key: "value" }
+  attributes: { key: "value" },
 };
 
 // Export for testing
-export { something, otherThing, thing };
+export { otherThing, something, thing };

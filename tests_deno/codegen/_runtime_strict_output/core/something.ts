@@ -1,1 +1,3 @@
-export interface Something { prop: string; }
+export interface Something {
+  prop: string;
+}

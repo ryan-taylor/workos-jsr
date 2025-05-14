@@ -1,6 +1,6 @@
 #!/usr/bin/env deno run --allow-read --allow-write --allow-run
 
-import { ensureDir, emptyDir, exists } from "https://deno.land/std/fs/mod.ts";
+import { emptyDir, ensureDir, exists } from "https://deno.land/std/fs/mod.ts";
 import { join } from "https://deno.land/std/path/mod.ts";
 
 // Define test directories - these must match those in patch-openapi-runtime-cached.ts
@@ -26,33 +26,39 @@ export interface TestInterface {
  */
 async function setupTest() {
   console.log("Setting up test environment...");
-  
+
   // Create and ensure test directories exist
   await ensureDir(NORMAL_OUTPUT);
-  
+
   // Create utility directories
   const normalUtilsDir = join(BASE_DIR, "_runtime_output", "utils");
   await ensureDir(normalUtilsDir);
-  
+
   // Also ensure the cache directory exists
   await ensureDir(CACHE_DIR);
-  
+
   // Clean up test directories
   await emptyDir(NORMAL_OUTPUT);
-  
+
   // Create test files
   const normalFile = join(NORMAL_OUTPUT, "test.ts");
-  
+
   await Deno.writeTextFile(normalFile, SAMPLE_CONTENT);
-  
+
   // Create the imported files that are referenced in SAMPLE_CONTENT
-  await Deno.writeTextFile(join(NORMAL_OUTPUT, "something.ts"),
-    "export interface Something { prop: string; }\n");
-  await Deno.writeTextFile(join(NORMAL_OUTPUT, "otherThing.ts"),
-    "export interface OtherThing { value: number; }\n");
-  await Deno.writeTextFile(join(normalUtilsDir, "things.ts"),
-    "export interface YetAnotherThing { items: string[]; }\n");
-  
+  await Deno.writeTextFile(
+    join(NORMAL_OUTPUT, "something.ts"),
+    "export interface Something { prop: string; }\n",
+  );
+  await Deno.writeTextFile(
+    join(NORMAL_OUTPUT, "otherThing.ts"),
+    "export interface OtherThing { value: number; }\n",
+  );
+  await Deno.writeTextFile(
+    join(normalUtilsDir, "things.ts"),
+    "export interface YetAnotherThing { items: string[]; }\n",
+  );
+
   console.log("Test setup complete.");
   return { normalFile };
 }
@@ -62,7 +68,7 @@ async function setupTest() {
  */
 async function runPatchScript(args: string[] = []): Promise<boolean> {
   console.log(`Running patch script with args: ${args.join(" ")}`);
-  
+
   try {
     // Run the script directly as a command to avoid module caching issues
     const command = new Deno.Command(Deno.execPath(), {
@@ -70,17 +76,17 @@ async function runPatchScript(args: string[] = []): Promise<boolean> {
       stdout: "piped",
       stderr: "piped",
     });
-    
+
     const output = await command.output();
     const stdout = new TextDecoder().decode(output.stdout);
     const stderr = new TextDecoder().decode(output.stderr);
-    
+
     // Print the output
     console.log(stdout);
     if (stderr) {
       console.error(stderr);
     }
-    
+
     if (output.success) {
       console.log("Patch script completed successfully");
       return true;
@@ -99,46 +105,47 @@ async function runPatchScript(args: string[] = []): Promise<boolean> {
  */
 async function verifyFileContent(filePath: string): Promise<boolean> {
   console.log(`Verifying file: ${filePath}`);
-  
+
   try {
     if (!await exists(filePath)) {
       console.error(`❌ File does not exist: ${filePath}`);
       return false;
     }
-    
+
     // Read the file content
     const content = await Deno.readTextFile(filePath);
-    
+
     // Use a more comprehensive regex to check for all types of imports
-    const importRegex = /from\s+['"](\.\.?\/[^'"]+)['"]|import\s+type\s+.*?from\s+['"](\.\.?\/[^'"]+)['"]|import\s*\(\s*['"](\.\.?\/[^'"]+)['"]\s*\)/g;
+    const importRegex =
+      /from\s+['"](\.\.?\/[^'"]+)['"]|import\s+type\s+.*?from\s+['"](\.\.?\/[^'"]+)['"]|import\s*\(\s*['"](\.\.?\/[^'"]+)['"]\s*\)/g;
     const allImports = [];
     let match;
-    
+
     while ((match = importRegex.exec(content)) !== null) {
       const importPath = match[1] || match[2] || match[3];
       if (importPath) {
         allImports.push(importPath);
       }
     }
-    
+
     console.log(`File content for ${filePath}:\n${content}`);
     console.log(`Detected imports: ${JSON.stringify(allImports)}`);
-    
+
     // Verify all imports have .ts extensions
-    const hasExtensions = allImports.length > 0 && allImports.every(path => {
+    const hasExtensions = allImports.length > 0 && allImports.every((path) => {
       // Skip barrel imports (directories)
-      if (path.endsWith('/') || path.endsWith('/index')) {
+      if (path.endsWith("/") || path.endsWith("/index")) {
         return true;
       }
-      return path.endsWith('.ts');
+      return path.endsWith(".ts");
     });
-    
+
     if (!hasExtensions) {
       console.error("❌ Import extensions missing. Found these imports:");
-      allImports.forEach(path => console.log(`  - ${path}`));
+      allImports.forEach((path) => console.log(`  - ${path}`));
       return false;
     }
-    
+
     console.log("✅ File content verified successfully");
     return true;
   } catch (error) {
@@ -152,36 +159,36 @@ async function verifyFileContent(filePath: string): Promise<boolean> {
  */
 async function verifyCacheCreated(): Promise<boolean> {
   console.log("Verifying cache creation...");
-  
+
   try {
     // Check if cache directory exists
     if (!await exists(CACHE_DIR)) {
       console.error("❌ Cache directory not created");
       return false;
     }
-    
+
     // List all files in the cache directory
     console.log("Cache directory contents:");
     for await (const entry of Deno.readDir(CACHE_DIR)) {
       console.log(`  - ${entry.name} (${entry.isFile ? "file" : "directory"})`);
     }
-    
+
     // We can't know the exact cache file names as they're based on hashes,
     // but we can verify that some .cache files exist
     let foundCacheFiles = false;
-    
+
     for await (const entry of Deno.readDir(CACHE_DIR)) {
-      if (entry.isFile && entry.name.endsWith('.cache')) {
+      if (entry.isFile && entry.name.endsWith(".cache")) {
         foundCacheFiles = true;
         break;
       }
     }
-    
+
     if (!foundCacheFiles) {
       console.error("❌ No cache files found");
       return false;
     }
-    
+
     console.log("✅ Cache verified successfully");
     return true;
   } catch (error) {
@@ -196,10 +203,10 @@ async function verifyCacheCreated(): Promise<boolean> {
  */
 async function testCaching(): Promise<boolean> {
   console.log("\n=== Testing Caching Mechanism ===");
-  
+
   // Set up a fresh test environment
   const { normalFile } = await setupTest();
-  
+
   // Run the patching script first time with force to ensure it processes the file
   console.log("First run - should process the file...");
   const firstRunSuccess = await runPatchScript(["--force"]);
@@ -207,21 +214,21 @@ async function testCaching(): Promise<boolean> {
     console.error("❌ First run failed");
     return false;
   }
-  
+
   // Verify that the file was patched correctly
   const firstRunVerified = await verifyFileContent(normalFile);
   if (!firstRunVerified) {
     console.error("❌ First run didn't patch the file correctly");
     return false;
   }
-  
+
   // Verify that cache files were created
   const cacheCreated = await verifyCacheCreated();
   if (!cacheCreated) {
     console.error("❌ Cache not created after first run");
     return false;
   }
-  
+
   // Run the patching script again - should use the cache
   console.log("\nSecond run - should use the cache...");
   const secondRunSuccess = await runPatchScript();
@@ -229,14 +236,14 @@ async function testCaching(): Promise<boolean> {
     console.error("❌ Second run failed");
     return false;
   }
-  
+
   // Verify the file content again after the second run
   const secondRunVerified = await verifyFileContent(normalFile);
   if (!secondRunVerified) {
     console.error("❌ Second run file content is invalid");
     return false;
   }
-  
+
   console.log("✅ Caching test passed - both runs successful!");
   return true;
 }
@@ -244,10 +251,12 @@ async function testCaching(): Promise<boolean> {
 // Run just the caching test
 if (import.meta.main) {
   console.log("=== Running Caching Mechanism Debug Test ===");
-  
+
   const cachingPassed = await testCaching();
-  
-  console.log(`Caching Test Result: ${cachingPassed ? "✅ PASSED" : "❌ FAILED"}`);
-  
+
+  console.log(
+    `Caching Test Result: ${cachingPassed ? "✅ PASSED" : "❌ FAILED"}`,
+  );
+
   Deno.exit(cachingPassed ? 0 : 1);
 }

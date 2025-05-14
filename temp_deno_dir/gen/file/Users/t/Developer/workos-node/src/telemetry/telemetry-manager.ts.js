@@ -3,30 +3,31 @@
  *
  * This module provides a central manager for all telemetry instrumentation
  * across the SDK. It handles span creation, metrics collection, and log forwarding.
- */ import { defaultTelemetryConfig } from "./telemetry-config.ts";
+ */
+import { defaultTelemetryConfig } from "./telemetry-config.ts";
 import { OTLPHttpExporter } from "./otlp-exporter.ts";
 /**
  * Timer that tracks the duration of an operation
  */ class Timer {
   startTime;
-  constructor(){
+  constructor() {
     this.startTime = performance.now();
   }
   /**
    * Gets the elapsed time in nanoseconds
-   */ elapsedNanoseconds = ()=>{
+   */ elapsedNanoseconds = () => {
     const elapsedMs = this.elapsedMilliseconds();
     return BigInt(Math.floor(elapsedMs * 1_000_000));
   };
   /**
    * Gets the elapsed time in milliseconds
-   */ elapsedMilliseconds = ()=>{
+   */ elapsedMilliseconds = () => {
     return performance.now() - this.startTime;
   };
 }
 /**
  * SpanStatus represents the result of an operation
- */ export var SpanStatus = /*#__PURE__*/ function(SpanStatus) {
+ */ export var SpanStatus = /*#__PURE__*/ function (SpanStatus) {
   SpanStatus[SpanStatus["UNSET"] = 0] = "UNSET";
   SpanStatus[SpanStatus["OK"] = 1] = "OK";
   SpanStatus[SpanStatus["ERROR"] = 2] = "ERROR";
@@ -47,10 +48,10 @@ import { OTLPHttpExporter } from "./otlp-exporter.ts";
    * Creates a new TelemetryManager
    *
    * @param config - Telemetry configuration
-   */ constructor(config = {}){
+   */ constructor(config = {}) {
     this.config = {
       ...defaultTelemetryConfig,
-      ...config
+      ...config,
     };
     this.exporter = new OTLPHttpExporter(this.config);
     // Set up flush interval if telemetry is enabled
@@ -64,8 +65,8 @@ import { OTLPHttpExporter } from "./otlp-exporter.ts";
     // Only set up interval if not already set
     if (this.flushInterval === null) {
       // Flush every 5 seconds
-      this.flushInterval = setInterval(()=>{
-        this.flush().catch((err)=>{
+      this.flushInterval = setInterval(() => {
+        this.flush().catch((err) => {
           if (this.config.debug) {
             console.error("[WorkOS Telemetry] Error flushing telemetry:", err);
           }
@@ -103,9 +104,9 @@ import { OTLPHttpExporter } from "./otlp-exporter.ts";
       attributes: {
         ...attributes,
         // Add standard OpenTelemetry attributes
-        "service.name": this.config.serviceName || "workos-sdk"
+        "service.name": this.config.serviceName || "workos-sdk",
       },
-      events: []
+      events: [],
     });
     if (this.config.debug) {
       console.debug(`[WorkOS Telemetry] Started span: ${name} (${spanId})`);
@@ -129,10 +130,12 @@ import { OTLPHttpExporter } from "./otlp-exporter.ts";
     span.events.push({
       timeUnixNano,
       name,
-      attributes
+      attributes,
     });
     if (this.config.debug) {
-      console.debug(`[WorkOS Telemetry] Added event to span ${spanId}: ${name}`);
+      console.debug(
+        `[WorkOS Telemetry] Added event to span ${spanId}: ${name}`,
+      );
     }
   }
   /**
@@ -150,7 +153,9 @@ import { OTLPHttpExporter } from "./otlp-exporter.ts";
     // If the span doesn't exist, log a warning and return
     if (!this.activeSpans.has(spanId)) {
       if (this.config.debug) {
-        console.warn(`[WorkOS Telemetry] Attempted to end non-existent span: ${spanId}`);
+        console.warn(
+          `[WorkOS Telemetry] Attempted to end non-existent span: ${spanId}`,
+        );
       }
       return;
     }
@@ -168,13 +173,13 @@ import { OTLPHttpExporter } from "./otlp-exporter.ts";
       attributes: {
         ...span.attributes,
         ...attributes,
-        "duration_ms": span.timer.elapsedMilliseconds()
+        "duration_ms": span.timer.elapsedMilliseconds(),
       },
       status: {
         code: status,
-        message: message
+        message: message,
       },
-      events: span.events
+      events: span.events,
     };
     // Add to the batch of spans to be exported
     this.batchedSpans.push(finalSpan);
@@ -185,7 +190,7 @@ import { OTLPHttpExporter } from "./otlp-exporter.ts";
     }
     // If we have enough spans, flush them
     if (this.batchedSpans.length >= 5) {
-      this.flush().catch((err)=>{
+      this.flush().catch((err) => {
         if (this.config.debug) {
           console.error("[WorkOS Telemetry] Error flushing spans:", err);
         }
@@ -201,7 +206,14 @@ import { OTLPHttpExporter } from "./otlp-exporter.ts";
    * @param attributes - Optional attributes to attach to the metric
    * @param description - Optional description of the metric
    * @param unit - Optional unit of the metric
-   */ recordMetric(name, value, type = "counter", attributes = {}, description, unit) {
+   */ recordMetric(
+    name,
+    value,
+    type = "counter",
+    attributes = {},
+    description,
+    unit,
+  ) {
     // If telemetry is disabled, do nothing
     if (!this.config.enabled) {
       return;
@@ -215,17 +227,21 @@ import { OTLPHttpExporter } from "./otlp-exporter.ts";
       value,
       attributes: {
         ...attributes,
-        "service.name": this.config.serviceName || "workos-sdk"
+        "service.name": this.config.serviceName || "workos-sdk",
       },
-      timestamp: now
+      timestamp: now,
     };
     this.batchedMetrics.push(metric);
     if (this.config.debug) {
-      console.debug(`[WorkOS Telemetry] Recorded metric: ${name}=${typeof value === "number" ? value : "complex"}`);
+      console.debug(
+        `[WorkOS Telemetry] Recorded metric: ${name}=${
+          typeof value === "number" ? value : "complex"
+        }`,
+      );
     }
     // If we have enough metrics, flush them
     if (this.batchedMetrics.length >= 5) {
-      this.flush().catch((err)=>{
+      this.flush().catch((err) => {
         if (this.config.debug) {
           console.error("[WorkOS Telemetry] Error flushing metrics:", err);
         }
@@ -271,18 +287,20 @@ import { OTLPHttpExporter } from "./otlp-exporter.ts";
       body,
       attributes: {
         ...attributes,
-        "service.name": this.config.serviceName || "workos-sdk"
+        "service.name": this.config.serviceName || "workos-sdk",
       },
       traceId,
-      spanId
+      spanId,
     };
     this.batchedLogs.push(log);
     if (this.config.debug) {
-      console.debug(`[WorkOS Telemetry] Recorded log: [${severityText}] ${body}`);
+      console.debug(
+        `[WorkOS Telemetry] Recorded log: [${severityText}] ${body}`,
+      );
     }
     // If we have enough logs, flush them
     if (this.batchedLogs.length >= 10) {
-      this.flush().catch((err)=>{
+      this.flush().catch((err) => {
         if (this.config.debug) {
           console.error("[WorkOS Telemetry] Error flushing logs:", err);
         }
@@ -297,13 +315,13 @@ import { OTLPHttpExporter } from "./otlp-exporter.ts";
       return;
     }
     const spans = [
-      ...this.batchedSpans
+      ...this.batchedSpans,
     ];
     const metrics = [
-      ...this.batchedMetrics
+      ...this.batchedMetrics,
     ];
     const logs = [
-      ...this.batchedLogs
+      ...this.batchedLogs,
     ];
     // Clear the batches before exporting to avoid duplicates if export fails
     this.batchedSpans = [];
@@ -312,11 +330,15 @@ import { OTLPHttpExporter } from "./otlp-exporter.ts";
     // Export in parallel
     await Promise.all([
       spans.length > 0 ? this.exporter.exportSpans(spans) : Promise.resolve(),
-      metrics.length > 0 ? this.exporter.exportMetrics(metrics) : Promise.resolve(),
-      logs.length > 0 ? this.exporter.exportLogs(logs) : Promise.resolve()
+      metrics.length > 0
+        ? this.exporter.exportMetrics(metrics)
+        : Promise.resolve(),
+      logs.length > 0 ? this.exporter.exportLogs(logs) : Promise.resolve(),
     ]);
     if (this.config.debug) {
-      console.debug(`[WorkOS Telemetry] Flushed ${spans.length} spans, ${metrics.length} metrics, ${logs.length} logs`);
+      console.debug(
+        `[WorkOS Telemetry] Flushed ${spans.length} spans, ${metrics.length} metrics, ${logs.length} logs`,
+      );
     }
   }
   /**
@@ -345,7 +367,7 @@ import { OTLPHttpExporter } from "./otlp-exporter.ts";
    * @param attributes - Optional attributes to attach to the span
    * @returns Function that takes a callback and executes it within a span
    */ instrument(operation, attributes = {}) {
-    return async (callback)=>{
+    return async (callback) => {
       // Start a span for this operation
       const spanId = this.startSpan(operation, attributes);
       try {
@@ -356,9 +378,16 @@ import { OTLPHttpExporter } from "./otlp-exporter.ts";
         return result;
       } catch (error) {
         // End the span with error status
-        this.endSpan(spanId, SpanStatus.ERROR, error instanceof Error ? error.message : String(error), {
-          "error.type": error instanceof Error ? error.constructor.name : "Unknown"
-        });
+        this.endSpan(
+          spanId,
+          SpanStatus.ERROR,
+          error instanceof Error ? error.message : String(error),
+          {
+            "error.type": error instanceof Error
+              ? error.constructor.name
+              : "Unknown",
+          },
+        );
         throw error;
       }
     };

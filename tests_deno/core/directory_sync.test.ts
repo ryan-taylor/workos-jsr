@@ -1,7 +1,11 @@
 import { assertEquals, assertExists } from "@std/assert";
 import { createMockWorkOS, mockResponses } from "../utils/test_helpers.ts";
 import { fetchAndDeserialize } from "../../packages/workos_sdk/src/common/utils/fetch-and-deserialize.ts";
-import { deserializeDirectory, deserializeDirectoryGroup, deserializeDirectoryUser } from "../../packages/workos_sdk/src/directory-sync/serializers/index.ts";
+import {
+  deserializeDirectory,
+  deserializeDirectoryGroup,
+  deserializeDirectoryUser,
+} from "../../packages/workos_sdk/src/directory-sync/serializers/index.ts";
 
 /**
  * Directory Sync Tests
@@ -23,9 +27,9 @@ Deno.test("DirectorySync: list directories via fetch-and-deserialize", async () 
 
   // Use fetch-and-deserialize directly, bypassing the generated API client
   const directoriesResult = await fetchAndDeserialize(
-    workos, 
-    "/directories", 
-    deserializeDirectory
+    workos,
+    "/directories",
+    deserializeDirectory,
   );
 
   // Verify the request was correctly tracked by our mock client
@@ -34,7 +38,7 @@ Deno.test("DirectorySync: list directories via fetch-and-deserialize", async () 
   assertEquals(requestDetails.method, "GET");
 
   // Verify the response format matches what tests expect
-  if ('data' in directoriesResult) {
+  if ("data" in directoriesResult) {
     assertExists(directoriesResult.data);
     assertEquals(directoriesResult.data[0].id, mockResponses.directory.id);
     assertEquals(directoriesResult.data[0].name, mockResponses.directory.name);
@@ -49,9 +53,9 @@ Deno.test("DirectorySync: get directory via fetch-and-deserialize", async () => 
 
   // Use fetch-and-deserialize directly
   const directoryResult = await fetchAndDeserialize(
-    workos, 
-    `/directories/${directoryId}`, 
-    deserializeDirectory
+    workos,
+    `/directories/${directoryId}`,
+    deserializeDirectory,
   );
 
   // Verify the request details
@@ -61,11 +65,12 @@ Deno.test("DirectorySync: get directory via fetch-and-deserialize", async () => 
 
   // Our fetch-and-deserialize can return a single object or a list
   // depending on implementation details - handle both cases
-  if ('data' in directoryResult) {
+  if ("data" in directoryResult) {
     // If it's a list with one item, extract the first item
-    const directory = Array.isArray(directoryResult.data) ? 
-      directoryResult.data[0] : directoryResult.data;
-    
+    const directory = Array.isArray(directoryResult.data)
+      ? directoryResult.data[0]
+      : directoryResult.data;
+
     assertEquals(directory.id, mockResponses.directory.id);
     assertEquals(directory.name, mockResponses.directory.name);
   } else if (Array.isArray(directoryResult)) {
@@ -97,10 +102,10 @@ Deno.test("DirectorySync: list directory groups via fetch-and-deserialize", asyn
   // Using type assertion to bypass PaginationOptions constraints
   const queryParams = { directory: directoryId } as Record<string, unknown>;
   const groupsResult = await fetchAndDeserialize(
-    workos, 
-    "/directory_groups", 
+    workos,
+    "/directory_groups",
     deserializeDirectoryGroup,
-    queryParams
+    queryParams,
   );
 
   // Verify the request details
@@ -113,7 +118,7 @@ Deno.test("DirectorySync: list directory groups via fetch-and-deserialize", asyn
   }
 
   // Verify the response structure
-  if ('data' in groupsResult) {
+  if ("data" in groupsResult) {
     assertExists(groupsResult.data);
     assertEquals(groupsResult.data[0].id, mockResponses.directoryGroup.id);
     assertEquals(groupsResult.data[0].name, mockResponses.directoryGroup.name);
@@ -140,10 +145,10 @@ Deno.test("DirectorySync: list directory users via fetch-and-deserialize", async
   // Using type assertion to bypass PaginationOptions constraints
   const queryParams = { directory: directoryId } as Record<string, unknown>;
   const usersResult = await fetchAndDeserialize(
-    workos, 
-    "/directory_users", 
+    workos,
+    "/directory_users",
     deserializeDirectoryUser,
-    queryParams
+    queryParams,
   );
 
   // Verify the request details
@@ -156,7 +161,7 @@ Deno.test("DirectorySync: list directory users via fetch-and-deserialize", async
   }
 
   // Verify the response structure
-  if ('data' in usersResult) {
+  if ("data" in usersResult) {
     assertExists(usersResult.data);
     assertEquals(usersResult.data[0].id, mockResponses.directoryUser.id);
     assertEquals(usersResult.data[0].email, mockResponses.directoryUser.email);

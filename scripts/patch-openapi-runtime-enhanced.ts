@@ -12,7 +12,8 @@
 import { walk } from "https://deno.land/std/fs/walk.ts";
 
 // Define the directory to process - allow customization via environment variable
-const RUNTIME_DIR = Deno.env.get("RUNTIME_DIR") || "tests_deno/codegen/_runtime_test_output/core/";
+const RUNTIME_DIR = Deno.env.get("RUNTIME_DIR") ||
+  "tests_deno/codegen/_runtime_test_output/core/";
 
 // Parse command line arguments
 const strictTypes = Deno.args.includes("--strict-types");
@@ -39,7 +40,7 @@ function isBarrelImport(importPath: string): boolean {
  */
 export function addTsExtensionsToImports(content: string): string {
   let newContent = content;
-  
+
   // 1. Standard static imports - handle both ./ and ../ formats
   // Match: import { X } from './Y' or import { X } from '../utils/Y'
   newContent = newContent.replace(
@@ -49,9 +50,9 @@ export function addTsExtensionsToImports(content: string): string {
         return match; // Skip barrel imports
       }
       return `${prefix}${path}.ts${suffix}`;
-    }
+    },
   );
-  
+
   // 2. Type imports - handle both ./ and ../ formats
   // Match: import type { X } from './Y' or import type { X } from '../utils/Y'
   newContent = newContent.replace(
@@ -61,9 +62,9 @@ export function addTsExtensionsToImports(content: string): string {
         return match; // Skip barrel imports
       }
       return `${prefix}${path}.ts${suffix}`;
-    }
+    },
   );
-  
+
   // 3. Dynamic imports - handle both ./ and ../ formats
   // Match: await import('./Y') or await import('../utils/Y')
   newContent = newContent.replace(
@@ -73,12 +74,12 @@ export function addTsExtensionsToImports(content: string): string {
         return match; // Skip barrel imports
       }
       return `${prefix}${path}.ts${suffix}`;
-    }
+    },
   );
-  
+
   // 4. Template string imports with static beginnings/endings (more complex)
   // This is tricky because of the variable parts
-  
+
   // 4.1. Template string with static ending (e.g., `./modules/${name}`)
   // Approach: Split the path at the last dynamic part and add .ts extension
   newContent = newContent.replace(
@@ -87,17 +88,17 @@ export function addTsExtensionsToImports(content: string): string {
       if (isBarrelImport(startPath)) {
         return match; // Skip barrel imports
       }
-      
+
       // If the end path is empty or just a slash, consider it a folder/barrel import
       if (!endPath || endPath === "/" || endPath === "/index") {
         return match;
       }
-      
+
       // Otherwise, add .ts extension
       return `${prefix}${startPath}${dynamicPart}${endPath}.ts${suffix}`;
-    }
+    },
   );
-  
+
   // 4.2. Template string with only dynamic end (e.g., `./modules/${name}`)
   newContent = newContent.replace(
     /(import\s*\(\s*`)(\.\.?\/[^`${}]*?)(\${[^}]*?})(`\s*\))/g,
@@ -106,9 +107,9 @@ export function addTsExtensionsToImports(content: string): string {
         return match; // Skip barrel imports
       }
       return `${prefix}${path}${dynamicPart}.ts${suffix}`;
-    }
+    },
   );
-  
+
   return newContent;
 }
 
@@ -119,13 +120,13 @@ export function addTsExtensionsToImports(content: string): string {
  */
 function convertAnyToUnknown(content: string): string {
   if (!strictTypes) return content;
-  
+
   // Simple replacement of 'any' type annotations with 'unknown'
   // This is a basic implementation that works for most cases
   // A more complex parser would be needed for edge cases
   return content.replace(/: any(\s*[;,)])/g, ": unknown$1")
-               .replace(/: any(\s*\|)/g, ": unknown$1")
-               .replace(/any\[\]/g, "unknown[]");
+    .replace(/: any(\s*\|)/g, ": unknown$1")
+    .replace(/any\[\]/g, "unknown[]");
 }
 
 /**
@@ -136,18 +137,18 @@ async function processFile(filePath: string): Promise<boolean> {
   try {
     // Read the file content
     const content = await Deno.readTextFile(filePath);
-    
+
     // Apply transformations
     let newContent = addTsExtensionsToImports(content);
     newContent = convertAnyToUnknown(newContent);
-    
+
     // Check if content was changed
     if (content !== newContent) {
       console.log(`Patching: ${filePath}`);
-      
+
       // Write the modified content back to the file
       await Deno.writeTextFile(filePath, newContent);
-      
+
       // Format the file using deno fmt
       try {
         const command = new Deno.Command("deno", {
@@ -155,7 +156,7 @@ async function processFile(filePath: string): Promise<boolean> {
           stdout: "null",
           stderr: "piped",
         });
-        
+
         const output = await command.output();
         if (!output.success) {
           const error = new TextDecoder().decode(output.stderr);
@@ -174,9 +175,7 @@ async function processFile(filePath: string): Promise<boolean> {
     }
     return true; // Return true to indicate success
   } catch (error) {
-    const errorMessage = error instanceof Error
-      ? error.message
-      : String(error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
     console.error(`Error processing ${filePath}: ${errorMessage}`);
     return false; // Return false to indicate failure
   }
@@ -186,8 +185,10 @@ async function processFile(filePath: string): Promise<boolean> {
  * Main function to run the script
  */
 async function main(): Promise<void> {
-  console.log(`Starting OpenAPI runtime patch${strictTypes ? " with strict types" : ""}`);
-  
+  console.log(
+    `Starting OpenAPI runtime patch${strictTypes ? " with strict types" : ""}`,
+  );
+
   try {
     // Ensure the target directory exists
     try {
@@ -199,16 +200,16 @@ async function main(): Promise<void> {
       }
       throw error;
     }
-    
+
     // Walk through all TypeScript files in the directory
     const entries = walk(RUNTIME_DIR, {
       exts: [".ts"],
       includeDirs: false,
     });
-    
+
     let fileCount = 0;
     let allSuccessful = true; // Track if all files processed successfully
-    
+
     for await (const entry of entries) {
       const success = await processFile(entry.path);
       if (!success) {
@@ -216,19 +217,17 @@ async function main(): Promise<void> {
       }
       fileCount++;
     }
-    
+
     console.log(`Processed ${fileCount} files`);
-    
+
     if (!allSuccessful) {
       console.error("One or more files failed to process correctly.");
       Deno.exit(1); // Exit with error code if any file processing failed
     }
-    
+
     console.log("Done!");
   } catch (error) {
-    const errorMessage = error instanceof Error
-      ? error.message
-      : String(error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
     console.error(`Error: ${errorMessage}`);
     Deno.exit(1);
   }

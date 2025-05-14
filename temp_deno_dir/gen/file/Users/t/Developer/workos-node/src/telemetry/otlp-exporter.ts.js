@@ -3,9 +3,10 @@
  *
  * This module provides an implementation of the OpenTelemetry Protocol (OTLP) HTTP exporter
  * that works with Deno's native fetch API.
- */ /**
+ */
+/**
  * Types of telemetry data that can be exported
- */ export var TelemetryType = /*#__PURE__*/ function(TelemetryType) {
+ */ export var TelemetryType = /*#__PURE__*/ function (TelemetryType) {
   TelemetryType["SPANS"] = "spans";
   TelemetryType["METRICS"] = "metrics";
   TelemetryType["LOGS"] = "logs";
@@ -22,7 +23,7 @@
    * Creates a new OTLP HTTP exporter
    *
    * @param config - Telemetry configuration
-   */ constructor(config){
+   */ constructor(config) {
     this.endpoint = config.endpoint || "http://localhost:4318";
     this.serviceName = config.serviceName || "workos-sdk";
     this.defaultAttributes = config.defaultAttributes || {};
@@ -36,7 +37,9 @@
    */ generateId(bytes) {
     const array = new Uint8Array(bytes);
     crypto.getRandomValues(array);
-    return Array.from(array).map((b)=>b.toString(16).padStart(2, "0")).join("");
+    return Array.from(array).map((b) => b.toString(16).padStart(2, "0")).join(
+      "",
+    );
   }
   /**
    * Generates a trace ID (16 bytes)
@@ -59,34 +62,34 @@
    * @returns Promise that resolves when the export is complete
    */ async exportSpans(spans) {
     if (spans.length === 0) return;
-    const enrichedSpans = spans.map((span)=>({
-        ...span,
-        attributes: {
-          ...span.attributes,
-          ...this.defaultAttributes,
-          "service.name": this.serviceName
-        }
-      }));
+    const enrichedSpans = spans.map((span) => ({
+      ...span,
+      attributes: {
+        ...span.attributes,
+        ...this.defaultAttributes,
+        "service.name": this.serviceName,
+      },
+    }));
     const payload = {
       resourceSpans: [
         {
           resource: {
             attributes: {
               "service.name": this.serviceName,
-              ...this.defaultAttributes
-            }
+              ...this.defaultAttributes,
+            },
           },
           scopeSpans: [
             {
               scope: {
                 name: "@workos/sdk",
-                version: "1.0.0"
+                version: "1.0.0",
               },
-              spans: enrichedSpans
-            }
-          ]
-        }
-      ]
+              spans: enrichedSpans,
+            },
+          ],
+        },
+      ],
     };
     await this.sendTelemetry(TelemetryType.SPANS, payload);
   }
@@ -97,7 +100,7 @@
    * @returns Promise that resolves when the export is complete
    */ async exportMetrics(metrics) {
     if (metrics.length === 0) return;
-    const enrichedMetrics = metrics.map((metric)=>{
+    const enrichedMetrics = metrics.map((metric) => {
       const baseMetric = {
         name: metric.name,
         description: metric.description || "",
@@ -105,8 +108,8 @@
         attributes: {
           ...metric.attributes,
           ...this.defaultAttributes,
-          "service.name": this.serviceName
-        }
+          "service.name": this.serviceName,
+        },
       };
       if (metric.type === "counter") {
         return {
@@ -116,12 +119,12 @@
               {
                 timeUnixNano: BigInt(metric.timestamp * 1000000),
                 asDouble: typeof metric.value === "number" ? metric.value : 0,
-                attributes: baseMetric.attributes
-              }
+                attributes: baseMetric.attributes,
+              },
             ],
             isMonotonic: true,
-            aggregationTemporality: 1
-          }
+            aggregationTemporality: 1,
+          },
         };
       } else if (metric.type === "gauge") {
         return {
@@ -131,10 +134,10 @@
               {
                 timeUnixNano: BigInt(metric.timestamp * 1000000),
                 asDouble: typeof metric.value === "number" ? metric.value : 0,
-                attributes: baseMetric.attributes
-              }
-            ]
-          }
+                attributes: baseMetric.attributes,
+              },
+            ],
+          },
         };
       }
       // Histogram
@@ -147,13 +150,13 @@
               timeUnixNano: BigInt(metric.timestamp * 1000000),
               count: histValue.count,
               sum: histValue.sum,
-              bucketCounts: histValue.buckets.map((b)=>b.count),
-              explicitBounds: histValue.buckets.map((b)=>b.upperBound),
-              attributes: baseMetric.attributes
-            }
+              bucketCounts: histValue.buckets.map((b) => b.count),
+              explicitBounds: histValue.buckets.map((b) => b.upperBound),
+              attributes: baseMetric.attributes,
+            },
           ],
-          aggregationTemporality: 1
-        }
+          aggregationTemporality: 1,
+        },
       };
     });
     const payload = {
@@ -162,20 +165,20 @@
           resource: {
             attributes: {
               "service.name": this.serviceName,
-              ...this.defaultAttributes
-            }
+              ...this.defaultAttributes,
+            },
           },
           scopeMetrics: [
             {
               scope: {
                 name: "@workos/sdk",
-                version: "1.0.0"
+                version: "1.0.0",
               },
-              metrics: enrichedMetrics
-            }
-          ]
-        }
-      ]
+              metrics: enrichedMetrics,
+            },
+          ],
+        },
+      ],
     };
     await this.sendTelemetry(TelemetryType.METRICS, payload);
   }
@@ -186,49 +189,51 @@
    * @returns Promise that resolves when the export is complete
    */ async exportLogs(logs) {
     if (logs.length === 0) return;
-    const enrichedLogs = logs.map((log)=>({
-        ...log,
-        attributes: {
-          ...log.attributes,
-          ...this.defaultAttributes,
-          "service.name": this.serviceName
-        }
-      }));
+    const enrichedLogs = logs.map((log) => ({
+      ...log,
+      attributes: {
+        ...log.attributes,
+        ...this.defaultAttributes,
+        "service.name": this.serviceName,
+      },
+    }));
     const payload = {
       resourceLogs: [
         {
           resource: {
             attributes: {
               "service.name": this.serviceName,
-              ...this.defaultAttributes
-            }
+              ...this.defaultAttributes,
+            },
           },
           scopeLogs: [
             {
               scope: {
                 name: "@workos/sdk",
-                version: "1.0.0"
+                version: "1.0.0",
               },
-              logRecords: enrichedLogs.map((log)=>({
-                  timeUnixNano: BigInt(log.timestamp * 1000000),
-                  severityNumber: log.severityNumber,
-                  severityText: log.severityText,
-                  body: {
-                    stringValue: log.body
+              logRecords: enrichedLogs.map((log) => ({
+                timeUnixNano: BigInt(log.timestamp * 1000000),
+                severityNumber: log.severityNumber,
+                severityText: log.severityText,
+                body: {
+                  stringValue: log.body,
+                },
+                attributes: Object.entries(log.attributes || {}).map((
+                  [k, v],
+                ) => ({
+                  key: k,
+                  value: {
+                    stringValue: v.toString(),
                   },
-                  attributes: Object.entries(log.attributes || {}).map(([k, v])=>({
-                      key: k,
-                      value: {
-                        stringValue: v.toString()
-                      }
-                    })),
-                  traceId: log.traceId,
-                  spanId: log.spanId
-                }))
-            }
-          ]
-        }
-      ]
+                })),
+                traceId: log.traceId,
+                spanId: log.spanId,
+              })),
+            },
+          ],
+        },
+      ],
     };
     await this.sendTelemetry(TelemetryType.LOGS, payload);
   }
@@ -248,14 +253,16 @@
       const response = await fetch(url, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
       if (!response.ok) {
         const errorText = await response.text();
         if (this.debug) {
-          console.error(`[WorkOS Telemetry] Error exporting ${type}: ${response.status} ${errorText}`);
+          console.error(
+            `[WorkOS Telemetry] Error exporting ${type}: ${response.status} ${errorText}`,
+          );
         }
       } else if (this.debug) {
         console.debug(`[WorkOS Telemetry] Successfully exported ${type}`);
@@ -264,7 +271,7 @@
       if (this.debug) {
         console.error(`[WorkOS Telemetry] Failed to export ${type}:`, error);
       }
-    // We don't want to throw errors from telemetry to avoid breaking the application
+      // We don't want to throw errors from telemetry to avoid breaking the application
     }
   }
 }

@@ -2,13 +2,22 @@
 // This module is browser compatible.
 import { AssertionError } from "./assertion_error.ts";
 import { assertIsError } from "./is_error.ts";
-export async function assertRejects(fn, errorClassOrMsg, msgIncludesOrMsg, msg) {
+export async function assertRejects(
+  fn,
+  errorClassOrMsg,
+  msgIncludesOrMsg,
+  msg,
+) {
   // deno-lint-ignore no-explicit-any
   let ErrorClass;
   let msgIncludes;
   let err;
   if (typeof errorClassOrMsg !== "string") {
-    if (errorClassOrMsg === undefined || errorClassOrMsg.prototype instanceof Error || errorClassOrMsg.prototype === Error.prototype) {
+    if (
+      errorClassOrMsg === undefined ||
+      errorClassOrMsg.prototype instanceof Error ||
+      errorClassOrMsg.prototype === Error.prototype
+    ) {
       ErrorClass = errorClassOrMsg;
       msgIncludes = msgIncludesOrMsg;
     }
@@ -20,7 +29,10 @@ export async function assertRejects(fn, errorClassOrMsg, msgIncludesOrMsg, msg) 
   const msgSuffix = msg ? `: ${msg}` : ".";
   try {
     const possiblePromise = fn();
-    if (possiblePromise && typeof possiblePromise === "object" && typeof possiblePromise.then === "function") {
+    if (
+      possiblePromise && typeof possiblePromise === "object" &&
+      typeof possiblePromise.then === "function"
+    ) {
       isPromiseReturned = true;
       await possiblePromise;
     } else {
@@ -28,7 +40,9 @@ export async function assertRejects(fn, errorClassOrMsg, msgIncludesOrMsg, msg) 
     }
   } catch (error) {
     if (!isPromiseReturned) {
-      throw new AssertionError(`Function throws when expected to reject${msgSuffix}`);
+      throw new AssertionError(
+        `Function throws when expected to reject${msgSuffix}`,
+      );
     }
     if (ErrorClass) {
       if (!(error instanceof Error)) {

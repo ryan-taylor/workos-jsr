@@ -1,1 +1,3 @@
-export interface YetAnotherThing { items: string[]; }
+export interface YetAnotherThing {
+  items: string[];
+}

@@ -8,7 +8,11 @@ export function assertThrows(fn, errorClassOrMsg, msgIncludesOrMsg, msg) {
   let msgIncludes;
   let err;
   if (typeof errorClassOrMsg !== "string") {
-    if (errorClassOrMsg === undefined || errorClassOrMsg?.prototype instanceof Error || errorClassOrMsg?.prototype === Error.prototype) {
+    if (
+      errorClassOrMsg === undefined ||
+      errorClassOrMsg?.prototype instanceof Error ||
+      errorClassOrMsg?.prototype === Error.prototype
+    ) {
       ErrorClass = errorClassOrMsg;
       msgIncludes = msgIncludesOrMsg;
     } else {

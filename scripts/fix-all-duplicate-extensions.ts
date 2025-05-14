@@ -81,7 +81,7 @@ async function main() {
     changedFiles.forEach((file) => {
       console.log(`- ${file.replace(rootDir + "/", "")}`);
     });
-    
+
     console.log(
       `\nDone! Fixed duplicate .ts extensions in ${filesChanged} files.`,
     );

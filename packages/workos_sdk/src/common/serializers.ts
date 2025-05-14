@@ -9,21 +9,21 @@ export function serialize<T>(data: unknown): T {
   if (data instanceof Date) {
     return data.toISOString() as unknown as T;
   }
-  
+
   // Handle arrays by recursively serializing each element
   if (Array.isArray(data)) {
     return data.map((item) => serialize(item)) as unknown as T;
   }
-  
+
   // Handle objects by recursively serializing each property
-  if (data !== null && typeof data === 'object') {
+  if (data !== null && typeof data === "object") {
     const result: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(data)) {
       result[key] = serialize(value);
     }
     return result as unknown as T;
   }
-  
+
   return data as T;
 }
 
@@ -50,7 +50,7 @@ export function serializeList<T>(
   itemSerializer: (item: unknown) => T,
 ): ListResponse<T> {
   const adaptedData = adaptListMetadata(data);
-  
+
   // Handle case where data is already an array
   if (Array.isArray(data)) {
     return {
@@ -58,7 +58,7 @@ export function serializeList<T>(
       listMetadata: { before: null, after: null },
     };
   }
-  
+
   // Handle nested data structure
   const response = adaptedData as {
     data?: unknown[];
@@ -76,14 +76,14 @@ export function deserializeList<T>(
   itemDeserializer: (item: unknown) => T,
 ): List<T> {
   const adaptedData = adaptListMetadata(data);
-  
+
   // Ensure we handle cases where data might be a single item
   const response = adaptedData as {
     object?: string;
     data?: unknown[] | unknown;
     listMetadata?: { before: string | null; after: string | null };
   };
-  
+
   // Handle case where data property is not an array
   if (response.data && !Array.isArray(response.data)) {
     return {
@@ -108,7 +108,7 @@ export function serializeEvent(data: unknown): Event {
   if (created_at instanceof Date) {
     created_at = created_at.toISOString();
   }
-  
+
   // Using as unknown as Event to bypass type checking
   return {
     id: eventData.id as string,
@@ -129,15 +129,17 @@ export function serializeDate(date: string | null): Date | null {
 
 // Boolean serializer helper
 export function serializeBoolean(value: unknown): boolean {
-  if (typeof value === 'string') {
+  if (typeof value === "string") {
     const lowercased = value.toLowerCase();
-    if (['false', 'f', 'no', 'n', '0'].includes(lowercased)) {
+    if (["false", "f", "no", "n", "0"].includes(lowercased)) {
       return false;
     }
     // For strings that aren't explicitly true values, return false
-    if (lowercased !== 'true' && lowercased !== 't' && 
-        lowercased !== 'yes' && lowercased !== 'y' && 
-        lowercased !== '1') {
+    if (
+      lowercased !== "true" && lowercased !== "t" &&
+      lowercased !== "yes" && lowercased !== "y" &&
+      lowercased !== "1"
+    ) {
       return false;
     }
   }

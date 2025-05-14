@@ -1,9 +1,6 @@
 import { deserializeEmbedUrl } from "./serializers/embed-url.serializer.ts";
 import { serializeEmbedOptions } from "./serializers/embed-options.serializer.ts";
-import type {
-  EmbedOptions,
-  EmbedUrl,
-} from "./interfaces/index.ts";
+import type { EmbedOptions, EmbedUrl } from "./interfaces/index.ts";
 import type { WorkOS } from "../workos.ts";
 
 /**

@@ -27,13 +27,18 @@ import { assertEquals } from "./equals.ts";
  * @param actual The actual value to be matched.
  * @param expected The expected value to match.
  * @param msg The optional message to display if the assertion fails.
- */ export function assertObjectMatch(// deno-lint-ignore no-explicit-any
-actual, expected, msg) {
-  return assertEquals(// get the intersection of "actual" and "expected"
-  // side effect: all the instances' constructor field is "Object" now.
-  filter(actual, expected), // set (nested) instances' constructor field to be "Object" without changing expected value.
-  // see https://github.com/denoland/deno_std/pull/1419
-  filter(expected, expected), msg);
+ */ export function assertObjectMatch( // deno-lint-ignore no-explicit-any
+  actual,
+  expected,
+  msg,
+) {
+  return assertEquals( // get the intersection of "actual" and "expected"
+    // side effect: all the instances' constructor field is "Object" now.
+    filter(actual, expected), // set (nested) instances' constructor field to be "Object" without changing expected value.
+    // see https://github.com/denoland/deno_std/pull/1419
+    filter(expected, expected),
+    msg,
+  );
 }
 function isObject(val) {
   return typeof val === "object" && val !== null;
@@ -43,7 +48,7 @@ function defineProperty(target, key, value) {
     value,
     configurable: true,
     enumerable: true,
-    writable: true
+    writable: true,
   });
 }
 function filter(a, b) {
@@ -57,24 +62,26 @@ function filter(a, b) {
       seen.set(a, b);
     } catch (err) {
       if (err instanceof TypeError) {
-        throw new TypeError(`Cannot assertObjectMatch ${a === null ? null : `type ${typeof a}`}`);
+        throw new TypeError(
+          `Cannot assertObjectMatch ${a === null ? null : `type ${typeof a}`}`,
+        );
       }
     }
     // Filter keys and symbols which are present in both actual and expected
     const filtered = {};
     const keysA = Reflect.ownKeys(a);
     const keysB = Reflect.ownKeys(b);
-    const entries = keysA.filter((key)=>keysB.includes(key)).map((key)=>[
-        key,
-        a[key]
-      ]);
+    const entries = keysA.filter((key) => keysB.includes(key)).map((key) => [
+      key,
+      a[key],
+    ]);
     if (keysA.length && keysB.length && !entries.length) {
       // If both objects are not empty but don't have the same keys or symbols,
       // returns the entries in object a.
-      for (const key of keysA)defineProperty(filtered, key, a[key]);
+      for (const key of keysA) defineProperty(filtered, key, a[key]);
       return filtered;
     }
-    for (const [key, value] of entries){
+    for (const [key, value] of entries) {
       // On regexp references, keep value as it to avoid loosing pattern and flags
       if (value instanceof RegExp) {
         defineProperty(filtered, key, value);
@@ -90,21 +97,27 @@ function filter(a, b) {
       if (isObject(value) && isObject(subset)) {
         // When both operands are maps, build a filtered map with common keys and filter nested objects inside
         if (value instanceof Map && subset instanceof Map) {
-          defineProperty(filtered, key, new Map([
-            ...value
-          ].filter(([k])=>subset.has(k)).map(([k, v])=>{
-            const v2 = subset.get(k);
-            if (isObject(v) && isObject(v2)) {
-              return [
-                k,
-                filterObject(v, v2)
-              ];
-            }
-            return [
-              k,
-              v
-            ];
-          })));
+          defineProperty(
+            filtered,
+            key,
+            new Map(
+              [
+                ...value,
+              ].filter(([k]) => subset.has(k)).map(([k, v]) => {
+                const v2 = subset.get(k);
+                if (isObject(v) && isObject(v2)) {
+                  return [
+                    k,
+                    filterObject(v, v2),
+                  ];
+                }
+                return [
+                  k,
+                  v,
+                ];
+              }),
+            ),
+          );
           continue;
         }
         // When both operands are set, build a filtered set with common values
@@ -126,7 +139,7 @@ function filter(a, b) {
     seen.set(a, b);
     const filtered = [];
     const count = Math.min(a.length, b.length);
-    for(let i = 0; i < count; ++i){
+    for (let i = 0; i < count; ++i) {
       const value = a[i];
       const subset = b[i];
       // On regexp references, keep value as it to avoid loosing pattern and flags
@@ -143,21 +156,23 @@ function filter(a, b) {
       if (isObject(value) && isObject(subset)) {
         // When both operands are maps, build a filtered map with common keys and filter nested objects inside
         if (value instanceof Map && subset instanceof Map) {
-          const map = new Map([
-            ...value
-          ].filter(([k])=>subset.has(k)).map(([k, v])=>{
-            const v2 = subset.get(k);
-            if (isObject(v) && isObject(v2)) {
+          const map = new Map(
+            [
+              ...value,
+            ].filter(([k]) => subset.has(k)).map(([k, v]) => {
+              const v2 = subset.get(k);
+              if (isObject(v) && isObject(v2)) {
+                return [
+                  k,
+                  filterObject(v, v2),
+                ];
+              }
               return [
                 k,
-                filterObject(v, v2)
+                v,
               ];
-            }
-            return [
-              k,
-              v
-            ];
-          }));
+            }),
+          );
           filtered.push(map);
           continue;
         }

@@ -1,6 +1,6 @@
 /**
  * Type narrowing utilities for working with unknown types
- * 
+ *
  * This file re-exports all the type guard and type assertion utilities
  * for convenient access in a single import.
  */

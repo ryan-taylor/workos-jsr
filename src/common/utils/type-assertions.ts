@@ -1,11 +1,18 @@
 /**
  * Type assertion utilities for safely casting unknown types
- * 
+ *
  * These utilities provide type-safe ways to assert and cast unknown values
  * to specific types with runtime validation.
  */
 
-import { isArray, isBoolean, isNumber, isObject, isString, isNullOrUndefined } from "./type-guards.ts";
+import {
+  isArray,
+  isBoolean,
+  isNullOrUndefined,
+  isNumber,
+  isObject,
+  isString,
+} from "./type-guards.ts";
 
 /**
  * Error thrown when a type assertion fails
@@ -24,7 +31,7 @@ export class TypeAssertionError extends Error {
  * @param typeName - The name of the expected type (for error messages)
  * @returns The value with the asserted type
  * @throws {TypeAssertionError} If the value is not of the expected type
- * 
+ *
  * @example
  * ```ts
  * // Asserts data is a string or throws
@@ -34,13 +41,13 @@ export class TypeAssertionError extends Error {
 export function assertType<T>(
   value: unknown,
   check: (value: unknown) => value is T,
-  typeName: string
+  typeName: string,
 ): T {
   if (check(value)) {
     return value;
   }
   throw new TypeAssertionError(
-    `Expected ${typeName}, got ${value === null ? "null" : typeof value}`
+    `Expected ${typeName}, got ${value === null ? "null" : typeof value}`,
   );
 }
 
@@ -50,7 +57,7 @@ export function assertType<T>(
  * @param check - The type guard function to use
  * @param fallback - Optional fallback value to use if validation fails
  * @returns The value cast to the specified type, or the fallback value
- * 
+ *
  * @example
  * ```ts
  * // Safely cast to string, returns empty string if value is not a string
@@ -60,7 +67,7 @@ export function assertType<T>(
 export function safeCast<T>(
   value: unknown,
   check: (value: unknown) => value is T,
-  fallback: T
+  fallback: T,
 ): T {
   return check(value) ? value : fallback;
 }
@@ -72,7 +79,7 @@ export function safeCast<T>(
  * @param typeName - The name of the expected type (for error messages)
  * @returns The value with the asserted type
  * @throws {TypeAssertionError} If the value doesn't match the expected shape
- * 
+ *
  * @example
  * ```ts
  * // Define a User type
@@ -81,11 +88,11 @@ export function safeCast<T>(
  *   name: string;
  *   age: number;
  * }
- * 
+ *
  * // Validate an unknown value as a User
  * const user = assertShape<User>(
  *   data,
- *   (obj): obj is User => 
+ *   (obj): obj is User =>
  *     isObject(obj) &&
  *     isString(obj.id) &&
  *     isString(obj.name) &&
@@ -97,12 +104,14 @@ export function safeCast<T>(
 export function assertShape<T>(
   value: unknown,
   validator: (value: unknown) => value is T,
-  typeName: string
+  typeName: string,
 ): T {
   if (validator(value)) {
     return value;
   }
-  throw new TypeAssertionError(`Value does not match the expected shape of ${typeName}`);
+  throw new TypeAssertionError(
+    `Value does not match the expected shape of ${typeName}`,
+  );
 }
 
 /**
@@ -135,7 +144,7 @@ export function assertShape<T>(
 export function satisfies<T>(
   value: unknown,
   validator: (value: unknown) => value is T,
-  typeName = "expected type"
+  typeName = "expected type",
 ): T {
   if (validator(value)) {
     return value;
@@ -160,7 +169,7 @@ export function safeJsonParse(json: unknown): unknown | null {
   if (!isString(json)) {
     return null;
   }
-  
+
   try {
     return JSON.parse(json);
   } catch {

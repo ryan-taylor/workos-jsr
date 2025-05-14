@@ -1,4 +1,3 @@
-
 import { Something } from "./something.ts";
 import type { OtherThing } from "./otherThing.ts";
 import { YetAnotherThing } from "../utils/things.ts";

@@ -456,7 +456,7 @@ export function getGenerator(
   if (otcGenerator.supports(specVersion)) {
     return otcGenerator;
   }
-  
+
   // Then try the native generator for newer versions
   const nativeGenerator = new NativeGenerator();
   if (nativeGenerator.supports(specVersion)) {

@@ -1,8 +1,8 @@
 /**
  * Type guard utilities for narrowing unknown types
- * 
+ *
  * These utilities help safely narrow unknown types to specific types with
- * runtime checks, making it easier to work with unknown values from OpenAPI 
+ * runtime checks, making it easier to work with unknown values from OpenAPI
  * generated code.
  */
 
@@ -10,7 +10,7 @@
  * Checks if a value is a string
  * @param value - The value to check
  * @returns True if the value is a string, false otherwise
- * 
+ *
  * @example
  * ```ts
  * const data: unknown = responseData;
@@ -28,7 +28,7 @@ export function isString(value: unknown): value is string {
  * Checks if a value is a number
  * @param value - The value to check
  * @returns True if the value is a number and not NaN, false otherwise
- * 
+ *
  * @example
  * ```ts
  * const data: unknown = responseData;
@@ -46,7 +46,7 @@ export function isNumber(value: unknown): value is number {
  * Checks if a value is a boolean
  * @param value - The value to check
  * @returns True if the value is a boolean, false otherwise
- * 
+ *
  * @example
  * ```ts
  * const data: unknown = responseData;
@@ -82,7 +82,7 @@ export function isUndefined(value: unknown): value is undefined {
  * Checks if a value is null or undefined
  * @param value - The value to check
  * @returns True if the value is null or undefined, false otherwise
- * 
+ *
  * @example
  * ```ts
  * const data: unknown = responseData;
@@ -100,7 +100,7 @@ export function isNullOrUndefined(value: unknown): value is null | undefined {
  * Checks if a value is an array
  * @param value - The value to check
  * @returns True if the value is an array, false otherwise
- * 
+ *
  * @example
  * ```ts
  * const data: unknown = responseData;
@@ -118,7 +118,7 @@ export function isArray(value: unknown): value is unknown[] {
  * Checks if a value is an object (not null, not an array)
  * @param value - The value to check
  * @returns True if the value is an object, false otherwise
- * 
+ *
  * @example
  * ```ts
  * const data: unknown = responseData;
@@ -129,9 +129,9 @@ export function isArray(value: unknown): value is unknown[] {
  * ```
  */
 export function isObject(value: unknown): value is Record<string, unknown> {
-  return value !== null && 
-         typeof value === "object" && 
-         !Array.isArray(value);
+  return value !== null &&
+    typeof value === "object" &&
+    !Array.isArray(value);
 }
 
 /**
@@ -139,7 +139,7 @@ export function isObject(value: unknown): value is Record<string, unknown> {
  * @param value - The value to check
  * @param prop - The property to check for
  * @returns True if the value has the specified property, false otherwise
- * 
+ *
  * @example
  * ```ts
  * const data: unknown = responseData;
@@ -150,8 +150,8 @@ export function isObject(value: unknown): value is Record<string, unknown> {
  * ```
  */
 export function hasProperty<K extends string>(
-  value: unknown, 
-  prop: K
+  value: unknown,
+  prop: K,
 ): value is { [key in K]: unknown } {
   return (
     value !== null &&
@@ -166,7 +166,7 @@ export function hasProperty<K extends string>(
  * @returns True if the value is a function, false otherwise
  */
 export function isFunction(
-  value: unknown
+  value: unknown,
 ): value is (...args: unknown[]) => unknown {
   return typeof value === "function";
 }
@@ -175,7 +175,7 @@ export function isFunction(
  * Checks if a value is a Date object
  * @param value - The value to check
  * @returns True if the value is a valid Date object, false otherwise
- * 
+ *
  * @example
  * ```ts
  * const data: unknown = responseData;
@@ -187,7 +187,7 @@ export function isFunction(
  */
 export function isDate(value: unknown): value is Date {
   return (
-    value instanceof Date && 
+    value instanceof Date &&
     !Number.isNaN(value.getTime())
   );
 }
@@ -209,8 +209,9 @@ export function isDate(value: unknown): value is Date {
  * }
  * ```
  */
-export const isArrayOf = <T>(guard: (v: unknown) => v is T) =>
-  (value: unknown): value is T[] => isArray(value) && value.every(guard);
+export const isArrayOf =
+  <T>(guard: (v: unknown) => v is T) => (value: unknown): value is T[] =>
+    isArray(value) && value.every(guard);
 
 /**
  * Creates a type guard for records where every value satisfies a specific type guard
@@ -229,7 +230,8 @@ export const isArrayOf = <T>(guard: (v: unknown) => v is T) =>
  * }
  * ```
  */
-export const isRecordOf = <T>(valueGuard: (v: unknown) => v is T) =>
+export const isRecordOf =
+  <T>(valueGuard: (v: unknown) => v is T) =>
   (value: unknown): value is Record<string, T> =>
     isObject(value) && Object.values(value).every(valueGuard);
 
@@ -254,7 +256,7 @@ export const isRecordOf = <T>(valueGuard: (v: unknown) => v is T) =>
  */
 export function isOneOf<T extends readonly unknown[]>(
   value: unknown,
-  allowedValues: T
+  allowedValues: T,
 ): value is T[number] {
   return allowedValues.includes(value as T[number]);
 }
@@ -281,6 +283,6 @@ export function hasProperties<K extends string>(
   if (!isObject(value)) {
     return false;
   }
-  
-  return props.every(prop => prop in value);
+
+  return props.every((prop) => prop in value);
 }

@@ -1,1 +1,3 @@
-export interface OtherThing { value: number; }
+export interface OtherThing {
+  value: number;
+}

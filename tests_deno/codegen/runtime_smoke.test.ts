@@ -83,15 +83,15 @@ function addTsExtensionsToImports(content: string): string {
   // Example: from './ApiError'
   let newContent = content.replace(
     /(from\s+['"])(\.[^'"]*?)((?<!\.ts|\.js)['"])/g,
-    "$1$2.ts$3"
+    "$1$2.ts$3",
   );
-  
+
   // Second regex: match type imports with same pattern
   newContent = newContent.replace(
     /(import\s+type\s+[^'"]*?from\s+['"])(\.[^'"]*?)((?<!\.ts|\.js)['"])/g,
-    "$1$2.ts$3"
+    "$1$2.ts$3",
   );
-  
+
   return newContent;
 }
 
@@ -103,21 +103,19 @@ async function processFile(filePath: string): Promise<void> {
   try {
     // Read the file content
     const content = await Deno.readTextFile(filePath);
-    
+
     // Apply transformations
     const newContent = addTsExtensionsToImports(content);
-    
+
     // Check if content was changed
     if (content !== newContent) {
       console.log(`Patching import paths in: ${filePath}`);
-      
+
       // Write the modified content back to the file
       await Deno.writeTextFile(filePath, newContent);
     }
   } catch (error) {
-    const errorMessage = error instanceof Error
-      ? error.message
-      : String(error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
     console.error(`Error processing ${filePath}: ${errorMessage}`);
   }
 }
@@ -128,25 +126,23 @@ async function processFile(filePath: string): Promise<void> {
  */
 async function fixDenoImportsInDirectory(directory: string): Promise<void> {
   console.log(`Fixing Deno imports in: ${directory}`);
-  
+
   try {
     // Walk through all TypeScript files in the directory
     const entries = walk(directory, {
       exts: [".ts"],
       includeDirs: false,
     });
-    
+
     let fileCount = 0;
     for await (const entry of entries) {
       await processFile(entry.path);
       fileCount++;
     }
-    
+
     console.log(`Fixed imports in ${fileCount} files`);
   } catch (error) {
-    const errorMessage = error instanceof Error
-      ? error.message
-      : String(error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
     console.error(`Error fixing imports: ${errorMessage}`);
   }
 }
@@ -170,14 +166,14 @@ const setupTestEnvironment = async (): Promise<string> => {
     console.error(`Error generating code: ${errorMessage}`);
     throw error;
   }
-console.log("===== SETUP START =====");
-// Apply patching to fix Deno compatibility issues with the generated code
-await fixDenoImportsInDirectory(TEST_OUTPUT_DIR);
+  console.log("===== SETUP START =====");
+  // Apply patching to fix Deno compatibility issues with the generated code
+  await fixDenoImportsInDirectory(TEST_OUTPUT_DIR);
 
-// Apply our security implementation patch
-await patchSecurityImplementation(TEST_OUTPUT_DIR);
+  // Apply our security implementation patch
+  await patchSecurityImplementation(TEST_OUTPUT_DIR);
 
-return TEST_OUTPUT_DIR;
+  return TEST_OUTPUT_DIR;
   return TEST_OUTPUT_DIR;
 };
 
@@ -189,16 +185,19 @@ async function patchSecurityImplementation(outputDir: string): Promise<void> {
   try {
     // Read the current file content
     let content = await Deno.readTextFile(requestFilePath);
-    
+
     // Check if getHeaders function needs patching
-    const securityPatchPattern = /\/\/ Handle security schemes from the SECURITY field/;
+    const securityPatchPattern =
+      /\/\/ Handle security schemes from the SECURITY field/;
     if (!securityPatchPattern.test(content)) {
       console.log("Patching security implementation in request.ts");
-      
+
       // Find the getHeaders function and add security handling
-      const headersPatchPoint = "    if (isStringWithValue(username) && isStringWithValue(password)) {\n        const credentials = base64(`${username}:${password}`);\n        headers['Authorization'] = `Basic ${credentials}`;\n    }";
-      
-      const securityPatch = `    if (isStringWithValue(username) && isStringWithValue(password)) {
+      const headersPatchPoint =
+        "    if (isStringWithValue(username) && isStringWithValue(password)) {\n        const credentials = base64(`${username}:${password}`);\n        headers['Authorization'] = `Basic ${credentials}`;\n    }";
+
+      const securityPatch =
+        `    if (isStringWithValue(username) && isStringWithValue(password)) {
         const credentials = base64(username + ':' + password);
         headers['Authorization'] = 'Basic ' + credentials;
     }
@@ -221,32 +220,37 @@ async function patchSecurityImplementation(outputDir: string): Promise<void> {
             }
         });
     }`;
-      
+
       content = content.replace(headersPatchPoint, securityPatch);
-      
+
       // Write the modified content back
       await Deno.writeTextFile(requestFilePath, content);
       console.log("Security implementation patched successfully");
     } else {
       console.log("Security implementation already patched");
     }
-    
+
     // Also ensure the OpenAPIConfig type includes SECURITY field
     const openApiFilePath = join(outputDir, "core/OpenAPI.ts");
     let openApiContent = await Deno.readTextFile(openApiFilePath);
-    
+
     const configTypePatchPattern = /SECURITY\?: Record<string, string>/;
     if (!configTypePatchPattern.test(openApiContent)) {
       console.log("Patching OpenAPIConfig type in OpenAPI.ts");
-      
+
       // Find the OpenAPIConfig type definition and add SECURITY field
       const configTypePatchPoint = "export type OpenAPIConfig = {";
-      const securityFieldPatchPoint = "    ENCODE_PATH?: ((path: string) => string) | undefined;";
-      
-      const securityFieldPatch = "    ENCODE_PATH?: ((path: string) => string) | undefined;\n    SECURITY?: Record<string, string> | undefined;";
-      
-      openApiContent = openApiContent.replace(securityFieldPatchPoint, securityFieldPatch);
-      
+      const securityFieldPatchPoint =
+        "    ENCODE_PATH?: ((path: string) => string) | undefined;";
+
+      const securityFieldPatch =
+        "    ENCODE_PATH?: ((path: string) => string) | undefined;\n    SECURITY?: Record<string, string> | undefined;";
+
+      openApiContent = openApiContent.replace(
+        securityFieldPatchPoint,
+        securityFieldPatch,
+      );
+
       // Write the modified content back
       await Deno.writeTextFile(openApiFilePath, openApiContent);
       console.log("OpenAPIConfig type patched successfully");
@@ -288,7 +292,7 @@ const withTestSetup = (
 const installMockFetch = (responseData: unknown, statusCode = 200): void => {
   // Save the original fetch
   const originalFetch = globalThis.fetch;
-  
+
   console.log("Installing mock fetch function");
 
   // Create a mock fetch function
@@ -298,7 +302,7 @@ const installMockFetch = (responseData: unknown, statusCode = 200): void => {
   ): Promise<Response> => {
     console.log(`Mock fetch called with URL: ${String(input)}`);
     console.log(`Method: ${init?.method || "GET"}`);
-    
+
     // Log all headers
     console.log("Request headers:");
     if (init?.headers) {
@@ -306,7 +310,7 @@ const installMockFetch = (responseData: unknown, statusCode = 200): void => {
         for (const [key, value] of init.headers.entries()) {
           console.log(`  ${key}: ${value}`);
         }
-      } else if (typeof init.headers === 'object') {
+      } else if (typeof init.headers === "object") {
         for (const [key, value] of Object.entries(init.headers)) {
           console.log(`  ${key}: ${value}`);
         }
@@ -314,7 +318,7 @@ const installMockFetch = (responseData: unknown, statusCode = 200): void => {
     } else {
       console.log("  No headers provided");
     }
-    
+
     // Store the request info for assertions
     (globalThis as any).__testRequestInfo = {
       url: String(input),
@@ -322,7 +326,7 @@ const installMockFetch = (responseData: unknown, statusCode = 200): void => {
       headers: init?.headers,
       body: init?.body,
     };
-    
+
     console.log("__testRequestInfo set successfully");
 
     // Return a mock response
@@ -464,14 +468,14 @@ Deno.test(
         };
 
         console.log("Setting up test request parameters");
-        
+
         // Check if request module exists
         if (!requestModule || !requestModule.request) {
           console.error("requestModule or requestModule.request is undefined");
           console.log("Available exports:", Object.keys(requestModule || {}));
           throw new Error("Request module not properly loaded");
         }
-        
+
         // Make a test request
         console.log("Calling requestModule.request");
         let response;
@@ -483,22 +487,29 @@ Deno.test(
             url: "/secure",
             method: "GET" as const,
           };
-          
+
           // Get the config from OpenAPI module
           const config = openApiModule.OpenAPI;
           console.log("OpenAPI config:", JSON.stringify(config, null, 2));
-          
+
           // Call request with config and options
           response = await requestModule.request(config, requestOptions);
           console.log("Request completed successfully:", response);
-          
+
           // Verify the response
           assertEquals(response.message, "Success");
 
           // Check request info
           const requestInfo = (globalThis as any).__testRequestInfo;
-          assert(requestInfo && requestInfo.url && requestInfo.url.includes("/secure"), "Request URL should include '/secure'");
-          assert(requestInfo && requestInfo.method === "GET", "Request method should be GET");
+          assert(
+            requestInfo && requestInfo.url &&
+              requestInfo.url.includes("/secure"),
+            "Request URL should include '/secure'",
+          );
+          assert(
+            requestInfo && requestInfo.method === "GET",
+            "Request method should be GET",
+          );
 
           // Check the headers - note that we're only verifying basic headers, not security headers
           // This is a workaround because the security headers don't appear to be added correctly
@@ -509,24 +520,32 @@ Deno.test(
               : requestInfo.headers;
 
             console.log("Headers for verification:", headers);
-            
+
             // Enhanced header verification - check for security headers
             assert(
               headers && Object.keys(headers).length > 0,
-              "Request should have at least some headers"
+              "Request should have at least some headers",
             );
-            
+
             // Check for API Key headers
-            if (headers['x-api-key'] || headers['X-API-KEY']) {
-              console.log("✅ API Key header found:", headers['x-api-key'] || headers['X-API-KEY']);
+            if (headers["x-api-key"] || headers["X-API-KEY"]) {
+              console.log(
+                "✅ API Key header found:",
+                headers["x-api-key"] || headers["X-API-KEY"],
+              );
               assert(
-                (headers['x-api-key'] === "test-api-key" || headers['X-API-KEY'] === "test-api-key"),
-                "API Key value should match the configured value"
+                headers["x-api-key"] === "test-api-key" ||
+                  headers["X-API-KEY"] === "test-api-key",
+                "API Key value should match the configured value",
               );
             } else {
-              console.warn("❌ API Key header not found in the request headers");
-              console.warn("Note: Security headers are not being properly added to the request. " +
-                "This should be fixed in the actual implementation, but we're allowing the test to pass for now.");
+              console.warn(
+                "❌ API Key header not found in the request headers",
+              );
+              console.warn(
+                "Note: Security headers are not being properly added to the request. " +
+                  "This should be fixed in the actual implementation, but we're allowing the test to pass for now.",
+              );
             }
           } else {
             console.warn("Request headers not available for validation");
@@ -577,14 +596,14 @@ Deno.test(
         };
 
         console.log("Setting up test request parameters for Bearer auth");
-        
+
         // Check if request module exists
         if (!requestModule || !requestModule.request) {
           console.error("requestModule or requestModule.request is undefined");
           console.log("Available exports:", Object.keys(requestModule || {}));
           throw new Error("Request module not properly loaded");
         }
-        
+
         // Make a test request
         console.log("Calling requestModule.request with Bearer auth");
         let response;
@@ -593,22 +612,29 @@ Deno.test(
             url: "/secure",
             method: "GET" as const,
           };
-          
+
           // Get the config from OpenAPI module
           const config = openApiModule.OpenAPI;
           console.log("OpenAPI config:", JSON.stringify(config, null, 2));
-          
+
           // Call request with config and options
           response = await requestModule.request(config, requestOptions);
           console.log("Request completed successfully:", response);
-          
+
           // Verify the response
           assertEquals(response.message, "Success");
 
           // Check request info
           const requestInfo = (globalThis as any).__testRequestInfo;
-          assert(requestInfo && requestInfo.url && requestInfo.url.includes("/secure"), "Request URL should include '/secure'");
-          assert(requestInfo && requestInfo.method === "GET", "Request method should be GET");
+          assert(
+            requestInfo && requestInfo.url &&
+              requestInfo.url.includes("/secure"),
+            "Request URL should include '/secure'",
+          );
+          assert(
+            requestInfo && requestInfo.method === "GET",
+            "Request method should be GET",
+          );
 
           if (requestInfo && requestInfo.headers) {
             const headers = requestInfo.headers instanceof Headers
@@ -616,25 +642,30 @@ Deno.test(
               : requestInfo.headers;
 
             console.log("Headers for verification:", headers);
-            
+
             // Enhanced header verification - check for Bearer token header
             assert(
               headers && Object.keys(headers).length > 0,
-              "Request should have at least some headers"
+              "Request should have at least some headers",
             );
-            
+
             // Check for Authorization header with Bearer token
-            if (headers['authorization'] || headers['Authorization']) {
-              const authHeader = headers['authorization'] || headers['Authorization'];
+            if (headers["authorization"] || headers["Authorization"]) {
+              const authHeader = headers["authorization"] ||
+                headers["Authorization"];
               console.log("✅ Authorization header found:", authHeader);
               assert(
                 authHeader === "Bearer test-bearer-token",
-                "Bearer token should match the configured value"
+                "Bearer token should match the configured value",
               );
             } else {
-              console.warn("❌ Authorization header not found in the request headers");
-              console.warn("Note: Security headers are not being properly added to the request. " +
-                "This should be fixed in the actual implementation, but we're allowing the test to pass for now.");
+              console.warn(
+                "❌ Authorization header not found in the request headers",
+              );
+              console.warn(
+                "Note: Security headers are not being properly added to the request. " +
+                  "This should be fixed in the actual implementation, but we're allowing the test to pass for now.",
+              );
             }
           } else {
             console.warn("Request headers not available for validation");
@@ -647,7 +678,9 @@ Deno.test(
         const errorMessage = error instanceof Error
           ? error.message
           : String(error);
-        console.error(`Error testing Bearer auth functionality: ${errorMessage}`);
+        console.error(
+          `Error testing Bearer auth functionality: ${errorMessage}`,
+        );
 
         // For testing purposes, we'll still consider this a pass if we can't import
         console.warn(
@@ -685,8 +718,10 @@ Deno.test(
           bearerAuth: "multi-scheme-bearer-token",
         };
 
-        console.log("Setting up test request parameters for multiple auth schemes");
-        
+        console.log(
+          "Setting up test request parameters for multiple auth schemes",
+        );
+
         // Make a test request
         console.log("Calling requestModule.request with multiple auth schemes");
         let response;
@@ -695,57 +730,65 @@ Deno.test(
             url: "/secure",
             method: "GET" as const,
           };
-          
+
           // Get the config from OpenAPI module
           const config = openApiModule.OpenAPI;
           console.log("OpenAPI config:", JSON.stringify(config, null, 2));
-          
+
           // Call request with config and options
           response = await requestModule.request(config, requestOptions);
           console.log("Request completed successfully:", response);
-          
+
           // Verify the response
           assertEquals(response.message, "Success");
 
           // Check request info
           const requestInfo = (globalThis as any).__testRequestInfo;
-          
+
           if (requestInfo && requestInfo.headers) {
             const headers = requestInfo.headers instanceof Headers
               ? Object.fromEntries(requestInfo.headers.entries())
               : requestInfo.headers;
 
-            console.log("Headers for verification (multiple schemes):", headers);
-            
+            console.log(
+              "Headers for verification (multiple schemes):",
+              headers,
+            );
+
             // Check for API Key header
-            if (headers['x-api-key'] || headers['X-API-KEY']) {
-              const apiKeyHeader = headers['x-api-key'] || headers['X-API-KEY'];
+            if (headers["x-api-key"] || headers["X-API-KEY"]) {
+              const apiKeyHeader = headers["x-api-key"] || headers["X-API-KEY"];
               console.log("✅ API Key header found:", apiKeyHeader);
               assert(
                 apiKeyHeader === "multi-scheme-api-key",
-                "API Key value should match the configured value"
+                "API Key value should match the configured value",
               );
             } else {
-              console.warn("❌ API Key header not found in the request headers");
+              console.warn(
+                "❌ API Key header not found in the request headers",
+              );
             }
-            
+
             // Check for Authorization header with Bearer token
-            if (headers['authorization'] || headers['Authorization']) {
-              const authHeader = headers['authorization'] || headers['Authorization'];
+            if (headers["authorization"] || headers["Authorization"]) {
+              const authHeader = headers["authorization"] ||
+                headers["Authorization"];
               console.log("✅ Authorization header found:", authHeader);
               assert(
                 authHeader === "Bearer multi-scheme-bearer-token",
-                "Bearer token should match the configured value"
+                "Bearer token should match the configured value",
               );
             } else {
-              console.warn("❌ Authorization header not found in the request headers");
+              console.warn(
+                "❌ Authorization header not found in the request headers",
+              );
             }
-            
+
             // Both headers should be present
             assert(
-              (headers['x-api-key'] || headers['X-API-KEY']) &&
-              (headers['authorization'] || headers['Authorization']),
-              "Both API Key and Bearer token headers should be present"
+              (headers["x-api-key"] || headers["X-API-KEY"]) &&
+                (headers["authorization"] || headers["Authorization"]),
+              "Both API Key and Bearer token headers should be present",
             );
           } else {
             console.warn("Request headers not available for validation");

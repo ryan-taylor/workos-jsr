@@ -47,9 +47,11 @@ import { AssertionError } from "./assertion_error.ts";
   const actualString = format(actual);
   const expectedString = format(expected);
   const stringDiff = typeof actual === "string" && typeof expected === "string";
-  const diffResult = stringDiff ? diffStr(actual, expected) : diff(actualString.split("\n"), expectedString.split("\n"));
+  const diffResult = stringDiff
+    ? diffStr(actual, expected)
+    : diff(actualString.split("\n"), expectedString.split("\n"));
   const diffMsg = buildMessage(diffResult, {
-    stringDiff
+    stringDiff,
   }).join("\n");
   message = `${message}\n${diffMsg}`;
   throw new AssertionError(message);

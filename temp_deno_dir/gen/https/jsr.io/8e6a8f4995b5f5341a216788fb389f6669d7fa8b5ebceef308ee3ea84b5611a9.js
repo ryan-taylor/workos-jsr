@@ -15,7 +15,8 @@
  * ```
  *
  * @module
- */ export * from "./almost_equals.ts";
+ */
+export * from "./almost_equals.ts";
 export * from "./array_includes.ts";
 export * from "./equals.ts";
 export * from "./exists.ts";

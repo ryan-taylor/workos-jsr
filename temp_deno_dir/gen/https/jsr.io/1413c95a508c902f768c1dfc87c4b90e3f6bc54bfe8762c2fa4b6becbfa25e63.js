@@ -19,7 +19,8 @@ import { AssertionError } from "./assertion_error.ts";
  */ export function assertExists(actual, msg) {
   if (actual === undefined || actual === null) {
     const msgSuffix = msg ? `: ${msg}` : ".";
-    msg = `Expected actual: "${actual}" to not be null or undefined${msgSuffix}`;
+    msg =
+      `Expected actual: "${actual}" to not be null or undefined${msgSuffix}`;
     throw new AssertionError(msg);
   }
 }

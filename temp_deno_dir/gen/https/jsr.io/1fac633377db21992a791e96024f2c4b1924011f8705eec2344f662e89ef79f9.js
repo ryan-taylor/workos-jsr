@@ -24,14 +24,21 @@ import { stripAnsiCode } from "jsr:@std/internal@^1.0.6/styles";
  * @param ErrorClass The optional error class to assert.
  * @param msgMatches The optional string or RegExp to assert in the error message.
  * @param msg The optional message to display if the assertion fails.
- */ export function assertIsError(error, // deno-lint-ignore no-explicit-any
-ErrorClass, msgMatches, msg) {
+ */ export function assertIsError(
+  error, // deno-lint-ignore no-explicit-any
+  ErrorClass,
+  msgMatches,
+  msg,
+) {
   const msgSuffix = msg ? `: ${msg}` : ".";
   if (!(error instanceof Error)) {
-    throw new AssertionError(`Expected "error" to be an Error object${msgSuffix}`);
+    throw new AssertionError(
+      `Expected "error" to be an Error object${msgSuffix}`,
+    );
   }
   if (ErrorClass && !(error instanceof ErrorClass)) {
-    msg = `Expected error to be instance of "${ErrorClass.name}", but was "${error?.constructor?.name}"${msgSuffix}`;
+    msg =
+      `Expected error to be instance of "${ErrorClass.name}", but was "${error?.constructor?.name}"${msgSuffix}`;
     throw new AssertionError(msg);
   }
   let msgCheck;
@@ -42,7 +49,11 @@ ErrorClass, msgMatches, msg) {
     msgCheck = msgMatches.test(stripAnsiCode(error.message));
   }
   if (msgMatches && !msgCheck) {
-    msg = `Expected error message to include ${msgMatches instanceof RegExp ? msgMatches.toString() : JSON.stringify(msgMatches)}, but got ${JSON.stringify(error?.message)}${msgSuffix}`;
+    msg = `Expected error message to include ${
+      msgMatches instanceof RegExp
+        ? msgMatches.toString()
+        : JSON.stringify(msgMatches)
+    }, but got ${JSON.stringify(error?.message)}${msgSuffix}`;
     throw new AssertionError(msg);
   }
 }

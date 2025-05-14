@@ -156,10 +156,10 @@ async function setup() {
   try {
     // Create test directory
     await Deno.mkdir(TEST_DIR, { recursive: true });
-    
+
     // Create test file
     await Deno.writeTextFile(TEST_FILE, ORIGINAL_CONTENT);
-    
+
     console.log("Test setup completed.");
   } catch (error) {
     console.error("Setup failed:", error);
@@ -184,30 +184,40 @@ async function cleanup() {
  */
 function testAddExtensionsFunction() {
   console.log("\nTesting addTsExtensionsToImports function directly:");
-  
+
   // Import the function from our enhanced script
-  import("./patch-openapi-runtime-enhanced.ts").then(({ addTsExtensionsToImports }) => {
-    const result = addTsExtensionsToImports(ORIGINAL_CONTENT);
-    
-    // Check if the transformation matches expected output
-    if (result.trim() === EXPECTED_CONTENT.trim()) {
-      console.log("✅ Function test passed: Transformation matches expected output");
-    } else {
-      console.log("❌ Function test failed: Transformation does not match expected output");
-      console.log("\nDifferences:");
-      
-      const originalLines = result.trim().split("\n");
-      const expectedLines = EXPECTED_CONTENT.trim().split("\n");
-      
-      for (let i = 0; i < Math.max(originalLines.length, expectedLines.length); i++) {
-        if (originalLines[i] !== expectedLines[i]) {
-          console.log(`Line ${i + 1}:`);
-          console.log(`  Actual:   ${originalLines[i]}`);
-          console.log(`  Expected: ${expectedLines[i]}`);
+  import("./patch-openapi-runtime-enhanced.ts").then(
+    ({ addTsExtensionsToImports }) => {
+      const result = addTsExtensionsToImports(ORIGINAL_CONTENT);
+
+      // Check if the transformation matches expected output
+      if (result.trim() === EXPECTED_CONTENT.trim()) {
+        console.log(
+          "✅ Function test passed: Transformation matches expected output",
+        );
+      } else {
+        console.log(
+          "❌ Function test failed: Transformation does not match expected output",
+        );
+        console.log("\nDifferences:");
+
+        const originalLines = result.trim().split("\n");
+        const expectedLines = EXPECTED_CONTENT.trim().split("\n");
+
+        for (
+          let i = 0;
+          i < Math.max(originalLines.length, expectedLines.length);
+          i++
+        ) {
+          if (originalLines[i] !== expectedLines[i]) {
+            console.log(`Line ${i + 1}:`);
+            console.log(`  Actual:   ${originalLines[i]}`);
+            console.log(`  Expected: ${expectedLines[i]}`);
+          }
         }
       }
-    }
-  }).catch(error => {
+    },
+  ).catch((error) => {
     console.error("Error importing function:", error);
   });
 }
@@ -217,34 +227,44 @@ function testAddExtensionsFunction() {
  */
 async function testManualTransformation() {
   console.log("\nTesting manual transformation:");
-  
+
   try {
     // Import the addTsExtensionsToImports function from our enhanced script
-    const { addTsExtensionsToImports } = await import("./patch-openapi-runtime-enhanced.ts");
-    
+    const { addTsExtensionsToImports } = await import(
+      "./patch-openapi-runtime-enhanced.ts"
+    );
+
     // Read the original content
     const originalContent = await Deno.readTextFile(TEST_FILE);
-    
+
     // Apply transformation
     const transformedContent = addTsExtensionsToImports(originalContent);
-    
+
     // Write transformed content back
     await Deno.writeTextFile(TEST_FILE, transformedContent);
-    
+
     // Read the transformed content
     const finalContent = await Deno.readTextFile(TEST_FILE);
-    
+
     // Check if the transformation matches expected output
     if (finalContent.trim() === EXPECTED_CONTENT.trim()) {
-      console.log("✅ Manual transformation test passed: Content matches expected output");
+      console.log(
+        "✅ Manual transformation test passed: Content matches expected output",
+      );
     } else {
-      console.log("❌ Manual transformation test failed: Content does not match expected output");
+      console.log(
+        "❌ Manual transformation test failed: Content does not match expected output",
+      );
       console.log("\nDifferences:");
-      
+
       const finalLines = finalContent.trim().split("\n");
       const expectedLines = EXPECTED_CONTENT.trim().split("\n");
-      
-      for (let i = 0; i < Math.max(finalLines.length, expectedLines.length); i++) {
+
+      for (
+        let i = 0;
+        i < Math.max(finalLines.length, expectedLines.length);
+        i++
+      ) {
         if (finalLines[i] !== expectedLines[i]) {
           console.log(`Line ${i + 1}:`);
           console.log(`  Actual:   ${finalLines[i]}`);
@@ -263,16 +283,16 @@ async function testManualTransformation() {
 async function runTests() {
   try {
     console.log("Starting tests for patch-openapi-runtime-enhanced.ts");
-    
+
     // Setup test environment
     await setup();
-    
+
     // Test the function directly
     await testAddExtensionsFunction();
-    
+
     // Test manual transformation
     await testManualTransformation();
-    
+
     console.log("\nAll tests completed.");
   } catch (error) {
     console.error("Test failed:", error);

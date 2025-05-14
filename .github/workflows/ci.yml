@@ -67,7 +67,7 @@ jobs:
         run: deno task generate:api
         env:
           CANARY_SPECS: ${{ github.event_name == 'schedule' && 'true' || 'false' }}
-          
+
       # Run Deno check on runtime test output files
       - name: Check runtime test output files
         run: deno check tests_deno/codegen/_runtime_test_output/**/*.ts

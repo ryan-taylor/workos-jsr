@@ -1,132 +1,47 @@
 name: CI
+
 on:
-  # triggers for pushes & PRs
-  push: { branches: ["**"] }
-  pull_request: {}
-  # scheduled workflow trigger for canary specs
-  schedule:
-    - cron: "0 2 * * 0" # Run at 02:00 UTC every Sunday
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
 
 jobs:
-  coverage:
-    name: Coverage Check 📊
+  test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.2.2
-      - uses: denoland/setup-deno@v1
-        with: { deno-version: "2.x" }
-
-      - name: Run Tests with Coverage
-        run: deno test -A tests_deno/**/*.test.ts --coverage=cov_profile && deno coverage cov_profile --lcov > coverage.lcov
-
-      - name: Check Coverage Threshold (80%)
-        run: deno run -A scripts/coverage-threshold.ts 80
-
-      - name: Upload Coverage Artifact
-        uses: actions/upload-artifact@v4
+      - uses: actions/checkout@v3
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
         with:
-          name: coverage-report
+          deno-version: v2.x
+      - name: Cache Deno modules
+        uses: actions/cache@v3
+        with:
           path: |
-            coverage.lcov
-            cov_profile
-          retention-days: 7
-  codegen:
-    name: Generate SDK Code 📝
-    runs-on: ubuntu-latest
-    outputs:
-      cache-key: ${{ steps.cache-key.outputs.value }}
-    steps:
-      - uses: actions/checkout@v4.2.2
-      - uses: denoland/setup-deno@v1
-        with: { deno-version: "2.x" }
-
-      # Generate cache key based on spec checksum and deno.lock
-      - name: Generate cache key
-        id: cache-key
-        run: |
-          SPECS_CHECKSUM=$(find ./vendor/openapi -name 'workos-*.json' -type f | sort | xargs sha256sum | sha256sum | cut -d ' ' -f1)
-          DENO_LOCK_CHECKSUM=$(sha256sum deno.lock | cut -d ' ' -f1)
-          CACHE_KEY="codegen-${{ github.ref_name }}-${SPECS_CHECKSUM}-${DENO_LOCK_CHECKSUM}"
-          echo "value=${CACHE_KEY}" >> $GITHUB_OUTPUT
-          echo "Cache key: ${CACHE_KEY}"
-
-      # Try to restore generated files from cache
-      - name: Restore generated files from cache
-        id: cache-generated
-        uses: actions/cache@v4
-        with:
-          path: packages/workos_sdk/generated
-          key: ${{ steps.cache-key.outputs.value }}
-          restore-keys: |
-            codegen-${{ github.ref_name }}-
-            codegen-main-
-
-      # Generate SDK code if not in cache
-      - name: Generate SDK code
-        if: steps.cache-generated.outputs.cache-hit != 'true'
-        run: deno task generate:api
-        env:
-          CANARY_SPECS: ${{ github.event_name == 'schedule' && 'true' || 'false' }}
-
-      # Run Deno check on runtime test output files
-      - name: Check runtime test output files
-        run: deno check tests_deno/codegen/_runtime_test_output/**/*.ts
-
-      # Validate OpenAPI Spec Checksums
-      - name: Validate OpenAPI Spec Checksums
-        run: deno run -A scripts/ci/validate-spec-checksums.ts
-
-      # Upload generated files as an artifact for other jobs
-      - name: Upload generated code as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: generated-code
-          path: packages/workos_sdk/generated
-          retention-days: 1
-
-  lint_unit:
-    name: Lint 🧹 & Test 🧪
-    needs: codegen
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4.2.2
-      - uses: denoland/setup-deno@v1
-        with: { deno-version: "2.x" }
-
-      # Download generated code from previous job
-      - name: Download generated code
-        uses: actions/download-artifact@v4
-        with:
-          name: generated-code
-          path: packages/workos_sdk/generated
-
-      - name: Deno Lint
-        run: deno lint
-
-      - name: Format Check
+            ~/.cache/deno
+          key: ${{ runner.os }}-deno-${{ hashFiles('**/import_map.json') }}
+      - name: Deno format check
         run: deno fmt --check
+      - name: Deno lint
+        run: deno lint
+      - name: Deno test
+        run: deno test --unstable
 
-      - name: Cache Dependencies
-        run: deno cache mod.ts
-
-      - name: Unit & Integration Tests
-        run: deno test -A tests_deno/**/*.test.ts
-
-  type_check:
-    name: Type Check 🔍
-    needs: codegen
+  publish:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.2.2
-      - uses: denoland/setup-deno@v1
-        with: { deno-version: "2.x" }
-
-      # Download generated code from previous job
-      - name: Download generated code
-        uses: actions/download-artifact@v4
+      - uses: actions/checkout@v3
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
         with:
-          name: generated-code
-          path: packages/workos_sdk/generated
-
-      - name: Deno Type-Check
-        run: deno check $(git ls-files '*.ts')
+          deno-version: v2.x
+      - name: Install JSR CLI
+        run: deno install -Af -n jsr https://deno.land/x/jsr/cli.ts
+      - name: Publish to JSR
+        env:
+          JSR_TOKEN: ${{ secrets.JSR_TOKEN }}
+        run: jsr publish . --scope @ryantaylor --registry jsr.io

@@ -8,7 +8,7 @@ export type DefaultCustomAttributes = Record<string, unknown>;
 
 export interface DirectoryUser<
   TCustomAttributes extends object = DefaultCustomAttributes,
-  TRawAttributes = any,
+  TRawAttributes = Record<string, unknown>,
 > {
   object: "directory_user";
   id: string;
@@ -47,7 +47,7 @@ export interface DirectoryUser<
 
 export interface DirectoryUserResponse<
   TCustomAttributes extends object = DefaultCustomAttributes,
-  TRawAttributes = any,
+  TRawAttributes = Record<string, unknown>,
 > {
   object: "directory_user";
   id: string;

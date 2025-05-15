@@ -56,6 +56,7 @@ export class FreshSessionProvider {
    * @returns Promise resolving to the encrypted data string
    * @deprecated Use createCookieValue instead in Fresh 2.x
    */
+  // eslint-disable-next-line require-await
   async sealData<T, O = unknown>(
     data: T,
     options?: { password?: string },
@@ -70,6 +71,7 @@ export class FreshSessionProvider {
    * @returns Promise resolving to the decrypted data
    * @deprecated Use extractDataFromCookie instead in Fresh 2.x
    */
+  // eslint-disable-next-line require-await
   async unsealData<T, O = unknown, E = unknown>(
     sealedData: string,
     options?: { password?: string },
@@ -83,6 +85,7 @@ export class FreshSessionProvider {
    * @param password Optional password override
    * @returns Promise resolving to the encrypted cookie value
    */
+  // eslint-disable-next-line require-await
   async createCookieValue<T>(data: T, password?: string): Promise<string> {
     try {
       // This is a simplified mock implementation
@@ -102,6 +105,7 @@ export class FreshSessionProvider {
    * @param password Optional password override
    * @returns Promise resolving to the decrypted data
    */
+  // eslint-disable-next-line require-await
   async extractDataFromCookie<T>(
     cookieValue: string,
     password?: string,
@@ -193,6 +197,7 @@ export class FreshSessionProvider {
    * Saves session data
    * @param session Session data to save
    */
+  // eslint-disable-next-line require-await
   private async saveSession(session: SessionData): Promise<void> {
     // In a real implementation, this would prepare the session for saving
     // Since Iron is cookie-based, we don't actually save here, but during cookie update

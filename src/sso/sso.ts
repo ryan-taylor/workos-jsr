@@ -1,4 +1,7 @@
-import { AutoPaginatable } from "../common/utils/pagination.ts";
+import {
+  AutoPaginatable,
+  type PaginatedResponse,
+} from "../common/utils/pagination.ts";
 import type { WorkOS } from "../workos.ts";
 import type {
   Connection,
@@ -12,8 +15,7 @@ import {
   deserializeProfile, // Corrected from deserializeProfileAndToken
   serializeListConnectionsOptions,
 } from "./serializers.ts";
-import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
-import type { PaginationOptions } from "../common/interfaces.ts";
+// Removed unused imports
 
 // Define response types locally instead of importing
 type ConnectionResponse = {
@@ -24,8 +26,7 @@ type ProfileResponse = {
   data: Profile;
 };
 
-// Define locally instead of importing from common/interfaces.ts
-type UnknownRecord = Record<string, unknown>;
+// Removed unused type definition
 
 const toQueryString = (options: Record<string, string | undefined>): string => {
   const searchParams = new URLSearchParams();
@@ -47,25 +48,35 @@ export class SSO {
 
   async listConnections(
     options?: ListConnectionsOptions,
-  ): Promise<any> { // Using any temporarily to avoid type errors
-    const response = await this.workos.get<ConnectionResponse>(
-      "/connections",
-      options ? serializeListConnectionsOptions(options) : undefined,
-    );
+  ): Promise<AutoPaginatable<Connection>> {
+    const fetchFunction = async (): Promise<PaginatedResponse<Connection>> => {
+      // Use a completely generic type to avoid type errors with inconsistent API responses
+      const response = await this.workos.get(
+        "/connections",
+        options ? serializeListConnectionsOptions(options) : undefined,
+      ) as unknown as {
+        data: Record<string, unknown> | Record<string, unknown>[];
+        list_metadata?: {
+          before?: string;
+          after?: string;
+        };
+      };
 
-    // @ts-ignore: Using original implementation
-    return new AutoPaginatable(
-      deserializeConnection(response.data),
-      // @ts-ignore: Using original implementation
-      async (params) => {
-        const resp = await this.workos.get<ConnectionResponse>(
-          "/connections",
-          params,
-        );
-        return deserializeConnection(resp.data);
-      },
-      options ? serializeListConnectionsOptions(options) : undefined,
-    );
+      // Handle both array and single object responses
+      const connections = Array.isArray(response.data)
+        ? response.data.map((item) => deserializeConnection(item))
+        : [deserializeConnection(response.data)];
+
+      return {
+        data: connections,
+        list_metadata: {
+          before: response.list_metadata?.before || null,
+          after: response.list_metadata?.after || null,
+        },
+      };
+    };
+
+    return new AutoPaginatable(fetchFunction);
   }
 
   async deleteConnection(id: string) {

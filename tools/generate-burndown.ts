@@ -15,11 +15,7 @@ import {
   TestBurndownAnalysis,
   TestBurndownData,
 } from "../src/common/utils/test-burndown-analyzer.ts";
-import {
-  analyzeTrends,
-  getHistoricalEntries,
-  readHistoricalEntry,
-} from "../src/common/utils/test-burndown-history.ts";
+import { analyzeTrends } from "../src/common/utils/test-burndown-history.ts";
 import { analyzeFailureConsistency } from "../src/common/utils/test-failure-consistency.ts";
 import { analyzeBurndownVelocity } from "../src/common/utils/burndown-velocity.ts";
 import { dirname, join } from "@std/path";
@@ -29,15 +25,12 @@ import { ensureDirSync } from "@std/fs";
 const TEST_BURNDOWN_PATH = "./test-burndown.json";
 const ANALYSIS_OUTPUT_PATH = "./test-burndown-analysis.json";
 const BURNDOWN_DOC_PATH = "./test-burndown.md";
-const GENERATED_DOC_PATH = "./test-burndown-report.md";
-const HISTORY_DIR = "./.burndown-history";
 
 // Maximum number of historical runs to analyze
 const MAX_HISTORICAL_RUNS = 10;
 
 // GitHub repository details for permalinks
 const REPO_BASE_URL = "https://github.com/organization/workos-node";
-const DEFAULT_BRANCH = "main";
 
 /**
  * Reads JSON data from a file
@@ -207,7 +200,6 @@ function generateMiniTrendChart(data: number[], label: string): string {
   const min = Math.min(...data);
   const max = Math.max(...data);
   const range = max - min;
-  const chartHeight = 5;
 
   // If all values are the same, create a flat line
   if (range === 0) {
@@ -241,8 +233,8 @@ function generateBurndownDocument(
   burndownData: TestBurndownData,
   analysis: TestBurndownAnalysis,
   trends?: ReturnType<typeof analyzeTrends>,
-  consistency?: ReturnType<typeof analyzeFailureConsistency>,
-  velocity?: ReturnType<typeof analyzeBurndownVelocity>,
+  _consistency?: ReturnType<typeof analyzeFailureConsistency>,
+  _velocity?: ReturnType<typeof analyzeBurndownVelocity>,
 ): string[] {
   // Start with the document header
   const document = [
@@ -335,7 +327,6 @@ function generateBurndownDocument(
 
     failures.forEach((failure) => {
       const fileUrl = generateFileUrl(failure.file);
-      const githubLink = generateGitHubPermalink(failure.file);
       const linkedFile = `[${failure.file}](${fileUrl})`;
 
       let suggestedFix = "";
@@ -491,7 +482,7 @@ function main() {
     try {
       analysis = readJsonSync<TestBurndownAnalysis>(ANALYSIS_OUTPUT_PATH);
       console.log("Using existing analysis data.");
-    } catch (error) {
+    } catch (_error) {
       console.log("Generating new analysis data...");
       analysis = analyzeBurndownData(burndownData);
 
@@ -507,8 +498,8 @@ function main() {
 
     // Analyze historical trends if enough data is available
     let trends = null;
-    let consistency = null;
-    let velocity = null;
+    let _consistency = null;
+    let _velocity = null;
 
     try {
       // Analyze trends from historical data
@@ -520,18 +511,18 @@ function main() {
       }
 
       // Analyze test failure consistency
-      consistency = analyzeFailureConsistency(MAX_HISTORICAL_RUNS);
-      if (consistency) {
+      _consistency = analyzeFailureConsistency(MAX_HISTORICAL_RUNS);
+      if (_consistency) {
         console.log(
-          `Analyzing consistency across ${consistency.totalRuns} runs`,
+          `Analyzing consistency across ${_consistency.totalRuns} runs`,
         );
       }
 
       // Analyze burndown velocity
-      velocity = analyzeBurndownVelocity(MAX_HISTORICAL_RUNS);
-      if (velocity) {
+      _velocity = analyzeBurndownVelocity(MAX_HISTORICAL_RUNS);
+      if (_velocity) {
         console.log(
-          `Analyzing velocity across ${velocity.dataPoints.length} runs`,
+          `Analyzing velocity across ${_velocity.dataPoints.length} runs`,
         );
       }
     } catch (error) {
@@ -543,8 +534,8 @@ function main() {
       burndownData,
       analysis,
       trends,
-      consistency,
-      velocity,
+      _consistency,
+      _velocity,
     );
 
     // Check if existing burndown document exists

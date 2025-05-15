@@ -14,8 +14,10 @@ export const deserializeDirectoryGroup = (
 });
 
 export const deserializeUpdatedEventDirectoryGroup = (
-  directoryGroup: DirectoryGroupResponse & Record<"previous_attributes", any>,
-): DirectoryGroup & Record<"previousAttributes", any> => ({
+  directoryGroup:
+    & DirectoryGroupResponse
+    & Record<"previous_attributes", Record<string, unknown>>,
+): DirectoryGroup & Record<"previousAttributes", Record<string, unknown>> => ({
   id: directoryGroup.id,
   idpId: directoryGroup.idp_id,
   directoryId: directoryGroup.directory_id,

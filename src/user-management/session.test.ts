@@ -63,14 +63,13 @@ function setupJwtVerifySpy(
   mockImplementation: () => Promise<jwtUtils.JWTPayload>,
 ) {
   const originalVerifyJWT = jwtUtils.verifyJWT;
-  const jwtVerifySpy = spy(mockImplementation);
 
   Object.defineProperty(jwtUtils, "verifyJWT", {
-    value: jwtVerifySpy,
+    value: spy(mockImplementation),
     configurable: true,
   });
 
-  return { originalVerifyJWT, jwtVerifySpy };
+  return { originalVerifyJWT };
 }
 
 // Constructor tests

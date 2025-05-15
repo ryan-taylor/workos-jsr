@@ -10,6 +10,7 @@ import {
   ListConnectionsOptions,
   Profile,
 } from "./interfaces.ts";
+import { ConnectionType } from "./interfaces/connection-type.enum.ts";
 
 /**
  * Serializes options for get connection request
@@ -77,34 +78,36 @@ export function serializeListConnectionsOptions(
 /**
  * Deserializes connection response from the API
  */
-export function deserializeConnection(data: any): Connection {
+export function deserializeConnection(
+  data: Record<string, unknown>,
+): Connection {
   return {
-    object: data.object,
-    id: data.id,
-    organization_id: data.organization_id,
-    name: data.name,
-    connection_type: data.connection_type,
-    domains: data.domains || [],
-    state: data.state,
-    status: data.status,
-    created_at: data.created_at,
-    updated_at: data.updated_at,
+    object: data.object as "connection",
+    id: data.id as string,
+    organization_id: data.organization_id as string,
+    name: data.name as string,
+    connection_type: data.connection_type as string,
+    domains: (data.domains as string[]) || [],
+    state: data.state as "active" | "inactive" | "draft",
+    status: data.status as string,
+    created_at: data.created_at as string,
+    updated_at: data.updated_at as string,
   };
 }
 
 /**
  * Deserializes profile response from the API
  */
-export function deserializeProfile(data: any): Profile {
+export function deserializeProfile(data: Record<string, unknown>): Profile {
   return {
-    id: data.id,
-    connection_id: data.connection_id,
-    connection_type: data.connection_type,
-    email: data.email,
-    first_name: data.first_name,
-    last_name: data.last_name,
-    object: data.object,
-    organization_id: data.organization_id,
-    raw_attributes: data.raw_attributes || {},
+    id: data.id as string,
+    idpId: data.idp_id as string,
+    connectionId: data.connection_id as string,
+    connectionType: data.connection_type as ConnectionType,
+    email: data.email as string,
+    firstName: data.first_name as string | undefined,
+    lastName: data.last_name as string | undefined,
+    organizationId: data.organization_id as string | undefined,
+    rawAttributes: (data.raw_attributes as Record<string, unknown>) || {},
   };
 }

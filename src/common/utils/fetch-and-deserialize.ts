@@ -20,7 +20,7 @@ export async function fetchAndDeserialize<
   fetchFn: (path: string, params?: P) => Promise<{ data: T }>,
   path: string,
   params: P | undefined,
-  deserializeFn: (item: any) => U,
+  deserializeFn: (item: T) => U,
 ): Promise<U> {
   const { data } = await fetchFn(path, params);
   return deserializeFn(data);

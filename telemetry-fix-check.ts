@@ -16,7 +16,8 @@ import { instrumentWorkOSCore } from "./src/telemetry/instrumentation.ts";
 
 // This is just a type check - we won't actually run this
 const typeCheckOnly = () => {
-  if (typeof instrumentWorkOSCore === "function" && workosTemp as any) {
+  // Check if the instrumentation function exists
+  if (typeof instrumentWorkOSCore === "function") {
     console.log("Type check passed");
   }
 };

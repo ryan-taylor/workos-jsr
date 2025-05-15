@@ -74,27 +74,16 @@ async function updateFileReferences() {
 
           // Check for imports of spec files
           for (const [fromImport, toImport] of importMap.entries()) {
-            // Look for both quoted imports
-            const doubleQuotePattern = new RegExp(
-              `from ["']${fromImport.replace(".", "\\.")}["']`,
-              "g",
-            );
-            const singleQuotePattern = new RegExp(
+            // Look for imports with either single or double quotes
+            const importPattern = new RegExp(
               `from ["']${fromImport.replace(".", "\\.")}["']`,
               "g",
             );
 
-            if (
-              doubleQuotePattern.test(updated) ||
-              singleQuotePattern.test(updated)
-            ) {
+            if (importPattern.test(updated)) {
               // Replace the import path but preserve the quotes
               updated = updated.replace(
-                doubleQuotePattern,
-                (match) => match.replace(fromImport, toImport),
-              );
-              updated = updated.replace(
-                singleQuotePattern,
+                importPattern,
                 (match) => match.replace(fromImport, toImport),
               );
               hasChanges = true;

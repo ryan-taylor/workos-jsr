@@ -6,15 +6,11 @@
  * and runs the analysis tools to showcase the system's capabilities.
  */
 
-import {
-  analyzeBurndownData,
-  TestBurndownData,
-} from "../src/common/utils/test-burndown-analyzer.ts";
+// Removed unused imports
 import {
   analyzeTrends,
   getHistoricalEntries,
   readHistoricalEntry,
-  storeHistoricalData,
 } from "../src/common/utils/test-burndown-history.ts";
 import {
   analyzeFailureConsistency,
@@ -25,13 +21,12 @@ import {
   formatVelocityReport,
 } from "../src/common/utils/burndown-velocity.ts";
 import { ensureDirSync } from "@std/fs";
-import { dirname, join } from "@std/path";
+import { dirname } from "@std/path";
 
-// Historical directory
-const HISTORY_DIR = "./.burndown-history";
+// Historical directory is handled by the imported modules
 
 // Report paths
-const TREND_REPORT_PATH = "./test-burndown-trends.md";
+const TREND_REPORT_PATH = "./test-burndown-trends.md"; // Needed for directory creation
 const CONSISTENCY_REPORT_PATH = "./test-burndown-consistency.md";
 const VELOCITY_REPORT_PATH = "./test-burndown-velocity.md";
 

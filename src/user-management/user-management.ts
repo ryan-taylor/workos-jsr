@@ -3,8 +3,7 @@ import {
   type JWTPayload,
   verifyJWT,
 } from "../common/crypto/jwt-utils.ts";
-import { type PaginationOptions } from "../common/interfaces/pagination-options.interface.ts";
-import { OAuthException } from "../common/exceptions/oauth.exception.ts";
+// Removed unused imports
 import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
 import {
   AutoPaginatable,
@@ -609,7 +608,7 @@ export class UserManagement {
    * This method will be removed in a future major version.
    */
   async sendMagicAuthCode(options: SendMagicAuthCodeOptions): Promise<void> {
-    await this.workos.post<any, SerializedSendMagicAuthCodeOptions>(
+    await this.workos.post<void, SerializedSendMagicAuthCodeOptions>(
       "/user_management/magic_auth/send",
       serializeSendMagicAuthCodeOptions(options),
     );
@@ -659,7 +658,7 @@ export class UserManagement {
   async sendPasswordResetEmail(
     payload: SendPasswordResetEmailOptions,
   ): Promise<void> {
-    await this.workos.post<any, SerializedSendPasswordResetEmailOptions>(
+    await this.workos.post<void, SerializedSendPasswordResetEmailOptions>(
       "/user_management/password_reset/send",
       serializeSendPasswordResetEmailOptions(payload),
     );
@@ -894,7 +893,7 @@ export class UserManagement {
   }
 
   async acceptInvitation(invitationId: string): Promise<Invitation> {
-    const { data } = await this.workos.post<InvitationResponse, any>(
+    const { data } = await this.workos.post<InvitationResponse, null>(
       `/user_management/invitations/${invitationId}/accept`,
       null,
     );
@@ -903,7 +902,7 @@ export class UserManagement {
   }
 
   async revokeInvitation(invitationId: string): Promise<Invitation> {
-    const { data } = await this.workos.post<InvitationResponse, any>(
+    const { data } = await this.workos.post<InvitationResponse, null>(
       `/user_management/invitations/${invitationId}/revoke`,
       null,
     );

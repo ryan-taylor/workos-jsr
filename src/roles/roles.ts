@@ -5,8 +5,11 @@ import { WorkOS } from "../workos.ts";
 import type {
   ListOrganizationRolesResponse,
   OrganizationRoleResponse,
+  RoleAssignment,
+  RoleAssignmentResponse,
   RoleList,
 } from "./interfaces/role.interface.ts";
+import { deserializeRoleAssignment } from "./serializers/role-assignment.serializer.ts";
 import { deserializeRole } from "./serializers/role.serializer.ts";
 
 export interface RoleCreateParams {
@@ -113,14 +116,17 @@ export class Roles {
    * Assigns a role to a user.
    *
    * @param params - The role assignment parameters
-   * @returns The role assignment response
+   * @returns The role assignment
    */
-  async assign(params: RoleAssignmentParams) {
-    const { data } = await this.workos.post<any, RoleAssignmentParams>(
+  async assign(params: RoleAssignmentParams): Promise<RoleAssignment> {
+    const { data } = await this.workos.post<
+      RoleAssignmentResponse,
+      RoleAssignmentParams
+    >(
       "/role_assignments",
       params,
     );
 
-    return data;
+    return deserializeRoleAssignment(data);
   }
 }

@@ -51,3 +51,27 @@ export interface RoleList {
   object: "list";
   data: Role[];
 }
+
+/**
+ * Interface for role assignment response
+ */
+export interface RoleAssignmentResponse {
+  object: "role_assignment";
+  id: string;
+  role_id: string;
+  user_id: string;
+  created_at: string;
+  updated_at: string;
+}
+
+/**
+ * Interface for role assignment
+ */
+export interface RoleAssignment {
+  object: "role_assignment";
+  id: string;
+  roleId: string;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
+}

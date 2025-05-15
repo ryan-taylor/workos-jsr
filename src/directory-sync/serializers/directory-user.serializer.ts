@@ -43,8 +43,10 @@ export const deserializeDirectoryUserWithGroups = <
 });
 
 export const deserializeUpdatedEventDirectoryUser = (
-  directoryUser: DirectoryUserResponse & Record<"previous_attributes", any>,
-): DirectoryUser & Record<"previousAttributes", any> => ({
+  directoryUser:
+    & DirectoryUserResponse
+    & Record<"previous_attributes", Record<string, unknown>>,
+): DirectoryUser & Record<"previousAttributes", Record<string, unknown>> => ({
   object: "directory_user",
   id: directoryUser.id,
   directoryId: directoryUser.directory_id,

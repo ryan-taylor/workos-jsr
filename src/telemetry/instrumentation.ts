@@ -157,7 +157,9 @@ export function instrumentSSO(sso: SSO): void {
       ...options.organization
         ? { "sso.organization": options.organization }
         : {},
-      ...options.domain ? { "sso.domain": options.domain } : {},
+      ...("domain" in options && options.domain)
+        ? { "sso.domain": String(options.domain) }
+        : {},
     });
 
     try {

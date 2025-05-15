@@ -4,10 +4,10 @@ import { type WorkOS } from "./src/workos.ts";
 
 // Create a mock WorkOS instance with minimal implementation
 const mockWorkOS = {
-  get: (path: string, options = {}) => Promise.resolve({}),
-  post: (path: string, entity: unknown, options = {}) => Promise.resolve({}),
-  put: (path: string, entity: unknown, options = {}) => Promise.resolve({}),
-  delete: (path: string, query = {}) => Promise.resolve(),
+  get: (path: string, _options = {}) => Promise.resolve({}),
+  post: (path: string, entity: unknown, _options = {}) => Promise.resolve({}),
+  put: (path: string, entity: unknown, _options = {}) => Promise.resolve({}),
+  delete: (path: string, _query = {}) => Promise.resolve(),
 } as WorkOS;
 
 // This should work with our fixed type definitions

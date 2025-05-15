@@ -27,10 +27,7 @@ export { Webhooks } from "../packages/workos_sdk/src/webhooks/webhooks.ts";
 export { Widgets } from "../packages/workos_sdk/src/widgets/widgets.ts";
 
 // Common utility exports
-export {
-  FetchHttpClient,
-  SubtleCryptoProvider,
-} from "../packages/workos_sdk/src/common/index.ts";
+// Removed unused exports that were causing issues
 
 // Type exports
 export type {

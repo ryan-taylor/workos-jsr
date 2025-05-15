@@ -6,7 +6,7 @@ export interface DirectoryGroup {
   name: string;
   createdAt: string;
   updatedAt: string;
-  rawAttributes: any;
+  rawAttributes: Record<string, unknown>;
 }
 
 export interface DirectoryGroupResponse {
@@ -17,5 +17,5 @@ export interface DirectoryGroupResponse {
   name: string;
   created_at: string;
   updated_at: string;
-  raw_attributes: any;
+  raw_attributes: Record<string, unknown>;
 }

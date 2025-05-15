@@ -1,6 +1,6 @@
-import type { ResourceInterface, Subject } from "../interfaces.ts";
+import type { ResourceInterface, Subject } from "../interfaces/index.ts";
 
-export function isSubject(resource: any): resource is Subject {
+export function isSubject(resource: unknown): resource is Subject {
   return (
     Object.prototype.hasOwnProperty.call(resource, "resourceType") &&
     Object.prototype.hasOwnProperty.call(resource, "resourceId")

@@ -3,48 +3,45 @@ import type { WorkOS } from "../workos.ts";
 import type {
   CreateOrganizationOptions,
   CreateOrganizationRequestOptions,
+  ListOrganizationRolesOptions,
   ListOrganizationsOptions,
   Organization,
   OrganizationResponse,
   UpdateOrganizationOptions,
-} from "./interfaces.ts";
+} from "./interfaces/index.ts";
 import {
   deserializeOrganization,
   serializeCreateOrganizationOptions,
   serializeUpdateOrganizationOptions,
-} from "./serializers.ts";
+} from "./serializers/index.ts";
 
-import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
+import { fetchAndDeserializeList } from "../common/utils/fetch-and-deserialize.ts";
 import type {
   ListOrganizationRolesResponse,
   RoleList,
-} from "../roles/interfaces.ts";
+} from "../roles/interfaces/index.ts";
 import { deserializeRole } from "../roles/serializers/role.serializer.ts";
-import type { ListOrganizationRolesOptions } from "./interfaces/list-organization-roles-options.interface.ts";
-import type { PaginationOptions } from "../common/interfaces.ts";
 
 export class Organizations {
   constructor(private readonly workos: WorkOS) {}
 
-  async listOrganizations(
+  listOrganizations(
     options?: ListOrganizationsOptions,
-  ): Promise<AutoPaginatable<Organization>> {
-    return new AutoPaginatable(
-      await fetchAndDeserialize<OrganizationResponse, Organization>(
-        this.workos,
+  ): AutoPaginatable<Organization> {
+    const fetchPage = () => {
+      return fetchAndDeserializeList<
+        OrganizationResponse,
+        Organization,
+        Record<string, unknown>
+      >(
+        this.workos.get.bind(this.workos),
         "/organizations",
-        deserializeOrganization,
-        options,
-      ),
-      (params: PaginationOptions) =>
-        fetchAndDeserialize<OrganizationResponse, Organization>(
-          this.workos,
-          "/organizations",
-          deserializeOrganization,
-          params,
-        ),
-      options,
-    );
+        options as Record<string, unknown>,
+        (data: OrganizationResponse) => deserializeOrganization(data),
+      );
+    };
+
+    return new AutoPaginatable(fetchPage);
   }
 
   async createOrganization(
@@ -60,7 +57,7 @@ export class Organizations {
     return deserializeOrganization(data);
   }
 
-  async deleteOrganization(id: string) {
+  async deleteOrganization(id: string): Promise<void> {
     await this.workos.delete(`/organizations/${id}`);
   }
 
@@ -106,7 +103,7 @@ export class Organizations {
 
     return {
       object: "list",
-      data: response.data.map((role) => deserializeRole(role)),
+      data: response.data.map(deserializeRole),
     };
   }
 }

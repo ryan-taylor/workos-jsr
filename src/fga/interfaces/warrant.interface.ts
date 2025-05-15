@@ -28,7 +28,13 @@ export interface SerializedListWarrantsOptions {
 }
 
 export interface PolicyContext {
-  [key: string]: any;
+  [key: string]:
+    | string
+    | number
+    | boolean
+    | Record<string, unknown>
+    | null
+    | undefined;
 }
 
 export interface Subject {

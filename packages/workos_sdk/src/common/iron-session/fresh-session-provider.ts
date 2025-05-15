@@ -4,7 +4,7 @@ import {
   ensureContextState,
   type FreshContext,
   type FreshMiddleware,
-  type MiddlewareHandler
+  type MiddlewareHandler,
 } from "../utils/fresh-middleware-adapter.ts";
 /**
  * Options for sealing session data
@@ -287,34 +287,45 @@ export class FreshSessionProvider {
 
   /**
    * Create a middleware handler for session management that works with both Fresh 1.x and 2.x
+   *
+   * Following Fresh 2.x compatibility requirements:
+   * 1. Uses the object structure { handler: async (req, ctx) => Response } for Fresh 2.x
+   * 2. Ensures proper context state access for sessions
+   * 3. Implements updated session response handling flow
+   *
    * @param options Session options
    * @returns A Fresh middleware compatible with the detected Fresh version
    */
   createSessionMiddleware(
     options: SessionOptions,
   ): FreshMiddleware {
-    // Define the middleware handler function
-    const sessionHandler: MiddlewareHandler = async (req: Request, ctx: FreshContext) => {
+    // Define the middleware handler function for both Fresh 1.x and 2.x
+    const sessionHandler: MiddlewareHandler = async (
+      req: Request,
+      ctx: FreshContext,
+    ) => {
       // Ensure context state exists, standardizing across Fresh versions
       const enhancedCtx = ensureContextState(ctx);
-      
+
       // Get the session from the request
       const session = await this.getSession(req, options);
 
-      // Add session to state for handler access
+      // Add session to state for handler access - ensure it's in ctx.state as required by Fresh 2.x
       enhancedCtx.state.session = session || {};
 
       // Store the original session state to detect changes
+      // This is critical for Fresh 2.x flow where we need to check for modifications
       const originalSession = JSON.stringify(enhancedCtx.state.session);
 
-      // Process the request
+      // Process the request through the next middleware or route handler
       const response = await enhancedCtx.next();
 
-      // Check if session was modified
+      // Check if session was modified by comparing with original state
+      // This follows the Fresh 2.x session response handling pattern
       const currentSession = JSON.stringify(enhancedCtx.state.session);
 
       if (currentSession !== originalSession) {
-        // Session was modified, update the cookie
+        // Session was modified, create a new response with updated session cookie
         return await this.createSessionResponse(
           enhancedCtx.state.session as Record<string, unknown>,
           options,
@@ -322,11 +333,13 @@ export class FreshSessionProvider {
         );
       }
 
+      // No changes to session, return original response
       return response;
     };
-    
+
     // Use the compatibility adapter to return the appropriate middleware format
     // based on the detected Fresh version (1.x or 2.x)
+    // This ensures we get { handler: fn } for Fresh 2.x or fn directly for Fresh 1.x
     return createCompatibleMiddleware(sessionHandler);
   }
 

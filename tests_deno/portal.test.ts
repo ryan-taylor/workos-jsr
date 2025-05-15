@@ -15,6 +15,14 @@ enum GeneratePortalLinkIntent {
   CertificateRenewal = "certificate_renewal",
 }
 
+// Define a type for portal link request data
+interface PortalLinkRequestData {
+  intent: GeneratePortalLinkIntent;
+  organization: string;
+  return_url?: string;
+  success_url?: string;
+}
+
 // Mock WorkOS instance for testing
 class MockWorkOS {
   private mockResponseData: unknown;
@@ -44,7 +52,7 @@ class MockWorkOS {
     return {
       path: this.lastPath,
       method: this.lastMethod,
-      data: this.lastData,
+      data: this.lastData as PortalLinkRequestData,
     };
   }
 }
@@ -98,19 +106,19 @@ Deno.test("Portal - generateLink with required parameters", async () => {
   assertEquals(lastRequest.path, "/portal/generate_link");
   assertEquals(lastRequest.method, "post");
   assertEquals(
-    (lastRequest.data as Record<string, unknown>).intent,
+    lastRequest.data.intent,
     GeneratePortalLinkIntent.SSO,
   );
   assertEquals(
-    (lastRequest.data as Record<string, unknown>).organization,
+    lastRequest.data.organization,
     "org_123",
   );
   assertEquals(
-    (lastRequest.data as Record<string, unknown>).return_url,
+    lastRequest.data.return_url,
     undefined,
   );
   assertEquals(
-    (lastRequest.data as Record<string, unknown>).success_url,
+    lastRequest.data.success_url,
     undefined,
   );
 });
@@ -140,19 +148,19 @@ Deno.test("Portal - generateLink with all parameters", async () => {
   assertEquals(lastRequest.path, "/portal/generate_link");
   assertEquals(lastRequest.method, "post");
   assertEquals(
-    (lastRequest.data as Record<string, unknown>).intent,
+    lastRequest.data.intent,
     GeneratePortalLinkIntent.DSync,
   );
   assertEquals(
-    (lastRequest.data as Record<string, unknown>).organization,
+    lastRequest.data.organization,
     "org_456",
   );
   assertEquals(
-    (lastRequest.data as Record<string, unknown>).return_url,
+    lastRequest.data.return_url,
     "https://example.com/return",
   );
   assertEquals(
-    (lastRequest.data as Record<string, unknown>).success_url,
+    lastRequest.data.success_url,
     "https://example.com/success",
   );
 });
@@ -183,7 +191,7 @@ Deno.test("Portal - generateLink with different intent values", async () => {
 
     // Verify correct intent was passed
     const lastRequest = mockWorkos.getLastRequest();
-    assertEquals((lastRequest.data as Record<string, unknown>).intent, intent);
+    assertEquals(lastRequest.data.intent, intent);
   }
 });
 

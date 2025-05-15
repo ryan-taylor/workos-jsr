@@ -23,7 +23,7 @@ export function detectFreshVersion(): string {
   if (_versionOverride !== null) {
     return _versionOverride;
   }
-  
+
   // Strategy 1: Check environment variable first (explicit override)
   const envFlag = Deno.env.get("WORKOS_FRESH_V2");
   if (envFlag !== undefined) {

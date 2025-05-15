@@ -1,19 +1,18 @@
 // Import Deno testing utilities
 import { assertEquals } from "jsr:@std/assert@^1";
-import { beforeEach, describe, it } from "jsr:@std/testing@^1/bdd";
-
 import { crypto } from "jsr:@std/crypto@^1";
 import { SubtleCryptoProvider } from "./subtle-crypto-provider.ts";
 import { SignatureProvider } from "./signature-provider.ts";
 
-// Main test suite
-describe("CryptoProvider", () => {
+Deno.test("CryptoProvider", async (t) => {
+  // State for the tests
   let payload: Record<string, unknown>;
   let secret: string;
   let timestamp: number;
   let signatureHash: string;
 
-  beforeEach(async () => {
+  // Setup for each test
+  const setupTestData = async () => {
     // Load webhook fixture directly
     payload = {
       "id": "wh_123",
@@ -66,50 +65,62 @@ describe("CryptoProvider", () => {
     signatureHash = Array.from(new Uint8Array(signatureBuffer))
       .map((b) => b.toString(16).padStart(2, "0"))
       .join("");
+  };
+
+  // Test group: when computing HMAC signature
+  await t.step("when computing HMAC signature", async (t) => {
+    await t.step(
+      "returns the same for two SubtleCryptoProvider instances",
+      async () => {
+        await setupTestData();
+
+        const subtleCryptoProvider1 = new SubtleCryptoProvider();
+        const subtleCryptoProvider2 = new SubtleCryptoProvider();
+
+        const stringifiedPayload = JSON.stringify(payload);
+        const payloadHMAC = `${timestamp}.${stringifiedPayload}`;
+
+        const compare1 = await subtleCryptoProvider1.computeHMACSignatureAsync(
+          payloadHMAC,
+          secret,
+        );
+        const compare2 = await subtleCryptoProvider2.computeHMACSignatureAsync(
+          payloadHMAC,
+          secret,
+        );
+
+        assertEquals(compare1, compare2);
+      },
+    );
   });
 
-  describe("when computing HMAC signature", () => {
-    it("returns the same for two SubtleCryptoProvider instances", async () => {
-      const subtleCryptoProvider1 = new SubtleCryptoProvider();
-      const subtleCryptoProvider2 = new SubtleCryptoProvider();
+  // Test group: when securely comparing
+  await t.step("when securely comparing", async (t) => {
+    await t.step(
+      "returns the same for two SubtleCryptoProvider instances",
+      async () => {
+        await setupTestData();
 
-      const stringifiedPayload = JSON.stringify(payload);
-      const payloadHMAC = `${timestamp}.${stringifiedPayload}`;
+        const subtleCryptoProvider1 = new SubtleCryptoProvider();
+        const subtleCryptoProvider2 = new SubtleCryptoProvider();
+        const signatureProvider = new SignatureProvider(subtleCryptoProvider1);
 
-      const compare1 = await subtleCryptoProvider1.computeHMACSignatureAsync(
-        payloadHMAC,
-        secret,
-      );
-      const compare2 = await subtleCryptoProvider2.computeHMACSignatureAsync(
-        payloadHMAC,
-        secret,
-      );
+        const signature = await signatureProvider.computeSignature(
+          timestamp,
+          payload,
+          secret,
+        );
 
-      assertEquals(compare1, compare2);
-    });
-  });
+        assertEquals(
+          subtleCryptoProvider1.secureCompare(signature, signatureHash),
+          subtleCryptoProvider2.secureCompare(signature, signatureHash),
+        );
 
-  describe("when securely comparing", () => {
-    it("returns the same for two SubtleCryptoProvider instances", async () => {
-      const subtleCryptoProvider1 = new SubtleCryptoProvider();
-      const subtleCryptoProvider2 = new SubtleCryptoProvider();
-      const signatureProvider = new SignatureProvider(subtleCryptoProvider1);
-
-      const signature = await signatureProvider.computeSignature(
-        timestamp,
-        payload,
-        secret,
-      );
-
-      assertEquals(
-        subtleCryptoProvider1.secureCompare(signature, signatureHash),
-        subtleCryptoProvider2.secureCompare(signature, signatureHash),
-      );
-
-      assertEquals(
-        subtleCryptoProvider1.secureCompare(signature, "foo"),
-        subtleCryptoProvider2.secureCompare(signature, "foo"),
-      );
-    });
+        assertEquals(
+          subtleCryptoProvider1.secureCompare(signature, "foo"),
+          subtleCryptoProvider2.secureCompare(signature, "foo"),
+        );
+      },
+    );
   });
 });

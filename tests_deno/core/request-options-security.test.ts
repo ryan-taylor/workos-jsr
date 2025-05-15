@@ -26,7 +26,7 @@ Deno.test("Request Options with Multi-Scheme Security", async (t) => {
 
   await t.step("should handle single scheme security", () => {
     setupStrategies();
-    
+
     const options: RequestOptions<"apiKey"> = {
       securityScheme: "apiKey",
       security: {
@@ -45,7 +45,7 @@ Deno.test("Request Options with Multi-Scheme Security", async (t) => {
 
   await t.step("should select best scheme from multi-scheme endpoint", () => {
     setupStrategies();
-    
+
     // Endpoint supports http and apiKey but we have oauth2 credentials as well
     const options = {
       supportedSchemes: ["http", "apiKey"] as SupportedAuthScheme[],
@@ -78,7 +78,7 @@ Deno.test("Request Options with Multi-Scheme Security", async (t) => {
 
   await t.step("should honor custom priority order", () => {
     setupStrategies();
-    
+
     const options = {
       supportedSchemes: ["http", "apiKey", "oauth2"] as SupportedAuthScheme[],
       availableCredentials: {
@@ -110,7 +110,7 @@ Deno.test("Request Options with Multi-Scheme Security", async (t) => {
 
   await t.step("should use explicitly provided scheme if available", () => {
     setupStrategies();
-    
+
     const options = {
       securityScheme: "http" as const,
       security: {
@@ -142,29 +142,32 @@ Deno.test("Request Options with Multi-Scheme Security", async (t) => {
     );
   });
 
-  await t.step("should throw error when no valid credentials for supported schemes", () => {
-    setupStrategies();
-    
-    const options = {
-      supportedSchemes: ["http", "apiKey"] as SupportedAuthScheme[],
-      availableCredentials: {
-        oauth2: {
-          accessToken: "test-oauth-token",
-        },
-      },
-    };
+  await t.step(
+    "should throw error when no valid credentials for supported schemes",
+    () => {
+      setupStrategies();
 
-    const request: Record<string, unknown> = {};
-    assertThrows(
-      () => applySecurityToRequest(request, options),
-      Error,
-      "No matching security credentials found",
-    );
-  });
+      const options = {
+        supportedSchemes: ["http", "apiKey"] as SupportedAuthScheme[],
+        availableCredentials: {
+          oauth2: {
+            accessToken: "test-oauth-token",
+          },
+        },
+      };
+
+      const request: Record<string, unknown> = {};
+      assertThrows(
+        () => applySecurityToRequest(request, options),
+        Error,
+        "No matching security credentials found",
+      );
+    },
+  );
 
   await t.step("should not throw if throwOnNoMatch is false", () => {
     setupStrategies();
-    
+
     const options = {
       supportedSchemes: ["http", "apiKey"] as SupportedAuthScheme[],
       availableCredentials: {
@@ -184,46 +187,49 @@ Deno.test("Request Options with Multi-Scheme Security", async (t) => {
     assertEquals(securedRequest, request);
   });
 
-  await t.step("should prioritize custom security strategy over everything else", () => {
-    setupStrategies();
-    
-    class CustomStrategy implements SecurityStrategy<"apiKey"> {
-      readonly scheme = "apiKey" as const;
+  await t.step(
+    "should prioritize custom security strategy over everything else",
+    () => {
+      setupStrategies();
 
-      applyToRequest<T extends RequestLike>(request: T, options?: any): T {
-        return {
-          ...request,
-          headers: {
-            ...((request.headers as Record<string, string>) || {}),
-            "X-Custom-Header": "custom-value",
-          },
-        } as T;
+      class CustomStrategy implements SecurityStrategy<"apiKey"> {
+        readonly scheme = "apiKey" as const;
+
+        applyToRequest<T extends RequestLike>(request: T, options?: any): T {
+          return {
+            ...request,
+            headers: {
+              ...((request.headers as Record<string, string>) || {}),
+              "X-Custom-Header": "custom-value",
+            },
+          } as T;
+        }
       }
-    }
 
-    const options = {
-      securityScheme: "http" as const,
-      security: {
-        scheme: "bearer",
-        credentials: "specific-token",
-      },
-      supportedSchemes: ["http", "apiKey"] as SupportedAuthScheme[],
-      availableCredentials: {
-        apiKey: {
-          apiKey: "test-api-key",
+      const options = {
+        securityScheme: "http" as const,
+        security: {
+          scheme: "bearer",
+          credentials: "specific-token",
         },
-      },
-      securityStrategy: new CustomStrategy(),
-    };
+        supportedSchemes: ["http", "apiKey"] as SupportedAuthScheme[],
+        availableCredentials: {
+          apiKey: {
+            apiKey: "test-api-key",
+          },
+        },
+        securityStrategy: new CustomStrategy(),
+      };
 
-    const request: Record<string, unknown> = {};
-    const securedRequest = applySecurityToRequest(request, options) as {
-      headers?: Record<string, string>;
-    };
+      const request: Record<string, unknown> = {};
+      const securedRequest = applySecurityToRequest(request, options) as {
+        headers?: Record<string, string>;
+      };
 
-    // Should use the custom strategy
-    assertEquals(securedRequest.headers?.["X-Custom-Header"], "custom-value");
-    // Should not have applied the HTTP auth
-    assertEquals(securedRequest.headers?.["Authorization"], undefined);
-  });
+      // Should use the custom strategy
+      assertEquals(securedRequest.headers?.["X-Custom-Header"], "custom-value");
+      // Should not have applied the HTTP auth
+      assertEquals(securedRequest.headers?.["Authorization"], undefined);
+    },
+  );
 });

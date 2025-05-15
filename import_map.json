@@ -40,6 +40,7 @@
     "https://deno.land/std/path/mod.ts": "jsr:@std/path@^1.0.0",
     "https://deno.land/x/deno_ast@0.46.7/mod.ts": "jsr:deno_ast@^1.0.0",
     "https://deno.land/std@0.219.0/cli/parse_args.ts": "jsr:@std/cli@^1.0.0",
-    "https://deno.land/x/superdeno@4.7.2/mod.ts": "jsr:@superdeno"
+    "https://deno.land/x/superdeno@4.7.2/mod.ts": "https://deno.land/x/superdeno@4.7.2/mod.ts",
+    "handlebars/runtime": "https://esm.sh/handlebars@4.7.8/runtime"
   }
 }

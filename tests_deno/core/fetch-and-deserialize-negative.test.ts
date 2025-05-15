@@ -38,7 +38,13 @@ class MockWorkOS {
     errorConfig: Record<string, unknown> = {},
   ) {
     this.mockResponseData = mockResponse;
-    this.errorConfig = errorConfig as any;
+    this.errorConfig = errorConfig as {
+      type?: string;
+      status?: number;
+      code?: string;
+      message?: string;
+      nested?: boolean;
+    };
   }
 
   async get<T>(
@@ -282,8 +288,8 @@ Deno.test("fetchAndDeserialize - handles API errors with POST (options object)",
     });
     fail("Expected error was not thrown");
   } catch (error) {
-    assertEquals((error as any).code, "internal_server_error");
-    assertEquals((error as any).status, 500);
+    assertEquals((error as { code: string }).code, "internal_server_error");
+    assertEquals((error as { status: number }).status, 500);
   }
 });
 
@@ -301,8 +307,8 @@ Deno.test("fetchAndDeserialize - handles API errors with PUT (options object)", 
     });
     fail("Expected error was not thrown");
   } catch (error) {
-    assertEquals((error as any).code, "internal_server_error");
-    assertEquals((error as any).status, 500);
+    assertEquals((error as { code: string }).code, "internal_server_error");
+    assertEquals((error as { status: number }).status, 500);
   }
 });
 
@@ -319,8 +325,8 @@ Deno.test("fetchAndDeserialize - handles API errors with DELETE (options object)
     });
     fail("Expected error was not thrown");
   } catch (error) {
-    assertEquals((error as any).code, "internal_server_error");
-    assertEquals((error as any).status, 500);
+    assertEquals((error as { code: string }).code, "internal_server_error");
+    assertEquals((error as { status: number }).status, 500);
   }
 });
 
@@ -336,9 +342,12 @@ Deno.test("fetchAndDeserialize - handles 400 Bad Request errors with positional 
     );
     fail("Expected error was not thrown");
   } catch (error) {
-    assertEquals((error as any).code, "bad_request");
-    assertEquals((error as any).status, 400);
-    assertEquals((error as any).message, "The request was invalid");
+    assertEquals((error as { code: string }).code, "bad_request");
+    assertEquals((error as { status: number }).status, 400);
+    assertEquals(
+      (error as { message: string }).message,
+      "The request was invalid",
+    );
   }
 });
 
@@ -354,10 +363,10 @@ Deno.test("fetchAndDeserialize - handles 404 Not Found errors with positional pa
     );
     fail("Expected error was not thrown");
   } catch (error) {
-    assertEquals((error as any).code, "not_found");
-    assertEquals((error as any).status, 404);
+    assertEquals((error as { code: string }).code, "not_found");
+    assertEquals((error as { status: number }).status, 404);
     assertEquals(
-      (error as any).message,
+      (error as { message: string }).message,
       "The requested resource was not found",
     );
   }
@@ -375,9 +384,12 @@ Deno.test("fetchAndDeserialize - handles 500 Server Error with positional parame
     );
     fail("Expected error was not thrown");
   } catch (error) {
-    assertEquals((error as any).code, "internal_server_error");
-    assertEquals((error as any).status, 500);
-    assertEquals((error as any).message, "An internal server error occurred");
+    assertEquals((error as { code: string }).code, "internal_server_error");
+    assertEquals((error as { status: number }).status, 500);
+    assertEquals(
+      (error as { message: string }).message,
+      "An internal server error occurred",
+    );
   }
 });
 
@@ -393,9 +405,12 @@ Deno.test("fetchAndDeserialize - handles 401 Unauthorized errors", async () => {
     );
     fail("Expected error was not thrown");
   } catch (error) {
-    assertEquals((error as any).code, "unauthorized");
-    assertEquals((error as any).status, 401);
-    assertEquals((error as any).message, "Authentication required");
+    assertEquals((error as { code: string }).code, "unauthorized");
+    assertEquals((error as { status: number }).status, 401);
+    assertEquals(
+      (error as { message: string }).message,
+      "Authentication required",
+    );
   }
 });
 
@@ -411,9 +426,12 @@ Deno.test("fetchAndDeserialize - handles 403 Forbidden errors", async () => {
     );
     fail("Expected error was not thrown");
   } catch (error) {
-    assertEquals((error as any).code, "forbidden");
-    assertEquals((error as any).status, 403);
-    assertEquals((error as any).message, "You do not have permission");
+    assertEquals((error as { code: string }).code, "forbidden");
+    assertEquals((error as { status: number }).status, 403);
+    assertEquals(
+      (error as { message: string }).message,
+      "You do not have permission",
+    );
   }
 });
 
@@ -429,9 +447,9 @@ Deno.test("fetchAndDeserialize - handles 429 Rate Limit errors", async () => {
     );
     fail("Expected error was not thrown");
   } catch (error) {
-    assertEquals((error as any).code, "rate_limited");
-    assertEquals((error as any).status, 429);
-    assertEquals((error as any).message, "Too many requests");
+    assertEquals((error as { code: string }).code, "rate_limited");
+    assertEquals((error as { status: number }).status, 429);
+    assertEquals((error as { message: string }).message, "Too many requests");
   }
 });
 
@@ -582,8 +600,8 @@ Deno.test("fetchAndDeserialize - handles JSON parse errors", async () => {
   const mockWorkos = new MockWorkOS({ data: "invalid-json" });
 
   // Override the get method to return invalid JSON
-  mockWorkos.get = async () => {
-    return { data: "{not-valid-json" } as any;
+  mockWorkos.get = async <T>() => {
+    return { data: "{not-valid-json" } as unknown as { data: T };
   };
 
   try {

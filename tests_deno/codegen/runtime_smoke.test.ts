@@ -174,7 +174,6 @@ const setupTestEnvironment = async (): Promise<string> => {
   await patchSecurityImplementation(TEST_OUTPUT_DIR);
 
   return TEST_OUTPUT_DIR;
-  return TEST_OUTPUT_DIR;
 };
 
 /**
@@ -288,8 +287,19 @@ const withTestSetup = (
   };
 };
 
+// Define a type for our test request info
+interface TestRequestInfo {
+  url: string;
+  method: string;
+  headers?: Headers | Record<string, string>;
+  body?: unknown;
+}
+
 // Replace the fetch function during tests
-const installMockFetch = (responseData: unknown, statusCode = 200): void => {
+const installMockFetch = async (
+  responseData: unknown,
+  statusCode = 200,
+): Promise<void> => {
   // Save the original fetch
   const originalFetch = globalThis.fetch;
 
@@ -325,7 +335,7 @@ const installMockFetch = (responseData: unknown, statusCode = 200): void => {
       method: init?.method || "GET",
       headers: init?.headers,
       body: init?.body,
-    };
+    } as TestRequestInfo;
 
     console.log("__testRequestInfo set successfully");
 
@@ -352,9 +362,12 @@ const installMockFetch = (responseData: unknown, statusCode = 200): void => {
 };
 
 // Clean up after tests
-const cleanupMockFetch = (): void => {
-  if ((globalThis as any).__restoreFetch) {
-    (globalThis as any).__restoreFetch();
+const cleanupMockFetch = async (): Promise<void> => {
+  const restoreFn = (globalThis as any).__restoreFetch as
+    | (() => void)
+    | undefined;
+  if (restoreFn) {
+    restoreFn();
   }
 };
 
@@ -500,7 +513,8 @@ Deno.test(
           assertEquals(response.message, "Success");
 
           // Check request info
-          const requestInfo = (globalThis as any).__testRequestInfo;
+          const requestInfo = (globalThis as any)
+            .__testRequestInfo as TestRequestInfo;
           assert(
             requestInfo && requestInfo.url &&
               requestInfo.url.includes("/secure"),
@@ -625,7 +639,8 @@ Deno.test(
           assertEquals(response.message, "Success");
 
           // Check request info
-          const requestInfo = (globalThis as any).__testRequestInfo;
+          const requestInfo = (globalThis as any)
+            .__testRequestInfo as TestRequestInfo;
           assert(
             requestInfo && requestInfo.url &&
               requestInfo.url.includes("/secure"),
@@ -743,7 +758,8 @@ Deno.test(
           assertEquals(response.message, "Success");
 
           // Check request info
-          const requestInfo = (globalThis as any).__testRequestInfo;
+          const requestInfo = (globalThis as any)
+            .__testRequestInfo as TestRequestInfo;
 
           if (requestInfo && requestInfo.headers) {
             const headers = requestInfo.headers instanceof Headers

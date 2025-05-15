@@ -1,5 +1,5 @@
-import { assertStrictEquals } from "jsr:@std/assert@^1";
-import { describe, it, beforeEach, afterEach } from "jsr:@std/testing/bdd@^1";
+import { assertStrictEquals } from "jsr:@std/assert@^1.0.0";
+import { afterEach, beforeEach, describe, it } from "jsr:@std/testing@^1/bdd";
 import { detectFreshVersion, isFresh2 } from "./fresh-version-detector.ts";
 
 describe("Fresh Version Detector", () => {
@@ -10,7 +10,7 @@ describe("Fresh Version Detector", () => {
   afterEach(() => {
     // Restore original environment
     // Get all environment variables and delete them
-    Object.keys(Deno.env.toObject()).forEach(key => {
+    Object.keys(Deno.env.toObject()).forEach((key) => {
       Deno.env.delete(key);
     });
     // Set back the original values
@@ -33,7 +33,7 @@ describe("Fresh Version Detector", () => {
     it("should fall back to Fresh 1.x when no detection method works", () => {
       // Make sure the env var is not set
       Deno.env.delete("WORKOS_FRESH_V2");
-      
+
       // Since we're in a test environment and not in an actual Fresh app,
       // the structure detection should fail, returning the default value
       assertStrictEquals(detectFreshVersion(), "1.x");

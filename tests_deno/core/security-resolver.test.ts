@@ -49,28 +49,31 @@ Deno.test("Security Resolver", async (t) => {
     assertEquals(result?.options, apiKeyCredentials);
   });
 
-  await t.step("should respect priority order when multiple schemes are supported", () => {
-    const supportedSchemes: SupportedAuthScheme[] = [
-      "apiKey",
-      "http",
-      "oauth2",
-    ];
-    const availableCredentials = {
-      apiKey: apiKeyCredentials,
-      http: httpCredentials,
-      oauth2: oauth2Credentials,
-    };
+  await t.step(
+    "should respect priority order when multiple schemes are supported",
+    () => {
+      const supportedSchemes: SupportedAuthScheme[] = [
+        "apiKey",
+        "http",
+        "oauth2",
+      ];
+      const availableCredentials = {
+        apiKey: apiKeyCredentials,
+        http: httpCredentials,
+        oauth2: oauth2Credentials,
+      };
 
-    // Default priority: mutualTLS > oauth2 > openIdConnect > http > apiKey
-    // So oauth2 should be selected over http and apiKey
-    const result = resolveSecurityStrategy(
-      supportedSchemes,
-      availableCredentials,
-    );
+      // Default priority: mutualTLS > oauth2 > openIdConnect > http > apiKey
+      // So oauth2 should be selected over http and apiKey
+      const result = resolveSecurityStrategy(
+        supportedSchemes,
+        availableCredentials,
+      );
 
-    assertEquals(result?.scheme, "oauth2");
-    assertEquals(result?.options, oauth2Credentials);
-  });
+      assertEquals(result?.scheme, "oauth2");
+      assertEquals(result?.options, oauth2Credentials);
+    },
+  );
 
   await t.step("should allow overriding priority with custom order", () => {
     const supportedSchemes: SupportedAuthScheme[] = [
@@ -95,18 +98,21 @@ Deno.test("Security Resolver", async (t) => {
     assertEquals(result?.options, apiKeyCredentials);
   });
 
-  await t.step("should throw error when no matching credentials are found", () => {
-    const supportedSchemes: SupportedAuthScheme[] = ["oauth2", "http"];
-    const availableCredentials = {
-      apiKey: apiKeyCredentials,
-    };
+  await t.step(
+    "should throw error when no matching credentials are found",
+    () => {
+      const supportedSchemes: SupportedAuthScheme[] = ["oauth2", "http"];
+      const availableCredentials = {
+        apiKey: apiKeyCredentials,
+      };
 
-    assertThrows(
-      () => resolveSecurityStrategy(supportedSchemes, availableCredentials),
-      Error,
-      "No matching security credentials found",
-    );
-  });
+      assertThrows(
+        () => resolveSecurityStrategy(supportedSchemes, availableCredentials),
+        Error,
+        "No matching security credentials found",
+      );
+    },
+  );
 
   await t.step("should not throw error when throwOnNoMatch is false", () => {
     const supportedSchemes: SupportedAuthScheme[] = ["oauth2", "http"];

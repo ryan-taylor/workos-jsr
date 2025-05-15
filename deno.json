@@ -1,6 +1,6 @@
 {
   "name": "@ryantaylor/workos",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "exports": "./mod.ts",
   "importMap": "./import_map.json",
   "nodeModulesDir": "auto",
@@ -13,6 +13,9 @@
     "pretest": "deno run -A scripts/check-import-map.ts",
     "test": "deno test -A tests_deno/**/*.test.ts",
     "test:watch": "deno test -A tests_deno/**/*.test.ts --watch",
+    "test:codegen": "deno test --allow-read --allow-write --allow-run --allow-sys tests_deno/codegen/**/*.test.ts",
+    "test:codegen:file-rw": "deno test --allow-read --allow-write tests_deno/codegen/dereference-spec.test.ts tests_deno/codegen/runtime_smoke.test.ts tests_deno/codegen/spec_validator.test.ts tests_deno/codegen/typescript_compile.test.ts tests_deno/codegen/verify-spec.test.ts",
+    "test:codegen:system": "deno test --allow-read --allow-write --allow-run --allow-sys tests_deno/codegen/adapter-contract.test.ts",
     "coverage": "deno test -A tests_deno/**/*.test.ts --coverage=cov_profile && deno coverage cov_profile --lcov > coverage.lcov",
     "test:coverage": "deno test -A tests_deno/**/*.test.ts --coverage=cov_profile && deno coverage cov_profile --lcov > coverage.lcov",
     "test:coverage:full": "deno test -A tests_deno/**/*.test.ts --coverage=cov_profile && deno coverage cov_profile --lcov > coverage.lcov",

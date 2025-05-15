@@ -110,7 +110,10 @@ export { Vault } from "./src/vault/vault.ts";
 export { FreshSessionProvider } from "./src/common/iron-session/fresh-session-provider.ts";
 
 // Fresh utility functions
-export { detectFreshVersion, isFresh2 } from "./src/common/utils/fresh-version-detector.ts";
+export {
+  detectFreshVersion,
+  isFresh2,
+} from "./src/common/utils/fresh-version-detector.ts";
 
 // Crypto providers
 export { SubtleCryptoProvider } from "./src/common/crypto/subtle-crypto-provider.ts";

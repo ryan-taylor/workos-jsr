@@ -1,20 +1,21 @@
 // Import Deno testing utilities
 import { assertEquals } from "jsr:@std/assert@^1";
-import { beforeEach, describe, it } from "jsr:@std/testing@^1/bdd";
-
 import { crypto } from "jsr:@std/crypto@^1";
 import { SubtleCryptoProvider } from "./subtle-crypto-provider.ts";
 import { SignatureProvider } from "./signature-provider.ts";
+import { withTestEnv } from "../../../../../tests_deno/utils/test-lifecycle.ts";
+import { assertTrue } from "../../../../../tests_deno/utils/test-utils.ts";
 
-// Main test suite
-describe("SignatureProvider", () => {
+Deno.test("SignatureProvider", async (t) => {
+  // State for the tests
   let payload: Record<string, unknown>;
   let secret: string;
   let timestamp: number;
   let signatureHash: string;
   const signatureProvider = new SignatureProvider(new SubtleCryptoProvider());
 
-  beforeEach(async () => {
+  // Setup for each test
+  const setupTestData = async () => {
     // Load webhook fixture directly
     payload = {
       "id": "wh_123",
@@ -67,10 +68,12 @@ describe("SignatureProvider", () => {
     signatureHash = Array.from(new Uint8Array(signatureBuffer))
       .map((b) => b.toString(16).padStart(2, "0"))
       .join("");
-  });
+  };
 
-  describe("verifyHeader", () => {
-    it("returns true when the signature is valid", async () => {
+  // Test group: verifyHeader
+  await t.step("verifyHeader", async (t) => {
+    await t.step("returns true when the signature is valid", async () => {
+      await setupTestData();
       const sigHeader = `t=${timestamp}, v1=${signatureHash}`;
       const options = { payload, sigHeader, secret };
       const result = await signatureProvider.verifyHeader(options);
@@ -78,21 +81,28 @@ describe("SignatureProvider", () => {
     });
   });
 
-  describe("getTimestampAndSignatureHash", () => {
-    it("returns the timestamp and signature when the signature is valid", () => {
-      const sigHeader = `t=${timestamp}, v1=${signatureHash}`;
-      const timestampAndSignature = signatureProvider
-        .getTimestampAndSignatureHash(sigHeader);
+  // Test group: getTimestampAndSignatureHash
+  await t.step("getTimestampAndSignatureHash", async (t) => {
+    await t.step(
+      "returns the timestamp and signature when the signature is valid",
+      async () => {
+        await setupTestData();
+        const sigHeader = `t=${timestamp}, v1=${signatureHash}`;
+        const timestampAndSignature = signatureProvider
+          .getTimestampAndSignatureHash(sigHeader);
 
-      assertEquals(timestampAndSignature, [
-        timestamp.toString(),
-        signatureHash,
-      ]);
-    });
+        assertEquals(timestampAndSignature, [
+          timestamp.toString(),
+          signatureHash,
+        ]);
+      },
+    );
   });
 
-  describe("computeSignature", () => {
-    it("returns the computed signature", async () => {
+  // Test group: computeSignature
+  await t.step("computeSignature", async (t) => {
+    await t.step("returns the computed signature", async () => {
+      await setupTestData();
       const signature = await signatureProvider.computeSignature(
         timestamp,
         payload,
@@ -103,13 +113,18 @@ describe("SignatureProvider", () => {
     });
   });
 
-  describe("when in an environment that supports SubtleCrypto", () => {
-    it("automatically uses the subtle crypto library", () => {
-      // Access private property with type assertion
-      const cryptoProvider =
-        (signatureProvider as unknown as { cryptoProvider: unknown })
-          .cryptoProvider;
-      assertEquals(cryptoProvider instanceof SubtleCryptoProvider, true);
-    });
-  });
+  // Test group: when in an environment that supports SubtleCrypto
+  await t.step(
+    "when in an environment that supports SubtleCrypto",
+    async (t) => {
+      await t.step("automatically uses the subtle crypto library", async () => {
+        await setupTestData();
+        // Access private property with type assertion
+        const cryptoProvider =
+          (signatureProvider as unknown as { cryptoProvider: unknown })
+            .cryptoProvider;
+        assertTrue(cryptoProvider instanceof SubtleCryptoProvider);
+      });
+    },
+  );
 });

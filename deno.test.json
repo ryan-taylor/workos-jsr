@@ -1,0 +1,60 @@
+{
+  "name": "@ryantaylor/workos-test-config",
+  "importMap": "./import_map.json",
+  "nodeModulesDir": "auto",
+  "exclude": ["archive/**"],
+  "testSets": {
+    "default": {
+      "include": ["tests_deno/**/*.test.ts"],
+      "permissions": "all"
+    },
+    "codegen": {
+      "include": ["tests_deno/codegen/**/*.test.ts"],
+      "permissions": {
+        "read": true,
+        "write": true,
+        "run": true,
+        "sys": true
+      }
+    },
+    "codegen-file-rw": {
+      "include": [
+        "tests_deno/codegen/dereference-spec.test.ts",
+        "tests_deno/codegen/runtime_smoke.test.ts",
+        "tests_deno/codegen/spec_validator.test.ts",
+        "tests_deno/codegen/typescript_compile.test.ts",
+        "tests_deno/codegen/verify-spec.test.ts"
+      ],
+      "permissions": {
+        "read": true,
+        "write": true
+      }
+    },
+    "codegen-system": {
+      "include": ["tests_deno/codegen/adapter-contract.test.ts"],
+      "permissions": {
+        "read": true,
+        "write": true,
+        "run": true,
+        "sys": true
+      }
+    }
+  },
+  "lint": {
+    "rules": {
+      "tags": ["recommended"],
+      "exclude": [],
+      "include": [
+        "no-npm-imports/no-sloppy-imports",
+        "no-npm-imports/no-sloppy-node"
+      ]
+    },
+    "exclude": [
+      ".deno_codegen_cache/",
+      ".cache/",
+      "tests_deno/codegen/_runtime_test_output/**",
+      "tests_deno/codegen/_runtime_output/**",
+      "tests_deno/codegen/_runtime_strict_output/**"
+    ]
+  }
+}

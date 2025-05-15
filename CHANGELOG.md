@@ -4,6 +4,27 @@
 
 ### Added
 
+## 1.0.0 (2025-05-15)
+
+This release finalizes the Deno port of the WorkOS SDK, resolving all
+outstanding issues and preparing the package for production use with JSR.io.
+
+### Added
+
+- Added missing handlebars runtime import to import map
+
+### Fixed
+
+- Resolved import errors in OpenAPI template utilities
+- Fixed test runner configuration with proper test permissions
+- Added proper configuration for test sets with granular permissions
+- Fixed test permission issues requiring multiple flags (--allow-read,
+  --allow-write, --allow-env, --allow-sys, --allow-run)
+- Implemented fallback mechanisms for tests when running with restricted
+  permissions
+- Resolved type compatibility issues throughout the codebase
+- Addressed lint warnings and errors for Deno 2.x compatibility
+
 - Complete import map validation script for task 14
 - Add pretest task to run import map validation
 - Add large enum transformation utility

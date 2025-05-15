@@ -1,179 +1,151 @@
-# Deno Test Utilities
+# WorkOS SDK Deno Test Utilities
 
-This directory contains Deno-native test utilities that replace the Jest/Vitest
-compatibility layer found in `tests/deno-test-setup.ts`. These utilities provide
-a clean, Deno-native way to write tests without relying on Jest-specific
-patterns.
+This module provides Deno-native testing utilities for the WorkOS SDK, designed
+to replace custom test utilities that don't follow Deno's patterns. These
+utilities make it easier to write and maintain tests using Deno's standard
+patterns, while providing helpers for test setup/teardown and API mocking.
 
 ## Features
 
-- **Mock fetch** - Tools for mocking HTTP requests and responses
-- **Spy functions** - Track function calls and set up custom implementations
-- **Test context** - Helpers for test setup and teardown with Deno.test
-- **Test groups** - Organize tests with shared setup/teardown
+- **Assertion utilities**: Extended set of assertion helpers compatible with
+  Deno's testing system
+- **HTTP mocking**: Utilities for mocking API dependencies and HTTP responses
+- **Test lifecycle management**: Helpers for test setup and teardown operations
+- **BDD-style migration helpers**: Utilities to ease migration from BDD-style
+  testing to Deno's native patterns
 
-## Getting Started
+## Usage
 
-Import the utilities in your test file:
-
-```typescript
-import {
-  createTestGroup,
-  fetchUtils,
-  mockResponse,
-  mockResponseOnce,
-  resetMockFetch,
-  setupFetchMock,
-  spy,
-  testWithContext,
-} from "./utils/test-utils.ts";
-```
-
-## Mocking HTTP Requests
+### Basic Test Utilities
 
 ```typescript
-// Setup fetch mocking for the test
-const uninstall = setupFetchMock();
+import { assertEquals, assertMatch, mockFetch } from "../utils/index.ts";
 
-try {
-  // Configure mock responses
-  mockResponse({ success: true }); // Default response
-  mockResponseOnce({ first: true }); // One-time response
+Deno.test("basic test example", async (t) => {
+  // Basic assertions
+  assertEquals(2 + 2, 4);
+  assertMatch("user_123", /user_\d+/);
 
-  // Make requests
-  const response = await fetch("https://api.example.com/data");
-  const data = await response.json();
-
-  // Verify the calls
-  console.assert(fetchUtils.url() === "https://api.example.com/data");
-  console.assert(fetchUtils.method() === "GET");
-
-  // Get all fetch calls
-  const calls = fetchUtils.calls();
-} finally {
-  // Clean up
-  uninstall();
-}
-```
-
-## Spy Functions
-
-```typescript
-// Create a spy function
-const greet = spy((name: string) => `Hello, ${name}!`);
-
-// Call the function
-const result = greet("Alice");
-
-// Verify calls
-console.assert(greet.calls.length === 1);
-console.assert(greet.calls[0][0] === "Alice");
-
-// Override implementation
-greet.mockImplementation((name) => `Hi, ${name}!`);
-
-// Reset the spy
-greet.mockReset();
-```
-
-## Test Helpers
-
-### Individual Tests with Setup/Teardown
-
-```typescript
-testWithContext("test with setup and teardown", async () => {
-  // Test code here
-}, {
-  setup: async () => {
-    // Setup code
-  },
-  teardown: async () => {
-    // Cleanup code
-  },
-});
-```
-
-### Test Groups
-
-```typescript
-const testGroup = createTestGroup({
-  beforeEach: async () => {
-    // Setup before each test
-  },
-  afterEach: async () => {
-    // Cleanup after each test
-  },
-});
-
-testGroup.test("first test", async () => {
-  // Test code
-});
-
-testGroup.test("second test", async () => {
-  // Test code
-});
-```
-
-## Migrating from Jest/Vitest Style
-
-### Old Pattern (Jest/Vitest compatibility layer)
-
-```typescript
-import { describe, expect, it } from "../tests/deno-test-setup.ts";
-
-describe("feature tests", () => {
-  it("should do something", () => {
-    // Test code
-    expect(result).toBe(expected);
+  // Simple steps
+  await t.step("nested step", () => {
+    // More assertions...
   });
 });
 ```
 
-### New Pattern (Deno-native)
+### HTTP Mocking
 
 ```typescript
-import { createTestGroup } from "./utils/test-utils.ts";
-import { assertEquals } from "@std/assert";
+import { MockHttpClient } from "../utils/index.ts";
 
-const testGroup = createTestGroup();
+Deno.test("mocking HTTP responses", async () => {
+  const mockHttp = new MockHttpClient();
 
-testGroup.test("should do something", () => {
-  // Test code
-  assertEquals(result, expected);
+  // Mock a JSON response
+  mockHttp.mockJsonResponse("https://api.workos.com/users", [
+    { id: "user_123", name: "Test User" },
+  ]);
+
+  // Mock a response for a regex pattern
+  mockHttp.mockResponseForPattern(
+    /api\.workos\.com\/organizations\/.*/,
+    new Response(JSON.stringify({ id: "org_123" }), {
+      headers: { "Content-Type": "application/json" },
+    }),
+  );
+
+  // Use the mocked fetch
+  const fetchStub = stub(globalThis, "fetch", mockHttp.fetch);
+  try {
+    // Your test code using fetch...
+    const response = await fetch("https://api.workos.com/users");
+    const data = await response.json();
+    assertEquals(data[0].id, "user_123");
+  } finally {
+    fetchStub.restore();
+  }
 });
 ```
 
-Or even simpler with plain Deno.test:
+### Test Environment Management
 
 ```typescript
-import { assertEquals } from "@std/assert";
+import { withTestEnv } from "../utils/index.ts";
 
-Deno.test("should do something", () => {
-  // Test code
-  assertEquals(result, expected);
+// Create a test wrapper with environment setup
+const withApiTest = withTestEnv(async (env) => {
+  // Setup common resources for tests
+  env.setEnv("WORKOS_API_KEY", "test_api_key");
+
+  // Create a test server
+  const serverUrl = await env.createTestServer((req) => {
+    return new Response(JSON.stringify({ success: true }), {
+      headers: { "Content-Type": "application/json" },
+    });
+  });
+
+  env.setEnv("WORKOS_API_URL", serverUrl);
+});
+
+// Use the wrapper for tests
+Deno.test(
+  "API client test",
+  withApiTest(async (t, env) => {
+    // Create test-specific resources
+    const tempFile = await env.createTempFile({
+      content: JSON.stringify({ config: "test" }),
+    });
+
+    // Test logic...
+
+    // All cleanup happens automatically when the test finishes
+  }),
+);
+```
+
+### Migrating from BDD-Style Tests
+
+```typescript
+import { bdd } from "../utils/index.ts";
+
+// Use a BDD-style wrapper during migration
+bdd.describe("My test suite", (t) => {
+  // Setup for all tests in this suite
+  let testValue = 0;
+
+  // Define setup/teardown
+  const beforeEach = () => {
+    testValue = 1;
+  };
+  const afterEach = () => {
+    testValue = 0;
+  };
+
+  // Create a test function with hooks
+  const test = bdd.createTestWithHooks(beforeEach, afterEach);
+
+  // Run a test with the hooks
+  test("should do something", () => {
+    assertEquals(testValue, 1);
+  }, t);
+
+  // Run parameterized tests
+  bdd.itEach(t, "handles values", [1, 2, 3], (value) => {
+    assert(value > 0);
+  });
 });
 ```
 
-## Working with WorkOS SDK
+## Utility Components
 
-The utils directory also includes `test_helpers.ts` with utilities specifically
-for testing the WorkOS SDK:
+- **test-utils.ts**: Core testing utilities like assertions and HTTP mocking
+- **test-lifecycle.ts**: Utilities for test setup/teardown and resource
+  management
+- **bdd-to-deno.ts**: Migration helpers for transitioning from BDD-style tests
+- **index.ts**: Consolidated exports from all utility modules with examples
 
-```typescript
-import { createMockWorkOS } from "./utils/test_helpers.ts";
+## Compatibility
 
-Deno.test("WorkOS API test", async () => {
-  const mockResponse = { id: "123", type: "test" };
-  const { workos, client } = createMockWorkOS(mockResponse);
-
-  // Call WorkOS methods
-  const result = await workos.someMethod();
-
-  // Check the request details
-  const requestDetails = client.getRequestDetails();
-  assertEquals(requestDetails.url, "expected/path");
-});
-```
-
-See the `test-utils-example.ts` file for more detailed examples of how to use
-these utilities.
+These utilities are designed to work with Deno 2.x and follow the standardized
+*.test.ts file naming convention. They provide a path for migrating existing
+BDD-style tests to Deno's native patterns over time.

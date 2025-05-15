@@ -23,7 +23,10 @@ export function instrumentWorkOSCore(workos: WorkOS): void {
   const originalDelete = workos.delete.bind(workos);
 
   // Replace with instrumented versions
-  workos.get = async (path, options = {}) => {
+  workos.get = async <Result = unknown>(
+    path: string,
+    options = {},
+  ): Promise<any> => {
     const spanId = telemetry.startSpan("workos.get", {
       "http.method": "GET",
       "http.path": path,
@@ -32,7 +35,7 @@ export function instrumentWorkOSCore(workos: WorkOS): void {
     try {
       const result = await originalGet(path, options);
       telemetry.endSpan(spanId, SpanStatus.OK);
-      return result;
+      return result as { data: Result };
     } catch (error) {
       telemetry.endSpan(
         spanId,
@@ -48,7 +51,11 @@ export function instrumentWorkOSCore(workos: WorkOS): void {
     }
   };
 
-  workos.post = async (path, entity, options = {}) => {
+  workos.post = async <Result = unknown, Entity = unknown>(
+    path: string,
+    entity: Entity,
+    options = {},
+  ): Promise<any> => {
     const spanId = telemetry.startSpan("workos.post", {
       "http.method": "POST",
       "http.path": path,
@@ -57,7 +64,7 @@ export function instrumentWorkOSCore(workos: WorkOS): void {
     try {
       const result = await originalPost(path, entity, options);
       telemetry.endSpan(spanId, SpanStatus.OK);
-      return result;
+      return result as { data: Result };
     } catch (error) {
       telemetry.endSpan(
         spanId,
@@ -73,7 +80,11 @@ export function instrumentWorkOSCore(workos: WorkOS): void {
     }
   };
 
-  workos.put = async (path, entity, options = {}) => {
+  workos.put = async <Result = unknown, Entity = unknown>(
+    path: string,
+    entity: Entity,
+    options = {},
+  ): Promise<any> => {
     const spanId = telemetry.startSpan("workos.put", {
       "http.method": "PUT",
       "http.path": path,
@@ -82,7 +93,7 @@ export function instrumentWorkOSCore(workos: WorkOS): void {
     try {
       const result = await originalPut(path, entity, options);
       telemetry.endSpan(spanId, SpanStatus.OK);
-      return result;
+      return result as { data: Result };
     } catch (error) {
       telemetry.endSpan(
         spanId,

@@ -44,7 +44,7 @@ export type FreshMiddleware = MiddlewareHandler | Fresh2Middleware;
  * @returns The context with a guaranteed state property
  */
 export function ensureContextState<T extends { next: () => Promise<Response> }>(
-  ctx: T & { state?: Record<string, unknown> }
+  ctx: T & { state?: Record<string, unknown> },
 ): T & { state: Record<string, unknown> } {
   if (!ctx.state) {
     ctx.state = {};
@@ -87,7 +87,7 @@ export function createCompatibleMiddleware(
     const enhancedCtx = ensureContextState(ctx);
     return await handler(req, enhancedCtx);
   };
-  
+
   // Return the middleware in the appropriate format based on Fresh version
   return adaptMiddleware(wrappedHandler);
 }

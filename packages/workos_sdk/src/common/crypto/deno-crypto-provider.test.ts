@@ -1,4 +1,8 @@
-import { assertEquals, assertThrows } from "jsr:@std/assert@^1";
+import {
+  assertEquals,
+  assertThrows,
+  assertTrue,
+} from "../../../../../tests_deno/utils/test-utils.ts";
 import { DenoCryptoProvider } from "./deno-crypto-provider.ts";
 
 Deno.test("DenoCryptoProvider", async (t) => {
@@ -91,8 +95,3 @@ Deno.test("DenoCryptoProvider", async (t) => {
     assertTrue(encoder instanceof TextEncoder);
   });
 });
-
-// Helper function for test assertions
-function assertTrue(condition: boolean): void {
-  assertEquals(condition, true);
-}

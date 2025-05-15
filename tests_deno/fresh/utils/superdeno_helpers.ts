@@ -1,4 +1,4 @@
-// Using a version known to be in the Deno registry
+// Using the Deno Land version directly
 import { superdeno } from "https://deno.land/x/superdeno@4.7.2/mod.ts";
 import { WorkOS } from "../../../mod.ts";
 

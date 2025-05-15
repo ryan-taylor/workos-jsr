@@ -1,27 +1,58 @@
-import type { Cookie } from "jsr:@std/http@1/cookie";
 /**
- * Options for sealing session data
+ * Fresh Session Provider Module
+ *
+ * This module provides a session management implementation that's compatible with
+ * both Fresh 1.x and 2.x. It implements secure cookie-based sessions using
+ * iron-session patterns with encryption.
+ */
+
+import type { Cookie } from "jsr:@std/http@1/cookie";
+
+/**
+ * Options for sealing (encrypting) session data
+ *
+ * @property password - Either a single password string or a map of password IDs to passwords
+ *                      Using a map allows for password rotation without breaking existing sessions
+ * @property ttl - Optional time-to-live in seconds for the sealed data
  */
 export type SealDataOptions = {
   password: string | { [id: string]: string };
   ttl?: number;
 };
 /**
- * Represents unsealed session data
+ * Represents unsealed (decrypted) session data
+ *
+ * This is a generic type that can store any JSON-serializable data
+ * in the session. The session implementation will serialize/deserialize
+ * this data when storing/retrieving from cookies.
  */
 export type UnsealedDataType = Record<string, unknown>;
-
-// Define FreshContext type locally instead of importing from Fresh
+/**
+ * Universal Fresh context interface that works with both Fresh 1.x and 2.x
+ *
+ * This is defined locally instead of importing from Fresh to avoid version dependencies.
+ * It includes the common properties needed for session management across both versions:
+ * - state: An object to store session and other state data during request processing
+ * - next: A function to call the next handler in the middleware chain
+ *
+ * Using this universal interface allows the middleware to work with either
+ * Fresh version without code changes.
+ */
 export interface FreshContext {
   state: Record<string, unknown>;
   next: () => Promise<Response>;
 }
 
 /**
- * Interface for Fresh 2.x session options
+ * Session configuration options
+ *
+ * These options configure both the session behavior and the underlying
+ * cookie properties. The interface is designed to be compatible with
+ * Fresh 2.x session management patterns while maintaining backward
+ * compatibility with Fresh 1.x.
  */
 export interface SessionOptions {
-  /** The cookie name */
+  /** The cookie name used to store the session */
   cookieName: string;
   /** Password used for encryption. Either a string or a record of password IDs to passwords */
   password: string | { [id: string]: string };
@@ -40,8 +71,15 @@ export interface SessionOptions {
 }
 
 /**
- * FreshSessionProvider uses Fresh-Session for cookie management
- * and provides Fresh 2.x middleware support.
+ * FreshSessionProvider implements session management for Fresh applications
+ *
+ * This class provides:
+ * 1. Secure cookie-based session management with encryption
+ * 2. Compatibility with both Fresh 1.x and 2.x session patterns
+ * 3. Middleware that automatically detects session changes
+ *
+ * The implementation uses the Web Crypto API for secure session data
+ * encryption and follows best practices for cookie management.
  */
 export class FreshSessionProvider {
   constructor() {
@@ -49,10 +87,19 @@ export class FreshSessionProvider {
   }
 
   /**
-   * Seals data using encryption
-   * @param data The data to seal
+   * Seals (encrypts) data for secure storage in cookies
+   *
+   * This method:
+   * 1. Converts the data to JSON
+   * 2. Encrypts it using AES-GCM with a key derived from the password
+   * 3. Formats the result for safe storage in a cookie
+   *
+   * The encryption prevents clients from tampering with session data
+   * while still allowing the server to retrieve and modify it securely.
+   *
+   * @param data The data to seal (any JSON-serializable object)
    * @param options Options including the password for encryption
-   * @returns A promise that resolves to the sealed data string
+   * @returns A promise that resolves to the sealed data string (base64-encoded)
    */
   async sealData(data: unknown, options: SealDataOptions): Promise<string> {
     const { password } = options;
@@ -96,10 +143,21 @@ export class FreshSessionProvider {
   }
 
   /**
-   * Unseals data using decryption
-   * @param seal The sealed data string
+   * Unseals (decrypts) data from a secure cookie
+   *
+   * This method:
+   * 1. Decodes the base64 sealed data
+   * 2. Extracts the IV and encrypted content
+   * 3. Decrypts using the same password-derived key
+   * 4. Parses the JSON back to the original data structure
+   *
+   * This is the counterpart to sealData() and allows retrieving
+   * session data that was previously stored in a cookie.
+   *
+   * @param seal The sealed data string (base64-encoded)
    * @param options Options including the password for decryption
-   * @returns A promise that resolves to the unsealed data
+   * @returns A promise that resolves to the unsealed data of type T
+   * @throws Error if decryption fails (invalid data or wrong password)
    */
   async unsealData<T = UnsealedDataType>(
     seal: string,
@@ -147,10 +205,20 @@ export class FreshSessionProvider {
   }
 
   /**
-   * Get session data from a request
-   * @param req The request object
-   * @param options Session options
-   * @returns Promise resolving to the session data or null if no session
+   * Retrieves session data from a request's cookies
+   *
+   * This method:
+   * 1. Extracts cookies from the request
+   * 2. Finds the session cookie by name
+   * 3. Attempts to unseal (decrypt) the cookie value
+   * 4. Returns the session data or null if no valid session exists
+   *
+   * This is typically used at the beginning of request processing
+   * to make session data available to handlers.
+   *
+   * @param req The HTTP request object
+   * @param options Session configuration options
+   * @returns Promise resolving to the session data or null if no valid session exists
    */
   async getSession<T = UnsealedDataType>(
     req: Request,
@@ -173,10 +241,19 @@ export class FreshSessionProvider {
   }
 
   /**
-   * Create a new response with session data
+   * Creates a response with session data stored in a cookie
+   *
+   * This method:
+   * 1. Seals (encrypts) the provided session data
+   * 2. Creates a cookie with the encrypted data and proper security settings
+   * 3. Adds the cookie to a new response or modifies an existing one
+   *
+   * This is typically used at the end of request processing to
+   * persist any changes made to the session during handling.
+   *
    * @param data The session data to store
-   * @param options Session options
-   * @param response Optional response to modify (creates new response if not provided)
+   * @param options Session configuration options
+   * @param response Optional existing response to modify
    * @returns A new response with the session cookie set
    */
   async createSessionResponse(
@@ -231,9 +308,16 @@ export class FreshSessionProvider {
   }
 
   /**
-   * Create a response that clears the session cookie
-   * @param options Session options
-   * @param response Optional response to modify (creates new response if not provided)
+   * Creates a response that clears the session cookie
+   *
+   * This method:
+   * 1. Creates an expired cookie with the same name and path
+   * 2. Adds the cookie to a new response or modifies an existing one
+   *
+   * This is used to implement logout functionality or to clear invalid sessions.
+   *
+   * @param options Session configuration options
+   * @param response Optional existing response to modify
    * @returns A new response with the session cookie cleared
    */
   destroySession(
@@ -283,33 +367,51 @@ export class FreshSessionProvider {
   }
 
   /**
-   * Fresh 2.x middleware for session management
-   * @param options Session options
-   * @returns A Fresh middleware handler
+   * Creates a Fresh 2.x compatible middleware for session management
+   *
+   * This method implements the adapter pattern for Fresh 2.x middleware:
+   * 1. Returns an object with a handler property (Fresh 2.x format)
+   * 2. The handler retrieves the session from the request
+   * 3. Adds session data to the context state
+   * 4. Detects changes to the session during request processing
+   * 5. Automatically persists changes in the response
+   *
+   * This is a key part of the Fresh 2.x compatibility implementation,
+   * making session management work seamlessly with the new middleware structure.
+   *
+   * @param options Session configuration options
+   * @returns A Fresh 2.x compatible middleware object
    */
   createSessionMiddleware(
     options: SessionOptions,
   ): { handler: (req: Request, ctx: FreshContext) => Promise<Response> } {
+    // This returns the Fresh 2.x middleware format (object with handler property)
     // Use arrow function to preserve 'this' context
     return {
       handler: async (req: Request, ctx: FreshContext) => {
-        // Get the session from the request
+        // Get the session from the request cookies and decrypt it
         const session = await this.getSession(req, options);
 
         // Add session to state for handler access
+        // This makes session data available via ctx.state.session
+        // Works with both Fresh 1.x and 2.x context state management
         ctx.state.session = session || {};
-
-        // Store the original session state to detect changes
+        // Store the original session state to detect changes during request processing
+        // This is used to determine if the session cookie needs to be updated
         const originalSession = JSON.stringify(ctx.state.session);
 
-        // Process the request
+        // Process the request by calling the next middleware or route handler
+        // This allows the route handler to access and modify the session
         const response = await ctx.next();
 
-        // Check if session was modified
+        // Check if session was modified during request processing
+        // by comparing the stringified objects before and after
         const currentSession = JSON.stringify(ctx.state.session);
 
         if (currentSession !== originalSession) {
-          // Session was modified, update the cookie
+          // Session was modified, update the cookie in the response
+          // This automatic change detection and persistence is a key feature
+          // that works consistently across Fresh 1.x and 2.x
           return await this.createSessionResponse(
             ctx.state.session as Record<string, unknown>,
             options,
@@ -323,9 +425,14 @@ export class FreshSessionProvider {
   }
 
   /**
-   * Parse cookies from a request
-   * @param req The request object
-   * @returns An object containing all cookies
+   * Parses cookies from a request's headers
+   *
+   * This is a utility method that extracts cookies from the Cookie header
+   * and returns them as a key-value object. Used internally by getSession().
+   *
+   * @param req The HTTP request object
+   * @returns An object containing all cookies as key-value pairs
+   * @private Internal utility method
    */
   private parseCookies(req: Request): Record<string, string> {
     const cookieStr = req.headers.get("cookie") || "";
@@ -342,9 +449,14 @@ export class FreshSessionProvider {
   }
 
   /**
-   * Serialize a cookie object to a string
-   * @param cookie The cookie object
-   * @returns A string representation of the cookie
+   * Serializes a cookie object to a string for the Set-Cookie header
+   *
+   * This utility method converts a Cookie object with its properties into
+   * the string format required for the Set-Cookie HTTP header.
+   *
+   * @param cookie The cookie object with name, value, and options
+   * @returns A string representation of the cookie for the Set-Cookie header
+   * @private Internal utility method
    */
   private serializeCookie(cookie: Cookie): string {
     let cookieStr = `${cookie.name}=${cookie.value}`;
@@ -385,9 +497,14 @@ export class FreshSessionProvider {
   }
 
   /**
-   * Creates key material from a password string
-   * @param password The password string
-   * @returns A promise that resolves to a CryptoKey
+   * Creates cryptographic key material from a password string
+   *
+   * This method imports the password as raw key material that can be used
+   * for further key derivation. It's part of the encryption process.
+   *
+   * @param password The password string to derive key material from
+   * @returns A promise that resolves to a CryptoKey for PBKDF2
+   * @private Internal crypto utility method
    */
   private async getKeyMaterial(password: string): Promise<CryptoKey> {
     const encoder = new TextEncoder();
@@ -401,9 +518,15 @@ export class FreshSessionProvider {
   }
 
   /**
-   * Derives an AES-GCM key from key material
-   * @param keyMaterial The key material
-   * @returns A promise that resolves to a CryptoKey
+   * Derives an AES-GCM encryption key from key material
+   *
+   * This method uses PBKDF2 with a fixed salt to derive a deterministic
+   * encryption key from the password material. The derived key is used for
+   * both encryption and decryption of session data.
+   *
+   * @param keyMaterial The base key material from getKeyMaterial()
+   * @returns A promise that resolves to an AES-GCM CryptoKey
+   * @private Internal crypto utility method
    */
   private async deriveKey(keyMaterial: CryptoKey): Promise<CryptoKey> {
     // Use a fixed salt for deterministic key derivation

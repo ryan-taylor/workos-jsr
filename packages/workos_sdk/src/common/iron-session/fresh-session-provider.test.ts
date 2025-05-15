@@ -1,12 +1,18 @@
 import {
   assertEquals,
   assertExists,
-  assertNotEquals,
-} from "jsr:@std/assert@^1";
+  assertTrue,
+} from "../../../../../tests_deno/utils/test-utils.ts";
+import { assertNotEquals } from "jsr:@std/assert@^1";
 import {
   FreshSessionProvider,
   type SessionOptions,
 } from "./fresh-session-provider.ts";
+import { isFresh2 } from "../utils/fresh-version-detector.ts";
+import type {
+  FreshMiddleware,
+  MiddlewareHandler,
+} from "../utils/fresh-middleware-adapter.ts";
 
 Deno.test("FreshSessionProvider", async (t) => {
   const provider = new FreshSessionProvider();
@@ -154,8 +160,12 @@ Deno.test("FreshSessionProvider", async (t) => {
         next: async () => new Response("OK"),
       };
 
-      // Call middleware
-      const response = await middleware.handler(req, ctx);
+      // Call middleware - handle both Fresh 1.x and 2.x middleware formats
+      const handler = "handler" in middleware
+        ? middleware.handler
+        : middleware as MiddlewareHandler;
+
+      const response = await handler(req, ctx);
 
       // Verify session was added to state
       assertEquals(ctx.state.session, testData);
@@ -191,16 +201,15 @@ Deno.test("FreshSessionProvider", async (t) => {
       },
     };
 
-    // Call middleware
-    const response = await middleware.handler(req, ctx);
+    // Call middleware - handle both Fresh 1.x and 2.x middleware formats
+    const handler = "handler" in middleware
+      ? middleware.handler
+      : middleware as MiddlewareHandler;
+
+    const response = await handler(req, ctx);
 
     // Verify response has Set-Cookie header (session was updated)
     const setCookie = response.headers.get("Set-Cookie");
     assertExists(setCookie);
   });
 });
-
-// Helper function for test assertions
-function assertTrue(condition: boolean): void {
-  assertEquals(condition, true);
-}

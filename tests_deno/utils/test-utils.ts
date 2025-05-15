@@ -1,379 +1,355 @@
 /**
- * test-utils.ts - Deno-native test utilities
+ * WorkOS SDK Deno Test Utilities
  *
- * This module provides testing utilities for Deno tests, including:
- *  - Mock fetch functionality for testing HTTP requests
- *  - Spy utilities for mocking and tracking function calls
- *  - Helpers for test setup/teardown with Deno.test
- *  - Assertion helpers
+ * This module provides Deno-native testing utilities for the WorkOS SDK,
+ * including assertions, mocking capabilities, and test setup/teardown helpers.
  */
 
-// ---- Types and Interfaces ----
+import {
+  assert,
+  assertEquals,
+  assertExists,
+  assertStrictEquals,
+  assertThrows,
+} from "jsr:@std/assert@^1";
+import { FakeTime } from "jsr:@std/testing@^1/time";
+import {
+  assertSpyCall,
+  assertSpyCalls,
+  spy,
+  stub,
+} from "jsr:@std/testing@^1/mock";
 
-/** Interface for mock response data */
-export interface MockResponseData {
-  [key: string]: unknown;
-}
+// Re-export standard assertions for convenience
+export {
+  assert,
+  assertEquals,
+  assertExists,
+  assertSpyCall,
+  assertSpyCalls,
+  assertStrictEquals,
+  assertThrows,
+  spy,
+  stub,
+};
 
-/** Interface for mock response parameters */
-export interface MockParams {
-  status?: number;
-  statusText?: string;
-  headers?: Record<string, string>;
-  [key: string]: unknown;
-}
-
-/** Type for any function */
-type AnyFunction = (...args: any[]) => any;
-
-// ---- Mock Fetch Functionality ----
-
-/** Global state for the mock fetch implementation */
-const mockFetchState = {
-  calls: [] as Array<[string, RequestInit | undefined]>,
-  implementations: [] as Array<
-    (input: string | URL | Request, init?: RequestInit) => Promise<Response>
-  >,
-  defaultImplementation: ((): Promise<Response> => {
-    throw new Error("Mock fetch called without implementation");
-  }) as (
-    input: string | URL | Request,
-    init?: RequestInit,
-  ) => Promise<Response>,
+// Types
+export type TestCase<T = unknown> = {
+  name: string;
+  input: T;
+  expected: unknown;
 };
 
 /**
- * Creates a mockable fetch function that can be used to test HTTP requests
+ * Helper for common boolean assertions
  */
-export function mockFetch(
-  input: string | URL | Request,
-  init?: RequestInit,
-): Promise<Response> {
-  const url = typeof input === "string"
-    ? input
-    : input instanceof URL
-    ? input.toString()
-    : input.url;
-  mockFetchState.calls.push([url, init]);
+export function assertTrue(condition: boolean, msg?: string): void {
+  assertEquals(condition, true, msg);
+}
 
-  if (mockFetchState.implementations.length > 0) {
-    const implementation = mockFetchState.implementations.shift()!;
-    return implementation(input, init);
+/**
+ * Helper for common boolean assertions
+ */
+export function assertFalse(condition: boolean, msg?: string): void {
+  assertEquals(condition, false, msg);
+}
+
+/**
+ * Helper to assert that a value is null
+ */
+export function assertNull(value: unknown, msg?: string): void {
+  assertEquals(value, null, msg);
+}
+
+/**
+ * Helper to assert that a value is undefined
+ */
+export function assertUndefined(value: unknown, msg?: string): void {
+  assertEquals(value, undefined, msg);
+}
+
+/**
+ * Helper to assert that a value is not null or undefined
+ */
+export function assertDefined<T>(
+  value: T | null | undefined,
+  msg?: string,
+): asserts value is T {
+  assert(
+    value !== null && value !== undefined,
+    msg ?? "Expected value to be defined but got null or undefined",
+  );
+}
+
+/**
+ * Helper to assert that a value matches a regex pattern
+ */
+export function assertMatch(
+  value: string,
+  pattern: RegExp,
+  msg?: string,
+): void {
+  assert(
+    pattern.test(value),
+    msg ?? `Expected '${value}' to match pattern ${pattern}`,
+  );
+}
+
+/**
+ * Helper to assert that a function throws a specific error
+ */
+export function assertThrowsAsync(
+  fn: () => Promise<unknown>,
+  errorClass?: new (...args: any[]) => Error,
+  msgIncludes?: string,
+  msg?: string,
+): Promise<Error> {
+  return assertRejects(fn, errorClass, msgIncludes, msg);
+}
+
+/**
+ * Helper to assert that a promise rejects
+ */
+export async function assertRejects(
+  fn: () => Promise<unknown>,
+  errorClass?: new (...args: any[]) => Error,
+  msgIncludes?: string,
+  msg?: string,
+): Promise<Error> {
+  let error: Error | undefined;
+  try {
+    await fn();
+    assert(false, msg ?? "Expected function to throw, but it didn't");
+  } catch (e) {
+    error = e as Error;
+    if (errorClass) {
+      assert(
+        error instanceof errorClass,
+        msg ??
+          `Expected error to be instance of ${errorClass.name}, but got ${error.constructor.name}`,
+      );
+    }
+    if (msgIncludes) {
+      assert(
+        error.message.includes(msgIncludes),
+        msg ??
+          `Expected error message to include "${msgIncludes}", but got "${error.message}"`,
+      );
+    }
+  }
+  return error!;
+}
+
+/**
+ * A simple type-safe storage for mock responses
+ */
+type MockResponseMap = Map<string, Response | (() => Promise<Response>)>;
+type MockPatternMap = Array<[RegExp, Response | (() => Promise<Response>)]>;
+
+/**
+ * Mocking HTTP responses for API dependencies
+ */
+export class MockHttpClient {
+  private responseMap: MockResponseMap = new Map();
+  private patternMap: MockPatternMap = [];
+  private requestLog: Request[] = [];
+
+  /**
+   * Register a mock response for a specific URL
+   */
+  mockResponse(
+    url: string | URL,
+    response: Response | (() => Promise<Response>),
+  ): void {
+    const urlKey = url instanceof URL ? url.toString() : url;
+    this.responseMap.set(urlKey, response);
   }
 
-  return mockFetchState.defaultImplementation(input, init);
-}
+  /**
+   * Register a mock response for a URL matching a regex pattern
+   */
+  mockResponseForPattern(
+    pattern: RegExp,
+    response: Response | (() => Promise<Response>),
+  ): void {
+    this.patternMap.push([pattern, response]);
+  }
 
-/**
- * Configures mockFetch to return a successful response with the provided body
- */
-export function mockResponse(
-  body: string | object,
-  init: ResponseInit = {},
-): typeof mockFetch {
-  const bodyStr = typeof body === "string" ? body : JSON.stringify(body);
-  mockFetchState.defaultImplementation = () =>
-    Promise.resolve(new Response(bodyStr, init));
-  return mockFetch;
-}
+  /**
+   * Register a mock JSON response for a specific URL
+   */
+  mockJsonResponse(
+    url: string | URL,
+    data: unknown,
+    status = 200,
+    headers?: HeadersInit,
+  ): void {
+    const jsonResponse = new Response(JSON.stringify(data), {
+      status,
+      headers: {
+        "Content-Type": "application/json",
+        ...(headers ?? {}),
+      },
+    });
+    this.mockResponse(url, () => Promise.resolve(jsonResponse));
+  }
 
-/**
- * Configures mockFetch to reject with the provided error
- */
-export function mockReject(error: Error): typeof mockFetch {
-  mockFetchState.defaultImplementation = () => Promise.reject(error);
-  return mockFetch;
-}
+  /**
+   * Mock a fetch implementation that returns registered responses
+   */
+  fetch = async (
+    input: Request | URL | string,
+    init?: RequestInit,
+  ): Promise<Response> => {
+    const request = input instanceof Request
+      ? input
+      : new Request(input.toString(), init);
+    this.requestLog.push(request);
 
-/**
- * Configures mockFetch to return a successful response once with the provided body
- */
-export function mockResponseOnce(
-  body: string | object,
-  init: ResponseInit = {},
-): typeof mockFetch {
-  const bodyStr = typeof body === "string" ? body : JSON.stringify(body);
-  mockFetchState.implementations.push(() =>
-    Promise.resolve(new Response(bodyStr, init))
-  );
-  return mockFetch;
-}
-
-/**
- * Configures mockFetch to reject once with the provided error
- */
-export function mockRejectOnce(error: Error): typeof mockFetch {
-  mockFetchState.implementations.push(() => Promise.reject(error));
-  return mockFetch;
-}
-
-/**
- * Resets the mockFetch function to its default state
- */
-export function resetMockFetch(): void {
-  mockFetchState.calls = [];
-  mockFetchState.implementations = [];
-  mockFetchState.defaultImplementation = () => {
-    throw new Error("Mock fetch called without implementation");
-  };
-}
-
-/**
- * Helper functions to extract details from the last fetch call
- */
-export const fetchUtils = {
-  /** Get the URL from the last fetch call */
-  url(): string | undefined {
-    return mockFetchState.calls[0]?.[0];
-  },
-
-  /** Get search params from the last fetch URL */
-  searchParams(): Record<string, string> {
-    const url = this.url();
-    return url ? Object.fromEntries(new URL(url).searchParams) : {};
-  },
-
-  /** Get headers from the last fetch call */
-  headers(): Record<string, string> | undefined {
-    return mockFetchState.calls[0]?.[1]?.headers as
-      | Record<string, string>
-      | undefined;
-  },
-
-  /** Get method from the last fetch call */
-  method(): string | undefined {
-    return mockFetchState.calls[0]?.[1]?.method;
-  },
-
-  /** Get body from the last fetch call */
-  body({ raw = false } = {}): unknown {
-    const body = mockFetchState.calls[0]?.[1]?.body;
-    if (body instanceof URLSearchParams) {
-      return body.toString();
+    // Try to find an exact match first
+    const url = request.url;
+    if (this.responseMap.has(url)) {
+      const response = this.responseMap.get(url)!;
+      return typeof response === "function" ? await response() : response;
     }
-    if (raw) {
-      return body;
-    }
-    if (typeof body === "string") {
-      try {
-        return JSON.parse(body);
-      } catch {
-        return body;
+
+    // Try to find a regex match
+    for (const [pattern, response] of this.patternMap) {
+      if (pattern.test(url)) {
+        return typeof response === "function" ? await response() : response;
       }
     }
-    return body;
-  },
 
-  /** Get all fetch calls */
-  calls(): Array<[string, RequestInit | undefined]> {
-    return [...mockFetchState.calls];
-  },
-};
-
-/**
- * Installs the mock fetch globally and returns a function to restore the original fetch
- */
-export function installMockFetch(): () => void {
-  const originalFetch = globalThis.fetch;
-  globalThis.fetch = mockFetch as unknown as typeof fetch;
-
-  return function uninstallMockFetch() {
-    globalThis.fetch = originalFetch;
-  };
-}
-
-// ---- Spy Utility ----
-
-/**
- * Creates a spy function that tracks calls and can be configured to return specific values
- */
-export function spy<T extends AnyFunction = AnyFunction>(implementation?: T) {
-  const calls: Array<Parameters<T>> = [];
-
-  const spyFn = function (this: unknown, ...args: any[]): any {
-    calls.push(args as Parameters<T>);
-    return implementation?.apply(this, args);
+    // No match found
+    throw new Error(`No mock response found for URL: ${url}`);
   };
 
-  // Add spy-specific properties
-  Object.defineProperties(spyFn, {
-    calls: {
-      get: () => calls,
-    },
-    mock: {
-      value: {
-        calls,
-        results: calls.map((_, i) => ({ type: "return", value: calls[i] })),
-      },
-    },
-    mockImplementation: {
-      value: (newImpl: T) => {
-        implementation = newImpl;
-        return spyFn;
-      },
-    },
-    mockImplementationOnce: {
-      value: (implOnce: T) => {
-        const currentImpl = implementation;
-        let used = false;
-        implementation = ((...args: Parameters<T>) => {
-          if (!used) {
-            used = true;
-            return implOnce(...args);
-          }
-          return currentImpl?.(...args);
-        }) as T;
-        return spyFn;
-      },
-    },
-    mockReturnValue: {
-      value: (returnValue: ReturnType<T>) => {
-        implementation = (() => returnValue) as T;
-        return spyFn;
-      },
-    },
-    mockReturnValueOnce: {
-      value: (returnValue: ReturnType<T>) => {
-        const current = implementation;
-        let used = false;
-        implementation = ((...args: Parameters<T>) => {
-          if (!used) {
-            used = true;
-            return returnValue;
-          }
-          return current?.(...args);
-        }) as T;
-        return spyFn;
-      },
-    },
-    mockReset: {
-      value: () => {
-        calls.length = 0;
-        implementation = undefined;
-        return spyFn;
-      },
-    },
-    mockClear: {
-      value: () => {
-        calls.length = 0;
-        return spyFn;
-      },
-    },
-  });
+  /**
+   * Get all recorded requests
+   */
+  getRequests(): Request[] {
+    return [...this.requestLog];
+  }
 
-  return spyFn as T & {
-    calls: Array<Parameters<T>>;
-    mock: {
-      calls: Array<Parameters<T>>;
-      results: Array<{ type: string; value: unknown }>;
-    };
-    mockImplementation: (impl: T) => typeof spyFn;
-    mockImplementationOnce: (impl: T) => typeof spyFn;
-    mockReturnValue: (value: ReturnType<T>) => typeof spyFn;
-    mockReturnValueOnce: (value: ReturnType<T>) => typeof spyFn;
-    mockReset: () => typeof spyFn;
-    mockClear: () => typeof spyFn;
-  };
+  /**
+   * Reset all mocks and request logs
+   */
+  reset(): void {
+    this.responseMap.clear();
+    this.patternMap = [];
+    this.requestLog = [];
+  }
 }
 
 /**
- * Creates a stub for a method on an object, replacing it with a spy
+ * Create a mock for the global fetch function
  */
-export function stub<T extends object, K extends keyof T>(
-  obj: T,
-  method: K,
-  implementation?: T[K] extends AnyFunction ? T[K] : never,
-): T[K] extends AnyFunction ? ReturnType<T[K]> : never {
-  const original = obj[method];
-  const spyFn = spy(implementation as T[K] extends AnyFunction ? T[K] : never);
-
-  // Replace the method with our spy
-  obj[method] = spyFn as unknown as T[K];
-
-  // Add restore functionality
-  Object.defineProperty(spyFn, "restore", {
-    value: () => {
-      obj[method] = original;
-    },
-  });
-
-  return spyFn as unknown as T[K] extends AnyFunction ? ReturnType<T[K]>
-    : never;
-}
-
-// ---- Mock Reset Helpers ----
-
-/**
- * Resets all mocks after each test
- */
-export function resetMocks(): void {
-  resetMockFetch();
+export function mockFetch() {
+  return stub(globalThis, "fetch" as unknown as keyof typeof globalThis);
 }
 
 /**
- * Setup for tests that use fetch mocking
+ * Utilities for controlling time in tests
  */
-export function setupFetchMock(): () => void {
-  const uninstall = installMockFetch();
-  return () => {
-    resetMockFetch();
-    uninstall();
-  };
-}
+export class TimeController {
+  private fakeTime: FakeTime;
 
-// ---- Test Helpers ----
+  constructor(startTime?: number | Date) {
+    this.fakeTime = new FakeTime(startTime);
+  }
 
-/**
- * Type for setup function that runs before each test
- */
-type SetupFn = () => void | Promise<void>;
+  /**
+   * Advance time by a specified number of milliseconds
+   */
+  tick(ms: number): void {
+    this.fakeTime.tick(ms);
+  }
 
-/**
- * Type for teardown function that runs after each test
- */
-type TeardownFn = () => void | Promise<void>;
+  /**
+   * Get the current time
+   */
+  now(): number {
+    return Date.now();
+  }
 
-/**
- * Helper for Deno.test that provides setup and teardown functionality
- */
-export function testWithContext(
-  name: string,
-  fn: () => void | Promise<void>,
-  options: { setup?: SetupFn; teardown?: TeardownFn } = {},
-): void {
-  Deno.test(name, async () => {
-    try {
-      if (options.setup) {
-        await options.setup();
-      }
-
-      await fn();
-    } finally {
-      if (options.teardown) {
-        await options.teardown();
-      }
-    }
-  });
+  /**
+   * Restore the real time
+   */
+  restore(): void {
+    this.fakeTime.restore();
+  }
 }
 
 /**
- * Options for creating a test group
+ * Test context with common utilities
  */
-export interface TestGroupOptions {
-  beforeEach?: SetupFn;
-  afterEach?: TeardownFn;
+export interface TestContext {
+  mockHttp: MockHttpClient;
+  timeController?: TimeController;
+  cleanup: () => Promise<void>;
 }
 
 /**
- * Creates a test group with common setup/teardown
+ * Create a test context with common utilities
  */
-export function createTestGroup(options: TestGroupOptions = {}) {
+export function createTestContext(options: {
+  useFakeTime?: boolean;
+  initialTime?: number | Date;
+} = {}): TestContext {
+  const mockHttp = new MockHttpClient();
+  const fetchStub = stub(globalThis, "fetch", mockHttp.fetch);
+
+  let timeController: TimeController | undefined;
+  if (options.useFakeTime) {
+    timeController = new TimeController(options.initialTime);
+  }
+
   return {
-    test(name: string, fn: () => void | Promise<void>): void {
-      testWithContext(name, fn, {
-        setup: options.beforeEach,
-        teardown: options.afterEach,
-      });
+    mockHttp,
+    timeController,
+    cleanup: async () => {
+      fetchStub.restore();
+      if (timeController) {
+        timeController.restore();
+      }
     },
   };
+}
+
+/**
+ * Run a test with automatically created test context
+ */
+export function withTestContext(
+  testFn: (t: Deno.TestContext, ctx: TestContext) => Promise<void> | void,
+  options: {
+    useFakeTime?: boolean;
+    initialTime?: number | Date;
+  } = {},
+): (t: Deno.TestContext) => Promise<void> {
+  return async (t: Deno.TestContext) => {
+    const ctx = createTestContext(options);
+    try {
+      await testFn(t, ctx);
+    } finally {
+      await ctx.cleanup();
+    }
+  };
+}
+
+/**
+ * Run tests with parameterized test cases
+ */
+export function runTestCases<T>(
+  t: Deno.TestContext,
+  cases: TestCase<T>[],
+  testFn: (input: T) => unknown | Promise<unknown>,
+): Promise<unknown[]> {
+  const promises = cases.map((testCase) =>
+    t.step(testCase.name, async () => {
+      const result = await testFn(testCase.input);
+      assertEquals(result, testCase.expected);
+    })
+  );
+
+  return Promise.all(promises);
 }

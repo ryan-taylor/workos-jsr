@@ -3,7 +3,7 @@ import type {
   Warrant,
   WarrantResponse,
 } from "./warrant.interface.ts";
-import type { PaginationOptions } from "../../common/interfaces/pagination-options.interface.ts";
+import type { PaginationOptions } from "../../common/interfaces.ts";
 import type { GetOptions } from "../../common/interfaces.ts";
 
 export interface QueryOptions extends PaginationOptions {
@@ -22,7 +22,7 @@ export interface QueryResult {
   relation: string;
   warrant: Warrant;
   isImplicit: boolean;
-  meta?: { [key: string]: any };
+  meta?: { [key: string]: unknown };
 }
 
 export interface QueryResultResponse {
@@ -31,7 +31,7 @@ export interface QueryResultResponse {
   relation: string;
   warrant: WarrantResponse;
   is_implicit: boolean;
-  meta?: Record<string, any>;
+  meta?: Record<string, unknown>;
 }
 
 export type QueryRequestOptions = Pick<GetOptions, "warrantToken">;

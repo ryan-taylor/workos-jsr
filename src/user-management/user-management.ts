@@ -1,24 +1,20 @@
-// Define PaginationOptions interface to fix the missing type error
-interface PaginationOptions {
-  after?: string;
-  before?: string;
-  limit?: number;
-  [key: string]: any;
-}
-
 import {
-  createRemoteJWKSet,
-  decodeJwt,
-  jwtVerify,
+  decodeJWT,
+  type JWTPayload,
+  verifyJWT,
 } from "../common/crypto/jwt-utils.ts";
-import { OauthException } from "../common/exceptions/oauth.exception.ts";
+import { type PaginationOptions } from "../common/interfaces/pagination-options.interface.ts";
+import { OAuthException } from "../common/exceptions/oauth.exception.ts";
 import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
-import { AutoPaginatable } from "../common/utils/pagination.ts";
+import {
+  AutoPaginatable,
+  type PaginatedResponse,
+} from "../common/utils/pagination.ts";
 import type { Challenge, ChallengeResponse } from "../mfa/interfaces/index.ts";
 import { deserializeChallenge } from "../mfa/serializers/index.ts";
 import type { WorkOS } from "../workos.ts";
+import type { AuthenticateWithCodeOptions } from "./interfaces/authenticate-with-code-options.interface.ts";
 import {
-  type AuthenticateWithCodeOptions,
   type AuthenticateWithMagicAuthOptions,
   type AuthenticateWithPasswordOptions,
   type AuthenticateWithRefreshTokenOptions,
@@ -75,7 +71,7 @@ import {
   type AuthenticateWithSessionCookieSuccessResponse,
   type SessionCookieData,
 } from "./interfaces/authenticate-with-session-cookie.interface.ts";
-import type { AuthorizationURLOptions } from "./interfaces/authorization-url-options.interface.ts";
+import type { GetAuthorizationURLOptions } from "./interfaces/authorization-url-options.interface.ts";
 import type {
   CreateOrganizationMembershipOptions,
   SerializedCreateOrganizationMembershipOptions,
@@ -171,7 +167,7 @@ const toQueryString = (options: Record<string, string | undefined>): string => {
 };
 
 export class UserManagement {
-  private _jwks: ReturnType<typeof createRemoteJWKSet> | undefined;
+  private _jwks: string | undefined;
   public clientId: string | undefined;
   public ironSessionProvider: FreshSessionProvider;
 
@@ -185,14 +181,16 @@ export class UserManagement {
     this.ironSessionProvider = ironSessionProvider;
   }
 
-  get jwks(): ReturnType<typeof createRemoteJWKSet> | undefined {
+  get jwks(): string | undefined {
     if (!this.clientId) {
-      return;
+      return undefined;
     }
 
     // Set the JWKS URL. This is used to verify if the JWT is still valid
-    this._jwks ??= createRemoteJWKSet(new URL(this.getJwksUrl(this.clientId)));
-
+    // Note: The JWKS implementation is handled internally in the verifyJWT function
+    this._jwks ??= this.clientId
+      ? `${this.workos.baseURL}/sso/jwks/${this.clientId}`
+      : undefined;
     return this._jwks;
   }
 
@@ -228,22 +226,21 @@ export class UserManagement {
   }
 
   async listUsers(options?: ListUsersOptions): Promise<AutoPaginatable<User>> {
-    return new AutoPaginatable(
-      await fetchAndDeserialize<UserResponse, User>(
-        this.workos,
+    const fetchFunction = async (): Promise<PaginatedResponse<User>> => {
+      const result = await fetchAndDeserialize<
+        UserResponse,
+        User,
+        Record<string, unknown>
+      >(
+        this.workos.get.bind(this.workos),
         "/user_management/users",
-        deserializeUser,
         options ? serializeListUsersOptions(options) : undefined,
-      ),
-      (params: PaginationOptions) =>
-        fetchAndDeserialize<UserResponse, User>(
-          this.workos,
-          "/user_management/users",
-          deserializeUser,
-          params,
-        ),
-      options ? serializeListUsersOptions(options) : undefined,
-    );
+        deserializeUser,
+      );
+      return result as unknown as PaginatedResponse<User>;
+    };
+
+    return new AutoPaginatable(fetchFunction);
   }
 
   async createUser(payload: CreateUserOptions): Promise<User> {
@@ -431,15 +428,22 @@ export class UserManagement {
           AuthenticateWithSessionCookieFailureReason.NO_SESSION_COOKIE_PROVIDED,
       };
     }
+    let session: SessionCookieData;
 
-    const session = await this.ironSessionProvider.unsealData<
-      SessionCookieData
-    >(
-      sessionData,
-      {
-        password: cookiePassword,
-      },
-    );
+    try {
+      session = await this.ironSessionProvider.extractDataFromCookie<
+        SessionCookieData
+      >(
+        sessionData,
+        cookiePassword,
+      );
+    } catch (e) {
+      return {
+        authenticated: false,
+        reason:
+          AuthenticateWithSessionCookieFailureReason.INVALID_SESSION_COOKIE,
+      };
+    }
 
     if (!session.accessToken) {
       return {
@@ -462,7 +466,7 @@ export class UserManagement {
       role,
       permissions,
       entitlements,
-    } = decodeJwt<AccessToken>(session.accessToken);
+    } = decodeJWT(session.accessToken) as AccessToken & JWTPayload;
 
     return {
       authenticated: true,
@@ -482,7 +486,7 @@ export class UserManagement {
     }
 
     try {
-      await jwtVerify(accessToken, this.jwks);
+      await verifyJWT(accessToken, this.jwks || "");
       return true;
     } catch (e) {
       return false;
@@ -522,9 +526,9 @@ export class UserManagement {
       throw new Error("Cookie password is required");
     }
 
-    const { org_id: organizationIdFromAccessToken } = decodeJwt<AccessToken>(
+    const { org_id: organizationIdFromAccessToken } = decodeJWT(
       authenticationResponse.accessToken,
-    );
+    ) as AccessToken & JWTPayload;
 
     const sessionData: SessionCookieData = {
       organizationId: organizationIdFromAccessToken,
@@ -533,10 +537,10 @@ export class UserManagement {
       refreshToken: authenticationResponse.refreshToken,
       impersonator: authenticationResponse.impersonator,
     };
-
-    return this.ironSessionProvider.sealData(sessionData, {
-      password: cookiePassword,
-    });
+    return await this.ironSessionProvider.createCookieValue<SessionCookieData>(
+      sessionData,
+      cookiePassword,
+    );
   }
 
   async getSessionFromCookie({
@@ -548,11 +552,9 @@ export class UserManagement {
     }
 
     if (sessionData) {
-      return this.ironSessionProvider.unsealData<SessionCookieData>(
+      return this.ironSessionProvider.extractDataFromCookie<SessionCookieData>(
         sessionData,
-        {
-          password: cookiePassword,
-        },
+        cookiePassword,
       );
     }
 
@@ -710,22 +712,22 @@ export class UserManagement {
     options: ListAuthFactorsOptions,
   ): Promise<AutoPaginatable<Factor>> {
     const { userId, ...restOfOptions } = options;
-    return new AutoPaginatable(
-      await fetchAndDeserialize<FactorResponse, Factor>(
-        this.workos,
+
+    const fetchFunction = async (): Promise<PaginatedResponse<Factor>> => {
+      const result = await fetchAndDeserialize<
+        FactorResponse,
+        Factor,
+        Record<string, unknown>
+      >(
+        this.workos.get.bind(this.workos),
         `/user_management/users/${userId}/auth_factors`,
-        deserializeFactor,
         restOfOptions,
-      ),
-      (params: PaginationOptions) =>
-        fetchAndDeserialize<FactorResponse, Factor>(
-          this.workos,
-          `/user_management/users/${userId}/auth_factors`,
-          deserializeFactor,
-          params,
-        ),
-      restOfOptions,
-    );
+        deserializeFactor,
+      );
+      return result as unknown as PaginatedResponse<Factor>;
+    };
+
+    return new AutoPaginatable(fetchFunction);
   }
 
   async deleteUser(userId: string) {
@@ -753,36 +755,28 @@ export class UserManagement {
 
     return deserializeOrganizationMembership(data);
   }
-
   async listOrganizationMemberships(
     options: ListOrganizationMembershipsOptions,
   ): Promise<AutoPaginatable<OrganizationMembership>> {
-    return new AutoPaginatable(
-      await fetchAndDeserialize<
+    const initialFetch = async (): Promise<
+      PaginatedResponse<OrganizationMembership>
+    > => {
+      const result = await fetchAndDeserialize<
         OrganizationMembershipResponse,
-        OrganizationMembership
+        OrganizationMembership,
+        Record<string, unknown>
       >(
-        this.workos,
+        this.workos.get.bind(this.workos),
         "/user_management/organization_memberships",
-        deserializeOrganizationMembership,
         options
           ? serializeListOrganizationMembershipsOptions(options)
           : undefined,
-      ),
-      (params: PaginationOptions) =>
-        fetchAndDeserialize<
-          OrganizationMembershipResponse,
-          OrganizationMembership
-        >(
-          this.workos,
-          "/user_management/organization_memberships",
-          deserializeOrganizationMembership,
-          params,
-        ),
-      options
-        ? serializeListOrganizationMembershipsOptions(options)
-        : undefined,
-    );
+        deserializeOrganizationMembership,
+      );
+      return result as unknown as PaginatedResponse<OrganizationMembership>;
+    };
+
+    return new AutoPaginatable(initialFetch);
   }
 
   async createOrganizationMembership(
@@ -795,7 +789,6 @@ export class UserManagement {
       "/user_management/organization_memberships",
       serializeCreateOrganizationMembershipOptions(options),
     );
-
     return deserializeOrganizationMembership(data);
   }
 
@@ -814,6 +807,12 @@ export class UserManagement {
     return deserializeOrganizationMembership(data);
   }
 
+  /**
+   * Deletes an organization membership.
+   *
+   * @param organizationMembershipId - The ID of the organization membership to delete.
+   * @returns A promise that resolves when the organization membership has been deleted.
+   */
   async deleteOrganizationMembership(
     organizationMembershipId: string,
   ): Promise<void> {
@@ -863,22 +862,21 @@ export class UserManagement {
   async listInvitations(
     options: ListInvitationsOptions,
   ): Promise<AutoPaginatable<Invitation>> {
-    return new AutoPaginatable(
-      await fetchAndDeserialize<InvitationResponse, Invitation>(
-        this.workos,
+    const fetchFunction = async (): Promise<PaginatedResponse<Invitation>> => {
+      const result = await fetchAndDeserialize<
+        InvitationResponse,
+        Invitation,
+        Record<string, unknown>
+      >(
+        this.workos.get.bind(this.workos),
         "/user_management/invitations",
-        deserializeInvitation,
         options ? serializeListInvitationsOptions(options) : undefined,
-      ),
-      (params: PaginationOptions) =>
-        fetchAndDeserialize<InvitationResponse, Invitation>(
-          this.workos,
-          "/user_management/invitations",
-          deserializeInvitation,
-          params,
-        ),
-      options ? serializeListInvitationsOptions(options) : undefined,
-    );
+        deserializeInvitation,
+      );
+      return result as unknown as PaginatedResponse<Invitation>;
+    };
+
+    return new AutoPaginatable(fetchFunction);
   }
 
   async sendInvitation(payload: SendInvitationOptions): Promise<Invitation> {
@@ -933,7 +931,7 @@ export class UserManagement {
     redirectUri,
     state,
     screenHint,
-  }: AuthorizationURLOptions): string {
+  }: GetAuthorizationURLOptions): string {
     if (!provider && !connectionId && !organizationId) {
       throw new TypeError(
         `Incomplete arguments. Need to specify either a 'connectionId', 'organizationId', or 'provider'.`,
@@ -1022,11 +1020,28 @@ export class UserManagement {
     return this.getLogoutUrl({ sessionId: authenticationResponse.sessionId });
   }
 
+  /**
+   * Gets the JWKS URL for a client ID
+   *
+   * @param clientId The client ID to get the JWKS URL for
+   * @returns The JWKS URL
+   */
   getJwksUrl(clientId: string): string {
     if (!clientId) {
       throw TypeError("clientId must be a valid clientId");
     }
 
+    // In Deno 2.x, we handle the JWKS verification directly in verifyJWT
     return `${this.workos.baseURL}/sso/jwks/${clientId}`;
   }
+
+  /**
+   * Creates a new Session instance using sealed session data
+   *
+   * @param options - Options for loading the sealed session
+   * @param options.sessionData - The sealed session data string
+   * @param options.cookiePassword - The password used to seal the session data
+   * @returns A new Session instance
+   */
+  // The loadSealedSession method is already defined above
 }

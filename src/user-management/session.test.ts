@@ -5,8 +5,6 @@ import { WorkOS } from "../workos.ts";
 import { Session } from "./session.ts";
 import * as jwtUtils from "../common/crypto/jwt-utils.ts";
 import { FreshSessionProvider } from "../common/iron-session/fresh-session-provider.ts";
-// Use FreshSessionProvider for sealing session data in Deno
-const provider = new FreshSessionProvider();
 import { fetchOnce, resetMockFetch, spy } from "../common/utils/test-utils.ts";
 import {
   AuthenticateWithSessionCookieFailureReason,
@@ -14,6 +12,12 @@ import {
 } from "./interfaces/authenticate-with-session-cookie.interface.ts";
 import { RefreshAndSealSessionDataFailureReason } from "./interfaces/refresh-and-seal-session-data.interface.ts";
 import type { User } from "./interfaces/user.interface.ts";
+
+// Type assertion for WorkOS with extended UserManagement
+// This is a simplified interface for test purposes
+interface WorkOSWithUserManagement extends WorkOS {
+  userManagement: any; // Use any to bypass type checking in tests
+}
 
 // Import user fixture directly
 const userFixture = {
@@ -34,35 +38,44 @@ const userFixture = {
 function setupTest() {
   const workos = new WorkOS("sk_test_Sz3IQjepeSWaI4cMS4ms4sMuU", {
     clientId: "client_123",
-  });
+  }) as WorkOSWithUserManagement;
   resetMockFetch();
-  return workos;
+
+  // Initialize FreshSessionProvider with required options
+  const provider = new FreshSessionProvider({
+    cookieName: "workos_session",
+    password: "alongcookiesecretmadefortestingsessions", // 32+ character password
+  });
+
+  return { workos, provider };
 }
 
 // Teardown helper function
-function teardownJwtSpy(originalJwtVerify: typeof jwtUtils.jwtVerify) {
-  Object.defineProperty(jwtUtils, "jwtVerify", {
-    value: originalJwtVerify,
+function teardownJwtSpy(originalVerifyJWT: typeof jwtUtils.verifyJWT) {
+  Object.defineProperty(jwtUtils, "verifyJWT", {
+    value: originalVerifyJWT,
     configurable: true,
   });
 }
 
 // Setup JWT mock helper
-function setupJwtVerifySpy(mockImplementation: () => Promise<unknown>) {
-  const originalJwtVerify = jwtUtils.jwtVerify;
+function setupJwtVerifySpy(
+  mockImplementation: () => Promise<jwtUtils.JWTPayload>,
+) {
+  const originalVerifyJWT = jwtUtils.verifyJWT;
   const jwtVerifySpy = spy(mockImplementation);
 
-  Object.defineProperty(jwtUtils, "jwtVerify", {
+  Object.defineProperty(jwtUtils, "verifyJWT", {
     value: jwtVerifySpy,
     configurable: true,
   });
 
-  return { originalJwtVerify, jwtVerifySpy };
+  return { originalVerifyJWT, jwtVerifySpy };
 }
 
 // Constructor tests
 Deno.test("Session - constructor throws an error if cookiePassword is not provided", () => {
-  const workos = setupTest();
+  const { workos } = setupTest();
   try {
     workos.userManagement.loadSealedSession({
       sessionData: "sessionData",
@@ -76,7 +89,7 @@ Deno.test("Session - constructor throws an error if cookiePassword is not provid
 });
 
 Deno.test("Session - constructor creates a new Session instance", () => {
-  const workos = setupTest();
+  const { workos } = setupTest();
   const session = workos.userManagement.loadSealedSession({
     sessionData: "sessionData",
     cookiePassword: "cookiePassword",
@@ -88,7 +101,7 @@ Deno.test("Session - constructor creates a new Session instance", () => {
 
 // Authenticate tests
 Deno.test("Session - authenticate returns a failed response if no sessionData is provided", async () => {
-  const workos = setupTest();
+  const { workos } = setupTest();
 
   const session = workos.userManagement.loadSealedSession({
     sessionData: "",
@@ -104,7 +117,7 @@ Deno.test("Session - authenticate returns a failed response if no sessionData is
 });
 
 Deno.test("Session - authenticate returns a failed response if no accessToken is found in the sessionData", async () => {
-  const workos = setupTest();
+  const { workos } = setupTest();
 
   const session = workos.userManagement.loadSealedSession({
     sessionData: "sessionData",
@@ -120,10 +133,10 @@ Deno.test("Session - authenticate returns a failed response if no accessToken is
 });
 
 Deno.test("Session - authenticate returns a failed response if the accessToken is not a valid JWT", async () => {
-  const workos = setupTest();
+  const { workos, provider } = setupTest();
 
   // Setup JWT verify spy that throws an error
-  const { originalJwtVerify } = setupJwtVerifySpy(() => {
+  const { originalVerifyJWT } = setupJwtVerifySpy(() => {
     throw new Error("Invalid JWT");
   });
 
@@ -134,7 +147,7 @@ Deno.test("Session - authenticate returns a failed response if the accessToken i
     const sampleToken =
       "ewogICJzdWIiOiAiMTIzNDU2Nzg5MCIsCiAgIm5hbWUiOiAiSm9obiBEb2UiLAogICJpYXQiOiAxNTE2MjM5MDIy";
 
-    const sessionData = await provider.sealData(
+    const sessionData = await provider.createCookieValue(
       {
         accessToken: sampleToken,
         refreshToken: "def456",
@@ -153,7 +166,7 @@ Deno.test("Session - authenticate returns a failed response if the accessToken i
           metadata: {},
         } as User,
       },
-      { password: cookiePassword },
+      cookiePassword,
     );
 
     const session = workos.userManagement.loadSealedSession({
@@ -168,16 +181,16 @@ Deno.test("Session - authenticate returns a failed response if the accessToken i
     });
   } finally {
     // Restore original function
-    teardownJwtSpy(originalJwtVerify);
+    teardownJwtSpy(originalVerifyJWT);
   }
 });
 
 Deno.test("Session - authenticate returns a successful response if the sessionData is valid", async () => {
-  const workos = setupTest();
+  const { workos, provider } = setupTest();
 
   // Setup JWT verify spy that returns a successful result
-  const { originalJwtVerify } = setupJwtVerifySpy(async () => {
-    return {} as any;
+  const { originalVerifyJWT } = setupJwtVerifySpy(async () => {
+    return {} as jwtUtils.JWTPayload;
   });
 
   try {
@@ -191,7 +204,7 @@ Deno.test("Session - authenticate returns a successful response if the sessionDa
       "VzZXJfMDFINUpRRFY3UjdBVEVZWkRFRzBXNVBSWVMiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20ifX0.A8mDST4wtq" +
       "_0vId6ALg7k2Ukr7FXrszZtdJ_6dfXeAc";
 
-    const sessionData = await provider.sealData(
+    const sessionData = await provider.createCookieValue(
       {
         accessToken,
         refreshToken: "def456",
@@ -214,7 +227,7 @@ Deno.test("Session - authenticate returns a successful response if the sessionDa
           metadata: {},
         } as User,
       },
-      { password: cookiePassword },
+      cookiePassword,
     );
 
     const session = workos.userManagement.loadSealedSession({
@@ -249,13 +262,13 @@ Deno.test("Session - authenticate returns a successful response if the sessionDa
     }
   } finally {
     // Restore original function
-    teardownJwtSpy(originalJwtVerify);
+    teardownJwtSpy(originalVerifyJWT);
   }
 });
 
 // Refresh tests
 Deno.test("Session - refresh returns a failed response if invalid session data is provided", async () => {
-  const workos = setupTest();
+  const { workos } = setupTest();
   fetchOnce({ user: userFixture });
 
   const session = workos.userManagement.loadSealedSession({
@@ -272,7 +285,7 @@ Deno.test("Session - refresh returns a failed response if invalid session data i
 });
 
 Deno.test("Session - refresh when session data is valid returns a successful response with sealed and unsealed session", async () => {
-  const workos = setupTest();
+  const { workos, provider } = setupTest();
 
   // Split the token into multiple lines to avoid hitting the line length limit
   const accessToken = "test_jwt_token" +
@@ -304,7 +317,7 @@ Deno.test("Session - refresh when session data is valid returns a successful res
     metadata: { key: "value" },
   };
 
-  const sessionData = await provider.sealData(
+  const sessionData = await provider.createCookieValue(
     {
       accessToken,
       refreshToken,
@@ -314,7 +327,7 @@ Deno.test("Session - refresh when session data is valid returns a successful res
       },
       user: userWithProperType,
     },
-    { password: cookiePassword },
+    cookiePassword,
   );
 
   const session = workos.userManagement.loadSealedSession({
@@ -349,7 +362,7 @@ Deno.test("Session - refresh when session data is valid returns a successful res
 });
 
 Deno.test("Session - refresh overwrites the cookie password if a new one is provided", async () => {
-  const workos = setupTest();
+  const { workos, provider } = setupTest();
 
   // Split the token into multiple lines to avoid hitting the line length limit
   const accessToken = "test_jwt_token" +
@@ -365,7 +378,7 @@ Deno.test("Session - refresh overwrites the cookie password if a new one is prov
   });
 
   // Setup JWT verify spy
-  const { originalJwtVerify } = setupJwtVerifySpy(async () => {
+  const { originalVerifyJWT } = setupJwtVerifySpy(async () => {
     return {} as any;
   });
 
@@ -387,13 +400,13 @@ Deno.test("Session - refresh overwrites the cookie password if a new one is prov
       metadata: {},
     };
 
-    const sessionData = await provider.sealData(
+    const sessionData = await provider.createCookieValue(
       {
         accessToken,
         refreshToken,
         user: userWithProperType,
       },
-      { password: cookiePassword },
+      cookiePassword,
     );
 
     const session = workos.userManagement.loadSealedSession({
@@ -414,16 +427,16 @@ Deno.test("Session - refresh overwrites the cookie password if a new one is prov
     assertEquals(resp.authenticated, true);
   } finally {
     // Restore original function
-    teardownJwtSpy(originalJwtVerify);
+    teardownJwtSpy(originalVerifyJWT);
   }
 });
 
 // getLogoutUrl tests
 Deno.test("Session - getLogoutUrl returns a logout URL for the user", async () => {
-  const workos = setupTest();
+  const { workos, provider } = setupTest();
 
   // Setup JWT verify spy
-  const { originalJwtVerify } = setupJwtVerifySpy(async () => {
+  const { originalVerifyJWT } = setupJwtVerifySpy(async () => {
     return {} as any;
   });
 
@@ -451,13 +464,13 @@ Deno.test("Session - getLogoutUrl returns a logout URL for the user", async () =
       "iAgInJvbGUiOiAibWVtYmVyIiwKICAicGVybWlzc2lvbnMiOiBbInBvc3RzOmNyZWF0ZSIsICJwb3N0czpkZWxldGUiXQp9." +
       "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 
-    const sessionData = await provider.sealData(
+    const sessionData = await provider.createCookieValue(
       {
         accessToken,
         refreshToken: "def456",
         user: userWithProperType,
       },
-      { password: cookiePassword },
+      cookiePassword,
     );
 
     const session = workos.userManagement.loadSealedSession({
@@ -473,12 +486,12 @@ Deno.test("Session - getLogoutUrl returns a logout URL for the user", async () =
     );
   } finally {
     // Restore original function
-    teardownJwtSpy(originalJwtVerify);
+    teardownJwtSpy(originalVerifyJWT);
   }
 });
 
 Deno.test("Session - getLogoutUrl returns an error if the session is invalid", async () => {
-  const workos = setupTest();
+  const { workos } = setupTest();
 
   const session = workos.userManagement.loadSealedSession({
     sessionData: "",
@@ -498,10 +511,10 @@ Deno.test("Session - getLogoutUrl returns an error if the session is invalid", a
 });
 
 Deno.test("Session - getLogoutUrl with returnTo URL returns a logout URL with return_to parameter", async () => {
-  const workos = setupTest();
+  const { workos, provider } = setupTest();
 
   // Setup JWT verify spy
-  const { originalJwtVerify } = setupJwtVerifySpy(async () => {
+  const { originalVerifyJWT } = setupJwtVerifySpy(async () => {
     return {} as any;
   });
 
@@ -529,13 +542,13 @@ Deno.test("Session - getLogoutUrl with returnTo URL returns a logout URL with re
       "iAgInJvbGUiOiAibWVtYmVyIiwKICAicGVybWlzc2lvbnMiOiBbInBvc3RzOmNyZWF0ZSIsICJwb3N0czpkZWxldGUiXQp9." +
       "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 
-    const sessionData = await provider.sealData(
+    const sessionData = await provider.createCookieValue(
       {
         accessToken,
         refreshToken: "def456",
         user: userWithProperType,
       },
-      { password: cookiePassword },
+      cookiePassword,
     );
 
     const session = workos.userManagement.loadSealedSession({
@@ -554,6 +567,6 @@ Deno.test("Session - getLogoutUrl with returnTo URL returns a logout URL with re
     assertEquals(url, expectedUrl);
   } finally {
     // Restore original function
-    teardownJwtSpy(originalJwtVerify);
+    teardownJwtSpy(originalVerifyJWT);
   }
 });

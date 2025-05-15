@@ -10,7 +10,7 @@ interface RoleResponse {
   permissions?: string[];
 }
 
-export interface Profile<CustomAttributesType extends UnknownRecord> {
+export interface Profile {
   id: string;
   idpId: string;
   organizationId?: string;
@@ -21,11 +21,11 @@ export interface Profile<CustomAttributesType extends UnknownRecord> {
   lastName?: string;
   role?: RoleResponse;
   groups?: string[];
-  customAttributes?: CustomAttributesType;
+  customAttributes?: Record<string, unknown>;
   rawAttributes?: { [key: string]: unknown };
 }
 
-export interface ProfileResponse<CustomAttributesType extends UnknownRecord> {
+export interface ProfileResponse {
   id: string;
   idp_id: string;
   organization_id?: string;
@@ -36,6 +36,6 @@ export interface ProfileResponse<CustomAttributesType extends UnknownRecord> {
   last_name?: string;
   role?: RoleResponse;
   groups?: string[];
-  custom_attributes?: CustomAttributesType;
+  custom_attributes?: Record<string, unknown>;
   raw_attributes?: { [key: string]: unknown };
 }

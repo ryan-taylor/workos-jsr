@@ -27,21 +27,24 @@ export class DirectorySync {
   async listDirectories(
     options?: ListDirectoriesOptions,
   ): Promise<AutoPaginatable<Directory>> {
-    return new AutoPaginatable(
-      await fetchAndDeserialize<DirectoryResponse, Directory>(
-        this.workos,
-        "/directories",
-        deserializeDirectory,
-        options ? serializeListDirectoriesOptions(options) : undefined,
-      ),
-      (params: PaginationOptions) =>
-        fetchAndDeserialize<DirectoryResponse, Directory>(
-          this.workos,
-          "/directories",
-          deserializeDirectory,
-          params,
-        ),
-      options ? serializeListDirectoriesOptions(options) : undefined,
+    const data = await fetchAndDeserialize<
+      DirectoryResponse,
+      Directory,
+      Record<string, unknown>
+    >(
+      this.workos.get.bind(this.workos),
+      "/directories",
+      options
+        ? serializeListDirectoriesOptions(options) as Record<string, unknown>
+        : undefined,
+      deserializeDirectory,
+    );
+
+    return new AutoPaginatable(() =>
+      Promise.resolve({
+        data: [data],
+        list_metadata: { before: null, after: null },
+      })
     );
   }
 
@@ -60,48 +63,44 @@ export class DirectorySync {
   async listGroups(
     options: ListDirectoryGroupsOptions,
   ): Promise<AutoPaginatable<DirectoryGroup>> {
-    return new AutoPaginatable(
-      await fetchAndDeserialize<DirectoryGroupResponse, DirectoryGroup>(
-        this.workos,
-        "/directory_groups",
-        deserializeDirectoryGroup,
-        options,
-      ),
-      (params: PaginationOptions) =>
-        fetchAndDeserialize<DirectoryGroupResponse, DirectoryGroup>(
-          this.workos,
-          "/directory_groups",
-          deserializeDirectoryGroup,
-          params,
-        ),
-      options,
+    const data = await fetchAndDeserialize<
+      DirectoryGroupResponse,
+      DirectoryGroup,
+      Record<string, unknown>
+    >(
+      this.workos.get.bind(this.workos),
+      "/directory_groups",
+      options as Record<string, unknown>,
+      deserializeDirectoryGroup,
+    );
+
+    return new AutoPaginatable(() =>
+      Promise.resolve({
+        data: [data],
+        list_metadata: { before: null, after: null },
+      })
     );
   }
 
   async listUsers<TCustomAttributes extends object = DefaultCustomAttributes>(
     options: ListDirectoryUsersOptions,
   ): Promise<AutoPaginatable<DirectoryUserWithGroups<TCustomAttributes>>> {
-    return new AutoPaginatable(
-      await fetchAndDeserialize<
-        DirectoryUserWithGroupsResponse<TCustomAttributes>,
-        DirectoryUserWithGroups<TCustomAttributes>
-      >(
-        this.workos,
-        "/directory_users",
-        deserializeDirectoryUserWithGroups,
-        options,
-      ),
-      (params: PaginationOptions) =>
-        fetchAndDeserialize<
-          DirectoryUserWithGroupsResponse<TCustomAttributes>,
-          DirectoryUserWithGroups<TCustomAttributes>
-        >(
-          this.workos,
-          "/directory_users",
-          deserializeDirectoryUserWithGroups,
-          params,
-        ),
-      options,
+    const data = await fetchAndDeserialize<
+      DirectoryUserWithGroupsResponse<TCustomAttributes>,
+      DirectoryUserWithGroups<TCustomAttributes>,
+      Record<string, unknown>
+    >(
+      this.workos.get.bind(this.workos),
+      "/directory_users",
+      options as Record<string, unknown>,
+      deserializeDirectoryUserWithGroups,
+    );
+
+    return new AutoPaginatable(() =>
+      Promise.resolve({
+        data: [data],
+        list_metadata: { before: null, after: null },
+      })
     );
   }
 

@@ -271,7 +271,7 @@ Deno.test("WorkOS - post throws GenericServerException when API responds with 50
   }
 });
 
-Deno.test("WorkOS - post throws OauthException when API responds with 400 and error/error_description", async () => {
+Deno.test("WorkOS - post throws OAuthException when API responds with 400 and error/error_description", async () => {
   resetMockFetch();
   fetchOnce(
     { error: "error", error_description: "error description" },

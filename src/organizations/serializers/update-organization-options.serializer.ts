@@ -1,7 +1,7 @@
 import type {
   SerializedUpdateOrganizationOptions,
   UpdateOrganizationOptions,
-} from "../interfaces.ts";
+} from "../interfaces/update-organization-options.interface.ts";
 
 export const serializeUpdateOrganizationOptions = (
   options: Omit<UpdateOrganizationOptions, "organization">,

@@ -58,7 +58,7 @@ export {
   GenericServerException,
   NoApiKeyProvidedException,
   NotFoundException,
-  OauthException,
+  OAuthException,
   RateLimitExceededException,
   SignatureVerificationException,
   UnauthorizedException,

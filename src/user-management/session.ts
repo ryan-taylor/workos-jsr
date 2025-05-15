@@ -1,9 +1,9 @@
 import {
-  type createRemoteJWKSet,
-  decodeJwt,
-  jwtVerify,
+  decodeJWT,
+  type JWTPayload,
+  verifyJWT,
 } from "../common/crypto/jwt-utils.ts";
-import { OauthException } from "../common/exceptions/oauth.exception.ts";
+import { OAuthException } from "../common/exceptions/oauth.exception.ts";
 import type { FreshSessionProvider } from "../common/iron-session/fresh-session-provider.ts";
 import {
   type AccessToken,
@@ -23,7 +23,7 @@ type RefreshOptions = {
 };
 
 export class Session {
-  private jwks: ReturnType<typeof createRemoteJWKSet> | undefined;
+  private jwks: string | undefined;
   private userManagement: UserManagement;
   private ironSessionProvider: FreshSessionProvider;
   private cookiePassword: string;
@@ -66,11 +66,11 @@ export class Session {
     let session: SessionCookieData;
 
     try {
-      session = await this.ironSessionProvider.unsealData<SessionCookieData>(
+      session = await this.ironSessionProvider.extractDataFromCookie<
+        SessionCookieData
+      >(
         this.sessionData,
-        {
-          password: this.cookiePassword,
-        },
+        this.cookiePassword,
       );
     } catch (e) {
       return {
@@ -101,7 +101,7 @@ export class Session {
       role,
       permissions,
       entitlements,
-    } = decodeJwt<AccessToken>(session.accessToken);
+    } = decodeJWT(session.accessToken) as AccessToken & JWTPayload;
 
     return {
       authenticated: true,
@@ -125,14 +125,28 @@ export class Session {
    * @returns An object indicating whether the refresh was successful or not. If successful, it will include the new sealed session data.
    */
   async refresh(options: RefreshOptions = {}): Promise<RefreshSessionResponse> {
-    const session = await this.ironSessionProvider.unsealData<
-      SessionCookieData
-    >(
-      this.sessionData,
-      {
-        password: this.cookiePassword,
-      },
-    );
+    if (!this.sessionData) {
+      return {
+        authenticated: false,
+        reason: RefreshAndSealSessionDataFailureReason.INVALID_SESSION_COOKIE,
+      };
+    }
+
+    let session: SessionCookieData;
+
+    try {
+      session = await this.ironSessionProvider.extractDataFromCookie<
+        SessionCookieData
+      >(
+        this.sessionData,
+        this.cookiePassword,
+      );
+    } catch (e) {
+      return {
+        authenticated: false,
+        reason: RefreshAndSealSessionDataFailureReason.INVALID_SESSION_COOKIE,
+      };
+    }
 
     if (!session.refreshToken || !session.user) {
       return {
@@ -141,9 +155,9 @@ export class Session {
       };
     }
 
-    const { org_id: organizationIdFromAccessToken } = decodeJwt<AccessToken>(
+    const { org_id: organizationIdFromAccessToken } = decodeJWT(
       session.accessToken,
-    );
+    ) as AccessToken & JWTPayload;
 
     try {
       const cookiePassword = options.cookiePassword ?? this.cookiePassword;
@@ -174,7 +188,9 @@ export class Session {
         role,
         permissions,
         entitlements,
-      } = decodeJwt<AccessToken>(authenticationResponse.accessToken);
+      } = decodeJWT(authenticationResponse.accessToken) as
+        & AccessToken
+        & JWTPayload;
 
       // TODO: Returning `session` here means there's some duplicated data.
       // Slim down the return type in a future major version.
@@ -191,24 +207,20 @@ export class Session {
         impersonator: session.impersonator,
       };
     } catch (error) {
-      if (
-        error instanceof OauthException &&
-        // TODO: Add additional known errors and remove re-throw
-        (error && typeof error === "object" && "error" in error &&
-            error.error ===
+      if (error instanceof OAuthException) {
+        if (
+          typeof error === "object" && "error" in error &&
+          (error.error ===
               RefreshAndSealSessionDataFailureReason.INVALID_GRANT ||
-          error && typeof error === "object" && "error" in error &&
             error.error ===
               RefreshAndSealSessionDataFailureReason.MFA_ENROLLMENT ||
-          error && typeof error === "object" && "error" in error &&
             error.error === RefreshAndSealSessionDataFailureReason.SSO_REQUIRED)
-      ) {
-        return {
-          authenticated: false,
-          reason: error && typeof error === "object" && "error" in error
-            ? error.error
-            : RefreshAndSealSessionDataFailureReason.INVALID_GRANT,
-        };
+        ) {
+          return {
+            authenticated: false,
+            reason: error.error,
+          };
+        }
       }
 
       throw error;
@@ -230,10 +242,27 @@ export class Session {
       throw new Error(`Failed to extract session ID for logout URL: ${reason}`);
     }
 
-    return this.userManagement.getLogoutUrl({
-      sessionId: authenticationResponse.sessionId,
-      returnTo,
-    });
+    // Directly construct the logout URL since we can't access the private workos property
+    if (!authenticationResponse.sessionId) {
+      throw new TypeError(`Incomplete arguments. Need to specify 'sessionId'.`);
+    }
+
+    // Get base URL from jwks URL which is of the form: https://api.workos.com/sso/jwks/client_xyz
+    const baseUrl = this.jwks
+      ? this.jwks.substring(0, this.jwks.indexOf("/sso/jwks/"))
+      : "https://api.workos.com";
+
+    const url = new URL(
+      "/user_management/sessions/logout",
+      baseUrl,
+    );
+
+    url.searchParams.set("session_id", authenticationResponse.sessionId);
+    if (returnTo) {
+      url.searchParams.set("return_to", returnTo);
+    }
+
+    return url.toString();
   }
 
   private async isValidJwt(accessToken: string): Promise<boolean> {
@@ -244,7 +273,7 @@ export class Session {
     }
 
     try {
-      await jwtVerify(accessToken, this.jwks);
+      await verifyJWT(accessToken, this.jwks || "");
       return true;
     } catch (e) {
       return false;

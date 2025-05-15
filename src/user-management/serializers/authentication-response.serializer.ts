@@ -2,7 +2,7 @@ import type {
   AuthenticationResponse,
   AuthenticationResponseResponse,
 } from "../interfaces/authentication-response.interface.ts";
-import { deserializeOauthTokens } from "./oauth-tokens.serializer.ts";
+import { deserializeOAuthTokens } from "./oauth-tokens.serializer.ts";
 import { deserializeUser } from "./user.serializer.ts";
 
 export const deserializeAuthenticationResponse = (
@@ -26,7 +26,7 @@ export const deserializeAuthenticationResponse = (
     refreshToken: refresh_token,
     impersonator,
     authenticationMethod: authentication_method,
-    oauthTokens: deserializeOauthTokens(oauth_tokens),
+    oauthTokens: deserializeOAuthTokens(oauth_tokens),
     ...rest,
   };
 };

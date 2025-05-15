@@ -1,4 +1,4 @@
-import type { RoleResponse } from "../../roles/interfaces/.ts";
+import type { RoleResponse } from "../../roles/interfaces/role.interface.ts";
 import type {
   DirectoryGroup,
   DirectoryGroupResponse,

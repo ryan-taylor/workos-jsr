@@ -2,7 +2,7 @@ import {
   GenericServerException,
   NoApiKeyProvidedException,
   NotFoundException,
-  OauthException,
+  OAuthException,
   RateLimitExceededException,
   UnauthorizedException,
   UnprocessableEntityException,
@@ -459,7 +459,7 @@ export class WorkOS {
    *  - 409: ConflictException
    *  - 422: UnprocessableEntityException
    *  - 429: RateLimitExceededException
-   *  - Others: OauthException, BadRequestException, or GenericServerException
+   *  - Others: OAuthException, BadRequestException, or GenericServerException
    * @internal
    */
   private handleHttpError({ path, error }: { path: string; error: unknown }) {
@@ -539,7 +539,7 @@ export class WorkOS {
         }
         default: {
           if (error !== undefined || errorDescription !== undefined) {
-            throw new OauthException(
+            throw new OAuthException(
               status,
               requestID,
               error || "",
@@ -548,7 +548,7 @@ export class WorkOS {
             );
           } else if (code && errors) {
             // Note: ideally this should be mapped directly with a `400` status code.
-            // However, this would break existing logic for the `OauthException` exception.
+            // However, this would break existing logic for the `OAuthException` exception.
             throw new BadRequestException({
               code,
               errors,

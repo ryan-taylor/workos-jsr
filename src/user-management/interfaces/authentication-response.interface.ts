@@ -3,8 +3,8 @@ import type {
   ImpersonatorResponse,
 } from "./impersonator.interface.ts";
 import type {
-  OauthTokens,
-  OauthTokensResponse,
+  OAuthTokens,
+  OAuthTokensResponse,
 } from "./oauth-tokens.interface.ts";
 import type { User, UserResponse } from "./user.interface.ts";
 
@@ -27,7 +27,7 @@ export interface AuthenticationResponse {
   impersonator?: Impersonator;
   authenticationMethod?: AuthenticationMethod;
   sealedSession?: string;
-  oauthTokens?: OauthTokens;
+  oauthTokens?: OAuthTokens;
 }
 
 export interface AuthenticationResponseResponse {
@@ -37,5 +37,5 @@ export interface AuthenticationResponseResponse {
   refresh_token: string;
   impersonator?: ImpersonatorResponse;
   authentication_method?: AuthenticationMethod;
-  oauth_tokens?: OauthTokensResponse;
+  oauth_tokens?: OAuthTokensResponse;
 }

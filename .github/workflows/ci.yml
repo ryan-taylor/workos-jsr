@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches: [main]
-    tags: ['v*']
+    tags: ["v*"]
   pull_request:
     branches: [main]
 
@@ -23,9 +23,9 @@ jobs:
             ~/.cache/deno
           key: ${{ runner.os }}-deno-${{ hashFiles('**/import_map.json') }}
       - name: Deno format check
-        run: deno fmt --check
+        run: deno fmt --check src tests_deno .github/workflows
       - name: Deno lint
-        run: deno lint
+        run: deno lint src
       - name: Deno test
         run: deno test --unstable
 

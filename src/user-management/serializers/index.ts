@@ -14,6 +14,7 @@ export * from "./invitation.serializer.ts";
 export * from "./magic-auth.serializer.ts";
 export * from "./password-reset.serializer.ts";
 export * from "./reset-password-options.serializer.ts";
+export * from "./oauth-tokens.serializer.ts";
 export * from "./send-password-reset-email.serializer.ts";
 export * from "./create-user-options.serializer.ts";
 export * from "./send-magic-auth-code-options.serializer.ts";

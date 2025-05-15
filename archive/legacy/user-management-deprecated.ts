@@ -15,7 +15,7 @@
  * FUTURE REMOVAL: This code is scheduled for complete removal in the next major version.
  */
 
-import { OauthException } from "../../packages/workos_sdk/src/common/exceptions/oauth.exception.ts";
+import { OAuthException } from "../../packages/workos_sdk/src/common/exceptions/oauth.exception.ts";
 import { decodeJwt } from "../../packages/workos_sdk/src/common/crypto/jwt-utils.ts";
 import type { FreshSessionProvider } from "../../packages/workos_sdk/src/common/iron-session/fresh-session-provider.ts";
 import { RefreshAndSealSessionDataFailureReason } from "../../packages/workos_sdk/src/user-management/interfaces/refresh-and-seal-session-data.interface.ts";
@@ -161,7 +161,7 @@ async function refreshAndSealSessionData(
         error.error === RefreshAndSealSessionDataFailureReason.SSO_REQUIRED)
     ) {
       const errorObj = error as { error: string; error_description?: string };
-      throw new OauthException({
+      throw new OAuthException({
         error: errorObj.error,
         reason: errorObj.error,
         errorDescription: errorObj.error_description,

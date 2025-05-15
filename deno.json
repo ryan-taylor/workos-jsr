@@ -47,7 +47,9 @@
       ".cache/",
       "tests_deno/codegen/_runtime_test_output/**",
       "tests_deno/codegen/_runtime_output/**",
-      "tests_deno/codegen/_runtime_strict_output/**"
+      "tests_deno/codegen/_runtime_strict_output/**",
+      "templates/openapi-ts/**",
+      "temp_deno_dir/**"
     ],
     "plugins": []
   },

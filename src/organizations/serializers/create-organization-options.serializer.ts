@@ -1,7 +1,7 @@
 import type {
   CreateOrganizationOptions,
   SerializedCreateOrganizationOptions,
-} from "../interfaces.ts";
+} from "../interfaces/create-organization-options.interface.ts";
 
 export const serializeCreateOrganizationOptions = (
   options: CreateOrganizationOptions,

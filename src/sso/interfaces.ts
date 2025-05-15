@@ -4,6 +4,12 @@
 
 import { PaginationParams } from "../common/utils/pagination.ts";
 
+// Re-export the Profile and ProfileResponse interfaces from the dedicated file
+export type {
+  Profile,
+  ProfileResponse,
+} from "./interfaces/profile.interface.ts";
+
 export interface GetConnectionOptions {
   connection: string;
 }
@@ -41,18 +47,4 @@ export interface Connection {
   status: string;
   created_at: string;
   updated_at: string;
-}
-
-export interface Profile {
-  id: string;
-  connection_id: string;
-  connection_type: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-  object: "profile";
-  organization_id: string;
-  raw_attributes: {
-    [key: string]: unknown;
-  };
 }

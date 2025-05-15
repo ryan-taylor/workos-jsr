@@ -3,9 +3,11 @@ import type { PaginationOptions } from "../../common/interfaces/pagination-optio
 export interface ListDirectoriesOptions extends PaginationOptions {
   organizationId?: string;
   search?: string;
+  order?: string;
 }
 
 export interface SerializedListDirectoriesOptions extends PaginationOptions {
   organization_id?: string;
   search?: string;
+  order?: string;
 }

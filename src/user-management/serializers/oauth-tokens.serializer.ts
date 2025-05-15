@@ -1,8 +1,13 @@
-import type { OauthTokens, OauthTokensResponse } from "../interfaces.ts";
+import type {
+  OAuthTokens,
+  OAuthTokensResponse,
+} from "../interfaces/oauth-tokens.interface.ts";
 
-export const deserializeOauthTokens = (
-  oauthTokens?: OauthTokensResponse,
-): OauthTokens | undefined =>
+export type { OAuthTokens, OAuthTokensResponse };
+
+export const deserializeOAuthTokens = (
+  oauthTokens?: OAuthTokensResponse,
+): OAuthTokens | undefined =>
   oauthTokens
     ? {
       accessToken: oauthTokens.access_token,

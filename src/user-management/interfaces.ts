@@ -120,3 +120,37 @@ export interface RefreshSessionOptions {
   ip_address?: string;
   user_agent?: string;
 }
+
+/**
+ * Interface for OAuth tokens
+ */
+export interface OAuthTokens {
+  accessToken: string;
+  refreshToken: string;
+  expiresAt: string;
+  scopes?: string[];
+}
+
+/**
+ * Interface for OAuth tokens response from API
+ */
+export interface OAuthTokensResponse {
+  access_token: string;
+  refresh_token: string;
+  expires_at: string;
+  scopes?: string[];
+}
+
+/**
+ * Interface for serialized update user password options
+ */
+export interface SerializedUpdateUserPasswordOptions {
+  password: string;
+}
+
+/**
+ * Interface for update user password options
+ */
+export interface UpdateUserPasswordOptions {
+  password: string;
+}

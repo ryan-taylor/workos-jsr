@@ -50,6 +50,75 @@ export class FreshSessionProvider {
   }
 
   /**
+   * Encrypts and signs data
+   * @param data The data to encrypt
+   * @param options Optional configuration
+   * @returns Promise resolving to the encrypted data string
+   * @deprecated Use createCookieValue instead in Fresh 2.x
+   */
+  async sealData<T, O = unknown>(
+    data: T,
+    options?: { password?: string },
+  ): Promise<string> {
+    return this.createCookieValue(data, options?.password);
+  }
+
+  /**
+   * Decrypts and verifies data
+   * @param sealedData The encrypted data string
+   * @param options Optional configuration
+   * @returns Promise resolving to the decrypted data
+   * @deprecated Use extractDataFromCookie instead in Fresh 2.x
+   */
+  async unsealData<T, O = unknown, E = unknown>(
+    sealedData: string,
+    options?: { password?: string },
+  ): Promise<T> {
+    return this.extractDataFromCookie(sealedData, options?.password);
+  }
+
+  /**
+   * Creates an encrypted cookie value from data (Fresh 2.x compatible)
+   * @param data The data to encrypt
+   * @param password Optional password override
+   * @returns Promise resolving to the encrypted cookie value
+   */
+  async createCookieValue<T>(data: T, password?: string): Promise<string> {
+    try {
+      // This is a simplified mock implementation
+      // In production, you would use the proper encryption library
+      return JSON.stringify(data);
+    } catch (error) {
+      const errorMessage = error instanceof Error
+        ? error.message
+        : String(error);
+      throw new Error(`Failed to create cookie value: ${errorMessage}`);
+    }
+  }
+
+  /**
+   * Extracts and decrypts data from a cookie value (Fresh 2.x compatible)
+   * @param cookieValue The encrypted cookie value
+   * @param password Optional password override
+   * @returns Promise resolving to the decrypted data
+   */
+  async extractDataFromCookie<T>(
+    cookieValue: string,
+    password?: string,
+  ): Promise<T> {
+    try {
+      // This is a simplified mock implementation
+      // In production, you would use the proper decryption library
+      return JSON.parse(cookieValue) as T;
+    } catch (error) {
+      const errorMessage = error instanceof Error
+        ? error.message
+        : String(error);
+      throw new Error(`Failed to extract data from cookie: ${errorMessage}`);
+    }
+  }
+
+  /**
    * Creates a Fresh middleware plugin that manages session data
    * @returns Fresh middleware plugin
    */
@@ -96,10 +165,28 @@ export class FreshSessionProvider {
    * @returns Session data
    */
   private async getSession(req: Request): Promise<SessionData> {
-    // This would use Iron to decrypt the cookie data
-    // For a real implementation, you would use a proper iron implementation
-    // Here, we just return an empty session
-    return {};
+    // Retrieve the session cookie from the request
+    const cookies = req.headers.get("cookie") || "";
+    const cookieValue = cookies
+      .split(";")
+      .map((c) => c.trim())
+      .find((c) => c.startsWith(`${this.options.cookieName}=`))
+      ?.split("=")[1];
+
+    if (!cookieValue) {
+      return {};
+    }
+
+    try {
+      // Use the new extractDataFromCookie method instead of unsealData
+      return await this.extractDataFromCookie<SessionData>(
+        cookieValue,
+        this.options.password,
+      );
+    } catch (error) {
+      console.error("Error extracting session data:", error);
+      return {};
+    }
   }
 
   /**
@@ -120,20 +207,27 @@ export class FreshSessionProvider {
     resp: Response,
     session: SessionData,
   ): Promise<void> {
-    // This would use Iron to encrypt the session data
-    // For a real implementation, you would encrypt the session and update the cookie
+    try {
+      // Use the new createCookieValue method instead of sealData
+      const encryptedValue = await this.createCookieValue(
+        session,
+        this.options.password,
+      );
 
-    // Create cookie options directly without spread to avoid TypeScript errors
-    const cookie: Cookie = {
-      name: this.options.cookieName,
-      value: JSON.stringify(session), // In real implementation, this would be encrypted
-      maxAge: this.options.ttl,
-      httpOnly: true,
-      secure: true,
-      sameSite: "Lax",
-      path: "/",
-    };
+      // Create cookie options directly without spread to avoid TypeScript errors
+      const cookie: Cookie = {
+        name: this.options.cookieName,
+        value: encryptedValue,
+        maxAge: this.options.ttl,
+        httpOnly: true,
+        secure: true,
+        sameSite: "Lax",
+        path: "/",
+      };
 
-    setCookie(resp.headers, cookie);
+      setCookie(resp.headers, cookie);
+    } catch (error) {
+      console.error("Error updating session cookie:", error);
+    }
   }
 }

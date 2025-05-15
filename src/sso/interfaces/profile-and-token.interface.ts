@@ -1,14 +1,11 @@
 import type { UnknownRecord } from "../../common/interfaces/unknown-record.interface.ts";
 import type { Profile, ProfileResponse } from "./profile.interface.ts";
 
-export interface ProfileAndToken<CustomAttributesType extends UnknownRecord> {
+export interface ProfileAndToken {
   accessToken: string;
-  profile: Profile<CustomAttributesType>;
+  profile: Profile;
 }
-
-export interface ProfileAndTokenResponse<
-  CustomAttributesType extends UnknownRecord,
-> {
+export interface ProfileAndTokenResponse {
   access_token: string;
-  profile: ProfileResponse<CustomAttributesType>;
+  profile: ProfileResponse;
 }

@@ -39,7 +39,7 @@ export async function fetchAndDeserialize<T, U>(
   deserializeFn?: (item: unknown) => U,
   options?: PaginationOptions,
   requestOptions?: GetOptions,
-): Promise<U | U[] | List<U>> {
+): Promise<U | U[] | List<U> | ListResponse<U>> {
   // Handle options object pattern (legacy)
   if (isOptionsObject<U>(workosOrOptions)) {
     const {
@@ -150,7 +150,7 @@ export async function fetchAndDeserialize<T, U>(
 
   const paginationOptions = setDefaultOptions(options);
   const response = await workos.get<Record<string, unknown>>(endpoint, {
-    query: paginationOptions as Record<
+    query: paginationOptions as unknown as Record<
       string,
       string | number | boolean | undefined
     >,

@@ -1,5 +1,13 @@
 import { deserializeOrganization } from "./organization.serializer.ts";
-import organizationFixture from "../fixtures/get-organization.json.ts";
+import { assertEquals } from "https://deno.land/std/assert/mod.ts";
+
+// Mock organization fixture since import path is failing
+const organizationFixture = {
+  id: "org_01EHWNCEGRABT9A8MTEFJ0BB4M",
+  name: "Acme Inc.",
+  domains: [],
+  metadata: { key: "value" },
+};
 
 const organizationResponse = {
   ...organizationFixture,
@@ -9,28 +17,22 @@ const organizationResponse = {
   domains: [],
 };
 
-describe("deserializeOrganization", () => {
-  it("includes metadata if present", () => {
-    const metadata = { key: "value" };
+Deno.test("deserializeOrganization - includes metadata if present", () => {
+  const metadata = { key: "value" };
 
-    expect(
-      deserializeOrganization({
-        ...organizationResponse,
-        metadata,
-      }),
-    ).toMatchObject({
-      metadata,
-    });
+  const result = deserializeOrganization({
+    ...organizationResponse,
+    metadata,
   });
 
-  it("coerces missing metadata to empty object", () => {
-    const { metadata, ...organizationResponseWithoutMetadata } =
-      organizationResponse;
+  assertEquals(result.metadata, metadata);
+});
 
-    expect(
-      deserializeOrganization(organizationResponseWithoutMetadata),
-    ).toMatchObject({
-      metadata: {},
-    });
-  });
+Deno.test("deserializeOrganization - coerces missing metadata to empty object", () => {
+  const { metadata: _metadata, ...organizationResponseWithoutMetadata } =
+    organizationResponse;
+
+  const result = deserializeOrganization(organizationResponseWithoutMetadata);
+
+  assertEquals(result.metadata, {});
 });

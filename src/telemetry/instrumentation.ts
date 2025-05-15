@@ -10,6 +10,12 @@ import type { WorkOS } from "../workos.ts";
 import type { SSO } from "../sso/sso.ts";
 import type { DirectorySync } from "../directory-sync/directory-sync.ts";
 import type { UserManagement } from "../user-management/user-management.ts";
+import { AutoPaginatable } from "../common/utils/pagination.ts";
+import type {
+  DefaultCustomAttributes,
+  DirectoryUserWithGroups,
+  ListDirectoryUsersOptions,
+} from "../directory-sync/interfaces.ts";
 
 /**
  * Instruments HTTP methods on the WorkOS class with telemetry
@@ -26,7 +32,7 @@ export function instrumentWorkOSCore(workos: WorkOS): void {
   workos.get = async <Result = unknown>(
     path: string,
     options = {},
-  ): Promise<any> => {
+  ): Promise<{ data: Result }> => {
     const spanId = telemetry.startSpan("workos.get", {
       "http.method": "GET",
       "http.path": path,
@@ -55,7 +61,7 @@ export function instrumentWorkOSCore(workos: WorkOS): void {
     path: string,
     entity: Entity,
     options = {},
-  ): Promise<any> => {
+  ): Promise<{ data: Result }> => {
     const spanId = telemetry.startSpan("workos.post", {
       "http.method": "POST",
       "http.path": path,
@@ -84,7 +90,7 @@ export function instrumentWorkOSCore(workos: WorkOS): void {
     path: string,
     entity: Entity,
     options = {},
-  ): Promise<any> => {
+  ): Promise<{ data: Result }> => {
     const spanId = telemetry.startSpan("workos.put", {
       "http.method": "PUT",
       "http.path": path,
@@ -109,7 +115,7 @@ export function instrumentWorkOSCore(workos: WorkOS): void {
     }
   };
 
-  workos.delete = async (path, query) => {
+  workos.delete = async (path: string, query?: Record<string, string>) => {
     const spanId = telemetry.startSpan("workos.delete", {
       "http.method": "DELETE",
       "http.path": path,
@@ -206,7 +212,11 @@ export function instrumentDirectorySync(directorySync: DirectorySync): void {
   const originalListUsers = directorySync.listUsers.bind(directorySync);
 
   // Replace with instrumented versions
-  directorySync.listUsers = async (options = {}) => {
+  directorySync.listUsers = async function <
+    TCustomAttributes extends object = DefaultCustomAttributes,
+  >(
+    options: ListDirectoryUsersOptions,
+  ): Promise<AutoPaginatable<DirectoryUserWithGroups<TCustomAttributes>>> {
     const spanId = telemetry.startSpan("directorySync.listUsers", {
       "workos.module": "directorySync",
       ...options.directory
@@ -215,10 +225,8 @@ export function instrumentDirectorySync(directorySync: DirectorySync): void {
     });
 
     try {
-      const result = await originalListUsers(options);
-      telemetry.endSpan(spanId, SpanStatus.OK, undefined, {
-        "result.count": result.data.length,
-      });
+      const result = await originalListUsers<TCustomAttributes>(options);
+      telemetry.endSpan(spanId, SpanStatus.OK);
       telemetry.recordMetric("directory_sync.user_queries", 1, "counter");
       return result;
     } catch (error) {

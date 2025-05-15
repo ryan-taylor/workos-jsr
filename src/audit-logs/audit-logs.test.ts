@@ -70,17 +70,18 @@ Deno.test("AuditLogs - createEvent sends the correct data to the API", async () 
   const originalPost = workos.post;
   let postCalled = false;
   let postPath = "";
-  let postData: any = null;
-  let postOptions: any = null;
+  let postData: Record<string, unknown> | null = null;
+  let postOptions: { idempotencyKey?: string } | null = null;
 
   // Use type assertion to bypass TypeScript's type checking for the mock
-  workos.post = ((path: string, data: any, options = {}) => {
-    postCalled = true;
-    postPath = path;
-    postData = data;
-    postOptions = options;
-    return Promise.resolve({ data: { success: true } });
-  }) as typeof workos.post;
+  workos.post =
+    ((path: string, data: Record<string, unknown>, options = {}) => {
+      postCalled = true;
+      postPath = path;
+      postData = data;
+      postOptions = options;
+      return Promise.resolve({ data: { success: true } });
+    }) as typeof workos.post;
 
   try {
     // Call the method being tested
@@ -91,8 +92,8 @@ Deno.test("AuditLogs - createEvent sends the correct data to the API", async () 
     // Verify the post method was called with the correct arguments
     assertEquals(postCalled, true);
     assertEquals(postPath, "/audit_logs/events");
-    assertEquals(postData.organization_id, "org_123");
-    assertEquals(postOptions.idempotencyKey, "the-idempotency-key");
+    assertEquals(postData!.organization_id, "org_123");
+    assertEquals(postOptions!.idempotencyKey, "the-idempotency-key");
   } finally {
     // Restore the original method
     workos.post = originalPost;
@@ -147,7 +148,7 @@ Deno.test("AuditLogs - createExport sends the correct data to the API", async ()
   const originalPost = workos.post;
   let postCalled = false;
   let postPath = "";
-  let postData: any = null;
+  let postData: Record<string, unknown> | null = null;
 
   const timestamp = new Date().toISOString();
   const mockResponse = {
@@ -160,7 +161,7 @@ Deno.test("AuditLogs - createExport sends the correct data to the API", async ()
   };
 
   // Use type assertion to bypass TypeScript's type checking for the mock
-  workos.post = ((path: string, data: any) => {
+  workos.post = ((path: string, data: Record<string, unknown>) => {
     postCalled = true;
     postPath = path;
     postData = data;
@@ -180,7 +181,7 @@ Deno.test("AuditLogs - createExport sends the correct data to the API", async ()
     // Verify the post method was called with the correct arguments
     assertEquals(postCalled, true);
     assertEquals(postPath, "/audit_logs/exports");
-    assertEquals(postData.organization_id, options.organizationId);
+    assertEquals(postData!.organization_id, options.organizationId);
 
     // Verify the result
     assertEquals(result.object, "audit_log_export");
@@ -244,7 +245,7 @@ Deno.test("AuditLogs - createSchema sends the correct data to the API", async ()
   const originalPost = workos.post;
   let postCalled = false;
   let postPath = "";
-  let postOptions: any = null;
+  let postOptions: { idempotencyKey?: string } | null = null;
 
   const time = new Date().toISOString();
   const mockResponse = {
@@ -288,12 +289,13 @@ Deno.test("AuditLogs - createSchema sends the correct data to the API", async ()
   };
 
   // Use type assertion to bypass TypeScript's type checking for the mock
-  workos.post = ((path: string, _data: any, options = {}) => {
-    postCalled = true;
-    postPath = path;
-    postOptions = options;
-    return Promise.resolve({ data: mockResponse });
-  }) as typeof workos.post;
+  workos.post =
+    ((path: string, _data: Record<string, unknown>, options = {}) => {
+      postCalled = true;
+      postPath = path;
+      postOptions = options;
+      return Promise.resolve({ data: mockResponse });
+    }) as typeof workos.post;
 
   try {
     // Call the method being tested
@@ -304,7 +306,7 @@ Deno.test("AuditLogs - createSchema sends the correct data to the API", async ()
     // Verify the post method was called with the correct arguments
     assertEquals(postCalled, true);
     assertEquals(postPath, "/audit_logs/actions/user.logged_in/schemas");
-    assertEquals(postOptions.idempotencyKey, "the-idempotency-key");
+    assertEquals(postOptions!.idempotencyKey, "the-idempotency-key");
 
     // Verify the result
     assertEquals(result.object, "audit_log_schema");
@@ -323,7 +325,7 @@ Deno.test("AuditLogs - createSchema handles requests without metadata", async ()
   const originalPost = workos.post;
   let postCalled = false;
   let postPath = "";
-  let postData: any = null;
+  let postData: Record<string, unknown> | null = null;
 
   const time = new Date().toISOString();
   const mockResponse = {
@@ -356,7 +358,7 @@ Deno.test("AuditLogs - createSchema handles requests without metadata", async ()
   };
 
   // Use type assertion to bypass TypeScript's type checking for the mock
-  workos.post = ((path: string, data: any) => {
+  workos.post = ((path: string, data: Record<string, unknown>) => {
     postCalled = true;
     postPath = path;
     postData = data;
@@ -370,7 +372,7 @@ Deno.test("AuditLogs - createSchema handles requests without metadata", async ()
     // Verify the post method was called with the correct arguments
     assertEquals(postCalled, true);
     assertEquals(postPath, "/audit_logs/actions/user.logged_in/schemas");
-    assertEquals(postData.metadata, undefined);
+    assertEquals(postData!.metadata, undefined);
 
     // Verify the result
     assertEquals(result.object, "audit_log_schema");

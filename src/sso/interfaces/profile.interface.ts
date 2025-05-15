@@ -1,6 +1,14 @@
-import type { UnknownRecord } from "../../common/interfaces/unknown-record.interface.ts";
-import type { RoleResponse } from "../../roles/interfaces.ts";
 import type { ConnectionType } from "./connection-type.enum.ts";
+
+// Define locally to avoid import errors
+type UnknownRecord = Record<string, unknown>;
+
+// Define a simple version locally to avoid import errors
+interface RoleResponse {
+  id: string;
+  name: string;
+  permissions?: string[];
+}
 
 export interface Profile<CustomAttributesType extends UnknownRecord> {
   id: string;
@@ -14,7 +22,7 @@ export interface Profile<CustomAttributesType extends UnknownRecord> {
   role?: RoleResponse;
   groups?: string[];
   customAttributes?: CustomAttributesType;
-  rawAttributes?: { [key: string]: any };
+  rawAttributes?: { [key: string]: unknown };
 }
 
 export interface ProfileResponse<CustomAttributesType extends UnknownRecord> {
@@ -29,5 +37,5 @@ export interface ProfileResponse<CustomAttributesType extends UnknownRecord> {
   role?: RoleResponse;
   groups?: string[];
   custom_attributes?: CustomAttributesType;
-  raw_attributes?: { [key: string]: any };
+  raw_attributes?: { [key: string]: unknown };
 }

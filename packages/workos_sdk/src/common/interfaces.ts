@@ -46,11 +46,21 @@ export interface List<T> {
     before: string | null;
     after: string | null;
   };
+  // Include snake_case version for backward compatibility
+  list_metadata?: {
+    before: string | null;
+    after: string | null;
+  };
 }
 
 export interface ListResponse<T> {
   data: T[];
   listMetadata: {
+    before: string | null;
+    after: string | null;
+  };
+  // Include snake_case version for backward compatibility
+  list_metadata?: {
     before: string | null;
     after: string | null;
   };

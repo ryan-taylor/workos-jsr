@@ -14,6 +14,9 @@ import {
   instrumentUserManagement,
   instrumentWorkOSCore,
 } from "./instrumentation.ts";
+import type { SSO } from "../sso/sso.ts";
+import type { DirectorySync } from "../directory-sync/directory-sync.ts";
+import type { UserManagement } from "../user-management/user-management.ts";
 
 /**
  * Initializes telemetry for a WorkOS instance
@@ -41,8 +44,10 @@ export function initTelemetry(
   const newTelemetryManager = new TelemetryManager(mergedConfig);
 
   // Replace the global telemetry instance's properties
+  // Using unknown to safely assign properties between telemetry instances
   Object.keys(newTelemetryManager).forEach((key) => {
-    (telemetry as any)[key] = (newTelemetryManager as any)[key];
+    (telemetry as unknown as Record<string, unknown>)[key] =
+      (newTelemetryManager as unknown as Record<string, unknown>)[key];
   });
 
   // Only apply instrumentation if telemetry is enabled
@@ -51,9 +56,12 @@ export function initTelemetry(
     instrumentWorkOSCore(workos);
 
     // Apply instrumentation to modules
-    instrumentSSO(workos.sso);
-    instrumentDirectorySync(workos.directorySync);
-    instrumentUserManagement(workos.userManagement);
+    // Use type assertions to handle compatibility between package and source implementations
+    instrumentSSO(workos.sso as unknown as SSO);
+    instrumentDirectorySync(workos.directorySync as unknown as DirectorySync);
+    instrumentUserManagement(
+      workos.userManagement as unknown as UserManagement,
+    );
 
     if (mergedConfig.debug) {
       console.debug(

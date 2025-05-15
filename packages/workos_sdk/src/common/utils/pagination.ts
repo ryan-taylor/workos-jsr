@@ -78,7 +78,7 @@ export class PageIterator<T> {
     return this.list.listMetadata;
   }
 
-  async next(): Promise<List<T>> {
+  next(): List<T> {
     return this.list;
   }
 
@@ -94,6 +94,7 @@ export class PageIterator<T> {
         ...options,
         after: result.listMetadata.after,
       });
+      yield result;
     }
   }
 }

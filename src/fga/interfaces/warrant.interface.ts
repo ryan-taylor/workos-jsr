@@ -1,4 +1,4 @@
-import type { GetOptions } from "../../common/interfaces.ts";
+import type { GetOptions as _GetOptions } from "../../common/interfaces.ts";
 import type {
   ResourceInterface,
   ResourceOptions,
@@ -74,7 +74,7 @@ export interface SerializedWriteWarrantOptions {
   policy?: string;
 }
 
-export type ListWarrantsRequestOptions = Pick<GetOptions, "warrantToken">;
+export type ListWarrantsRequestOptions = Pick<_GetOptions, "warrantToken">;
 
 export interface WarrantResponse {
   resource_type: string;

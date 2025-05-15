@@ -3,7 +3,7 @@ interface PaginationOptions {
   after?: string;
   before?: string;
   limit?: number;
-  [key: string]: any;
+  [key: string]: string | number | undefined;
 }
 
 export interface ListInvitationsOptions extends PaginationOptions {

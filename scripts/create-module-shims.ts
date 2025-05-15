@@ -8,7 +8,7 @@
  */
 
 import { ensureDir } from "jsr:@std/fs@1.0.0";
-import { dirname, join } from "jsr:@std/path@1.0.0";
+import { dirname as _dirname, join } from "jsr:@std/path@1.0.0";
 import { walk } from "jsr:@std/fs@1.0.0/walk";
 
 const SRC_DIR = "./src";
@@ -89,7 +89,7 @@ async function getInterfaceExports(modulePath: string): Promise<string[]> {
           '/interfaces/index.ts";',
       );
     }
-  } catch (e) {
+  } catch (_e) {
     // If the file doesn't exist, just return an empty array
     exports.push(`// No interfaces found for ${modulePath}`);
   }

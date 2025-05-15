@@ -1,5 +1,5 @@
 export interface KeyContext {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface DataKeyPair {

@@ -5,7 +5,7 @@ interface PaginationOptions {
   after?: string;
   before?: string;
   limit?: number;
-  [key: string]: any;
+  [key: string]: string | number | string[] | undefined;
 }
 
 export interface ListOrganizationMembershipsOptions extends PaginationOptions {

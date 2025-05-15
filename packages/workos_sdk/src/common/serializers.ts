@@ -33,15 +33,20 @@ export function adaptListMetadata(data: unknown): unknown {
 
   const rawResponse = data as Record<string, unknown>;
 
-  // Check if it has list_metadata and adapt it
-  if ("list_metadata" in rawResponse) {
-    return {
-      ...rawResponse,
-      listMetadata: rawResponse.list_metadata,
-    };
+  // Make a copy of the response to avoid mutating the original
+  const result = { ...rawResponse };
+
+  // Handle snake_case to camelCase conversion
+  if ("list_metadata" in rawResponse && !("listMetadata" in rawResponse)) {
+    result.listMetadata = rawResponse.list_metadata;
   }
 
-  return data;
+  // Handle camelCase to snake_case conversion (for backward compatibility)
+  if ("listMetadata" in rawResponse && !("list_metadata" in rawResponse)) {
+    result.list_metadata = rawResponse.listMetadata;
+  }
+
+  return result;
 }
 
 // List serializer functions
@@ -82,21 +87,28 @@ export function deserializeList<T>(
     object?: string;
     data?: unknown[] | unknown;
     listMetadata?: { before: string | null; after: string | null };
+    list_metadata?: { before: string | null; after: string | null };
   };
+
+  // Use whichever metadata is available
+  const metadata = response.listMetadata || response.list_metadata ||
+    { before: null, after: null };
 
   // Handle case where data property is not an array
   if (response.data && !Array.isArray(response.data)) {
     return {
       object: response.object || "list",
       data: [itemDeserializer(response.data)],
-      listMetadata: response.listMetadata || { before: null, after: null },
+      listMetadata: metadata,
+      list_metadata: metadata,
     };
   }
 
   return {
     object: response.object || "list",
     data: (response.data as unknown[] || []).map(itemDeserializer),
-    listMetadata: response.listMetadata || { before: null, after: null },
+    listMetadata: metadata,
+    list_metadata: metadata,
   };
 }
 

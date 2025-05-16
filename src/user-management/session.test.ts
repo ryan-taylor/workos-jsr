@@ -21,7 +21,8 @@ interface WorkOSWithUserManagement extends WorkOS {
   // Using 'any' here allows us to create a minimal test interface without
   // implementing the full UserManagement interface, which would be overkill for tests.
   // deno-lint-ignore no-explicit-any
-  // TODO: Long-term, consider creating a minimal mock interface for UserManagement
+  // This is a legitimate use of 'any' for testing purposes - it allows us to create
+  // lightweight mock objects without implementing the entire interface
   userManagement: any;
 }
 

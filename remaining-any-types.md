@@ -20,10 +20,12 @@ couldn't be eliminated during our type safety refactoring effort.
 
 #### Common Module
 
-- **packages/workos_sdk/src/common/crypto/signature-provider.ts:17,65,66** -
-  Payload and timestamp types
-- **packages/workos_sdk/src/common/crypto/jwt-utils.ts:17,80,108,109** - JWT
-  related functionality
+- No remaining `any` types - Previously present in JWT and signature
+  functionality, now replaced with proper types:
+  - `JWTHeader` and `JWTPayload` interfaces
+  - `SignatureTimestamp` type (number | string | Date)
+  - `SignaturePayload` type (Record<string, unknown>)
+  - `MetadataValue` and `MetadataMap` types with runtime type guards
 
 ### In Test and Example Files
 

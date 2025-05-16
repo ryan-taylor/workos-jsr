@@ -1,28 +1,28 @@
 {
-  "totalTests": 28,
-  "passed": 27,
-  "failed": 1,
+  "totalTests": 32,
+  "passed": 32,
+  "failed": 0,
   "ignored": 0,
   "timeouts": 0,
-  "duration": 836,
+  "duration": 1110,
   "results": [
     {
-      "name": "telemetry.spec.ts",
-      "file": "./tests_deno/telemetry.spec.ts",
+      "name": "mfa.test.ts",
+      "file": "./tests_deno/mfa.test.ts",
       "status": "passed",
-      "duration": 13
+      "duration": 2
     },
     {
-      "name": "mfa.spec.ts",
-      "file": "./tests_deno/mfa.spec.ts",
+      "name": "telemetry.test.ts",
+      "file": "./tests_deno/telemetry.test.ts",
       "status": "passed",
-      "duration": 4
+      "duration": 12
     },
     {
       "name": "security-resolver.test.ts",
       "file": "./tests_deno/core/security-resolver.test.ts",
       "status": "passed",
-      "duration": 4
+      "duration": 12
     },
     {
       "name": "workos_core.test.ts",
@@ -40,19 +40,19 @@
       "name": "request-options-security.test.ts",
       "file": "./tests_deno/core/request-options-security.test.ts",
       "status": "passed",
-      "duration": 4
+      "duration": 12
     },
     {
       "name": "security-error-handling.test.ts",
       "file": "./tests_deno/core/security-error-handling.test.ts",
       "status": "passed",
-      "duration": 4
+      "duration": 12
     },
     {
       "name": "serializers.test.ts",
       "file": "./tests_deno/core/serializers.test.ts",
       "status": "passed",
-      "duration": 4
+      "duration": 3
     },
     {
       "name": "directory_sync.test.ts",
@@ -70,29 +70,29 @@
       "name": "fetch-and-deserialize.test.ts",
       "file": "./tests_deno/core/fetch-and-deserialize.test.ts",
       "status": "passed",
-      "duration": 4
+      "duration": 3
     },
     {
       "name": "session.test.ts",
       "file": "./tests_deno/fresh/middleware/session.test.ts",
       "status": "passed",
-      "duration": 120
+      "duration": 118
     },
     {
       "name": "callback.test.ts",
       "file": "./tests_deno/fresh/routes/callback.test.ts",
       "status": "passed",
-      "duration": 4
+      "duration": 2
     },
     {
-      "name": "directory-sync.spec.ts",
-      "file": "./tests_deno/directory-sync.spec.ts",
+      "name": "portal.test.ts",
+      "file": "./tests_deno/portal.test.ts",
       "status": "passed",
       "duration": 3
     },
     {
-      "name": "portal.spec.ts",
-      "file": "./tests_deno/portal.spec.ts",
+      "name": "directory-sync.test.ts",
+      "file": "./tests_deno/directory-sync.test.ts",
       "status": "passed",
       "duration": 3
     },
@@ -100,23 +100,19 @@
       "name": "runtime_smoke.test.ts",
       "file": "./tests_deno/codegen/runtime_smoke.test.ts",
       "status": "passed",
-      "duration": 107
+      "duration": 89
     },
     {
       "name": "dereference-spec.test.ts",
       "file": "./tests_deno/codegen/dereference-spec.test.ts",
       "status": "passed",
-      "duration": 3
+      "duration": 4
     },
     {
       "name": "adapter-contract.test.ts",
       "file": "./tests_deno/codegen/adapter-contract.test.ts",
-      "status": "failed",
-      "duration": 1,
-      "error": {
-        "message": "Adapter Contract Tests ... \u001b[0m\u001b[31mFAILED\u001b[0m (due to 3 failed steps) \u001b[0m\u001b[38;5;245m(112ms)\u001b[0m",
-        "category": "Runtime Error"
-      }
+      "status": "passed",
+      "duration": 213
     },
     {
       "name": "auth-schemes.test.ts",
@@ -128,7 +124,7 @@
       "name": "verify-spec.test.ts",
       "file": "./tests_deno/codegen/verify-spec.test.ts",
       "status": "passed",
-      "duration": 9
+      "duration": 10
     },
     {
       "name": "typescript_compile.test.ts",
@@ -140,7 +136,7 @@
       "name": "spec_validator.test.ts",
       "file": "./tests_deno/codegen/spec_validator.test.ts",
       "status": "passed",
-      "duration": 4
+      "duration": 3
     },
     {
       "name": "simple.test.ts",
@@ -149,35 +145,59 @@
       "duration": 1
     },
     {
+      "name": "signature-types.test.ts",
+      "file": "./tests_deno/common/crypto/signature-types.test.ts",
+      "status": "passed",
+      "duration": 4
+    },
+    {
+      "name": "jwt-utils.test.ts",
+      "file": "./tests_deno/common/crypto/jwt-utils.test.ts",
+      "status": "passed",
+      "duration": 4
+    },
+    {
+      "name": "compile-time-types.test.ts",
+      "file": "./tests_deno/common/crypto/compile-time-types.test.ts",
+      "status": "passed",
+      "duration": 1
+    },
+    {
+      "name": "metadata.test.ts",
+      "file": "./tests_deno/common/interfaces/metadata.test.ts",
+      "status": "passed",
+      "duration": 2
+    },
+    {
       "name": "directory_sync_basic.test.ts",
       "file": "./tests_deno/directory_sync_basic.test.ts",
       "status": "passed",
-      "duration": 2
+      "duration": 1
     },
     {
       "name": "http_client.test.ts",
       "file": "./tests_deno/http_client.test.ts",
       "status": "passed",
-      "duration": 508
+      "duration": 563
+    },
+    {
+      "name": "passwordless.test.ts",
+      "file": "./tests_deno/passwordless.test.ts",
+      "status": "passed",
+      "duration": 2
     },
     {
       "name": "workos_basic.test.ts",
       "file": "./tests_deno/workos_basic.test.ts",
       "status": "passed",
-      "duration": 3
-    },
-    {
-      "name": "widgets.spec.ts",
-      "file": "./tests_deno/widgets.spec.ts",
-      "status": "passed",
       "duration": 2
     },
     {
-      "name": "passwordless.spec.ts",
-      "file": "./tests_deno/passwordless.spec.ts",
+      "name": "widgets.test.ts",
+      "file": "./tests_deno/widgets.test.ts",
       "status": "passed",
       "duration": 2
     }
   ],
-  "timestamp": "2025-05-14T01:54:14.769Z"
+  "timestamp": "2025-05-16T02:49:13.495Z"
 }

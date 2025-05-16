@@ -1,4 +1,5 @@
 import type { DomainData } from "./domain-data.interface.ts";
+import type { MetadataMap } from "../../common/interfaces/metadata.interface.ts";
 
 export interface UpdateOrganizationOptions {
   organization: string;
@@ -6,7 +7,7 @@ export interface UpdateOrganizationOptions {
   domainData?: DomainData[];
   stripeCustomerId?: string | null;
   externalId?: string | null;
-  metadata?: Record<string, string>;
+  metadata?: MetadataMap;
 
   /**
    * @deprecated If you need to allow sign-ins from any email domain, contact support@workos.com.
@@ -23,7 +24,7 @@ export interface SerializedUpdateOrganizationOptions {
   domain_data?: DomainData[];
   stripe_customer_id?: string | null;
   external_id?: string | null;
-  metadata?: Record<string, string>;
+  metadata?: MetadataMap;
 
   /**
    * @deprecated If you need to allow sign-ins from any email domain, contact support@workos.com.

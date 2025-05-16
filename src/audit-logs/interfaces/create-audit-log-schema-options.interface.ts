@@ -1,4 +1,5 @@
 import type { PostOptions } from "../../common/interfaces.ts";
+import type { MetadataMap } from "../../common/interfaces/metadata.interface.ts";
 
 export type AuditLogSchemaMetadata =
   | Record<string, { type: "string" | "boolean" | "number" }>
@@ -9,24 +10,24 @@ export interface AuditLogSchema {
   version: number;
   targets: AuditLogTargetSchema[];
   actor: AuditLogActorSchema;
-  metadata: Record<string, string | boolean | number> | undefined;
+  metadata: MetadataMap | undefined;
   createdAt: string;
 }
 
 export interface AuditLogActorSchema {
-  metadata: Record<string, string | boolean | number>;
+  metadata: MetadataMap;
 }
 
 export interface AuditLogTargetSchema {
   type: string;
-  metadata?: Record<string, string | boolean | number> | undefined;
+  metadata?: MetadataMap | undefined;
 }
 
 export interface CreateAuditLogSchemaOptions {
   action: string;
   targets: AuditLogTargetSchema[];
   actor?: AuditLogActorSchema;
-  metadata?: Record<string, string | boolean | number>;
+  metadata?: MetadataMap;
 }
 
 interface SerializedAuditLogTargetSchema {

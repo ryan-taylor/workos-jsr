@@ -220,10 +220,10 @@ Deno.test("Actions - constructAction returns a user registration action", async 
   // Check the action properties individually to avoid TypeScript errors
   assertEquals(action.id, "01JATCMZJY26PQ59XT9BNT0FNN");
   assertEquals(action.object, "user_registration_action_context");
-
   // Check userData
   // deno-lint-ignore no-explicit-any
-  // TODO: Using type assertion to access dynamically structured response in test context
+  // This is a legitimate use of 'any' - accessing a dynamic object property in test context
+  // where we need to verify values from the API response with flexible structure
   const userData = (action as any).userData;
   assertEquals(userData.object, "user_data");
   assertEquals(userData.email, "jane@foocorp.com");
@@ -237,7 +237,8 @@ Deno.test("Actions - constructAction returns a user registration action", async 
 
   // Check invitation properties
   // deno-lint-ignore no-explicit-any
-  // TODO: Using type assertion to access dynamically structured response in test context
+  // This is a legitimate use of 'any' - accessing a dynamic object property in test context
+  // where we need to verify values from the API response with flexible structure
   const invitation = (action as any).invitation;
   assertEquals(invitation.object, "invitation");
   assertEquals(invitation.id, "01JBVZWH8HJ855YZ5BWHG1WNZN");

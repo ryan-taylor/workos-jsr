@@ -254,7 +254,8 @@ Deno.test("webhooks.constructEvent with incorrect payload throws error", async (
   await setup();
   const sigHeader = `t=${timestamp}, v1=${signatureHash}`;
   // deno-lint-ignore no-explicit-any
-  // TODO: Intentionally using string as payload for negative test case
+  // This is a legitimate use of 'any' for a negative test case - we're deliberately
+  // providing an invalid payload type to test error handling
   payload = "invalid" as any;
   const options: ConstructEventOptions = { payload, sigHeader, secret };
 
@@ -293,7 +294,8 @@ Deno.test("webhooks.constructEvent with timestamp outside tolerance throws error
 Deno.test("webhooks.verifyHeader aliases to the signature provider", async () => {
   await setup();
   // deno-lint-ignore no-explicit-any
-  // TODO: Using bracket notation to access private property for testing
+  // This is a legitimate use of 'any' - we need to access the private signatureProvider
+  // property for test verification purposes using bracket notation
   const verifyHeaderSpy = spy(
     (workos.webhooks as any)["signatureProvider"],
     "verifyHeader",
@@ -312,7 +314,8 @@ Deno.test("webhooks.verifyHeader aliases to the signature provider", async () =>
 Deno.test("webhooks.computeSignature aliases to the signature provider", async () => {
   await setup();
   // deno-lint-ignore no-explicit-any
-  // TODO: Using bracket notation to access private property for testing
+  // This is a legitimate use of 'any' - we need to access the private signatureProvider
+  // property for test verification purposes using bracket notation
   const computeSignatureSpy = spy(
     (workos.webhooks as any)["signatureProvider"],
     "computeSignature",
@@ -327,7 +330,8 @@ Deno.test("webhooks.computeSignature aliases to the signature provider", async (
 Deno.test("webhooks.getTimestampAndSignatureHash aliases to the signature provider", async () => {
   await setup();
   // deno-lint-ignore no-explicit-any
-  // TODO: Using bracket notation to access private property for testing
+  // This is a legitimate use of 'any' - we need to access the private signatureProvider
+  // property for test verification purposes using bracket notation
   const getTimestampAndSignatureHashSpy = spy(
     (workos.webhooks as any)["signatureProvider"],
     "getTimestampAndSignatureHash",

@@ -3,12 +3,13 @@ import type {
   DirectoryGroup,
   DirectoryGroupResponse,
 } from "./directory-group.interface.ts";
+import type { MetadataMap } from "../../common/interfaces/metadata.interface.ts";
 
-export type DefaultCustomAttributes = Record<string, unknown>;
+export type DefaultCustomAttributes = MetadataMap;
 
 export interface DirectoryUser<
   TCustomAttributes extends object = DefaultCustomAttributes,
-  TRawAttributes = Record<string, unknown>,
+  TRawAttributes = MetadataMap,
 > {
   object: "directory_user";
   id: string;
@@ -47,7 +48,7 @@ export interface DirectoryUser<
 
 export interface DirectoryUserResponse<
   TCustomAttributes extends object = DefaultCustomAttributes,
-  TRawAttributes = Record<string, unknown>,
+  TRawAttributes = MetadataMap,
 > {
   object: "directory_user";
   id: string;

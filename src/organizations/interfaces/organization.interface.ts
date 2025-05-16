@@ -2,6 +2,7 @@ import type {
   OrganizationDomain,
   OrganizationDomainResponse,
 } from "../../organization-domains/interfaces/organization-domain.interface.ts";
+import type { MetadataMap } from "../../common/interfaces/metadata.interface.ts";
 
 export interface Organization {
   object: "organization";
@@ -13,7 +14,7 @@ export interface Organization {
   createdAt: string;
   updatedAt: string;
   externalId: string | null;
-  metadata: Record<string, string>;
+  metadata: MetadataMap;
 }
 
 export interface OrganizationResponse {
@@ -26,5 +27,5 @@ export interface OrganizationResponse {
   created_at: string;
   updated_at: string;
   external_id?: string | null;
-  metadata?: Record<string, string>;
+  metadata?: MetadataMap;
 }

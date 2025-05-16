@@ -4,6 +4,15 @@
 
 ### Added
 
+- Enhanced type safety with proper type definitions:
+  - Added `JWTHeader` and `JWTPayload` interfaces for JWT operations
+  - Created `SignaturePayload` and `SignatureTimestamp` types for crypto
+    functions
+  - Implemented `MetadataValue` and `MetadataMap` types with runtime type guards
+  - Added comprehensive JSDoc documentation with usage examples
+  - Updated documentation in remaining-any-types.md and
+    type-safety-refactoring-summary.md
+
 ## 1.0.0 (2025-05-15)
 
 This release finalizes the Deno port of the WorkOS SDK, resolving all

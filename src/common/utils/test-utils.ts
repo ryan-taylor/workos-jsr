@@ -66,11 +66,13 @@ export function spy<T extends (...args: any[]) => any>(
   implementation: T,
 ): SpyFunction<T> {
   // deno-lint-ignore no-explicit-any
-  // TODO: Using any here is intentional for generic function types
+  // This is a legitimate use of 'any' to implement a generic test spy function
+  // that can store arguments of any type passed to the spied function
   const calls: any[] = [];
 
   // deno-lint-ignore no-explicit-any
-  // TODO: Using any here is necessary for the spy implementation
+  // This is a legitimate use of 'any' for a generic spy function implementation
+  // that needs to handle arbitrary argument and return types
   const spyFn = function (...args: any[]): any {
     try {
       const returned = implementation(...args);

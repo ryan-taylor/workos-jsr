@@ -3,6 +3,16 @@
  */
 
 /**
+ * Interface representing the standard JWT header structure
+ */
+export interface JWTHeader {
+  alg: string; // Required: Algorithm used for signing
+  typ?: string; // Optional: Type of token (usually "JWT")
+  kid?: string; // Optional: Key ID
+  [key: string]: unknown; // Allow for other custom headers
+}
+
+/**
  * Interface representing the standard JWT payload structure
  */
 export interface JWTPayload {
@@ -15,6 +25,16 @@ export interface JWTPayload {
   jti?: string; // JWT ID
   [key: string]: unknown; // Allow for additional custom claims
 }
+
+/**
+ * Represents various timestamp formats that can be used in signatures
+ */
+export type SignatureTimestamp = number | string | Date;
+
+/**
+ * Represents a generic signature payload structure
+ */
+export type SignaturePayload = Record<string, unknown>;
 
 /**
  * Decodes a JWT token without verification

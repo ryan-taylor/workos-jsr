@@ -1,3 +1,5 @@
+import type { MetadataMap } from "../../common/interfaces/metadata.interface.ts";
+
 export interface User {
   object: "user";
   id: string;
@@ -10,7 +12,7 @@ export interface User {
   createdAt: string;
   updatedAt: string;
   externalId: string | null;
-  metadata: Record<string, string>;
+  metadata: MetadataMap;
 }
 
 export interface UserResponse {
@@ -25,5 +27,5 @@ export interface UserResponse {
   created_at: string;
   updated_at: string;
   external_id?: string;
-  metadata?: Record<string, string>;
+  metadata?: MetadataMap;
 }

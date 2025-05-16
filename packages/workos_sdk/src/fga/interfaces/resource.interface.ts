@@ -1,5 +1,6 @@
 import type { PaginationOptions } from "../../common/interfaces.ts";
 import type { ResourceOp } from "./resource-op.enum.ts";
+import type { MetadataMap } from "../../common/interfaces/metadata.interface.ts";
 
 export interface ResourceInterface {
   getResourceType(): string;
@@ -18,13 +19,13 @@ export interface SerializedResourceOptions {
 
 export interface CreateResourceOptions {
   resource: ResourceInterface | ResourceOptions;
-  meta?: { [key: string]: any };
+  meta?: MetadataMap;
 }
 
 export interface SerializedCreateResourceOptions {
   resource_type: string;
   resource_id?: string;
-  meta?: { [key: string]: any };
+  meta?: MetadataMap;
 }
 
 export type GetResourceOptions = ResourceInterface | ResourceOptions;
@@ -41,7 +42,7 @@ export interface SerializedListResourcesOptions extends PaginationOptions {
 
 export interface UpdateResourceOptions {
   resource: ResourceInterface | ResourceOptions;
-  meta: { [key: string]: any };
+  meta: MetadataMap;
 }
 
 export type DeleteResourceOptions = ResourceInterface | ResourceOptions;
@@ -54,13 +55,13 @@ export interface SerializedDeleteResourceOptions {
 export interface Resource {
   resourceType: string;
   resourceId: string;
-  meta?: { [key: string]: any };
+  meta?: MetadataMap;
 }
 
 export interface ResourceResponse {
   resource_type: string;
   resource_id: string;
-  meta?: { [key: string]: any };
+  meta?: MetadataMap;
 }
 
 export interface BatchWriteResourcesOptions {

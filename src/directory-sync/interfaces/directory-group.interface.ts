@@ -1,3 +1,5 @@
+import type { MetadataMap } from "../../common/interfaces/metadata.interface.ts";
+
 export interface DirectoryGroup {
   id: string;
   idpId: string;
@@ -6,7 +8,7 @@ export interface DirectoryGroup {
   name: string;
   createdAt: string;
   updatedAt: string;
-  rawAttributes: Record<string, unknown>;
+  rawAttributes: MetadataMap;
 }
 
 export interface DirectoryGroupResponse {
@@ -17,5 +19,5 @@ export interface DirectoryGroupResponse {
   name: string;
   created_at: string;
   updated_at: string;
-  raw_attributes: Record<string, unknown>;
+  raw_attributes: MetadataMap;
 }

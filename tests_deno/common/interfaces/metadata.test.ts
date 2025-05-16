@@ -1,11 +1,11 @@
 import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
 import {
-  isMetadataValue,
   isMetadataMap,
+  isMetadataValue,
 } from "../../../src/common/interfaces/metadata-guards.ts";
 import type {
-  MetadataValue,
   MetadataMap,
+  MetadataValue,
 } from "../../../src/common/interfaces/metadata.interface.ts";
 
 Deno.test("isMetadataValue - primitive values", () => {
@@ -13,14 +13,26 @@ Deno.test("isMetadataValue - primitive values", () => {
   assertEquals(isMetadataValue("string value"), true, "String should be valid");
   assertEquals(isMetadataValue(42), true, "Number should be valid");
   assertEquals(isMetadataValue(0), true, "Zero should be valid");
-  assertEquals(isMetadataValue(-10.5), true, "Negative decimal should be valid");
+  assertEquals(
+    isMetadataValue(-10.5),
+    true,
+    "Negative decimal should be valid",
+  );
   assertEquals(isMetadataValue(true), true, "Boolean true should be valid");
   assertEquals(isMetadataValue(false), true, "Boolean false should be valid");
-  
+
   // Invalid primitive values
   assertEquals(isMetadataValue(null), false, "Null should be invalid");
-  assertEquals(isMetadataValue(undefined), false, "Undefined should be invalid");
-  assertEquals(isMetadataValue(Symbol("test")), false, "Symbol should be invalid");
+  assertEquals(
+    isMetadataValue(undefined),
+    false,
+    "Undefined should be invalid",
+  );
+  assertEquals(
+    isMetadataValue(Symbol("test")),
+    false,
+    "Symbol should be invalid",
+  );
   assertEquals(isMetadataValue(() => {}), false, "Function should be invalid");
   assertEquals(isMetadataValue(BigInt(123)), false, "BigInt should be invalid");
 });
@@ -28,52 +40,64 @@ Deno.test("isMetadataValue - primitive values", () => {
 Deno.test("isMetadataValue - arrays", () => {
   // Valid arrays
   assertEquals(isMetadataValue([]), true, "Empty array should be valid");
-  assertEquals(isMetadataValue(["a", "b", "c"]), true, "String array should be valid");
-  assertEquals(isMetadataValue([1, 2, 3]), true, "Number array should be valid");
-  assertEquals(isMetadataValue([true, false]), true, "Boolean array should be valid");
+  assertEquals(
+    isMetadataValue(["a", "b", "c"]),
+    true,
+    "String array should be valid",
+  );
+  assertEquals(
+    isMetadataValue([1, 2, 3]),
+    true,
+    "Number array should be valid",
+  );
+  assertEquals(
+    isMetadataValue([true, false]),
+    true,
+    "Boolean array should be valid",
+  );
   assertEquals(
     isMetadataValue(["a", 1, true]),
     true,
-    "Mixed primitive array should be valid"
+    "Mixed primitive array should be valid",
   );
-  
+
   // Nested arrays
   assertEquals(
     isMetadataValue([["nested"], [1, 2], [true]]),
     true,
-    "Array of arrays should be valid"
+    "Array of arrays should be valid",
   );
   assertEquals(
     isMetadataValue([1, ["a", "b"], [["deeply", "nested"]]]),
     true,
-    "Deeply nested arrays should be valid"
+    "Deeply nested arrays should be valid",
   );
-  
+
   // Invalid arrays
   assertEquals(
     isMetadataValue([null]),
     false,
-    "Array with null should be invalid"
+    "Array with null should be invalid",
   );
   assertEquals(
     isMetadataValue([undefined]),
     false,
-    "Array with undefined should be invalid"
+    "Array with undefined should be invalid",
   );
   assertEquals(
     isMetadataValue([() => {}]),
     false,
-    "Array with function should be invalid"
+    "Array with function should be invalid",
   );
   assertEquals(
     isMetadataValue([Symbol("test")]),
     false,
-    "Array with symbol should be invalid"
+    "Array with symbol should be invalid",
   );
   assertEquals(
     isMetadataValue([1, "valid", null, "also-valid"]),
     false,
-    "Array with some invalid items should be invalid"
+    "Array with some invalid items should be invalid",
   );
 });
 
@@ -83,84 +107,84 @@ Deno.test("isMetadataValue - objects", () => {
   assertEquals(
     isMetadataValue({ key: "value" }),
     true,
-    "Simple string object should be valid"
+    "Simple string object should be valid",
   );
   assertEquals(
     isMetadataValue({ key: 42 }),
     true,
-    "Simple number object should be valid"
+    "Simple number object should be valid",
   );
   assertEquals(
     isMetadataValue({ key: true }),
     true,
-    "Simple boolean object should be valid"
+    "Simple boolean object should be valid",
   );
   assertEquals(
     isMetadataValue({ str: "value", num: 42, bool: true }),
     true,
-    "Mixed primitive object should be valid"
+    "Mixed primitive object should be valid",
   );
-  
+
   // Nested objects
   assertEquals(
     isMetadataValue({ nested: { key: "value" } }),
     true,
-    "Nested object should be valid"
+    "Nested object should be valid",
   );
   assertEquals(
-    isMetadataValue({ 
-      level1: { 
-        level2: { 
-          level3: "deep" 
-        } 
-      } 
+    isMetadataValue({
+      level1: {
+        level2: {
+          level3: "deep",
+        },
+      },
     }),
     true,
-    "Deeply nested object should be valid"
+    "Deeply nested object should be valid",
   );
-  
+
   // Objects with arrays
   assertEquals(
     isMetadataValue({ array: [1, 2, 3] }),
     true,
-    "Object with array should be valid"
+    "Object with array should be valid",
   );
   assertEquals(
     isMetadataValue({ array: ["a", { nested: "value" }] }),
     true,
-    "Object with array of mixed types should be valid"
+    "Object with array of mixed types should be valid",
   );
-  
+
   // Invalid objects
   assertEquals(
     isMetadataValue({ key: null }),
     false,
-    "Object with null value should be invalid"
+    "Object with null value should be invalid",
   );
   assertEquals(
     isMetadataValue({ key: undefined }),
     false,
-    "Object with undefined value should be invalid"
+    "Object with undefined value should be invalid",
   );
   assertEquals(
     isMetadataValue({ key: () => {} }),
     false,
-    "Object with function value should be invalid"
+    "Object with function value should be invalid",
   );
   assertEquals(
     isMetadataValue({ key: Symbol("test") }),
     false,
-    "Object with symbol value should be invalid"
+    "Object with symbol value should be invalid",
   );
   assertEquals(
     isMetadataValue({ valid: "value", invalid: null }),
     false,
-    "Object with some invalid values should be invalid"
+    "Object with some invalid values should be invalid",
   );
   assertEquals(
     isMetadataValue({ deeply: { nested: { invalid: undefined } } }),
     false,
-    "Deeply nested object with invalid value should be invalid"
+    "Deeply nested object with invalid value should be invalid",
   );
 });
 
@@ -174,15 +198,15 @@ Deno.test("isMetadataValue - complex mixed structures", () => {
     nested: {
       object: { key: "value" },
       arrayOfObjects: [{ a: 1 }, { b: 2 }],
-      objectWithArrays: { x: [1, 2], y: ["a", "b"] }
-    }
+      objectWithArrays: { x: [1, 2], y: ["a", "b"] },
+    },
   };
   assertEquals(
     isMetadataValue(complexValid),
     true,
-    "Complex valid structure should be valid"
+    "Complex valid structure should be valid",
   );
-  
+
   // Complex invalid structure
   const complexInvalid = {
     string: "value",
@@ -192,14 +216,14 @@ Deno.test("isMetadataValue - complex mixed structures", () => {
       invalid: null,
       deeplyNested: {
         stillValid: "yes",
-        nowInvalid: undefined
-      }
-    }
+        nowInvalid: undefined,
+      },
+    },
   };
   assertEquals(
     isMetadataValue(complexInvalid),
     false,
-    "Complex structure with invalid values should be invalid"
+    "Complex structure with invalid values should be invalid",
   );
 });
 
@@ -209,29 +233,29 @@ Deno.test("isMetadataMap - valid maps", () => {
   assertEquals(
     isMetadataMap({ key: "value" }),
     true,
-    "Simple string map should be valid"
+    "Simple string map should be valid",
   );
   assertEquals(
     isMetadataMap({ key: 42 }),
     true,
-    "Simple number map should be valid"
+    "Simple number map should be valid",
   );
   assertEquals(
     isMetadataMap({ key: true }),
     true,
-    "Simple boolean map should be valid"
+    "Simple boolean map should be valid",
   );
   assertEquals(
     isMetadataMap({ key: [1, 2, 3] }),
     true,
-    "Map with array should be valid"
+    "Map with array should be valid",
   );
   assertEquals(
     isMetadataMap({ key: { nested: "value" } }),
     true,
-    "Map with nested object should be valid"
+    "Map with nested object should be valid",
   );
-  
+
   // Complex valid map
   const complexMap = {
     string: "value",
@@ -241,13 +265,13 @@ Deno.test("isMetadataMap - valid maps", () => {
     nested: {
       object: { key: "value" },
       arrayOfObjects: [{ a: 1 }, { b: 2 }],
-      mixedArray: [1, "two", { three: 3 }]
-    }
+      mixedArray: [1, "two", { three: 3 }],
+    },
   };
   assertEquals(
     isMetadataMap(complexMap),
     true,
-    "Complex valid map should be valid"
+    "Complex valid map should be valid",
   );
 });
 
@@ -260,45 +284,45 @@ Deno.test("isMetadataMap - invalid maps", () => {
   assertEquals(isMetadataMap(true), false, "Boolean should be invalid");
   assertEquals(isMetadataMap([]), false, "Array should be invalid");
   assertEquals(isMetadataMap(() => {}), false, "Function should be invalid");
-  
+
   // Objects with invalid values
   assertEquals(
     isMetadataMap({ key: null }),
     false,
-    "Map with null value should be invalid"
+    "Map with null value should be invalid",
   );
   assertEquals(
     isMetadataMap({ key: undefined }),
     false,
-    "Map with undefined value should be invalid"
+    "Map with undefined value should be invalid",
   );
   assertEquals(
     isMetadataMap({ key: () => {} }),
     false,
-    "Map with function value should be invalid"
+    "Map with function value should be invalid",
   );
   assertEquals(
     isMetadataMap({ key: Symbol("test") }),
     false,
-    "Map with symbol value should be invalid"
+    "Map with symbol value should be invalid",
   );
-  
+
   // Mixed valid/invalid
   assertEquals(
     isMetadataMap({ valid: "value", invalid: null }),
     false,
-    "Map with some invalid values should be invalid"
+    "Map with some invalid values should be invalid",
   );
   assertEquals(
-    isMetadataMap({ 
-      valid: "value", 
-      nested: { 
+    isMetadataMap({
+      valid: "value",
+      nested: {
         alsoValid: 42,
-        butInvalid: undefined
-      } 
+        butInvalid: undefined,
+      },
     }),
     false,
-    "Map with nested invalid values should be invalid"
+    "Map with nested invalid values should be invalid",
   );
 });
 
@@ -307,9 +331,9 @@ Deno.test("isMetadataMap - edge cases", () => {
   assertEquals(
     isMetadataMap(Object.create(null)),
     true,
-    "Object with no prototype should be valid"
+    "Object with no prototype should be valid",
   );
-  
+
   // Testing with constructed objects
   class TestClass {
     prop = "value";
@@ -317,9 +341,9 @@ Deno.test("isMetadataMap - edge cases", () => {
   assertEquals(
     isMetadataMap(new TestClass()),
     true,
-    "Class instance with valid properties should be valid"
+    "Class instance with valid properties should be valid",
   );
-  
+
   // Object with inherited properties
   const proto = { inheritedProp: "value" };
   const obj = Object.create(proto);
@@ -327,6 +351,6 @@ Deno.test("isMetadataMap - edge cases", () => {
   assertEquals(
     isMetadataMap(obj),
     true,
-    "Object should only check own properties"
+    "Object should only check own properties",
   );
 });

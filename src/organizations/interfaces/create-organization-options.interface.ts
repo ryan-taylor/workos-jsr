@@ -1,11 +1,12 @@
 import type { PostOptions } from "../../common/interfaces.ts";
 import type { DomainData } from "./domain-data.interface.ts";
+import type { MetadataMap } from "../../common/interfaces/metadata.interface.ts";
 
 export interface CreateOrganizationOptions {
   name: string;
   domainData?: DomainData[];
   externalId?: string | null;
-  metadata?: Record<string, string>;
+  metadata?: MetadataMap;
 
   /**
    * @deprecated If you need to allow sign-ins from any email domain, contact support@workos.com.
@@ -21,7 +22,7 @@ export interface SerializedCreateOrganizationOptions {
   name: string;
   domain_data?: DomainData[];
   external_id?: string | null;
-  metadata?: Record<string, string>;
+  metadata?: MetadataMap;
 
   /**
    * @deprecated If you need to allow sign-ins from any email domain, contact support@workos.com.

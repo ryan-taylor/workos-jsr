@@ -281,17 +281,17 @@ export class FetchHttpClientResponse extends HttpClientResponse
     return this._res;
   }
 
-  toJSON(): Promise<JsonValue> | null {
+  async toJSON(): Promise<JsonValue | null> {
     const contentType = this._res.headers.get("content-type");
     const isJsonResponse = contentType?.includes("application/json");
 
-    return isJsonResponse ? this._res.json() : null;
+    return isJsonResponse ? await this._res.json() : null;
   }
 
   static _transformHeadersToObject(headers: Headers): ResponseHeaders {
     // Fetch uses a Headers instance so this must be converted to a barebones
     // JS object to meet the HttpClient interface.
-    const headersObj: { [key: string]: string } = {};
+    const headersObj: Record<string, string> = {};
 
     // Use forEach to iterate through headers which is more reliable
     headers.forEach((value, key) => {

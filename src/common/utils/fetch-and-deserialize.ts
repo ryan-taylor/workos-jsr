@@ -15,7 +15,7 @@ import { PaginatedResponse } from "./pagination.ts";
 export async function fetchAndDeserialize<
   T,
   U,
-  P extends Record<string, unknown>,
+  P extends Record<string, unknown> = Record<string, unknown>,
 >(
   fetchFn: (path: string, params?: P) => Promise<{ data: T }>,
   path: string,
@@ -37,7 +37,7 @@ export async function fetchAndDeserialize<
 export async function fetchAndDeserializeList<
   T,
   U,
-  P extends Record<string, unknown>,
+  P extends Record<string, unknown> = Record<string, unknown>,
 >(
   fetchFn: (
     path: string,

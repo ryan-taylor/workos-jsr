@@ -22,7 +22,7 @@ export interface Profile {
   role?: RoleResponse;
   groups?: string[];
   customAttributes?: Record<string, unknown>;
-  rawAttributes?: { [key: string]: unknown };
+  rawAttributes?: Record<string, unknown>;
 }
 
 export interface ProfileResponse {
@@ -37,5 +37,5 @@ export interface ProfileResponse {
   role?: RoleResponse;
   groups?: string[];
   custom_attributes?: Record<string, unknown>;
-  raw_attributes?: { [key: string]: unknown };
+  raw_attributes?: Record<string, unknown>;
 }

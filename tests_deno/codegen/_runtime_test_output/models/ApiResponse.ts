@@ -3,5 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export type ApiResponse = {
-  message?: string;
+    message?: string;
 };
+

@@ -1,6 +1,8 @@
-import type { PaginationOptions } from "../../common/interfaces.ts";
+import type { PaginationOptions } from "../../common/interfaces/pagination-options.interface.ts";
 
-export interface ListDirectoryUsersOptions extends PaginationOptions {
+// Interface for listing directory users with pagination
+export interface ListDirectoryUsersOptions
+  extends PaginationOptions, Record<string, unknown> {
   directory?: string;
   group?: string;
 }

@@ -18,13 +18,13 @@ export interface SerializedResourceOptions {
 
 export interface CreateResourceOptions {
   resource: ResourceInterface | ResourceOptions;
-  meta?: { [key: string]: unknown };
+  meta?: Record<string, unknown>;
 }
 
 export interface SerializedCreateResourceOptions {
   resource_type: string;
   resource_id?: string;
-  meta?: { [key: string]: unknown };
+  meta?: Record<string, unknown>;
 }
 
 export type GetResourceOptions = ResourceInterface | ResourceOptions;
@@ -41,7 +41,7 @@ export interface SerializedListResourcesOptions extends PaginationOptions {
 
 export interface UpdateResourceOptions {
   resource: ResourceInterface | ResourceOptions;
-  meta: { [key: string]: unknown };
+  meta: Record<string, unknown>;
 }
 
 export type DeleteResourceOptions = ResourceInterface | ResourceOptions;
@@ -54,13 +54,13 @@ export interface SerializedDeleteResourceOptions {
 export interface Resource {
   resourceType: string;
   resourceId: string;
-  meta?: { [key: string]: unknown };
+  meta?: Record<string, unknown>;
 }
 
 export interface ResourceResponse {
   resource_type: string;
   resource_id: string;
-  meta?: { [key: string]: unknown };
+  meta?: Record<string, unknown>;
 }
 
 export interface BatchWriteResourcesOptions {

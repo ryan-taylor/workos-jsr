@@ -10,3 +10,4 @@ export * from "./workos-options.interface.ts";
 export * from "./workos-response-error.interface.ts";
 export * from "./pagination-options.interface.ts";
 export * from "./http-client.interface.ts";
+export * from "./unknown-record.interface.ts";

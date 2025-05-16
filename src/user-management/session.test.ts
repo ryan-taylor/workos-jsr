@@ -16,7 +16,13 @@ import type { User } from "./interfaces/user.interface.ts";
 // Type assertion for WorkOS with extended UserManagement
 // This is a simplified interface for test purposes
 interface WorkOSWithUserManagement extends WorkOS {
-  userManagement: any; // Use any to bypass type checking in tests
+  // NOTE: This is an intentional exception to our "no any" rule.
+  // In tests, we sometimes need to bypass the type system to create mocks.
+  // Using 'any' here allows us to create a minimal test interface without
+  // implementing the full UserManagement interface, which would be overkill for tests.
+  // deno-lint-ignore no-explicit-any
+  // TODO: Long-term, consider creating a minimal mock interface for UserManagement
+  userManagement: any;
 }
 
 // Import user fixture directly
@@ -378,7 +384,7 @@ Deno.test("Session - refresh overwrites the cookie password if a new one is prov
 
   // Setup JWT verify spy
   const { originalVerifyJWT } = setupJwtVerifySpy(async () => {
-    return {} as any;
+    return {} as jwtUtils.JWTPayload;
   });
 
   try {
@@ -436,7 +442,7 @@ Deno.test("Session - getLogoutUrl returns a logout URL for the user", async () =
 
   // Setup JWT verify spy
   const { originalVerifyJWT } = setupJwtVerifySpy(async () => {
-    return {} as any;
+    return {} as jwtUtils.JWTPayload;
   });
 
   try {
@@ -514,7 +520,7 @@ Deno.test("Session - getLogoutUrl with returnTo URL returns a logout URL with re
 
   // Setup JWT verify spy
   const { originalVerifyJWT } = setupJwtVerifySpy(async () => {
-    return {} as any;
+    return {} as jwtUtils.JWTPayload;
   });
 
   try {

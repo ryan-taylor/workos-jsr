@@ -1,13 +1,13 @@
 export interface OAuthTokens {
   accessToken: string;
   refreshToken: string;
-  expiresAt: number;
+  expiresAt: string;
   scopes: string[];
 }
 
 export interface OAuthTokensResponse {
   access_token: string;
   refresh_token: string;
-  expires_at: number;
+  expires_at: string;
   scopes: string[];
 }

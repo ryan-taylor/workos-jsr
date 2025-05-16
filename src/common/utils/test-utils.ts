@@ -15,8 +15,8 @@ export function resetMockFetch(): void {
  *
  * @param responseData Data to return in the mock response
  */
-export function fetchOnce(
-  responseData: unknown,
+export function fetchOnce<T>(
+  responseData: T,
   options?: { status?: number; headers?: Record<string, string> },
 ): void {
   // In Deno, this would set up a mock for a single fetch call
@@ -29,7 +29,7 @@ export function fetchOnce(
  * @param options Options for getting the body
  * @returns The body of the last fetch call
  */
-export function fetchBody(options?: { raw?: boolean }): unknown {
+export function fetchBody<T = unknown>(options?: { raw?: boolean }): T | null {
   // In Deno, this would return the body of the last fetch call
   // For the Deno port, we'll leave this as a stub
   return null;
@@ -52,10 +52,40 @@ export function fetchHeaders(): Record<string, string> | null {
  * @param implementation Function implementation to spy on
  * @returns A wrapped function that tracks calls
  */
-export function spy<T extends (...args: unknown[]) => unknown>(
+export interface SpyFunction<T extends (...args: any[]) => any> {
+  (...args: Parameters<T>): ReturnType<T>;
+  calls: {
+    args: Parameters<T>;
+    returned?: ReturnType<T>;
+    error?: Error;
+  }[];
+  reset(): void;
+}
+
+export function spy<T extends (...args: any[]) => any>(
   implementation: T,
-): T {
-  // In Deno, this would wrap a function to track calls
-  // For simplicity in the port, just return the implementation
-  return implementation;
+): SpyFunction<T> {
+  // deno-lint-ignore no-explicit-any
+  // TODO: Using any here is intentional for generic function types
+  const calls: any[] = [];
+
+  // deno-lint-ignore no-explicit-any
+  // TODO: Using any here is necessary for the spy implementation
+  const spyFn = function (...args: any[]): any {
+    try {
+      const returned = implementation(...args);
+      calls.push({ args, returned });
+      return returned;
+    } catch (error) {
+      calls.push({ args, error });
+      throw error;
+    }
+  } as SpyFunction<T>;
+
+  spyFn.calls = calls;
+  spyFn.reset = () => {
+    calls.length = 0;
+  };
+
+  return spyFn;
 }

@@ -1,9 +1,10 @@
 // Import Deno standard testing library
 import { assertEquals, assertExists } from "@std/assert";
 import { FreshSessionProvider } from "../../../packages/workos_sdk/src/common/iron-session/fresh-session-provider.ts";
+import { SessionData, SessionOptions } from "../../types.ts";
 
 // Mock session options
-const SESSION_OPTIONS = {
+const SESSION_OPTIONS: SessionOptions = {
   cookieName: "test_session",
   password: "use-a-strong-password-in-production-this-is-32-chars",
   ttl: 60 * 60, // 1 hour
@@ -12,11 +13,7 @@ const SESSION_OPTIONS = {
   sameSite: "Lax" as const,
 };
 
-type SessionData = {
-  user?: { id: string; email: string };
-  authenticated?: boolean;
-  visits?: number;
-};
+// We can use the SessionData interface from types.ts
 
 // Test only the core serialization functionality, which is what's most important
 Deno.test("FreshSessionProvider - handles session serialization and deserialization", async () => {
@@ -85,8 +82,9 @@ Deno.test("FreshSessionProvider - can create session responses with cookies", as
 
   // Verify the session was retrieved correctly
   assertExists(retrievedSession);
-  assertEquals((retrievedSession as any).user.id, "123");
-  assertEquals((retrievedSession as any).user.email, "test@example.com");
+  const typedSession = retrievedSession as SessionData;
+  assertEquals(typedSession.user?.id, "123");
+  assertEquals(typedSession.user?.email, "test@example.com");
 });
 
 // Test session destruction

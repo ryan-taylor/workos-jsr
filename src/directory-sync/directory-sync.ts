@@ -34,9 +34,7 @@ export class DirectorySync {
     >(
       this.workos.get.bind(this.workos),
       "/directories",
-      options
-        ? serializeListDirectoriesOptions(options) as Record<string, unknown>
-        : undefined,
+      options ? serializeListDirectoriesOptions(options) : undefined,
       deserializeDirectory,
     );
 
@@ -70,7 +68,7 @@ export class DirectorySync {
     >(
       this.workos.get.bind(this.workos),
       "/directory_groups",
-      options as Record<string, unknown>,
+      options,
       deserializeDirectoryGroup,
     );
 
@@ -92,7 +90,7 @@ export class DirectorySync {
     >(
       this.workos.get.bind(this.workos),
       "/directory_users",
-      options as Record<string, unknown>,
+      options,
       deserializeDirectoryUserWithGroups,
     );
 

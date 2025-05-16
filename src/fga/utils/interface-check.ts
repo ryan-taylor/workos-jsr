@@ -13,7 +13,7 @@ export function isResourceInterface(
   return (
     !!resource &&
     typeof resource === "object" &&
-    "getResouceType" in resource &&
+    "getResourceType" in resource &&
     "getResourceId" in resource
   );
 }

@@ -222,6 +222,8 @@ Deno.test("Actions - constructAction returns a user registration action", async 
   assertEquals(action.object, "user_registration_action_context");
 
   // Check userData
+  // deno-lint-ignore no-explicit-any
+  // TODO: Using type assertion to access dynamically structured response in test context
   const userData = (action as any).userData;
   assertEquals(userData.object, "user_data");
   assertEquals(userData.email, "jane@foocorp.com");
@@ -234,6 +236,8 @@ Deno.test("Actions - constructAction returns a user registration action", async 
   assertEquals(action.deviceFingerprint, "notafingerprint");
 
   // Check invitation properties
+  // deno-lint-ignore no-explicit-any
+  // TODO: Using type assertion to access dynamically structured response in test context
   const invitation = (action as any).invitation;
   assertEquals(invitation.object, "invitation");
   assertEquals(invitation.id, "01JBVZWH8HJ855YZ5BWHG1WNZN");

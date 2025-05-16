@@ -258,12 +258,12 @@ export interface DsyncGroupDeletedEventResponse extends EventResponseBase {
 
 export interface DsyncGroupUpdatedEvent extends EventBase {
   event: "dsync.group.updated";
-  data: DirectoryGroup & Record<"previousAttributes", any>;
+  data: DirectoryGroup & Record<"previousAttributes", unknown>;
 }
 
 export interface DsyncGroupUpdatedEventResponse extends EventResponseBase {
   event: "dsync.group.updated";
-  data: DirectoryGroupResponse & Record<"previous_attributes", any>;
+  data: DirectoryGroupResponse & Record<"previous_attributes", unknown>;
 }
 
 export interface DsyncGroupUserAddedEvent extends EventBase {
@@ -324,12 +324,12 @@ export interface DsyncUserDeletedEventResponse extends EventResponseBase {
 
 export interface DsyncUserUpdatedEvent extends EventBase {
   event: "dsync.user.updated";
-  data: DirectoryUser & Record<"previousAttributes", any>;
+  data: DirectoryUser & Record<"previousAttributes", unknown>;
 }
 
 export interface DsyncUserUpdatedEventResponse extends EventResponseBase {
   event: "dsync.user.updated";
-  data: DirectoryUserResponse & Record<"previous_attributes", any>;
+  data: DirectoryUserResponse & Record<"previous_attributes", unknown>;
 }
 
 export interface EmailVerificationCreatedEvent extends EventBase {

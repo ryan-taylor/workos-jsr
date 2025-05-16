@@ -1,13 +1,27 @@
 /**
  * Fresh framework session provider for WorkOS Deno port
  */
-
 import { Cookie, setCookie } from "https://deno.land/std/http/cookie.ts";
+
+/**
+ * Fresh plugin interface
+ */
+interface FreshPlugin {
+  name: string;
+  middlewares: {
+    path: string;
+    middleware: {
+      handler: (req: Request, ctx: FreshContext) => Promise<Response>;
+    };
+  }[];
+}
 
 // Define simple interfaces for Fresh context
 interface FreshContext {
   next: () => Promise<Response>;
-  [key: string]: unknown;
+  // Using Record<string, unknown> is better than [key: string]: unknown
+  // since it's more explicit about the shape of the object
+  state: Record<string, unknown>;
 }
 
 interface SessionOptions {
@@ -19,9 +33,7 @@ interface SessionOptions {
 /**
  * Session data interface
  */
-export interface SessionData {
-  [key: string]: unknown;
-}
+export type SessionData = Record<string, unknown>;
 
 /**
  * Context with session data
@@ -57,7 +69,10 @@ export class FreshSessionProvider {
    * @deprecated Use createCookieValue instead in Fresh 2.x
    */
   // eslint-disable-next-line require-await
-  async sealData<T, O = unknown>(
+  async sealData<
+    T,
+    O extends Record<string, unknown> = Record<string, unknown>,
+  >(
     data: T,
     options?: { password?: string },
   ): Promise<string> {

@@ -22,7 +22,7 @@ export interface QueryResult {
   relation: string;
   warrant: Warrant;
   isImplicit: boolean;
-  meta?: { [key: string]: unknown };
+  meta?: Record<string, unknown>;
 }
 
 export interface QueryResultResponse {

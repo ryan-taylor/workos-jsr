@@ -28,7 +28,7 @@ export class AutoPaginatable<T> {
    *
    * @returns An async iterator that yields pages of results
    */
-  async *paginate(): AsyncGenerator<T[], void, unknown> {
+  async *paginate(): AsyncGenerator<T[], void, undefined> {
     // Simple implementation that would yield pages one at a time
     const response = await this.fetchNextPage();
     yield response.data;

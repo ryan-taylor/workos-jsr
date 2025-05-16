@@ -8,12 +8,13 @@ import type {
   RequestHeaders,
   RequestOptions,
 } from "../../packages/workos_sdk/src/common/interfaces/http-client.interface.ts";
+import { JsonValue } from "../../packages/workos_sdk/src/common/interfaces/http-response.interface.ts";
 
 /**
  * A standardized mock HTTP client for Deno testing that provides comprehensive
  * request tracking and response customization.
  */
-export class MockHttpClient extends HttpClient {
+export class MockHttpClient<ResponseType = unknown> extends HttpClient {
   private requestSpy: {
     url?: string;
     method?: string;
@@ -23,7 +24,7 @@ export class MockHttpClient extends HttpClient {
   } = {};
 
   constructor(
-    private readonly mockResponse: unknown,
+    private readonly mockResponse: ResponseType,
     private readonly statusCode = 200,
   ) {
     super(""); // Pass empty base URL to parent constructor
@@ -46,7 +47,7 @@ export class MockHttpClient extends HttpClient {
   /**
    * Implements the get method from HttpClient
    */
-  override async get(
+  override async get<T = ResponseType>(
     path: string,
     options: RequestOptions,
   ): Promise<HttpClientResponse> {
@@ -61,7 +62,7 @@ export class MockHttpClient extends HttpClient {
   /**
    * Implements the post method from HttpClient
    */
-  override async post<Entity = unknown>(
+  override async post<T = ResponseType, Entity = unknown>(
     path: string,
     entity: Entity,
     options: RequestOptions,
@@ -78,7 +79,7 @@ export class MockHttpClient extends HttpClient {
   /**
    * Implements the put method from HttpClient
    */
-  override async put<Entity = unknown>(
+  override async put<T = ResponseType, Entity = unknown>(
     path: string,
     entity: Entity,
     options: RequestOptions,
@@ -94,7 +95,7 @@ export class MockHttpClient extends HttpClient {
   /**
    * Implements the delete method from HttpClient
    */
-  override async delete(
+  override async delete<T = ResponseType>(
     path: string,
     options: RequestOptions,
   ): Promise<HttpClientResponse> {
@@ -120,7 +121,7 @@ export class MockHttpClient extends HttpClient {
       });
     }
 
-    return new MockHttpClientResponse(this.statusCode, {
+    return new MockHttpClientResponse<ResponseType>(this.statusCode, {
       "content-type": "application/json",
     }, this.mockResponse);
   }
@@ -129,21 +130,21 @@ export class MockHttpClient extends HttpClient {
 /**
  * Implementation of HttpClientResponse for testing
  */
-class MockHttpClientResponse extends HttpClientResponse {
+class MockHttpClientResponse<T = unknown> extends HttpClientResponse {
   constructor(
     statusCode: number,
     headers: Record<string, string>,
-    private readonly responseData: unknown,
+    private readonly responseData: T,
   ) {
     super(statusCode, headers);
   }
 
-  getRawResponse(): unknown {
+  getRawResponse(): T {
     return this.responseData;
   }
 
-  toJSON(): unknown {
-    return this.responseData;
+  toJSON(): Promise<JsonValue | null> {
+    return Promise.resolve(this.responseData as JsonValue);
   }
 }
 
@@ -155,17 +156,18 @@ class MockHttpClientResponse extends HttpClientResponse {
  * @param statusCode HTTP status code to return (defaults to 200)
  * @returns An object containing the WorkOS instance and mock client for assertions
  */
-export function createMockWorkOS(
-  mockResponse: unknown,
+export function createMockWorkOS<T = unknown>(
+  mockResponse: T,
   statusCode = 200,
-): { workos: WorkOS; client: MockHttpClient } {
-  const client = new MockHttpClient(mockResponse, statusCode);
+): { workos: WorkOS; client: MockHttpClient<T> } {
+  const client = new MockHttpClient<T>(mockResponse, statusCode);
 
   // Create WorkOS instance with API key
   const workos = new WorkOS("sk_test_123456789");
 
-  // Use any to bypass type checking since we're mocking for tests
-  (workos as any).client = client;
+  // Use type assertion with an explicit interface to make the intent clear
+  type WorkOSWithClient = WorkOS & { client: MockHttpClient<T> };
+  (workos as unknown as WorkOSWithClient).client = client;
 
   return { workos, client };
 }

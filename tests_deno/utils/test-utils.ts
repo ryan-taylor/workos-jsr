@@ -34,10 +34,10 @@ export {
 };
 
 // Types
-export type TestCase<T = unknown> = {
+export type TestCase<T = unknown, R = unknown> = {
   name: string;
   input: T;
-  expected: unknown;
+  expected: R;
 };
 
 /**
@@ -98,24 +98,24 @@ export function assertMatch(
 /**
  * Helper to assert that a function throws a specific error
  */
-export function assertThrowsAsync(
+export function assertThrowsAsync<E extends Error = Error>(
   fn: () => Promise<unknown>,
-  errorClass?: new (...args: any[]) => Error,
+  errorClass?: new (...args: any[]) => E,
   msgIncludes?: string,
   msg?: string,
-): Promise<Error> {
+): Promise<E> {
   return assertRejects(fn, errorClass, msgIncludes, msg);
 }
 
 /**
  * Helper to assert that a promise rejects
  */
-export async function assertRejects(
+export async function assertRejects<E extends Error = Error>(
   fn: () => Promise<unknown>,
-  errorClass?: new (...args: any[]) => Error,
+  errorClass?: new (...args: any[]) => E,
   msgIncludes?: string,
   msg?: string,
-): Promise<Error> {
+): Promise<E> {
   let error: Error | undefined;
   try {
     await fn();
@@ -137,7 +137,7 @@ export async function assertRejects(
       );
     }
   }
-  return error!;
+  return error as E;
 }
 
 /**
@@ -178,9 +178,9 @@ export class MockHttpClient {
   /**
    * Register a mock JSON response for a specific URL
    */
-  mockJsonResponse(
+  mockJsonResponse<T = unknown>(
     url: string | URL,
-    data: unknown,
+    data: T,
     status = 200,
     headers?: HeadersInit,
   ): void {
@@ -339,11 +339,11 @@ export function withTestContext(
 /**
  * Run tests with parameterized test cases
  */
-export function runTestCases<T>(
+export function runTestCases<T, R = unknown>(
   t: Deno.TestContext,
-  cases: TestCase<T>[],
-  testFn: (input: T) => unknown | Promise<unknown>,
-): Promise<unknown[]> {
+  cases: TestCase<T, R>[],
+  testFn: (input: T) => R | Promise<R>,
+): Promise<boolean[]> {
   const promises = cases.map((testCase) =>
     t.step(testCase.name, async () => {
       const result = await testFn(testCase.input);

@@ -45,42 +45,42 @@ export class BaseMockClient implements HttpClientInterface {
     return "mock";
   }
 
-  async get(
+  async get<ResponseType = unknown>(
     path: string,
     options: RequestOptions = {},
   ): Promise<HttpClientResponseInterface> {
     this.requestLog.push({ method: "GET", path, options });
-    return this.handleRequest("GET", path, null, options);
+    return this.handleRequest<ResponseType>("GET", path, null, options);
   }
 
-  async post<Entity = unknown>(
+  async post<ResponseType = unknown, EntityType = unknown>(
     path: string,
-    entity: Entity,
+    entity: EntityType,
     options: RequestOptions = {},
   ): Promise<HttpClientResponseInterface> {
     this.requestLog.push({ method: "POST", path, entity, options });
-    return this.handleRequest("POST", path, entity, options);
+    return this.handleRequest<ResponseType>("POST", path, entity, options);
   }
 
-  async put<Entity = unknown>(
+  async put<ResponseType = unknown, EntityType = unknown>(
     path: string,
-    entity: Entity,
+    entity: EntityType,
     options: RequestOptions = {},
   ): Promise<HttpClientResponseInterface> {
     this.requestLog.push({ method: "PUT", path, entity, options });
-    return this.handleRequest("PUT", path, entity, options);
+    return this.handleRequest<ResponseType>("PUT", path, entity, options);
   }
 
-  async delete(
+  async delete<ResponseType = unknown>(
     path: string,
     options: RequestOptions = {},
   ): Promise<HttpClientResponseInterface> {
     this.requestLog.push({ method: "DELETE", path, options });
-    return this.handleRequest("DELETE", path, null, options);
+    return this.handleRequest<ResponseType>("DELETE", path, null, options);
   }
 
   // This method should be overridden by subclasses to provide specific behavior
-  async handleRequest(
+  async handleRequest<ResponseType = unknown>(
     _method: string,
     _path: string,
     _entity?: unknown,
@@ -101,19 +101,19 @@ export class BaseMockClient implements HttpClientInterface {
 }
 
 // Implementation of HttpClientResponse for testing
-class MockHttpClientResponse extends HttpClientResponse {
-  private _data: unknown;
+class MockHttpClientResponse<T = unknown> extends HttpClientResponse {
+  private _data: T;
 
-  constructor(statusCode: number, headers: ResponseHeaders, data: unknown) {
+  constructor(statusCode: number, headers: ResponseHeaders, data: T) {
     super(statusCode, headers);
     this._data = data;
   }
 
-  override getRawResponse(): unknown {
+  getRawResponse(): T {
     return this._data;
   }
 
-  override toJSON(): Promise<unknown> {
+  toJSON(): Promise<unknown> {
     return Promise.resolve(this._data);
   }
 }
@@ -121,12 +121,12 @@ class MockHttpClientResponse extends HttpClientResponse {
 /**
  * Creates an HTTP response object for testing
  */
-export function createMockResponse(
-  data: unknown,
+export function createMockResponse<T = unknown>(
+  data: T,
   status = 200,
   headers = {},
 ): HttpClientResponseInterface {
-  return new MockHttpClientResponse(status, headers, data);
+  return new MockHttpClientResponse<T>(status, headers, data);
 }
 
 /**
@@ -143,8 +143,7 @@ export class SuccessMockClient extends BaseMockClient {
     super(baseURL, options);
     this.responseData = responseData;
   }
-
-  override async handleRequest(
+  override async handleRequest<ResponseType = unknown>(
     _method: string,
     path: string,
     _entity?: unknown,
@@ -154,26 +153,26 @@ export class SuccessMockClient extends BaseMockClient {
     const key = path.replace(/^\//, "").replace(/\//g, "_");
     const data = this.responseData[key] || { data: "mock_success" };
 
-    return createMockResponse(data, 200);
+    return createMockResponse<ResponseType>(data as ResponseType, 200);
   }
 
   // Set a specific response for a path
-  setResponseForPath(path: string, data: unknown): void {
+  setResponseForPath<T = unknown>(path: string, data: T): void {
     const key = path.replace(/^\//, "").replace(/\//g, "_");
-    this.responseData[key] = data;
+    this.responseData[key] = data as unknown;
   }
 }
 
 /**
  * A mock client that always returns error responses
  */
-export class ErrorMockClient extends BaseMockClient {
+export class ErrorMockClient<ErrorType = unknown> extends BaseMockClient {
   private status: number;
-  private errorData: unknown;
+  private errorData: ErrorType;
 
   constructor(
     status = 400,
-    errorData: unknown = { error: "mock_error" },
+    errorData: ErrorType = { error: "mock_error" } as ErrorType,
     baseURL?: string,
     options?: RequestInit,
   ) {
@@ -182,7 +181,7 @@ export class ErrorMockClient extends BaseMockClient {
     this.errorData = errorData;
   }
 
-  override async handleRequest(
+  override async handleRequest<ResponseType = unknown>(
     _method: string,
     _path: string,
     _entity?: unknown,
@@ -213,8 +212,7 @@ export class NetworkErrorMockClient extends BaseMockClient {
     super(baseURL, options);
     this.errorMessage = errorMessage;
   }
-
-  override async handleRequest(
+  override async handleRequest<ResponseType = unknown>(
     _method: string,
     _path: string,
     _entity?: unknown,
@@ -251,7 +249,7 @@ export class CapturingMockClient extends BaseMockClient {
     });
   }
 
-  override async handleRequest(
+  override async handleRequest<ResponseType = unknown>(
     _method: string,
     path: string,
     _entity?: unknown,
@@ -263,32 +261,32 @@ export class CapturingMockClient extends BaseMockClient {
     // Look for an exact path match
     if (this.responseMap.has(key)) {
       const { status, data } = this.responseMap.get(key)!;
-      return createMockResponse(data, status);
+      return createMockResponse<ResponseType>(data as ResponseType, status);
     }
 
     // Look for a response based on the first path segment
     const firstSegment = path.split("/")[1];
     if (firstSegment && this.responseMap.has(firstSegment)) {
       const { status, data } = this.responseMap.get(firstSegment)!;
-      return createMockResponse(data, status);
+      return createMockResponse<ResponseType>(data as ResponseType, status);
     }
 
     // Return the default response
-    return createMockResponse(
-      this.defaultResponse.data,
+    return createMockResponse<ResponseType>(
+      this.defaultResponse.data as ResponseType,
       this.defaultResponse.status,
     );
   }
 
   // Set a response for a specific path
-  setResponse(path: string, data: unknown, status = 200): void {
+  setResponse<T = unknown>(path: string, data: T, status = 200): void {
     const key = path.replace(/^\//, "").replace(/\//g, "_");
-    this.responseMap.set(key, { status, data });
+    this.responseMap.set(key, { status, data: data as unknown });
   }
 
   // Set the default response
-  setDefaultResponse(data: unknown, status = 200): void {
-    this.defaultResponse = { status, data };
+  setDefaultResponse<T = unknown>(data: T, status = 200): void {
+    this.defaultResponse = { status, data: data as unknown };
   }
 }
 
@@ -306,13 +304,18 @@ export function createSuccessMockClient(
 /**
  * Create a client that returns error responses
  */
-export function createErrorMockClient(
+export function createErrorMockClient<ErrorType = unknown>(
   status = 400,
-  errorData?: unknown,
+  errorData?: ErrorType,
   baseURL?: string,
   options?: RequestInit,
-): ErrorMockClient {
-  return new ErrorMockClient(status, errorData, baseURL, options);
+): ErrorMockClient<ErrorType> {
+  return new ErrorMockClient<ErrorType>(
+    status,
+    errorData as ErrorType,
+    baseURL,
+    options,
+  );
 }
 
 /**

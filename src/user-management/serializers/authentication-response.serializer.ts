@@ -19,6 +19,9 @@ export const deserializeAuthenticationResponse = (
     ...rest
   } = authenticationResponse;
 
+  // Since `rest` could contain unknown properties, type it explicitly
+  const typedRest: Record<string, unknown> = rest;
+
   return {
     user: deserializeUser(user),
     organizationId: organization_id,
@@ -27,6 +30,6 @@ export const deserializeAuthenticationResponse = (
     impersonator,
     authenticationMethod: authentication_method,
     oauthTokens: deserializeOAuthTokens(oauth_tokens),
-    ...rest,
+    ...(typedRest as Pick<AuthenticationResponse, "sealedSession">),
   };
 };

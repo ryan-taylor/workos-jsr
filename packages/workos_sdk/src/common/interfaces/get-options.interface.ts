@@ -1,4 +1,4 @@
-import { JsonValue } from "./http-response.interface.ts";
+// No imports needed
 
 /**
  * Options for GET requests

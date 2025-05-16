@@ -142,8 +142,20 @@ function createMockElement(tagName: string, id?: string): TestElement {
   };
 }
 
+// Define the WorkOSUser interface
+export interface WorkOSUser {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  profilePictureUrl: string | null;
+  [key: string]: unknown;
+}
+
 // Mock WorkOSUser for testing
-export function createMockUser(overrides = {}) {
+export function createMockUser(
+  overrides: Partial<WorkOSUser> = {},
+): WorkOSUser {
   return {
     id: "user_123",
     email: "test@example.com",

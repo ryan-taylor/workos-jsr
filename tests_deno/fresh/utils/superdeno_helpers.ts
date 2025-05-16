@@ -7,7 +7,11 @@ import { WorkOS } from "../../../mod.ts";
  * @param props Optional properties to override the default session
  * @returns A mock session object
  */
-export function createMockSession(props: Record<string, unknown> = {}) {
+export function createMockSession<
+  UserProps extends Record<string, unknown> = Record<string, unknown>,
+>(
+  props: UserProps = {} as UserProps,
+) {
   return {
     user: {
       id: "user_123",
@@ -25,15 +29,27 @@ export function createMockSession(props: Record<string, unknown> = {}) {
  * @param overrides Optional overrides for the context
  * @returns A mock Fresh context object
  */
-export function createMockContext(overrides: Record<string, unknown> = {}) {
+// Define default state type
+type DefaultState = {
+  session: ReturnType<typeof createMockSession>;
+  workos: WorkOS;
+};
+
+export function createMockContext<
+  StateType extends Record<string, unknown> = DefaultState,
+  DataType extends Record<string, unknown> = Record<string, unknown>,
+  ParamsType extends Record<string, string> = Record<string, string>,
+>(overrides: Record<string, unknown> = {}) {
+  const defaultState: DefaultState = {
+    session: createMockSession(),
+    workos: new WorkOS("sk_test_123456789"),
+  };
+
   return {
     url: new URL("http://localhost:8000"),
-    params: {},
-    data: {},
-    state: {
-      session: createMockSession(),
-      workos: new WorkOS("sk_test_123456789"),
-    },
+    params: {} as ParamsType,
+    data: {} as DataType,
+    state: (overrides.state || defaultState) as StateType,
     ...overrides,
   };
 }
@@ -41,10 +57,10 @@ export function createMockContext(overrides: Record<string, unknown> = {}) {
 /**
  * Type for handler mock responses
  */
-export interface HandlerResponse {
+export interface HandlerResponse<T = unknown> {
   status?: number;
   headers?: Headers;
-  body?: unknown;
+  body?: T;
 }
 
 /**
@@ -53,9 +69,12 @@ export interface HandlerResponse {
  * @param mockResponse Optional mock response
  * @returns A handler function compatible with superdeno
  */
-export function createTestHandler(
-  handler: (req: Request, ctx: unknown) => Promise<Response> | Response,
-  mockResponse?: HandlerResponse,
+export function createTestHandler<
+  ContextType = unknown,
+  ResponseBodyType = unknown,
+>(
+  handler: (req: Request, ctx: ContextType) => Promise<Response> | Response,
+  mockResponse?: HandlerResponse<ResponseBodyType>,
 ) {
   return async (req: Request): Promise<Response> => {
     if (mockResponse) {
@@ -71,7 +90,7 @@ export function createTestHandler(
     }
 
     try {
-      const context = createMockContext();
+      const context = createMockContext() as ContextType;
       return await handler(req, context);
     } catch (error: unknown) {
       console.error("Handler error:", error);
@@ -94,7 +113,16 @@ export function createTestHandler(
  * @param mockResponse Optional mock response
  * @returns A superdeno test instance
  */
-export function createTestClient(handler: any, mockResponse?: HandlerResponse) {
-  const testHandler = createTestHandler(handler, mockResponse);
+export function createTestClient<
+  ContextType = unknown,
+  ResponseBodyType = unknown,
+>(
+  handler: (req: Request, ctx: ContextType) => Promise<Response> | Response,
+  mockResponse?: HandlerResponse<ResponseBodyType>,
+) {
+  const testHandler = createTestHandler<ContextType, ResponseBodyType>(
+    handler,
+    mockResponse,
+  );
   return superdeno(testHandler);
 }

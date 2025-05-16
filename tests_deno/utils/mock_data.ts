@@ -134,13 +134,8 @@ export const mockResponses = {
 /**
  * Mock HTTP request details for verification
  */
-export interface MockRequestDetails {
-  url?: string;
-  method?: string;
-  params?: Record<string, any>;
-  body?: any;
-  headers?: Record<string, string>;
-}
+// Import types from the types.ts file
+import { MockRequestDetails } from "../types.ts";
 
 /**
  * Simple test-only implementation of a WorkOS client
@@ -150,12 +145,20 @@ export class TestWorkOS {
   constructor(public readonly apiKey: string) {}
 
   // Simplified method to simulate a GET request
-  async get(path: string): Promise<any> {
-    return Promise.resolve({});
+  async get<ResponseType = Record<string, unknown>>(
+    path: string,
+  ): Promise<ResponseType> {
+    return Promise.resolve({} as ResponseType);
   }
 
   // Simplified method to simulate a POST request
-  async post(path: string, data?: any): Promise<any> {
-    return Promise.resolve({});
+  async post<
+    ResponseType = Record<string, unknown>,
+    RequestData = Record<string, unknown>,
+  >(
+    path: string,
+    data?: RequestData,
+  ): Promise<ResponseType> {
+    return Promise.resolve({} as ResponseType);
   }
 }

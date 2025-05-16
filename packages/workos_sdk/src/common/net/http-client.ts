@@ -5,6 +5,7 @@ import type {
   RequestOptions,
   ResponseHeaders,
 } from "../interfaces/http-client.interface.ts";
+import type { JsonValue } from "../interfaces/http-response.interface.ts";
 
 /**
  * Abstract base class for HTTP clients that communicate with the WorkOS API.
@@ -48,7 +49,7 @@ export abstract class HttpClient implements HttpClientInterface {
    * @param options - Request options including query parameters and headers
    * @returns Promise resolving to the HTTP response
    */
-  abstract post<Entity = any>(
+  abstract post<Entity = unknown>(
     path: string,
     entity: Entity,
     options: RequestOptions,
@@ -61,7 +62,7 @@ export abstract class HttpClient implements HttpClientInterface {
    * @param options - Request options including query parameters and headers
    * @returns Promise resolving to the HTTP response
    */
-  abstract put<Entity = any>(
+  abstract put<Entity = unknown>(
     path: string,
     entity: Entity,
     options: RequestOptions,
@@ -220,7 +221,7 @@ export abstract class HttpClientResponse
    * Converts the response to JSON
    * Must be implemented by specific client implementations
    */
-  abstract toJSON(): any | null;
+  abstract toJSON(): Promise<JsonValue | null>;
 }
 
 /**

@@ -5,6 +5,7 @@ import type {
   RequestOptions,
   ResponseHeaders,
 } from "../interfaces/http-client.interface.ts";
+import type { JsonValue } from "../interfaces/http-response.interface.ts";
 import {
   HttpClient,
   HttpClientError,
@@ -202,12 +203,16 @@ export class DenoHttpClient extends HttpClient implements HttpClientInterface {
     let retryAttempts = 1;
 
     const makeRequest = async (): Promise<HttpClientResponseInterface> => {
-      let requestError: any = null;
+      let requestError: Error | HttpClientError<unknown> | null = null;
 
       try {
         response = await this.fetchRequest(url, method, body, headers);
       } catch (e) {
-        requestError = e;
+        if (e instanceof Error || e instanceof HttpClientError) {
+          requestError = e;
+        } else {
+          requestError = new Error(String(e));
+        }
       }
 
       if (this.shouldRetryRequest(requestError, retryAttempts)) {
@@ -226,7 +231,10 @@ export class DenoHttpClient extends HttpClient implements HttpClientInterface {
     return makeRequest();
   }
 
-  private shouldRetryRequest(requestError: any, retryAttempt: number): boolean {
+  private shouldRetryRequest(
+    requestError: Error | HttpClientError<unknown> | null,
+    retryAttempt: number,
+  ): boolean {
     if (retryAttempt > this.MAX_RETRY_ATTEMPTS) {
       return false;
     }
@@ -267,7 +275,7 @@ export class DenoHttpClientResponse extends HttpClientResponse
     return this._res;
   }
 
-  async toJSON(): Promise<any> {
+  async toJSON(): Promise<JsonValue | null> {
     const contentType = this._res.headers.get("content-type");
     const isJsonResponse = contentType?.includes("application/json");
 

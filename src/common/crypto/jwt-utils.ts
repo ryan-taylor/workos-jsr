@@ -74,7 +74,7 @@ export async function verifyJWT(
  * Creates a JWT token from the given payload
  *
  * @param payload Data to include in the JWT payload
- * @param secret Secret key to sign the token
+ * @param secret Secret key or CryptoKey to sign the token
  * @param options Signing options
  * @returns Signed JWT token
  */

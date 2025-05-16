@@ -31,6 +31,8 @@ class MockSessionProvider extends FreshSessionProvider {
   sessions: Map<string, SessionData> = new Map();
   cookies: Map<string, string> = new Map();
 
+  // deno-lint-ignore no-explicit-any
+  // TODO: Using 'any' for options to avoid importing complex session interface structure
   override async getSession<T>(req: Request, options: any): Promise<T | null> {
     const cookieHeader = req.headers.get("cookie") || "";
     const cookieName = options.cookieName || "workos_session";
@@ -46,6 +48,8 @@ class MockSessionProvider extends FreshSessionProvider {
     return this.sessions.get(sessionId) as unknown as T;
   }
 
+  // deno-lint-ignore no-explicit-any
+  // TODO: Using 'any' for options to avoid importing complex session interface structure
   override async createSessionResponse<T>(
     sessionData: T,
     options: any,

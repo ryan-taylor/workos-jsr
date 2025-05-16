@@ -1,24 +1,25 @@
 import { assertEquals } from "@std/assert";
 import { mockResponses, TestWorkOS } from "./utils/mock_data.ts";
+import { Directory, ListResponse } from "./types.ts";
 
 // Define a simple mock version of the Directory Sync module for testing
 class DirectorySyncTest {
   constructor(private client: TestWorkOS) {}
 
-  async listDirectories() {
+  async listDirectories(): Promise<ListResponse<Directory>> {
     // This is just a mock implementation for testing
     return {
-      data: [mockResponses.directory],
-      listMetadata: {
+      data: [mockResponses.directory as Directory],
+      list_metadata: {
         before: null,
         after: null,
       },
     };
   }
 
-  async getDirectory(directoryId: string) {
+  async getDirectory(directoryId: string): Promise<Directory> {
     // Mock implementation
-    return mockResponses.directory;
+    return mockResponses.directory as Directory;
   }
 }
 

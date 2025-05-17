@@ -8,8 +8,53 @@ on:
     branches: [main]
 
 jobs:
+  check-protected-dirs:
+    runs-on: ubuntu-latest
+    # Only run on PRs targeting main branch
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Need full history for merge-base
+      - name: Check for changes in protected directories
+        run: |
+          # Get list of changed files
+          CHANGED_FILES=$(git diff --name-only ${{ github.sha }} $(git merge-base HEAD origin/main))
+
+          # Check for changes in protected directories
+          PROTECTED_CHANGES=$(echo "$CHANGED_FILES" | grep -E "^(archive/|src/)" || true)
+
+          # If protected changes are found, print error and exit with non-zero code
+          if [ ! -z "$PROTECTED_CHANGES" ]; then
+            echo "::error::❌ ERROR: Detected changes in protected directories:"
+            echo "$PROTECTED_CHANGES" | sed 's/^/  - /'
+            echo "::error::⚠️ As part of the WorkOS Node to Deno migration plan (Phase 0):"
+            echo "::error::  • The packages/workos_sdk/src/ directory is now the authoritative SDK tree"
+            echo "::error::  • Changes to archive/ and old src/ directories are prohibited"
+            echo "::error::Please remove changes to these files before merging."
+            exit 1
+          fi
+
+          echo "✅ No changes detected in protected directories"
+  ci-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v2.x
+      - name: Cache Deno modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/deno
+          key: ${{ runner.os }}-deno-${{ hashFiles('**/import_map.json') }}
+      - name: Run fast-fail checks
+        run: deno task ci-check
   test:
     runs-on: ubuntu-latest
+    needs: [check-protected-dirs, ci-check]
     steps:
       - uses: actions/checkout@v3
       - name: Setup Deno
@@ -33,7 +78,7 @@ jobs:
 
   publish:
     if: startsWith(github.ref, 'refs/tags/v')
-    needs: test
+    needs: [test, ci-check]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

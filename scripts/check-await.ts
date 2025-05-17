@@ -2,21 +2,39 @@
 import { walk } from "@std/fs/walk";
 import { basename, join, relative } from "@std/path";
 import { parse } from "https://deno.land/std@0.219.0/flags/mod.ts";
-
 // Parse command line arguments
 const args = parse(Deno.args);
 
-// Configuration
+/**
+ * Configuration
+ *
+ * This script scans for async functions that don't have corresponding await statements.
+ * As part of the WorkOS Node to Deno migration plan (Phase 0 "One Source of Truth Freeze"),
+ * the authoritative SDK code is in packages/workos_sdk/src/
+ */
+
+// Default path is the authoritative SDK directory
 const DEFAULT_ROOT_DIR = "packages/workos_sdk/src";
-// Use CLI arg first, then env var, then default
-const ROOT_DIR = args.dir || Deno.env.get("CHECK_AWAIT_DIR") ||
-  DEFAULT_ROOT_DIR;
+
+// Directory path priority:
+// 1. Command line arg (--dir=path/to/dir)
+// 2. Environment variable (CHECK_AWAIT_DIR)
+// 3. Default path (packages/workos_sdk/src)
+// Safely get environment variable without prompting
+let dir: string | undefined;
+try {
+  dir = Deno.env.get("CHECK_AWAIT_DIR");
+} catch {
+  dir = undefined;
+}
+const ROOT_DIR = args.dir || dir || DEFAULT_ROOT_DIR;
 const EXCLUDE_PATTERNS = [
   /\.test\.ts$/,
   /__tests__\//,
   /\/generated\//, // More general pattern to catch any generated directory
   /packages\/workos_sdk\/generated/, // Specific pattern for the requested directory
   /\/examples\//, // Skip example/demo code
+  /tests_deno\/scripts\//, // Skip test fixtures for the check-await script itself
 ];
 
 const DEBUG = args.debug === true;
@@ -51,13 +69,17 @@ function shouldExcludeFile(filePath: string): boolean {
 /**
  * Find async functions and methods that don't use await or .then()
  */
-function findAsyncWithoutAwait(filePath: string, content: string) {
+export function findAsyncWithoutAwait(
+  filePath: string,
+  content: string,
+  collector: typeof violations = violations,
+) {
   const relativePath = relative(Deno.cwd(), filePath);
   const lines = content.split("\n");
 
-  // Find all async function declarations, methods, and arrow functions
+  // Find all async function declarations, methods, arrow functions, and generators
   const asyncFunctionRegex =
-    /\basync\s+(function\s+([a-zA-Z0-9_$]+)|([a-zA-Z0-9_$]+)\s*\(|\()/g;
+    /\basync\s+\*?\s*(function\s+([a-zA-Z0-9_$]+)|([a-zA-Z0-9_$]+)\s*\(|\()/g;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
@@ -86,8 +108,8 @@ function findAsyncWithoutAwait(filePath: string, content: string) {
         const currentLineBeforeAsync = line.substring(0, match.index);
 
         // Check for variable assignment patterns like "const myFunc = async" or "myFunc = async"
-        const assignmentMatch = /([a-zA-Z0-9_$]+)\s*=\s*$/.exec(prevLine) ||
-          /([a-zA-Z0-9_$]+)\s*=\s*(?=async)/.exec(currentLineBeforeAsync);
+        const assignmentMatch = /\b([a-zA-Z0-9_$]+)\s*=\s*$/.exec(prevLine) ||
+          /\b([a-zA-Z0-9_$]+)\s*=\s*(?=async)/.exec(currentLineBeforeAsync);
 
         if (assignmentMatch) {
           functionName = assignmentMatch[1];
@@ -124,6 +146,37 @@ function findAsyncWithoutAwait(filePath: string, content: string) {
             if (ch === "<") genericDepth++;
             else if (ch === ">" && genericDepth > 0) genericDepth--;
 
+            // Check for arrow function with expression body (no braces)
+            const afterArrow = currentLine.substring(k).trim();
+            if (
+              j === i && afterArrow.startsWith("=>") &&
+              parenDepth === 0 && genericDepth === 0 &&
+              /=>\s*(?!\s*\{)/.test(currentLine.substring(k))
+            ) {
+              // Find the position after "=>"
+              const arrowPos = currentLine.indexOf("=>", k);
+              if (arrowPos !== -1) {
+                // Extract everything after "=>" until ";" or end of line as the expression body
+                const expressionStart = arrowPos + 2;
+                const semicolonPos = currentLine.indexOf(";", expressionStart);
+                const expressionEnd = semicolonPos !== -1
+                  ? semicolonPos
+                  : currentLine.length;
+
+                const expressionBody = currentLine.substring(
+                  expressionStart,
+                  expressionEnd,
+                ).trim();
+                functionBody = expressionBody;
+
+                // Consider body found and exit the loop
+                bodyStartFound = true;
+                openBraces = 0;
+                j = lines.length; // Break outer line loop
+                break;
+              }
+            }
+
             if (ch === "{" && parenDepth === 0 && genericDepth === 0) {
               bodyStartFound = true;
               openBraces = 1; // This is the opening brace of the body
@@ -153,7 +206,7 @@ function findAsyncWithoutAwait(filePath: string, content: string) {
 
       // Check if functionBody contains await or .then()
       if (bodyStartFound && !functionBody.match(/\bawait\b|\b\.then\s*\(/)) {
-        violations.push({
+        collector.push({
           filePath: relativePath,
           functionName,
           line: i + 1, // Convert to 1-based line numbers
@@ -161,6 +214,17 @@ function findAsyncWithoutAwait(filePath: string, content: string) {
       }
     }
   }
+}
+
+/**
+ * Exported helper so unit tests can reuse the same detection logic on inline
+ * code snippets without walking the filesystem or hitting the global
+ * violation state.
+ */
+export function findAsyncViolationsForTest(code: string) {
+  const local: typeof violations = [];
+  findAsyncWithoutAwait("<inline>", code, local);
+  return local.map(({ functionName, line }) => ({ functionName, line }));
 }
 
 async function main() {
@@ -234,4 +298,7 @@ async function main() {
   }
 }
 
-await main();
+// Only run the main function when this script is executed directly
+if (import.meta.main) {
+  await main();
+}

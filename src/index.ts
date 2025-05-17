@@ -1,4 +1,4 @@
-import { WorkOS } from "../packages/workos_sdk/src/workos.ts";
+import { WorkOS } from "$sdk/workos.ts";
 
 // Reexport common classes and types for backward compatibility
 export { WorkOS };
@@ -10,21 +10,21 @@ console.warn(
 );
 
 // Re-export modules to maintain backward compatibility
-export { Actions } from "../packages/workos_sdk/src/actions/actions.ts";
-export { AuditLogs } from "../packages/workos_sdk/src/audit-logs/audit-logs.ts";
-export { DirectorySync } from "../packages/workos_sdk/src/directory-sync/directory-sync.ts";
-export { Events } from "../packages/workos_sdk/src/events/events.ts";
-export { FGA } from "../packages/workos_sdk/src/fga/fga.ts";
-export { Mfa } from "../packages/workos_sdk/src/mfa/mfa.ts";
-export { OrganizationDomains } from "../packages/workos_sdk/src/organization-domains/organization-domains.ts";
-export { Organizations } from "../packages/workos_sdk/src/organizations/organizations.ts";
-export { Passwordless } from "../packages/workos_sdk/src/passwordless/passwordless.ts";
-export { Portal } from "../packages/workos_sdk/src/portal/portal.ts";
-export { SSO } from "../packages/workos_sdk/src/sso/sso.ts";
-export { UserManagement } from "../packages/workos_sdk/src/user-management/user-management.ts";
-export { Vault } from "../packages/workos_sdk/src/vault/vault.ts";
-export { Webhooks } from "../packages/workos_sdk/src/webhooks/webhooks.ts";
-export { Widgets } from "../packages/workos_sdk/src/widgets/widgets.ts";
+export { Actions } from "$sdk/actions/actions.ts";
+export { AuditLogs } from "$sdk/audit-logs/audit-logs.ts";
+export { DirectorySync } from "$sdk/directory-sync/directory-sync.ts";
+export { Events } from "$sdk/events/events.ts";
+export { FGA } from "$sdk/fga/fga.ts";
+export { Mfa } from "$sdk/mfa/mfa.ts";
+export { OrganizationDomains } from "$sdk/organization-domains/organization-domains.ts";
+export { Organizations } from "$sdk/organizations";
+export { Passwordless } from "$sdk/passwordless/passwordless.ts";
+export { Portal } from "$sdk/portal/portal.ts";
+export { SSO } from "$sdk/sso";
+export { UserManagement } from "$sdk/user-management";
+export { Vault } from "$sdk/vault/vault.ts";
+export { Webhooks } from "$sdk/webhooks/webhooks.ts";
+export { Widgets } from "$sdk/widgets/widgets.ts";
 
 // Common utility exports
 // Removed unused exports that were causing issues
@@ -39,7 +39,7 @@ export type {
   EventType,
   List,
   PaginationOptions,
-} from "../packages/workos_sdk/src/common/interfaces.ts";
+} from "$sdk/common";
 
 // Options type exports
 export type {
@@ -47,4 +47,4 @@ export type {
   PostOptions,
   PutOptions,
   WorkOSOptions,
-} from "../packages/workos_sdk/src/workos.ts";
+} from "$sdk/workos.ts";

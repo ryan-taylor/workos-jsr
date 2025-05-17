@@ -1,7 +1,11 @@
 pre-commit:
   parallel: true
   commands:
-    lint:
-      run: deno task lint:staged
     fmt:
       run: deno fmt --check {staged_files}
+    lint:
+      run: deno task lint:staged
+    check:
+      run: deno task check
+    protected-dirs:
+      run: deno run -A scripts/git-hooks/check-protected-dirs.ts

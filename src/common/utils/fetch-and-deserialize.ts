@@ -2,7 +2,7 @@
  * Utility functions for fetching and deserializing API responses
  */
 
-import { PaginatedResponse } from "./pagination.ts";
+import { PaginatedResponse } from "$sdk/common/utils/pagination";
 
 /**
  * Generic function to fetch data from an API endpoint and deserialize the response
@@ -12,7 +12,7 @@ import { PaginatedResponse } from "./pagination.ts";
  * @param deserializeFn Function to deserialize individual items in the response
  * @returns The deserialized response
  */
-export async function fetchAndDeserialize<
+export function fetchAndDeserialize<
   T,
   U,
   P extends Record<string, unknown> = Record<string, unknown>,
@@ -22,8 +22,7 @@ export async function fetchAndDeserialize<
   params: P | undefined,
   deserializeFn: (item: T) => U,
 ): Promise<U> {
-  const { data } = await fetchFn(path, params);
-  return deserializeFn(data);
+  return fetchFn(path, params).then(({ data }) => deserializeFn(data));
 }
 
 /**
@@ -34,7 +33,7 @@ export async function fetchAndDeserialize<
  * @param deserializeFn Function to deserialize individual items in the response
  * @returns The deserialized paginated response
  */
-export async function fetchAndDeserializeList<
+export function fetchAndDeserializeList<
   T,
   U,
   P extends Record<string, unknown> = Record<string, unknown>,
@@ -47,10 +46,10 @@ export async function fetchAndDeserializeList<
   params: P | undefined,
   deserializeFn: (item: T) => U,
 ): Promise<PaginatedResponse<U>> {
-  const { data } = await fetchFn(path, params);
-
-  return {
-    data: data.data.map(deserializeFn),
-    list_metadata: data.list_metadata,
-  };
+  return fetchFn(path, params).then(({ data }) => {
+    return {
+      data: data.data.map(deserializeFn),
+      list_metadata: data.list_metadata,
+    };
+  });
 }

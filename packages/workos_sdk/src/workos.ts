@@ -432,7 +432,6 @@ export class WorkOS {
       });
     } catch (error) {
       this.handleHttpError({ path, error });
-
       throw error;
     }
   }

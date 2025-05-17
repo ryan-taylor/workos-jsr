@@ -55,4 +55,7 @@ yarn.lock
 .tools/bin/
 .tmp/openapi-diffs/
 
+# Archive directories
+archive/node-sdk/
+
 packages/workos_sdk/generated/

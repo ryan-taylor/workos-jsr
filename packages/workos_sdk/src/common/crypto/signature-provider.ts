@@ -1,4 +1,4 @@
-import { SignatureVerificationException } from "../exceptions.ts";
+import { SignatureVerificationException } from "../exceptions/signature-verification.exception.ts";
 import type { CryptoProvider } from "./crypto-provider.ts";
 
 export class SignatureProvider {
@@ -8,7 +8,7 @@ export class SignatureProvider {
     this.cryptoProvider = cryptoProvider;
   }
 
-  async verifyHeader({
+  verifyHeader({
     payload,
     sigHeader,
     secret,
@@ -35,16 +35,18 @@ export class SignatureProvider {
       );
     }
 
-    const expectedSig = await this.computeSignature(timestamp, payload, secret);
-    if (
-      (await this.cryptoProvider.secureCompare(expectedSig, signatureHash)) ===
-        false
-    ) {
-      throw new SignatureVerificationException(
-        "Signature hash does not match the expected signature hash for payload",
-      );
-    }
-    return true;
+    return this.computeSignature(timestamp, payload, secret)
+      .then((expectedSig) => {
+        return this.cryptoProvider.secureCompare(expectedSig, signatureHash);
+      })
+      .then((isMatch) => {
+        if (isMatch === false) {
+          throw new SignatureVerificationException(
+            "Signature hash does not match the expected signature hash for payload",
+          );
+        }
+        return true;
+      });
   }
 
   getTimestampAndSignatureHash(sigHeader: string): [string, string] {

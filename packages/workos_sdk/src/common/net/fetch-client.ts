@@ -201,7 +201,7 @@ export class FetchHttpClient extends HttpClient implements HttpClientInterface {
     return new FetchHttpClientResponse(res);
   }
 
-  private async fetchRequestWithRetry(
+  private fetchRequestWithRetry(
     url: string,
     method: string,
     body?: BodyInit | null | undefined,

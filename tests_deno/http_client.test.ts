@@ -1,7 +1,7 @@
+// deno-lint-ignore-file no-unused-vars
 // Example test file using Deno's native testing framework
 import { assertEquals, assertRejects } from "@std/assert";
-import { HttpClientError } from "../packages/workos_sdk/src/common/net/http-client.ts";
-import { DenoHttpClient } from "../packages/workos_sdk/src/common/net/deno-client.ts";
+import { DenoHttpClient, HttpClientError } from "../packages/workos_sdk/mod.ts";
 
 Deno.test("DenoHttpClient: successful JSON GET", async () => {
   // Use a public echo API for demonstration; in real tests, use a local server or mock

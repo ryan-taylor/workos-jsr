@@ -1,36 +1,36 @@
-import type { WorkOS } from "../workos.ts";
+import type { WorkOS } from "@ryantaylor/workos";
 import type {
   CreateAuditLogEventOptions,
   CreateAuditLogEventRequestOptions,
-} from "./interfaces.ts";
-import type { AuditLogExportOptions } from "./interfaces/audit-log-export-options.interface.ts";
+} from "$sdk/audit-logs/interfaces";
+import type { AuditLogExportOptions } from "$sdk/audit-logs/interfaces/audit-log-export-options.interface";
 import type {
   AuditLogExport,
   AuditLogExportResponse,
-} from "./interfaces/audit-log-export.interface.ts";
+} from "$sdk/audit-logs/interfaces/audit-log-export.interface";
 import type {
   AuditLogSchema,
   CreateAuditLogSchemaOptions,
   CreateAuditLogSchemaRequestOptions,
   CreateAuditLogSchemaResponse,
-} from "./interfaces/create-audit-log-schema-options.interface.ts";
+} from "$sdk/audit-logs/interfaces/create-audit-log-schema-options.interface";
 import {
   deserializeAuditLogExport,
   deserializeAuditLogSchema,
   serializeAuditLogExportOptions,
   serializeCreateAuditLogEventOptions,
   serializeCreateAuditLogSchemaOptions,
-} from "./serializers.ts";
+} from "$sdk/audit-logs/serializers";
 
 export class AuditLogs {
   constructor(private readonly workos: WorkOS) {}
 
-  async createEvent(
+  createEvent(
     organization: string,
     event: CreateAuditLogEventOptions,
     options: CreateAuditLogEventRequestOptions = {},
   ): Promise<void> {
-    await this.workos.post(
+    return this.workos.post(
       "/audit_logs/events",
       {
         event: serializeCreateAuditLogEventOptions(event),
@@ -57,16 +57,14 @@ export class AuditLogs {
     return deserializeAuditLogExport(data);
   }
 
-  async createSchema(
+  createSchema(
     schema: CreateAuditLogSchemaOptions,
     options: CreateAuditLogSchemaRequestOptions = {},
   ): Promise<AuditLogSchema> {
-    const { data } = await this.workos.post<CreateAuditLogSchemaResponse>(
+    return this.workos.post<CreateAuditLogSchemaResponse>(
       `/audit_logs/actions/${schema.action}/schemas`,
       serializeCreateAuditLogSchemaOptions(schema),
       options,
-    );
-
-    return deserializeAuditLogSchema(data);
+    ).then(({ data }) => deserializeAuditLogSchema(data));
   }
 }

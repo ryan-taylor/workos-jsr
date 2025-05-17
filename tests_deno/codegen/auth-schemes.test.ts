@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-unused-vars
 import { assertEquals, assertExists } from "@std/assert";
 import type { SupportedAuthScheme } from "../../packages/workos_sdk/generated/core/auth-schemes.ts";
 import { SecurityScheme } from "../../packages/workos_sdk/generated/core/security.ts";

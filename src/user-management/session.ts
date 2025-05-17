@@ -124,29 +124,31 @@ export class Session {
    * @param options.organizationId - The organization ID to use for the new session cookie.
    * @returns An object indicating whether the refresh was successful or not. If successful, it will include the new sealed session data.
    */
-  async refresh(options: RefreshOptions = {}): Promise<RefreshSessionResponse> {
+  refresh(options: RefreshOptions = {}): Promise<RefreshSessionResponse> {
     if (!this.sessionData) {
-      return {
+      return Promise.resolve({
         authenticated: false,
         reason: RefreshAndSealSessionDataFailureReason.INVALID_SESSION_COOKIE,
-      };
+      });
     }
 
     let session: SessionCookieData;
 
     try {
-      session = await this.ironSessionProvider.extractDataFromCookie<
+      return this.ironSessionProvider.extractDataFromCookie<
         SessionCookieData
       >(
         this.sessionData,
         this.cookiePassword,
-      );
-    } catch (e) {
-      return {
-        authenticated: false,
-        reason: RefreshAndSealSessionDataFailureReason.INVALID_SESSION_COOKIE,
-      };
-    }
+      ).then(extractedSession => {
+        session = extractedSession;
+        
+        if (!session.refreshToken || !session.user) {
+          return Promise.resolve({
+            authenticated: false,
+            reason: RefreshAndSealSessionDataFailureReason.INVALID_SESSION_COOKIE,
+          });
+        }
 
     if (!session.refreshToken || !session.user) {
       return {
@@ -232,38 +234,38 @@ export class Session {
    *
    * @returns The URL to redirect the user to for logging out.
    */
-  async getLogoutUrl({
+  getLogoutUrl({
     returnTo,
   }: { returnTo?: string } = {}): Promise<string> {
-    const authenticationResponse = await this.authenticate();
+    return this.authenticate().then(authenticationResponse => {
+      if (!authenticationResponse.authenticated) {
+        const { reason } = authenticationResponse;
+        throw new Error(`Failed to extract session ID for logout URL: ${reason}`);
+      }
 
-    if (!authenticationResponse.authenticated) {
-      const { reason } = authenticationResponse;
-      throw new Error(`Failed to extract session ID for logout URL: ${reason}`);
-    }
+      // Directly construct the logout URL since we can't access the private workos property
+      if (!authenticationResponse.sessionId) {
+        throw new TypeError(`Incomplete arguments. Need to specify 'sessionId'.`);
+      }
 
-    // Directly construct the logout URL since we can't access the private workos property
-    if (!authenticationResponse.sessionId) {
-      throw new TypeError(`Incomplete arguments. Need to specify 'sessionId'.`);
-    }
+      // Get base URL from jwks URL which is of the form: https://api.workos.com/sso/jwks/client_xyz
+      const baseUrl = this.jwks
+        ? this.jwks.substring(0, this.jwks.indexOf("/sso/jwks/"))
+        : "https://api.workos.com";
 
-    // Get base URL from jwks URL which is of the form: https://api.workos.com/sso/jwks/client_xyz
-    const baseUrl = this.jwks
-      ? this.jwks.substring(0, this.jwks.indexOf("/sso/jwks/"))
-      : "https://api.workos.com";
+      const url = new URL(
+        "/user_management/sessions/logout",
+        baseUrl,
+      );
 
-    const url = new URL(
-      "/user_management/sessions/logout",
-      baseUrl,
-    );
+      url.searchParams.set("session_id", authenticationResponse.sessionId);
 
-    url.searchParams.set("session_id", authenticationResponse.sessionId);
-    if (returnTo) {
-      url.searchParams.set("return_to", returnTo);
-    }
+      if (returnTo) {
+        url.searchParams.set("return_to", returnTo);
+      }
 
-    return url.toString();
-  }
+      return url.toString();
+    });
 
   private async isValidJwt(accessToken: string): Promise<boolean> {
     if (!this.jwks) {

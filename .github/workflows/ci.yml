@@ -23,11 +23,13 @@ jobs:
             ~/.cache/deno
           key: ${{ runner.os }}-deno-${{ hashFiles('**/import_map.json') }}
       - name: Deno format check
-        run: deno fmt --check src tests_deno .github/workflows
+        run: deno task fmt src tests_deno .github/workflows
       - name: Deno lint
-        run: deno lint src
+        run: deno task lint
+      - name: Deno type check
+        run: deno task check
       - name: Deno test
-        run: deno test --unstable
+        run: deno test -A --unstable
 
   publish:
     if: startsWith(github.ref, 'refs/tags/v')

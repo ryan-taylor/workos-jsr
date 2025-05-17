@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-unused-vars
 /**
  * Unit tests for JWT utilities and type definitions
  *
@@ -7,6 +8,7 @@
 
 import {
   assertEquals,
+  assertRejects,
   assertThrows,
 } from "https://deno.land/std/testing/asserts.ts";
 import {
@@ -252,7 +254,7 @@ Deno.test("Type Compatibility Scenarios", async (t) => {
 
   await t.step(
     "Different SignatureTimestamp formats should be handled correctly",
-    async () => {
+    () => {
       // Test function that works with SignatureTimestamp
       function normalizeTimestamp(timestamp: SignatureTimestamp): number {
         if (typeof timestamp === "number") {

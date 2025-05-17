@@ -54,8 +54,8 @@ export class DirectorySync {
     return deserializeDirectory(data);
   }
 
-  async deleteDirectory(id: string) {
-    await this.workos.delete(`/directories/${id}`);
+  deleteDirectory(id: string): Promise<void> {
+    return this.workos.delete(`/directories/${id}`);
   }
 
   async listGroups(

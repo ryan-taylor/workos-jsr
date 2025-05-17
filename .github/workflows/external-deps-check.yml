@@ -1,0 +1,44 @@
+name: Weekly External Dependencies Check
+
+on:
+  schedule:
+    # Run every Monday at 2 AM UTC
+    - cron: "0 2 * * 1"
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  check-external-dependencies:
+    name: Check External Dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: "2.x"
+
+      - name: Force reload cache for key modules
+        run: |
+          # Force reload cache for main entry points
+          echo "Reloading cache for mod.ts (main entry point)"
+          deno cache --reload mod.ts
+
+          echo "Reloading cache for src/index.ts"
+          deno cache --reload src/index.ts
+
+          echo "Reloading cache for src/index.worker.ts"
+          deno cache --reload src/index.worker.ts
+
+      - name: Run type checks
+        run: deno task check
+
+      - name: Run tests
+        run: deno task test
+
+      - name: Notify on failure
+        if: failure()
+        run: echo "Weekly dependency check failed. External dependencies may have breaking changes."

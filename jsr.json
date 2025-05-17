@@ -31,7 +31,9 @@
     "**/tests_deno/**",
     "**/fixtures/**",
     "src/**",
-    "examples/**"
+    "examples/**",
+    "scripts/**",
+    ".deno_codegen_cache/**"
   ],
   "tasks": {
     "test": "deno test -A"

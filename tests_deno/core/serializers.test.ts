@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-unused-vars
 import { assertEquals, assertNotEquals } from "@std/assert";
 import {
   adaptListMetadata,
@@ -8,7 +9,7 @@ import {
   serializeDate,
   serializeEvent,
   serializeList,
-} from "../../packages/workos_sdk/src/common/serializers.ts";
+} from "../../packages/workos_sdk/mod.ts";
 
 /**
  * Core serialization tests

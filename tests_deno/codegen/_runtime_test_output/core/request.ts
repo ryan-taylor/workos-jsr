@@ -8,6 +8,7 @@ import type { ApiResult } from "./ApiResult.ts";
 import { CancelablePromise } from "./CancelablePromise.ts";
 import type { OnCancel } from "./CancelablePromise.ts";
 import type { OpenAPIConfig } from "./OpenAPI.ts";
+import { Buffer } from "node:buffer";
 
 export const isDefined = <T>(
   value: T | null | undefined,

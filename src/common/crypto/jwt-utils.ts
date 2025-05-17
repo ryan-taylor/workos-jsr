@@ -67,7 +67,7 @@ export function decodeJWT(token: string): JWTPayload {
  * @param options Verification options
  * @returns Verified and decoded JWT payload
  */
-export async function verifyJWT(
+export function verifyJWT(
   token: string,
   secret: string | CryptoKey,
   options: {
@@ -87,7 +87,7 @@ export async function verifyJWT(
   // - Claims validation (exp, nbf, iss, aud, etc.)
 
   // For now, return decoded JWT without verification for interface compatibility
-  return decodeJWT(token);
+  return Promise.resolve(decodeJWT(token));
 }
 
 /**
@@ -98,7 +98,7 @@ export async function verifyJWT(
  * @param options Signing options
  * @returns Signed JWT token
  */
-export async function createJWT(
+export function createJWT(
   payload: JWTPayload,
   secret: string | CryptoKey,
   options: {
@@ -120,5 +120,5 @@ export async function createJWT(
   // - Signature generation using Deno.crypto
 
   // For now, return a dummy JWT for interface compatibility
-  return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U";
+  return Promise.resolve("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U");
 }

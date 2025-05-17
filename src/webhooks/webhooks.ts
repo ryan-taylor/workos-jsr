@@ -1,7 +1,7 @@
-import { deserializeEvent } from "../common/serializers.ts";
-import type { Event, EventResponse } from "../common/interfaces.ts";
-import { SignatureProvider } from "../common/crypto/signature-provider.ts";
-import type { CryptoProvider } from "../common/crypto/crypto-provider.ts";
+import { deserializeEvent } from "$sdk/common/serializers";
+import type { Event, EventResponse } from "$sdk/common/interfaces";
+import { SignatureProvider } from "$sdk/common/crypto/signature-provider";
+import type { CryptoProvider } from "$sdk/common/crypto/crypto-provider";
 
 export class Webhooks {
   private signatureProvider: SignatureProvider;
@@ -24,7 +24,7 @@ export class Webhooks {
     );
   }
 
-  async constructEvent({
+  constructEvent({
     payload,
     sigHeader,
     secret,
@@ -36,10 +36,9 @@ export class Webhooks {
     tolerance?: number;
   }): Promise<Event> {
     const options = { payload, sigHeader, secret, tolerance };
-    await this.verifyHeader(options);
-
-    const webhookPayload = payload as EventResponse;
-
-    return deserializeEvent(webhookPayload);
+    return this.verifyHeader(options).then(() => {
+      const webhookPayload = payload as EventResponse;
+      return deserializeEvent(webhookPayload);
+    });
   }
 }

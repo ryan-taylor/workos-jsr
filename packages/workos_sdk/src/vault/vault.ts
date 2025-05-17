@@ -157,7 +157,7 @@ export class Vault {
    * @param options - Options containing object ID to delete
    * @returns Promise that resolves when deletion is complete
    */
-  async deleteObject(options: DeleteObjectOptions): Promise<void> {
+  deleteObject(options: DeleteObjectOptions): Promise<void> {
     return this.workos.delete(`/vault/v1/kv/${encodeURIComponent(options.id)}`);
   }
 

@@ -405,7 +405,7 @@ export class UserManagement {
     });
   }
 
-  async authenticateWithSessionCookie({
+  authenticateWithSessionCookie({
     sessionData,
     cookiePassword = Deno.env.get("WORKOS_COOKIE_PASSWORD"),
   }: AuthenticateWithSessionCookieOptions): Promise<
@@ -421,62 +421,59 @@ export class UserManagement {
     }
 
     if (!sessionData) {
-      return {
+      return Promise.resolve({
         authenticated: false,
         reason:
           AuthenticateWithSessionCookieFailureReason.NO_SESSION_COOKIE_PROVIDED,
-      };
+      });
     }
-    let session: SessionCookieData;
 
-    try {
-      session = await this.ironSessionProvider.extractDataFromCookie<
-        SessionCookieData
-      >(
-        sessionData,
-        cookiePassword,
-      );
-    } catch (e) {
+    return this.ironSessionProvider.extractDataFromCookie<SessionCookieData>(
+      sessionData,
+      cookiePassword
+    ).then(session => {
+      if (!session.accessToken) {
+        return {
+          authenticated: false,
+          reason:
+            AuthenticateWithSessionCookieFailureReason.INVALID_SESSION_COOKIE,
+        };
+      }
+
+      return this.isValidJwt(session.accessToken).then(isValid => {
+        if (!isValid) {
+          return {
+            authenticated: false,
+            reason: AuthenticateWithSessionCookieFailureReason.INVALID_JWT,
+          };
+        }
+
+        const {
+          sid: sessionId,
+          org_id: organizationId,
+          role,
+          permissions,
+          entitlements,
+        } = decodeJWT(session.accessToken) as AccessToken & JWTPayload;
+
+        return {
+          authenticated: true,
+          sessionId,
+          organizationId,
+          role,
+          user: session.user,
+          permissions,
+          entitlements,
+          accessToken: session.accessToken,
+        };
+      });
+    }).catch(() => {
       return {
         authenticated: false,
         reason:
           AuthenticateWithSessionCookieFailureReason.INVALID_SESSION_COOKIE,
       };
-    }
-
-    if (!session.accessToken) {
-      return {
-        authenticated: false,
-        reason:
-          AuthenticateWithSessionCookieFailureReason.INVALID_SESSION_COOKIE,
-      };
-    }
-
-    if (!(await this.isValidJwt(session.accessToken))) {
-      return {
-        authenticated: false,
-        reason: AuthenticateWithSessionCookieFailureReason.INVALID_JWT,
-      };
-    }
-
-    const {
-      sid: sessionId,
-      org_id: organizationId,
-      role,
-      permissions,
-      entitlements,
-    } = decodeJWT(session.accessToken) as AccessToken & JWTPayload;
-
-    return {
-      authenticated: true,
-      sessionId,
-      organizationId,
-      role,
-      user: session.user,
-      permissions,
-      entitlements,
-      accessToken: session.accessToken,
-    };
+    });
   }
 
   private async isValidJwt(accessToken: string): Promise<boolean> {
@@ -494,7 +491,7 @@ export class UserManagement {
   /**
    * @deprecated Method 'prepareAuthenticationResponse' was moved to archive/legacy/user-management-deprecated.ts
    */
-  private async prepareAuthenticationResponse({
+  private prepareAuthenticationResponse({
     authenticationResponse,
     session,
   }: {
@@ -502,19 +499,21 @@ export class UserManagement {
     session?: AuthenticateWithSessionOptions;
   }): Promise<AuthenticationResponse> {
     if (session?.sealSession) {
-      return {
-        ...authenticationResponse,
-        sealedSession: await this.sealSessionDataFromAuthenticationResponse({
-          authenticationResponse,
-          cookiePassword: session.cookiePassword,
-        }),
-      };
+      return this.sealSessionDataFromAuthenticationResponse({
+        authenticationResponse,
+        cookiePassword: session.cookiePassword,
+      }).then(sealedSession => {
+        return {
+          ...authenticationResponse,
+          sealedSession,
+        };
+      });
     }
 
-    return authenticationResponse;
+    return Promise.resolve(authenticationResponse);
   }
 
-  private async sealSessionDataFromAuthenticationResponse({
+  private sealSessionDataFromAuthenticationResponse({
     authenticationResponse,
     cookiePassword,
   }: {
@@ -536,13 +535,13 @@ export class UserManagement {
       refreshToken: authenticationResponse.refreshToken,
       impersonator: authenticationResponse.impersonator,
     };
-    return await this.ironSessionProvider.createCookieValue<SessionCookieData>(
+    return this.ironSessionProvider.createCookieValue<SessionCookieData>(
       sessionData,
       cookiePassword,
     );
   }
 
-  async getSessionFromCookie({
+  getSessionFromCookie({
     sessionData,
     cookiePassword = Deno.env.get("WORKOS_COOKIE_PASSWORD"),
   }: SessionHandlerOptions): Promise<SessionCookieData | undefined> {
@@ -557,7 +556,7 @@ export class UserManagement {
       );
     }
 
-    return undefined;
+    return Promise.resolve(undefined);
   }
 
   async getEmailVerification(
@@ -570,15 +569,15 @@ export class UserManagement {
     return deserializeEmailVerification(data);
   }
 
-  async sendVerificationEmail({
+  sendVerificationEmail({
     userId,
   }: SendVerificationEmailOptions): Promise<{ user: User }> {
-    const { data } = await this.workos.post<{ user: UserResponse }>(
+    return this.workos.post<{ user: UserResponse }>(
       `/user_management/users/${userId}/email_verification/send`,
       {},
-    );
-
-    return { user: deserializeUser(data.user) };
+    ).then(({ data }) => {
+      return { user: deserializeUser(data.user) };
+    });
   }
 
   async getMagicAuth(magicAuthId: string): Promise<MagicAuth> {
@@ -614,18 +613,18 @@ export class UserManagement {
     );
   }
 
-  async verifyEmail({
+  verifyEmail({
     code,
     userId,
   }: VerifyEmailOptions): Promise<{ user: User }> {
-    const { data } = await this.workos.post<
+    return this.workos.post<
       { user: UserResponse },
       SerializedVerifyEmailOptions
     >(`/user_management/users/${userId}/email_verification/confirm`, {
       code,
+    }).then(({ data }) => {
+      return { user: deserializeUser(data.user) };
     });
-
-    return { user: deserializeUser(data.user) };
   }
 
   async getPasswordReset(passwordResetId: string): Promise<PasswordReset> {
@@ -664,16 +663,16 @@ export class UserManagement {
     );
   }
 
-  async resetPassword(payload: ResetPasswordOptions): Promise<{ user: User }> {
-    const { data } = await this.workos.post<
+  resetPassword(payload: ResetPasswordOptions): Promise<{ user: User }> {
+    return this.workos.post<
       { user: UserResponse },
       SerializedResetPasswordOptions
     >(
       "/user_management/password_reset/confirm",
       serializeResetPasswordOptions(payload),
-    );
-
-    return { user: deserializeUser(data.user) };
+    ).then(({ data }) => {
+      return { user: deserializeUser(data.user) };
+    });
   }
 
   async updateUser(payload: UpdateUserOptions): Promise<User> {
@@ -685,26 +684,26 @@ export class UserManagement {
     return deserializeUser(data);
   }
 
-  async enrollAuthFactor(payload: EnrollAuthFactorOptions): Promise<{
+  enrollAuthFactor(payload: EnrollAuthFactorOptions): Promise<{
     authenticationFactor: FactorWithSecrets;
     authenticationChallenge: Challenge;
   }> {
-    const { data } = await this.workos.post<{
+    return this.workos.post<{
       authentication_factor: FactorWithSecretsResponse;
       authentication_challenge: ChallengeResponse;
     }>(
       `/user_management/users/${payload.userId}/auth_factors`,
       serializeEnrollAuthFactorOptions(payload),
-    );
-
-    return {
-      authenticationFactor: deserializeFactorWithSecrets(
-        data.authentication_factor,
-      ),
-      authenticationChallenge: deserializeChallenge(
-        data.authentication_challenge,
-      ),
-    };
+    ).then(({ data }) => {
+      return {
+        authenticationFactor: deserializeFactorWithSecrets(
+          data.authentication_factor,
+        ),
+        authenticationChallenge: deserializeChallenge(
+          data.authentication_challenge,
+        ),
+      };
+    });
   }
 
   async listAuthFactors(
@@ -729,8 +728,8 @@ export class UserManagement {
     return new AutoPaginatable(fetchFunction);
   }
 
-  async deleteUser(userId: string) {
-    await this.workos.delete(`/user_management/users/${userId}`);
+  deleteUser(userId: string): Promise<void> {
+    return this.workos.delete(`/user_management/users/${userId}`);
   }
 
   async getUserIdentities(userId: string): Promise<Identity[]> {
@@ -1002,21 +1001,21 @@ export class UserManagement {
    *
    * Use this over `getLogoutUrl` if you'd like to the SDK to handle session cookies for you.
    */
-  async getLogoutUrlFromSessionCookie({
+  getLogoutUrlFromSessionCookie({
     sessionData,
     cookiePassword = Deno.env.get("WORKOS_COOKIE_PASSWORD"),
   }: SessionHandlerOptions): Promise<string> {
-    const authenticationResponse = await this.authenticateWithSessionCookie({
+    return this.authenticateWithSessionCookie({
       sessionData,
       cookiePassword,
+    }).then(authenticationResponse => {
+      if (!authenticationResponse.authenticated) {
+        const { reason } = authenticationResponse;
+        throw new Error(`Failed to extract session ID for logout URL: ${reason}`);
+      }
+
+      return this.getLogoutUrl({ sessionId: authenticationResponse.sessionId });
     });
-
-    if (!authenticationResponse.authenticated) {
-      const { reason } = authenticationResponse;
-      throw new Error(`Failed to extract session ID for logout URL: ${reason}`);
-    }
-
-    return this.getLogoutUrl({ sessionId: authenticationResponse.sessionId });
   }
 
   /**

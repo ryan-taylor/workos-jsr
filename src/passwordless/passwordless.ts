@@ -1,38 +1,35 @@
-import type { WorkOS } from "../workos.ts";
+import type { WorkOS } from "@ryantaylor/workos";
 import type {
   CreatePasswordlessSessionOptions,
   PasswordlessSession,
   PasswordlessSessionResponse,
   SendSessionResponse,
   SerializedCreatePasswordlessSessionOptions,
-} from "./interfaces.ts";
-import { deserializePasswordlessSession } from "./serializers/passwordless-session.serializer.ts";
+} from "$sdk/passwordless/interfaces";
+import { deserializePasswordlessSession } from "$sdk/passwordless/serializers/passwordless-session.serializer";
 
 export class Passwordless {
   constructor(private readonly workos: WorkOS) {}
 
-  async createSession({
+  createSession({
     redirectURI,
     expiresIn,
     ...options
   }: CreatePasswordlessSessionOptions): Promise<PasswordlessSession> {
-    const { data } = await this.workos.post<
+    return this.workos.post<
       PasswordlessSessionResponse,
       SerializedCreatePasswordlessSessionOptions
     >("/passwordless/sessions", {
       ...options,
       redirect_uri: redirectURI,
       expires_in: expiresIn,
-    });
-
-    return deserializePasswordlessSession(data);
+    }).then(({ data }) => deserializePasswordlessSession(data));
   }
 
-  async sendSession(sessionId: string): Promise<SendSessionResponse> {
-    const { data } = await this.workos.post(
+  sendSession(sessionId: string): Promise<SendSessionResponse> {
+    return this.workos.post(
       `/passwordless/sessions/${sessionId}/send`,
       {},
-    );
-    return data;
+    ).then(({ data }) => data);
   }
 }

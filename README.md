@@ -474,7 +474,15 @@ deno fmt
 
 # Check types
 deno check
+
+# Check for async functions missing await or .then()
+deno task check-await
 ```
+
+The `check-await` task uses TypeScript AST analysis to detect async functions
+that don't use await expressions or .then() calls, providing higher precision
+than ESLint rules. This task automatically ignores test files (*.test.ts) and
+**tests** directories.
 
 ## Testing Approach
 

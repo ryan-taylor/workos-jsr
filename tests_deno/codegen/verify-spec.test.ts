@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-unused-vars
 import { assertEquals, assertExists, assertThrows } from "@std/assert";
 import {
   VerificationOptions,

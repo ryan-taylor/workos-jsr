@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-unused-vars
 /**
  * Unit tests for Signature Types
  *

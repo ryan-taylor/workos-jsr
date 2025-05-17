@@ -1,6 +1,6 @@
 import { assertEquals, assertRejects, assertThrows } from "@std/assert";
 import { fetchAndDeserialize } from "../../packages/workos_sdk/src/common/utils/fetch-and-deserialize.ts";
-import { type WorkOS } from "../../packages/workos_sdk/src/workos.ts";
+import { type WorkOS } from "../../packages/workos_sdk/mod.ts";
 
 /**
  * Tests for the fetchAndDeserialize utility

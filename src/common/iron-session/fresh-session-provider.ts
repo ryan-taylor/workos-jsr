@@ -1,7 +1,7 @@
 /**
  * Fresh framework session provider for WorkOS Deno port
  */
-import { Cookie, setCookie } from "https://deno.land/std/http/cookie.ts";
+import { Cookie, setCookie } from "$sdk/common/deps/cookie.ts";
 
 /**
  * Fresh plugin interface
@@ -212,10 +212,10 @@ export class FreshSessionProvider {
    * Saves session data
    * @param session Session data to save
    */
-  // eslint-disable-next-line require-await
-  private async saveSession(session: SessionData): Promise<void> {
+  private saveSession(session: SessionData): Promise<void> {
     // In a real implementation, this would prepare the session for saving
     // Since Iron is cookie-based, we don't actually save here, but during cookie update
+    return Promise.resolve();
   }
 
   /**

@@ -99,7 +99,7 @@ export class Vault {
     return deserializeObject(data);
   }
 
-  async deleteObject(options: DeleteObjectOptions): Promise<void> {
+  deleteObject(options: DeleteObjectOptions): Promise<void> {
     return this.workos.delete(`/vault/v1/kv/${encodeURIComponent(options.id)}`);
   }
 

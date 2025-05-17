@@ -1,0 +1,1725 @@
+Warning the configuration file "file:///Users/t/Developer/workos-node/deno.json" contains an entry for "importMap" that is being ignored.
+Check file:///Users/t/Developer/workos-node/src/actions/actions.test.ts
+Check file:///Users/t/Developer/workos-node/src/actions/actions.ts
+Check file:///Users/t/Developer/workos-node/src/actions/interfaces/action.interface.ts
+Check file:///Users/t/Developer/workos-node/src/actions/interfaces/index.ts
+Check file:///Users/t/Developer/workos-node/src/actions/interfaces/response-payload.interface.ts
+Check file:///Users/t/Developer/workos-node/src/actions/serializers/action.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/audit-logs/audit-logs.test.ts
+Check file:///Users/t/Developer/workos-node/src/audit-logs/audit-logs.ts
+Check file:///Users/t/Developer/workos-node/src/audit-logs/interfaces/audit-log-export-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/audit-logs/interfaces/audit-log-export.interface.ts
+Check file:///Users/t/Developer/workos-node/src/audit-logs/interfaces/create-audit-log-event-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/audit-logs/interfaces/create-audit-log-schema-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/audit-logs/interfaces/index.ts
+Check file:///Users/t/Developer/workos-node/src/audit-logs/serializers/audit-log-export-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/audit-logs/serializers/audit-log-export.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/audit-logs/serializers/create-audit-log-event-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/audit-logs/serializers/create-audit-log-schema-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/audit-logs/serializers/create-audit-log-schema.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/audit-logs/serializers/index.ts
+Check file:///Users/t/Developer/workos-node/src/common/crypto/jwt-utils.ts
+Check file:///Users/t/Developer/workos-node/src/common/exceptions/bad-request.exception.ts
+Check file:///Users/t/Developer/workos-node/src/common/exceptions/oauth.exception.ts
+Check file:///Users/t/Developer/workos-node/src/common/interfaces.ts
+Check file:///Users/t/Developer/workos-node/src/common/interfaces/event.interface.ts
+Check file:///Users/t/Developer/workos-node/src/common/interfaces/metadata-guards.ts
+Check file:///Users/t/Developer/workos-node/src/common/interfaces/metadata.interface.ts
+Check file:///Users/t/Developer/workos-node/src/common/interfaces/pagination-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/common/interfaces/unknown-record.interface.ts
+Check file:///Users/t/Developer/workos-node/src/common/iron-session/fresh-session-provider.ts
+Check file:///Users/t/Developer/workos-node/src/common/utils/burndown-velocity.ts
+Check file:///Users/t/Developer/workos-node/src/common/utils/fetch-and-deserialize.ts
+Check file:///Users/t/Developer/workos-node/src/common/utils/pagination.ts
+Check file:///Users/t/Developer/workos-node/src/common/utils/test-burndown-analyzer.ts
+Check file:///Users/t/Developer/workos-node/src/common/utils/test-burndown-history.ts
+Check file:///Users/t/Developer/workos-node/src/common/utils/test-failure-consistency.ts
+Check file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts
+Check file:///Users/t/Developer/workos-node/src/common/utils/type-assertions.ts
+Check file:///Users/t/Developer/workos-node/src/common/utils/type-guards.ts
+Check file:///Users/t/Developer/workos-node/src/common/utils/type-narrowing-examples.ts
+Check file:///Users/t/Developer/workos-node/src/common/utils/type-utils.ts
+Check file:///Users/t/Developer/workos-node/src/directory-sync/directory-sync.test.ts
+Check file:///Users/t/Developer/workos-node/src/directory-sync/directory-sync.ts
+Check file:///Users/t/Developer/workos-node/src/directory-sync/interfaces.ts
+Check file:///Users/t/Developer/workos-node/src/directory-sync/interfaces/directory-group.interface.ts
+Check file:///Users/t/Developer/workos-node/src/directory-sync/interfaces/directory-user.interface.ts
+Check file:///Users/t/Developer/workos-node/src/directory-sync/interfaces/directory.interface.ts
+Check file:///Users/t/Developer/workos-node/src/directory-sync/interfaces/index.ts
+Check file:///Users/t/Developer/workos-node/src/directory-sync/interfaces/list-directories-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/directory-sync/interfaces/list-directory-users-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/directory-sync/interfaces/list-groups-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/directory-sync/serializers.ts
+Check file:///Users/t/Developer/workos-node/src/directory-sync/serializers/directory-group.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/directory-sync/serializers/directory-user.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/directory-sync/serializers/directory.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/directory-sync/serializers/index.ts
+Check file:///Users/t/Developer/workos-node/src/directory-sync/serializers/list-directories-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/directory-sync/utils/get-primary-email.test.ts
+Check file:///Users/t/Developer/workos-node/src/directory-sync/utils/get-primary-email.ts
+Check file:///Users/t/Developer/workos-node/src/events/events.test.ts
+Check file:///Users/t/Developer/workos-node/src/events/events.ts
+Check file:///Users/t/Developer/workos-node/src/events/interfaces/index.ts
+Check file:///Users/t/Developer/workos-node/src/events/interfaces/list-events-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/events/serializers/index.ts
+Check file:///Users/t/Developer/workos-node/src/events/serializers/list-event-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/fga/fga.test.ts
+Check file:///Users/t/Developer/workos-node/src/fga/fga.ts
+Check file:///Users/t/Developer/workos-node/src/fga/interfaces/check-op.enum.ts
+Check file:///Users/t/Developer/workos-node/src/fga/interfaces/check.interface.ts
+Check file:///Users/t/Developer/workos-node/src/fga/interfaces/index.ts
+Check file:///Users/t/Developer/workos-node/src/fga/interfaces/query.interface.ts
+Check file:///Users/t/Developer/workos-node/src/fga/interfaces/resource-op.enum.ts
+Check file:///Users/t/Developer/workos-node/src/fga/interfaces/resource.interface.ts
+Check file:///Users/t/Developer/workos-node/src/fga/interfaces/warrant-op.enum.ts
+Check file:///Users/t/Developer/workos-node/src/fga/interfaces/warrant-token.interface.ts
+Check file:///Users/t/Developer/workos-node/src/fga/interfaces/warrant.interface.ts
+Check file:///Users/t/Developer/workos-node/src/fga/interfaces/warrant.ts
+Check file:///Users/t/Developer/workos-node/src/fga/serializers/batch-write-resources-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/fga/serializers/check-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/fga/serializers/create-resource-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/fga/serializers/delete-resource-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/fga/serializers/index.ts
+Check file:///Users/t/Developer/workos-node/src/fga/serializers/list-resources-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/fga/serializers/list-warrants-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/fga/serializers/query-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/fga/serializers/query-result.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/fga/serializers/resource.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/fga/serializers/warrant-token.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/fga/serializers/warrant.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/fga/serializers/write-warrant-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/fga/utils/interface-check.ts
+Check file:///Users/t/Developer/workos-node/src/index.ts
+Check file:///Users/t/Developer/workos-node/src/index.worker.ts
+Check file:///Users/t/Developer/workos-node/src/mfa/interfaces/challenge-factor-options.ts
+Check file:///Users/t/Developer/workos-node/src/mfa/interfaces/challenge.interface.ts
+Check file:///Users/t/Developer/workos-node/src/mfa/interfaces/enroll-factor-options.ts
+Check file:///Users/t/Developer/workos-node/src/mfa/interfaces/factor.interface.ts
+Check file:///Users/t/Developer/workos-node/src/mfa/interfaces/index.ts
+Check file:///Users/t/Developer/workos-node/src/mfa/interfaces/sms.interface.ts
+Check file:///Users/t/Developer/workos-node/src/mfa/interfaces/totp.interface.ts
+Check file:///Users/t/Developer/workos-node/src/mfa/interfaces/verify-challenge-options.ts
+Check file:///Users/t/Developer/workos-node/src/mfa/interfaces/verify-challenge-response.ts
+Check file:///Users/t/Developer/workos-node/src/mfa/interfaces/verify-factor-options.ts
+Check file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts
+Check file:///Users/t/Developer/workos-node/src/mfa/mfa.ts
+Check file:///Users/t/Developer/workos-node/src/mfa/serializers/challenge.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/mfa/serializers/factor.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/mfa/serializers/index.ts
+Check file:///Users/t/Developer/workos-node/src/mfa/serializers/sms.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/mfa/serializers/totp.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/mfa/serializers/verify-response.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/organization-domains/interfaces.ts
+Check file:///Users/t/Developer/workos-node/src/organization-domains/interfaces/create-organization-domain-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/organization-domains/interfaces/index.ts
+Check file:///Users/t/Developer/workos-node/src/organization-domains/interfaces/organization-domain.interface.ts
+Check file:///Users/t/Developer/workos-node/src/organization-domains/organization-domains.test.ts
+Check file:///Users/t/Developer/workos-node/src/organization-domains/organization-domains.ts
+Check file:///Users/t/Developer/workos-node/src/organization-domains/serializers/create-organization-domain-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/organization-domains/serializers/organization-domain.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/organizations/interfaces.ts
+Check file:///Users/t/Developer/workos-node/src/organizations/interfaces/create-organization-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/organizations/interfaces/domain-data.interface.ts
+Check file:///Users/t/Developer/workos-node/src/organizations/interfaces/index.ts
+Check file:///Users/t/Developer/workos-node/src/organizations/interfaces/list-organization-roles-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/organizations/interfaces/list-organizations-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/organizations/interfaces/organization.interface.ts
+Check file:///Users/t/Developer/workos-node/src/organizations/interfaces/update-organization-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts
+Check file:///Users/t/Developer/workos-node/src/organizations/organizations.ts
+Check file:///Users/t/Developer/workos-node/src/organizations/serializers/create-organization-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/organizations/serializers/index.ts
+Check file:///Users/t/Developer/workos-node/src/organizations/serializers/organization.serializer.test.ts
+Check file:///Users/t/Developer/workos-node/src/organizations/serializers/organization.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/organizations/serializers/update-organization-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/passwordless/interfaces/create-passwordless-session-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/passwordless/interfaces/index.ts
+Check file:///Users/t/Developer/workos-node/src/passwordless/interfaces/passwordless-session.interface.ts
+Check file:///Users/t/Developer/workos-node/src/passwordless/interfaces/send-session-response.interface.ts
+Check file:///Users/t/Developer/workos-node/src/passwordless/passwordless.test.ts
+Check file:///Users/t/Developer/workos-node/src/passwordless/passwordless.ts
+Check file:///Users/t/Developer/workos-node/src/passwordless/serializers/index.ts
+Check file:///Users/t/Developer/workos-node/src/passwordless/serializers/passwordless-session.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/portal/interfaces/generate-portal-link-intent.interface.ts
+Check file:///Users/t/Developer/workos-node/src/portal/interfaces/index.ts
+Check file:///Users/t/Developer/workos-node/src/portal/portal.test.ts
+Check file:///Users/t/Developer/workos-node/src/portal/portal.ts
+Check file:///Users/t/Developer/workos-node/src/roles/interfaces/index.ts
+Check file:///Users/t/Developer/workos-node/src/roles/interfaces/role.interface.ts
+Check file:///Users/t/Developer/workos-node/src/roles/roles.ts
+Check file:///Users/t/Developer/workos-node/src/roles/serializers/role-assignment.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/roles/serializers/role.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/services/directory_sync.ts
+Check file:///Users/t/Developer/workos-node/src/services/mfa.ts
+Check file:///Users/t/Developer/workos-node/src/services/organizations.ts
+Check file:///Users/t/Developer/workos-node/src/services/passwordless.ts
+Check file:///Users/t/Developer/workos-node/src/services/sso.ts
+Check file:///Users/t/Developer/workos-node/src/sso/interfaces.ts
+Check file:///Users/t/Developer/workos-node/src/sso/interfaces/authorization-url-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/sso/interfaces/connection-type.enum.ts
+Check file:///Users/t/Developer/workos-node/src/sso/interfaces/connection.interface.ts
+Check file:///Users/t/Developer/workos-node/src/sso/interfaces/get-profile-and-token-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/sso/interfaces/get-profile-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/sso/interfaces/index.ts
+Check file:///Users/t/Developer/workos-node/src/sso/interfaces/list-connections-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/sso/interfaces/profile-and-token.interface.ts
+Check file:///Users/t/Developer/workos-node/src/sso/interfaces/profile.interface.ts
+Check file:///Users/t/Developer/workos-node/src/sso/serializers.ts
+Check file:///Users/t/Developer/workos-node/src/sso/serializers/connection.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/sso/serializers/index.ts
+Check file:///Users/t/Developer/workos-node/src/sso/serializers/list-connections-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/sso/serializers/profile-and-token.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/sso/serializers/profile.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/sso/sso.test.ts
+Check file:///Users/t/Developer/workos-node/src/sso/sso.ts
+Check file:///Users/t/Developer/workos-node/src/telemetry/index.ts
+Check file:///Users/t/Developer/workos-node/src/telemetry/instrumentation.ts
+Check file:///Users/t/Developer/workos-node/src/telemetry/otlp-exporter.ts
+Check file:///Users/t/Developer/workos-node/src/telemetry/telemetry-config.ts
+Check file:///Users/t/Developer/workos-node/src/telemetry/telemetry-manager.ts
+Check file:///Users/t/Developer/workos-node/src/telemetry/workos-integration.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/authenticate-with-code-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/authenticate-with-email-verification-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/authenticate-with-magic-auth-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/authenticate-with-options-base.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/authenticate-with-organization-selection.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/authenticate-with-password-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/authenticate-with-refresh-token-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/authenticate-with-session-cookie.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/authenticate-with-totp-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/authentication-event.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/authentication-radar-risk-detected-event.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/authentication-response.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/authorization-url-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/create-magic-auth-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/create-organization-membership-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/create-password-reset-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/create-user-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/email-verification.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/enroll-auth-factor.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/factor.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/identity.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/impersonator.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/index.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/invitation.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/list-auth-factors-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/list-invitations-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/list-organization-memberships-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/list-users-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/magic-auth.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/oauth-tokens.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/organization-membership.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/password-hash-type.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/password-reset.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/refresh-and-seal-session-data.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/reset-password-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/revoke-session-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/send-invitation-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/send-magic-auth-code-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/send-password-reset-email-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/send-verification-email-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/session-handler-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/session.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/update-organization-membership-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/update-user-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/update-user-password-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/user.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/interfaces/verify-email-options.interface.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/authenticate-with-code-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/authenticate-with-email-verification.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/authenticate-with-magic-auth-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/authenticate-with-organization-selection-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/authenticate-with-password-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/authenticate-with-refresh-token.options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/authenticate-with-totp-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/authentication-event.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/authentication-radar-risk-event-serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/authentication-response.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/create-magic-auth-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/create-organization-membership-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/create-password-reset-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/create-user-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/email-verification.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/enroll-auth-factor-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/factor.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/identity.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/index.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/invitation.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/list-invitations-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/list-organization-memberships-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/list-users-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/magic-auth.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/oauth-tokens.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/organization-membership.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/password-reset.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/reset-password-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/role.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/send-invitation-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/send-magic-auth-code-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/send-password-reset-email.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/session.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/update-organization-membership-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/update-user-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/update-user-password-options.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/user.serializer.test.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/serializers/user.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/session.test.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/session.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts
+Check file:///Users/t/Developer/workos-node/src/user-management/user-management.ts
+Check file:///Users/t/Developer/workos-node/src/vault/interfaces/index.ts
+Check file:///Users/t/Developer/workos-node/src/vault/interfaces/key.interface.ts
+Check file:///Users/t/Developer/workos-node/src/vault/interfaces/key/create-data-key.interface.ts
+Check file:///Users/t/Developer/workos-node/src/vault/interfaces/key/decrypt-data-key.interface.ts
+Check file:///Users/t/Developer/workos-node/src/vault/interfaces/object.interface.ts
+Check file:///Users/t/Developer/workos-node/src/vault/interfaces/object/create-object.interface.ts
+Check file:///Users/t/Developer/workos-node/src/vault/interfaces/object/delete-object.interface.ts
+Check file:///Users/t/Developer/workos-node/src/vault/interfaces/object/list-object-versions.interface.ts
+Check file:///Users/t/Developer/workos-node/src/vault/interfaces/object/list-objects.interface.ts
+Check file:///Users/t/Developer/workos-node/src/vault/interfaces/object/read-object.interface.ts
+Check file:///Users/t/Developer/workos-node/src/vault/interfaces/object/update-object.interface.ts
+Check file:///Users/t/Developer/workos-node/src/vault/interfaces/secret.interface.ts
+Check file:///Users/t/Developer/workos-node/src/vault/serializers/vault-key.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/vault/serializers/vault-object.serializer.ts
+Check file:///Users/t/Developer/workos-node/src/vault/vault.test.ts
+Check file:///Users/t/Developer/workos-node/src/vault/vault.ts
+Check file:///Users/t/Developer/workos-node/src/webhooks/webhooks.test.ts
+Check file:///Users/t/Developer/workos-node/src/webhooks/webhooks.ts
+Check file:///Users/t/Developer/workos-node/src/widgets/interfaces/get-token.ts
+Check file:///Users/t/Developer/workos-node/src/widgets/widgets.test.ts
+Check file:///Users/t/Developer/workos-node/src/widgets/widgets.ts
+Check file:///Users/t/Developer/workos-node/src/worker.test.ts
+Check file:///Users/t/Developer/workos-node/src/workos.test.ts
+Check file:///Users/t/Developer/workos-node/src/workos.ts
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/common/crypto/subtle-crypto-provider.ts'.
+    at file:///Users/t/Developer/workos-node/src/actions/actions.test.ts:6:38
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/common/crypto/crypto-provider.ts'.
+    at file:///Users/t/Developer/workos-node/src/actions/actions.ts:1:37
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/common/crypto/signature-provider.ts'.
+    at file:///Users/t/Developer/workos-node/src/actions/actions.ts:2:35
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/common/utils/unreachable.ts'.
+    at file:///Users/t/Developer/workos-node/src/actions/actions.ts:3:29
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/user-management/serializers.ts'.
+    at file:///Users/t/Developer/workos-node/src/actions/serializers/action.serializer.ts:5:8
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/audit-logs/interfaces.ts'.
+    at file:///Users/t/Developer/workos-node/src/audit-logs/audit-logs.ts:5:8
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/audit-logs/serializers.ts'.
+    at file:///Users/t/Developer/workos-node/src/audit-logs/audit-logs.ts:23:8
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/events/interfaces.ts'.
+    at file:///Users/t/Developer/workos-node/src/events/events.ts:2:39
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/common/serializers.ts'.
+    at file:///Users/t/Developer/workos-node/src/events/events.ts:3:51
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/events/serializers.ts'.
+    at file:///Users/t/Developer/workos-node/src/events/events.ts:4:43
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/events/interfaces/event.interface.ts'.
+    at file:///Users/t/Developer/workos-node/src/events/interfaces/index.ts:2:15
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/fga/interfaces.ts'.
+    at file:///Users/t/Developer/workos-node/src/fga/fga.ts:29:8
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/fga/serializers.ts'.
+    at file:///Users/t/Developer/workos-node/src/fga/fga.ts:44:8
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/common/net/fetch-client.ts'.
+    at file:///Users/t/Developer/workos-node/src/index.worker.ts:2:33
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/common/net/http-client.ts'.
+    at file:///Users/t/Developer/workos-node/src/index.worker.ts:3:33
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/common/interfaces/workos-options.interface.ts'.
+    at file:///Users/t/Developer/workos-node/src/index.worker.ts:4:36
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/common/exceptions/unprocessable-entity.exception.ts'.
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:10:46
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/mfa/interfaces.ts'.
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.ts:15:8
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/mfa/serializers.ts'.
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.ts:21:8
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/organization-domains/fixtures/get-organization-domain-pending.json.ts'.
+    at file:///Users/t/Developer/workos-node/src/organization-domains/organization-domains.test.ts:11:42
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/organization-domains/fixtures/get-organization-domain-verified.json.ts'.
+    at file:///Users/t/Developer/workos-node/src/organization-domains/organization-domains.test.ts:14:43
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/organizations/fixtures/clear-stripe-customer-id.json.ts'.
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:13:35
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/organizations/fixtures/create-organization-invalid.json.ts'.
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:16:39
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/organizations/fixtures/create-organization.json.ts'.
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:19:32
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/organizations/fixtures/get-organization.json.ts'.
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:22:29
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/organizations/fixtures/list-organizations.json.ts'.
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:25:38
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/organizations/fixtures/list-organization-roles.json.ts'.
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:28:42
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/organizations/fixtures/update-organization.json.ts'.
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:31:32
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/organizations/fixtures/set-stripe-customer-id.json.ts'.
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:34:33
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/organizations/fixtures/set-stripe-customer-id-disabled.json.ts'.
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:37:41
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/passwordless/fixtures/create-session.json.ts'.
+    at file:///Users/t/Developer/workos-node/src/passwordless/passwordless.test.ts:10:27
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/passwordless/interfaces.ts'.
+    at file:///Users/t/Developer/workos-node/src/passwordless/passwordless.ts:8:8
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/portal/fixtures/generate-link-invalid.json.ts'.
+    at file:///Users/t/Developer/workos-node/src/portal/portal.test.ts:10:33
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/portal/fixtures/generate-link.json.ts'.
+    at file:///Users/t/Developer/workos-node/src/portal/portal.test.ts:13:26
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/core/http_client.ts'.
+    at file:///Users/t/Developer/workos-node/src/services/directory_sync.ts:1:33
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/common/interfaces/index.ts'.
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:16:35
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/roles/interfaces.ts'.
+    at file:///Users/t/Developer/workos-node/src/user-management/serializers/role.serializer.ts:1:51
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/user-management/fixtures/user.json.ts'.
+    at file:///Users/t/Developer/workos-node/src/user-management/serializers/user.serializer.test.ts:2:25
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/vault/interfaces.ts'.
+    at file:///Users/t/Developer/workos-node/src/vault/serializers/vault-object.serializer.ts:16:8
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/common/exceptions/conflict.exception.ts'.
+    at file:///Users/t/Developer/workos-node/src/vault/vault.test.ts:18:35
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/vault/cryptography/decrypt.ts'.
+    at file:///Users/t/Developer/workos-node/src/vault/vault.ts:7:33
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/vault/cryptography/encrypt.ts'.
+    at file:///Users/t/Developer/workos-node/src/vault/vault.ts:8:25
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/widgets/fixtures/token.json.ts'.
+    at file:///Users/t/Developer/workos-node/src/widgets/widgets.test.ts:5:26
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/widgets/fixtures/get-token-error.json.ts'.
+    at file:///Users/t/Developer/workos-node/src/widgets/widgets.test.ts:6:34
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/common/exceptions/not-found.exception.ts'.
+    at file:///Users/t/Developer/workos-node/src/workos.test.ts:10:35
+
+TS2307 [ERROR]: Cannot find module 'file:///Users/t/Developer/workos-node/src/common/net/deno-client.ts'.
+    at file:///Users/t/Developer/workos-node/src/workos.test.ts:14:32
+
+TS2339 [ERROR]: Property 'signResponse' does not exist on type 'Actions'.
+  const response = await workos.actions.signResponse(
+                                        ~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/actions/actions.test.ts:63:41
+
+TS2339 [ERROR]: Property 'signResponse' does not exist on type 'Actions'.
+  const response = await workos.actions.signResponse(
+                                        ~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/actions/actions.test.ts:93:41
+
+TS2339 [ERROR]: Property 'verifyHeader' does not exist on type 'Actions'.
+    await workos.actions.verifyHeader({
+                         ~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/actions/actions.test.ts:126:26
+
+TS2339 [ERROR]: Property 'verifyHeader' does not exist on type 'Actions'.
+    await workos.actions.verifyHeader({
+                         ~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/actions/actions.test.ts:141:26
+
+TS2339 [ERROR]: Property 'constructAction' does not exist on type 'Actions'.
+  const action = await workos.actions.constructAction({
+                                      ~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/actions/actions.test.ts:158:39
+
+TS2339 [ERROR]: Property 'constructAction' does not exist on type 'Actions'.
+  const action = await workos.actions.constructAction({
+                                      ~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/actions/actions.test.ts:214:39
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/user-management/interfaces.ts"' has no exported member 'Invitation'.
+  Invitation,
+  ~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/actions/interfaces/action.interface.ts:6:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/user-management/interfaces.ts"' has no exported member 'InvitationResponse'.
+  InvitationResponse,
+  ~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/actions/interfaces/action.interface.ts:7:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/user-management/interfaces.ts"' has no exported member 'OrganizationMembership'.
+  OrganizationMembership,
+  ~~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/actions/interfaces/action.interface.ts:8:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/user-management/interfaces.ts"' has no exported member 'OrganizationMembershipResponse'.
+  OrganizationMembershipResponse,
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/actions/interfaces/action.interface.ts:9:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/user-management/interfaces.ts"' has no exported member 'UserResponse'.
+  UserResponse,
+  ~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/actions/interfaces/action.interface.ts:11:3
+
+TS2345 [ERROR]: Argument of type 'import("file:///Users/t/Developer/workos-node/src/organizations/interfaces.ts").OrganizationResponse' is not assignable to parameter of type 'import("file:///Users/t/Developer/workos-node/src/organizations/interfaces/organization.interface.ts").OrganizationResponse'.
+  Types of property 'object' are incompatible.
+    Type 'string' is not assignable to type '"organization"'.
+          ? deserializeOrganization(actionPayload.organization)
+                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/actions/serializers/action.serializer.ts:46:37
+
+TS7006 [ERROR]: Parameter 'target' implicitly has an 'any' type.
+  targets: schema.targets.map((target) => {
+                               ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/audit-logs/serializers/create-audit-log-schema-options.serializer.ts:34:32
+
+TS7006 [ERROR]: Parameter 'target' implicitly has an 'any' type.
+  targets: auditLogSchema.targets.map((target) => {
+                                       ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/audit-logs/serializers/create-audit-log-schema.serializer.ts:29:40
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts"' has no exported member 'fetchSearchParams'.
+  fetchSearchParams,
+  ~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/directory-sync/directory-sync.test.ts:6:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts"' has no exported member 'fetchURL'.
+  fetchURL,
+  ~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/directory-sync/directory-sync.test.ts:7:3
+
+TS2345 [ERROR]: Argument of type 'import("file:///Users/t/Developer/workos-node/src/directory-sync/interfaces/directory.interface.ts").Directory' is not assignable to parameter of type 'import("file:///Users/t/Developer/workos-node/packages/workos_sdk/src/directory-sync/interfaces/directory.interface.ts").Directory'.
+  Type 'Directory' is missing the following properties from type 'Directory': created_at, updated_at
+  assertEquals(subject, directory);
+                        ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/directory-sync/directory-sync.test.ts:226:25
+
+TS2551 [ERROR]: Property 'deleteDirectory' does not exist on type 'DirectorySync'. Did you mean 'getDirectory'?
+  await workos.directorySync.deleteDirectory("directory_123");
+                             ~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/directory-sync/directory-sync.test.ts:234:30
+
+    'getDirectory' is declared here.
+      async getDirectory(id: string): Promise<Directory> {
+            ~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/directory-sync/directory-sync.ts:52:9
+
+TS2339 [ERROR]: Property 'getGroup' does not exist on type 'DirectorySync'.
+  const subject = await workos.directorySync.getGroup("dir_grp_123");
+                                             ~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/directory-sync/directory-sync.test.ts:247:46
+
+TS2339 [ERROR]: Property 'options' does not exist on type 'List<DirectoryGroup>'.
+  assertEquals(subject.options?.directory, "directory_123");
+                       ~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/directory-sync/directory-sync.test.ts:275:24
+
+TS2339 [ERROR]: Property 'options' does not exist on type 'List<DirectoryGroup>'.
+  assertEquals(subject.options?.user, "directory_usr_123");
+                       ~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/directory-sync/directory-sync.test.ts:301:24
+
+TS2551 [ERROR]: Property 'firstName' does not exist on type 'DirectoryUser'. Did you mean 'first_name'?
+  assertEquals(subject.data[0].firstName, userWithGroup.firstName);
+                               ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/directory-sync/directory-sync.test.ts:326:32
+
+    'first_name' is declared here.
+      first_name: string;
+      ~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/directory-sync/interfaces/directory-user.interface.ts:6:3
+
+TS2339 [ERROR]: Property 'options' does not exist on type 'List<DirectoryUser>'.
+  assertEquals(subject.options?.directory, "directory_123");
+                       ~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/directory-sync/directory-sync.test.ts:327:24
+
+TS2558 [ERROR]: Expected 0 type arguments, but got 1.
+  const users = await workos.directorySync.listUsers<MyCustomAttributes>({
+                                                     ~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/directory-sync/directory-sync.test.ts:399:54
+
+TS2339 [ERROR]: Property 'customAttributes' does not exist on type 'DirectoryUser'.
+    (user) => user.customAttributes.managerId,
+                   ~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/directory-sync/directory-sync.test.ts:407:20
+
+TS2551 [ERROR]: Property 'firstName' does not exist on type 'DirectoryUser'. Did you mean 'first_name'?
+  assertEquals(subject.data[0].firstName, userWithGroup.firstName);
+                               ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/directory-sync/directory-sync.test.ts:438:32
+
+    'first_name' is declared here.
+      first_name: string;
+      ~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/directory-sync/interfaces/directory-user.interface.ts:6:3
+
+TS2339 [ERROR]: Property 'options' does not exist on type 'List<DirectoryUser>'.
+  assertEquals(subject.options?.group, "directory_grp_123");
+                       ~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/directory-sync/directory-sync.test.ts:439:24
+
+TS2339 [ERROR]: Property 'getUser' does not exist on type 'DirectorySync'.
+  const subject = await workos.directorySync.getUser("dir_usr_123");
+                                             ~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/directory-sync/directory-sync.test.ts:448:46
+
+TS2339 [ERROR]: Property 'getUser' does not exist on type 'DirectorySync'.
+  const subject = await workos.directorySync.getUser(
+                                             ~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/directory-sync/directory-sync.test.ts:459:46
+
+TS2582 [ERROR]: Cannot find name 'describe'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+describe("getPrimaryEmail", () => {
+~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/directory-sync/utils/get-primary-email.test.ts:4:1
+
+TS2582 [ERROR]: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+  it(`returns primary email value`, () => {
+  ~~
+    at file:///Users/t/Developer/workos-node/src/directory-sync/utils/get-primary-email.test.ts:32:3
+
+TS2304 [ERROR]: Cannot find name 'expect'.
+    expect(primaryEmail).toEqual("jonsnow@workos.com");
+    ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/directory-sync/utils/get-primary-email.test.ts:35:5
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts"' has no exported member 'fetchSearchParams'.
+  fetchSearchParams,
+  ~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/events/events.test.ts:6:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/interfaces/event.interface.ts"' has no exported member 'DsyncUserUpdatedEvent'.
+  DsyncUserUpdatedEvent,
+  ~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/events/events.test.ts:10:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/interfaces/event.interface.ts"' has no exported member 'DsyncUserUpdatedEventResponse'.
+  DsyncUserUpdatedEventResponse,
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/events/events.test.ts:11:3
+
+TS2561 [ERROR]: Object literal may only specify known properties, but 'createdAt' does not exist in type 'Event'. Did you mean to write 'created_at'?
+  createdAt: "2020-05-06 04:21:48.649164",
+  ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/events/events.test.ts:21:3
+
+TS2322 [ERROR]: Type 'string' is not assignable to type 'Event'.
+  event: "connection.activated",
+  ~~~~~
+    at file:///Users/t/Developer/workos-node/src/events/events.test.ts:40:3
+
+    The expected type comes from property 'event' which is declared here on type 'EventResponse'
+      event: Event;
+      ~~~~~
+        at file:///Users/t/Developer/workos-node/src/common/interfaces/event.interface.ts:22:3
+
+TS2561 [ERROR]: Object literal may only specify known properties, but 'rangeStart' does not exist in type 'EventsListOptions'. Did you mean to write 'range_start'?
+    rangeStart: "2020-05-04",
+    ~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/events/events.test.ts:146:5
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'object' does not exist in type 'Event[]'.
+    object: "list",
+    ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/events/events.test.ts:156:5
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'object' does not exist in type 'Event[]'.
+    object: "list",
+    ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/events/events.test.ts:178:5
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'organizationId' does not exist in type 'EventsListOptions'.
+    organizationId: "org_1234",
+    ~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/events/events.test.ts:197:5
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'object' does not exist in type 'Event[]'.
+    object: "list",
+    ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/events/events.test.ts:201:5
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'object' does not exist in type 'Event[]'.
+    object: "list",
+    ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/events/events.test.ts:223:5
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/interfaces.ts"' has no exported member 'Event'.
+  Event,
+  ~~~~~
+    at file:///Users/t/Developer/workos-node/src/events/events.ts:6:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/interfaces.ts"' has no exported member 'EventResponse'.
+  EventResponse,
+  ~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/events/events.ts:7:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/interfaces.ts"' has no exported member 'List'.
+  List,
+  ~~~~
+    at file:///Users/t/Developer/workos-node/src/events/events.ts:8:3
+
+TS2724 [ERROR]: '"file:///Users/t/Developer/workos-node/src/common/interfaces.ts"' has no exported member named 'ListResponse'. Did you mean 'ListAPIResponse'?
+  ListResponse,
+  ~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/events/events.ts:9:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/interfaces.ts"' has no exported member 'EventName'.
+import type { EventName } from "../../common/interfaces.ts";
+              ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/events/interfaces/list-events-options.interface.ts:1:15
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts"' has no exported member 'fetchSearchParams'.
+  fetchSearchParams,
+  ~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/fga/fga.test.ts:8:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts"' has no exported member 'fetchURL'.
+  fetchURL,
+  ~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/fga/fga.test.ts:9:3
+
+TS2345 [ERROR]: Argument of type '{ result: string; isImplicit: false; warrantToken: string; }' is not assignable to parameter of type 'CheckResult'.
+  Property 'isAuthorized' is missing in type '{ result: string; isImplicit: false; warrantToken: string; }' but required in type 'CheckResult'.
+  assertEquals(checkResult, {
+                            ^
+    at file:///Users/t/Developer/workos-node/src/fga/fga.test.ts:52:29
+
+    'isAuthorized' is declared here.
+      isAuthorized(): boolean {
+      ~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/fga/interfaces/check.interface.ts:67:3
+
+TS2554 [ERROR]: Expected 1-2 arguments, but got 0.
+  fetchOnce();
+  ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/fga/fga.test.ts:215:3
+
+    An argument for 'responseData' was not provided.
+      responseData: T,
+      ~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts:19:3
+
+TS2345 [ERROR]: Argument of type 'WorkOS' is not assignable to parameter of type '(path: string, params?: Record<string, unknown> | undefined) => Promise<{ data: ResourceResponse; }>'.
+  Type 'WorkOS' provides no match for the signature '(path: string, params?: Record<string, unknown> | undefined): Promise<{ data: ResourceResponse; }>'.
+        this.workos,
+        ~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/fga/fga.ts:110:9
+
+TS2554 [ERROR]: Expected 1 arguments, but got 3.
+      (params: PaginationOptions) =>
+      ^
+    at file:///Users/t/Developer/workos-node/src/fga/fga.ts:115:7
+
+TS2345 [ERROR]: Argument of type 'WorkOS' is not assignable to parameter of type '(path: string, params?: Record<string, unknown> | undefined) => Promise<{ data: ResourceResponse; }>'.
+  Type 'WorkOS' provides no match for the signature '(path: string, params?: Record<string, unknown> | undefined): Promise<{ data: ResourceResponse; }>'.
+          this.workos,
+          ~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/fga/fga.ts:117:11
+
+TS2554 [ERROR]: Expected 4 arguments, but got 5.
+        requestOptions,
+        ~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/fga/fga.ts:195:9
+
+TS2554 [ERROR]: Expected 1 arguments, but got 3.
+      (params: PaginationOptions) =>
+      ^
+    at file:///Users/t/Developer/workos-node/src/fga/fga.ts:197:7
+
+TS2554 [ERROR]: Expected 4 arguments, but got 5.
+          requestOptions,
+          ~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/fga/fga.ts:203:11
+
+TS2554 [ERROR]: Expected 4 arguments, but got 5.
+        requestOptions,
+        ~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/fga/fga.ts:219:9
+
+TS2554 [ERROR]: Expected 1 arguments, but got 3.
+      (params: PaginationOptions) =>
+      ^
+    at file:///Users/t/Developer/workos-node/src/fga/fga.ts:221:7
+
+TS2554 [ERROR]: Expected 4 arguments, but got 5.
+          requestOptions,
+          ~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/fga/fga.ts:227:11
+
+TS7006 [ERROR]: Parameter 'resource' implicitly has an 'any' type.
+  return response.data.map((resource) => deserializeResource(resource));
+                            ~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/fga/serializers/resource.serializer.ts:16:29
+
+TS4114 [ERROR]: This member must have an 'override' modifier because it overrides a member in the base class 'WorkOS'.
+  createHttpClient(
+  ~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/index.worker.ts:13:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts"' has no exported member 'fetchURL'.
+  fetchURL,
+  ~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:7:3
+
+TS2339 [ERROR]: Property 'getFactor' does not exist on type 'MFAImpl'.
+  const subject = await workos.mfa.getFactor("test_123");
+                                   ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:60:36
+
+TS2554 [ERROR]: Expected 1-2 arguments, but got 0.
+  fetchOnce();
+  ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:69:3
+
+    An argument for 'responseData' was not provided.
+      responseData: T,
+      ~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts:19:3
+
+TS2339 [ERROR]: Property 'deleteFactor' does not exist on type 'MFAImpl'.
+  await workos.mfa.deleteFactor("conn_123");
+                   ~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:72:20
+
+TS2322 [ERROR]: Type '"generic_otp"' is not assignable to type '"totp" | "sms"'.
+    type: "generic_otp",
+    ~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:106:5
+
+    The expected type comes from property 'type' which is declared here on type 'EnrollFactorOptions'
+      type: "totp" | "sms";
+      ~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/mfa/interfaces/enroll-factor-options.interface.ts:2:3
+
+TS2345 [ERROR]: Argument of type 'import("file:///Users/t/Developer/workos-node/src/mfa/interfaces/factor.interface.ts").Factor' is not assignable to parameter of type 'import("file:///Users/t/Developer/workos-node/packages/workos_sdk/src/mfa/interfaces/factor.interface.ts").Factor'.
+  Type 'Factor' is missing the following properties from type 'Factor': created_at, updated_at
+  assertEquals(subject, factor);
+                        ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:109:25
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'issuer' does not exist in type 'EnrollFactorOptions'.
+    issuer: "WorkOS",
+    ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:153:5
+
+TS2345 [ERROR]: Argument of type 'FactorWithSecrets' is not assignable to parameter of type 'Factor'.
+  Type 'FactorWithSecrets' is missing the following properties from type 'Factor': created_at, updated_at
+  assertEquals(subject, factor);
+                        ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:157:25
+
+TS2561 [ERROR]: Object literal may only specify known properties, but 'phoneNumber' does not exist in type 'EnrollFactorOptions'. Did you mean to write 'phone_number'?
+    phoneNumber: "+1555555555",
+    ~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:194:5
+
+TS2345 [ERROR]: Argument of type 'import("file:///Users/t/Developer/workos-node/src/mfa/interfaces/factor.interface.ts").Factor' is not assignable to parameter of type 'import("file:///Users/t/Developer/workos-node/packages/workos_sdk/src/mfa/interfaces/factor.interface.ts").Factor'.
+  Type 'Factor' is missing the following properties from type 'Factor': created_at, updated_at
+  assertEquals(subject, factor);
+                        ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:197:25
+
+TS2561 [ERROR]: Object literal may only specify known properties, but 'phoneNumber' does not exist in type 'EnrollFactorOptions'. Did you mean to write 'phone_number'?
+      phoneNumber: "foo",
+      ~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:222:7
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'authenticationFactorId' does not exist in type 'ChallengeFactorOptions'.
+    authenticationFactorId: "auth_factor_1234",
+    ~~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:261:5
+
+TS2345 [ERROR]: Argument of type 'import("file:///Users/t/Developer/workos-node/src/mfa/interfaces/challenge.interface.ts").Challenge' is not assignable to parameter of type 'import("file:///Users/t/Developer/workos-node/packages/workos_sdk/src/mfa/interfaces/challenge.interface.ts").Challenge'.
+  Type 'Challenge' is missing the following properties from type 'Challenge': factor_id, expires_at, created_at, updated_at
+  assertEquals(subject, challenge);
+                        ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:264:25
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'authenticationFactorId' does not exist in type 'ChallengeFactorOptions'.
+    authenticationFactorId: "auth_factor_1234",
+    ~~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:298:5
+
+TS2345 [ERROR]: Argument of type 'import("file:///Users/t/Developer/workos-node/src/mfa/interfaces/challenge.interface.ts").Challenge' is not assignable to parameter of type 'import("file:///Users/t/Developer/workos-node/packages/workos_sdk/src/mfa/interfaces/challenge.interface.ts").Challenge'.
+  Type 'Challenge' is missing the following properties from type 'Challenge': factor_id, expires_at, created_at, updated_at
+  assertEquals(subject, challenge);
+                        ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:306:25
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'authenticationChallengeId' does not exist in type 'VerifyChallengeOptions'.
+    authenticationChallengeId: "auth_challenge_1234",
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:346:5
+
+TS2345 [ERROR]: Argument of type 'VerifyResponse' is not assignable to parameter of type 'Challenge'.
+  Type 'VerifyResponse' is missing the following properties from type 'Challenge': id, factor_id, expires_at, created_at, updated_at
+  assertEquals(subject, verifyResponse);
+                        ~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:354:25
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'authenticationChallengeId' does not exist in type 'VerifyChallengeOptions'.
+      authenticationChallengeId: "auth_challenge_1234",
+      ~~~~~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:379:7
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'authenticationChallengeId' does not exist in type 'VerifyChallengeOptions'.
+      authenticationChallengeId: "auth_challenge_1234",
+      ~~~~~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:414:7
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'authenticationChallengeId' does not exist in type 'VerifyChallengeOptions'.
+      authenticationChallengeId: "auth_challenge_1234",
+      ~~~~~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:448:7
+
+TS18046 [ERROR]: 'error' is of type 'unknown'.
+      assertEquals(error.code, "authentication_challenge_expired");
+                   ~~~~~
+    at file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts:454:20
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts"' has no exported member 'fetchURL'.
+  fetchURL,
+  ~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organization-domains/organization-domains.test.ts:7:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/organization-domains/interfaces.ts"' has no exported member 'CreateOrganizationDomainOptions'.
+  CreateOrganizationDomainOptions,
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organization-domains/organization-domains.ts:3:3
+
+TS2322 [ERROR]: Type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces/organization-domain.interface.ts").OrganizationDomain' is not assignable to type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces.ts").OrganizationDomain'.
+  Types of property 'state' are incompatible.
+    Type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces/organization-domain.interface.ts").OrganizationDomainState' is not assignable to type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces.ts").OrganizationDomainState'.
+      Property 'LegacyVerified' is missing in type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces.ts").OrganizationDomainState'.
+    return deserializeOrganizationDomain(data);
+    ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organization-domains/organization-domains.ts:18:5
+
+TS2345 [ERROR]: Argument of type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces.ts").OrganizationDomainResponse' is not assignable to parameter of type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces/organization-domain.interface.ts").OrganizationDomainResponse'.
+  Types of property 'object' are incompatible.
+    Type 'string' is not assignable to type '"organization_domain"'.
+    return deserializeOrganizationDomain(data);
+                                         ~~~~
+    at file:///Users/t/Developer/workos-node/src/organization-domains/organization-domains.ts:18:42
+
+TS2322 [ERROR]: Type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces/organization-domain.interface.ts").OrganizationDomain' is not assignable to type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces.ts").OrganizationDomain'.
+  Types of property 'state' are incompatible.
+    Type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces/organization-domain.interface.ts").OrganizationDomainState' is not assignable to type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces.ts").OrganizationDomainState'.
+      Property 'LegacyVerified' is missing in type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces.ts").OrganizationDomainState'.
+    return deserializeOrganizationDomain(data);
+    ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organization-domains/organization-domains.ts:27:5
+
+TS2345 [ERROR]: Argument of type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces.ts").OrganizationDomainResponse' is not assignable to parameter of type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces/organization-domain.interface.ts").OrganizationDomainResponse'.
+  Types of property 'object' are incompatible.
+    Type 'string' is not assignable to type '"organization_domain"'.
+    return deserializeOrganizationDomain(data);
+                                         ~~~~
+    at file:///Users/t/Developer/workos-node/src/organization-domains/organization-domains.ts:27:42
+
+TS2322 [ERROR]: Type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces/organization-domain.interface.ts").OrganizationDomain' is not assignable to type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces.ts").OrganizationDomain'.
+  Types of property 'state' are incompatible.
+    Type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces/organization-domain.interface.ts").OrganizationDomainState' is not assignable to type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces.ts").OrganizationDomainState'.
+      Property 'LegacyVerified' is missing in type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces.ts").OrganizationDomainState'.
+    return deserializeOrganizationDomain(data);
+    ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organization-domains/organization-domains.ts:38:5
+
+TS2345 [ERROR]: Argument of type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces.ts").OrganizationDomainResponse' is not assignable to parameter of type 'import("file:///Users/t/Developer/workos-node/src/organization-domains/interfaces/organization-domain.interface.ts").OrganizationDomainResponse'.
+  Types of property 'object' are incompatible.
+    Type 'string' is not assignable to type '"organization_domain"'.
+    return deserializeOrganizationDomain(data);
+                                         ~~~~
+    at file:///Users/t/Developer/workos-node/src/organization-domains/organization-domains.ts:38:42
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/organization-domains/interfaces.ts"' has no exported member 'CreateOrganizationDomainOptions'.
+  CreateOrganizationDomainOptions,
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organization-domains/serializers/create-organization-domain-options.serializer.ts:2:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/organization-domains/interfaces.ts"' has no exported member 'SerializedCreateOrganizationDomainOptions'.
+  SerializedCreateOrganizationDomainOptions,
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organization-domains/serializers/create-organization-domain-options.serializer.ts:3:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts"' has no exported member 'fetchSearchParams'.
+  fetchSearchParams,
+  ~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:8:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts"' has no exported member 'fetchURL'.
+  fetchURL,
+  ~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:9:3
+
+TS2551 [ERROR]: Property 'listOrganizations' does not exist on type 'Organizations'. Did you mean 'getOrganization'?
+  const { data, listMetadata } = await workos.organizations.listOrganizations();
+                                                            ~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:55:61
+
+    'getOrganization' is declared here.
+      async getOrganization(id: string): Promise<Organization> {
+            ~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/organizations/organizations.ts:76:9
+
+TS2551 [ERROR]: Property 'listOrganizations' does not exist on type 'Organizations'. Did you mean 'getOrganization'?
+  const { data } = await workos.organizations.listOrganizations({
+                                              ~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:77:47
+
+    'getOrganization' is declared here.
+      async getOrganization(id: string): Promise<Organization> {
+            ~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/organizations/organizations.ts:76:9
+
+TS2551 [ERROR]: Property 'listOrganizations' does not exist on type 'Organizations'. Did you mean 'getOrganization'?
+  const { data } = await workos.organizations.listOrganizations({
+                                              ~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:97:47
+
+    'getOrganization' is declared here.
+      async getOrganization(id: string): Promise<Organization> {
+            ~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/organizations/organizations.ts:76:9
+
+TS2551 [ERROR]: Property 'listOrganizations' does not exist on type 'Organizations'. Did you mean 'getOrganization'?
+  const { data } = await workos.organizations.listOrganizations({
+                                              ~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:117:47
+
+    'getOrganization' is declared here.
+      async getOrganization(id: string): Promise<Organization> {
+            ~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/organizations/organizations.ts:76:9
+
+TS2551 [ERROR]: Property 'listOrganizations' does not exist on type 'Organizations'. Did you mean 'getOrganization'?
+  const { data } = await workos.organizations.listOrganizations({
+                                              ~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:137:47
+
+    'getOrganization' is declared here.
+      async getOrganization(id: string): Promise<Organization> {
+            ~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/organizations/organizations.ts:76:9
+
+TS2554 [ERROR]: Expected 1 arguments, but got 2.
+    {
+    ^
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:163:5
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'domainData' does not exist in type 'CreateOrganizationOptions'.
+    domainData: [
+    ~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:202:5
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'metadata' does not exist in type 'CreateOrganizationOptions'.
+    metadata: { key: "value" },
+    ~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:224:5
+
+TS2339 [ERROR]: Property 'allowProfilesOutsideOrganization' does not exist on type 'Organization'.
+  assertEquals(subject.allowProfilesOutsideOrganization, false);
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:281:24
+
+TS2322 [ERROR]: Type '{ object: string; id: string; domain: string; state: string; verificationStrategy: string; verificationToken: string; }' is not assignable to type 'string'.
+    {
+    ^
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:283:5
+
+TS2339 [ERROR]: Property 'getOrganizationByExternalId' does not exist on type 'Organizations'.
+  const organization = await workos.organizations.getOrganizationByExternalId(
+                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:305:51
+
+TS2554 [ERROR]: Expected 1-2 arguments, but got 0.
+  fetchOnce();
+  ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:320:3
+
+    An argument for 'responseData' was not provided.
+      responseData: T,
+      ~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts:19:3
+
+TS2554 [ERROR]: Expected 2 arguments, but got 1.
+  const subject = await workos.organizations.updateOrganization({
+                                             ~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:340:46
+
+    An argument for 'options' was not provided.
+        options: UpdateOrganizationOptions,
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/organizations/organizations.ts:107:5
+
+TS2554 [ERROR]: Expected 2 arguments, but got 1.
+  const subject = await workos.organizations.updateOrganization({
+                                             ~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:360:46
+
+    An argument for 'options' was not provided.
+        options: UpdateOrganizationOptions,
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/organizations/organizations.ts:107:5
+
+TS2554 [ERROR]: Expected 2 arguments, but got 1.
+  await workos.organizations.updateOrganization({
+                             ~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:380:30
+
+    An argument for 'options' was not provided.
+        options: UpdateOrganizationOptions,
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/organizations/organizations.ts:107:5
+
+TS2554 [ERROR]: Expected 2 arguments, but got 1.
+  const subject = await workos.organizations.updateOrganization({
+                                             ~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:395:46
+
+    An argument for 'options' was not provided.
+        options: UpdateOrganizationOptions,
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/organizations/organizations.ts:107:5
+
+TS2339 [ERROR]: Property 'stripeCustomerId' does not exist on type 'Organization'.
+  assertEquals(subject.stripeCustomerId, "cus_MX8J9nfK4lP2Yw");
+                       ~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:403:24
+
+TS2554 [ERROR]: Expected 2 arguments, but got 1.
+  const subject = await workos.organizations.updateOrganization({
+                                             ~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:411:46
+
+    An argument for 'options' was not provided.
+        options: UpdateOrganizationOptions,
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/organizations/organizations.ts:107:5
+
+TS2339 [ERROR]: Property 'stripeCustomerId' does not exist on type 'Organization'.
+  assertEquals(subject.stripeCustomerId, undefined);
+                       ~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:420:24
+
+TS2554 [ERROR]: Expected 2 arguments, but got 1.
+    await workos.organizations.updateOrganization({
+                               ~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:429:32
+
+    An argument for 'options' was not provided.
+        options: UpdateOrganizationOptions,
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/organizations/organizations.ts:107:5
+
+TS2339 [ERROR]: Property 'listOrganizationRoles' does not exist on type 'Organizations'.
+  const { data, object } = await workos.organizations.listOrganizationRoles(
+                                                      ~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts:456:55
+
+TS2345 [ERROR]: Argument of type '{ metadata: { key: string; }; object: "organization"; created_at: string; updated_at: string; domains: never[]; id: string; name: string; }' is not assignable to parameter of type 'OrganizationResponse'.
+  Property 'allow_profiles_outside_organization' is missing in type '{ metadata: { key: string; }; object: "organization"; created_at: string; updated_at: string; domains: never[]; id: string; name: string; }' but required in type 'OrganizationResponse'.
+  const result = deserializeOrganization({
+                                         ^
+    at file:///Users/t/Developer/workos-node/src/organizations/serializers/organization.serializer.test.ts:23:42
+
+    'allow_profiles_outside_organization' is declared here.
+      allow_profiles_outside_organization: boolean;
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/src/organizations/interfaces/organization.interface.ts:24:3
+
+TS2345 [ERROR]: Argument of type '{ object: "organization"; created_at: string; updated_at: string; domains: never[]; id: string; name: string; }' is not assignable to parameter of type 'OrganizationResponse'.
+  Property 'allow_profiles_outside_organization' is missing in type '{ object: "organization"; created_at: string; updated_at: string; domains: never[]; id: string; name: string; }' but required in type 'OrganizationResponse'.
+  const result = deserializeOrganization(organizationResponseWithoutMetadata);
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/organizations/serializers/organization.serializer.test.ts:35:42
+
+    'allow_profiles_outside_organization' is declared here.
+      allow_profiles_outside_organization: boolean;
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/src/organizations/interfaces/organization.interface.ts:24:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts"' has no exported member 'fetchURL'.
+  fetchURL,
+  ~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/passwordless/passwordless.test.ts:7:3
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'redirectURI' does not exist in type 'CreateSessionOptions'.
+    redirectURI,
+    ~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/passwordless/passwordless.test.ts:34:5
+
+TS2339 [ERROR]: Property 'object' does not exist on type 'PasswordlessSession'.
+  assertEquals(session.object, "passwordless_session");
+                       ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/passwordless/passwordless.test.ts:38:24
+
+TS2554 [ERROR]: Expected 1-2 arguments, but got 0.
+  fetchOnce();
+  ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/passwordless/passwordless.test.ts:52:3
+
+    An argument for 'responseData' was not provided.
+      responseData: T,
+      ~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts:19:3
+
+TS2339 [ERROR]: Property 'sendSession' does not exist on type 'Passwordless'.
+  await workos.passwordless.sendSession(sessionId);
+                            ~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/passwordless/passwordless.test.ts:56:29
+
+TS2561 [ERROR]: Object literal may only specify known properties, but 'returnUrl' does not exist in type 'GenerateLinkOptions'. Did you mean to write 'return_url'?
+    returnUrl: "https://www.example.com",
+    ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/portal/portal.test.ts:34:5
+
+TS2322 [ERROR]: Type 'GeneratePortalLinkIntent.DomainVerification' is not assignable to type '"audit_logs" | "dsync" | "log_streams" | "sso"'.
+    intent: GeneratePortalLinkIntent.DomainVerification,
+    ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/portal/portal.test.ts:52:5
+
+    The expected type comes from property 'intent' which is declared here on type 'GenerateLinkOptions'
+      intent: "sso" | "dsync" | "audit_logs" | "log_streams";
+      ~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/portal/interfaces/generate-link-options.interface.ts:18:3
+
+TS2561 [ERROR]: Object literal may only specify known properties, but 'returnUrl' does not exist in type 'GenerateLinkOptions'. Did you mean to write 'return_url'?
+    returnUrl: "https://www.example.com",
+    ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/portal/portal.test.ts:74:5
+
+TS2561 [ERROR]: Object literal may only specify known properties, but 'returnUrl' does not exist in type 'GenerateLinkOptions'. Did you mean to write 'return_url'?
+    returnUrl: "https://www.example.com",
+    ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/portal/portal.test.ts:94:5
+
+TS2561 [ERROR]: Object literal may only specify known properties, but 'returnUrl' does not exist in type 'GenerateLinkOptions'. Did you mean to write 'return_url'?
+    returnUrl: "https://www.example.com",
+    ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/portal/portal.test.ts:114:5
+
+TS2322 [ERROR]: Type 'GeneratePortalLinkIntent.CertificateRenewal' is not assignable to type '"audit_logs" | "dsync" | "log_streams" | "sso"'.
+    intent: GeneratePortalLinkIntent.CertificateRenewal,
+    ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/portal/portal.test.ts:132:5
+
+    The expected type comes from property 'intent' which is declared here on type 'GenerateLinkOptions'
+      intent: "sso" | "dsync" | "audit_logs" | "log_streams";
+      ~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/portal/interfaces/generate-link-options.interface.ts:18:3
+
+TS2561 [ERROR]: Object literal may only specify known properties, but 'returnUrl' does not exist in type 'GenerateLinkOptions'. Did you mean to write 'return_url'?
+      returnUrl: "https://www.example.com",
+      ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/portal/portal.test.ts:158:7
+
+TS2322 [ERROR]: Type 'unknown' is not assignable to type '{ link: string; }'.
+    return data;
+    ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/portal/portal.ts:25:5
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/sso/interfaces.ts"' has no exported member 'ConnectionResponse'.
+import type { Connection, ConnectionResponse } from "../interfaces.ts";
+                          ~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/serializers/connection.serializer.ts:1:27
+
+TS2561 [ERROR]: Object literal may only specify known properties, but 'organizationId' does not exist in type 'Connection'. Did you mean to write 'organization_id'?
+  organizationId: connection.organization_id,
+  ~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/serializers/connection.serializer.ts:8:3
+
+TS2724 [ERROR]: '"file:///Users/t/Developer/workos-node/src/sso/interfaces.ts"' has no exported member named 'SerializedListConnectionsOptions'. Did you mean 'ListConnectionsOptions'?
+  SerializedListConnectionsOptions,
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/serializers/list-connections-options.serializer.ts:3:3
+
+TS2551 [ERROR]: Property 'connectionType' does not exist on type 'ListConnectionsOptions'. Did you mean 'connection_type'?
+  connection_type: options.connectionType,
+                           ~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/serializers/list-connections-options.serializer.ts:9:28
+
+    'connection_type' is declared here.
+      connection_type?: string;
+      ~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/src/sso/interfaces.ts:33:3
+
+TS2551 [ERROR]: Property 'organizationId' does not exist on type 'ListConnectionsOptions'. Did you mean 'organization_id'?
+  organization_id: options.organizationId,
+                           ~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/serializers/list-connections-options.serializer.ts:11:28
+
+    'organization_id' is declared here.
+      organization_id?: string;
+      ~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/src/sso/interfaces.ts:35:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts"' has no exported member 'fetchSearchParams'.
+  fetchSearchParams,
+  ~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:8:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts"' has no exported member 'fetchURL'.
+  fetchURL,
+  ~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:9:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts"' has no exported member 'MockResponseData'.
+  type MockResponseData,
+       ~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:10:8
+
+TS2551 [ERROR]: Property 'listConnections' does not exist on type 'SSO'. Did you mean 'getConnection'?
+  await workos.sso.listConnections({
+                   ~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:50:20
+
+    'getConnection' is declared here.
+      async getConnection(id: string): Promise<Connection> {
+            ~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/sso/sso.ts:73:9
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'domain' does not exist in type 'GetAuthorizationUrlOptions'.
+    domain: "lyft.com",
+    ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:64:5
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'clientId' does not exist in type 'GetAuthorizationUrlOptions'.
+      clientId: "proj_123",
+      ~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:82:7
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'clientId' does not exist in type 'GetAuthorizationUrlOptions'.
+    clientId: "proj_123",
+    ~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:106:5
+
+TS2561 [ERROR]: Object literal may only specify known properties, but 'connection' does not exist in type 'GetAuthorizationUrlOptions'. Did you mean to write 'connection_id'?
+    connection: "connection_123",
+    ~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:124:5
+
+TS2561 [ERROR]: Object literal may only specify known properties, but 'organization' does not exist in type 'GetAuthorizationUrlOptions'. Did you mean to write 'organization_id'?
+    organization: "organization_123",
+    ~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:143:5
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'domain' does not exist in type 'GetAuthorizationUrlOptions'.
+    domain: "lyft.com",
+    ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:162:5
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'domain' does not exist in type 'GetAuthorizationUrlOptions'.
+    domain: "lyft.com",
+    ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:179:5
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'domainHint' does not exist in type 'GetAuthorizationUrlOptions'.
+    domainHint: "lyft.com",
+    ~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:197:5
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'loginHint' does not exist in type 'GetAuthorizationUrlOptions'.
+    loginHint: "foo@workos.com",
+    ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:217:5
+
+TS2339 [ERROR]: Property 'getProfileAndToken' does not exist on type 'SSO'.
+  const { accessToken, profile } = await workos.sso.getProfileAndToken({
+                                                    ~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:265:53
+
+TS2339 [ERROR]: Property 'getProfileAndToken' does not exist on type 'SSO'.
+  const { accessToken, profile } = await workos.sso.getProfileAndToken({
+                                                    ~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:329:53
+
+TS2345 [ERROR]: Argument of type '{ accessToken: string; }' is not assignable to parameter of type 'string'.
+  const profile = await workos.sso.getProfile({
+                                              ^
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:386:47
+
+TS2554 [ERROR]: Expected 1-2 arguments, but got 0.
+  fetchOnce();
+  ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:401:3
+
+    An argument for 'responseData' was not provided.
+      responseData: T,
+      ~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts:19:3
+
+TS2551 [ERROR]: Property 'deleteConnection' does not exist on type 'SSO'. Did you mean 'getConnection'?
+  await workos.sso.deleteConnection("conn_123");
+                   ~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:405:20
+
+    'getConnection' is declared here.
+      async getConnection(id: string): Promise<Connection> {
+            ~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/sso/sso.ts:73:9
+
+TS2339 [ERROR]: Property 'connectionType' does not exist on type 'Connection'.
+  assertEquals(subject.connectionType, "OktaSAML");
+                       ~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:425:24
+
+TS2551 [ERROR]: Property 'listConnections' does not exist on type 'SSO'. Did you mean 'getConnection'?
+  const subject = await workos.sso.listConnections({
+                                   ~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/sso/sso.test.ts:439:36
+
+    'getConnection' is declared here.
+      async getConnection(id: string): Promise<Connection> {
+            ~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/sso/sso.ts:73:9
+
+TS2582 [ERROR]: Cannot find name 'describe'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+describe("deserializeUser", () => {
+~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/serializers/user.serializer.test.ts:4:1
+
+TS2582 [ERROR]: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+  it("includes metadata if present", () => {
+  ~~
+    at file:///Users/t/Developer/workos-node/src/user-management/serializers/user.serializer.test.ts:5:3
+
+TS2304 [ERROR]: Cannot find name 'expect'.
+    expect(
+    ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/serializers/user.serializer.test.ts:8:5
+
+TS2582 [ERROR]: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+  it("coerces missing metadata to empty object", () => {
+  ~~
+    at file:///Users/t/Developer/workos-node/src/user-management/serializers/user.serializer.test.ts:19:3
+
+TS2304 [ERROR]: Cannot find name 'expect'.
+    expect(
+    ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/serializers/user.serializer.test.ts:22:5
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts"' has no exported member 'fetchSearchParams'.
+  fetchSearchParams,
+  ~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:7:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts"' has no exported member 'fetchURL'.
+  fetchURL,
+  ~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:8:3
+
+TS2339 [ERROR]: Property 'object' does not exist on type 'User'.
+  assertEquals(user.object, "user");
+                    ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:62:21
+
+TS2339 [ERROR]: Property 'profilePictureUrl' does not exist on type 'User'.
+    user.profilePictureUrl,
+         ~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:66:10
+
+TS2551 [ERROR]: Property 'firstName' does not exist on type 'User'. Did you mean 'first_name'?
+  assertEquals(user.firstName, "Test 01");
+                    ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:69:21
+
+    'first_name' is declared here.
+      first_name?: string;
+      ~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/user-management/interfaces/user.interface.ts:10:3
+
+TS2551 [ERROR]: Property 'lastName' does not exist on type 'User'. Did you mean 'last_name'?
+  assertEquals(user.lastName, "User");
+                    ~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:70:21
+
+    'last_name' is declared here.
+      last_name?: string;
+      ~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/user-management/interfaces/user.interface.ts:12:3
+
+TS2339 [ERROR]: Property 'emailVerified' does not exist on type 'User'.
+  assertEquals(user.emailVerified, true);
+                    ~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:71:21
+
+TS2339 [ERROR]: Property 'lastSignInAt' does not exist on type 'User'.
+  assertEquals(user.lastSignInAt, "2023-07-18T02:07:19.911Z");
+                    ~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:72:21
+
+TS2339 [ERROR]: Property 'getUserByExternalId' does not exist on type 'UserManagement'.
+  const user = await workos.userManagement.getUserByExternalId(externalId);
+                                           ~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:82:44
+
+TS2339 [ERROR]: Property 'object' does not exist on type 'User'.
+  assertEquals(userList.data[0].object, "user");
+                                ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:110:33
+
+TS2561 [ERROR]: Object literal may only specify known properties, but 'firstName' does not exist in type 'CreateUserOptions'. Did you mean to write 'first_name'?
+    firstName: "Test 01",
+    ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:144:5
+
+TS2339 [ERROR]: Property 'object' does not exist on type 'User'.
+  assertEquals(user.object, "user");
+                    ~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:150:21
+
+TS2551 [ERROR]: Property 'firstName' does not exist on type 'User'. Did you mean 'first_name'?
+  assertEquals(user.firstName, "Test 01");
+                    ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:152:21
+
+    'first_name' is declared here.
+      first_name?: string;
+      ~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/user-management/interfaces/user.interface.ts:10:3
+
+TS2551 [ERROR]: Property 'lastName' does not exist on type 'User'. Did you mean 'last_name'?
+  assertEquals(user.lastName, "User");
+                    ~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:153:21
+
+    'last_name' is declared here.
+      last_name?: string;
+      ~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/user-management/interfaces/user.interface.ts:12:3
+
+TS2339 [ERROR]: Property 'emailVerified' does not exist on type 'User'.
+  assertEquals(user.emailVerified, true);
+                    ~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:154:21
+
+TS2339 [ERROR]: Property 'profilePictureUrl' does not exist on type 'User'.
+    user.profilePictureUrl,
+         ~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:156:10
+
+TS2551 [ERROR]: Property 'createdAt' does not exist on type 'User'. Did you mean 'created_at'?
+  assertEquals(user.createdAt, "2023-07-18T02:07:19.911Z");
+                    ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:159:21
+
+    'created_at' is declared here.
+      created_at: string;
+      ~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/user-management/interfaces/user.interface.ts:14:3
+
+TS2551 [ERROR]: Property 'updatedAt' does not exist on type 'User'. Did you mean 'updated_at'?
+  assertEquals(user.updatedAt, "2023-07-18T02:07:19.911Z");
+                    ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:160:21
+
+    'updated_at' is declared here.
+      updated_at: string;
+      ~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/user-management/interfaces/user.interface.ts:16:3
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'metadata' does not exist in type 'CreateUserOptions'.
+    metadata: { key: "value" },
+    ~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:170:5
+
+TS2339 [ERROR]: Property 'getAuthorizationUrl' does not exist on type 'UserManagement'.
+  const url = workos.userManagement.getAuthorizationUrl({
+                                    ~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:181:37
+
+TS2339 [ERROR]: Property 'getAuthorizationUrl' does not exist on type 'UserManagement'.
+  const url = workos.userManagement.getAuthorizationUrl({
+                                    ~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:199:37
+
+TS2339 [ERROR]: Property 'getAuthorizationUrl' does not exist on type 'UserManagement'.
+  const url = workos.userManagement.getAuthorizationUrl({
+                                    ~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:219:37
+
+TS2339 [ERROR]: Property 'getAuthorizationUrl' does not exist on type 'UserManagement'.
+    workos.userManagement.getAuthorizationUrl({
+                          ~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:237:27
+
+TS2339 [ERROR]: Property 'getLogoutUrl' does not exist on type 'UserManagement'.
+  const url = workos.userManagement.getLogoutUrl({
+                                    ~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:255:37
+
+TS2339 [ERROR]: Property 'getLogoutUrl' does not exist on type 'UserManagement'.
+  const url = workos.userManagement.getLogoutUrl({
+                                    ~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:269:37
+
+TS2339 [ERROR]: Property 'getJwksUrl' does not exist on type 'UserManagement'.
+  const url = workos.userManagement.getJwksUrl("client_whatever");
+                                    ~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:285:37
+
+TS2339 [ERROR]: Property 'getJwksUrl' does not exist on type 'UserManagement'.
+    workos.userManagement.getJwksUrl("");
+                          ~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts:295:27
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/interfaces.ts"' has no exported member 'List'.
+import type { List, ListResponse } from "../../common/interfaces.ts";
+              ~~~~
+    at file:///Users/t/Developer/workos-node/src/vault/serializers/vault-object.serializer.ts:1:15
+
+TS2724 [ERROR]: '"file:///Users/t/Developer/workos-node/src/common/interfaces.ts"' has no exported member named 'ListResponse'. Did you mean 'ListAPIResponse'?
+import type { List, ListResponse } from "../../common/interfaces.ts";
+                    ~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/vault/serializers/vault-object.serializer.ts:1:21
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts"' has no exported member 'fetchMethod'.
+  fetchMethod,
+  ~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/vault/vault.test.ts:5:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts"' has no exported member 'fetchURL'.
+  fetchURL,
+  ~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/vault/vault.test.ts:7:3
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'name' does not exist in type 'CreateObjectOptions'.
+    name: secretName,
+    ~~~~
+    at file:///Users/t/Developer/workos-node/src/vault/vault.test.ts:48:5
+
+TS2345 [ERROR]: Argument of type 'SecretMetadata' is not assignable to parameter of type 'ObjectMetadata'.
+  Type 'SecretMetadata' is missing the following properties from type 'ObjectMetadata': type, createdAt
+  assertEquals(resource, {
+                         ^
+    at file:///Users/t/Developer/workos-node/src/vault/vault.test.ts:55:26
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'name' does not exist in type 'CreateObjectOptions'.
+      name: secretName,
+      ~~~~
+    at file:///Users/t/Developer/workos-node/src/vault/vault.test.ts:85:7
+
+TS2345 [ERROR]: Argument of type 'VaultSecret' is not assignable to parameter of type 'VaultObject'.
+  Type 'VaultSecret' is missing the following properties from type 'VaultObject': type, createdAt, updatedAt
+  assertEquals(resource, {
+                         ^
+    at file:///Users/t/Developer/workos-node/src/vault/vault.test.ts:130:26
+
+TS2345 [ERROR]: Argument of type 'SecretVersion[]' is not assignable to parameter of type 'ObjectVersion[]'.
+  Property 'version' is missing in type 'SecretVersion' but required in type 'ObjectVersion'.
+  assertEquals(resource, [
+                         ^
+    at file:///Users/t/Developer/workos-node/src/vault/vault.test.ts:213:26
+
+    'version' is declared here.
+      version: number;
+      ~~~~~~~
+        at file:///Users/t/Developer/workos-node/packages/workos_sdk/src/vault/interfaces.ts:71:3
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'value' does not exist in type 'UpdateObjectOptions'.
+    value: "Full speed ahead",
+    ~~~~~
+    at file:///Users/t/Developer/workos-node/src/vault/vault.test.ts:248:5
+
+TS2345 [ERROR]: Argument of type 'VaultSecret' is not assignable to parameter of type 'VaultObject'.
+  Type 'VaultSecret' is missing the following properties from type 'VaultObject': type, createdAt, updatedAt
+  assertEquals(resource, {
+                         ^
+    at file:///Users/t/Developer/workos-node/src/vault/vault.test.ts:253:26
+
+TS2353 [ERROR]: Object literal may only specify known properties, and 'value' does not exist in type 'UpdateObjectOptions'.
+      value: "Full speed ahead",
+      ~~~~~
+    at file:///Users/t/Developer/workos-node/src/vault/vault.test.ts:288:7
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/interfaces.ts"' has no exported member 'List'.
+  List,
+  ~~~~
+    at file:///Users/t/Developer/workos-node/src/vault/vault.ts:2:3
+
+TS2724 [ERROR]: '"file:///Users/t/Developer/workos-node/src/common/interfaces.ts"' has no exported member named 'ListResponse'. Did you mean 'ListAPIResponse'?
+  ListResponse,
+  ~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/vault/vault.ts:3:3
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/interfaces.ts"' has no exported member 'Event'.
+import type { Event, EventResponse } from "../common/interfaces.ts";
+              ~~~~~
+    at file:///Users/t/Developer/workos-node/src/webhooks/webhooks.ts:2:15
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/src/common/interfaces.ts"' has no exported member 'EventResponse'.
+import type { Event, EventResponse } from "../common/interfaces.ts";
+                     ~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/webhooks/webhooks.ts:2:22
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/tests_deno/utils/test-utils.ts"' has no exported member 'fetchOnce'.
+import { fetchOnce, fetchURL } from "../../tests_deno/utils/test-utils.ts";
+         ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/widgets/widgets.test.ts:4:10
+
+TS2305 [ERROR]: Module '"file:///Users/t/Developer/workos-node/tests_deno/utils/test-utils.ts"' has no exported member 'fetchURL'.
+import { fetchOnce, fetchURL } from "../../tests_deno/utils/test-utils.ts";
+                    ~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/widgets/widgets.test.ts:4:21
+
+TS2339 [ERROR]: Property 'getToken' does not exist on type 'Widgets'.
+      const token = await workos.widgets.getToken({
+                                         ~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/widgets/widgets.test.ts:19:42
+
+TS2339 [ERROR]: Property 'getToken' does not exist on type 'Widgets'.
+          workos.widgets.getToken({
+                         ~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/widgets/widgets.test.ts:32:26
+
+TS2554 [ERROR]: Expected 1-2 arguments, but got 0.
+  fetchOnce();
+  ~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/workos.test.ts:320:3
+
+    An argument for 'responseData' was not provided.
+      responseData: T,
+      ~~~~~~~~~~~~~~~
+        at file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts:19:3
+
+TS7053 [ERROR]: Element implicitly has an 'any' type because expression of type '"signatureProvider"' can't be used to index type 'Webhooks'.
+  Property 'signatureProvider' does not exist on type 'Webhooks'.
+    workos.webhooks["signatureProvider"]["cryptoProvider"];
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/workos.test.ts:369:5
+
+TS7053 [ERROR]: Element implicitly has an 'any' type because expression of type '"signatureProvider"' can't be used to index type 'Actions'.
+  Property 'signatureProvider' does not exist on type 'Actions'.
+    workos.actions["signatureProvider"]["cryptoProvider"];
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    at file:///Users/t/Developer/workos-node/src/workos.test.ts:373:5
+
+Found 258 errors.
+
+error: Type checking failed.

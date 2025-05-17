@@ -1,5 +1,5 @@
-import { AutoPaginatable } from "../common/utils/pagination.ts";
-import type { WorkOS } from "../workos.ts";
+import { AutoPaginatable } from "$sdk/common/utils/pagination";
+import type { WorkOS } from "@ryantaylor/workos";
 import type {
   CreateOrganizationOptions,
   CreateOrganizationRequestOptions,
@@ -8,19 +8,19 @@ import type {
   Organization,
   OrganizationResponse,
   UpdateOrganizationOptions,
-} from "./interfaces/index.ts";
+} from "$sdk/organizations/interfaces/index";
 import {
   deserializeOrganization,
   serializeCreateOrganizationOptions,
   serializeUpdateOrganizationOptions,
-} from "./serializers/index.ts";
+} from "$sdk/organizations/serializers/index";
 
-import { fetchAndDeserializeList } from "../common/utils/fetch-and-deserialize.ts";
+import { fetchAndDeserializeList } from "$sdk/common/utils/fetch-and-deserialize";
 import type {
   ListOrganizationRolesResponse,
   RoleList,
-} from "../roles/interfaces/index.ts";
-import { deserializeRole } from "../roles/serializers/role.serializer.ts";
+} from "$sdk/roles/interfaces/index";
+import { deserializeRole } from "$sdk/roles/serializers/role.serializer";
 
 export class Organizations {
   constructor(private readonly workos: WorkOS) {}
@@ -44,21 +44,19 @@ export class Organizations {
     return new AutoPaginatable(fetchPage);
   }
 
-  async createOrganization(
+  createOrganization(
     payload: CreateOrganizationOptions,
     requestOptions: CreateOrganizationRequestOptions = {},
   ): Promise<Organization> {
-    const { data } = await this.workos.post<OrganizationResponse>(
+    return this.workos.post<OrganizationResponse>(
       "/organizations",
       serializeCreateOrganizationOptions(payload),
       requestOptions,
-    );
-
-    return deserializeOrganization(data);
+    ).then(({ data }) => deserializeOrganization(data));
   }
 
-  async deleteOrganization(id: string): Promise<void> {
-    await this.workos.delete(`/organizations/${id}`);
+  deleteOrganization(id: string): Promise<void> {
+    return this.workos.delete(`/organizations/${id}`);
   }
 
   async getOrganization(id: string): Promise<Organization> {

@@ -1,0 +1,29 @@
+{
+  "tasks": {
+    "check": "deno test --quiet --check --import-map=import_map.json",
+    "lint": "deno lint --unstable",
+    "fmt": "deno fmt --check"
+  },
+  "importMap": "import_map.json",
+  "imports": {
+    "$sdk/": "./packages/workos_sdk/src/"
+  },
+  "test": {
+    "unstable": true
+  },
+  "lint": {
+    "rules": { "tags": ["recommended", "strict"] }
+  },
+  "compilerOptions": {
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
+    "allowJs": true,
+    "checkJs": true,
+    "lib": ["deno.window"],
+    "types": ["node"]
+  }
+}

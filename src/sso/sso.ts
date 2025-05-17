@@ -1,20 +1,20 @@
 import {
   AutoPaginatable,
   type PaginatedResponse,
-} from "../common/utils/pagination.ts";
-import type { WorkOS } from "../workos.ts";
+} from "$sdk/common/utils/pagination";
+import type { WorkOS } from "@ryantaylor/workos";
 import type {
   Connection,
   GetAuthorizationURLOptions, // Corrected from AuthorizationURLOptions
   GetProfileOptions, // Corrected from GetProfileAndTokenOptions
   ListConnectionsOptions,
   Profile,
-} from "./interfaces.ts";
+} from "$sdk/sso/interfaces";
 import {
   deserializeConnection,
   deserializeProfile, // Corrected from deserializeProfileAndToken
   serializeListConnectionsOptions,
-} from "./serializers.ts";
+} from "$sdk/sso/serializers";
 // Removed unused imports
 
 // Define response types locally instead of importing
@@ -79,8 +79,8 @@ export class SSO {
     return new AutoPaginatable(fetchFunction);
   }
 
-  async deleteConnection(id: string) {
-    await this.workos.delete(`/connections/${id}`);
+  deleteConnection(id: string): Promise<void> {
+    return this.workos.delete(`/connections/${id}`);
   }
 
   getAuthorizationUrl({
@@ -121,7 +121,7 @@ export class SSO {
     return deserializeConnection(data);
   }
 
-  async getProfile({
+  getProfile({
     code,
     connection,
   }: GetProfileOptions): Promise<Profile> {
@@ -136,21 +136,17 @@ export class SSO {
       form.append("connection", connection);
     }
 
-    const { data } = await this.workos.post<ProfileResponse>(
+    return this.workos.post<ProfileResponse>(
       "/sso/token",
       form,
-    );
-
-    return deserializeProfile(data);
+    ).then(({ data }) => deserializeProfile(data));
   }
 
-  async getProfileWithToken({
+  getProfileWithToken({
     accessToken,
   }: { accessToken: string }): Promise<Profile> {
-    const { data } = await this.workos.get<ProfileResponse>("/sso/profile", {
+    return this.workos.get<ProfileResponse>("/sso/profile", {
       accessToken,
-    });
-
-    return deserializeProfile(data);
+    }).then(({ data }) => deserializeProfile(data));
   }
 }

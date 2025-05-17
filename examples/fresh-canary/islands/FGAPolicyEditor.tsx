@@ -260,7 +260,7 @@ export default function FGAPolicyEditor() {
   };
 
   // Submit the policy to the API
-  const handleSavePolicy = async () => {
+  const handleSavePolicy = () => {
     try {
       // In a real implementation, we would send the policy to the API
       alert(

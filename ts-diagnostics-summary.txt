@@ -1,0 +1,41 @@
+# TypeScript Error Analysis Baseline Report
+
+## Overview
+
+Total TypeScript errors identified: 258
+
+## Error Categories
+
+1. Module Resolution Errors (TS2307): 46
+2. Property/Method Missing (TS2339): 45
+3. Property Not Found (TS2551): 19
+4. Type Mismatch Errors (TS2345): 21
+5. Unknown Property Errors (TS2353): 27
+6. Naming Convention Issues (TS2561): 13
+7. Incorrect Argument Count (TS2554): 20
+8. Implicit Any Types (TS7006): 3
+9. Interface Property Mismatches (TS2322): 9
+10. Test Framework Missing (TS2582/TS2304): 8
+
+## Error Hotspots
+
+Files with the most errors:
+  33 file:///Users/t/Developer/workos-node/src/organizations/organizations.test.ts
+  28 file:///Users/t/Developer/workos-node/src/user-management/user-management.test.ts
+  23 file:///Users/t/Developer/workos-node/src/mfa/mfa.test.ts
+  22 file:///Users/t/Developer/workos-node/src/sso/sso.test.ts
+  16 file:///Users/t/Developer/workos-node/src/directory-sync/directory-sync.test.ts
+  12 file:///Users/t/Developer/workos-node/src/vault/vault.test.ts
+  12 file:///Users/t/Developer/workos-node/src/fga/fga.ts
+  12 file:///Users/t/Developer/workos-node/src/events/events.test.ts
+  10 file:///Users/t/Developer/workos-node/src/portal/portal.test.ts
+   9 file:///Users/t/Developer/workos-node/src/common/utils/test-utils.ts"' has no exported member 'fetchURL'.
+
+## Common Error Patterns
+
+1. Missing module imports, particularly for utility modules
+2. Property name mismatches (camelCase vs snake_case)
+3. Incompatible interface implementations between different modules
+4. Non-existent methods being called on various service classes
+5. Type incompatibilities between expected and actual parameter types
+6. Test framework references not being resolved

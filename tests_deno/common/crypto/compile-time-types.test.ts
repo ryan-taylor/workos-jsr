@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-unused-vars
 /**
  * Compile-time type tests for JWT and crypto module type definitions
  *

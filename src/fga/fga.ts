@@ -1,4 +1,4 @@
-import type { WorkOS } from "../workos.ts";
+import type { WorkOS } from "@ryantaylor/workos";
 import {
   type BatchWriteResourcesOptions,
   type BatchWriteResourcesResponse,
@@ -26,7 +26,7 @@ import {
   type WarrantToken,
   type WarrantTokenResponse,
   type WriteWarrantOptions,
-} from "./interfaces.ts";
+} from "$sdk/fga/interfaces";
 import {
   deserializeBatchWriteResourcesResponse,
   deserializeQueryResult,
@@ -41,38 +41,38 @@ import {
   serializeListWarrantsOptions,
   serializeQueryOptions,
   serializeWriteWarrantOptions,
-} from "./serializers.ts";
-import { isResourceInterface } from "./utils/interface-check.ts";
-import { AutoPaginatable } from "../common/utils/pagination.ts";
-import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
-import type { PaginationOptions } from "../common/interfaces.ts";
+} from "$sdk/fga/serializers";
+import { isResourceInterface } from "$sdk/fga/utils/interface-check";
+import { AutoPaginatable } from "$sdk/common/utils/pagination";
+import { fetchAndDeserialize } from "$sdk/common/utils/fetch-and-deserialize";
+import type { PaginationOptions } from "$sdk/common/interfaces";
 
 export class FGA {
   constructor(private readonly workos: WorkOS) {}
 
-  async check(
+  check(
     checkOptions: CheckOptions,
     options: CheckRequestOptions = {},
   ): Promise<CheckResult> {
-    const { data } = await this.workos.post<CheckResultResponse>(
+    return this.workos.post<CheckResultResponse>(
       `/fga/v1/check`,
       serializeCheckOptions(checkOptions),
       options,
-    );
-    return new CheckResult(data);
+    ).then(({ data }) => new CheckResult(data));
   }
 
-  async checkBatch(
+  checkBatch(
     checkOptions: CheckBatchOptions,
     options: CheckRequestOptions = {},
   ): Promise<CheckResult[]> {
-    const { data } = await this.workos.post<CheckResultResponse[]>(
+    return this.workos.post<CheckResultResponse[]>(
       `/fga/v1/check`,
       serializeCheckBatchOptions(checkOptions),
       options,
-    );
-    return data.map(
-      (checkResult: CheckResultResponse) => new CheckResult(checkResult),
+    ).then(({ data }) =>
+      data.map(
+        (checkResult: CheckResultResponse) => new CheckResult(checkResult)
+      )
     );
   }
 
@@ -206,27 +206,29 @@ export class FGA {
     );
   }
 
-  async query(
+  query(
     options: QueryOptions,
     requestOptions: QueryRequestOptions = {},
   ): Promise<AutoPaginatable<QueryResult>> {
-    return new AutoPaginatable(
-      await fetchAndDeserialize<QueryResultResponse, QueryResult>(
-        this.workos,
-        "/fga/v1/query",
-        deserializeQueryResult,
-        serializeQueryOptions(options),
-        requestOptions,
-      ),
-      (params: PaginationOptions) =>
-        fetchAndDeserialize<QueryResultResponse, QueryResult>(
-          this.workos,
-          "/fga/v1/query",
-          deserializeQueryResult,
-          params,
-          requestOptions,
-        ),
+    return fetchAndDeserialize<QueryResultResponse, QueryResult>(
+      this.workos,
+      "/fga/v1/query",
+      deserializeQueryResult,
       serializeQueryOptions(options),
+      requestOptions,
+    ).then(result =>
+      new AutoPaginatable(
+        result,
+        (params: PaginationOptions) =>
+          fetchAndDeserialize<QueryResultResponse, QueryResult>(
+            this.workos,
+            "/fga/v1/query",
+            deserializeQueryResult,
+            params,
+            requestOptions,
+          ),
+        serializeQueryOptions(options),
+      )
     );
   }
 }

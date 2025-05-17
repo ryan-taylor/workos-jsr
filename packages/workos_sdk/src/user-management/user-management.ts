@@ -147,6 +147,7 @@ export class UserManagement {
   async authenticateWithPassword(
     options: AuthenticateOptions,
   ): Promise<SessionAuth> {
+    await Promise.resolve();
     return await this.authenticate(options);
   }
 

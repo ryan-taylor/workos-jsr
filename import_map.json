@@ -1,5 +1,6 @@
 {
   "imports": {
+    "zod": "https://esm.sh/zod@3.22.4",
     "preact": "https://esm.sh/preact@10.19.3",
     "preact/hooks": "https://esm.sh/preact@10.19.3/hooks",
     "preact/jsx-runtime": "https://esm.sh/preact@10.19.3/jsx-runtime",
@@ -12,6 +13,12 @@
     "@workos/sdk/": "./packages/workos_sdk/",
     "workos": "./packages/workos_sdk/src/",
     "workos/": "./packages/workos_sdk/src/",
+
+    "$sdk/": "./packages/workos_sdk/src/",
+    "$sdk/organizations": "./packages/workos_sdk/src/organizations/mod.ts",
+    "$sdk/user-management": "./packages/workos_sdk/src/user-management/mod.ts",
+    "$sdk/common": "./packages/workos_sdk/src/common/mod.ts",
+    "$sdk/sso": "./packages/workos_sdk/src/sso/mod.ts",
     "jose": "jsr:@panva/jose@^4.0.0",
     "crypto": "jsr:@std/crypto@^1.0.5",
     "fs/promises": "jsr:@std/fs@^1.0.0",
@@ -25,7 +32,9 @@
     "@std/testing/bdd": "jsr:@std/testing@^1.0.12/bdd",
     "@std/flags": "jsr:@std/flags@^1.0.0",
     "@std/cli": "jsr:@std/cli@^1.0.0",
-    "deno_ast": "jsr:deno_ast@^1.0.0",
+    "deno_ast": "https://deno.land/x/deno_ast@0.46.7/mod.ts",
+    "deno_ast/": "https://deno.land/x/deno_ast@0.46.7/",
+    "https://deno.land/x/deno_ast@0.46.7/mod.ts": "https://deno.land/x/deno_ast@0.46.7/mod.ts",
     "@ryantaylor/workos": "jsr:@ryantaylor/workos",
     "@workos-inc/node": "jsr:@workos-inc/node",
     "@workos/sdk": "jsr:@workos/sdk",
@@ -38,9 +47,8 @@
     "https://deno.land/std/flags/mod.ts": "jsr:@std/flags@^1.0.0",
     "https://deno.land/std/fs/walk.ts": "jsr:@std/fs@^1.0.0/walk",
     "https://deno.land/std/path/mod.ts": "jsr:@std/path@^1.0.0",
-    "https://deno.land/x/deno_ast@0.46.7/mod.ts": "jsr:deno_ast@^1.0.0",
-    "https://deno.land/std@0.219.0/cli/parse_args.ts": "jsr:@std/cli@^1.0.0",
     "https://deno.land/x/superdeno@4.7.2/mod.ts": "https://deno.land/x/superdeno@4.7.2/mod.ts",
-    "handlebars/runtime": "https://esm.sh/handlebars@4.7.8/runtime"
+    "handlebars/runtime": "https://esm.sh/handlebars@4.7.8/runtime",
+    "https://deno.land/std@0.219.0/cli/parse_args.ts": "jsr:@std/cli@^1.0.0"
   }
 }

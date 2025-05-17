@@ -64,7 +64,7 @@ function filterActions(actions: any[], filters: Record<string, string>) {
 }
 
 export const handler: Handlers = {
-  async GET(req) {
+  GET(req) {
     try {
       // If the actions store doesn't exist, initialize it
       if (!globalThis.__ACTIONS_STORE__) {

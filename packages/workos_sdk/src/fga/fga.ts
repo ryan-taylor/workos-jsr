@@ -45,7 +45,11 @@ import {
 import { isResourceInterface } from "./utils/interface-check.ts";
 import { AutoPaginatable } from "../common/utils/pagination.ts";
 import { fetchAndDeserialize } from "../common/utils/fetch-and-deserialize.ts";
-import type { List, PaginationOptions } from "../common/interfaces.ts";
+import type {
+  CommonGetOptions,
+  List,
+  PaginationOptions,
+} from "../common/interfaces.ts";
 
 /**
  * Service for Fine-Grained Authorization (FGA) in WorkOS.
@@ -67,12 +71,12 @@ export class FGA {
     checkOptions: CheckOptions,
     options: V2CheckRequestOptions = {},
   ): Promise<CheckResult> {
-    const { data } = await this.workos.post<CheckResultResponse>(
+    const response = await this.workos.post<CheckResultResponse>(
       `/fga/v1/check`,
       serializeCheckOptions(checkOptions),
       options,
     );
-    return new CheckResult(data);
+    return new CheckResult(response.data);
   }
 
   /**
@@ -270,19 +274,22 @@ export class FGA {
     options?: ListWarrantsOptions,
     requestOptions?: ListWarrantsRequestOptions,
   ): Promise<AutoPaginatable<Warrant>> {
+    const queryParams = options
+      ? serializeListWarrantsOptions(options)
+      : undefined;
+    const getOpts: (CommonGetOptions & ListWarrantsRequestOptions) | undefined =
+      requestOptions;
     const deserializer = (item: unknown) =>
       deserializeWarrant(item as WarrantResponse);
 
-    // Get the initial page of warrants
     const result = await fetchAndDeserialize<WarrantResponse, Warrant>(
       this.workos,
       "/fga/v1/warrants",
       deserializer,
-      options ? serializeListWarrantsOptions(options) : undefined,
-      requestOptions as any,
+      queryParams,
+      getOpts,
     );
 
-    // Create an AutoPaginatable instance with the initial page data and a fetch function for loading more pages
     return new AutoPaginatable(
       result as unknown as List<Warrant>,
       async (params: PaginationOptions) => {
@@ -291,11 +298,11 @@ export class FGA {
           "/fga/v1/warrants",
           deserializer,
           params,
-          requestOptions as any,
+          getOpts,
         );
         return nextPage as unknown as List<Warrant>;
       },
-      options ? serializeListWarrantsOptions(options) : undefined,
+      queryParams,
     );
   }
 
@@ -310,19 +317,19 @@ export class FGA {
     options: QueryOptions,
     requestOptions: QueryRequestOptions = {},
   ): Promise<AutoPaginatable<QueryResult>> {
+    const queryParams = serializeQueryOptions(options);
+    const getOpts: CommonGetOptions & QueryRequestOptions = requestOptions;
     const deserializer = (item: unknown) =>
       deserializeQueryResult(item as QueryResultResponse);
 
-    // Get the initial page of query results
     const result = await fetchAndDeserialize<QueryResultResponse, QueryResult>(
       this.workos,
       "/fga/v1/query",
       deserializer,
-      serializeQueryOptions(options),
-      requestOptions as any,
+      queryParams,
+      getOpts,
     );
 
-    // Create an AutoPaginatable instance with the initial page data and a fetch function for loading more pages
     return new AutoPaginatable(
       result as unknown as List<QueryResult>,
       async (params: PaginationOptions) => {
@@ -334,11 +341,11 @@ export class FGA {
           "/fga/v1/query",
           deserializer,
           params,
-          requestOptions as any,
+          getOpts,
         );
         return nextPage as unknown as List<QueryResult>;
       },
-      serializeQueryOptions(options),
+      queryParams,
     );
   }
 }

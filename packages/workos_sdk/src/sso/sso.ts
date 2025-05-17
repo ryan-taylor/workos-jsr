@@ -104,7 +104,10 @@ export class SSO {
    * // Redirect the user to this URL to start the SSO flow
    * ```
    */
-  getAuthorizationUrl(options: GetAuthorizationUrlOptions): string {
+  async getAuthorizationUrl(
+    options: GetAuthorizationUrlOptions,
+  ): Promise<string> {
+    await Promise.resolve();
     const params = new URLSearchParams(
       serializeGetAuthorizationUrlOptions(options) as Record<string, string>,
     );

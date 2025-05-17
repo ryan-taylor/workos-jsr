@@ -148,11 +148,21 @@ All quality gates are enforced through GitHub Actions:
    - Deno linting and formatting
    - Type checking with strict TypeScript settings
    - Unit & integration tests with Deno's native test runner
+   - AST-based async function validation (check-await task)
 
 2. **Commit Message Format**: All commits are automatically checked against the
    Conventional Commits specification using commitlint.
 
-3. **Pre-commit Hook for Generated Code**: A pre-commit hook ensures that the
+3. **Async Function Validation**: The check-await task analyzes TypeScript AST
+   to detect async functions missing await expressions or .then() calls:
+   ```bash
+   deno task check-await
+   ```
+   This TypeScript AST-based solution provides higher precision than ESLint
+   rules and intentionally ignores test files (*.test.ts) and **tests**
+   directories.
+
+4. **Pre-commit Hook for Generated Code**: A pre-commit hook ensures that the
    OpenAPI-generated code is up-to-date:
    - Automatically runs `deno task generate:api` before each commit
    - Checks if there are any changes to the generated files

@@ -1,6 +1,7 @@
+// deno-lint-ignore-file no-unused-vars
 // Import Deno standard testing library
 import { assertEquals, assertExists } from "@std/assert";
-import { FreshSessionProvider } from "../../../packages/workos_sdk/src/common/iron-session/fresh-session-provider.ts";
+import { FreshSessionProvider } from "../../../packages/workos_sdk/mod.ts";
 import { SessionData, SessionOptions } from "../../types.ts";
 
 // Mock session options

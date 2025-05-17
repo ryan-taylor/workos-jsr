@@ -3,7 +3,7 @@ import {
   HttpClient,
   HttpClientError,
   HttpClientResponse,
-} from "../../packages/workos_sdk/src/common/net/http-client.ts";
+} from "../../packages/workos_sdk/mod.ts";
 import type {
   RequestHeaders,
   RequestOptions,
@@ -47,7 +47,7 @@ export class MockHttpClient<ResponseType = unknown> extends HttpClient {
   /**
    * Implements the get method from HttpClient
    */
-  override async get<T = ResponseType>(
+  override async get(
     path: string,
     options: RequestOptions,
   ): Promise<HttpClientResponse> {
@@ -56,13 +56,13 @@ export class MockHttpClient<ResponseType = unknown> extends HttpClient {
     this.requestSpy.method = "GET";
     this.requestSpy.params = options.params;
 
-    return this.createResponse();
+    return await this.createResponse();
   }
 
   /**
    * Implements the post method from HttpClient
    */
-  override async post<T = ResponseType, Entity = unknown>(
+  override async post<Entity = unknown>(
     path: string,
     entity: Entity,
     options: RequestOptions,
@@ -73,13 +73,13 @@ export class MockHttpClient<ResponseType = unknown> extends HttpClient {
     this.requestSpy.body = entity === null ? "" : entity;
     this.requestSpy.params = options.params;
 
-    return this.createResponse();
+    return await this.createResponse();
   }
 
   /**
    * Implements the put method from HttpClient
    */
-  override async put<T = ResponseType, Entity = unknown>(
+  override async put<Entity = unknown>(
     path: string,
     entity: Entity,
     options: RequestOptions,
@@ -89,13 +89,13 @@ export class MockHttpClient<ResponseType = unknown> extends HttpClient {
     this.requestSpy.body = entity;
     this.requestSpy.params = options.params;
 
-    return this.createResponse();
+    return await this.createResponse();
   }
 
   /**
    * Implements the delete method from HttpClient
    */
-  override async delete<T = ResponseType>(
+  override async delete(
     path: string,
     options: RequestOptions,
   ): Promise<HttpClientResponse> {
@@ -103,13 +103,16 @@ export class MockHttpClient<ResponseType = unknown> extends HttpClient {
     this.requestSpy.method = "DELETE";
     this.requestSpy.params = options.params;
 
-    return this.createResponse();
+    return await this.createResponse();
   }
 
   /**
    * Creates a response object based on the configured status code and mock response
    */
-  private createResponse(): HttpClientResponse {
+  private async createResponse(): Promise<HttpClientResponse> {
+    // Adding a no-op await to satisfy the `require-await` lint rule.
+    await Promise.resolve();
+
     if (this.statusCode >= 400) {
       throw new HttpClientError({
         message: `HTTP ${this.statusCode}`,
@@ -139,11 +142,11 @@ class MockHttpClientResponse<T = unknown> extends HttpClientResponse {
     super(statusCode, headers);
   }
 
-  getRawResponse(): T {
+  override getRawResponse(): unknown {
     return this.responseData;
   }
 
-  toJSON(): Promise<JsonValue | null> {
+  override toJSON(): Promise<JsonValue | null> {
     return Promise.resolve(this.responseData as JsonValue);
   }
 }
@@ -178,7 +181,7 @@ export function createMockWorkOS<T = unknown>(
  * @returns A mock WebCrypto function
  */
 export function mockWebCrypto<T>(mockReturn: T): () => Promise<T> {
-  return async () => mockReturn;
+  return async () => await Promise.resolve(mockReturn);
 }
 
 /**

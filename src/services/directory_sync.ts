@@ -1,4 +1,4 @@
-import type { HttpClient } from "../core/http_client.ts";
+import type { HttpClient } from "$sdk/core/http_client";
 
 export interface ListDirectoriesOptions {
   limit?: number;
@@ -44,7 +44,7 @@ export class DirectorySync {
     this.apiKey = apiKey;
   }
 
-  async listDirectories(
+  listDirectories(
     options: ListDirectoriesOptions = {},
   ): Promise<ListDirectoriesResponse> {
     const url = new URL("/directories", this.baseUrl);
@@ -52,7 +52,7 @@ export class DirectorySync {
       if (v !== undefined) url.searchParams.set(k, String(v));
     });
     const headers = { "Authorization": `Bearer ${this.apiKey}` };
-    return await this.httpClient.request<ListDirectoriesResponse>(
+    return this.httpClient.request<ListDirectoriesResponse>(
       url.toString(),
       { headers },
     );

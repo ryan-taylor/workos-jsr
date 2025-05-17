@@ -1,4 +1,4 @@
-import type { HttpClient } from "../core/http_client.ts";
+import type { HttpClient } from "$sdk/core/http_client";
 
 export interface ListOrganizationsOptions {
   limit?: number;
@@ -43,7 +43,7 @@ export class Organizations {
     this.apiKey = apiKey;
   }
 
-  async list(
+  list(
     options: ListOrganizationsOptions = {},
   ): Promise<ListOrganizationsResponse> {
     const url = new URL("/organizations", this.baseUrl);
@@ -51,7 +51,7 @@ export class Organizations {
       if (v !== undefined) url.searchParams.set(k, String(v));
     });
     const headers = { "Authorization": `Bearer ${this.apiKey}` };
-    return await this.httpClient.request<ListOrganizationsResponse>(
+    return this.httpClient.request<ListOrganizationsResponse>(
       url.toString(),
       { headers },
     );

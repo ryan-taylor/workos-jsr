@@ -1,16 +1,16 @@
-import type { CryptoProvider } from "../common/crypto/crypto-provider.ts";
-import { SignatureProvider } from "../common/crypto/signature-provider.ts";
-import { unreachable } from "../common/utils/unreachable.ts";
+import type { CryptoProvider } from "$sdk/common/crypto/crypto-provider";
+import { SignatureProvider } from "$sdk/common/crypto/signature-provider";
+import { unreachable } from "$sdk/common/utils/unreachable";
 import type {
   ActionContext,
   ActionPayload,
-} from "./interfaces/action.interface.ts";
+} from "$sdk/actions/interfaces/action.interface";
 import type {
   AuthenticationActionResponseData,
   ResponsePayload,
   UserRegistrationActionResponseData,
-} from "./interfaces/response-payload.interface.ts";
-import { deserializeAction } from "./serializers/action.serializer.ts";
+} from "$sdk/actions/interfaces/response-payload.interface";
+import { deserializeAction } from "$sdk/actions/serializers/action.serializer";
 
 export class Actions {
   private signatureProvider: SignatureProvider;
@@ -73,7 +73,7 @@ export class Actions {
     return response;
   }
 
-  async constructAction({
+  constructAction({
     payload,
     sigHeader,
     secret,
@@ -85,8 +85,7 @@ export class Actions {
     tolerance?: number;
   }): Promise<ActionContext> {
     const options = { payload, sigHeader, secret, tolerance };
-    await this.verifyHeader(options);
-
-    return deserializeAction(payload as ActionPayload);
+    return this.verifyHeader(options)
+      .then(() => deserializeAction(payload as ActionPayload));
   }
 }

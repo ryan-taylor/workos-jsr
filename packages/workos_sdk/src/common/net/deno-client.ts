@@ -193,7 +193,7 @@ export class DenoHttpClient extends HttpClient implements HttpClientInterface {
     return new DenoHttpClientResponse(res);
   }
 
-  private async fetchRequestWithRetry(
+  private fetchRequestWithRetry(
     url: string,
     method: string,
     body?: BodyInit | null,

@@ -1,4 +1,4 @@
-import type { WorkOS } from "../workos.ts";
+import type { WorkOS } from "@ryantaylor/workos";
 import type {
   Challenge,
   ChallengeFactorOptions,
@@ -12,19 +12,19 @@ import type {
   VerifyFactorOptions,
   VerifyResponse,
   VerifyResponseResponse,
-} from "./interfaces.ts";
+} from "$sdk/mfa/interfaces";
 import {
   deserializeChallenge,
   deserializeFactor,
   deserializeFactorWithSecrets,
   deserializeVerifyResponse,
-} from "./serializers.ts";
+} from "$sdk/mfa/serializers";
 
 export class Mfa {
   constructor(private readonly workos: WorkOS) {}
 
-  async deleteFactor(id: string) {
-    await this.workos.delete(`/auth/factors/${id}`);
+  deleteFactor(id: string): Promise<void> {
+    return this.workos.delete(`/auth/factors/${id}`);
   }
 
   async getFactor(id: string): Promise<Factor> {
@@ -77,7 +77,7 @@ export class Mfa {
   /**
    * @deprecated Please use `verifyChallenge` instead.
    */
-  async verifyFactor(options: VerifyFactorOptions): Promise<VerifyResponse> {
+  verifyFactor(options: VerifyFactorOptions): Promise<VerifyResponse> {
     return this.verifyChallenge(options);
   }
 

@@ -23,7 +23,7 @@ const mockFetchState = {
 };
 
 // Create a mock fetch function
-export const mockFetch = async (
+export const mockFetch = (
   input: string | URL | Request,
   init?: RequestInit,
 ): Promise<Response> => {
@@ -36,10 +36,10 @@ export const mockFetch = async (
 
   if (mockFetchState.implementations.length > 0) {
     const implementation = mockFetchState.implementations.shift()!;
-    return implementation();
+    return Promise.resolve(implementation());
   }
 
-  return mockFetchState.defaultImplementation();
+  return Promise.resolve(mockFetchState.defaultImplementation());
 };
 
 // Reset the mock fetch state

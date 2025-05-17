@@ -155,10 +155,10 @@ export class AuditLogs {
    * }
    * ```
    */
-  async listEvents(
+  listEvents(
     options: AuditLogListEventsOptions,
   ): Promise<List<AuditLogEvent>> {
-    const result = await fetchAndDeserialize<
+    return fetchAndDeserialize<
       Record<string, unknown>,
       AuditLogEvent
     >(
@@ -166,7 +166,6 @@ export class AuditLogs {
       "/audit_logs",
       deserializeAuditLogEvent,
       serializeListEventsOptions(options),
-    );
-    return result as List<AuditLogEvent>;
+    ) as Promise<List<AuditLogEvent>>;
   }
 }

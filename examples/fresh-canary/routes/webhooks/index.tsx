@@ -9,7 +9,7 @@ import type { WebhookEvent } from "../../utils/webhook-types.ts";
 
 // Server-side handlers
 export const handler: Handlers = {
-  async GET(req, ctx) {
+  GET(req, ctx) {
     // Get initial events data for server-side rendering
     const url = new URL(req.url);
     const eventType = url.searchParams.get("eventType") || undefined;

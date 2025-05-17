@@ -1,0 +1,81 @@
+# Dependabot configuration for Deno project
+# Focuses on security updates and dependency version management for import_map.json and deno.jsonc
+
+version: 2
+updates:
+  # Configuration for import_map.json
+  - package-ecosystem: "npm" # Using npm ecosystem type for JSR packages & ESM imports
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Toronto"
+    open-pull-requests-limit: 10
+    target-branch: "main"
+    labels:
+      - "dependencies"
+      - "import-map-update"
+    versioning-strategy: "auto"
+    allow:
+      - dependency-type: "all"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    pull-request-branch-name:
+      separator: "-"
+    ignore:
+      # Ignore major updates for external dependencies to avoid breaking changes
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    registries:
+      - jsr-registry # Reference to the JSR registry entry below
+
+  # Configuration for deno.jsonc
+  - package-ecosystem: "npm" # Using npm for Deno dependencies
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Toronto"
+    open-pull-requests-limit: 5
+    target-branch: "main"
+    labels:
+      - "dependencies"
+      - "deno-config-update"
+    versioning-strategy: "auto"
+    allow:
+      - dependency-type: "all"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    pull-request-branch-name:
+      separator: "-"
+    ignore:
+      # Ignore major updates for external dependencies to avoid breaking changes
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    registries:
+      - jsr-registry # Reference to the JSR registry entry below
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Toronto"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+
+registries:
+  jsr-registry:
+    type: npm-registry
+    url: https://npm.jsr.io

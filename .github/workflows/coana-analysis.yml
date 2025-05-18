@@ -9,6 +9,9 @@ on:
         description: "Manually run vulnerability analysis"
       # Required by the return-dispatch action
       distinct_id:
+        description: "Unique identifier for the workflow dispatch"
+        required: false
+        type: string
 
 jobs:
   coana-vulnerability-analysis:
@@ -16,7 +19,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.1.1
 
       - name: Run Coana CLI
         id: coana-cli

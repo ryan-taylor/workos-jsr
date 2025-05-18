@@ -76,7 +76,7 @@ jobs:
           fi
 
       - name: Upload burndown reports as artifacts
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v4
         with:
           name: test-burndown-reports
           path: |

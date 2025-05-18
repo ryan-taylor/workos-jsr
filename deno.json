@@ -1,6 +1,6 @@
 {
   "name": "@ryantaylor/workos",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "exports": "./mod.ts",
   "importMap": "./import_map.json",
   "nodeModulesDir": "auto",
@@ -35,7 +35,8 @@
     "precommit:check-adapter": "deno task prebuild:api",
     "check-await": "deno run --allow-read --allow-env scripts/check-await.ts",
     "publish:smoke": "deno run --allow-run scripts/jsr-smoke.ts",
-    "publish:try": "deno run --allow-run scripts/jsr-smoke.ts --show-panics"
+    "publish:try": "deno run --allow-run scripts/jsr-smoke.ts --show-panics",
+    "publish:snapshot": "deno run --allow-run scripts/jsr-smoke.ts --show-panics"
   },
   "lint": {
     "rules": {

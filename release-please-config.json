@@ -1,15 +1,12 @@
 {
-  "release-type": "deno",
   "packages": {
     ".": {
-      "package-name": "workos",
-      "changelog-sections": [
-        { "type": "feat", "section": "Features" },
-        { "type": "fix", "section": "Bug Fixes" },
-        { "type": "perf", "section": "Performance Improvements" },
-        { "type": "refactor", "section": "Refactoring" },
-        { "type": "chore", "hidden": true }
-      ]
+      "release-type": "simple",
+      "pull-request-title-pattern": "chore(release): v${version}",
+      "bump-minor-pre-major": true,
+      "include-v-in-tag": true,
+      "changelog-path": "CHANGELOG.md",
+      "version-file": "deno.json"
     }
   }
 }

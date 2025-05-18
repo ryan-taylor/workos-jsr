@@ -1,0 +1,12 @@
+# Example Git alias configuration for workflow monitoring
+# Add to repository .git/config or global ~/.gitconfig
+
+[alias]
+  # Monitor workflow after push
+  pushwatch = "!sh -c 'git push \"$@\" && scripts/workflow-monitor.sh' -"
+  
+  # Alternative: Just push and list recent workflows
+  pushlist = "!sh -c 'git push \"$@\" && gh run list --limit 5' -"
+  
+  # Alternative: Push and watch most recent workflow
+  pushview = "!sh -c 'git push \"$@\" && (sleep 3 && gh run list --limit 1 --json databaseId --jq \".[0].databaseId\" | xargs gh run view)' -"

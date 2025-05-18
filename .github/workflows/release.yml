@@ -1,22 +1,46 @@
-name: Release
+name: Release & Publish
+
+# A)  Every merge to main is inspected by Release-Please.
+# B)  A tag created by Release-Please triggers the publish job.
+
 on:
   push:
-    tags: ["sdk-*.*.*"] # eg sdk-0.1.0-alpha.0
+    branches: [main]
+    tags: ["v*"]
+
+permissions:
+  contents: write # create tags & release PRs
+  pull-requests: write # open the release PR
+  id-token: write # OIDC token for jsr publish (needed only in publish job)
 
 jobs:
-  publish:
+  release-please:
+    if: github.event_name == 'push' && github.ref_type == 'branch'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.2.2
-      - uses: denoland/setup-deno@v2.0.2
-        with: { deno-version: "2.x" }
+      - uses: googleapis/release-please-action@v4
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish core SDK
-        run: |
-          cd packages/workos_sdk
-          deno publish --allow-net
+  publish:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # ✨ provides the OIDC token for JSR
+    steps:
+      - uses: actions/checkout@v4
 
-      - name: Publish Fresh helpers
-        run: |
-          cd ../../packages/workos_fresh
-          deno publish --allow-net
+      - name: Setup Deno 2
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v2.x
+
+      - name: Run CI checks
+        run: deno task ci-check
+
+      # jsr publish automatically detects OIDC and prompts nothing.
+      - name: Publish to JSR
+        run: npx jsr publish

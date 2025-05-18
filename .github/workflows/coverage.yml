@@ -23,7 +23,7 @@ jobs:
           deno-version: v1.x
 
       - name: Cache Deno directory
-        uses: actions/cache@v3.3.2
+        uses: actions/cache@v4
         with:
           path: |
             ~/.deno

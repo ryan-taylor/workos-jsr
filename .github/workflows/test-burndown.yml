@@ -25,7 +25,7 @@ jobs:
           deno-version: "2.x"
 
       - name: Cache dependencies
-        uses: actions/cache@v3.3.2
+        uses: actions/cache@v4
         with:
           path: ~/.cache/deno
           key: ${{ runner.os }}-deno-${{ hashFiles('**/deno.json', '**/import_map.json') }}

@@ -21,7 +21,7 @@ jobs:
           deno-version: 2
 
       - name: Cache Deno dependencies
-        uses: actions/cache@v3.3.2
+        uses: actions/cache@v4
         with:
           path: ~/.cache/deno
           key: ${{ runner.os }}-deno-${{ hashFiles('deno.lock') }}

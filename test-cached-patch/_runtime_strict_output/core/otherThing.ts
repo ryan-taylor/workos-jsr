@@ -1,3 +1,1 @@
-export type OtherThing = {
-  // Minimal type definition
-};
+export type OtherThing = Record<string, unknown>;

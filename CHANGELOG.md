@@ -4,6 +4,7 @@
 
 ### Added
 
+- Added publish smoke-test matrix (Deno 1.44 / 1.43 fallback)
 - Enhanced type safety with proper type definitions:
   - Added `JWTHeader` and `JWTPayload` interfaces for JWT operations
   - Created `SignaturePayload` and `SignatureTimestamp` types for crypto

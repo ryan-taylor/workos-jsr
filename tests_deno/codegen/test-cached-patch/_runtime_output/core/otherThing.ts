@@ -2,7 +2,7 @@
 export type OtherThing = {
   id: string;
   name: string;
-  data?: unknown;
+  [key: string]: unknown;
 };
 
 export function createOtherThing(id: string, name: string): OtherThing {

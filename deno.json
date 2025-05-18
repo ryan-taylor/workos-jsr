@@ -31,9 +31,11 @@
     "generate:api:force": "deno task prebuild:api && DENO_DIR=.deno_codegen_cache deno run -A scripts/codegen/build.ts && deno fmt packages/workos_sdk/generated && deno run --allow-read --allow-write --allow-run scripts/patch-openapi-runtime-cached.ts --force && deno check packages/workos_sdk/generated/**/*.ts tests_deno/codegen/_runtime_output/**/*.ts",
     "codegen:upgrade": "deno run -A scripts/codegen/upgrade.ts",
     "ci:dialect-check": "deno run -A scripts/ci/dialect-check.ts",
-    "ci-check": "deno fmt --check && deno check mod.ts && deno task check-await && deno test -A tests_deno/scripts",
+    "ci-check": "deno fmt --check && deno lint && deno check mod.ts && deno task check-await && deno task publish:smoke && deno test -A tests_deno/scripts",
     "precommit:check-adapter": "deno task prebuild:api",
-    "check-await": "deno run --allow-read --allow-env scripts/check-await.ts"
+    "check-await": "deno run --allow-read --allow-env scripts/check-await.ts",
+    "publish:smoke": "deno run --allow-run scripts/jsr-smoke.ts",
+    "publish:try": "deno run --allow-run scripts/jsr-smoke.ts --show-panics"
   },
   "lint": {
     "rules": {

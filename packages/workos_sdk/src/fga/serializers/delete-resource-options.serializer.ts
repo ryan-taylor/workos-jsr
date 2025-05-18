@@ -16,7 +16,7 @@ export const serializeDeleteResourceOptions = (
     ? options.getResourceType()
     : options.resourceType;
 
-  let resourceId = isResourceInterface(options)
+  const resourceId = isResourceInterface(options)
     ? options.getResourceId()
     : options.resourceId;
 

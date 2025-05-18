@@ -17,7 +17,7 @@ function walkSync(dir, callback) {
 function findAsyncWithoutAwait(filePath) {
   const content = fs.readFileSync(filePath, "utf8");
   const lines = content.split("\n");
-  let foundMethods = [];
+  const foundMethods = [];
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
@@ -31,7 +31,7 @@ function findAsyncWithoutAwait(filePath) {
       let j = i + 1;
       let openBraces = 0;
       let insideBraces = false;
-      let methodName = line.match(/async\s+(\w+)/)[1];
+      const methodName = line.match(/async\s+(\w+)/)[1];
 
       // Count opening braces on this line
       for (const char of line) {

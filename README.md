@@ -421,6 +421,13 @@ TypeScript packages. To publish new versions:
 3. Create a new git tag for the version
 4. Run `jsr publish` to publish to JSR.io
 
+## CI Publishing Guarantee
+
+This package includes a CI publishing guarantee through Phase 2 smoke testing.
+The CI pipeline automatically verifies that the package can be successfully
+published and imported across different Deno versions, ensuring compatibility
+and reliability before official releases.
+
 ## Migration from Node.js
 
 This package has been fully migrated from Node.js to Deno. All Node.js
